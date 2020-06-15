@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
@@ -40,7 +41,6 @@ import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -110,6 +110,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.InitWith                   -> handleInitWith(action)
             is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action)
             is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action)
+            is LoginAction.LoginWithToken             -> handleLoginWithToken(action)
             is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword              -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -118,6 +119,41 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
+    }
+
+    private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
+        val safeLoginWizard = loginWizard
+
+        if (safeLoginWizard == null) {
+            setState {
+                copy(
+                        asyncLoginAction = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncLoginAction = Loading()
+                )
+            }
+
+            currentTask = safeLoginWizard.loginWithToken(
+                    action.loginToken,
+                    object : MatrixCallback<Session> {
+                        override fun onSuccess(data: Session) {
+                            onSessionCreated(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            _viewEvents.post(LoginViewEvents.Failure(failure))
+                            setState {
+                                copy(
+                                        asyncLoginAction = Fail(failure)
+                                )
+                            }
+                        }
+                    })
+        }
     }
 
     private fun handleSetupSsoForSessionRecovery(action: LoginAction.SetupSsoForSessionRecovery) {
@@ -635,9 +671,9 @@ class LoginViewModel @AssistedInject constructor(
                         is LoginFlowResult.Success            -> {
                             val loginMode = when {
                                 // SSO login is taken first
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
-                                else                                                                    -> LoginMode.Unsupported
+                                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
+                                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                                else                                                       -> LoginMode.Unsupported
                             }
 
                             if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
@@ -648,7 +684,7 @@ class LoginViewModel @AssistedInject constructor(
                                             asyncHomeServerLoginFlowRequest = Uninitialized,
                                             homeServerUrl = data.homeServerUrl,
                                             loginMode = loginMode,
-                                            loginModeSupportedTypes = data.loginFlowResponse.flows.mapNotNull { it.type }.toList()
+                                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
                                     )
                                 }
                             }

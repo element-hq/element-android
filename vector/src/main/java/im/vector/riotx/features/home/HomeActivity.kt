@@ -55,7 +55,7 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
+class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -66,6 +66,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
+    @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -77,6 +78,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
+    }
+
+    override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
+        return unknownDeviceViewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -32,6 +32,8 @@
         <item name="riotx_keys_backup_banner_accent_color">@color/riotx_keys_backup_banner_accent_color_light</item>
         <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_light</item>
         <item name="riotx_attachment_selector_border">@color/riotx_attachment_selector_border_light</item>
+        <item name="riotx_room_active_widgets_banner_bg">@color/riotx_room_active_widgets_banner_bg_light</item>
+        <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_light</item>
 
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_light</item>

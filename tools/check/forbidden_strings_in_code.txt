@@ -120,7 +120,8 @@ ButterKnife\.findById\(
 \w\.flatMap\(
 
 ### Bad formatting of Realm query chain. Insert new line
-\)\.equalTo
+# DISABLED
+# \)\.equalTo
 
 # Use StandardCharsets.UTF_8.name()
 # DISABLED (min API to low)

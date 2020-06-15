@@ -95,7 +95,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     protected val viewModelProvider
         get() = ViewModelProvider(this, viewModelFactory)
 
-    // TODO Other Activity should use this also
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
                 .observe()

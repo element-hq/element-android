@@ -58,7 +58,6 @@ class DeviceListFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
-        super.invalidate()
     }
 
     override fun onDeviceSelected(device: CryptoDeviceInfo) {

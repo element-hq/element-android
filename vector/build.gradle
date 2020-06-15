@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 21
+ext.versionMinor = 22
 ext.versionPatch = 0
 ext.scVersion = 5
 
@@ -249,7 +249,7 @@ android {
 
 dependencies {
 
-    def epoxy_version = '3.9.0'
+    def epoxy_version = '3.11.0'
     def fragment_version = '1.2.0'
     def arrow_version = "0.8.2"
     def coroutines_version = "1.3.2"
@@ -333,6 +333,9 @@ dependencies {
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
 
+    // Custom Tab
+    implementation 'androidx.browser:browser:1.2.0'
+
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.7'
 
@@ -393,6 +396,9 @@ dependencies {
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+
+    // Activate when you want to check for leaks, from time to time.
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'

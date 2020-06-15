@@ -667,8 +667,6 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
 
     <string name="widget_no_power_to_manage">Musíte mať povolenie meniť widgety v tejto miestnosti</string>
     <string name="widget_creation_failure">Nie je možné vytvoriť widget</string>
-    <string name="event_formatter_widget_added">%2$s pridal widget %1$s</string>
-    <string name="event_formatter_widget_removed">%2$s odstránil widget %1$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenčné hovory uskutočňovať použitím jitsi</string>
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget z tejto miestnosti?</string>
 
@@ -950,9 +948,6 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="room_participants_now">teraz %1$s</string>
     <string name="room_participants_ago">%1$s pred %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">Zobraziť všetky správy od tohoto používateľa?
-
-Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s a %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -1058,11 +1053,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="video_call_in_progress">Prebiehajúci video hovor…</string>
 
     <string name="room_participants_action_kick">Vykázať</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohto používateľa\?</item>
-        <item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
-        <item quantity="other">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
-    </plurals>
     <string name="reason_hint">Dôvod</string>
 
     <string name="settings_notification_troubleshoot">Riešiť problémy s oznámeniami</string>

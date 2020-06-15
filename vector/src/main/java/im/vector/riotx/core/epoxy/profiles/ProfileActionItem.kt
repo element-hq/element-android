@@ -66,7 +66,6 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
         if (listener == null) {
             holder.view.isClickable = false
         }
-        holder.editable.isVisible = editable
         holder.title.text = title
         val tintColor = if (destructive) {
             ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
@@ -94,7 +93,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.secondaryAccessory.isVisible = false
         }
 
-        if (editableRes != 0) {
+        if (editableRes != 0 && editable) {
             val tintColorSecondary = if (destructive) {
                 tintColor
             } else {

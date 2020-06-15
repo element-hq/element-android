@@ -708,8 +708,6 @@
 
     <string name="settings_notification_ringtone">Звук уведомлений</string>
     <string name="settings_12_24_timestamps">Показывать метки времени в 12-часовом формате</string>
-    <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
     <string name="widget_creation_failure">Создание виджета не удалось</string>
@@ -987,9 +985,6 @@
     <string name="command_description_ban_user">Банит пользователя с указанным ID</string>
     <string name="command_description_unban_user">Разбанит пользователя с указанным ID</string>
     <string name="command_description_op_user">Определение уровня доступа пользователя</string>
-    <string name="room_participants_action_unignore_prompt">Показать все сообщения от этого пользователя?
-
-Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
     <string name="command_description_deop_user">Сбросить уровень доступа для пользователя с данным ID</string>
     <string name="command_description_invite_user">Пригласить пользователя с данным ID в текущую комнату</string>
     <string name="command_description_part_room">Покинуть комнату</string>
@@ -1098,11 +1093,6 @@
     <string name="video_call_in_progress">Идёт видеозвонок …</string>
 
     <string name="room_participants_action_kick">Выгнать</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Вы уверены, что хотите выгнать этого пользователя из чата\?</item>
-        <item quantity="few">Вы уверены, что хотите выгнать этих пользователей из чата\?</item>
-        <item quantity="many">Вы уверены, что хотите выгнать этих пользователей из чата\?</item>
-    </plurals>
     <string name="reason_hint">Причина</string>
 
     <string name="settings_notification_troubleshoot">Поиск проблем с уведомлениями</string>

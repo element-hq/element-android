@@ -27,6 +27,7 @@ sealed class RoomListAction : VectorViewModelAction {
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListAction()
     data class FilterWith(val filter: String) : RoomListAction()
     data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListAction()
+    data class ToggleFavorite(val roomId: String) : RoomListAction()
     data class LeaveRoom(val roomId: String) : RoomListAction()
     object MarkAllRoomsRead : RoomListAction()
 }

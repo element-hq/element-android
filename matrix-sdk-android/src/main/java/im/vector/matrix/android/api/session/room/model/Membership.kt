@@ -44,6 +44,10 @@ enum class Membership(val value: String) {
         return this == KNOCK || this == LEAVE || this == BAN
     }
 
+    fun isActive(): Boolean {
+        return activeMemberships().contains(this)
+    }
+
     companion object {
         fun activeMemberships(): List<Membership> {
             return listOf(INVITE, JOIN)

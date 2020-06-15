@@ -725,8 +725,6 @@
 
     <string name="widget_no_power_to_manage">U heeft toestemming nodig om widgets in dit gesprek te beheren</string>
     <string name="widget_creation_failure">Aanmaken van widget is mislukt</string>
-    <string name="event_formatter_widget_added">%1$s is toegevoegd door %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s is verwijderd door %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Vergadergesprekken maken met jitsi</string>
     <string name="widget_delete_message_confirmation">Weet u zeker dat u deze widget uit dit gesprek wilt verwijderen\?</string>
 
@@ -975,9 +973,6 @@
 
     <string name="settings_labs_keyboard_options_to_send_message">Enter-knop van toetsenbord gebruiken om berichten te versturen</string>
     <string name="command_description_emote">Toont een actie</string>
-    <string name="room_participants_action_unignore_prompt">Alle berichten van deze gebruiker tonen\?
-\n
-\nLet op: de app zal voor deze actie opnieuw opgestart worden; dit kan even duren.</string>
     <string name="command_description_ban_user">Verbant gebruiker met gegeven ID</string>
     <string name="command_description_unban_user">Heft verbanning van gebruiker met gegeven ID op</string>
     <string name="command_description_op_user">Stel het machtsniveau van een gebruiker in</string>
@@ -1065,10 +1060,6 @@
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
 
     <string name="room_participants_action_kick">Eruit sturen</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Weet u zeker dat u deze gebruiker uit dit gesprek wilt sturen\?</item>
-        <item quantity="other">Weet u zeker dat u deze gebruikers uit dit gesprek wilt sturen\?</item>
-    </plurals>
     <string name="reason_hint">Reden</string>
 
     <string name="room_sliding_menu_version_x">Versie %s</string>

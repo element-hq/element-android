@@ -26,7 +26,7 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.jsonViewerStyler
+import im.vector.riotx.core.utils.createJSonViewerStyleProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import javax.inject.Inject
@@ -66,7 +66,7 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
             JSonViewerDialog.newInstance(
                     it,
                     -1,
-                    jsonViewerStyler(colorProvider)
+                    createJSonViewerStyleProvider(colorProvider)
             ).show(childFragmentManager, "JSON_VIEWER")
         }
     }

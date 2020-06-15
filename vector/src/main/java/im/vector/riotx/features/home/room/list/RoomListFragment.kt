@@ -32,6 +32,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -71,6 +72,7 @@ class RoomListFragment @Inject constructor(
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
+    private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getLayoutResId() = R.layout.fragment_room_list
 
@@ -99,7 +101,6 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.observeViewEvents {
             when (it) {
                 is RoomListViewEvents.Loading    -> showLoading(it.message)
@@ -126,6 +127,7 @@ class RoomListFragment @Inject constructor(
         modelBuildListener = null
         roomListView.cleanup()
         roomController.listener = null
+        stateRestorer.clear()
         createChatFabMenu.listener = null
         super.onDestroyView()
     }
@@ -190,7 +192,7 @@ class RoomListFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
+        stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         roomListView.layoutManager = layoutManager
         roomListView.itemAnimator = RoomListAnimator()
         roomListView.setRecycledViewPool(sharedViewPool)
@@ -230,6 +232,9 @@ class RoomListFragment @Inject constructor(
             is RoomListQuickActionsSharedAction.Settings                  -> {
                 navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
+            is RoomListQuickActionsSharedAction.Favorite                  -> {
+                roomListViewModel.handle(RoomListAction.ToggleFavorite(quickAction.roomId))
+            }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
@@ -239,11 +244,12 @@ class RoomListFragment @Inject constructor(
                         }
                         .setNegativeButton(R.string.cancel, null)
                         .show()
+                Unit
             }
-        }
+        }.exhaustive
     }
 
-    private fun renderState(state: RoomListViewState) {
+    override fun invalidate() = withState(roomListViewModel) { state ->
         when (state.asyncFilteredRooms) {
             is Incomplete -> renderLoading()
             is Success    -> renderSuccess(state)

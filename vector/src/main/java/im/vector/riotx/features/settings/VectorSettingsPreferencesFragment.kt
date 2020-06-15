@@ -55,7 +55,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                ThemeUtils.setApplicationLightTheme(requireContext(), newValue)
+                ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
                 // Restart the Activity
                 activity?.restart()
                 true
@@ -66,7 +66,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                ThemeUtils.setApplicationDarkTheme(requireContext(), newValue)
+                ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
                 // Restart the Activity
                 activity?.let {
                     // Note: recreate does not apply the color correctly

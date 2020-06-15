@@ -22,7 +22,9 @@ import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.toCancelable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -34,5 +36,7 @@ internal fun <T> CoroutineScope.launchToCallback(
     val result = runCatching {
         block()
     }
-    result.foldToCallback(callback)
+    withContext(Dispatchers.Main) {
+        result.foldToCallback(callback)
+    }
 }.toCancelable()

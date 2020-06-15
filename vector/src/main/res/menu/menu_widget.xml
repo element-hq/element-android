@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="@string/edit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/room_widget_reload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_widget_open_ext"
+        android:title="@string/room_widget_open_in_browser"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_revoke"
+        android:title="@string/room_widget_revoke_access"
+        app:showAsAction="never" />
+
+</menu>

@@ -763,8 +763,6 @@ Nepazīstamas ierīces:</string>
 
     <string name="widget_no_power_to_manage">Tev nepietiek atļauju, lai rīkotos ar vidžetiem šajā istabā</string>
     <string name="widget_creation_failure">Vidžeta izveide neizdevās</string>
-    <string name="event_formatter_widget_added">%1$s pievienoja %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s noņēma %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferences zvaniem izmantot Jitsi</string>
     <string name="widget_delete_message_confirmation">Vai tiešām vēlies dzēst vidžetu?</string>
     <plurals name="active_widgets">

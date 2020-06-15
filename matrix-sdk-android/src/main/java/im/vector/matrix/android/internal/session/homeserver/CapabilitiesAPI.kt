@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.session.homeserver
 
-import im.vector.matrix.android.api.auth.data.Versions
+import im.vector.matrix.android.internal.auth.version.Versions
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.GET

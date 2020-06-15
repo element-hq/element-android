@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.platform.VectorViewModelAction
@@ -26,6 +27,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
     data class SaveDraft(val draft: String) : RoomDetailAction()
+    data class SendSticker(val stickerContent: MessageStickerContent) : RoomDetailAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
@@ -72,4 +74,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RequestVerification(val userId: String) : RoomDetailAction()
     data class ResumeVerification(val transactionId: String, val otherUserId: String?) : RoomDetailAction()
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
+
+    object SelectStickerAttachment : RoomDetailAction()
 }

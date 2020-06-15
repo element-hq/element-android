@@ -30,13 +30,13 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo

@@ -712,8 +712,6 @@
     <string name="settings_notification_ringtone">Suono delle notifiche</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>
     <string name="widget_no_power_to_manage">Devi avere il permesso per poter gestire i widget in questa stanza</string>
-    <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Avvia una conferenza usando Jitsi</string>
     <string name="widget_delete_message_confirmation">Vuoi davvero eliminare questo widget dalla stanza\?</string>
 
@@ -985,9 +983,6 @@
     <string name="room_tombstone_continuation_description">Questa stanza contiene una conversazione cominciata altrove</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
 
-    <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente\?
-\n
-\nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
     <string name="missing_permissions_error">Non hai permessi sufficienti per effettuare questa azione.</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
@@ -1071,10 +1066,6 @@
 
     <string name="call_anyway">Chiama comunque</string>
     <string name="room_participants_action_kick">Butta fuori</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Sei sicuro di voler buttare fuori questo utente\?</item>
-        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti\?</item>
-    </plurals>
     <string name="reason_hint">Motivo</string>
 
     <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>

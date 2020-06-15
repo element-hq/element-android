@@ -648,8 +648,6 @@
 
     <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
     <string name="widget_creation_failure">Създаване на приспособлението беше неуспешно</string>
-    <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
     <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението от тази стая?</string>
     <plurals name="active_widgets">
@@ -921,9 +919,6 @@
     <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
     <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
 
-    <string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
-
-Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="missing_permissions_error">Поради липсващи разрешения, това действие не е възможно.</string>
     <plurals name="format_time_s">
         <item quantity="one">1 сек.</item>
@@ -1016,10 +1011,6 @@
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
 
     <string name="room_participants_action_kick">Изгони</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Сигурни ли сте, че искате да изгоните този потребител от този чат?</item>
-        <item quantity="other">Сигурни ли сте, че искате да изгоните тези потребители от този чат?</item>
-    </plurals>
     <string name="reason_hint">Причина</string>
 
     <string name="settings_inline_url_preview_summary">Прегледи на връзки директно в самия чат, когато функцията се поддържа от сървъра.</string>

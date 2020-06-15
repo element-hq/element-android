@@ -844,8 +844,6 @@ Czy chcesz dodać teraz kilka?</string>
 
     <string name="widget_no_power_to_manage">Potrzebujesz uprawnień do zarządzania widżetami w tym pokoju</string>
     <string name="widget_creation_failure">Utworzenie widżetu nie powiodło się</string>
-    <string name="event_formatter_widget_added">%1$s został dodany przez %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s został usunięty przez %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Utwórz połączenia konferencyjne za pomocą jitsi</string>
     <string name="widget_delete_message_confirmation">Czy na pewno chcesz usunąć widżet z tego pokoju?</string>
     <string name="widget_integration_unable_to_create">Nie można utworzyć widżetu.</string>
@@ -963,8 +961,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="many" />
     </plurals>
 
-    <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
-Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <plurals name="room_details_selected">
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
@@ -1037,11 +1033,6 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_kick">Wyrzuć</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Czy chcesz wyrzucić tego użytkownika z rozmowy\?</item>
-        <item quantity="few">Czy chcesz wyrzucić tych użytkowników z rozmowy\?</item>
-        <item quantity="many" />
-    </plurals>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
     <string name="show_info_area_messages_and_errors">Dla komunikatów i błędów</string>

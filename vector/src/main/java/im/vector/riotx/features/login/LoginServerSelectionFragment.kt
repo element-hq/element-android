@@ -21,7 +21,7 @@ import android.view.View
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -55,8 +55,8 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     @OnClick(R.id.loginServerChoiceModularLearnMore)
-    fun learMore() {
-        openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
+    fun learnMore() {
+        openUrlInChromeCustomTab(requireActivity(), null, MODULAR_LINK)
     }
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
@@ -113,7 +113,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
         if (state.loginMode != LoginMode.Unknown) {
             // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode == LoginMode.Sso)))
         }
     }
 }

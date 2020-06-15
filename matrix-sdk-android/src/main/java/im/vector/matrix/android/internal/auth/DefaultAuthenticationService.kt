@@ -23,9 +23,6 @@ import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
-import im.vector.matrix.android.api.auth.data.Versions
-import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
-import im.vector.matrix.android.api.auth.data.isSupportedBySdk
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
@@ -40,6 +37,9 @@ import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.login.DirectLoginTask
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
+import im.vector.matrix.android.internal.auth.version.Versions
+import im.vector.matrix.android.internal.auth.version.isLoginAndRegistrationSupportedBySdk
+import im.vector.matrix.android.internal.auth.version.isSupportedBySdk
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
@@ -236,7 +236,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
                 apiCall = authAPI.getLoginFlows()
             }
-            LoginFlowResult.Success(loginFlowResponse, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
+            LoginFlowResult.Success(loginFlowResponse.flows.orEmpty().mapNotNull { it.type }, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
         } else {
             // Not supported
             LoginFlowResult.OutdatedHomeserver

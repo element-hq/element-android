@@ -18,7 +18,9 @@
 package im.vector.riotx.features.roommemberprofile
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -30,23 +32,25 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.rx.mapOptional
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
@@ -140,6 +144,36 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
+            is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
+            is RoomMemberProfileAction.BanOrUnbanUser         -> handleBanOrUnbanAction(action)
+            is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
+            RoomMemberProfileAction.InviteUser                -> handleInviteAction()
+        }
+    }
+
+    private fun handleSetPowerLevel(action: RoomMemberProfileAction.SetPowerLevel) = withState { state ->
+        if (room == null || action.previousValue == action.newValue) {
+            return@withState
+        }
+        val currentPowerLevelsContent = state.powerLevelsContent ?: return@withState
+        val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevelValue(session.myUserId)
+        if (action.askForValidation && action.newValue >= myPowerLevel) {
+            _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
+        } else if (action.askForValidation && state.isMine) {
+            _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning(action.previousValue, action.newValue))
+        } else {
+            currentPowerLevelsContent.users[state.userId] = action.newValue
+            viewModelScope.launch {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                try {
+                    awaitCallback<Unit> {
+                        room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
+                    }
+                    _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
+                } catch (failure: Throwable) {
+                    _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+                }
+            }
         }
     }
 
@@ -156,15 +190,79 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
+    private fun handleInviteAction() {
+        if (room == null) {
+            return
+        }
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    room.invite(initialState.userId, callback = it)
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handleKickAction(action: RoomMemberProfileAction.KickUser) {
+        if (room == null) {
+            return
+        }
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    room.kick(initialState.userId, action.reason, it)
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handleBanOrUnbanAction(action: RoomMemberProfileAction.BanOrUnbanUser) = withState { state ->
+        if (room == null) {
+            return@withState
+        }
+        val membership = state.asyncMembership() ?: return@withState
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    if (membership == Membership.BAN) {
+                        room.unban(initialState.userId, action.reason, it)
+                    } else {
+                        room.ban(initialState.userId, action.reason, it)
+                    }
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
     private fun observeRoomMemberSummary(room: Room) {
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
         room.rx().liveRoomMembers(queryParams)
-                .map { it.firstOrNull()?.toMatrixItem().toOptional() }
+                .map { it.firstOrNull().toOptional() }
                 .unwrap()
                 .execute {
-                    copy(userMatrixItem = it)
+                    when (it) {
+                        is Loading       -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
+                        is Success       -> copy(
+                                userMatrixItem = Success(it().toMatrixItem()),
+                                asyncMembership = Success(it().membership)
+                        )
+                        is Fail          -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
+                        is Uninitialized -> this
+                    }
                 }
     }
 
@@ -184,17 +282,22 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
-                .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                .unwrap()
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive.subscribe {
+            val powerLevelsHelper = PowerLevelsHelper(it)
+            val permissions = ActionPermissions(
+                    canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
+                    canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
+                    canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
+                    canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
+            )
+            setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
+        }.disposeOnClear()
 
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
         }
-        powerLevelsContentLive.execute {
-            copy(powerLevelsContent = it)
-        }
-
         Observable
                 .combineLatest(
                         roomSummaryLive,
@@ -202,15 +305,11 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                         BiFunction<RoomSummary, PowerLevelsContent, String> { roomSummary, powerLevelsContent ->
                             val roomName = roomSummary.toMatrixItem().getBestName()
                             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-                            val userPowerLevel = powerLevelsHelper.getUserPowerLevel(initialState.userId)
-                            if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL) {
-                                stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
-                            } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL) {
-                                stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
-                            } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL) {
-                                ""
-                            } else {
-                                stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel, roomName)
+                            when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
+                                Role.Admin     -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
+                                Role.Moderator -> stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
+                                Role.Default   -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
+                                is Role.Custom -> stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel.value, roomName)
                             }
                         }
                 ).execute {

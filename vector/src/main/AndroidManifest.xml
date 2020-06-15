@@ -48,7 +48,19 @@
         <activity android:name=".features.home.HomeActivity" />
         <activity
             android:name=".features.login.LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="riotx" />
+                <data android:host="riotx" />
+            </intent-filter>
+        </activity>
         <activity android:name=".features.media.ImageMediaViewerActivity" />
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
@@ -162,6 +174,7 @@
             android:theme="@style/AppTheme.AttachmentsPreview" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
+        <activity android:name=".features.widgets.WidgetActivity" />
 
         <!-- Services -->
 

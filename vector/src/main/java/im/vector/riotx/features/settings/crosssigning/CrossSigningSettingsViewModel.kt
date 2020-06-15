@@ -22,10 +22,10 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.rx.rx

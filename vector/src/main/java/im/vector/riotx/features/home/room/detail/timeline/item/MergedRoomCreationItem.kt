@@ -46,8 +46,12 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             // Take the oldest data
             val data = distinctMergeData.lastOrNull()
 
-            val summary = holder.expandView.resources.getString(R.string.room_created_summary_item,
-                    data?.memberName ?: data?.userId ?: "")
+            val createdFromCurrentUser = data?.userId == attributes.currentUserId
+            val summary = if (createdFromCurrentUser) {
+                holder.expandView.resources.getString(R.string.room_created_summary_item_by_you)
+            } else {
+                holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
+            }
             holder.summaryView.text = summary
             holder.summaryView.visibility = View.VISIBLE
             holder.avatarView.visibility = View.VISIBLE
@@ -110,7 +114,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             override val avatarRenderer: AvatarRenderer,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             override val onCollapsedStateChanged: (Boolean) -> Unit,
-            val hasEncryptionEvent : Boolean,
+            val currentUserId: String,
+            val hasEncryptionEvent: Boolean,
             val isEncryptionAlgorithmSecure: Boolean
     ) : BasedMergedItem.Attributes
 }

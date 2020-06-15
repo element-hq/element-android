@@ -53,11 +53,11 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
 
         ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_enter_passphrase)
         withState(sharedViewModel) {
-            // set initial value (usefull when coming back)
+            // set initial value (useful when coming back)
             ssss_passphrase_enter_edittext.setText(it.passphrase ?: "")
         }
         ssss_passphrase_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {

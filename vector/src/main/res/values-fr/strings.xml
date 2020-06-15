@@ -669,8 +669,6 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’ap
 
     <string name="widget_no_power_to_manage">Vous avez besoin d’une permission pour gérer les widgets de ce salon</string>
     <string name="widget_creation_failure">La création du widget a échoué</string>
-    <string name="event_formatter_widget_added">%1$s ajouté par %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s supprimé par %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
     <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer le widget de ce salon ?</string>
 
@@ -908,9 +906,6 @@ Voulez-vous en ajouter ?</string>
     <string name="error_empty_field_your_password">Veuillez renseigner votre mot de passe.</string>
 
     <string name="send_bug_report_description_in_english">Si possible, veuillez écrire la description en anglais.</string>
-    <string name="room_participants_action_unignore_prompt">Afficher tous les messages de cet utilisateur ?
-
-Veuillez noter que cette action redémarrera l’application et pourra prendre un certain temps.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Envoyer une réponse chiffrée…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Envoyer une réponse (non chiffrée)…</string>
     <string name="settings_preview_media_before_sending">Prévisualiser le média avant de l’envoyer</string>
@@ -1020,10 +1015,6 @@ Veuillez noter que cette action redémarrera l’application et pourra prendre u
 
     <string name="call_anyway">Appeler quand même</string>
     <string name="room_participants_action_kick">Expulser</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
-        <item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
-    </plurals>
     <string name="reason_hint">Motif</string>
 
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>

@@ -57,11 +57,11 @@ class BootstrapMigrateBackupFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         withState(sharedViewModel) {
-            // set initial value (usefull when coming back)
+            // set initial value (useful when coming back)
             bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         bootstrapMigrateEditText.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {

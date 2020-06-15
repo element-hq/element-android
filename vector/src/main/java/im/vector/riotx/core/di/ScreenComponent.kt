@@ -32,10 +32,12 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
+import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -56,13 +58,17 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
+import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.ui.UiStateRepository
+import im.vector.riotx.features.widgets.WidgetActivity
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 
 @Component(
         dependencies = [
@@ -98,6 +104,9 @@ interface ScreenComponent {
      * ========================================================================================== */
 
     fun inject(activity: HomeActivity)
+    fun inject(activity: RoomDetailActivity)
+    fun inject(activity: RoomProfileActivity)
+    fun inject(activity: RoomMemberProfileActivity)
     fun inject(activity: VectorSettingsActivity)
     fun inject(activity: KeysBackupManageActivity)
     fun inject(activity: EmojiReactionPickerActivity)
@@ -120,6 +129,7 @@ interface ScreenComponent {
     fun inject(activity: BigImageViewerActivity)
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
+    fun inject(activity: WidgetActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -134,6 +144,8 @@ interface ScreenComponent {
     fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
     fun inject(bottomSheet: DeviceListBottomSheet)
     fun inject(bottomSheet: BootstrapBottomSheet)
+    fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
+    fun inject(bottomSheet: RoomWidgetsBottomSheet)
 
     /* ==========================================================================================
      * Others

@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -34,6 +35,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
@@ -46,6 +48,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -67,13 +70,16 @@ import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -82,14 +88,15 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomDetailViewState,
+        @Assisted private val initialState: RoomDetailViewState,
         userPreferencesProvider: UserPreferencesProvider,
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
         private val typingHelper: TypingHelper,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val stickerPickerActionHandler: StickerPickerActionHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -100,12 +107,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         TimelineSettings(30,
                 filterEdits = false,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = false,
                 filterTypes = false,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
                 filterEdits = true,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = true,
                 filterTypes = true,
                 allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
@@ -155,11 +164,38 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeDrafts()
         observeUnreadState()
         observeMyRoomMember()
+        observeActiveRoomWidgets()
+        observePowerLevel()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observePowerLevel() {
+        PowerLevelsObservableFactory(room).createObservable()
+                .subscribe {
+                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    setState {
+                        copy(canSendMessage = canSendMessage)
+                    }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeActiveRoomWidgets() {
+        session.rx()
+                .liveRoomWidgets(
+                        roomId = initialState.roomId,
+                        widgetId = QueryStringValue.NoCondition
+                )
+                .map { widgets ->
+                    widgets.filter { it.isActive }
+                }
+                .execute {
+                    copy(activeRoomWidgets = it)
+                }
     }
 
     private fun observeMyRoomMember() {
@@ -183,6 +219,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
             is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
             is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
+            is RoomDetailAction.SendSticker                      -> handleSendSticker(action)
             is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
             is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
             is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
@@ -214,6 +251,18 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
+            is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
+        }
+    }
+
+    private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
+        room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+    }
+
+    private fun handleSelectStickerAttachment() {
+        viewModelScope.launch {
+            val viewEvent = stickerPickerActionHandler.handle()
+            _viewEvents.post(viewEvent)
         }
     }
 
@@ -322,6 +371,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+        R.id.open_matrix_apps    -> session.integrationManagerService().isIntegrationEnabled()
         else                     -> false
     }
 
@@ -372,16 +422,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.UnbanUser                -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleUnbanSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.BanUser                  -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleBanSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.KickUser                 -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleKickSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             handleJoinToAnotherRoomSlashCommand(slashCommandResult)
@@ -567,23 +617,38 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
-
-        room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
-            }
-        })
+        launchSlashCommandFlow {
+            room.updateTopic(changeTopic.topic, it)
+        }
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        launchSlashCommandFlow {
+            room.invite(invite.userId, invite.reason, it)
+        }
+    }
 
-        room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
+    private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
+        launchSlashCommandFlow {
+            room.kick(kick.userId, kick.reason, it)
+        }
+    }
+
+    private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
+        launchSlashCommandFlow {
+            room.ban(ban.userId, ban.reason, it)
+        }
+    }
+
+    private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
+        launchSlashCommandFlow {
+            room.unban(unban.userId, unban.reason, it)
+        }
+    }
+
+    private fun launchSlashCommandFlow(lambda: (MatrixCallback<Unit>) -> Unit) {
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        val matrixCallback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
@@ -591,7 +656,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
-        })
+        }
+        lambda.invoke(matrixCallback)
     }
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
@@ -1006,7 +1072,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, "")?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }

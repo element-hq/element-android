@@ -17,26 +17,21 @@
 package im.vector.matrix.android.internal.session.room.state
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.query.getOrNull
-import im.vector.matrix.android.internal.database.query.whereStateKey
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import io.realm.Realm
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val monarchy: Monarchy,
+                                                               private val stateEventDataSource: StateEventDataSource,
                                                                private val taskExecutor: TaskExecutor,
                                                                private val sendStateTask: SendStateTask
 ) : StateService {
@@ -46,33 +41,47 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         fun create(roomId: String): StateService
     }
 
-    override fun getStateEvent(eventType: String, stateKey: String): Event? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            CurrentStateEventEntity.getOrNull(realm, roomId, type = eventType, stateKey = stateKey)?.root?.asDomain()
-        }
+    override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
+        return stateEventDataSource.getStateEvent(roomId, eventType, stateKey)
     }
 
-    override fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> CurrentStateEventEntity.whereStateKey(realm, roomId, type = eventType, stateKey = "") },
-                { it.root?.asDomain() }
+    override fun getStateEventLive(eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
+        return stateEventDataSource.getStateEventLive(roomId, eventType, stateKey)
+    }
+
+    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
+        return stateEventDataSource.getStateEvents(roomId, eventTypes, stateKey)
+    }
+
+    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
+        return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
+    }
+
+    override fun sendStateEvent(
+            eventType: String,
+            stateKey: String?,
+            body: JsonDict,
+            callback: MatrixCallback<Unit>
+    ): Cancelable {
+        val params = SendStateTask.Params(
+                roomId = roomId,
+                stateKey = stateKey,
+                eventType = eventType,
+                body = body
         )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
-    }
-
-    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
-        val params = SendStateTask.Params(roomId,
-                EventType.STATE_ROOM_TOPIC,
-                mapOf(
-                        "topic" to topic
-                ))
-
-        sendStateTask
+        return sendStateTask
                 .configureWith(params) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable {
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_TOPIC,
+                body = mapOf("topic" to topic),
+                callback = callback,
+                stateKey = null
+        )
     }
 }

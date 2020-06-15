@@ -86,7 +86,11 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun didSelectMenuAction(quickAction: RoomListQuickActionsSharedAction) {
         sharedActionViewModel.post(quickAction)
-        dismiss()
+        // Do not dismiss for all the actions
+        when (quickAction) {
+            is RoomListQuickActionsSharedAction.Favorite -> Unit
+            else                                         -> dismiss()
+        }
     }
 
     companion object {

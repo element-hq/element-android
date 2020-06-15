@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.MatrixItem
 
 /**
@@ -55,6 +56,7 @@ data class RoomDetailViewState(
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
+        val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
         val typingRoomMembers: List<MatrixItem.UserItem>? = null,
         val typingMessage: String? = null,
         val sendMode: SendMode = SendMode.REGULAR(""),
@@ -63,7 +65,8 @@ data class RoomDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
-        val canShowJumpToReadMarker: Boolean = true
+        val canShowJumpToReadMarker: Boolean = true,
+        val canSendMessage: Boolean = true
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

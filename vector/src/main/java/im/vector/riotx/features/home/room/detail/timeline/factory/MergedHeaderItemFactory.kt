@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.prevOrNull
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -38,7 +39,8 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreatio
 import javax.inject.Inject
 
 class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer,
-                                                  private val avatarSizeProvider: AvatarSizeProvider) {
+                                                  private val avatarSizeProvider: AvatarSizeProvider,
+                                                  private val activeSessionHolder: ActiveSessionHolder) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -188,7 +190,8 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                     },
                     hasEncryptionEvent = hasEncryption,
                     isEncryptionAlgorithmSecure = encryptionAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM,
-                    readReceiptsCallback = callback
+                    readReceiptsCallback = callback,
+                    currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
             )
             MergedRoomCreationItem_()
                     .id(mergeId)

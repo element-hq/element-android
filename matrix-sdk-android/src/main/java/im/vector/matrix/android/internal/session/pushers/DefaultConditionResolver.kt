@@ -48,7 +48,7 @@ internal class DefaultConditionResolver @Inject constructor(
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
 
-        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
+        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                 ?.content
                 ?.toModel<PowerLevelsContent>()
                 ?: PowerLevelsContent()

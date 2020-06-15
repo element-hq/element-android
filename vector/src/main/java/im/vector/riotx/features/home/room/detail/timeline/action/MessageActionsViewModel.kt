@@ -15,11 +15,8 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -35,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -47,46 +45,11 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.settings.VectorPreferences
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
-/**
- * Quick reactions state
- */
-data class ToggleState(
-        val reaction: String,
-        val isSelected: Boolean
-)
-
-data class MessageActionState(
-        val roomId: String,
-        val eventId: String,
-        val informationData: MessageInformationData,
-        val timelineEvent: Async<TimelineEvent> = Uninitialized,
-        val messageBody: CharSequence = "",
-        // For quick reactions
-        val quickStates: Async<List<ToggleState>> = Uninitialized,
-        // For actions
-        val actions: List<EventSharedAction> = emptyList(),
-        val expendedReportContentMenu: Boolean = false
-) : MvRxState {
-
-    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
-
-    private val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
-
-    fun senderName(): String = informationData.memberName?.toString() ?: ""
-
-    fun time(): String? = timelineEvent()?.root?.originServerTs?.let { dateFormat.format(Date(it)) } ?: ""
-
-    fun canReact() = timelineEvent()?.canReact() == true
-}
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -121,6 +84,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     init {
         observeEvent()
         observeReactions()
+        observePowerLevel()
         observeTimelineEventState()
     }
 
@@ -136,6 +100,23 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     expendedReportContentMenu = it.expendedReportContentMenu.not()
             )
         }
+    }
+
+    private fun observePowerLevel() {
+        if (room == null) {
+            return
+        }
+        PowerLevelsObservableFactory(room).createObservable()
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
+                    val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
+                    val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact)
+                    setState {
+                        copy(actionPermissions = permissions)
+                    }
+                }.disposeOnClear()
     }
 
     private fun observeEvent() {
@@ -163,11 +144,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeTimelineEventState() {
-        asyncSubscribe(MessageActionState::timelineEvent) { timelineEvent ->
+        selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
+            val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
             setState {
                 copy(
-                        messageBody = computeMessageBody(timelineEvent),
-                        actions = actionsForEvent(timelineEvent)
+                        messageBody = computeMessageBody(nonNullTimelineEvent),
+                        actions = actionsForEvent(nonNullTimelineEvent, permissions)
                 )
             }
         }
@@ -235,14 +217,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
     }
 
-    private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
+    private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: timelineEvent.root.getClearContent().toModel()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
             if (timelineEvent.root.sendState.hasFailed()) {
-                if (canRetry(timelineEvent)) {
+                if (canRetry(timelineEvent, actionPermissions)) {
                     add(EventSharedAction.Resend(eventId))
                 }
                 add(EventSharedAction.Remove(eventId))
@@ -253,15 +235,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
             } else if (timelineEvent.root.sendState == SendState.SYNCED) {
                 if (!timelineEvent.root.isRedacted()) {
-                    if (canReply(timelineEvent, messageContent)) {
+                    if (canReply(timelineEvent, messageContent, actionPermissions)) {
                         add(EventSharedAction.Reply(eventId))
                     }
 
-                    if (canEdit(timelineEvent, session.myUserId)) {
+                    if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
                         add(EventSharedAction.Edit(eventId))
                     }
 
-                    if (canRedact(timelineEvent, session.myUserId)) {
+                    if (canRedact(timelineEvent, actionPermissions)) {
                         add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
                     }
 
@@ -270,11 +252,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.Copy(messageContent!!.body))
                     }
 
-                    if (timelineEvent.canReact()) {
+                    if (timelineEvent.canReact() && actionPermissions.canReact) {
                         add(EventSharedAction.AddReaction(eventId))
                     }
 
-                    if (canQuote(timelineEvent, messageContent)) {
+                    if (canQuote(timelineEvent, messageContent, actionPermissions)) {
                         add(EventSharedAction.Quote(eventId))
                     }
 
@@ -340,9 +322,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return false
     }
 
-    private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
+    private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
@@ -355,9 +338,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
+    private fun canQuote(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
@@ -369,15 +353,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
+    private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        // TODO if user is admin or moderator
-        return event.root.senderId == myUserId
+        return actionPermissions.canRedact
     }
 
-    private fun canRetry(event: TimelineEvent): Boolean {
-        return event.root.sendState.hasFailed() && event.root.isTextMessage()
+    private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
+        return event.root.sendState.hasFailed() && event.root.isTextMessage() && actionPermissions.canSendMessage
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
@@ -387,9 +370,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
-    private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
+    private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
