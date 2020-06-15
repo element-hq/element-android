@@ -230,6 +230,9 @@ class RoomListFragment @Inject constructor(
             is RoomListQuickActionsSharedAction.Settings                  -> {
                 navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
+            is RoomListQuickActionsSharedAction.Favorite                  -> {
+                roomListViewModel.handle(RoomListAction.ToggleFavorite(quickAction.roomId))
+            }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
@@ -239,8 +242,9 @@ class RoomListFragment @Inject constructor(
                         }
                         .setNegativeButton(R.string.cancel, null)
                         .show()
+                Unit
             }
-        }
+        }.exhaustive
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->

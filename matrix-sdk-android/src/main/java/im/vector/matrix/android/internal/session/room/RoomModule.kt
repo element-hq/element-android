@@ -58,6 +58,10 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReportCon
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.tags.AddTagToRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DefaultAddTagToRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DefaultDeleteTagFromRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DeleteTagFromRoomTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchNextTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
@@ -191,4 +195,10 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetUploadsTask(task: DefaultGetUploadsTask): GetUploadsTask
+
+    @Binds
+    abstract fun bindAddTagToRoomTask(task: DefaultAddTagToRoomTask): AddTagToRoomTask
+
+    @Binds
+    abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
 }

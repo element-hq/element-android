@@ -58,7 +58,7 @@ class ShortcutsHandler @Inject constructor(
                 .observeOn(Schedulers.computation())
                 .subscribe { rooms ->
                     val shortcuts = rooms
-                            .filter { room -> room.tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE } }
+                            .filter { room -> room.isFavorite }
                             .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)

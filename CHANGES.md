@@ -13,6 +13,7 @@ Improvements 🙌:
  - Correctly handle SSO login redirection
  - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
  - Improve checking of homeserver version support (#1442)
+ - Add capability to add and remove a room from the favorites (#1217)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
