@@ -68,8 +68,9 @@ object ThemeUtils {
         return mUseDarkTheme
     }
 
-    fun invalidateNightMode() {
+    fun invalidateNightMode(context: Context) {
         mThemeInitialized = false;
+        setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context))
     }
 
     /**

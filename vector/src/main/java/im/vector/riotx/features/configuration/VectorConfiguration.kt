@@ -37,11 +37,10 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
             Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
             Locale.setDefault(VectorLocale.applicationLocale)
-            ThemeUtils.invalidateNightMode()
         }
         if (ThemeUtils.useDarkTheme(context) != ThemeUtils.shouldUseDarkTheme(context)) {
             Timber.v("## onConfigurationChanged(): night mode has changed")
-            ThemeUtils.invalidateNightMode()
+            ThemeUtils.invalidateNightMode(context)
         }
     }
 
