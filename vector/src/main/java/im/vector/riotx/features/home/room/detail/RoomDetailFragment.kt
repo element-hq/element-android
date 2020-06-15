@@ -372,6 +372,7 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
+        autoCompleter.clear()
         debouncer.cancelAll()
         recyclerView.cleanup()
 

@@ -67,7 +67,7 @@ class RoomProfileFragment @Inject constructor(
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
 
-    private lateinit var appBarStateChangeListener: AppBarStateChangeListener
+    private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
@@ -147,6 +147,7 @@ class RoomProfileFragment @Inject constructor(
         super.onDestroyView()
         matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         matrixProfileRecyclerView.cleanup()
+        appBarStateChangeListener = null
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
