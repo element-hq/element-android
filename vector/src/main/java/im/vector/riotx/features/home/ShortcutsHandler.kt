@@ -22,7 +22,6 @@ import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.utils.DimensionConverter

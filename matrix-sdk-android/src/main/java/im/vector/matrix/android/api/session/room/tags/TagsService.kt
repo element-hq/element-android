@@ -29,7 +29,7 @@ interface TagsService {
     fun addTag(tag: String, order: Double?, callback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * Remove tag form a room
+     * Remove tag from a room
      */
     fun deleteTag(tag: String, callback: MatrixCallback<Unit>): Cancelable
 }
