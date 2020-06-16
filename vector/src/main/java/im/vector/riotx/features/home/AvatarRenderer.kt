@@ -75,6 +75,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
+    @Throws
     fun shortcutDrawable(context: Context, glideRequest: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
         return glideRequest
                 .asBitmap()
