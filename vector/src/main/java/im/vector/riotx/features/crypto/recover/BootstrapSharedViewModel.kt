@@ -408,7 +408,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
             val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             val args: BootstrapBottomSheet.Args = fragment.arguments?.getParcelable(BootstrapBottomSheet.EXTRA_ARGS)
-                    ?: BootstrapBottomSheet.Args(true)
+                    ?: BootstrapBottomSheet.Args(isNewAccount = true, initCrossSigningOnly = true)
             return fragment.bootstrapViewModelFactory.create(state, args)
         }
     }

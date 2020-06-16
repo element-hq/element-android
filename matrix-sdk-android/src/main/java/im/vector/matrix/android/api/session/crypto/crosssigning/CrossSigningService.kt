@@ -41,7 +41,7 @@ interface CrossSigningService {
      * Users needs to enter credentials
      */
     fun initializeCrossSigning(authParams: UserPasswordAuth?,
-                               callback: MatrixCallback<Unit>? = null)
+                               callback: MatrixCallback<Unit>)
 
     fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
                                   uskKeyPrivateKey: String?,

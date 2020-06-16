@@ -36,6 +36,7 @@ internal data class SignatureUploadResponse(
 
 )
 
+// TODO Not used. Remove?
 @JsonClass(generateAdapter = true)
 data class UploadResponseFailure(
         @Json(name = "status")

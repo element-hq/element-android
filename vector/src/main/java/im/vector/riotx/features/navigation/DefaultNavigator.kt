@@ -124,9 +124,9 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun upgradeSessionSecurity(context: Context) {
+    override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, false)
+            BootstrapBottomSheet.show(context.supportFragmentManager, false, initCrossSigningOnly)
         }
     }
 

@@ -42,7 +42,7 @@ interface Navigator {
 
     fun waitSessionVerification(context: Context)
 
-    fun upgradeSessionSecurity(context: Context)
+    fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean)
 
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 

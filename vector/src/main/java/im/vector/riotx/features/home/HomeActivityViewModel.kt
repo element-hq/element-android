@@ -21,11 +21,16 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.session.InitialSyncProgressService
+import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.rx.asObservable
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.platform.EmptyAction
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.ReAuthHelper
 import timber.log.Timber
@@ -35,7 +40,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         @Assisted private val args: HomeActivityArgs,
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper
-) : VectorViewModel<HomeActivityViewState, EmptyAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<HomeActivityViewState, EmptyAction, HomeActivityViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -52,8 +57,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
-    // TODO Remove?
-    var hasDisplayedCompleteSecurityPrompt: Boolean = false
+    private var checkBootstrap = false
 
     init {
         observeInitialSync()
@@ -66,6 +70,19 @@ class HomeActivityViewModel @AssistedInject constructor(
         session.getInitialSyncProgressStatus()
                 .asObservable()
                 .subscribe { status ->
+                    when (status) {
+                        is InitialSyncProgressService.Status.Progressing -> {
+                            // Schedule a check of the bootstrap when the init sync will be finished
+                            checkBootstrap = true
+                        }
+                        is InitialSyncProgressService.Status.Idle        -> {
+                            if (checkBootstrap) {
+                                checkBootstrap = false
+                                maybeBootstrapCrossSigning()
+                            }
+                        }
+                    }
+
                     setState {
                         copy(
                                 initialSyncProgressServiceStatus = status
@@ -92,10 +109,55 @@ class HomeActivityViewModel @AssistedInject constructor(
                             session = null,
                             user = session.myUserId,
                             password = password
-                    )
+                    ),
+                    callback = NoOpMatrixCallback()
             )
-            // TODO Download keys?
         }
+    }
+
+    private fun maybeBootstrapCrossSigning() {
+        // In case of account creation, it is already done before
+        if (args.accountCreation) return
+
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+
+        // Ensure keys of the user are downloaded
+        session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
+                // Is there already cross signing keys here?
+                val mxCrossSigningInfo = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
+                if (mxCrossSigningInfo != null) {
+                    // Cross-signing is already set up for this user, is it trusted?
+                    if(!mxCrossSigningInfo.isTrusted()) {
+                        // New session
+                        _viewEvents.post(HomeActivityViewEvents.OnNewSession(session.getUser(session.myUserId)?.toMatrixItem()))
+                    }
+                } else {
+                    // Initialize cross-signing
+                    val password = reAuthHelper.data
+
+                    if (password == null) {
+                        // Check this is not an SSO account
+                        if (session.getHomeServerCapabilities().canChangePassword) {
+                            // Ask password to the user: Upgrade security
+                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUser(session.myUserId)?.toMatrixItem()))
+                        }
+                        // Else (SSO) just ignore for the moment
+                    } else {
+                        // We do not use the viewModel context because we do not want to cancel this action
+                        Timber.d("Initialize cross signing")
+                        session.cryptoService().crossSigningService().initializeCrossSigning(
+                                authParams = UserPasswordAuth(
+                                        session = null,
+                                        user = session.myUserId,
+                                        password = password
+                                ),
+                                callback = NoOpMatrixCallback()
+                        )
+                    }
+                }
+            }
+        })
     }
 
     override fun handle(action: EmptyAction) {

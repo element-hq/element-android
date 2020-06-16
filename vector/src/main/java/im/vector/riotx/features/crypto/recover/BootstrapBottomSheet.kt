@@ -44,7 +44,8 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Parcelize
     data class Args(
-            val isNewAccount: Boolean
+            val isNewAccount: Boolean,
+            val initCrossSigningOnly: Boolean
     ) : Parcelable
 
     override val showExpanded = true
@@ -168,10 +169,10 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         const val EXTRA_ARGS = "EXTRA_ARGS"
 
-        fun show(fragmentManager: FragmentManager, isAccountCreation: Boolean) {
+        fun show(fragmentManager: FragmentManager, isAccountCreation: Boolean, initCrossSigningOnly: Boolean) {
             BootstrapBottomSheet().apply {
                 isCancelable = false
-                arguments = Bundle().apply { this.putParcelable(EXTRA_ARGS, Args(isAccountCreation)) }
+                arguments = Bundle().apply { this.putParcelable(EXTRA_ARGS, Args(isAccountCreation, initCrossSigningOnly)) }
             }.show(fragmentManager, "BootstrapBottomSheet")
         }
     }

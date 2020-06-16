@@ -140,7 +140,7 @@ internal class DefaultCrossSigningService @Inject constructor(
      *   - Sign the keys and upload them
      *   - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures
      */
-    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>?) {
+    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning  initializeCrossSigning")
 
         val params = InitializeCrossSigningTask.Params(
@@ -150,7 +150,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             this.callbackThread = TaskThread.CRYPTO
             this.callback = object : MatrixCallback<InitializeCrossSigningTask.Result> {
                 override fun onFailure(failure: Throwable) {
-                    callback?.onFailure(failure)
+                    callback.onFailure(failure)
                 }
 
                 override fun onSuccess(data: InitializeCrossSigningTask.Result) {
@@ -162,7 +162,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                     userPkSigning = OlmPkSigning().apply { initWithSeed(data.userKeyPK.fromBase64()) }
                     selfSigningPkSigning = OlmPkSigning().apply { initWithSeed(data.selfSigningKeyPK.fromBase64()) }
 
-                    callback?.onSuccess(Unit)
+                    callback.onSuccess(Unit)
                 }
             }
         }.executeBy(taskExecutor)
