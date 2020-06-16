@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -49,6 +48,7 @@ import javax.inject.Inject
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
+                                                        private val roomSummaryHolder: RoomSummaryHolder,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
@@ -75,8 +75,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
         }
 
-        val room = event.root.roomId?.let { session.getRoom(it) }
-        val e2eDecoration = getE2EDecoration(room, event)
+        val e2eDecoration = getE2EDecoration(event)
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -121,13 +120,14 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getE2EDecoration(room: Room?, event: TimelineEvent): E2EDecoration {
+    private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {
+        val roomSummary = roomSummaryHolder.roomSummary
         return if (
                 event.root.sendState == SendState.SYNCED
-                && room?.isEncrypted() == true
+                && roomSummary?.isEncrypted.orFalse()
                 // is user verified
                 && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
-            val ts = room.roomSummary()?.encryptionEventTs ?: 0
+            val ts = roomSummary?.encryptionEventTs ?: 0
             val eventTs = event.root.originServerTs ?: 0
             if (event.isEncrypted()) {
                 // Do not decorate failed to decrypt, or redaction (we lost sender device info)

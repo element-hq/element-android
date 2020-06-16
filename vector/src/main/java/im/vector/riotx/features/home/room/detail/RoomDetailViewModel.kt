@@ -71,6 +71,7 @@ import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
+import im.vector.riotx.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
@@ -96,7 +97,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stickerPickerActionHandler: StickerPickerActionHandler
+        private val stickerPickerActionHandler: StickerPickerActionHandler,
+        private val roomSummaryHolder: RoomSummaryHolder
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -1065,6 +1067,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+            roomSummaryHolder.set(summary)
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
                     session.getUser(inviterId)
@@ -1094,6 +1097,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
+        roomSummaryHolder.clear()
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {
