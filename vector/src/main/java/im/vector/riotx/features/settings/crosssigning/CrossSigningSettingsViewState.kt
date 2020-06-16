@@ -16,13 +16,12 @@
 
 package im.vector.riotx.features.settings.crosssigning
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import com.airbnb.mvrx.MvRxState
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 
-/**
- * Transient events for cross signing settings screen
- */
-sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
-
-    object VerifySession : CrossSigningSettingsViewEvents()
-}
+data class CrossSigningSettingsViewState(
+        val crossSigningInfo: MXCrossSigningInfo? = null,
+        val xSigningIsEnableInAccount: Boolean = false,
+        val xSigningKeysAreTrusted: Boolean = false,
+        val xSigningKeyCanSign: Boolean = true
+) : MvRxState

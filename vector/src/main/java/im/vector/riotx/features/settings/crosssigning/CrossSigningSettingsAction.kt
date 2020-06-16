@@ -16,13 +16,8 @@
 
 package im.vector.riotx.features.settings.crosssigning
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-/**
- * Transient events for cross signing settings screen
- */
-sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
-
-    object VerifySession : CrossSigningSettingsViewEvents()
+sealed class CrossSigningSettingsAction : VectorViewModelAction {
+    object VerifySession : CrossSigningSettingsAction()
 }
