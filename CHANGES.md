@@ -8,6 +8,7 @@ Features ✨:
 Improvements 🙌:
  - "Add Matrix app" menu is now always visible (#1495)
  - Handle `/op`, `/deop`, and `/nick` commands (#12)
+ - Prioritising Recovery key over Recovery passphrase (#1463)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
