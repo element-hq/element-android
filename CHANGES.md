@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Enable code optimization (Proguard)
 
 Other changes:
  -

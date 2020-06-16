@@ -192,10 +192,10 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
-
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
                 obfuscate false
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
