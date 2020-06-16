@@ -58,6 +58,8 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.extensions.observeK
+import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -162,6 +164,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
+        observeTypings()
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
@@ -999,15 +1002,20 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    val typingRoomMembers =
-                            typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds.orEmpty(), room)
-
                     copy(
                             asyncRoomSummary = async,
-                            typingRoomMembers = typingRoomMembers,
-                            typingMessage = typingHelper.toTypingMessage(typingRoomMembers)
+                            typingRoomMembers = typingRoomMembers
                     )
                 }
+    }
+
+    private fun observeTypings(){
+        typingHelper.getTypingMessage(initialState.roomId)
+                .asObservable()
+                .subscribe {
+                    setState { copy(typingMessage = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun getUnreadState() {

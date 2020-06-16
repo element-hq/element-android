@@ -64,7 +64,7 @@ class BreadcrumbsController @Inject constructor(
                         unreadNotificationCount(it.notificationCount)
                         showHighlighted(it.highlightCount > 0)
                         hasUnreadMessage(it.hasUnreadMessages)
-                        hasTypingUsers(typingHelper.excludeCurrentUser(it.typingRoomMemberIds).isNotEmpty())
+                        typingHelper(typingHelper)
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
                                 DebouncedClickListener(View.OnClickListener { _ ->

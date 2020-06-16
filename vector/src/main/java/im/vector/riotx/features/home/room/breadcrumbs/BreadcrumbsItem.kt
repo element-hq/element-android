@@ -26,18 +26,20 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.observeNotNull
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+import im.vector.riotx.features.home.room.typing.TypingHelper
 
 @EpoxyModelClass(layout = R.layout.item_breadcrumbs)
 abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
 
+    @EpoxyAttribute lateinit var typingHelper: TypingHelper
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
-    @EpoxyAttribute var hasTypingUsers: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
 
@@ -45,10 +47,12 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
-        holder.typingIndicator.isVisible = hasTypingUsers
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
+        typingHelper.hasTypingUsers(matrixItem.id).observeNotNull(this) { hasTypingUsers ->
+            holder.typingIndicator.isVisible = hasTypingUsers
+        }
     }
 
     class Holder : VectorEpoxyHolder() {

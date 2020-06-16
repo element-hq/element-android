@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
+import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -66,6 +67,7 @@ import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLive
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
+import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
@@ -269,4 +271,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
+
+    @Binds
+    abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
 }

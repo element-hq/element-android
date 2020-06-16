@@ -770,15 +770,15 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSubTitle(typingMessage: String?, topic: String) {
         // TODO Temporary place to put typing data
-        roomToolbarSubtitleView.let {
-            it.setTextOrHide(typingMessage ?: topic)
-
-            if (typingMessage == null) {
-                it.setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_secondary_text_color))
-                it.setTypeface(null, Typeface.NORMAL)
+        val subtitle = typingMessage?.takeIf { it.isNotBlank() } ?: topic
+        roomToolbarSubtitleView.apply {
+            setTextOrHide(subtitle)
+            if (typingMessage.isNullOrBlank()) {
+                setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_secondary_text_color))
+                setTypeface(null, Typeface.NORMAL)
             } else {
-                it.setTextColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
-                it.setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                setTypeface(null, Typeface.BOLD)
             }
         }
     }

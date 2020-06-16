@@ -45,6 +45,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
+import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -99,6 +100,7 @@ internal class DefaultSession @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
+        private val typingUsersTracker: TypingUsersTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
@@ -236,6 +238,8 @@ internal class DefaultSession @Inject constructor(
     override fun contentUrlResolver() = contentUrlResolver
 
     override fun contentUploadProgressTracker() = contentUploadProgressTracker
+
+    override fun typingUsersTracker() = typingUsersTracker
 
     override fun cryptoService(): CryptoService = cryptoService.get()
 

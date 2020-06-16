@@ -69,6 +69,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
+                                                   private val roomTypingUsersHandler: RoomTypingUsersHandler,
                                                    @UserId private val userId: String,
                                                    private val eventBus: EventBus) {
 
@@ -170,14 +171,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             it.type == EventType.STATE_ROOM_MEMBER
         } != null
 
+        roomTypingUsersHandler.handle(realm, roomId, ephemeralResult)
         roomSummaryUpdater.update(
                 realm,
                 roomId,
                 Membership.JOIN,
                 roomSync.summary,
                 roomSync.unreadNotifications,
-                updateMembers = hasRoomMember,
-                ephemeralResult = ephemeralResult)
+                updateMembers = hasRoomMember
+        )
         return roomEntity
     }
 
