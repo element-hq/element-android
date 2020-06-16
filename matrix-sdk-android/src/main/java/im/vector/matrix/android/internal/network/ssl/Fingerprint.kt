@@ -76,6 +76,7 @@ data class Fingerprint(
         }
     }
 
+    @JsonClass(generateAdapter = false)
     enum class HashType {
         @Json(name = "sha-1") SHA1,
         @Json(name = "sha-256")SHA256
