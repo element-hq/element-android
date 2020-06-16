@@ -117,6 +117,7 @@
     <string name="action_mark_room_read">Mark as read</string>
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
+    <string name="action_copy">Copy</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -2477,5 +2478,15 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="a11y_unmute_microphone">Unmute the microphone</string>
     <string name="a11y_stop_camera">Stop the camera</string>
     <string name="a11y_start_camera">Start the camera</string>
+
+    <string name="settings_setup_secure_backup">Set up Secure Backup</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Set up Secure Backup</string>
+    <string name="bottom_sheet_setup_secure_backup_content_1">Backup your encryption keys with your account data in case you lose access to your logins.</string>
+    <string name="bottom_sheet_setup_secure_backup_content_2">Your keys will be secured with a unique Recovery Key.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Set up</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Save your Recovery Key</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Store your Recovery Key somewhere safe. It can be used to unlock your encrypted messages and data.</string>
 
 </resources>

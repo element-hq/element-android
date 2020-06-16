@@ -24,5 +24,6 @@ import im.vector.riotx.core.platform.VectorViewEvents
 sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
 
+    object SetUpRecovery : CrossSigningSettingsViewEvents()
     object VerifySession : CrossSigningSettingsViewEvents()
 }

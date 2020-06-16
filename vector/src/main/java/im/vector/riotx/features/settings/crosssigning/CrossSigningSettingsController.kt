@@ -33,6 +33,7 @@ class CrossSigningSettingsController @Inject constructor(
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
     interface InteractionListener {
+        fun setupRecovery()
         fun verifySession()
     }
 
@@ -67,6 +68,15 @@ class CrossSigningSettingsController @Inject constructor(
                 id("enable")
                 titleIconResourceId(R.drawable.ic_shield_black)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+            }
+            bottomSheetVerificationActionItem {
+                id("setup_recovery")
+                title(stringProvider.getString(R.string.settings_setup_secure_backup))
+                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                iconRes(R.drawable.ic_arrow_right)
+                listener {
+                    interactionListener?.setupRecovery()
+                }
             }
             bottomSheetVerificationActionItem {
                 id("verify")

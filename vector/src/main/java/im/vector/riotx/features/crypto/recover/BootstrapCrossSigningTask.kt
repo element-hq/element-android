@@ -16,10 +16,8 @@
 
 package im.vector.riotx.features.crypto.recover
 
-import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -71,19 +69,23 @@ data class Params(
         val keySpec: SsssKeySpec? = null
 )
 
+// TODO Rename to CreateServerRecovery
 class BootstrapCrossSigningTask @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider
 ) : ViewModelTask<Params, BootstrapResult> {
 
     override suspend fun execute(params: Params): BootstrapResult {
+        val crossSigningService = session.cryptoService().crossSigningService()
+
+        // TODO Remove
+        /*
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
                         isIndeterminate = true
                 )
         )
-        val crossSigningService = session.cryptoService().crossSigningService()
 
         try {
             awaitCallback<Unit> {
@@ -92,6 +94,7 @@ class BootstrapCrossSigningTask @Inject constructor(
         } catch (failure: Throwable) {
             return handleInitializeXSigningError(failure)
         }
+         */
 
         val keyInfo: SsssKeyCreationInfo
 
@@ -214,6 +217,8 @@ class BootstrapCrossSigningTask @Inject constructor(
         return BootstrapResult.Success(keyInfo)
     }
 
+    /*
+    TODO Remove
     private fun handleInitializeXSigningError(failure: Throwable): BootstrapResult {
         if (failure is Failure.ServerError && failure.error.code == MatrixError.M_FORBIDDEN) {
             return BootstrapResult.InvalidPasswordError(failure.error)
@@ -230,4 +235,5 @@ class BootstrapCrossSigningTask @Inject constructor(
         }
         return BootstrapResult.GenericError(failure)
     }
+     */
 }

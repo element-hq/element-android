@@ -30,6 +30,7 @@ import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.riotx.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
+import im.vector.riotx.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
@@ -455,6 +456,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(BootstrapWaitingFragment::class)
     fun bindBootstrapWaitingFragment(fragment: BootstrapWaitingFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapSetupRecoveryKeyFragment::class)
+    fun bindBootstrapSetupRecoveryKeyFragment(fragment: BootstrapSetupRecoveryKeyFragment): Fragment
 
     @Binds
     @IntoMap

@@ -27,6 +27,8 @@ sealed class BootstrapActions : VectorViewModelAction {
     object GoToCompleted : BootstrapActions()
     object GoToEnterAccountPassword : BootstrapActions()
 
+    object SetupRecoveryKey : BootstrapActions()
+
     object DoInitializeGeneratedKey : BootstrapActions()
     object TogglePasswordVisibility : BootstrapActions()
     data class ReAuth(val pass: String) : BootstrapActions()

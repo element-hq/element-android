@@ -53,6 +53,9 @@ class CrossSigningSettingsFragment @Inject constructor(
                 CrossSigningSettingsViewEvents.VerifySession -> {
                     navigator.waitSessionVerification(requireActivity())
                 }
+                CrossSigningSettingsViewEvents.SetUpRecovery -> {
+                    navigator.upgradeSessionSecurity(requireActivity(), false)
+                }
             }.exhaustive
         }
     }
@@ -80,6 +83,10 @@ class CrossSigningSettingsFragment @Inject constructor(
         recyclerView.cleanup()
         controller.interactionListener = null
         super.onDestroyView()
+    }
+
+    override fun setupRecovery() {
+        viewModel.handle(CrossSigningSettingsAction.SetUpRecovery)
     }
 
     override fun verifySession() {

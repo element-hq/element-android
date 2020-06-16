@@ -19,5 +19,6 @@ package im.vector.riotx.features.settings.crosssigning
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class CrossSigningSettingsAction : VectorViewModelAction {
+    object SetUpRecovery : CrossSigningSettingsAction()
     object VerifySession : CrossSigningSettingsAction()
 }

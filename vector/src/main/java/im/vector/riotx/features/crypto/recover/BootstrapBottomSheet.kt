@@ -121,8 +121,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-
         when (state.step) {
+            is BootstrapStep.SetupSecureBackup           -> {
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+                bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
+                showFragment(BootstrapSetupRecoveryKeyFragment::class, Bundle())
+            }
             is BootstrapStep.CheckingMigration           -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.upgrade_security)
@@ -134,17 +138,17 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 showFragment(BootstrapAccountPasswordFragment::class, Bundle())
             }
             is BootstrapStep.Initializing                -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
                 bootstrapTitleText.text = getString(R.string.bootstrap_loading_title)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
             is BootstrapStep.SaveRecoveryKey             -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
-                bootstrapTitleText.text = getString(R.string.keys_backup_setup_step3_please_make_copy)
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+                bootstrapTitleText.text = getString(R.string.bottom_sheet_save_your_recovery_key_title)
                 showFragment(BootstrapSaveRecoveryKeyFragment::class, Bundle())
             }
             is BootstrapStep.DoneSuccess                 -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
                 bootstrapTitleText.text = getString(R.string.bootstrap_finish_title)
                 showFragment(BootstrapConclusionFragment::class, Bundle())
             }
@@ -153,7 +157,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
                     else                                             -> true
                 }
-                val drawableRes = if (isKey) R.drawable.ic_message_key else R.drawable.ic_message_password
+                val drawableRes = if (isKey) R.drawable.ic_secure_backup_24dp else R.drawable.ic_message_password
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
                         requireContext(),
                         drawableRes)

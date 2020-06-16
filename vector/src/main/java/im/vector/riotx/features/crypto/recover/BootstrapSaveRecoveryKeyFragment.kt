@@ -21,14 +21,12 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.core.utils.toast
 import kotlinx.android.synthetic.main.fragment_bootstrap_save_key.*
@@ -47,14 +45,6 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val messageKey = getString(R.string.message_key)
-        val recoveryPassphrase = getString(R.string.recovery_passphrase)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_link_text_color)
-        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, messageKey, recoveryPassphrase)
-                .toSpannable()
-                .colorizeMatchingText(messageKey, color)
-                .colorizeMatchingText(recoveryPassphrase, color)
 
         recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
         recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }

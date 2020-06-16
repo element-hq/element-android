@@ -17,6 +17,12 @@
 package im.vector.riotx.features.crypto.recover
 
 /**
+ *                        ┌───────────────────────────────────┐
+ *                        │  BootstrapStep.SetupSecureBackup  │
+ *                        └───────────────────────────────────┘
+ *                                          │
+ *                                          │
+ *                                          ▼
  *                             ┌─────────────────────────┐
  *                             │ User has signing keys?  │──────────── Account
  *                             └─────────────────────────┘            Creation ?
@@ -73,6 +79,8 @@ package im.vector.riotx.features.crypto.recover
  */
 
 sealed class BootstrapStep {
+    object SetupSecureBackup : BootstrapStep()
+
     data class AccountPassword(val isPasswordVisible: Boolean, val failure: String? = null) : BootstrapStep()
     object CheckingMigration : BootstrapStep()
 

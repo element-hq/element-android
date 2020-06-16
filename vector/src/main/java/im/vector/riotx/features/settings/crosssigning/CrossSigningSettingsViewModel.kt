@@ -53,6 +53,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
 
     override fun handle(action: CrossSigningSettingsAction) {
         when (action) {
+            CrossSigningSettingsAction.SetUpRecovery -> {
+                _viewEvents.post(CrossSigningSettingsViewEvents.SetUpRecovery)
+            }
             CrossSigningSettingsAction.VerifySession -> {
                 _viewEvents.post(CrossSigningSettingsViewEvents.VerifySession)
             }

@@ -17,11 +17,9 @@
 package im.vector.riotx.features.crypto.recover
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -31,7 +29,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
-import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
@@ -45,15 +42,6 @@ import im.vector.riotx.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.OutputStream
-
-data class BootstrapViewState(
-        val step: BootstrapStep = BootstrapStep.AccountPassword(false),
-        val migrationRecoveryKey: String? = null,
-        val crossSigningInitialization: Async<Unit> = Uninitialized,
-        val recoveryKeyCreationInfo: SsssKeyCreationInfo? = null,
-        val initializationWaitingViewData: WaitingViewData? = null,
-        val recoverySaveFileProcess: Async<Unit> = Uninitialized
-) : MvRxState
 
 class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
@@ -72,7 +60,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     private var _pendingSession: String? = null
 
-    init {
+    private fun startProcess() {
         // need to check if user have an existing keybackup
         if (args.isNewAccount) {
             setState {
@@ -136,6 +124,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     else                                             -> {
                     }
                 }
+            }
+            BootstrapActions.SetupRecoveryKey             -> {
+                startProcess()
             }
             is BootstrapActions.DoInitializeGeneratedKey  -> {
                 val userPassword = reAuthHelper.data

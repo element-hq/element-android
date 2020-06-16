@@ -15,10 +15,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/bootstrap_save_key_description"
+        android:text="@string/bottom_sheet_save_your_recovery_key_content"
         android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/bootstrapRecoveryKeyText"
@@ -44,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="50dp"
-        app:actionTitle="@string/copy_value"
+        app:actionTitle="@string/action_copy"
         app:leftIcon="@drawable/ic_clipboard"
         app:rightIcon="@drawable/ic_arrow_right"
         app:tint="?colorAccent" />
