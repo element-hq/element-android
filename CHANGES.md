@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix dark theme issue on login screen (#1097)
 
 Translations 🗣:
  -
