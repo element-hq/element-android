@@ -41,34 +41,37 @@ class CrossSigningSettingsController @Inject constructor(
 
     override fun buildModels(data: CrossSigningSettingsViewState?) {
         if (data == null) return
-        if (data.xSigningKeyCanSign) {
-            genericItem {
-                id("can")
-                titleIconResourceId(R.drawable.ic_shield_trusted)
-                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
-            }
-        } else if (data.xSigningKeysAreTrusted) {
-            genericItem {
-                id("trusted")
-                titleIconResourceId(R.drawable.ic_shield_custom)
-                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
-            }
-            bottomSheetVerificationActionItem {
-                id("verify")
-                title(stringProvider.getString(R.string.crosssigning_verify_this_session))
-                titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                listener {
-                    interactionListener?.verifySession()
+        when {
+            data.xSigningKeyCanSign        -> {
+                genericItem {
+                    id("can")
+                    titleIconResourceId(R.drawable.ic_shield_trusted)
+                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
                 }
             }
-        } else if (data.xSigningIsEnableInAccount) {
-            genericItem {
-                id("enable")
-                titleIconResourceId(R.drawable.ic_shield_black)
-                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+            data.xSigningKeysAreTrusted    -> {
+                genericItem {
+                    id("trusted")
+                    titleIconResourceId(R.drawable.ic_shield_custom)
+                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
+                }
             }
+            data.xSigningIsEnableInAccount -> {
+                genericItem {
+                    id("enable")
+                    titleIconResourceId(R.drawable.ic_shield_black)
+                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+                }
+            }
+            else                           -> {
+                genericItem {
+                    id("not")
+                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
+                }
+            }
+        }
+
+        if (data.recoveryHasToBeSetUp) {
             bottomSheetVerificationActionItem {
                 id("setup_recovery")
                 title(stringProvider.getString(R.string.settings_setup_secure_backup))
@@ -78,6 +81,9 @@ class CrossSigningSettingsController @Inject constructor(
                     interactionListener?.setupRecovery()
                 }
             }
+        }
+
+        if (data.deviceHasToBeVerified) {
             bottomSheetVerificationActionItem {
                 id("verify")
                 title(stringProvider.getString(R.string.crosssigning_verify_this_session))
@@ -87,11 +93,6 @@ class CrossSigningSettingsController @Inject constructor(
                 listener {
                     interactionListener?.verifySession()
                 }
-            }
-        } else {
-            genericItem {
-                id("not")
-                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
             }
         }
 

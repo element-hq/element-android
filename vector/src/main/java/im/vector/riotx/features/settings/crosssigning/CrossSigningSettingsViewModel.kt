@@ -21,27 +21,43 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
                                                                 private val session: Session)
     : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
-        session.rx().liveCrossSigningInfo(session.myUserId)
-                .execute {
-                    val crossSigningKeys = it.invoke()?.getOrNull()
+        Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
+                session.rx().liveMyDeviceInfo(),
+                session.rx().liveCrossSigningInfo(session.myUserId),
+                BiFunction { myDeviceInfo, mxCrossSigningInfo ->
+                    (myDeviceInfo to mxCrossSigningInfo)
+                }
+        )
+                .execute { data ->
+                    val crossSigningKeys = data.invoke()?.second?.getOrNull()
                     val xSigningIsEnableInAccount = crossSigningKeys != null
                     val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
                     val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+                    val hasSeveralDevices = data.invoke()?.first?.size ?: 0 > 1
+
                     copy(
                             crossSigningInfo = crossSigningKeys,
                             xSigningIsEnableInAccount = xSigningIsEnableInAccount,
                             xSigningKeysAreTrusted = xSigningKeysAreTrusted,
-                            xSigningKeyCanSign = xSigningKeyCanSign
+                            xSigningKeyCanSign = xSigningKeyCanSign,
+
+                            deviceHasToBeVerified = hasSeveralDevices && (xSigningIsEnableInAccount || xSigningKeysAreTrusted),
+                            recoveryHasToBeSetUp = !session.sharedSecretStorageService.isRecoverySetup()
                     )
                 }
     }
