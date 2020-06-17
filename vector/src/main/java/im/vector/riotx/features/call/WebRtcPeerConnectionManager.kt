@@ -581,7 +581,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
         Timber.v("## VOIP onCallInviteReceived callId ${mxCall.callId}")
-        // TODO What if a call is currently active?
+        // to simplify we only treat one call at a time, and ignore others
         if (currentCall != null) {
             Timber.w("## VOIP receiving incoming call while already in call?")
             // Just ignore, maybe we could answer from other session?

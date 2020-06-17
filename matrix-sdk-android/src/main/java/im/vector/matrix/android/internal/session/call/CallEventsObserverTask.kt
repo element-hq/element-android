@@ -52,10 +52,17 @@ internal class DefaultCallEventsObserverTask @Inject constructor(
     }
 
     private fun update(realm: Realm, events: List<Event>, userId: String) {
+        val now = System.currentTimeMillis()
         events.forEach { event ->
             event.roomId ?: return@forEach Unit.also {
                 Timber.w("Event with no room id ${event.eventId}")
             }
+            val age = now - (event.ageLocalTs ?: now)
+            if (age > 40_000) {
+                // To old to ring?
+                return@forEach
+            }
+            event.ageLocalTs
             decryptIfNeeded(event)
             if (EventType.isCallEvent(event.getClearType())) {
                 callService.onCallEvent(event)
