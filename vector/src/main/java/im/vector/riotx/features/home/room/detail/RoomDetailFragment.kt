@@ -159,6 +159,7 @@ import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.widgets.WidgetActivity
@@ -469,11 +470,26 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                if (session.integrationManagerService().isIntegrationEnabled()) {
+                    navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                } else {
+                    displayDisabledIntegrationDialog()
+                }
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun displayDisabledIntegrationDialog() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.disabled_integration_dialog_title)
+                .setMessage(R.string.disabled_integration_dialog_content)
+                .setPositiveButton(R.string.settings) { _, _ ->
+                    navigator.openSettings(requireActivity(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     private fun renderRegularMode(text: String) {
