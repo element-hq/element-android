@@ -20,9 +20,10 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:contentDescription="@string/avatar"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_message_password"
+            android:tint="?riotx_text_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
