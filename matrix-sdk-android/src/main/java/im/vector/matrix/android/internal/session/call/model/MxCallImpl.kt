@@ -83,6 +83,7 @@ internal class MxCallImpl(
 
     override fun offerSdp(sdp: SessionDescription) {
         if (!isOutgoing) return
+        Timber.v("## VOIP offerSdp $callId")
         state = CallState.DIALING
         CallInviteContent(
                 callId = callId,
@@ -113,6 +114,7 @@ internal class MxCallImpl(
     }
 
     override fun hangUp() {
+        Timber.v("## VOIP hangup $callId")
         CallHangupContent(
                 callId = callId
         )
@@ -122,6 +124,7 @@ internal class MxCallImpl(
     }
 
     override fun accept(sdp: SessionDescription) {
+        Timber.v("## VOIP accept $callId")
         if (isOutgoing) return
         state = CallState.ANSWERING
         CallAnswerContent(

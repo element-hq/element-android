@@ -38,6 +38,7 @@ import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RoomEventSender
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -100,8 +101,8 @@ internal class DefaultCallSignalingService @Inject constructor(
     override fun removeCallListener(listener: CallsListener) {
         callListeners.remove(listener)
     }
-
     override fun getCallWithId(callId: String): MxCall? {
+        Timber.v("## VOIP getCallWithId $callId all calls ${activeCalls.map { it.callId }}")
         return activeCalls.find { it.callId == callId }
     }
 

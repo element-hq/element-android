@@ -19,6 +19,7 @@
     <!-- READ_PHONE_STATE is needed only if your calling app reads numbers from the `PHONE_STATE`
             intent action. -->
 
+    <!-- Needed to show incoming calls activity in lock screen-->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Needed for incoming calls  -->

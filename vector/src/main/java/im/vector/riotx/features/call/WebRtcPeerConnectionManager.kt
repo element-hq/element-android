@@ -266,6 +266,23 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
         this.localSurfaceRenderer = WeakReference(localViewRenderer)
         this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+
+        // The call is going to resume from background, we can reduce notif
+        currentCall?.mxCall
+                ?.takeIf { it.state == CallState.CONNECTING || it.state == CallState.CONNECTED }
+                ?.let { mxCall ->
+                    val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                            ?: mxCall.roomId
+                    // Start background service with notification
+                    CallService.onPendingCall(
+                            context = context,
+                            isVideo = mxCall.isVideoCall,
+                            roomName = name,
+                            roomId = mxCall.roomId,
+                            matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                            callId = mxCall.callId)
+                }
+
         getTurnServer { turnServer ->
             val call = currentCall ?: return@getTurnServer
             when (mode) {
@@ -314,6 +331,19 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun internalAcceptIncomingCall(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
+        val mxCall = callContext.mxCall
+        // Update service state
+
+        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                ?: mxCall.roomId
+        CallService.onPendingCall(
+                context = context,
+                isVideo = mxCall.isVideoCall,
+                roomName = name,
+                roomId = mxCall.roomId,
+                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                callId = mxCall.callId
+        )
         executor.execute {
             // 1) create peer connection
             createPeerConnection(callContext, turnServerResponse)
@@ -435,7 +465,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun acceptIncomingCall() {
         Timber.v("## VOIP acceptIncomingCall from state ${currentCall?.mxCall?.state}")
-        if (currentCall?.mxCall?.state == CallState.LOCAL_RINGING) {
+        val mxCall = currentCall?.mxCall
+        if (mxCall?.state == CallState.LOCAL_RINGING) {
             getTurnServer { turnServer ->
                 internalAcceptIncomingCall(currentCall!!, turnServer)
             }
@@ -443,6 +474,24 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun detachRenderers() {
+        // The call is going to continue in background, so ensure notification is visible
+        currentCall?.mxCall
+                ?.takeIf { it.state == CallState.CONNECTING || it.state == CallState.CONNECTED }
+                ?.let { mxCall ->
+                    // Start background service with notification
+
+                    val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                            ?: mxCall.otherUserId
+                    CallService.onOnGoingCallBackground(
+                            context = context,
+                            isVideo = mxCall.isVideoCall,
+                            roomName = name,
+                            roomId = mxCall.roomId,
+                            matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                            callId = mxCall.callId
+                    )
+                }
+
         Timber.v("## VOIP detachRenderers")
         // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
         localSurfaceRenderer?.get()?.let {
@@ -496,6 +545,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
         audioManager.startForCall(createdCall)
         currentCall = callContext
 
+        val name = sessionHolder.getSafeActiveSession()?.getUser(createdCall.otherUserId)?.getBestName()
+                ?: createdCall.otherUserId
+        CallService.onOutgoingCallRinging(
+                context = context,
+                isVideo = createdCall.isVideoCall,
+                roomName = name,
+                roomId = createdCall.roomId,
+                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                callId = createdCall.callId)
+
         executor.execute {
             callContext.remoteCandidateSource = ReplaySubject.create()
         }
@@ -524,9 +583,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP onCallInviteReceived callId ${mxCall.callId}")
         // TODO What if a call is currently active?
         if (currentCall != null) {
-            Timber.w("## VOIP TODO: Automatically reject incoming call?")
-            mxCall.hangUp()
-            audioManager.stop()
+            Timber.w("## VOIP receiving incoming call while already in call?")
+            // Just ignore, maybe we could answer from other session?
             return
         }
 
@@ -537,12 +595,17 @@ class WebRtcPeerConnectionManager @Inject constructor(
             callContext.remoteCandidateSource = ReplaySubject.create()
         }
 
-        CallService.onIncomingCall(context,
-                mxCall.isVideoCall,
-                mxCall.otherUserId,
-                mxCall.roomId,
-                sessionHolder.getSafeActiveSession()?.myUserId ?: "",
-                mxCall.callId)
+        // Start background service with notification
+        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                ?: mxCall.otherUserId
+        CallService.onIncomingCallRinging(
+                context = context,
+                isVideo = mxCall.isVideoCall,
+                roomName = name,
+                roomId = mxCall.roomId,
+                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                callId = mxCall.callId
+        )
 
         callContext.offerSdp = callInviteContent.offer
     }
@@ -575,12 +638,19 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun endCall() {
+        // Update service state
+        CallService.onNoActiveCall(context)
+        // close tracks ASAP
+        currentCall?.localVideoTrack?.setEnabled(false)
+        currentCall?.localVideoTrack?.setEnabled(false)
+
         currentCall?.cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
                 cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
             }
         }
+
         currentCall?.mxCall?.hangUp()
         currentCall = null
         audioManager.stop()
@@ -592,6 +662,18 @@ class WebRtcPeerConnectionManager @Inject constructor(
         if (call.mxCall.callId != callAnswerContent.callId) return Unit.also {
             Timber.w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
         }
+        val mxCall = call.mxCall
+        // Update service state
+        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                ?: mxCall.otherUserId
+        CallService.onPendingCall(
+                context = context,
+                isVideo = mxCall.isVideoCall,
+                roomName = name,
+                roomId = mxCall.roomId,
+                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                callId = mxCall.callId
+        )
         executor.execute {
             Timber.v("## VOIP onCallAnswerReceived ${callAnswerContent.callId}")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
@@ -626,7 +708,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * One or more of the ICE transports on the connection is in the "failed" state.
                  */
                 PeerConnection.PeerConnectionState.FAILED       -> {
-                    endCall()
+                    // This can be temporary, e.g when other ice not yet received...
+                    // callContext.mxCall.state = CallState.ERROR
                 }
                 /**
                  * At least one of the connection's ICE transports (RTCIceTransports or RTCDtlsTransports) are in the "new" state,
@@ -711,7 +794,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * It is, however, possible that the ICE agent did find compatible connections for some components.
                  */
                 PeerConnection.IceConnectionState.FAILED       -> {
-                    callContext.mxCall.hangUp()
+                    // I should not hangup here..
+                    // because new candidates could arrive
+                    // callContext.mxCall.hangUp()
                 }
                 /**
                  *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
@@ -742,7 +827,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     remoteVideoTrack.setEnabled(true)
                     callContext.remoteVideoTrack = remoteVideoTrack
                     // sink to renderer if attached
-                    remoteSurfaceRenderer?.get().let { remoteVideoTrack.addSink(it) }
+                    remoteSurfaceRenderer?.get()?.let { remoteVideoTrack.addSink(it) }
                 }
             }
         }

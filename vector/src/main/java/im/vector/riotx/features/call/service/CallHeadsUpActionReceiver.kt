@@ -23,8 +23,14 @@ import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.settings.VectorLocale.context
+import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
+
+    companion object {
+        const val EXTRA_CALL_ACTION_KEY = "EXTRA_CALL_ACTION_KEY"
+        const val CALL_ACTION_REJECT = 0
+    }
 
     private lateinit var peerConnectionManager: WebRtcPeerConnectionManager
     private lateinit var notificationUtils: NotificationUtils
@@ -38,10 +44,9 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-//        when (intent?.getIntExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, 0)) {
-//            CallHeadsUpService.CALL_ACTION_ANSWER -> onCallAnswerClicked(context)
-//            CallHeadsUpService.CALL_ACTION_REJECT -> onCallRejectClicked()
-//        }
+        when (intent?.getIntExtra(EXTRA_CALL_ACTION_KEY, 0)) {
+            CALL_ACTION_REJECT -> onCallRejectClicked()
+        }
 
         // Not sure why this should be needed
 //        val it = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
@@ -51,10 +56,10 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
 //        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
-//    private fun onCallRejectClicked() {
-//        Timber.d("onCallRejectClicked")
-//        peerConnectionManager.endCall()
-//    }
+    private fun onCallRejectClicked() {
+        Timber.d("onCallRejectClicked")
+        peerConnectionManager.endCall()
+    }
 
 //    private fun onCallAnswerClicked(context: Context) {
 //        Timber.d("onCallAnswerClicked")

@@ -20,6 +20,7 @@ package im.vector.riotx.features.call
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -31,6 +32,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import butterknife.BindView
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.jakewharton.rxbinding3.view.clicks
@@ -46,10 +48,11 @@ import im.vector.riotx.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.RoomDetailActivity
+import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
-import kotlinx.android.synthetic.main.fragment_attachments_preview.*
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
@@ -101,19 +104,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     override fun doBeforeSetContentView() {
         // Set window styles for fullscreen-window size. Needs to be done before adding content.
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setTurnScreenOn(true)
-            setShowWhenLocked(true)
-            getSystemService(KeyguardManager::class.java)?.requestDismissKeyguard(this, null)
-        } else {
-            @Suppress("DEPRECATION")
-            window.addFlags(
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                            or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-            )
-        }
 
         hideSystemUI()
         setContentView(R.layout.activity_call)
@@ -179,7 +169,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
         } else {
+            Timber.e("## VOIP missing callArgs for VectorCall Activity")
+            CallService.onNoActiveCall(this)
             finish()
+        }
+
+        Timber.v("## VOIP EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
+        if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
+            turnScreenOnAndKeyguardOff()
         }
 
         constraintLayout.clicks()
@@ -187,22 +184,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { toggleUiSystemVisibility() }
                 .disposeOnDestroy()
-
-        if (isFirstCreation()) {
-            // Reduce priority of notification as the activity is on screen
-            CallService.onPendingCall(
-                    this,
-                    callArgs.isVideoCall,
-                    callArgs.participantUserId,
-                    callArgs.roomId,
-                    "",
-                    callArgs.callId ?: ""
-            )
-        }
-
-        rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
-            finish()
-        }
 
         configureCallViews()
 
@@ -229,8 +210,68 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        peerConnectionManager.detachRenderers()
+        turnScreenOffAndKeyguardOn()
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        when(callViewModel.call?.state) {
+//            CallState.DIALING       -> {
+//                CallService.onIncomingCall(
+//                        this,
+//                        callArgs.isVideoCall,
+//                        callArgs.participantUserId,
+//                        callArgs.roomId,
+//                        "",
+//                        callArgs.callId ?: ""
+//                )
+//            }
+//            CallState.LOCAL_RINGING -> {
+//                CallService.onIncomingCall(
+//                        this,
+//                        callArgs.isVideoCall,
+//                        callArgs.participantUserId,
+//                        callArgs.roomId,
+//                        "",
+//                        callArgs.callId ?: ""
+//                )
+//            }
+//            CallState.ANSWERING,
+//            CallState.CONNECTING,
+//            CallState.CONNECTED     -> {
+//                CallService.onPendingCall(
+//                        this,
+//                        callArgs.isVideoCall,
+//                        callArgs.participantUserId,
+//                        callArgs.roomId,
+//                        "",
+//                        callArgs.callId ?: ""
+//                )
+//            }
+//            CallState.TERMINATED    ,
+//            CallState.IDLE          ,
+//            null                    -> {
+//
+//            }
+//        }
+//    }
+
     private fun renderState(state: VectorCallViewState) {
         Timber.v("## VOIP renderState call $state")
+        if (state.callState is Fail) {
+            // be sure to clear notification
+            CallService.onNoActiveCall(this)
+            finish()
+            return
+        }
+
         callControlsView.updateForState(state)
         when (state.callState.invoke()) {
             CallState.IDLE,
@@ -271,6 +312,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     configureCallInfo(state)
                     callStatusText.text = null
                 }
+                // ensure all attached?
+                peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
             }
             CallState.TERMINATED    -> {
                 finish()
@@ -290,20 +333,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private fun configureCallViews() {
         callControlsView.interactionListener = this
-//        if (callArgs.isVideoCall) {
-//            iv_call_speaker.isVisible = false
-//            iv_call_flip_camera.isVisible = true
-//            iv_call_videocam_off.isVisible = true
-//        } else {
-//            iv_call_speaker.isVisible = true
-//            iv_call_flip_camera.isVisible = false
-//            iv_call_videocam_off.isVisible = false
-//        }
-//
-//        iv_end_call.setOnClickListener {
-//            callViewModel.handle(VectorCallViewActions.EndCall)
-//            finish()
-//        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -315,7 +344,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
     }
 
-    private fun start(): Boolean {
+    private fun start() {
+        rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
+            Timber.v("## VOIP rootEglBase is null")
+            finish()
+        }
+
         // Init Picture in Picture renderer
         pipRenderer.init(rootEglBase!!.eglBaseContext, null)
         pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
@@ -330,16 +364,31 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
         peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
-        return false
     }
 
-    override fun onPause() {
-        peerConnectionManager.detachRenderers()
-        super.onPause()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        withState(callViewModel) {
+//           if(it.callState.invoke() == CallState.CONNECTED) {
+//               peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer)
+//           }
+//        }
+//    }
+//    override fun onPause() {
+//        peerConnectionManager.detachRenderers()
+//        super.onPause()
+//    }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {
-        Timber.v("handleViewEvents $event")
+        Timber.v("## VOIP handleViewEvents $event")
+        when (event) {
+            VectorCallViewEvents.DismissNoCall -> {
+                CallService.onNoActiveCall(this)
+                finish()
+            }
+            null                               -> {
+            }
+        }
 //        when (event) {
 //            is VectorCallViewEvents.CallAnswered -> {
 //            }
@@ -360,6 +409,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
         fun newIntent(context: Context, mxCall: MxCallDetail): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
+                // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall, false))
                 putExtra(EXTRA_MODE, OUTGOING_CREATED)
@@ -375,7 +425,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                       accept: Boolean,
                       mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                // what could be the best flags?
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall, accept))
                 putExtra(EXTRA_MODE, mode)
             }
@@ -403,11 +454,48 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun returnToChat() {
-        // TODO, what if the room is not in backstack??
+        val args = RoomDetailArgs(callArgs.roomId)
+        val intent = RoomDetailActivity.newIntent(this, args).apply {
+            flags = FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(intent)
+        // is it needed?
         finish()
     }
 
     override fun didTapMore() {
         CallControlsBottomSheet().show(supportFragmentManager, "Controls")
+    }
+
+    // Needed to let you answer call when phone is locked
+    private fun turnScreenOnAndKeyguardOff() {
+        Timber.v("## VOIP turnScreenOnAndKeyguardOff")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            window.addFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                            or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
+        }
+
+        with(getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requestDismissKeyguard(this@VectorCallActivity, null)
+            }
+        }
+    }
+
+    private fun turnScreenOffAndKeyguardOn() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(false)
+            setTurnScreenOn(false)
+        } else {
+            window.clearFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                            or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
+        }
     }
 }

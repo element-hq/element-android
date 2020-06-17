@@ -17,6 +17,7 @@
 package im.vector.riotx.features.call
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -58,6 +59,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
 
 sealed class VectorCallViewEvents : VectorViewEvents {
 
+    object DismissNoCall : VectorCallViewEvents()
 //    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
 //    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
 //    object CallAccepted : VectorCallViewEvents()
@@ -115,6 +117,12 @@ class VectorCallViewModel @AssistedInject constructor(
                             callState = Success(mxCall.state),
                             otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
                             soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                    )
+                }
+            } ?: run {
+                setState {
+                    copy(
+                            callState = Fail(IllegalArgumentException("No call"))
                     )
                 }
             }
