@@ -53,6 +53,7 @@ internal class DefaultCallEventsObserverTask @Inject constructor(
 
     private fun update(realm: Realm, events: List<Event>, userId: String) {
         val now = System.currentTimeMillis()
+        // TODO might check if an invite is not closed (hangup/answsered) in the same event batch?
         events.forEach { event ->
             event.roomId ?: return@forEach Unit.also {
                 Timber.w("Event with no room id ${event.eventId}")

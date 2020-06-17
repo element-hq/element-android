@@ -692,6 +692,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
         close()
     }
 
+    override fun onCallManagedByOtherSession(callId: String) {
+        currentCall = null
+        CallService.onNoActiveCall(context)
+    }
+
     private inner class StreamObserver(val callContext: CallContext) : PeerConnection.Observer {
 
         override fun onConnectionChange(newState: PeerConnection.PeerConnectionState?) {

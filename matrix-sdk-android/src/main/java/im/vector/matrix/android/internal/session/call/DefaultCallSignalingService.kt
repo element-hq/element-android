@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.call
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallSignalingService
+import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.MxCall
 import im.vector.matrix.android.api.session.call.TurnServerResponse
@@ -108,19 +109,33 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     internal fun onCallEvent(event: Event) {
-        // TODO if handled by other of my sessions
-        // this test is too simple, should notify upstream
-        if (event.senderId == userId) {
-            // ignore local echos!
-            return
-        }
         when (event.getClearType()) {
             EventType.CALL_ANSWER     -> {
                 event.getClearContent().toModel<CallAnswerContent>()?.let {
+                    if (event.senderId == userId) {
+                        // ok it's an answer from me.. is it remote echo or other session
+                        val knownCall = getCallWithId(it.callId)
+                        if (knownCall == null) {
+                            Timber.d("## VOIP onCallEvent ${event.getClearType()} id ${it.callId} send by me")
+                        } else if (!knownCall.isOutgoing) {
+                            // incoming call
+                            // if it was anwsered by this session, the call state would be in Answering(or connected) state
+                            if (knownCall.state == CallState.LocalRinging) {
+                                // discard current call, it's answered by another of my session
+                                onCallManageByOtherSession(it.callId)
+                            }
+                        }
+                        return
+                    }
+
                     onCallAnswer(it)
                 }
             }
             EventType.CALL_INVITE     -> {
+                if (event.senderId == userId) {
+                    // Always ignore local echos of invite
+                    return
+                }
                 event.getClearContent().toModel<CallInviteContent>()?.let { content ->
                     val incomingCall = MxCallImpl(
                             callId = content.callId ?: return@let,
@@ -138,11 +153,31 @@ internal class DefaultCallSignalingService @Inject constructor(
             }
             EventType.CALL_HANGUP     -> {
                 event.getClearContent().toModel<CallHangupContent>()?.let { content ->
+
+                    if (event.senderId == userId) {
+                        // ok it's an answer from me.. is it remote echo or other session
+                        val knownCall = getCallWithId(content.callId)
+                        if (knownCall == null) {
+                            Timber.d("## VOIP onCallEvent ${event.getClearType()} id ${content.callId} send by me")
+                        } else if (!knownCall.isOutgoing) {
+                            // incoming call
+                            if (knownCall.state == CallState.LocalRinging) {
+                                // discard current call, it's answered by another of my session
+                                onCallManageByOtherSession(content.callId)
+                            }
+                        }
+                        return
+                    }
+
                     onCallHangup(content)
                     activeCalls.removeAll { it.callId == content.callId }
                 }
             }
             EventType.CALL_CANDIDATES -> {
+                if (event.senderId == userId) {
+                    // Always ignore local echos of invite
+                    return
+                }
                 event.getClearContent().toModel<CallCandidatesContent>()?.let { content ->
                     activeCalls.firstOrNull { it.callId == content.callId }?.let {
                         onCallIceCandidate(it, content)
@@ -164,6 +199,14 @@ internal class DefaultCallSignalingService @Inject constructor(
         callListeners.toList().forEach {
             tryThis {
                 it.onCallAnswerReceived(answer)
+            }
+        }
+    }
+
+    private fun onCallManageByOtherSession(callId: String) {
+        callListeners.toList().forEach {
+            tryThis {
+                it.onCallManagedByOtherSession(callId)
             }
         }
     }
