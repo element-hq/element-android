@@ -293,30 +293,34 @@ class NotificationUtils @Inject constructor(private val context: Context,
 //        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val contentIntent = VectorCallActivity.newIntent(
-                context, callId, roomId, otherUserId, true, isVideo,
-                false, VectorCallActivity.INCOMING_RINGING
+                context = context,
+                callId = callId,
+                roomId = roomId,
+                otherUserId = otherUserId,
+                isIncomingCall = true,
+                isVideoCall = isVideo,
+                mode = VectorCallActivity.INCOMING_RINGING
         ).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             data = Uri.parse("foobar://$callId")
         }
         val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
 
-//        val contentPendingIntent = TaskStackBuilder.create(context)
-//                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
-//                .addNextIntent(RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId = roomId))
-//                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, otherUserId, true, isVideo, false, VectorCallActivity.INCOMING_RINGING))
-//                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
-
         val answerCallPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
-                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, otherUserId, true, isVideo, true, VectorCallActivity.INCOMING_ACCEPT))
+                .addNextIntent(VectorCallActivity.newIntent(
+                        context = context,
+                        callId = callId,
+                        roomId = roomId,
+                        otherUserId = otherUserId,
+                        isIncomingCall = true,
+                        isVideoCall = isVideo,
+                        mode = VectorCallActivity.INCOMING_ACCEPT)
+                )
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
-//        val answerCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
-//            putExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, CallHeadsUpService.CALL_ACTION_ANSWER)
-//        }
         val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
-            //            putExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, CallHeadsUpService.CALL_ACTION_REJECT)
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
         }
         // val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
         val rejectCallPendingIntent = PendingIntent.getBroadcast(
@@ -367,8 +371,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val requestId = Random.nextInt(1000)
 
         val contentIntent = VectorCallActivity.newIntent(
-                context, callId, roomId, otherUserId, true, isVideo,
-                false, null).apply {
+                context = context,
+                callId = callId,
+                roomId = roomId,
+                otherUserId = otherUserId,
+                isIncomingCall = true,
+                isVideoCall = isVideo,
+                mode = null).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             data = Uri.parse("foobar://$callId")
         }
@@ -451,7 +460,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
                 // TODO other userId
-                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, false, null))
+                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, null))
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
         builder.setContentIntent(contentPendingIntent)

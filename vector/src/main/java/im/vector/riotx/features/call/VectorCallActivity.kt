@@ -27,6 +27,7 @@ import android.os.Parcelable
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -39,6 +40,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.call.MxCallDetail
+import im.vector.matrix.android.api.session.call.TurnServerResponse
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -54,6 +56,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
 import org.webrtc.EglBase
+import org.webrtc.PeerConnection
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
@@ -66,8 +69,7 @@ data class CallArgs(
         val callId: String?,
         val participantUserId: String,
         val isIncomingCall: Boolean,
-        val isVideoCall: Boolean,
-        val autoAccept: Boolean
+        val isVideoCall: Boolean
 ) : Parcelable
 
 class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionListener {
@@ -216,53 +218,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         turnScreenOffAndKeyguardOn()
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        when(callViewModel.call?.state) {
-//            CallState.DIALING       -> {
-//                CallService.onIncomingCall(
-//                        this,
-//                        callArgs.isVideoCall,
-//                        callArgs.participantUserId,
-//                        callArgs.roomId,
-//                        "",
-//                        callArgs.callId ?: ""
-//                )
-//            }
-//            CallState.LOCAL_RINGING -> {
-//                CallService.onIncomingCall(
-//                        this,
-//                        callArgs.isVideoCall,
-//                        callArgs.participantUserId,
-//                        callArgs.roomId,
-//                        "",
-//                        callArgs.callId ?: ""
-//                )
-//            }
-//            CallState.ANSWERING,
-//            CallState.CONNECTING,
-//            CallState.CONNECTED     -> {
-//                CallService.onPendingCall(
-//                        this,
-//                        callArgs.isVideoCall,
-//                        callArgs.participantUserId,
-//                        callArgs.roomId,
-//                        "",
-//                        callArgs.callId ?: ""
-//                )
-//            }
-//            CallState.TERMINATED    ,
-//            CallState.IDLE          ,
-//            null                    -> {
-//
-//            }
-//        }
-//    }
-
     private fun renderState(state: VectorCallViewState) {
         Timber.v("## VOIP renderState call $state")
         if (state.callState is Fail) {
@@ -273,52 +228,55 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
 
         callControlsView.updateForState(state)
-        when (state.callState.invoke()) {
-            CallState.IDLE,
-            CallState.DIALING       -> {
+        val callState = state.callState.invoke()
+        when (callState) {
+            is CallState.Idle,
+            is CallState.Dialing      -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
                 configureCallInfo(state)
             }
 
-            CallState.LOCAL_RINGING -> {
+            is CallState.LocalRinging -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.text = null
                 configureCallInfo(state)
             }
 
-            CallState.ANSWERING     -> {
+            is CallState.Answering    -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
                 configureCallInfo(state)
             }
-            CallState.CONNECTING    -> {
-                callVideoGroup.isInvisible = true
-                callInfoGroup.isVisible = true
-                configureCallInfo(state)
-                callStatusText.setText(R.string.call_connecting)
-            }
-            CallState.CONNECTED     -> {
-                if (callArgs.isVideoCall) {
-                    callVideoGroup.isVisible = true
-                    callInfoGroup.isVisible = false
-                    pip_video_view.isVisible = !state.isVideoCaptureInError
+            is CallState.Connected    -> {
+                if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                    if (callArgs.isVideoCall) {
+                        callVideoGroup.isVisible = true
+                        callInfoGroup.isVisible = false
+                        pip_video_view.isVisible = !state.isVideoCaptureInError
+                    } else {
+                        callVideoGroup.isInvisible = true
+                        callInfoGroup.isVisible = true
+                        configureCallInfo(state)
+                        callStatusText.text = null
+                    }
                 } else {
+                    // This state is not final, if you change network, new candidates will be sent
                     callVideoGroup.isInvisible = true
                     callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    callStatusText.text = null
+                    callStatusText.setText(R.string.call_connecting)
                 }
                 // ensure all attached?
                 peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
             }
-            CallState.TERMINATED    -> {
+            is CallState.Terminated   -> {
                 finish()
             }
-            null                    -> {
+            null                      -> {
             }
         }
     }
@@ -382,20 +340,29 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall -> {
+            VectorCallViewEvents.DismissNoCall       -> {
                 CallService.onNoActiveCall(this)
                 finish()
             }
-            null                               -> {
+            is VectorCallViewEvents.ConnectionTimout -> {
+                onErrorTimoutConnect(event.turn)
+            }
+            null                                     -> {
             }
         }
-//        when (event) {
-//            is VectorCallViewEvents.CallAnswered -> {
-//            }
-//            is VectorCallViewEvents.CallHangup   -> {
-//                finish()
-//            }
-//        }
+    }
+
+    private fun onErrorTimoutConnect(turn: TurnServerResponse?) {
+        Timber.d("## VOIP onErrorTimoutConnect $turn")
+        // TODO ask to use default stun, etc...
+        AlertDialog
+                .Builder(this)
+                .setTitle(R.string.call_failed_no_connection)
+                .setMessage(getString(R.string.call_failed_no_connection_description))
+                .setNegativeButton(R.string.ok) { _, _ ->
+                    callViewModel.handle(VectorCallViewActions.EndCall)
+                }
+                .show()
     }
 
     companion object {
@@ -411,7 +378,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall, false))
+                putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
                 putExtra(EXTRA_MODE, OUTGOING_CREATED)
             }
         }
@@ -422,12 +389,11 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                       otherUserId: String,
                       isIncomingCall: Boolean,
                       isVideoCall: Boolean,
-                      accept: Boolean,
                       mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall, accept))
+                putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }

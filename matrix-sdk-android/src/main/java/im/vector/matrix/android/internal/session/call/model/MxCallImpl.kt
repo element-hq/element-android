@@ -46,7 +46,7 @@ internal class MxCallImpl(
         private val roomEventSender: RoomEventSender
 ) : MxCall {
 
-    override var state: CallState = CallState.IDLE
+    override var state: CallState = CallState.Idle
         set(value) {
             field = value
             dispatchStateChange()
@@ -74,17 +74,17 @@ internal class MxCallImpl(
 
     init {
         if (isOutgoing) {
-            state = CallState.IDLE
+            state = CallState.Idle
         } else {
             // because it's created on reception of an offer
-            state = CallState.LOCAL_RINGING
+            state = CallState.LocalRinging
         }
     }
 
     override fun offerSdp(sdp: SessionDescription) {
         if (!isOutgoing) return
         Timber.v("## VOIP offerSdp $callId")
-        state = CallState.DIALING
+        state = CallState.Dialing
         CallInviteContent(
                 callId = callId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
@@ -120,13 +120,13 @@ internal class MxCallImpl(
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { roomEventSender.sendEvent(it) }
-        state = CallState.TERMINATED
+        state = CallState.Terminated
     }
 
     override fun accept(sdp: SessionDescription) {
         Timber.v("## VOIP accept $callId")
         if (isOutgoing) return
-        state = CallState.ANSWERING
+        state = CallState.Answering
         CallAnswerContent(
                 callId = callId,
                 answer = CallAnswerContent.Answer(sdp = sdp.description)

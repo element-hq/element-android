@@ -29,6 +29,7 @@ import butterknife.OnClick
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.fragment_call_controls.view.*
+import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -99,28 +100,34 @@ class CallControlsView @JvmOverloads constructor(
         videoToggleIcon.setImageResource(if (state.isVideoEnabled) R.drawable.ic_video else R.drawable.ic_video_off)
 
         when (callState) {
-            CallState.IDLE,
-            CallState.DIALING,
-            CallState.CONNECTING,
-            CallState.ANSWERING     -> {
+            is CallState.Idle,
+            is CallState.Dialing,
+            is CallState.Answering    -> {
                 ringingControls.isVisible = true
                 ringingControlAccept.isVisible = false
                 ringingControlDecline.isVisible = true
                 connectedControls.isVisible = false
             }
-            CallState.LOCAL_RINGING -> {
+            is CallState.LocalRinging -> {
                 ringingControls.isVisible = true
                 ringingControlAccept.isVisible = true
                 ringingControlDecline.isVisible = true
                 connectedControls.isVisible = false
             }
-            CallState.CONNECTED     -> {
-                ringingControls.isVisible = false
-                connectedControls.isVisible = true
-                iv_video_toggle.isVisible = state.isVideoCall
+            is CallState.Connected    -> {
+                if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                    ringingControls.isVisible = false
+                    connectedControls.isVisible = true
+                    iv_video_toggle.isVisible = state.isVideoCall
+                } else {
+                    ringingControls.isVisible = true
+                    ringingControlAccept.isVisible = false
+                    ringingControlDecline.isVisible = true
+                    connectedControls.isVisible = false
+                }
             }
-            CallState.TERMINATED,
-            null                    -> {
+            is CallState.Terminated,
+            null                      -> {
                 ringingControls.isVisible = false
                 connectedControls.isVisible = false
             }

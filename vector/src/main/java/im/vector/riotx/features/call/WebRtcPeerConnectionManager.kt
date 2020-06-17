@@ -269,7 +269,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         // The call is going to resume from background, we can reduce notif
         currentCall?.mxCall
-                ?.takeIf { it.state == CallState.CONNECTING || it.state == CallState.CONNECTED }
+                ?.takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
                     val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
                             ?: mxCall.roomId
@@ -466,7 +466,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun acceptIncomingCall() {
         Timber.v("## VOIP acceptIncomingCall from state ${currentCall?.mxCall?.state}")
         val mxCall = currentCall?.mxCall
-        if (mxCall?.state == CallState.LOCAL_RINGING) {
+        if (mxCall?.state == CallState.LocalRinging) {
             getTurnServer { turnServer ->
                 internalAcceptIncomingCall(currentCall!!, turnServer)
             }
@@ -476,7 +476,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun detachRenderers() {
         // The call is going to continue in background, so ensure notification is visible
         currentCall?.mxCall
-                ?.takeIf { it.state == CallState.CONNECTING || it.state == CallState.CONNECTED }
+                ?.takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
                     // Start background service with notification
 
@@ -687,7 +687,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         if (call.mxCall.callId != callHangupContent.callId) return Unit.also {
             Timber.w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
         }
-        call.mxCall.state = CallState.TERMINATED
+        call.mxCall.state = CallState.Terminated
         currentCall = null
         close()
     }
@@ -702,7 +702,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * or is closed (state "closed"); in addition, at least one transport is either "connected" or "completed"
                  */
                 PeerConnection.PeerConnectionState.CONNECTED    -> {
-                    callContext.mxCall.state = CallState.CONNECTED
+                    callContext.mxCall.state = CallState.Connected(newState)
                 }
                 /**
                  * One or more of the ICE transports on the connection is in the "failed" state.
@@ -710,6 +710,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 PeerConnection.PeerConnectionState.FAILED       -> {
                     // This can be temporary, e.g when other ice not yet received...
                     // callContext.mxCall.state = CallState.ERROR
+                    callContext.mxCall.state = CallState.Connected(newState)
                 }
                 /**
                  * At least one of the connection's ICE transports (RTCIceTransports or RTCDtlsTransports) are in the "new" state,
@@ -723,20 +724,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
                      * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
                      */
                 PeerConnection.PeerConnectionState.CONNECTING   -> {
-                    callContext.mxCall.state = CallState.CONNECTING
+                    callContext.mxCall.state = CallState.Connected(PeerConnection.PeerConnectionState.CONNECTING)
                 }
                 /**
                  * The RTCPeerConnection is closed.
                  * This value was in the RTCSignalingState enum (and therefore found by reading the value of the signalingState)
                  * property until the May 13, 2016 draft of the specification.
                  */
-                PeerConnection.PeerConnectionState.CLOSED       -> {
-                }
-                /**
-                 * At least one of the ICE transports for the connection is in the "disconnected" state and none of
-                 * the other transports are in the state "failed", "connecting", or "checking".
-                 */
+                PeerConnection.PeerConnectionState.CLOSED,
+                    /**
+                     * At least one of the ICE transports for the connection is in the "disconnected" state and none of
+                     * the other transports are in the state "failed", "connecting", or "checking".
+                     */
                 PeerConnection.PeerConnectionState.DISCONNECTED -> {
+                    callContext.mxCall.state = CallState.Connected(newState)
                 }
                 null                                            -> {
                 }

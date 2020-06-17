@@ -296,7 +296,7 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    val hasActiveCall = it?.state == CallState.CONNECTED
+                    val hasActiveCall = it?.state is CallState.Connected
                     activeCallView.isVisible = hasActiveCall
                 })
 
@@ -1517,14 +1517,13 @@ class RoomDetailFragment @Inject constructor(
     override fun onTapToReturnToCall() {
         sharedCallActionViewModel.activeCall.value?.let { call ->
             VectorCallActivity.newIntent(
-                    requireContext(),
-                    call.callId,
-                    call.roomId,
-                    call.otherUserId,
-                    !call.isOutgoing,
-                    call.isVideoCall,
-                    false,
-                    null
+                    context = requireContext(),
+                    callId = call.callId,
+                    roomId = call.roomId,
+                    otherUserId = call.otherUserId,
+                    isIncomingCall = !call.isOutgoing,
+                    isVideoCall = call.isVideoCall,
+                    mode = null
             ).let {
                 startActivity(it)
             }

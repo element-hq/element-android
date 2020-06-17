@@ -26,15 +26,20 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.MxCall
+import im.vector.matrix.android.api.session.call.TurnServerResponse
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
+import org.webrtc.PeerConnection
+import java.util.Timer
+import java.util.TimerTask
 
 data class VectorCallViewState(
         val callId: String? = null,
@@ -60,6 +65,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
 sealed class VectorCallViewEvents : VectorViewEvents {
 
     object DismissNoCall : VectorCallViewEvents()
+    data class ConnectionTimout(val turn: TurnServerResponse?) : VectorCallViewEvents()
 //    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
 //    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
 //    object CallAccepted : VectorCallViewEvents()
@@ -72,15 +78,38 @@ class VectorCallViewModel @AssistedInject constructor(
         val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
-    var autoReplyIfNeeded: Boolean = false
-
     var call: MxCall? = null
+
+    var connectionTimoutTimer: Timer? = null
 
     private val callStateListener = object : MxCall.StateListener {
         override fun onStateUpdate(call: MxCall) {
+            val callState = call.state
+            if (callState is CallState.Connected && callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                connectionTimoutTimer?.cancel()
+                connectionTimoutTimer = null
+            } else {
+                // do we reset as long as it's moving?
+                connectionTimoutTimer?.cancel()
+                connectionTimoutTimer = Timer().apply {
+                    schedule(object : TimerTask() {
+                        override fun run() {
+                            session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
+                                override fun onFailure(failure: Throwable) {
+                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimout(null))
+                                }
+
+                                override fun onSuccess(data: TurnServerResponse) {
+                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimout(data))
+                                }
+                            })
+                        }
+                    }, 30_000)
+                }
+            }
             setState {
                 copy(
-                        callState = Success(call.state)
+                        callState = Success(callState)
                 )
             }
         }
@@ -98,8 +127,6 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     init {
-
-        autoReplyIfNeeded = args.autoAccept
 
         initialState.callId?.let {
 

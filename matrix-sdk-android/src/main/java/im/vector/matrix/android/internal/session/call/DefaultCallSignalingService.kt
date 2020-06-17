@@ -101,6 +101,7 @@ internal class DefaultCallSignalingService @Inject constructor(
     override fun removeCallListener(listener: CallsListener) {
         callListeners.remove(listener)
     }
+
     override fun getCallWithId(callId: String): MxCall? {
         Timber.v("## VOIP getCallWithId $callId all calls ${activeCalls.map { it.callId }}")
         return activeCalls.find { it.callId == callId }
@@ -189,25 +190,4 @@ internal class DefaultCallSignalingService @Inject constructor(
     companion object {
         const val CALL_TIMEOUT_MS = 120_000
     }
-
-//    internal class PeerSignalingClientFactory @Inject constructor(
-//            @UserId private val userId: String,
-//            private val localEchoEventFactory: LocalEchoEventFactory,
-//            private val sendEventTask: SendEventTask,
-//            private val taskExecutor: TaskExecutor,
-//            private val cryptoService: CryptoService
-//    ) {
-//
-//        fun create(roomId: String, callId: String): PeerSignalingClient {
-//            return RoomPeerSignalingClient(
-//                    callID = callId,
-//                    roomId = roomId,
-//                    userId = userId,
-//                    localEchoEventFactory = localEchoEventFactory,
-//                    sendEventTask = sendEventTask,
-//                    taskExecutor = taskExecutor,
-//                    cryptoService = cryptoService
-//            )
-//        }
-//    }
 }

@@ -16,26 +16,29 @@
 
 package im.vector.matrix.android.api.session.call
 
-enum class CallState {
+import org.webrtc.PeerConnection
+
+sealed class CallState {
 
     /** Idle, setting up objects */
-    IDLE,
+    object Idle : CallState()
 
     /** Dialing.  Outgoing call is signaling the remote peer */
-    DIALING,
+    object Dialing : CallState()
 
     /** Local ringing. Incoming call offer received */
-    LOCAL_RINGING,
+    object LocalRinging : CallState()
 
     /** Answering.  Incoming call is responding to remote peer */
-    ANSWERING,
+    object Answering : CallState()
 
-    /** Connecting. Incoming/Outgoing Offer and answer are known,  Currently checking and testing pairs of ice candidates */
-    CONNECTING,
-
-    /** Connected. Incoming/Outgoing call, the call is connected */
-    CONNECTED,
+    /**
+     * Connected. Incoming/Outgoing call, ice layer connecting or connected
+     * Notice that the PeerState failed is not always final, if you switch network, new ice candidtates
+     * could be exchanged, and the connection could go back to connected
+     * */
+    data class Connected(val iceConnectionState: PeerConnection.PeerConnectionState) : CallState()
 
     /** Terminated.  Incoming/Outgoing call, the call is terminated */
-    TERMINATED,
+    object Terminated : CallState()
 }

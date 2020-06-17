@@ -210,6 +210,10 @@
     <string name="call_failed_no_ice_description">Please ask the administrator of your homeserver (%1$s) to configure a TURN server in order for calls to work reliably.\n\nAlternatively, you can try to use the public server at %2$s, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings."</string>
     <string name="call_failed_no_ice_use_alt">Try using %s</string>
     <string name="call_failed_dont_ask_again">Do not ask me again</string>
+
+    <string name="call_failed_no_connection">RiotX Call Failed</string>
+    <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
+
     <string name="call_select_sound_device">Select Sound Device</string>
     <string name="sound_device_phone">Phone</string>
     <string name="sound_device_speaker">Speaker</string>
