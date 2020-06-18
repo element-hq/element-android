@@ -14,8 +14,9 @@ androidExtensions {
     experimental = true
 }
 
+// Note: 2 digits max for each value
 ext.versionMajor = 0
-ext.versionMinor = 23
+ext.versionMinor = 91
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
