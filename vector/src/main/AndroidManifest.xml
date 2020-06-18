@@ -196,7 +196,12 @@
 
         <service
             android:name=".core.services.CallService"
-            android:exported="false" />
+            android:exported="false" >
+            <!-- in order to get headset button events -->
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".core.services.VectorSyncService"
@@ -225,6 +230,16 @@
             android:name=".features.notifications.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <!--
+        A media button receiver receives and helps translate hardware media playback buttons,
+        such as those found on wired and wireless headsets, into the appropriate callbacks in your app.
+           -->
+        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
 
         <!-- Providers -->
 

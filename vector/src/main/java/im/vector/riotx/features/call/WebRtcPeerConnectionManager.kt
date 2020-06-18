@@ -184,6 +184,19 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
+    fun headSetButtonTapped() {
+        Timber.v("## VOIP headSetButtonTapped")
+        val call = currentCall?.mxCall ?: return
+        if (call.state is CallState.LocalRinging) {
+            // accept call
+            acceptIncomingCall()
+        }
+        if (call.state is CallState.Connected) {
+            // end call?
+            endCall()
+        }
+    }
+
     private fun createPeerConnectionFactory() {
         if (peerConnectionFactory != null) return
         Timber.v("## VOIP createPeerConnectionFactory")

@@ -20,7 +20,10 @@ package im.vector.riotx.core.services
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.support.v4.media.session.MediaSessionCompat
+import android.view.KeyEvent
 import androidx.core.content.ContextCompat
+import androidx.media.session.MediaButtonReceiver
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.call.telecom.CallConnection
@@ -34,22 +37,26 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
 
     private val connections = mutableMapOf<String, CallConnection>()
 
-    /**
-     * call in progress (foreground notification)
-     */
-//    private var mCallIdInProgress: String? = null
-
     private lateinit var notificationUtils: NotificationUtils
     private lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
-
-    /**
-     * incoming (foreground notification)
-     */
-//    private var mIncomingCallId: String? = null
 
     private var callRingPlayer: CallRingPlayer? = null
 
     private var wiredHeadsetStateReceiver: WiredHeadsetStateReceiver? = null
+
+    // A media button receiver receives and helps translate hardware media playback buttons,
+    // such as those found on wired and wireless headsets, into the appropriate callbacks in your app
+    private var mediaSession : MediaSessionCompat? = null
+    private val mediaSessionButtonCallback = object : MediaSessionCompat.Callback() {
+        override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
+            val keyEvent = mediaButtonEvent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
+                webRtcPeerConnectionManager.headSetButtonTapped()
+                return true
+            }
+            return false
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -64,22 +71,36 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         callRingPlayer?.stop()
         wiredHeadsetStateReceiver?.let { WiredHeadsetStateReceiver.unRegister(this, it) }
         wiredHeadsetStateReceiver = null
+        mediaSession?.release()
+        mediaSession = null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.v("## VOIP onStartCommand $intent")
+        if (mediaSession == null) {
+            mediaSession = MediaSessionCompat(applicationContext, CallService::class.java.name).apply {
+                setCallback(mediaSessionButtonCallback)
+            }
+        }
         if (intent == null) {
             // Service started again by the system.
             // TODO What do we do here?
             return START_STICKY
         }
+        mediaSession?.let {
+            // This ensures that the correct callbacks to MediaSessionCompat.Callback
+            // will be triggered based on the incoming KeyEvent.
+            MediaButtonReceiver.handleIntent(it, intent)
+        }
 
         when (intent.action) {
             ACTION_INCOMING_RINGING_CALL -> {
+                mediaSession?.isActive = true
                 callRingPlayer?.start()
                 displayIncomingCallNotification(intent)
             }
             ACTION_OUTGOING_RINGING_CALL -> {
+                mediaSession?.isActive = true
                 callRingPlayer?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
@@ -221,6 +242,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     private fun hideCallNotifications() {
         val notification = notificationUtils.buildCallEndedNotification()
 
+        mediaSession?.isActive = false
         // It's mandatory to startForeground to avoid crash
         startForeground(NOTIFICATION_ID, notification)
 

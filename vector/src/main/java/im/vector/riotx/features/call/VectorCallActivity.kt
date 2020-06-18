@@ -326,10 +326,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        when (keyCode) {
-            KeyEvent.KEYCODE_HEADSETHOOK -> {
-                callViewModel.handle(VectorCallViewActions.HeadSetButtonPressed)
-                return true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // for newer version, it will be passed automatically to active media session
+            // in call service
+            when (keyCode) {
+                KeyEvent.KEYCODE_HEADSETHOOK -> {
+                    callViewModel.handle(VectorCallViewActions.HeadSetButtonPressed)
+                    return true
+                }
             }
         }
         return super.onKeyDown(keyCode, event)
