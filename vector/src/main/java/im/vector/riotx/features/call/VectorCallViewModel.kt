@@ -48,6 +48,8 @@ data class VectorCallViewState(
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
         val isVideoCaptureInError: Boolean = false,
+        val isFrontCamera: Boolean = true,
+        val canSwitchCamera: Boolean = true,
         val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
         val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
@@ -62,7 +64,8 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleVideo : VectorCallViewActions()
     data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
     object SwitchSoundDevice : VectorCallViewActions()
-    object HeadSetButtonPressed: VectorCallViewActions()
+    object HeadSetButtonPressed : VectorCallViewActions()
+    object ToggleCamera : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -140,6 +143,15 @@ class VectorCallViewModel @AssistedInject constructor(
                 )
             }
         }
+
+        override fun onCameraChange(mgr: WebRtcPeerConnectionManager) {
+            setState {
+                copy(
+                        canSwitchCamera = mgr.canSwitchCamera(),
+                        isFrontCamera = mgr.currentCameraType() == CameraType.FRONT
+                )
+            }
+        }
     }
 
     init {
@@ -160,7 +172,9 @@ class VectorCallViewModel @AssistedInject constructor(
                             callState = Success(mxCall.state),
                             otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
                             soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice(),
-                            availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices()
+                            availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices(),
+                            isFrontCamera = webRtcPeerConnectionManager.currentCameraType() == CameraType.FRONT,
+                            canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera()
                     )
                 }
             } ?: run {
@@ -235,6 +249,9 @@ class VectorCallViewModel @AssistedInject constructor(
                     webRtcPeerConnectionManager.endCall()
                 }
                 Unit
+            }
+            VectorCallViewActions.ToggleCamera         -> {
+                webRtcPeerConnectionManager.switchCamera()
             }
         }.exhaustive
     }

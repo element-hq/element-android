@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.call
 
-// import im.vector.riotx.features.call.service.CallHeadsUpService
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -161,13 +160,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             v.updatePadding(bottom = if (systemUiVisibility) insets.systemWindowInsetBottom else 0)
             insets
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-// //            window.navigationBarColor = ContextCompat.getColor(this, R.color.riotx_background_light)
-// //        }
 
-        // for content intent when screen is locked
-//        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
@@ -323,6 +317,10 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
         peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
+
+        pipRenderer.setOnClickListener {
+            callViewModel.handle(VectorCallViewActions.ToggleCamera)
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

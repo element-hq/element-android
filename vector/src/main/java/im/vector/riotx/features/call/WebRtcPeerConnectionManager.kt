@@ -42,6 +42,7 @@ import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
 import org.webrtc.Camera2Enumerator
+import org.webrtc.CameraVideoCapturer
 import org.webrtc.DataChannel
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
@@ -54,7 +55,6 @@ import org.webrtc.RtpReceiver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.SurfaceViewRenderer
-import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
@@ -78,6 +78,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         fun onCurrentCallChange(call: MxCall?)
         fun onCaptureStateChanged(captureInError: Boolean)
         fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
+        fun onCameraChange(mgr: WebRtcPeerConnectionManager) {}
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -159,9 +160,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private var peerConnectionFactory: PeerConnectionFactory? = null
 
-//    private var localSdp: SessionDescription? = null
+    private var videoCapturer: CameraVideoCapturer? = null
 
-    private var videoCapturer: VideoCapturer? = null
+    private val availableCamera = ArrayList<CameraProxy>()
+    private var cameraInUse: CameraProxy? = null
 
     var capturerIsInError = false
         set(value) {
@@ -413,51 +415,66 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         // add video track if needed
         if (callContext.mxCall.isVideoCall) {
+            availableCamera.clear()
+
             val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
+
+            // I don't realy know how that works if there are 2 front or 2 back cameras
             val frontCamera = cameraIterator.deviceNames
                     ?.firstOrNull { cameraIterator.isFrontFacing(it) }
-                    ?: cameraIterator.deviceNames?.first()
-
-            // TODO detect when no camera or no front camera
-
-            val videoCapturer = cameraIterator.createCapturer(frontCamera, object : CameraEventsHandlerAdapter() {
-                override fun onFirstFrameAvailable() {
-                    super.onFirstFrameAvailable()
-                    capturerIsInError = false
-                }
-
-                override fun onCameraClosed() {
-                    // This could happen if you open the camera app in chat
-                    // We then register in order to restart capture as soon as the camera is available again
-                    Timber.v("## VOIP onCameraClosed")
-                    this@WebRtcPeerConnectionManager.capturerIsInError = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        val restarter = CameraRestarter(frontCamera ?: "", callContext.mxCall.callId)
-                        callContext.cameraAvailabilityCallback = restarter
-                        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-                        cameraManager.registerAvailabilityCallback(restarter, null)
+                    ?.let {
+                        CameraProxy(it, CameraType.FRONT).also { availableCamera.add(it) }
                     }
-                }
-            })
 
-            val videoSource = peerConnectionFactory!!.createVideoSource(videoCapturer.isScreencast)
-            val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
-            Timber.v("## VOIP Local video source created")
+            val backCamera = cameraIterator.deviceNames
+                    ?.firstOrNull { cameraIterator.isBackFacing(it) }
+                    ?.let {
+                        CameraProxy(it, CameraType.BACK).also { availableCamera.add(it) }
+                    }
 
-            videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
-            // HD
-            videoCapturer.startCapture(1280, 720, 30)
+            val camera = frontCamera?.also { cameraInUse = frontCamera }
+                    ?: backCamera?.also { cameraInUse = backCamera }
+                    ?: null.also { cameraInUse = null }
 
-            this.videoCapturer = videoCapturer
+            if (camera != null) {
+                val videoCapturer = cameraIterator.createCapturer(camera.name, object : CameraEventsHandlerAdapter() {
+                    override fun onFirstFrameAvailable() {
+                        super.onFirstFrameAvailable()
+                        capturerIsInError = false
+                    }
 
-            val localVideoTrack = peerConnectionFactory!!.createVideoTrack("ARDAMSv0", videoSource)
-            Timber.v("## VOIP Local video track created")
-            localVideoTrack?.setEnabled(true)
+                    override fun onCameraClosed() {
+                        // This could happen if you open the camera app in chat
+                        // We then register in order to restart capture as soon as the camera is available again
+                        Timber.v("## VOIP onCameraClosed")
+                        this@WebRtcPeerConnectionManager.capturerIsInError = true
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
+                            callContext.cameraAvailabilityCallback = restarter
+                            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                            cameraManager.registerAvailabilityCallback(restarter, null)
+                        }
+                    }
+                })
 
-            callContext.localVideoSource = videoSource
-            callContext.localVideoTrack = localVideoTrack
+                val videoSource = peerConnectionFactory!!.createVideoSource(videoCapturer.isScreencast)
+                val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+                Timber.v("## VOIP Local video source created")
 
-            localMediaStream?.addTrack(localVideoTrack)
+                videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
+                // HD
+                videoCapturer.startCapture(1280, 720, 30)
+                this.videoCapturer = videoCapturer
+
+                val localVideoTrack = peerConnectionFactory!!.createVideoTrack("ARDAMSv0", videoSource)
+                Timber.v("## VOIP Local video track created")
+                localVideoTrack?.setEnabled(true)
+
+                callContext.localVideoSource = videoSource
+                callContext.localVideoTrack = localVideoTrack
+
+                localMediaStream?.addTrack(localVideoTrack)
+            }
         }
     }
 
@@ -659,6 +676,34 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun enableVideo(enabled: Boolean) {
         currentCall?.localVideoTrack?.setEnabled(enabled)
+    }
+
+    fun switchCamera() {
+        Timber.v("## VOIP switchCamera")
+        if (currentCall != null && currentCall?.mxCall?.state is CallState.Connected && currentCall?.mxCall?.isVideoCall == true) {
+            videoCapturer?.switchCamera(object : CameraVideoCapturer.CameraSwitchHandler {
+                // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
+                override fun onCameraSwitchDone(isFrontCamera: Boolean) {
+                    Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
+                    cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
+                    currentCallsListeners.forEach {
+                        tryThis { it.onCameraChange(this@WebRtcPeerConnectionManager) }
+                    }
+                }
+
+                override fun onCameraSwitchError(errorDescription: String?) {
+                    Timber.v("## VOIP onCameraSwitchError isFront $errorDescription")
+                }
+            })
+        }
+    }
+
+    fun canSwitchCamera(): Boolean {
+        return availableCamera.size > 0
+    }
+
+    fun currentCameraType(): CameraType? {
+        return cameraInUse?.type
     }
 
     fun endCall() {

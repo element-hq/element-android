@@ -19,6 +19,7 @@ package im.vector.riotx.features.call
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
@@ -41,6 +42,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
+        callControlsSwitchCamera.clickableView.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleCamera)
+            dismiss()
+        }
+
         callViewModel.observeViewEvents {
             when (it) {
                 is VectorCallViewEvents.ShowSoundDeviceChooser -> {
@@ -55,19 +61,19 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     private fun showSoundDeviceChooser(available: List<CallAudioManager.SoundDevice>, current: CallAudioManager.SoundDevice) {
         val soundDevices = available.map {
             when (it) {
-                CallAudioManager.SoundDevice.WIRELESS_HEADSET   -> span {
+                CallAudioManager.SoundDevice.WIRELESS_HEADSET -> span {
                     text = getString(R.string.sound_device_wireless_headset)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.PHONE   -> span {
+                CallAudioManager.SoundDevice.PHONE            -> span {
                     text = getString(R.string.sound_device_phone)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.SPEAKER -> span {
+                CallAudioManager.SoundDevice.SPEAKER          -> span {
                     text = getString(R.string.sound_device_speaker)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.HEADSET -> span {
+                CallAudioManager.SoundDevice.HEADSET          -> span {
                     text = getString(R.string.sound_device_headset)
                     textStyle = if (current == it) "bold" else "normal"
                 }
@@ -77,13 +83,13 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 .setItems(soundDevices.toTypedArray()) { d, n ->
                     d.cancel()
                     when (soundDevices[n].toString()) {
-                        getString(R.string.sound_device_phone)   -> {
+                        getString(R.string.sound_device_phone)            -> {
                             callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.PHONE))
                         }
-                        getString(R.string.sound_device_speaker) -> {
+                        getString(R.string.sound_device_speaker)          -> {
                             callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.SPEAKER))
                         }
-                        getString(R.string.sound_device_headset) -> {
+                        getString(R.string.sound_device_headset)          -> {
                             callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.HEADSET))
                         }
                         getString(R.string.sound_device_wireless_headset) -> {
@@ -95,23 +101,16 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 .show()
     }
 
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        return super.onCreateDialog(savedInstanceState).apply {
-//            window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-//            window?.decorView?.systemUiVisibility =
-//                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-//                            View.SYSTEM_UI_FLAG_FULLSCREEN or
-//                            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//        }
-//    }
-
     private fun renderState(state: VectorCallViewState) {
         callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
         callControlsSoundDevice.subTitle = when (state.soundDevice) {
-            CallAudioManager.SoundDevice.PHONE   -> getString(R.string.sound_device_phone)
-            CallAudioManager.SoundDevice.SPEAKER -> getString(R.string.sound_device_speaker)
-            CallAudioManager.SoundDevice.HEADSET -> getString(R.string.sound_device_headset)
+            CallAudioManager.SoundDevice.PHONE            -> getString(R.string.sound_device_phone)
+            CallAudioManager.SoundDevice.SPEAKER          -> getString(R.string.sound_device_speaker)
+            CallAudioManager.SoundDevice.HEADSET          -> getString(R.string.sound_device_headset)
             CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
         }
+
+        callControlsSwitchCamera.isVisible = state.canSwitchCamera
+        callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
     }
 }
