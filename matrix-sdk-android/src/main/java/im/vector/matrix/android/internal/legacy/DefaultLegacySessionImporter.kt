@@ -30,6 +30,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import im.vector.matrix.android.internal.legacy.riot.Fingerprint as LegacyFingerprint
+import im.vector.matrix.android.internal.legacy.riot.HomeServerConnectionConfig as LegacyHomeServerConnectionConfig
 
 internal class DefaultLegacySessionImporter @Inject constructor(
         context: Context,
@@ -45,19 +47,32 @@ internal class DefaultLegacySessionImporter @Inject constructor(
 
         Timber.d("Migration: found ${list.size} session(s).")
 
-        val firstConfig = list.firstOrNull() ?: return
+        val legacyConfig = list.firstOrNull() ?: return
 
-        Timber.d("Migration: importing a session")
+        GlobalScope.launch {
+            Timber.d("Migration: importing a session")
+            importCredentials(legacyConfig)
 
+            Timber.d("Migration: importing crypto DB")
+            importCryptoDb(legacyConfig)
+
+            Timber.d("Migration: clear legacy session")
+
+            // Delete to avoid doing this several times
+            loginStorage.clear()
+        }
+    }
+
+    private suspend fun importCredentials(legacyConfig: LegacyHomeServerConnectionConfig) {
         @Suppress("DEPRECATION")
         val sessionParams = SessionParams(
                 credentials = Credentials(
-                        userId = firstConfig.credentials.userId,
-                        accessToken = firstConfig.credentials.accessToken,
-                        refreshToken = firstConfig.credentials.refreshToken,
-                        homeServer = firstConfig.credentials.homeServer,
-                        deviceId = firstConfig.credentials.deviceId,
-                        discoveryInformation = firstConfig.credentials.wellKnown?.let { wellKnown ->
+                        userId = legacyConfig.credentials.userId,
+                        accessToken = legacyConfig.credentials.accessToken,
+                        refreshToken = legacyConfig.credentials.refreshToken,
+                        homeServer = legacyConfig.credentials.homeServer,
+                        deviceId = legacyConfig.credentials.deviceId,
+                        discoveryInformation = legacyConfig.credentials.wellKnown?.let { wellKnown ->
                             // Note credentials.wellKnown is not serialized in the LoginStorage, so this code is a bit useless...
                             if (wellKnown.homeServer?.baseURL != null
                                     || wellKnown.identityServer?.baseURL != null) {
@@ -71,44 +86,35 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         }
                 ),
                 homeServerConnectionConfig = HomeServerConnectionConfig(
-                        homeServerUri = firstConfig.homeserverUri,
-                        identityServerUri = firstConfig.identityServerUri,
-                        antiVirusServerUri = firstConfig.antiVirusServerUri,
-                        allowedFingerprints = firstConfig.allowedFingerprints.map {
+                        homeServerUri = legacyConfig.homeserverUri,
+                        identityServerUri = legacyConfig.identityServerUri,
+                        antiVirusServerUri = legacyConfig.antiVirusServerUri,
+                        allowedFingerprints = legacyConfig.allowedFingerprints.map {
                             Fingerprint(
                                     bytes = it.bytes,
                                     hashType = when (it.type) {
-                                        im.vector.matrix.android.internal.legacy.riot.Fingerprint.HashType.SHA1,
-                                        null                                                                      -> Fingerprint.HashType.SHA1
-                                        im.vector.matrix.android.internal.legacy.riot.Fingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
+                                        LegacyFingerprint.HashType.SHA1,
+                                        null                              -> Fingerprint.HashType.SHA1
+                                        LegacyFingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
                                     }
                             )
                         },
-                        shouldPin = firstConfig.shouldPin(),
-                        tlsVersions = firstConfig.acceptedTlsVersions,
-                        tlsCipherSuites = firstConfig.acceptedTlsCipherSuites,
-                        shouldAcceptTlsExtensions = firstConfig.shouldAcceptTlsExtensions(),
+                        shouldPin = legacyConfig.shouldPin(),
+                        tlsVersions = legacyConfig.acceptedTlsVersions,
+                        tlsCipherSuites = legacyConfig.acceptedTlsCipherSuites,
+                        shouldAcceptTlsExtensions = legacyConfig.shouldAcceptTlsExtensions(),
                         allowHttpExtension = false, // TODO
-                        forceUsageTlsVersions = firstConfig.forceUsageOfTlsVersions()
+                        forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
                 ),
                 // If token is not valid, this boolean will be updated later
                 isTokenValid = true
         )
 
         Timber.d("Migration: save session")
+        sessionParamsStore.save(sessionParams)
+    }
 
-        GlobalScope.launch {
-            sessionParamsStore.save(sessionParams)
-        }
-
-        Timber.d("Migration: clear legacy session")
-
-        // Delete to avoid doing this several times
-        loginStorage.clear()
-
-        // TODO Crypto DB
-
-        // TODO Remove
-        Thread.sleep(5000)
+    private suspend fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
+        TODO("Not yet implemented")
     }
 }
