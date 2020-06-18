@@ -47,6 +47,11 @@
         android:theme="@style/AppTheme.Light"
         tools:replace="android:allowBackup">
 
+        <!-- No limit for screen ratio: avoid black strips -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="9.9" />
+
         <activity
             android:name=".features.MainActivity"
             android:theme="@style/AppTheme.Launcher" />
