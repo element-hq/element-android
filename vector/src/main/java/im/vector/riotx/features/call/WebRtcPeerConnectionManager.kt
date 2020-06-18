@@ -182,13 +182,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
 
-    init {
-        // TODO do this lazyly
-        executor.execute {
-            createPeerConnectionFactory()
-        }
-    }
-
     fun headSetButtonTapped() {
         Timber.v("## VOIP headSetButtonTapped")
         val call = currentCall?.mxCall ?: return
@@ -558,6 +551,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun startOutgoingCall(context: Context, signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
+        executor.execute {
+            if (peerConnectionFactory == null) {
+                createPeerConnectionFactory()
+            }
+        }
+
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         val createdCall = sessionHolder.getSafeActiveSession()?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
@@ -606,6 +605,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
             Timber.w("## VOIP receiving incoming call while already in call?")
             // Just ignore, maybe we could answer from other session?
             return
+        }
+        executor.execute {
+            if (peerConnectionFactory == null) {
+                createPeerConnectionFactory()
+            }
         }
 
         val callContext = CallContext(mxCall)
@@ -675,6 +679,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall = null
         audioManager.stop()
         close()
+        executor.execute {
+            if (currentCall == null) {
+                peerConnectionFactory?.dispose()
+            }
+        }
     }
 
     fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
