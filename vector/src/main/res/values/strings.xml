@@ -862,6 +862,9 @@
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
 
+    <string name="disabled_integration_dialog_title">Integrations are disabled</string>
+    <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
+
     <string name="settings_user_interface">User interface</string>
     <string name="settings_interface_language">Language</string>
     <string name="settings_select_language">Choose language</string>
