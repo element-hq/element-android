@@ -30,7 +30,7 @@ import timber.log.Timber
 /**
  * Foreground service to manage calls
  */
-class CallService : VectorService() {
+class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListener {
 
     private val connections = mutableMapOf<String, CallConnection>()
 
@@ -49,11 +49,21 @@ class CallService : VectorService() {
 
     private var callRingPlayer: CallRingPlayer? = null
 
+    private var wiredHeadsetStateReceiver: WiredHeadsetStateReceiver? = null
+
     override fun onCreate() {
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
         webRtcPeerConnectionManager = vectorComponent().webRtcPeerConnectionManager()
         callRingPlayer = CallRingPlayer(applicationContext)
+        wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        callRingPlayer?.stop()
+        wiredHeadsetStateReceiver?.let { WiredHeadsetStateReceiver.unRegister(this, it) }
+        wiredHeadsetStateReceiver = null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -217,11 +227,6 @@ class CallService : VectorService() {
         myStopSelf()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        callRingPlayer?.stop()
-    }
-
     fun addConnection(callConnection: CallConnection) {
         connections[callConnection.callId] = callConnection
     }
@@ -334,5 +339,10 @@ class CallService : VectorService() {
         fun getCallService(): CallService {
             return this@CallService
         }
+    }
+
+    override fun onHeadsetEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+        Timber.v("## VOIP: onHeadsetEvent $event")
+        webRtcPeerConnectionManager.onWireDeviceEvent(event)
     }
 }

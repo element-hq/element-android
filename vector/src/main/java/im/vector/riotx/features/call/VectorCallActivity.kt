@@ -340,14 +340,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall       -> {
+            VectorCallViewEvents.DismissNoCall        -> {
                 CallService.onNoActiveCall(this)
                 finish()
             }
-            is VectorCallViewEvents.ConnectionTimout -> {
+            is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
-            null                                     -> {
+            null                                      -> {
             }
         }
     }

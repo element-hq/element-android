@@ -49,6 +49,7 @@ data class VectorCallViewState(
         val isVideoEnabled: Boolean = true,
         val isVideoCaptureInError: Boolean = false,
         val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
+        val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
         val callState: Async<CallState> = Uninitialized
 ) : MvRxState
@@ -60,12 +61,17 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleMute : VectorCallViewActions()
     object ToggleVideo : VectorCallViewActions()
     data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
+    object SwitchSoundDevice : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
 
     object DismissNoCall : VectorCallViewEvents()
-    data class ConnectionTimout(val turn: TurnServerResponse?) : VectorCallViewEvents()
+    data class ConnectionTimeout(val turn: TurnServerResponse?) : VectorCallViewEvents()
+    data class ShowSoundDeviceChooser(
+            val available: List<CallAudioManager.SoundDevice>,
+            val current: CallAudioManager.SoundDevice
+    ) : VectorCallViewEvents()
 //    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
 //    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
 //    object CallAccepted : VectorCallViewEvents()
@@ -96,11 +102,11 @@ class VectorCallViewModel @AssistedInject constructor(
                         override fun run() {
                             session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
                                 override fun onFailure(failure: Throwable) {
-                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimout(null))
+                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(null))
                                 }
 
                                 override fun onSuccess(data: TurnServerResponse) {
-                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimout(data))
+                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(data))
                                 }
                             })
                         }
@@ -124,6 +130,15 @@ class VectorCallViewModel @AssistedInject constructor(
                 copy(isVideoCaptureInError = captureInError)
             }
         }
+
+        override fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {
+            setState {
+                copy(
+                        availableSoundDevices = mgr.audioManager.getAvailableSoundDevices(),
+                        soundDevice = mgr.audioManager.getCurrentSoundDevice()
+                )
+            }
+        }
     }
 
     init {
@@ -143,7 +158,8 @@ class VectorCallViewModel @AssistedInject constructor(
                             isVideoCall = mxCall.isVideoCall,
                             callState = Success(mxCall.state),
                             otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
-                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice(),
+                            availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices()
                     )
                 }
             } ?: run {
@@ -163,7 +179,7 @@ class VectorCallViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    override fun handle(action: VectorCallViewActions) = withState {
+    override fun handle(action: VectorCallViewActions) = withState { state ->
         when (action) {
             VectorCallViewActions.EndCall              -> webRtcPeerConnectionManager.endCall()
             VectorCallViewActions.AcceptCall           -> {
@@ -179,24 +195,21 @@ class VectorCallViewModel @AssistedInject constructor(
                 webRtcPeerConnectionManager.endCall()
             }
             VectorCallViewActions.ToggleMute           -> {
-                withState {
-                    val muted = it.isAudioMuted
-                    webRtcPeerConnectionManager.muteCall(!muted)
-                    setState {
-                        copy(isAudioMuted = !muted)
-                    }
+                val muted = state.isAudioMuted
+                webRtcPeerConnectionManager.muteCall(!muted)
+                setState {
+                    copy(isAudioMuted = !muted)
                 }
             }
             VectorCallViewActions.ToggleVideo          -> {
-                withState {
-                    if (it.isVideoCall) {
-                        val videoEnabled = it.isVideoEnabled
-                        webRtcPeerConnectionManager.enableVideo(!videoEnabled)
-                        setState {
-                            copy(isVideoEnabled = !videoEnabled)
-                        }
+                if (state.isVideoCall) {
+                    val videoEnabled = state.isVideoEnabled
+                    webRtcPeerConnectionManager.enableVideo(!videoEnabled)
+                    setState {
+                        copy(isVideoEnabled = !videoEnabled)
                     }
                 }
+                Unit
             }
             is VectorCallViewActions.ChangeAudioDevice -> {
                 webRtcPeerConnectionManager.audioManager.setCurrentSoundDevice(action.device)
@@ -205,6 +218,11 @@ class VectorCallViewModel @AssistedInject constructor(
                             soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
                     )
                 }
+            }
+            VectorCallViewActions.SwitchSoundDevice    -> {
+                _viewEvents.post(
+                        VectorCallViewEvents.ShowSoundDeviceChooser(state.availableSoundDevices, state.soundDevice)
+                )
             }
         }.exhaustive
     }

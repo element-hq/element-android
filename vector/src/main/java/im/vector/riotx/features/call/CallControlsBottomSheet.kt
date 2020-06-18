@@ -23,6 +23,7 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_call_controls.*
+import me.gujun.android.span.span
 
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun getLayoutResId() = R.layout.bottom_sheet_call_controls
@@ -37,25 +38,54 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         callControlsSoundDevice.clickableView.debouncedClicks {
-            val soundDevices = listOf(
-                    getString(R.string.sound_device_phone),
-                    getString(R.string.sound_device_speaker)
-            )
-            AlertDialog.Builder(requireContext())
-                    .setItems(soundDevices.toTypedArray()) { d, n ->
-                        d.cancel()
-                        when (soundDevices[n]) {
-                            getString(R.string.sound_device_phone) -> {
-                                callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.PHONE))
-                            }
-                            getString(R.string.sound_device_speaker) -> {
-                                callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.SPEAKER))
-                            }
+            callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
+        }
+
+        callViewModel.observeViewEvents {
+            when (it) {
+                is VectorCallViewEvents.ShowSoundDeviceChooser -> {
+                    showSoundDeviceChooser(it.available, it.current)
+                }
+                else                                           -> {
+                }
+            }
+        }
+    }
+
+    private fun showSoundDeviceChooser(available: List<CallAudioManager.SoundDevice>, current: CallAudioManager.SoundDevice) {
+        val soundDevices = available.map {
+            when (it) {
+                CallAudioManager.SoundDevice.PHONE   -> span {
+                    text = getString(R.string.sound_device_phone)
+                    textStyle = if (current == it) "bold" else "normal"
+                }
+                CallAudioManager.SoundDevice.SPEAKER -> span {
+                    text = getString(R.string.sound_device_speaker)
+                    textStyle = if (current == it) "bold" else "normal"
+                }
+                CallAudioManager.SoundDevice.HEADSET -> span {
+                    text = getString(R.string.sound_device_headset)
+                    textStyle = if (current == it) "bold" else "normal"
+                }
+            }
+        }
+        AlertDialog.Builder(requireContext())
+                .setItems(soundDevices.toTypedArray()) { d, n ->
+                    d.cancel()
+                    when (soundDevices[n].toString()) {
+                        getString(R.string.sound_device_phone)   -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.PHONE))
+                        }
+                        getString(R.string.sound_device_speaker) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.SPEAKER))
+                        }
+                        getString(R.string.sound_device_headset) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.HEADSET))
                         }
                     }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-        }
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
 //    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -73,6 +103,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         callControlsSoundDevice.subTitle = when (state.soundDevice) {
             CallAudioManager.SoundDevice.PHONE   -> getString(R.string.sound_device_phone)
             CallAudioManager.SoundDevice.SPEAKER -> getString(R.string.sound_device_speaker)
+            CallAudioManager.SoundDevice.HEADSET -> getString(R.string.sound_device_headset)
         }
     }
 }

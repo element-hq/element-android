@@ -28,7 +28,8 @@ class CallAudioManager(
 
     enum class SoundDevice {
         PHONE,
-        SPEAKER
+        SPEAKER,
+        HEADSET
     }
 
     private val audioManager: AudioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -71,12 +72,22 @@ class CallAudioManager(
         // Always disable microphone mute during a WebRTC call.
         setMicrophoneMute(false)
 
-        // TODO check if there are headsets?
-        if (mxCall.isVideoCall) {
+        // If there are no headset, start video output in speaker
+        // (you can't watch the video and have the phone close to your ear)
+        if (mxCall.isVideoCall && !isHeadsetOn()) {
             setSpeakerphoneOn(true)
         } else {
+            // if a headset is plugged, sound will be directed to it
+            // (can't really force earpiece when headset is plugged)
             setSpeakerphoneOn(false)
         }
+    }
+
+    fun getAvailableSoundDevices(): List<SoundDevice> {
+        return listOf(
+                if (isHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE,
+                SoundDevice.SPEAKER
+        )
     }
 
     fun stop() {
@@ -91,19 +102,25 @@ class CallAudioManager(
         audioManager.abandonAudioFocus(audioFocusChangeListener)
     }
 
-    fun getCurrentSoundDevice() : SoundDevice {
+    fun getCurrentSoundDevice(): SoundDevice {
         if (audioManager.isSpeakerphoneOn) {
             return SoundDevice.SPEAKER
         } else {
-            return SoundDevice.PHONE
+            return if (isHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE
         }
     }
 
-    fun setCurrentSoundDevice(device: SoundDevice)  {
+    fun setCurrentSoundDevice(device: SoundDevice) {
         when (device) {
+            SoundDevice.HEADSET,
             SoundDevice.PHONE   -> setSpeakerphoneOn(false)
             SoundDevice.SPEAKER -> setSpeakerphoneOn(true)
         }
+    }
+
+    private fun isHeadsetOn(): Boolean {
+        @Suppress("DEPRECATION")
+        return audioManager.isWiredHeadsetOn || audioManager.isBluetoothScoOn
     }
 
     /** Sets the speaker phone mode.  */

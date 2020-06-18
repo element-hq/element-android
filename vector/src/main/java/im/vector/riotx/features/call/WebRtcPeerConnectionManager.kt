@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.services.CallService
+import im.vector.riotx.core.services.WiredHeadsetStateReceiver
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
@@ -75,6 +76,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
         fun onCaptureStateChanged(captureInError: Boolean)
+        fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -655,6 +657,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall = null
         audioManager.stop()
         close()
+    }
+
+    fun onWireDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+        currentCall ?: return
+        // if it's plugged and speaker is on we should route to headset
+        if (event.plugged && audioManager.getCurrentSoundDevice() == CallAudioManager.SoundDevice.SPEAKER) {
+            audioManager.setCurrentSoundDevice(CallAudioManager.SoundDevice.HEADSET)
+        } else if (!event.plugged) {
+            // if it's unplugged ? always route to speaker?
+            // this is questionable?
+            audioManager.setCurrentSoundDevice(CallAudioManager.SoundDevice.SPEAKER)
+        }
+        currentCallsListeners.forEach {
+            it.onAudioDevicesChange(this)
+        }
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
