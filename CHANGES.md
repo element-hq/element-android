@@ -18,6 +18,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
 
 Other changes:
  -
