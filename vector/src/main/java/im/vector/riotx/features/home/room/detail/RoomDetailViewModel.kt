@@ -67,6 +67,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.subscribeLogError
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
@@ -97,7 +98,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stickerPickerActionHandler: StickerPickerActionHandler
+        private val stickerPickerActionHandler: StickerPickerActionHandler,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -255,11 +257,18 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
-        }
+            is RoomDetailAction.StartCall                        -> handleStartCall(action)
+        }.exhaustive
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+    }
+
+    private fun handleStartCall(action: RoomDetailAction.StartCall) {
+        room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
+            webRtcPeerConnectionManager.startOutgoingCall(room.roomId, it, action.isVideo)
+        }
     }
 
     private fun handleSelectStickerAttachment() {
@@ -369,7 +378,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
-        R.id.clear_message_queue ->
+        R.id.clear_message_queue         ->
             // For now always disable when not in developer mode, worker cancellation is not working properly
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0

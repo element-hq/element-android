@@ -567,7 +567,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    fun startOutgoingCall(context: Context, signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
+    fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
         executor.execute {
             if (peerConnectionFactory == null) {
                 createPeerConnectionFactory()
@@ -584,7 +584,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val name = sessionHolder.getSafeActiveSession()?.getUser(createdCall.otherUserId)?.getBestName()
                 ?: createdCall.otherUserId
         CallService.onOutgoingCallRinging(
-                context = context,
+                context = context.applicationContext,
                 isVideo = createdCall.isVideoCall,
                 roomName = name,
                 roomId = createdCall.roomId,
@@ -596,7 +596,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
 
         // start the activity now
-        context.startActivity(VectorCallActivity.newIntent(context, createdCall))
+        context.applicationContext.startActivity(VectorCallActivity.newIntent(context, createdCall))
     }
 
     override fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent) {

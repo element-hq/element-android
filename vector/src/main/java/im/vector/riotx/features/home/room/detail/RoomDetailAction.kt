@@ -68,7 +68,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     object ClearSendQueue : RoomDetailAction()
     object ResendAll : RoomDetailAction()
-    object StartCall : RoomDetailAction()
+    data class StartCall(val isVideo: Boolean) : RoomDetailAction()
 
     data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
     data class DeclineVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()

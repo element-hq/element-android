@@ -107,6 +107,8 @@ import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
 import im.vector.riotx.core.utils.KeyboardStateUtils
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
@@ -120,6 +122,8 @@ import im.vector.riotx.core.utils.createJSonViewerStyleProvider
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.isValidUrl
+import im.vector.riotx.core.utils.onPermissionResultAudioIpCall
+import im.vector.riotx.core.utils.onPermissionResultVideoIpCall
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
@@ -132,7 +136,6 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.call.SharedActiveCallViewModel
 import im.vector.riotx.features.call.VectorCallActivity
-import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -202,8 +205,7 @@ class RoomDetailFragment @Inject constructor(
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
-        private val colorProvider: ColorProvider,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
+        private val colorProvider: ColorProvider) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -214,6 +216,9 @@ class RoomDetailFragment @Inject constructor(
         ActiveCallView.Callback {
 
     companion object {
+
+        private const val AUDIO_CALL_PERMISSION_REQUEST_CODE = 1
+        private const val VIDEO_CALL_PERMISSION_REQUEST_CODE = 2
 
         /**
          * Sanitize the display name.
@@ -503,22 +508,22 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.voice_call,
             R.id.video_call          -> {
-                roomDetailViewModel.getOtherUserIds()?.firstOrNull()?.let {
                     // TODO CALL We should check/ask for permission here first
                     val activeCall = sharedCallActionViewModel.activeCall.value
+                    val isVideoCall = item.itemId == R.id.video_call
                     if (activeCall != null) {
                         // resume existing if same room, if not prompt to kill and then restart new call?
                         if (activeCall.roomId == roomDetailArgs.roomId) {
                             onTapToReturnToCall()
-                        } else {
-                            // TODO might not work well, and should prompt
-                            webRtcPeerConnectionManager.endCall()
-                            webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
                         }
+//                        else {
+                            // TODO might not work well, and should prompt
+//                            webRtcPeerConnectionManager.endCall()
+//                            safeStartCall(it, isVideoCall)
+//                        }
                     } else {
-                        webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
+                        safeStartCall(isVideoCall)
                     }
-                }
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
@@ -534,6 +539,22 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+    }
+
+    private fun safeStartCall(isVideoCall: Boolean) {
+        val startCallAction = RoomDetailAction.StartCall(isVideoCall)
+        roomDetailViewModel.pendingAction = startCallAction
+        if (isVideoCall) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, VIDEO_CALL_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(startCallAction)
+            }
+        } else {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, AUDIO_CALL_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_record_audio)) {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(startCallAction)
+            }
+        }
     }
 
     private fun renderRegularMode(text: String) {
@@ -1128,6 +1149,22 @@ class RoomDetailFragment @Inject constructor(
                     if (pendingType != null) {
                         attachmentsHelper.pendingType = null
                         launchAttachmentProcess(pendingType)
+                    }
+                }
+                AUDIO_CALL_PERMISSION_REQUEST_CODE      -> {
+                    if (onPermissionResultAudioIpCall(requireContext(), grantResults)) {
+                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                            roomDetailViewModel.pendingAction = null
+                            roomDetailViewModel.handle(it)
+                        }
+                    }
+                }
+                VIDEO_CALL_PERMISSION_REQUEST_CODE      -> {
+                    if (onPermissionResultVideoIpCall(requireContext(), grantResults)) {
+                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                            roomDetailViewModel.pendingAction = null
+                            roomDetailViewModel.handle(it)
+                        }
                     }
                 }
             }
