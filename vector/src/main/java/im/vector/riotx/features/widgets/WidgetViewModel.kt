@@ -77,6 +77,9 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     private val widgetURLFormatter = widgetService.getWidgetURLFormatter()
     private val postAPIMediator = widgetService.getWidgetPostAPIMediator()
 
+    // Flag to avoid infinite loop
+    private var canRefreshToken = true
+
     init {
         integrationManagerService.addListener(this)
         if (initialState.widgetKind.isAdmin()) {
@@ -227,7 +230,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 _viewEvents.post(WidgetViewEvents.LoadFormattedURL(formattedUrl))
             } catch (failure: Throwable) {
                 if (failure is WidgetManagementFailure.TermsNotSignedException) {
-                    _viewEvents.post(WidgetViewEvents.DisplayTerms(failure.baseUrl, failure.token))
+                    _viewEvents.post(WidgetViewEvents.DisplayTerms(initialState.baseUrl, failure.token))
                 }
                 setState { copy(formattedURL = Fail(failure)) }
             }
@@ -251,7 +254,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         }
         if (action.isHttpError) {
             // In case of 403, try to refresh the scalar token
-            if (it.formattedURL is Success && action.errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+            if (it.formattedURL is Success && action.errorCode == HttpsURLConnection.HTTP_FORBIDDEN && canRefreshToken) {
+                canRefreshToken = false
                 loadFormattedUrl(true)
             }
         } else {
