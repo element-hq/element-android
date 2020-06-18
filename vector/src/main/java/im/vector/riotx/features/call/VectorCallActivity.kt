@@ -24,6 +24,7 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -324,18 +325,15 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        withState(callViewModel) {
-//           if(it.callState.invoke() == CallState.CONNECTED) {
-//               peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer)
-//           }
-//        }
-//    }
-//    override fun onPause() {
-//        peerConnectionManager.detachRenderers()
-//        super.onPause()
-//    }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_HEADSETHOOK -> {
+                callViewModel.handle(VectorCallViewActions.HeadSetButtonPressed)
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
+    }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")

@@ -62,6 +62,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleVideo : VectorCallViewActions()
     data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
     object SwitchSoundDevice : VectorCallViewActions()
+    object HeadSetButtonPressed: VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -223,6 +224,17 @@ class VectorCallViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         VectorCallViewEvents.ShowSoundDeviceChooser(state.availableSoundDevices, state.soundDevice)
                 )
+            }
+            VectorCallViewActions.HeadSetButtonPressed -> {
+                if (state.callState.invoke() is CallState.LocalRinging) {
+                    // accept call
+                    webRtcPeerConnectionManager.acceptIncomingCall()
+                }
+                if (state.callState.invoke() is CallState.Connected) {
+                    // end call?
+                    webRtcPeerConnectionManager.endCall()
+                }
+                Unit
             }
         }.exhaustive
     }
