@@ -106,7 +106,7 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "im.vector.riotx"
+        applicationId "im.vector.app"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
