@@ -545,12 +545,16 @@ class RoomDetailFragment @Inject constructor(
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
         roomDetailViewModel.pendingAction = startCallAction
         if (isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, VIDEO_CALL_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
+                            this, VIDEO_CALL_PERMISSION_REQUEST_CODE,
+                            R.string.permissions_rationale_msg_camera_and_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
         } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, AUDIO_CALL_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_record_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
+                            this, AUDIO_CALL_PERMISSION_REQUEST_CODE,
+                            R.string.permissions_rationale_msg_record_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }

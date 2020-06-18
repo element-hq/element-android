@@ -38,9 +38,7 @@ class CallAudioManager(
         WIRELESS_HEADSET
     }
 
-    /*
-    * if all calls to audio manager not in the same thread it's not working well...
-     */
+    // if all calls to audio manager not in the same thread it's not working well.
     private val executor = Executors.newSingleThreadExecutor()
 
     private var audioManager: AudioManager? = null
