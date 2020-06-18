@@ -16,27 +16,58 @@
 
 package im.vector.riotx.features.call
 
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import im.vector.matrix.android.api.session.call.MxCall
+import im.vector.riotx.core.services.WiredHeadsetStateReceiver
 import timber.log.Timber
+import java.util.concurrent.Executors
 
 class CallAudioManager(
-        val applicationContext: Context
+        val applicationContext: Context,
+        val configChange: (() -> Unit)?
 ) {
 
     enum class SoundDevice {
         PHONE,
         SPEAKER,
-        HEADSET
+        HEADSET,
+        WIRELESS_HEADSET
     }
 
-    private val audioManager: AudioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    /*
+    * if all calls to audio manager not in the same thread it's not working well...
+     */
+    private val executor = Executors.newSingleThreadExecutor()
+
+    private var audioManager: AudioManager? = null
 
     private var savedIsSpeakerPhoneOn = false
     private var savedIsMicrophoneMute = false
     private var savedAudioMode = AudioManager.MODE_INVALID
+
+    private var connectedBlueToothHeadset: BluetoothProfile? = null
+    private var wantsBluetoothConnection = false
+
+    init {
+        executor.execute {
+            audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        }
+        val bm = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+        bm?.adapter?.getProfileProxy(applicationContext, object : BluetoothProfile.ServiceListener {
+            override fun onServiceDisconnected(profile: Int) {
+                connectedBlueToothHeadset = null
+            }
+
+            override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                connectedBlueToothHeadset = proxy
+                configChange?.invoke()
+            }
+        }, BluetoothProfile.HEADSET)
+    }
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
 
@@ -49,6 +80,7 @@ class CallAudioManager(
 
     fun startForCall(mxCall: MxCall) {
         Timber.v("## VOIP: AudioManager startForCall ${mxCall.callId}")
+        val audioManager = audioManager ?: return
         savedIsSpeakerPhoneOn = audioManager.isSpeakerphoneOn
         savedIsMicrophoneMute = audioManager.isMicrophoneMute
         savedAudioMode = audioManager.mode
@@ -72,77 +104,150 @@ class CallAudioManager(
         // Always disable microphone mute during a WebRTC call.
         setMicrophoneMute(false)
 
-        // If there are no headset, start video output in speaker
-        // (you can't watch the video and have the phone close to your ear)
-        if (mxCall.isVideoCall && !isHeadsetOn()) {
-            setSpeakerphoneOn(true)
-        } else {
-            // if a headset is plugged, sound will be directed to it
-            // (can't really force earpiece when headset is plugged)
-            setSpeakerphoneOn(false)
+        executor.execute {
+            // If there are no headset, start video output in speaker
+            // (you can't watch the video and have the phone close to your ear)
+            if (mxCall.isVideoCall && !isHeadsetOn()) {
+                Timber.v("##VOIP: AudioManager default to speaker ")
+                setCurrentSoundDevice(SoundDevice.SPEAKER)
+            } else {
+                // if a wired headset is plugged, sound will be directed to it
+                // (can't really force earpiece when headset is plugged)
+                if (isBluetoothHeadsetOn()) {
+                    Timber.v("##VOIP: AudioManager default to WIRELESS_HEADSET ")
+                    setCurrentSoundDevice(SoundDevice.WIRELESS_HEADSET)
+                    // try now in case already connected?
+                    audioManager.isBluetoothScoOn = true
+                } else {
+                    Timber.v("##VOIP: AudioManager default to PHONE/HEADSET ")
+                    setCurrentSoundDevice(if (isWiredHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE)
+                }
+            }
         }
     }
 
     fun getAvailableSoundDevices(): List<SoundDevice> {
-        return listOf(
-                if (isHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE,
-                SoundDevice.SPEAKER
-        )
+        return ArrayList<SoundDevice>().apply {
+            if (isBluetoothHeadsetOn()) add(SoundDevice.WIRELESS_HEADSET)
+            add(if (isWiredHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE)
+            add(SoundDevice.SPEAKER)
+        }
     }
 
     fun stop() {
         Timber.v("## VOIP: AudioManager stopCall")
+        executor.execute {
+            // Restore previously stored audio states.
+            setSpeakerphoneOn(savedIsSpeakerPhoneOn)
+            setMicrophoneMute(savedIsMicrophoneMute)
+            audioManager?.mode = savedAudioMode
 
-        // Restore previously stored audio states.
-        setSpeakerphoneOn(savedIsSpeakerPhoneOn)
-        setMicrophoneMute(savedIsMicrophoneMute)
-        audioManager.mode = savedAudioMode
-
-        @Suppress("DEPRECATION")
-        audioManager.abandonAudioFocus(audioFocusChangeListener)
+            @Suppress("DEPRECATION")
+            audioManager?.abandonAudioFocus(audioFocusChangeListener)
+        }
     }
 
     fun getCurrentSoundDevice(): SoundDevice {
+        val audioManager = audioManager ?: return SoundDevice.PHONE
         if (audioManager.isSpeakerphoneOn) {
             return SoundDevice.SPEAKER
         } else {
+            if (isBluetoothHeadsetOn() && (wantsBluetoothConnection || audioManager.isBluetoothScoOn)) return SoundDevice.WIRELESS_HEADSET
             return if (isHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE
         }
     }
 
     fun setCurrentSoundDevice(device: SoundDevice) {
-        when (device) {
-            SoundDevice.HEADSET,
-            SoundDevice.PHONE   -> setSpeakerphoneOn(false)
-            SoundDevice.SPEAKER -> setSpeakerphoneOn(true)
+        executor.execute {
+            Timber.v("## VOIP setCurrentSoundDevice $device")
+            when (device) {
+                SoundDevice.HEADSET,
+                SoundDevice.PHONE            -> {
+                    wantsBluetoothConnection = false
+                    if (isBluetoothHeadsetOn()) {
+                        audioManager?.stopBluetoothSco()
+                        audioManager?.isBluetoothScoOn = false
+                    }
+                    setSpeakerphoneOn(false)
+                }
+                SoundDevice.SPEAKER          -> {
+                    setSpeakerphoneOn(true)
+                    wantsBluetoothConnection = false
+                    audioManager?.stopBluetoothSco()
+                    audioManager?.isBluetoothScoOn = false
+                }
+                SoundDevice.WIRELESS_HEADSET -> {
+                    setSpeakerphoneOn(false)
+                    // I cannot directly do it, i have to start then wait that it's connected
+                    // to route to bt
+                    audioManager?.startBluetoothSco()
+                    wantsBluetoothConnection = true
+                }
+            }
+
+            configChange?.invoke()
+        }
+    }
+
+    fun bluetoothStateChange(plugged: Boolean) {
+        executor.execute {
+            if (plugged && wantsBluetoothConnection) {
+                audioManager?.isBluetoothScoOn = true
+            } else if (!plugged && !wantsBluetoothConnection) {
+                audioManager?.stopBluetoothSco()
+            }
+
+            configChange?.invoke()
+        }
+    }
+
+    fun wiredStateChange(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+        executor.execute {
+            // if it's plugged and speaker is on we should route to headset
+            if (event.plugged && getCurrentSoundDevice() == SoundDevice.SPEAKER) {
+                setCurrentSoundDevice(CallAudioManager.SoundDevice.HEADSET)
+            } else if (!event.plugged) {
+                // if it's unplugged ? always route to speaker?
+                // this is questionable?
+                if (!wantsBluetoothConnection) {
+                    setCurrentSoundDevice(SoundDevice.SPEAKER)
+                }
+            }
+            configChange?.invoke()
         }
     }
 
     private fun isHeadsetOn(): Boolean {
+        return isWiredHeadsetOn() || isBluetoothHeadsetOn()
+    }
+
+    private fun isWiredHeadsetOn(): Boolean {
         @Suppress("DEPRECATION")
-        return audioManager.isWiredHeadsetOn || audioManager.isBluetoothScoOn
+        return audioManager?.isWiredHeadsetOn ?: false
+    }
+
+    private fun isBluetoothHeadsetOn(): Boolean {
+        return connectedBlueToothHeadset != null
     }
 
     /** Sets the speaker phone mode.  */
     private fun setSpeakerphoneOn(on: Boolean) {
         Timber.v("## VOIP: AudioManager setSpeakerphoneOn $on")
-        val wasOn = audioManager.isSpeakerphoneOn
+        val wasOn = audioManager?.isSpeakerphoneOn ?: false
         if (wasOn == on) {
             return
         }
-        audioManager.isSpeakerphoneOn = on
+        audioManager?.isSpeakerphoneOn = on
     }
 
     /** Sets the microphone mute state.  */
     private fun setMicrophoneMute(on: Boolean) {
         Timber.v("## VOIP: AudioManager setMicrophoneMute $on")
-        val wasMuted = audioManager.isMicrophoneMute
+        val wasMuted = audioManager?.isMicrophoneMute ?: false
         if (wasMuted == on) {
             return
         }
-        audioManager.isMicrophoneMute = on
-
-        audioManager.isMusicActive
+        audioManager?.isMicrophoneMute = on
     }
 
     /** true if the device has a telephony radio with data

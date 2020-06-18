@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.call.CallCandidatesConten
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.services.BluetoothHeadsetReceiver
 import im.vector.riotx.core.services.CallService
 import im.vector.riotx.core.services.WiredHeadsetStateReceiver
 import io.reactivex.disposables.Disposable
@@ -88,7 +89,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val audioManager = CallAudioManager(context.applicationContext)
+    val audioManager = CallAudioManager(context.applicationContext) {
+        currentCallsListeners.forEach {
+            tryThis { it.onAudioDevicesChange(this) }
+        }
+    }
 
     data class CallContext(
             val mxCall: MxCall,
@@ -672,19 +677,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
         close()
     }
 
-    fun onWireDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+    fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+        Timber.v("## VOIP onWiredDeviceEvent $event")
         currentCall ?: return
-        // if it's plugged and speaker is on we should route to headset
-        if (event.plugged && audioManager.getCurrentSoundDevice() == CallAudioManager.SoundDevice.SPEAKER) {
-            audioManager.setCurrentSoundDevice(CallAudioManager.SoundDevice.HEADSET)
-        } else if (!event.plugged) {
-            // if it's unplugged ? always route to speaker?
-            // this is questionable?
-            audioManager.setCurrentSoundDevice(CallAudioManager.SoundDevice.SPEAKER)
-        }
-        currentCallsListeners.forEach {
-            it.onAudioDevicesChange(this)
-        }
+        // sometimes we received un-wanted unplugged...
+        audioManager.wiredStateChange(event)
+    }
+
+    fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
+        Timber.v("## VOIP onWirelessDeviceEvent $event")
+        audioManager.bluetoothStateChange(event.plugged)
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {

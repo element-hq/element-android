@@ -55,6 +55,10 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     private fun showSoundDeviceChooser(available: List<CallAudioManager.SoundDevice>, current: CallAudioManager.SoundDevice) {
         val soundDevices = available.map {
             when (it) {
+                CallAudioManager.SoundDevice.WIRELESS_HEADSET   -> span {
+                    text = getString(R.string.sound_device_wireless_headset)
+                    textStyle = if (current == it) "bold" else "normal"
+                }
                 CallAudioManager.SoundDevice.PHONE   -> span {
                     text = getString(R.string.sound_device_phone)
                     textStyle = if (current == it) "bold" else "normal"
@@ -82,6 +86,9 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                         getString(R.string.sound_device_headset) -> {
                             callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.HEADSET))
                         }
+                        getString(R.string.sound_device_wireless_headset) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.WIRELESS_HEADSET))
+                        }
                     }
                 }
                 .setNegativeButton(R.string.cancel, null)
@@ -104,6 +111,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             CallAudioManager.SoundDevice.PHONE   -> getString(R.string.sound_device_phone)
             CallAudioManager.SoundDevice.SPEAKER -> getString(R.string.sound_device_speaker)
             CallAudioManager.SoundDevice.HEADSET -> getString(R.string.sound_device_headset)
+            CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
         }
     }
 }

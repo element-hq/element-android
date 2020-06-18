@@ -218,6 +218,7 @@
     <string name="sound_device_phone">Phone</string>
     <string name="sound_device_speaker">Speaker</string>
     <string name="sound_device_headset">Headset</string>
+    <string name="sound_device_wireless_headset">Wireless Headset</string>
 
 
     <string name="option_send_files">Send files</string>
