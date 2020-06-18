@@ -210,4 +210,5 @@
 
     <string name="key_verification_request_fallback_message">%s demande à vérifier votre clé, mais votre client ne supporte pas la vérification de clés dans les discussions. Vous devrez utiliser l’ancienne vérification de clés pour vérifier les clés.</string>
 
+    <string name="notice_room_created">%1$s a créé le salon</string>
 </resources>

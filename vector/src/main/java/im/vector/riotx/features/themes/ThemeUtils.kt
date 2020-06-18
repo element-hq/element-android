@@ -74,6 +74,17 @@ object ThemeUtils {
     }
 
     /**
+     * @return true if current theme is Light or Status
+     */
+    fun isLightTheme(context: Context): Boolean {
+        return when (getApplicationTheme(context)) {
+            THEME_LIGHT_VALUE,
+            THEME_STATUS_VALUE -> true
+            else               -> false
+        }
+    }
+
+    /**
      * Provides the selected application theme
      *
      * @param context the context

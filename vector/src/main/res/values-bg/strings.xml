@@ -1673,7 +1673,7 @@
     <string name="settings_discovery_confirm_mail">Изпратихме имейл за потвърждение на %s. Проверете имейла и кликнете връзката за потвърждение</string>
     <string name="settings_discovery_mail_pending">Изчакване</string>
 
-    <string name="settings_discovery_enter_identity_server">Въведете нов сървър за самоличност</string>
+    <string name="settings_discovery_enter_identity_server">Въведете сървър за самоличност</string>
     <string name="settings_discovery_bad_identity_server">Неуспешна връзка със сървъра за самоличност</string>
     <string name="settings_discovery_please_enter_server">Въведете адреса на сървъра за самоличност</string>
     <string name="settings_discovery_no_terms_title">Сървъра за самоличност няма условия за ползване</string>
@@ -1978,4 +1978,10 @@
 
     <string name="settings_developer_mode_fail_fast_title">Бърз-провал</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX може да забива по-често когато възникне неочаквана грешка</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="event_redacted">Съобщението беше изтрито</string>
+    <string name="settings_show_redacted">Показвай премахнатите съобщения</string>
+    <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
 </resources>

@@ -72,7 +72,7 @@
 
     <string name="message_reply_to_prefix">Vastauksena käyttäjälle</string>
 
-    <string name="reply_to_an_image">lähetti kuvan.</string>
+    <string name="reply_to_an_image">oli lähettänyt kuvan.</string>
     <string name="reply_to_a_video">lähetti videon.</string>
     <string name="reply_to_an_audio_file">lähetti äänitiedoston.</string>
     <string name="reply_to_a_file">lähetti tiedoston.</string>
