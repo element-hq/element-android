@@ -224,6 +224,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
         callControlsView.updateForState(state)
         val callState = state.callState.invoke()
+        callConnectingProgress.isVisible = false
         when (callState) {
             is CallState.Idle,
             is CallState.Dialing      -> {
@@ -244,6 +245,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
+                callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
             is CallState.Connected    -> {
@@ -264,6 +266,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callInfoGroup.isVisible = true
                     configureCallInfo(state)
                     callStatusText.setText(R.string.call_connecting)
+                    callConnectingProgress.isVisible = true
                 }
                 // ensure all attached?
                 peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
