@@ -98,12 +98,12 @@
         app:layout_constraintTop_toBottomOf="@id/roomToolbar" />
 
     <im.vector.riotx.core.ui.views.ActiveCallView
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -127,8 +127,6 @@
 
         <im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
             android:id="@+id/roomWidgetsBannerView"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
