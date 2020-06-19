@@ -82,6 +82,14 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 // It can happen in case of partial migration. To test, do not return
                 Timber.e(t, "Error clearing filesystem")
             }
+
+            Timber.d("Migration: clear shared prefs")
+            try {
+                clearSharedPrefs()
+            } catch (t: Throwable) {
+                // It can happen in case of partial migration. To test, do not return
+                Timber.e(t, "Error clearing filesystem")
+            }
         }
     }
 
@@ -172,8 +180,6 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     private fun clearFileSystem(legacyConfig: LegacyHomeServerConnectionConfig) {
         val cryptoFolder = legacyConfig.credentials.userId.md5()
 
-        val sharedPrefFolder = File(context.filesDir, "shared_prefs")
-
         listOf(
                 // Where session store was saved (we do not care about migrating that, an initial sync will be performed)
                 File(context.filesDir, "MXFileStore"),
@@ -188,13 +194,23 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 // Ext folder
                 File(context.filesDir, "ext_share"),
                 // Crypto store
-                File(context.filesDir, cryptoFolder),
-                // Shared Pref. Note that we do not delete the default preferences, as it should be nearly the same (TODO check that)
-                File(sharedPrefFolder, "Vector.LoginStorage.xml"),
-                File(sharedPrefFolder, "GcmRegistrationManager"),
-                File(sharedPrefFolder, "IntegrationManager.Storage")
+                File(context.filesDir, cryptoFolder)
         ).forEach { file ->
             tryThis { file.deleteRecursively() }
+        }
+    }
+
+    private fun clearSharedPrefs() {
+        // Shared Pref. Note that we do not delete the default preferences, as it should be nearly the same (TODO check that)
+        listOf(
+                "Vector.LoginStorage",
+                "GcmRegistrationManager",
+                "IntegrationManager.Storage"
+        ).forEach { prefName ->
+            context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
+                    .edit()
+                    .clear()
+                    .apply()
         }
     }
 }
