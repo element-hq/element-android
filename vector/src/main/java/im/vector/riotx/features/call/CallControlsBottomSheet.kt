@@ -126,11 +126,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             if (state.isHD) {
                 callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
                 callControlsToggleSDHD.subTitle  = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
+                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
             } else {
                 callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
                 callControlsToggleSDHD.subTitle  = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
+                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
             }
         } else {
             callControlsToggleSDHD.isVisible = false
