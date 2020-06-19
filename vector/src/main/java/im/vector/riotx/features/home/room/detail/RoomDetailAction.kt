@@ -76,4 +76,5 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()
+    object OpenIntegrationManager: RoomDetailAction()
 }

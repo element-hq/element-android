@@ -1162,6 +1162,9 @@
     <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
     <!-- Widget Integration Manager -->
+    <string name="integration_manager_not_enabled_title">Integrations are disabled</string>
+    <string name="integration_manager_not_enabled_msg">Enable integrations in settings to allow this action.</string>
+
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>

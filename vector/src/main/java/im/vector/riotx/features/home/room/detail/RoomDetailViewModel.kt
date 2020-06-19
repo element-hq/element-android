@@ -79,7 +79,9 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -252,6 +254,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
+            is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
         }
     }
 
@@ -262,6 +265,19 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleSelectStickerAttachment() {
         viewModelScope.launch {
             val viewEvent = stickerPickerActionHandler.handle()
+            _viewEvents.post(viewEvent)
+        }
+    }
+
+    private fun handleOpenIntegrationManager() {
+        viewModelScope.launch {
+            val viewEvent = withContext(Dispatchers.Default) {
+                if (isIntegrationEnabled()) {
+                    RoomDetailViewEvents.OpenIntegrationManager
+                } else {
+                    RoomDetailViewEvents.DisplayEnableIntegrationsWarning
+                }
+            }
             _viewEvents.post(viewEvent)
         }
     }
@@ -365,13 +381,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
+
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
         R.id.clear_message_queue ->
             /* For now always disable on production, worker cancellation is not working properly */
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
-        R.id.open_matrix_apps    -> session.integrationManagerService().isIntegrationEnabled()
+        R.id.open_matrix_apps    -> true
         else                     -> false
     }
 

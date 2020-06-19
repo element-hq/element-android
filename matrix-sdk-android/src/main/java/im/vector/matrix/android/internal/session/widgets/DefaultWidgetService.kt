@@ -26,10 +26,11 @@ import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.Cancelable
 import javax.inject.Inject
+import javax.inject.Provider
 
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
                                                         private val widgetURLFormatter: WidgetURLFormatter,
-                                                        private val widgetPostAPIMediator: WidgetPostAPIMediator)
+                                                        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>)
     : WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {
@@ -37,7 +38,7 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
     }
 
     override fun getWidgetPostAPIMediator(): WidgetPostAPIMediator {
-        return widgetPostAPIMediator
+        return widgetPostAPIMediator.get()
     }
 
     override fun getRoomWidgets(

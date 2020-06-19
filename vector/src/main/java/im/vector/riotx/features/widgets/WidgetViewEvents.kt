@@ -23,6 +23,6 @@ sealed class WidgetViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable): WidgetViewEvents()
     data class Close(val content: Content? = null) : WidgetViewEvents()
     data class DisplayIntegrationManager(val integId: String?, val integType: String?) : WidgetViewEvents()
-    data class LoadFormattedURL(val formattedURL: String) : WidgetViewEvents()
+    data class OnURLFormatted(val formattedURL: String) : WidgetViewEvents()
     data class DisplayTerms(val url: String, val token: String) : WidgetViewEvents()
 }

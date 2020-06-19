@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.session.widgets.WidgetManagementFailure
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPI
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPIProvider
 import im.vector.matrix.android.internal.task.Task
-import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
@@ -68,7 +67,7 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
             throw IllegalStateException("Scalar token is null")
         }
         scalarTokenStore.setToken(serverUrl, registerWidgetResponse.scalarToken)
-        return validateToken(widgetsAPI,serverUrl, registerWidgetResponse.scalarToken)
+        return validateToken(widgetsAPI, serverUrl, registerWidgetResponse.scalarToken)
     }
 
     private suspend fun validateToken(widgetsAPI: WidgetsAPI, serverUrl: String, scalarToken: String): String {

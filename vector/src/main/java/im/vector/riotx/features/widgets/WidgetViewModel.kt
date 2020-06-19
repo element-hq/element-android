@@ -76,6 +76,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     private val integrationManagerService = session.integrationManagerService()
     private val widgetURLFormatter = widgetService.getWidgetURLFormatter()
     private val postAPIMediator = widgetService.getWidgetPostAPIMediator()
+    private var widgetPostAPIHandler: WidgetPostAPIHandler? = null
 
     // Flag to avoid infinite loop
     private var canRefreshToken = true
@@ -83,8 +84,13 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     init {
         integrationManagerService.addListener(this)
         if (initialState.widgetKind.isAdmin()) {
-            val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId, this)
+            widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId).apply {
+                navigationCallback = this@WidgetViewModel
+            }
             postAPIMediator.setHandler(widgetPostAPIHandler)
+        }
+        if (!integrationManagerService.isIntegrationEnabled()) {
+            _viewEvents.post(WidgetViewEvents.Close(null))
         }
         setupName()
         refreshPermissionStatus()
@@ -142,10 +148,10 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
             is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl()
+            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
             WidgetAction.DeleteWidget               -> handleDeleteWidget()
             WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> refreshPermissionStatus()
+            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
         }
     }
 
@@ -227,7 +233,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 )
                 setState { copy(formattedURL = Success(formattedUrl)) }
                 Timber.v("Post load formatted url event: $formattedUrl")
-                _viewEvents.post(WidgetViewEvents.LoadFormattedURL(formattedUrl))
+                _viewEvents.post(WidgetViewEvents.OnURLFormatted(formattedUrl))
             } catch (failure: Throwable) {
                 if (failure is WidgetManagementFailure.TermsNotSignedException) {
                     _viewEvents.post(WidgetViewEvents.DisplayTerms(initialState.baseUrl, failure.token))
@@ -265,17 +271,24 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
 
     override fun onCleared() {
         integrationManagerService.removeListener(this)
+        widgetPostAPIHandler?.navigationCallback = null
         postAPIMediator.setHandler(null)
         super.onCleared()
     }
 
-// IntegrationManagerService.Listener
+    // IntegrationManagerService.Listener
 
     override fun onWidgetPermissionsChanged(widgets: Map<String, Boolean>) {
         refreshPermissionStatus()
     }
 
-// WidgetPostAPIHandler.NavigationCallback
+    override fun onIsEnabledChanged(enabled: Boolean) {
+        if (!enabled) {
+            _viewEvents.post(WidgetViewEvents.Close(null))
+        }
+    }
+
+    // WidgetPostAPIHandler.NavigationCallback
 
     override fun close() {
         _viewEvents.post(WidgetViewEvents.Close(null))

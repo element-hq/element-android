@@ -81,22 +81,10 @@ fun WebView.clearAfterWidget() {
     webChromeClient = null
     webViewClient = null
     clearHistory()
-
     // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
     clearCache(true)
-
     // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
     loadUrl("about:blank")
-
-    onPause()
     removeAllViews()
-
-    // NOTE: This pauses JavaScript execution for ALL WebViews,
-    // do not use if you have other WebViews still alive.
-    // If you create another WebView after calling this,
-    // make sure to call mWebView.resumeTimers().
-    pauseTimers()
-
-    // NOTE: This can occasionally cause a segfault below API 17 (4.2)
     destroy()
 }
