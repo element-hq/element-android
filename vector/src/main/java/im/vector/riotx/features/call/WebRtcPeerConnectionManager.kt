@@ -727,6 +727,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         executor.execute {
             if (currentCall == null) {
                 peerConnectionFactory?.dispose()
+                peerConnectionFactory = null
             }
         }
     }
