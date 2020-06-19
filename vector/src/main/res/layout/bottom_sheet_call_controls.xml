@@ -25,4 +25,13 @@
         app:leftIcon="@drawable/ic_video_flip"
         app:tint="?attr/riotx_text_primary" />
 
+    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsToggleSDHD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_switch_camera"
+        tools:actionDescription="Front"
+        app:leftIcon="@drawable/ic_hd"
+        app:tint="?attr/riotx_text_primary" />
+
 </LinearLayout>

@@ -48,6 +48,7 @@ data class VectorCallViewState(
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
         val isVideoCaptureInError: Boolean = false,
+        val isHD: Boolean = false,
         val isFrontCamera: Boolean = true,
         val canSwitchCamera: Boolean = true,
         val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
@@ -66,6 +67,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object SwitchSoundDevice : VectorCallViewActions()
     object HeadSetButtonPressed : VectorCallViewActions()
     object ToggleCamera : VectorCallViewActions()
+    object ToggleHDSD : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -129,9 +131,12 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onCurrentCallChange(call: MxCall?) {
         }
 
-        override fun onCaptureStateChanged(captureInError: Boolean) {
+        override fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {
             setState {
-                copy(isVideoCaptureInError = captureInError)
+                copy(
+                        isVideoCaptureInError = mgr.capturerIsInError,
+                        isHD = mgr.currentCaptureFormat() is CaptureFormat.HD
+                )
             }
         }
 
@@ -174,7 +179,8 @@ class VectorCallViewModel @AssistedInject constructor(
                             soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice(),
                             availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices(),
                             isFrontCamera = webRtcPeerConnectionManager.currentCameraType() == CameraType.FRONT,
-                            canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera()
+                            canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera(),
+                            isHD = mxCall.isVideoCall && webRtcPeerConnectionManager.currentCaptureFormat() is CaptureFormat.HD
                     )
                 }
             } ?: run {
@@ -252,6 +258,10 @@ class VectorCallViewModel @AssistedInject constructor(
             }
             VectorCallViewActions.ToggleCamera         -> {
                 webRtcPeerConnectionManager.switchCamera()
+            }
+            VectorCallViewActions.ToggleHDSD           -> {
+                if (!state.isVideoCall) return@withState
+                webRtcPeerConnectionManager.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
             }
         }.exhaustive
     }

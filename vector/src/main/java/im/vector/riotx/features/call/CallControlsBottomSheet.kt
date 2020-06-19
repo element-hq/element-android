@@ -19,11 +19,14 @@ package im.vector.riotx.features.call
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import kotlinx.android.synthetic.main.activity_call.*
 import kotlinx.android.synthetic.main.bottom_sheet_call_controls.*
+import kotlinx.android.synthetic.main.vector_preference_push_rule.view.*
 import me.gujun.android.span.span
 
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
@@ -44,6 +47,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         callControlsSwitchCamera.clickableView.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
+            dismiss()
+        }
+
+        callControlsToggleSDHD.clickableView.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleHDSD)
             dismiss()
         }
 
@@ -112,5 +120,20 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         callControlsSwitchCamera.isVisible = state.canSwitchCamera
         callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
+
+        if (state.isVideoCall) {
+            callControlsToggleSDHD.isVisible = true
+            if (state.isHD) {
+                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
+                callControlsToggleSDHD.subTitle  = null
+                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
+            } else {
+                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
+                callControlsToggleSDHD.subTitle  = null
+                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
+            }
+        } else {
+            callControlsToggleSDHD.isVisible = false
+        }
     }
 }

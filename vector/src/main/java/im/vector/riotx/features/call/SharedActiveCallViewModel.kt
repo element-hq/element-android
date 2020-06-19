@@ -33,12 +33,12 @@ class SharedActiveCallViewModel @Inject constructor(
 
     val activeCall: MutableLiveData<MxCall?> = MutableLiveData()
 
-    val callStateListener = object: MxCall.StateListener {
+    val callStateListener = object : MxCall.StateListener {
 
         override fun onStateUpdate(call: MxCall) {
-           if (activeCall.value?.callId == call.callId) {
-               activeCall.postValue(call)
-           }
+            if (activeCall.value?.callId == call.callId) {
+                activeCall.postValue(call)
+            }
         }
     }
 
@@ -47,10 +47,6 @@ class SharedActiveCallViewModel @Inject constructor(
             activeCall.value?.removeListener(callStateListener)
             activeCall.postValue(call)
             call?.addListener(callStateListener)
-        }
-
-        override fun onCaptureStateChanged(captureInError: Boolean) {
-            // nop
         }
     }
 

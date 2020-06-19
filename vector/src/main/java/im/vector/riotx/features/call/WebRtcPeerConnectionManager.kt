@@ -76,7 +76,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
-        fun onCaptureStateChanged(captureInError: Boolean)
+        fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {}
         fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
         fun onCameraChange(mgr: WebRtcPeerConnectionManager) {}
     }
@@ -165,11 +165,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
     private val availableCamera = ArrayList<CameraProxy>()
     private var cameraInUse: CameraProxy? = null
 
+    private var currentCaptureMode: CaptureFormat = CaptureFormat.HD
+
     var capturerIsInError = false
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCaptureStateChanged(value) }
+                tryThis { it.onCaptureStateChanged(this) }
             }
         }
 
@@ -336,7 +338,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     // Fallback for old android, try to restart capture when attached
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && capturerIsInError && call.mxCall.isVideoCall) {
                         // try to restart capture?
-                        videoCapturer?.startCapture(1280, 720, 30)
+                        videoCapturer?.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
                     }
                     // sink existing tracks (configuration change, e.g screen rotation)
                     attachViewRenderersInternal()
@@ -463,7 +465,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
                 videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
                 // HD
-                videoCapturer.startCapture(1280, 720, 30)
+                videoCapturer.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
                 this.videoCapturer = videoCapturer
 
                 val localVideoTrack = peerConnectionFactory!!.createVideoTrack("ARDAMSv0", videoSource)
@@ -704,6 +706,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun currentCameraType(): CameraType? {
         return cameraInUse?.type
+    }
+
+    fun setCaptureFormat(format: CaptureFormat) {
+        Timber.v("## VOIP setCaptureFormat $format")
+        currentCall ?: return
+        executor.execute {
+           // videoCapturer?.stopCapture()
+            videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
+            currentCaptureMode = format
+            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged(this) } }
+        }
+    }
+
+    fun currentCaptureFormat(): CaptureFormat {
+        return currentCaptureMode
     }
 
     fun endCall() {
@@ -971,7 +988,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             if (this.cameraId == cameraId && currentCall?.mxCall?.callId == callId) {
                 // re-start the capture
                 // TODO notify that video is enabled
-                videoCapturer?.startCapture(1280, 720, 30)
+                videoCapturer?.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
                 (context.getSystemService(Context.CAMERA_SERVICE) as? CameraManager)
                         ?.unregisterAvailabilityCallback(this)
             }
