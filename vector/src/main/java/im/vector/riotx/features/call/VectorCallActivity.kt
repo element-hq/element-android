@@ -103,6 +103,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     var systemUiVisibility = false
 
+    var surfaceRenderersAreInitialized = false
+
     override fun doBeforeSetContentView() {
         // Set window styles for fullscreen-window size. Needs to be done before adding content.
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -208,8 +210,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         peerConnectionManager.detachRenderers()
+        if (surfaceRenderersAreInitialized) {
+            pipRenderer.release()
+            fullscreenRenderer.release()
+        }
+        super.onDestroy()
         turnScreenOffAndKeyguardOn()
     }
 
@@ -324,6 +330,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         pipRenderer.setOnClickListener {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
+        surfaceRenderersAreInitialized = true
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
