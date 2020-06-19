@@ -18,9 +18,9 @@ package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceKeys
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
-import im.vector.matrix.android.internal.crypto.model.rest.RestDeviceInfo
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -30,7 +30,7 @@ import javax.inject.Inject
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
     data class Params(
             // the device keys to send.
-            val deviceKeys: RestDeviceInfo?,
+            val deviceKeys: DeviceKeys?,
             // the one-time keys to send.
             val oneTimeKeys: JsonDict?
     )

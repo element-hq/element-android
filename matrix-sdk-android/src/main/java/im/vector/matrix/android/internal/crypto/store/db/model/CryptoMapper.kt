@@ -20,6 +20,7 @@ import com.squareup.moshi.Types
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.UnsignedDeviceInfo
 import im.vector.matrix.android.internal.di.SerializeNulls
 import timber.log.Timber
 
@@ -57,7 +58,8 @@ object CryptoMapper {
                             locallyVerified = it.locallyVerified
                     )
                 },
-                unsignedMapJson = mapMigrationAdapter.toJson(deviceInfo.unsigned)
+                // We store the device name if present now
+                unsignedMapJson = deviceInfo.unsigned?.deviceDisplayName
         )
     }
 
@@ -69,14 +71,7 @@ object CryptoMapper {
                 trustLevel = deviceInfoEntity.trustLevelEntity?.let {
                     DeviceTrustLevel(it.crossSignedVerified ?: false, it.locallyVerified)
                 },
-                unsigned = deviceInfoEntity.unsignedMapJson?.let {
-                    try {
-                        mapMigrationAdapter.fromJson(it)
-                    } catch (failure: Throwable) {
-                        Timber.e(failure)
-                        null
-                    }
-                },
+                unsigned = deviceInfoEntity.unsignedMapJson?.let { UnsignedDeviceInfo(deviceDisplayName = it) },
                 signatures = deviceInfoEntity.signatureMapJson?.let {
                     try {
                         mapOfStringMigrationAdapter.fromJson(it)
