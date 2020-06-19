@@ -258,6 +258,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
+            is RoomDetailAction.EndCall                          -> handleEndCall()
         }.exhaustive
     }
 
@@ -269,6 +270,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
             webRtcPeerConnectionManager.startOutgoingCall(room.roomId, it, action.isVideo)
         }
+    }
+
+    private fun handleEndCall() {
+        webRtcPeerConnectionManager.endCall()
     }
 
     private fun handleSelectStickerAttachment() {
@@ -381,10 +386,11 @@ class RoomDetailViewModel @AssistedInject constructor(
         R.id.clear_message_queue         ->
             // For now always disable when not in developer mode, worker cancellation is not working properly
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
-        R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
-        R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
-        R.id.open_matrix_apps    -> true
-        R.id.voice_call, R.id.video_call -> room.canStartCall()
+        R.id.resend_all                  -> timeline.failedToDeliverEventCount() > 0
+        R.id.clear_all                   -> timeline.failedToDeliverEventCount() > 0
+        R.id.open_matrix_apps            -> true
+        R.id.voice_call, R.id.video_call -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
+        R.id.hangup_call                 -> webRtcPeerConnectionManager.currentCall != null
         else                             -> false
     }
 

@@ -27,6 +27,14 @@
         tools:visible="true" />
 
     <item
+        android:id="@+id/hangup_call"
+        android:icon="@drawable/ic_call_end"
+        android:title="@string/call_notification_hangup"
+        android:visible="false"
+        app:iconTint="@color/riotx_destructive_accent"
+        app:showAsAction="always"
+        tools:visible="true" />
+    <item
         android:id="@+id/resend_all"
         android:icon="@drawable/ic_refresh_cw"
         android:title="@string/room_prompt_resend"

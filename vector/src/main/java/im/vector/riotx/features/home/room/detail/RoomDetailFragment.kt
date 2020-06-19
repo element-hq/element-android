@@ -303,6 +303,7 @@ class RoomDetailFragment @Inject constructor(
                 .observe(viewLifecycleOwner, Observer {
                     val hasActiveCall = it?.state is CallState.Connected
                     activeCallView.isVisible = hasActiveCall
+                    invalidateOptionsMenu()
                 })
 
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
@@ -524,6 +525,10 @@ class RoomDetailFragment @Inject constructor(
                     } else {
                         safeStartCall(isVideoCall)
                     }
+                true
+            }
+            R.id.hangup_call -> {
+                roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
@@ -804,6 +809,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(roomDetailViewModel) { state ->
         renderRoomSummary(state)
+        invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
