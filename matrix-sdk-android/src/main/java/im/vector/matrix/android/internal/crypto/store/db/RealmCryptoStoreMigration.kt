@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
@@ -141,8 +142,10 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
     private fun migrateTo3RiotX(realm: DynamicRealm) {
         Timber.d("Step 2 -> 3")
-        // TODO Remove log of realm
-        Timber.d("Migrate to RiotX model $realm")
+        Timber.d("Migrate to RiotX model")
+
+        realm.schema.get("CryptoRoomEntity")
+                ?.addField(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, Boolean::class.java)
     }
 
     // Version 4L added Cross Signing info persistence
