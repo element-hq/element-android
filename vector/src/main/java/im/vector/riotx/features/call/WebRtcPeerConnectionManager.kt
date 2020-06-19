@@ -537,12 +537,25 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun close() {
+        Timber.v("## VOIP WebRtcPeerConnectionManager close() >")
         CallService.onNoActiveCall(context)
+        audioManager.stop()
+        val callToEnd = currentCall
+        currentCall = null
+        // This must be done in this thread
+        videoCapturer?.stopCapture()
+        videoCapturer?.dispose()
+        videoCapturer = null
         executor.execute {
-            currentCall?.release()
-            videoCapturer?.stopCapture()
-            videoCapturer?.dispose()
-            videoCapturer = null
+            callToEnd?.release()
+
+            if (currentCall == null) {
+                Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
+                peerConnectionFactory?.dispose()
+                peerConnectionFactory = null
+            }
+
+            Timber.v("## VOIP WebRtcPeerConnectionManager close() executor done")
         }
     }
 
@@ -712,7 +725,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP setCaptureFormat $format")
         currentCall ?: return
         executor.execute {
-           // videoCapturer?.stopCapture()
+            // videoCapturer?.stopCapture()
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureMode = format
             currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged(this) } }
@@ -723,7 +736,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         return currentCaptureMode
     }
 
-    fun endCall() {
+    fun endCall(originatedByMe: Boolean = true) {
         // Update service state
         CallService.onNoActiveCall(context)
         // close tracks ASAP
@@ -737,16 +750,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
 
-        currentCall?.mxCall?.hangUp()
-        currentCall = null
-        audioManager.stop()
-        close()
-        executor.execute {
-            if (currentCall == null) {
-                peerConnectionFactory?.dispose()
-                peerConnectionFactory = null
-            }
+        if (originatedByMe) {
+            // send hang up event
+            currentCall?.mxCall?.hangUp()
         }
+        close()
     }
 
     fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
@@ -788,15 +796,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
         val call = currentCall ?: return
+        // Remote echos are filtered, so it's only remote hangups that i will get here
         if (call.mxCall.callId != callHangupContent.callId) return Unit.also {
             Timber.w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
         }
         call.mxCall.state = CallState.Terminated
-        currentCall = null
-        close()
+        endCall(false)
     }
 
     override fun onCallManagedByOtherSession(callId: String) {
+        Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         currentCall = null
         CallService.onNoActiveCall(context)
     }
