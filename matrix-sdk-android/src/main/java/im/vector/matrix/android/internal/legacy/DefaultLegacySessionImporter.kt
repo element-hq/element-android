@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.auth.data.DiscoveryInformation
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.data.WellKnownBaseConfig
-import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
@@ -49,6 +48,11 @@ internal class DefaultLegacySessionImporter @Inject constructor(
 
     private val loginStorage = LoginStorage(context)
 
+    companion object {
+        // During development, set to false to play several times the migration
+        private var DELETE_PREVIOUS_DATA = true
+    }
+
     override fun process() {
         Timber.d("Migration: Importing legacy session")
 
@@ -64,7 +68,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 importCredentials(legacyConfig)
             } catch (t: Throwable) {
                 // It can happen in case of partial migration. To test, do not return
-                Timber.e(t, "Error importing credential")
+                Timber.e(t, "Migration: Error importing credential")
             }
 
             Timber.d("Migration: importing crypto DB")
@@ -72,23 +76,25 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 importCryptoDb(legacyConfig)
             } catch (t: Throwable) {
                 // It can happen in case of partial migration. To test, do not return
-                Timber.e(t, "Error importing crypto DB")
+                Timber.e(t, "Migration: Error importing crypto DB")
             }
 
-            Timber.d("Migration: clear file system")
-            try {
-                clearFileSystem(legacyConfig)
-            } catch (t: Throwable) {
-                // It can happen in case of partial migration. To test, do not return
-                Timber.e(t, "Error clearing filesystem")
-            }
-
-            Timber.d("Migration: clear shared prefs")
-            try {
-                clearSharedPrefs()
-            } catch (t: Throwable) {
-                // It can happen in case of partial migration. To test, do not return
-                Timber.e(t, "Error clearing filesystem")
+            if (DELETE_PREVIOUS_DATA) {
+                try {
+                    Timber.d("Migration: clear file system")
+                    clearFileSystem(legacyConfig)
+                } catch (t: Throwable) {
+                    Timber.e(t, "Migration: Error clearing filesystem")
+                }
+                try {
+                    Timber.d("Migration: clear shared prefs")
+                    clearSharedPrefs()
+                } catch (t: Throwable) {
+                    Timber.e(t, "Migration: Error clearing shared prefs")
+                }
+            } else {
+                Timber.d("Migration: clear file system - DEACTIVATED")
+                Timber.d("Migration: clear shared prefs - DEACTIVATED")
             }
         }
     }
@@ -104,8 +110,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         deviceId = legacyConfig.credentials.deviceId,
                         discoveryInformation = legacyConfig.credentials.wellKnown?.let { wellKnown ->
                             // Note credentials.wellKnown is not serialized in the LoginStorage, so this code is a bit useless...
-                            if (wellKnown.homeServer?.baseURL != null
-                                    || wellKnown.identityServer?.baseURL != null) {
+                            if (wellKnown.homeServer?.baseURL != null || wellKnown.identityServer?.baseURL != null) {
                                 DiscoveryInformation(
                                         homeServer = wellKnown.homeServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) },
                                         identityServer = wellKnown.identityServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) }
@@ -157,7 +162,6 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         newLocation.deleteRecursively()
         newLocation.mkdirs()
 
-        // TODO Check if file exists first?
         Timber.d("Migration: create legacy realm configuration")
 
         val realmConfiguration = RealmConfiguration.Builder()
@@ -166,7 +170,6 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 .modules(RealmCryptoStoreModule())
                 .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
                 .migration(realmCryptoStoreMigration)
-                // .initialData(CryptoFileStoreImporter(enableFileEncryption, context, credentials))
                 .build()
 
         Timber.d("Migration: copy DB to encrypted DB")
@@ -185,7 +188,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 File(context.filesDir, "MXFileStore"),
                 // Previous (and very old) file crypto store
                 File(context.filesDir, "MXFileCryptoStore"),
-                // Draft. They will be lost, this is sad TODO handle them?
+                // Draft. They will be lost, this is sad but we assume it
                 File(context.filesDir, "MXLatestMessagesStore"),
                 // Media storage
                 File(context.filesDir, "MXMediaStore"),
@@ -196,7 +199,11 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 // Crypto store
                 File(context.filesDir, cryptoFolder)
         ).forEach { file ->
-            tryThis { file.deleteRecursively() }
+            try {
+                file.deleteRecursively()
+            } catch (t: Throwable) {
+                Timber.e(t, "Migration: unable to delete $file")
+            }
         }
     }
 

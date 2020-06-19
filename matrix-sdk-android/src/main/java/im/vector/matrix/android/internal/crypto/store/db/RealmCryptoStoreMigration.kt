@@ -41,8 +41,10 @@ import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
 import im.vector.matrix.android.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
 import javax.inject.Inject
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo as LegacyMXDeviceInfo
 
 internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
 
@@ -146,6 +148,52 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
         realm.schema.get("CryptoRoomEntity")
                 ?.addField(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, Boolean::class.java)
+                ?.setRequired(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, false)
+
+        // Convert format of MXDeviceInfo, package has to be the same.
+        realm.schema.get("DeviceInfoEntity")
+                ?.transform { obj ->
+                    try {
+                        val oldSerializedData = obj.getString("deviceInfoData")
+                        deserializeFromRealm<LegacyMXDeviceInfo>(oldSerializedData)?.let { legacyMxDeviceInfo ->
+                            val newMxDeviceInfo = MXDeviceInfo(
+                                    deviceId = legacyMxDeviceInfo.deviceId,
+                                    userId = legacyMxDeviceInfo.userId,
+                                    algorithms = legacyMxDeviceInfo.algorithms,
+                                    keys = legacyMxDeviceInfo.keys,
+                                    signatures = legacyMxDeviceInfo.signatures,
+                                    unsigned = legacyMxDeviceInfo.unsigned,
+                                    verified = legacyMxDeviceInfo.mVerified
+                            )
+
+                            obj.setString("deviceInfoData", serializeForRealm(newMxDeviceInfo))
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
+
+        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper2
+        realm.schema.get("OlmInboundGroupSessionEntity")
+                ?.transform { obj ->
+                    try {
+                        val oldSerializedData = obj.getString("olmInboundGroupSessionData")
+                        deserializeFromRealm<MXOlmInboundGroupSession2>(oldSerializedData)?.let { mxOlmInboundGroupSession2 ->
+                            val newOlmInboundGroupSessionWrapper2 = OlmInboundGroupSessionWrapper2()
+                                    .apply {
+                                        olmInboundGroupSession = mxOlmInboundGroupSession2.mSession
+                                        roomId = mxOlmInboundGroupSession2.mRoomId
+                                        senderKey = mxOlmInboundGroupSession2.mSenderKey
+                                        keysClaimed = mxOlmInboundGroupSession2.mKeysClaimed
+                                        forwardingCurve25519KeyChain = mxOlmInboundGroupSession2.mForwardingCurve25519KeyChain
+                                    }
+
+                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper2))
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
     }
 
     // Version 4L added Cross Signing info persistence
@@ -364,7 +412,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                     deviceList.addAll(distinct)
                 }
             } catch (failure: Throwable) {
-                Timber.w(failure, "Crypto Data base migration error for migrateTo6")
+                Timber.w(failure, "Crypto Data base migration error for migrateTo9")
             }
         }
     }
