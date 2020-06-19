@@ -86,6 +86,13 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     fun configureEncryption(realmConfigurationBuilder: RealmConfiguration.Builder, alias: String) {
+        val key = getRealmEncryptionKey(alias)
+
+        realmConfigurationBuilder.encryptionKey(key)
+    }
+
+    // Expose to handle Realm migration to riotX
+    fun getRealmEncryptionKey(alias: String) : ByteArray {
         val key = if (hasKeyForDatabase(alias)) {
             Timber.i("Found key for alias:$alias")
             extractKeyForDatabase(alias)
@@ -99,7 +106,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
             Timber.w("Database key for alias `$alias`: $log")
         }
 
-        realmConfigurationBuilder.encryptionKey(key)
+        return key
     }
 
     // Delete elements related to the alias

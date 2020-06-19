@@ -121,10 +121,8 @@ internal abstract class CryptoModule {
                     .apply {
                         realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
                     }
-                    // Add `_x` because of the name clash with legacy Riot
-                    .name("crypto_store_x.realm")
+                    .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
-                    // TODO Cleanup the migration
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
                     .migration(realmCryptoStoreMigration)
                     .build()

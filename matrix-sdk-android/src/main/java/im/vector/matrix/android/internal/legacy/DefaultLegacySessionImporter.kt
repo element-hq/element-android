@@ -22,20 +22,29 @@ import im.vector.matrix.android.api.auth.data.DiscoveryInformation
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.data.WellKnownBaseConfig
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
+import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.legacy.riot.LoginStorage
 import im.vector.matrix.android.internal.network.ssl.Fingerprint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import im.vector.matrix.android.internal.util.md5
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 import im.vector.matrix.android.internal.legacy.riot.Fingerprint as LegacyFingerprint
 import im.vector.matrix.android.internal.legacy.riot.HomeServerConnectionConfig as LegacyHomeServerConnectionConfig
 
 internal class DefaultLegacySessionImporter @Inject constructor(
-        context: Context,
-        private val sessionParamsStore: SessionParamsStore
+        private val context: Context,
+        private val sessionParamsStore: SessionParamsStore,
+        private val realmCryptoStoreMigration: RealmCryptoStoreMigration,
+        private val realmKeysUtils: RealmKeysUtils
 ) : LegacySessionImporter {
 
     private val loginStorage = LoginStorage(context)
@@ -49,17 +58,30 @@ internal class DefaultLegacySessionImporter @Inject constructor(
 
         val legacyConfig = list.firstOrNull() ?: return
 
-        GlobalScope.launch {
+        runBlocking {
             Timber.d("Migration: importing a session")
-            importCredentials(legacyConfig)
+            try {
+                importCredentials(legacyConfig)
+            } catch (t: Throwable) {
+                // It can happen in case of partial migration. To test, do not return
+                Timber.e(t, "Error importing credential")
+            }
 
             Timber.d("Migration: importing crypto DB")
-            importCryptoDb(legacyConfig)
+            try {
+                importCryptoDb(legacyConfig)
+            } catch (t: Throwable) {
+                // It can happen in case of partial migration. To test, do not return
+                Timber.e(t, "Error importing crypto DB")
+            }
 
-            Timber.d("Migration: clear legacy session")
-
-            // Delete to avoid doing this several times
-            loginStorage.clear()
+            Timber.d("Migration: clear file system")
+            try {
+                clearFileSystem(legacyConfig)
+            } catch (t: Throwable) {
+                // It can happen in case of partial migration. To test, do not return
+                Timber.e(t, "Error clearing filesystem")
+            }
         }
     }
 
@@ -114,7 +136,65 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         sessionParamsStore.save(sessionParams)
     }
 
-    private suspend fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
-        TODO("Not yet implemented")
+    private fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
+        // Here we migrate the DB, we copy the crypto DB to the location specific to RiotX, and we encrypt it.
+        val userMd5 = legacyConfig.credentials.userId.md5()
+
+        val sessionId = legacyConfig.credentials.let { (if (it.deviceId.isNullOrBlank()) it.userId else "${it.userId}|${it.deviceId}").md5() }
+        val newLocation = File(context.filesDir, sessionId)
+
+        val keyAlias = "crypto_module_$userMd5"
+
+        // Ensure newLocation does not exist (can happen in case of partial migration)
+        newLocation.deleteRecursively()
+        newLocation.mkdirs()
+
+        // TODO Check if file exists first?
+        Timber.d("Migration: create legacy realm configuration")
+
+        val realmConfiguration = RealmConfiguration.Builder()
+                .directory(File(context.filesDir, userMd5))
+                .name("crypto_store.realm")
+                .modules(RealmCryptoStoreModule())
+                .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
+                .migration(realmCryptoStoreMigration)
+                // .initialData(CryptoFileStoreImporter(enableFileEncryption, context, credentials))
+                .build()
+
+        Timber.d("Migration: copy DB to encrypted DB")
+        Realm.getInstance(realmConfiguration).use {
+            // Move the DB to the new location, handled by RiotX
+            it.writeEncryptedCopyTo(File(newLocation, realmConfiguration.realmFileName), realmKeysUtils.getRealmEncryptionKey(keyAlias))
+        }
+    }
+
+    // Delete all the files created by Riot Android which will not be used anymore by RiotX
+    private fun clearFileSystem(legacyConfig: LegacyHomeServerConnectionConfig) {
+        val cryptoFolder = legacyConfig.credentials.userId.md5()
+
+        val sharedPrefFolder = File(context.filesDir, "shared_prefs")
+
+        listOf(
+                // Where session store was saved (we do not care about migrating that, an initial sync will be performed)
+                File(context.filesDir, "MXFileStore"),
+                // Previous (and very old) file crypto store
+                File(context.filesDir, "MXFileCryptoStore"),
+                // Draft. They will be lost, this is sad TODO handle them?
+                File(context.filesDir, "MXLatestMessagesStore"),
+                // Media storage
+                File(context.filesDir, "MXMediaStore"),
+                File(context.filesDir, "MXMediaStore2"),
+                File(context.filesDir, "MXMediaStore3"),
+                // Ext folder
+                File(context.filesDir, "ext_share"),
+                // Crypto store
+                File(context.filesDir, cryptoFolder),
+                // Shared Pref. Note that we do not delete the default preferences, as it should be nearly the same (TODO check that)
+                File(sharedPrefFolder, "Vector.LoginStorage.xml"),
+                File(sharedPrefFolder, "GcmRegistrationManager"),
+                File(sharedPrefFolder, "IntegrationManager.Storage")
+        ).forEach { file ->
+            tryThis { file.deleteRecursively() }
+        }
     }
 }
