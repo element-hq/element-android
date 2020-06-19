@@ -21,14 +21,14 @@ import im.vector.matrix.android.internal.crypto.model.rest.RestKeyInfo
 
 internal object CryptoInfoMapper {
 
-    fun map(restDeviceInfo: DeviceKeysWithUnsigned): CryptoDeviceInfo {
+    fun map(deviceKeysWithUnsigned: DeviceKeysWithUnsigned): CryptoDeviceInfo {
         return CryptoDeviceInfo(
-                deviceId = restDeviceInfo.deviceId ?: "",
-                userId = restDeviceInfo.userId ?: "",
-                algorithms = restDeviceInfo.algorithms,
-                keys = restDeviceInfo.keys,
-                signatures = restDeviceInfo.signatures,
-                unsigned = restDeviceInfo.unsigned,
+                deviceId = deviceKeysWithUnsigned.deviceId,
+                userId = deviceKeysWithUnsigned.userId,
+                algorithms = deviceKeysWithUnsigned.algorithms,
+                keys = deviceKeysWithUnsigned.keys,
+                signatures = deviceKeysWithUnsigned.signatures,
+                unsigned = deviceKeysWithUnsigned.unsigned,
                 trustLevel = null
         )
     }

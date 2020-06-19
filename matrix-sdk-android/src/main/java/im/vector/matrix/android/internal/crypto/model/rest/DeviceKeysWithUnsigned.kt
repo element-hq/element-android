@@ -25,13 +25,13 @@ data class DeviceKeysWithUnsigned(
          * Required. The ID of the user the device belongs to. Must match the user ID used when logging in.
          */
         @Json(name = "user_id")
-        val userId: String?,
+        val userId: String,
 
         /**
          * Required. The ID of the device these keys belong to. Must match the device ID used when logging in.
          */
         @Json(name = "device_id")
-        val deviceId: String?,
+        val deviceId: String,
 
         /**
          * Required. The encryption algorithms supported by this device.
