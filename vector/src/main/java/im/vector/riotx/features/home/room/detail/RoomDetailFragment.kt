@@ -63,7 +63,6 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -103,6 +102,7 @@ import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.ActiveCallView
+import im.vector.riotx.core.ui.views.ActiveCallViewHolder
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
@@ -136,6 +136,7 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.call.SharedActiveCallViewModel
 import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -205,7 +206,8 @@ class RoomDetailFragment @Inject constructor(
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
-        private val colorProvider: ColorProvider) :
+        private val colorProvider: ColorProvider,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -270,6 +272,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
+    private val activeCallViewHolder = ActiveCallViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -301,8 +304,7 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    val hasActiveCall = it?.state is CallState.Connected
-                    activeCallView.isVisible = hasActiveCall
+                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
                     invalidateOptionsMenu()
                 })
 
@@ -407,6 +409,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
+        activeCallViewHolder.unBind(webRtcPeerConnectionManager)
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -437,7 +440,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        activeCallView.callback = this
+        activeCallViewHolder.bind(
+                activeCallPiP,
+                activeCallView,
+                activeCallPiPWrap,
+                this
+        )
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {

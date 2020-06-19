@@ -210,7 +210,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onDestroy() {
-        peerConnectionManager.detachRenderers()
+        peerConnectionManager.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
             pipRenderer.release()
             fullscreenRenderer.release()

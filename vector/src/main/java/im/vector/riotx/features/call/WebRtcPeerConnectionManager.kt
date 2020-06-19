@@ -175,8 +175,28 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
 
-    var localSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
-    var remoteSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
+    var localSurfaceRenderer: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
+    var remoteSurfaceRenderer: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
+
+    fun addIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
+        if (renderer == null)  return
+        val exists = list.firstOrNull() {
+            it.get() == renderer
+        } != null
+        if (!exists) {
+            list.add(WeakReference(renderer))
+        }
+    }
+
+    fun removeIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
+        if (renderer == null)  return
+        val exists = list.indexOfFirst {
+            it.get() == renderer
+        }
+        if (exists != -1) {
+            list.add(WeakReference(renderer))
+        }
+    }
 
     var currentCall: CallContext? = null
         set(value) {
@@ -279,10 +299,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         })
     }
 
-    fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
+    fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
         Timber.v("## VOIP attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
-        this.localSurfaceRenderer = WeakReference(localViewRenderer)
-        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+//        this.localSurfaceRenderer =  WeakReference(localViewRenderer)
+//        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+        addIfNeeded(localViewRenderer, this.localSurfaceRenderer)
+        addIfNeeded(remoteViewRenderer, this.remoteSurfaceRenderer)
 
         // The call is going to resume from background, we can reduce notif
         currentCall?.mxCall
@@ -482,15 +504,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private fun attachViewRenderersInternal() {
         // render local video in pip view
-        localSurfaceRenderer?.get()?.let { pipSurface ->
-            pipSurface.setMirror(true)
-            currentCall?.localVideoTrack?.addSink(pipSurface)
+        localSurfaceRenderer.forEach {
+            it.get()?.let { pipSurface ->
+                pipSurface.setMirror(true)
+                // no need to check if already added, addSink is checking that
+                currentCall?.localVideoTrack?.addSink(pipSurface)
+            }
         }
 
         // If remote track exists, then sink it to surface
-        remoteSurfaceRenderer?.get()?.let { participantSurface ->
-            currentCall?.remoteVideoTrack?.let {
-                it.addSink(participantSurface)
+        remoteSurfaceRenderer.forEach {
+            it.get()?.let { participantSurface ->
+                currentCall?.remoteVideoTrack?.let {
+                    // no need to check if already added, addSink is checking that
+                    it.addSink(participantSurface)
+                }
             }
         }
     }
@@ -505,35 +533,48 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    fun detachRenderers() {
-        // The call is going to continue in background, so ensure notification is visible
-        currentCall?.mxCall
-                ?.takeIf { it.state is CallState.Connected }
-                ?.let { mxCall ->
-                    // Start background service with notification
-
-                    val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
-                            ?: mxCall.otherUserId
-                    CallService.onOnGoingCallBackground(
-                            context = context,
-                            isVideo = mxCall.isVideoCall,
-                            roomName = name,
-                            roomId = mxCall.roomId,
-                            matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
-                            callId = mxCall.callId
-                    )
-                }
-
+    fun detachRenderers(renderes: List<SurfaceViewRenderer>?) {
         Timber.v("## VOIP detachRenderers")
         // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
-        localSurfaceRenderer?.get()?.let {
-            currentCall?.localVideoTrack?.removeSink(it)
+        if (renderes.isNullOrEmpty()) {
+            // remove all sinks
+            localSurfaceRenderer.forEach {
+                if (it.get() != null) currentCall?.localVideoTrack?.removeSink(it.get())
+            }
+            remoteSurfaceRenderer.forEach {
+                if (it.get() != null) currentCall?.remoteVideoTrack?.removeSink(it.get())
+            }
+            localSurfaceRenderer.clear()
+            remoteSurfaceRenderer.clear()
+        } else {
+            renderes.forEach {
+                removeIfNeeded(it, localSurfaceRenderer)
+                removeIfNeeded(it, remoteSurfaceRenderer)
+                // no need to check if it's in the track, removeSink is doing it
+                currentCall?.localVideoTrack?.removeSink(it)
+                currentCall?.remoteVideoTrack?.removeSink(it)
+            }
         }
-        remoteSurfaceRenderer?.get()?.let {
-            currentCall?.remoteVideoTrack?.removeSink(it)
+
+        if (remoteSurfaceRenderer.isEmpty()) {
+            // The call is going to continue in background, so ensure notification is visible
+            currentCall?.mxCall
+                    ?.takeIf { it.state is CallState.Connected }
+                    ?.let { mxCall ->
+                        // Start background service with notification
+
+                        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                                ?: mxCall.otherUserId
+                        CallService.onOnGoingCallBackground(
+                                context = context,
+                                isVideo = mxCall.isVideoCall,
+                                roomName = name,
+                                roomId = mxCall.roomId,
+                                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                                callId = mxCall.callId
+                        )
+                    }
         }
-        localSurfaceRenderer = null
-        remoteSurfaceRenderer = null
     }
 
     fun close() {
@@ -946,7 +987,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     remoteVideoTrack.setEnabled(true)
                     callContext.remoteVideoTrack = remoteVideoTrack
                     // sink to renderer if attached
-                    remoteSurfaceRenderer?.get()?.let { remoteVideoTrack.addSink(it) }
+                    remoteSurfaceRenderer.forEach { it.get()?.let { remoteVideoTrack.addSink(it) } }
                 }
             }
         }
@@ -954,9 +995,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         override fun onRemoveStream(stream: MediaStream) {
             Timber.v("## VOIP StreamObserver onRemoveStream")
             executor.execute {
-                remoteSurfaceRenderer?.get()?.let {
-                    callContext.remoteVideoTrack?.removeSink(it)
-                }
+                //                remoteSurfaceRenderer?.get()?.let {
+//                    callContext.remoteVideoTrack?.removeSink(it)
+//                }
+                remoteSurfaceRenderer
+                        .mapNotNull { it.get() }
+                        .forEach { callContext.remoteVideoTrack?.removeSink(it) }
                 callContext.remoteVideoTrack = null
             }
         }
