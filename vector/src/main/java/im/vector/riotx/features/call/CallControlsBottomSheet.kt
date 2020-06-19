@@ -118,7 +118,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
         }
 
-        callControlsSwitchCamera.isVisible = state.canSwitchCamera
+        callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
         callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
 
         if (state.isVideoCall) {
