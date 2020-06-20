@@ -179,7 +179,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     var remoteSurfaceRenderer: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
 
     fun addIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
-        if (renderer == null)  return
+        if (renderer == null) return
         val exists = list.firstOrNull() {
             it.get() == renderer
         } != null
@@ -189,7 +189,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun removeIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
-        if (renderer == null)  return
+        if (renderer == null) return
         val exists = list.indexOfFirst {
             it.get() == renderer
         }
@@ -736,6 +736,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun switchCamera() {
         Timber.v("## VOIP switchCamera")
+        if (!canSwitchCamera()) return
         if (currentCall != null && currentCall?.mxCall?.state is CallState.Connected && currentCall?.mxCall?.isVideoCall == true) {
             videoCapturer?.switchCamera(object : CameraVideoCapturer.CameraSwitchHandler {
                 // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
