@@ -215,8 +215,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             pipRenderer.release()
             fullscreenRenderer.release()
         }
-        super.onDestroy()
         turnScreenOffAndKeyguardOn()
+        super.onDestroy()
     }
 
     private fun renderState(state: VectorCallViewState) {
@@ -450,9 +450,11 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             setShowWhenLocked(true)
             setTurnScreenOn(true)
         } else {
+            @Suppress("DEPRECATION")
             window.addFlags(
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                            or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                            or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
         }
 
@@ -464,13 +466,15 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     private fun turnScreenOffAndKeyguardOn() {
+        Timber.v("## VOIP turnScreenOnAndKeyguardOn")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(false)
             setTurnScreenOn(false)
         } else {
+            @Suppress("DEPRECATION")
             window.clearFlags(
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                            or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
         }
     }
