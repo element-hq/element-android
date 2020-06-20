@@ -64,7 +64,7 @@ class ActiveCallViewHolder() {
                 activeCallPiP?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_BALANCED)
                 activeCallPiP?.setEnableHardwareScaler(true /* enabled */)
                 activeCallPiP?.setZOrderMediaOverlay(true)
-                activeCallPipInitialized
+                activeCallPipInitialized = true
             }
         }
     }
