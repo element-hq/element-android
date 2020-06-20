@@ -19,7 +19,11 @@ An Android Studio template has been added to the project to help creating all fi
 
 To install the template (to be done only once):
 - Go to folder `./tools/template`.
-- Run the script `./configure.sh`.
+- Mac OSX: Run the script `./configure.sh`.
+
+   Linux: Run `ANDROID_STUDIO=/path/to/android-studio ./configure`
+    - e.g. `ANDROID_STUDIO=/usr/local/android-studio ./configure`
+
 - Restart Android Studio.
 
 To create a new screen:
