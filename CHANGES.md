@@ -22,7 +22,8 @@ Build 🧱:
  - SDK is now API level 21 minimum, and so RiotX (#405)
 
 Other changes:
- -
+ - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
+ - Random housekeeping clean-ups indicated by Lint (#1520)
 
 Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
