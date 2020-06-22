@@ -112,7 +112,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
-                    PowerLevelsHelper(it).isAllowedToSend(true, null, session.myUserId)
+                    PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
                 }.subscribe {
                     setState { copy(canManageWidgets = it) }
                 }.disposeOnClear()

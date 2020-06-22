@@ -1,4 +1,31 @@
-Changes in RiotX 0.22.0 (2020-XX-XX)
+Changes in RiotX 0.23.0 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - "Add Matrix app" menu is now always visible (#1495)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+
+Bugfix 🐛:
+ - Fix dark theme issue on login screen (#1097)
+ - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
+
+Other changes:
+ -
+
+Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
 
 Features ✨:
@@ -9,10 +36,11 @@ Improvements 🙌:
  - New wording for notice when current user is the sender
  - Hide "X made no changes" event by default in timeline (#1430)
  - Hide left rooms in breadcrumbs (#766)
+ - Handle PowerLevel properly (#627)
  - Correctly handle SSO login redirection
  - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
  - Improve checking of homeserver version support (#1442)
- - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Add capability to add and remove a room from the favorites (#1217)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
@@ -22,18 +50,11 @@ Bugfix 🐛:
  - Fix status bar icon contrast on API in [21,23[
  - Wrong /query request (#1444)
  - Make Credentials.homeServer optional because it is deprecated (#1443)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
+ - Fix issue on dark themes, after alert popup dismiss
 
 Other changes:
  - Send plain text in the body of events containing formatted body, as per https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
+ - Update link to Modular url from "https://modular.im/" to "https://modular.im/services/matrix-hosting-riot" and open it using ChromeCustomTab
 
 Changes in RiotX 0.21.0 (2020-05-28)
 ===================================================

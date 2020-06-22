@@ -867,9 +867,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_empty_field_your_password">請輸入您的密碼。</string>
 
     <string name="send_bug_report_description_in_english">如果可以，請使用英文撰寫描述。</string>
-    <string name="room_participants_action_unignore_prompt">顯示所有從此使用者而來的訊息？
-
-注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
     <string name="room_message_placeholder_reply_to_encrypted">傳送加密回覆……</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">傳送回覆（未加密）……</string>
     <string name="settings_preview_media_before_sending">在傳送前預覽媒體</string>
@@ -962,9 +959,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="call_anyway">無論如何都要通話</string>
     <string name="room_participants_action_kick">踢出</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">您確定您想要從這個聊天中踢出這些使用者嗎？</item>
-    </plurals>
     <string name="reason_hint">理由</string>
 
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
@@ -1638,7 +1632,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_discovery_confirm_mail">我們將會傳送確認電子郵件到 %s 給您，請檢查您的電子郵件並在確認連結上點選</string>
     <string name="settings_discovery_mail_pending">擱置中</string>
 
-    <string name="settings_discovery_enter_identity_server">輸入新的身份識別伺服器</string>
+    <string name="settings_discovery_enter_identity_server">輸入身份識別伺服器 URL</string>
     <string name="settings_discovery_bad_identity_server">無法連線到身份識別伺服器</string>
     <string name="settings_discovery_please_enter_server">請輸入身份識別伺服器 URL</string>
     <string name="settings_discovery_no_terms_title">身份識別伺服器無服務條款</string>
@@ -2346,5 +2340,47 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
         <item quantity="other">邀請已傳送給 %1$s 與其他 %2$d 個人</item>
     </plurals>
     <string name="invite_users_to_room_failure">我們無法邀請使用者。請檢查您想要邀請的使用者並再試一次。</string>
+
+    <string name="event_redacted">訊息已刪除</string>
+    <string name="settings_show_redacted">顯示已移除的訊息</string>
+    <string name="settings_show_redacted_summary">為已移除的訊息顯示佔位符</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">我們已傳送確認電子郵件給 %s，請先檢查您的電子郵件並點擊確認連結</string>
+    <string name="settings_text_message_sent_wrong_code">驗證代碼不正確。</string>
+
+    <string name="uploads_media_title">媒體</string>
+    <string name="uploads_media_no_result">此聊天室中沒有媒體</string>
+    <string name="uploads_files_title">檔案</string>
+    <string name="uploads_files_subtitle">%1$s 在 %2$s</string>
+    <string name="uploads_files_no_result">此聊天室中沒有檔案</string>
+
+    <string name="login_connect_using_matrix_id_notice">或者如果您已有帳號，而且您也知道您 Matrix 的識別符與密碼，您可以使用此方式：</string>
+    <string name="login_connect_using_matrix_id_submit">使用我的 Matrix 識別符登入</string>
+    <string name="login_signin_matrix_id_title">登入</string>
+    <string name="login_signin_matrix_id_notice">輸入您的識別符與您的密碼</string>
+    <string name="login_signin_matrix_id_hint">使用者識別符</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">這不是有效的使用者識別符。預期中的格式：\'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">找不到有效的家伺服器。請檢查您的識別符</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">飛航模式開啟</string>
+
+    <string name="choose_locale_current_locale_title">目前語言</string>
+    <string name="choose_locale_other_locales_title">其他可用的語言</string>
+    <string name="choose_locale_loading_locales">正在載入可用的語言……</string>
+
+    <string name="open_terms_of">開啟 %s 的條款</string>
+    <string name="disconnect_identity_server_dialog_content">從身份識別伺服器 %s 斷線？</string>
+    <string name="identity_server_error_outdated_identity_server">此身份識別伺服器太舊了。RiotX 僅支援 API V2。</string>
+    <string name="identity_server_error_outdated_home_server">此動作是不可能的。家伺服器太舊了。</string>
+    <string name="identity_server_error_no_identity_server_configured">請先設定身份識別伺服器。</string>
+    <string name="identity_server_error_terms_not_signed">請先在設定中同意身份識別伺服器的條款。</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，RiotX 僅支援傳送雜湊過的使用者電子郵件與電話號碼。</string>
+    <string name="identity_server_error_binding_error">關聯失敗。</string>
+    <string name="identity_server_error_no_current_binding_error">目前沒有此識別符的關聯。</string>
+
+    <string name="identity_server_set_default_notice">您的家伺服器 (%1$s) 建議將 %2$s 用於您的身份識別伺服器</string>
+    <string name="identity_server_set_default_submit">使用 %1$s</string>
+    <string name="identity_server_set_alternative_notice">或者您可以輸入任何身份識別伺服器 URL</string>
+    <string name="identity_server_set_alternative_notice_no_default">輸入身份識別伺服器 URL</string>
+    <string name="identity_server_set_alternative_submit">遞交</string>
 
 </resources>

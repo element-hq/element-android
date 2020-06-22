@@ -930,9 +930,6 @@ Quer adicionar alguns agora?</string>
     <string name="room_participants_now">%1$s agora</string>
     <string name="room_participants_ago">há %1$s %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">Exibir todas as mensagens desta(e) usuária(o)?
-
-Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo.</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s e %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -1070,10 +1067,6 @@ Por favor revise as configurações da conta.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Configurações do Dispositivo.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para este dispositivo.</string>
     <string name="room_participants_action_kick">Desconectar</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Você tem certeza que deseja desconectar este usuário deste chat?</item>
-        <item quantity="other">Você tem certeza que deseja desconectar estes usuários deste chat?</item>
-    </plurals>
     <string name="settings_troubleshoot_test_device_settings_failed">Notificações não são permitidas para este dispositivo.
 Por favor revise as configurações do Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
@@ -1253,7 +1246,7 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
 
     <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
     <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
-    <string name="resources_script">Nota para tradutores: os únicos valores possíveis são: Latn ou Cyrl</string>
+    <string name="resources_script">Latn</string>
 
     <string name="title_activity_verify_device">Verificar sessão</string>
 
@@ -1264,4 +1257,7 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
     <string name="decline">Negar</string>
 
     <string name="action_mark_room_read">Marcar como lido</string>
+    <string name="people_no_identity_server">Nenhum servidor de identidade configurado.</string>
+
+    <string name="call_failed_no_ice_title">Ligação falhou devido ao servidor mal configurado</string>
 </resources>

@@ -18,23 +18,19 @@ package im.vector.riotx.core.ui.views
 
 import android.content.Context
 import android.graphics.Color
-import android.text.SpannableString
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import butterknife.BindView
-import butterknife.ButterKnife
+import androidx.core.text.italic
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ResourceLimitErrorFormatter
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.themes.ThemeUtils
+import kotlinx.android.synthetic.main.view_notification_area.view.*
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import timber.log.Timber
@@ -48,11 +44,6 @@ class NotificationAreaView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
-
-    @BindView(R.id.room_notification_icon)
-    lateinit var imageView: ImageView
-    @BindView(R.id.room_notification_message)
-    lateinit var messageView: TextView
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -77,13 +68,9 @@ class NotificationAreaView @JvmOverloads constructor(
         when (newState) {
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
+            is State.NoPermissionToPost         -> renderNoPermissionToPost()
             is State.Tombstone                  -> renderTombstone(newState)
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-            is State.ConnectionError            -> renderConnectionError()
-            is State.Typing                     -> renderTyping(newState)
-            is State.UnreadPreview              -> renderUnreadPreview()
-            is State.ScrollToBottom             -> renderScrollToBottom(newState)
-            is State.UnsentEvents               -> renderUnsent(newState)
         }
     }
 
@@ -91,30 +78,27 @@ class NotificationAreaView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_notification_area, this)
-        ButterKnife.bind(this)
+        minimumHeight = DimensionConverter(resources).dpToPx(48)
     }
 
     private fun cleanUp() {
-        messageView.setOnClickListener(null)
-        imageView.setOnClickListener(null)
+        roomNotificationMessage.setOnClickListener(null)
+        roomNotificationIcon.setOnClickListener(null)
         setBackgroundColor(Color.TRANSPARENT)
-        messageView.text = null
-        imageView.setImageResource(0)
+        roomNotificationMessage.text = null
+        roomNotificationIcon.setImageResource(0)
     }
 
-    private fun renderTombstone(state: State.Tombstone) {
+    private fun renderNoPermissionToPost() {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
+        roomNotificationIcon.setImageDrawable(null)
         val message = span {
-            +resources.getString(R.string.room_tombstone_versioned_description)
-            +"\n"
-            span(resources.getString(R.string.room_tombstone_continuation_link)) {
-                textDecorationLine = "underline"
-                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
+            italic {
+                +resources.getString(R.string.room_do_not_have_permission_to_post)
             }
         }
-        messageView.movementMethod = BetterLinkMovementMethod.getInstance()
-        messageView.text = message
+        roomNotificationMessage.text = message
+        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
@@ -130,73 +114,26 @@ class NotificationAreaView @JvmOverloads constructor(
             formatterMode = ResourceLimitErrorFormatter.Mode.Hard
         }
         val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
-        messageView.setTextColor(Color.WHITE)
-        messageView.text = message
-        messageView.movementMethod = LinkMovementMethod.getInstance()
-        messageView.setLinkTextColor(Color.WHITE)
+        roomNotificationMessage.setTextColor(Color.WHITE)
+        roomNotificationMessage.text = message
+        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
+        roomNotificationMessage.setLinkTextColor(Color.WHITE)
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
-    private fun renderConnectionError() {
+    private fun renderTombstone(state: State.Tombstone) {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
-        messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        messageView.text = SpannableString(resources.getString(R.string.room_offline_notification))
-    }
-
-    private fun renderTyping(state: State.Typing) {
-        visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.vector_typing)
-        messageView.text = SpannableString(state.message)
-        messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-    }
-
-    private fun renderUnreadPreview() {
-        visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.scrolldown)
-        messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-        imageView.setOnClickListener { delegate?.closeScreen() }
-    }
-
-    private fun renderScrollToBottom(state: State.ScrollToBottom) {
-        visibility = View.VISIBLE
-        if (state.unreadCount > 0) {
-            imageView.setImageResource(R.drawable.newmessages)
-            messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-            messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
-        } else {
-            imageView.setImageResource(R.drawable.scrolldown)
-            messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-            if (!state.message.isNullOrEmpty()) {
-                messageView.text = SpannableString(state.message)
+        roomNotificationIcon.setImageResource(R.drawable.error)
+        val message = span {
+            +resources.getString(R.string.room_tombstone_versioned_description)
+            +"\n"
+            span(resources.getString(R.string.room_tombstone_continuation_link)) {
+                textDecorationLine = "underline"
+                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
             }
         }
-        messageView.setOnClickListener { delegate?.jumpToBottom() }
-        imageView.setOnClickListener { delegate?.jumpToBottom() }
-    }
-
-    private fun renderUnsent(state: State.UnsentEvents) {
-        visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
-        val cancelAll = resources.getString(R.string.room_prompt_cancel)
-        val resendAll = resources.getString(R.string.room_prompt_resend)
-        val messageRes = if (state.hasUnknownDeviceEvents) R.string.room_unknown_devices_messages_notification else R.string.room_unsent_messages_notification
-        val message = context.getString(messageRes, resendAll, cancelAll)
-        val cancelAllPos = message.indexOf(cancelAll)
-        val resendAllPos = message.indexOf(resendAll)
-        val spannableString = SpannableString(message)
-        // cancelAllPos should always be > 0 but a GA crash reported here
-        if (cancelAllPos >= 0) {
-            spannableString.setSpan(CancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length, 0)
-        }
-
-        // resendAllPos should always be > 0 but a GA crash reported here
-        if (resendAllPos >= 0) {
-            spannableString.setSpan(ResendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length, 0)
-        }
-        messageView.movementMethod = LinkMovementMethod.getInstance()
-        messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        messageView.text = spannableString
+        roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
+        roomNotificationMessage.text = message
     }
 
     private fun renderDefault() {
@@ -208,43 +145,8 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     /**
-     * Track the cancel all click.
-     */
-    private inner class CancelAllClickableSpan : ClickableSpan() {
-        override fun onClick(widget: View) {
-            delegate?.deleteUnsentEvents()
-            render(state)
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-            ds.color = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-            ds.bgColor = 0
-            ds.isUnderlineText = true
-        }
-    }
-
-    /**
-     * Track the resend all click.
-     */
-    private inner class ResendAllClickableSpan : ClickableSpan() {
-        override fun onClick(widget: View) {
-            delegate?.resendUnsentEvents()
-            render(state)
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-            ds.color = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-            ds.bgColor = 0
-            ds.isUnderlineText = true
-        }
-    }
-
-    /**
      * The state representing the view
      * It can take one state at a time
-     * Priority of state is managed in {@link VectorRoomActivity.refreshNotificationsArea() }
      */
     sealed class State {
 
@@ -254,29 +156,17 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
+        // User can't post messages to room because his power level doesn't allow it.
+        object NoPermissionToPost : State()
+
         // View will be Gone
         object Hidden : State()
-
-        // Resource limit exceeded error will be displayed (only hard for the moment)
-        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
-
-        // Server connection is lost
-        object ConnectionError : State()
 
         // The room is dead
         data class Tombstone(val tombstoneEvent: Event) : State()
 
-        // Somebody is typing
-        data class Typing(val message: String) : State()
-
-        // Some new messages are unread in preview
-        object UnreadPreview : State()
-
-        // Some new messages are unread (grey or red)
-        data class ScrollToBottom(val unreadCount: Int, val message: String? = null) : State()
-
-        // Some event has been unsent
-        data class UnsentEvents(val hasUndeliverableEvents: Boolean, val hasUnknownDeviceEvents: Boolean) : State()
+        // Resource limit exceeded error will be displayed (only hard for the moment)
+        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
     }
 
     /**
@@ -284,31 +174,5 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun onTombstoneEventClicked(tombstoneEvent: Event)
-        fun resendUnsentEvents()
-        fun deleteUnsentEvents()
-        fun closeScreen()
-        fun jumpToBottom()
-    }
-
-    companion object {
-        /**
-         * Preference key.
-         */
-        private const val SHOW_INFO_AREA_KEY = "SETTINGS_SHOW_INFO_AREA_KEY"
-
-        /**
-         * Always show the info area.
-         */
-        private const val SHOW_INFO_AREA_VALUE_ALWAYS = "always"
-
-        /**
-         * Show the info area when it has messages or errors.
-         */
-        private const val SHOW_INFO_AREA_VALUE_MESSAGES_AND_ERRORS = "messages_and_errors"
-
-        /**
-         * Show the info area only when it has errors.
-         */
-        private const val SHOW_INFO_AREA_VALUE_ONLY_ERRORS = "only_errors"
     }
 }

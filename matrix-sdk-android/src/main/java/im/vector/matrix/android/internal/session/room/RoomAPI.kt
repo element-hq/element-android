@@ -28,15 +28,18 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentBody
 import im.vector.matrix.android.internal.session.room.send.SendResponse
+import im.vector.matrix.android.internal.session.room.tags.TagBody
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import im.vector.matrix.android.internal.session.room.typing.TypingBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -244,6 +247,33 @@ internal interface RoomAPI {
               @Body params: Map<String, String?>): Call<Unit>
 
     /**
+     * Ban a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the banned user object (userId and reason for ban)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/ban")
+    fun ban(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+
+    /**
+     * unban a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the unbanned user object (userId and reason for unban)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/unban")
+    fun unban(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+
+    /**
+     * Kick a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the kicked user object (userId and reason for kicking)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/kick")
+    fun kick(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+
+    /**
      * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.
      * This cannot be undone.
      * Users may redact their own events, and any user with a power level greater than or equal to the redact power level of the room may redact events there.
@@ -288,4 +318,25 @@ internal interface RoomAPI {
     fun sendTypingState(@Path("roomId") roomId: String,
                         @Path("userId") userId: String,
                         @Body body: TypingBody): Call<Unit>
+
+    /**
+     * Room tagging
+     */
+
+    /**
+     * Add a tag to a room.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}")
+    fun putTag(@Path("userId") userId: String,
+               @Path("roomId") roomId: String,
+               @Path("tag") tag: String,
+               @Body body: TagBody): Call<Unit>
+
+    /**
+     * Delete a tag from a room.
+     */
+    @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}")
+    fun deleteTag(@Path("userId") userId: String,
+                  @Path("roomId") roomId: String,
+                  @Path("tag") tag: String): Call<Unit>
 }

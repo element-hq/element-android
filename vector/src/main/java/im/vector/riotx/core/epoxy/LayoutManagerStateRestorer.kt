@@ -25,12 +25,21 @@ import java.util.concurrent.atomic.AtomicReference
 
 private const val LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE"
 
-class LayoutManagerStateRestorer(private val layoutManager: RecyclerView.LayoutManager) : Restorable, DefaultListUpdateCallback {
+class LayoutManagerStateRestorer(layoutManager: RecyclerView.LayoutManager) : Restorable, DefaultListUpdateCallback {
 
+    private var layoutManager: RecyclerView.LayoutManager? = null
     private var layoutManagerState = AtomicReference<Parcelable?>()
 
+    init {
+        this.layoutManager = layoutManager
+    }
+
+    fun clear() {
+        layoutManager = null
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
-        val layoutManagerState = layoutManager.onSaveInstanceState()
+        val layoutManagerState = layoutManager?.onSaveInstanceState()
         outState.putParcelable(LAYOUT_MANAGER_STATE, layoutManagerState)
     }
 
@@ -41,7 +50,7 @@ class LayoutManagerStateRestorer(private val layoutManager: RecyclerView.LayoutM
 
     override fun onInserted(position: Int, count: Int) {
         layoutManagerState.getAndSet(null)?.also {
-            layoutManager.onRestoreInstanceState(it)
+            layoutManager?.onRestoreInstanceState(it)
         }
     }
 }

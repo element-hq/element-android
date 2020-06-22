@@ -64,6 +64,27 @@ interface MembershipService {
                callback: MatrixCallback<Unit>): Cancelable
 
     /**
+     * Ban a user from the room
+     */
+    fun ban(userId: String,
+            reason: String? = null,
+            callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Unban a user from the room
+     */
+    fun unban(userId: String,
+              reason: String? = null,
+              callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Kick a user from the room
+     */
+    fun kick(userId: String,
+             reason: String? = null,
+             callback: MatrixCallback<Unit>): Cancelable
+
+    /**
      * Join the room, or accept an invitation.
      */
     fun join(reason: String? = null,

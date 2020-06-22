@@ -894,9 +894,6 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="speak">发言</string>
     <string name="send_bug_report_description_in_english">如果可能的话，请使用英文撰写问题描述。</string>
-    <string name="room_participants_action_unignore_prompt">显示来自该用户的所有信息？
-
-注意，此操作会重启应用并将花费一些时间。</string>
     <string name="room_message_placeholder_reply_to_encrypted">发送加密的回复…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">发送回复（未加密）…</string>
     <string name="settings_preview_media_before_sending">发送前预览媒体文件</string>
@@ -991,9 +988,6 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_call_ringtone_dialog_title">请选择来电铃声：</string>
 
     <string name="room_participants_action_kick">移除</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">您确定要从此聊天室中移除这些用户吗？</item>
-    </plurals>
     <string name="reason_hint">理由</string>
 
     <string name="room_sliding_menu_version_x">版本 %s</string>

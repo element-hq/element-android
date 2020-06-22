@@ -32,6 +32,7 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_POWER_LEVELS,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,

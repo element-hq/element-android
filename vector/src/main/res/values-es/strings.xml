@@ -961,9 +961,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="lock_screen_hint">Escribe aquí…</string>
 
     <string name="send_bug_report_description_in_english">Si es posible, por favor escribe la descripción en inglés.</string>
-    <string name="room_participants_action_unignore_prompt">¿Mostrar todos los mensajes de este usuario?
-
-Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de tiempo.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
     <string name="settings_without_flair">Actualmente no eres miembro de ninguna comunidad.</string>
@@ -1074,10 +1071,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="video_call_in_progress">Llamada de video en proceso…</string>
 
     <string name="room_participants_action_kick">Expulsar</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">¿Seguro que quieres expulsar este usuario de esta conversación?</item>
-        <item quantity="other">¿Seguro que quieres expulsar estos usuarios de esta conversación?</item>
-    </plurals>
     <string name="reason_hint">Razón</string>
 
     <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>

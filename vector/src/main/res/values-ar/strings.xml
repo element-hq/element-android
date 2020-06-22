@@ -949,9 +949,6 @@
     <string name="room_participants_now">%1$s الآن</string>
     <string name="room_participants_ago">%1$s منذ %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">أأعرض كل الرسائل من هذا المستخدم؟
-
-سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.</string>
     <string name="room_participants_invite_join_names">"⁨%1$s⁩ و "</string>
     <string name="room_participants_invite_join_names_and">⁨%1$s⁩ و ⁨%2$s⁩</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>

@@ -18,8 +18,8 @@ package im.vector.riotx.features.autocomplete.command
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
+import im.vector.riotx.features.autocomplete.RecyclerViewPresenter
 import im.vector.riotx.features.command.Command
 import javax.inject.Inject
 
@@ -32,8 +32,6 @@ class AutocompleteCommandPresenter @Inject constructor(context: Context,
     }
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
-        // Also remove animation
-        recyclerView?.itemAnimator = null
         return controller.adapter
     }
 
@@ -50,5 +48,9 @@ class AutocompleteCommandPresenter @Inject constructor(context: Context,
             }
         }
         controller.setData(data)
+    }
+
+    fun clear() {
+        controller.listener = null
     }
 }

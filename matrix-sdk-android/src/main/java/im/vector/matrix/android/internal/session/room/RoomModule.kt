@@ -34,6 +34,8 @@ import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTas
 import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.admin.DefaultMembershipAdminTask
+import im.vector.matrix.android.internal.session.room.membership.admin.MembershipAdminTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
@@ -56,6 +58,10 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReportCon
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.tags.AddTagToRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DefaultAddTagToRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DefaultDeleteTagFromRoomTask
+import im.vector.matrix.android.internal.session.room.tags.DeleteTagFromRoomTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchNextTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
@@ -143,6 +149,9 @@ internal abstract class RoomModule {
     abstract fun bindLeaveRoomTask(task: DefaultLeaveRoomTask): LeaveRoomTask
 
     @Binds
+    abstract fun bindMembershipAdminTask(task: DefaultMembershipAdminTask): MembershipAdminTask
+
+    @Binds
     abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask
 
     @Binds
@@ -186,4 +195,10 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetUploadsTask(task: DefaultGetUploadsTask): GetUploadsTask
+
+    @Binds
+    abstract fun bindAddTagToRoomTask(task: DefaultAddTagToRoomTask): AddTagToRoomTask
+
+    @Binds
+    abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
 }

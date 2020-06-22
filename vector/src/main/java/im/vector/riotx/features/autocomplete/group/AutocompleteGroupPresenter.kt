@@ -18,12 +18,12 @@ package im.vector.riotx.features.autocomplete.group
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.groupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
+import im.vector.riotx.features.autocomplete.RecyclerViewPresenter
 import javax.inject.Inject
 
 class AutocompleteGroupPresenter @Inject constructor(context: Context,
@@ -35,9 +35,11 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
         controller.listener = this
     }
 
+    fun clear() {
+        controller.listener = null
+    }
+
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
-        // Also remove animation
-        recyclerView?.itemAnimator = null
         return controller.adapter
     }
 

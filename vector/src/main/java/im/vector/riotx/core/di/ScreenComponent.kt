@@ -32,6 +32,7 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
+import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
@@ -57,7 +58,9 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
+import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.riotx.features.share.IncomingShareActivity
@@ -101,6 +104,9 @@ interface ScreenComponent {
      * ========================================================================================== */
 
     fun inject(activity: HomeActivity)
+    fun inject(activity: RoomDetailActivity)
+    fun inject(activity: RoomProfileActivity)
+    fun inject(activity: RoomMemberProfileActivity)
     fun inject(activity: VectorSettingsActivity)
     fun inject(activity: KeysBackupManageActivity)
     fun inject(activity: EmojiReactionPickerActivity)

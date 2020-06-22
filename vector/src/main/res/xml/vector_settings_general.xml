@@ -68,6 +68,26 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_integrations_summary" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ALLOW_INTEGRATIONS_KEY"
+            android:persistent="false"
+            android:title="@string/settings_integration_allow" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dependency="SETTINGS_ALLOW_INTEGRATIONS_KEY"
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
+            android:persistent="false"
+            android:title="@string/settings_integration_manager" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
     <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
 
         <im.vector.riotx.core.preference.VectorPreference
@@ -93,26 +113,6 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
-
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:focusable="false"
-            android:persistent="false"
-            android:summary="@string/settings_integrations_summary" />
-
-        <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_ALLOW_INTEGRATIONS_KEY"
-            android:persistent="false"
-            android:title="@string/settings_integration_allow" />
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:dependency="SETTINGS_ALLOW_INTEGRATIONS_KEY"
-            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
-            android:persistent="false"
-            android:title="@string/settings_integration_manager" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

@@ -898,9 +898,6 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
 
     <string name="send_bug_report_description_in_english">Ahal dela idatzi deskripzioa ingelesez.</string>
-    <string name="room_participants_action_unignore_prompt">Erakutsi erabiltzaile honen mezu guztiak?
-
-Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Zifratutako erantzuna bidalita…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Bidali erantzuna (zifratu gabea)…</string>
     <string name="settings_preview_media_before_sending">Aurreikusi multimedia bidali aurretik</string>
@@ -1015,10 +1012,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
     <string name="room_participants_action_kick">Kanporatu</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</item>
-        <item quantity="other">Ziur erabiltzaile hauek txat honetatik kanporatu nahi dituzula?</item>
-    </plurals>
     <string name="reason_hint">Arrazoia</string>
 
     <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>
@@ -1681,7 +1674,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_discovery_confirm_mail">Berrespen e-mail bat bidali dizugu %s helbidera, begiratu zure e-maila eta sakatu baieztapen esteka</string>
     <string name="settings_discovery_mail_pending">Egiteke</string>
 
-    <string name="settings_discovery_enter_identity_server">Sartu identitate-zerbitzari berria</string>
+    <string name="settings_discovery_enter_identity_server">Sartu identitate-zerbitzari URLa</string>
     <string name="settings_discovery_bad_identity_server">Ezin izan da identitate-zerbitzarira konektatu</string>
     <string name="settings_discovery_please_enter_server">Sartu identitate-zerbitzariaren URL-a</string>
     <string name="settings_discovery_no_terms_title">Identitate-zerbitzariak ez du erabilera baldintzarik</string>
@@ -2398,5 +2391,47 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
         <item quantity="other">Gonbidapena bidali zaie %1$s eta beste %2$s erabiltzaileei</item>
     </plurals>
     <string name="invite_users_to_room_failure">Ezin izan ditugu erabiltzaile horiek gonbidatu. Egiaztatu gonbidatu nahi dituzun erabiltzaileak eta saiatu berriro.</string>
+
+    <string name="event_redacted">Mezu ezabatuta</string>
+    <string name="settings_show_redacted">Erakutsi kendutako mezuak</string>
+    <string name="settings_show_redacted_summary">Erakutsi kendutako mezuek utzitako hutsunea</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Berrespen e-mail bat bidali dizugu %s helbidera, begiratu zure e-maila eta sakatu baieztapen esteka</string>
+    <string name="settings_text_message_sent_wrong_code">Egiaztaketa kodea ez da zuzena.</string>
+
+    <string name="uploads_media_title">MULTIMEDIA</string>
+    <string name="uploads_media_no_result">Ez dago multimediarik gela honetan</string>
+    <string name="uploads_files_title">FITXATEGIAK</string>
+    <string name="uploads_files_subtitle">%1$s %2$s</string>
+    <string name="uploads_files_no_result">Ez dago fitxategirik gela honetan</string>
+
+    <string name="login_connect_using_matrix_id_notice">Bestela, kontua baduzu eta zure Matrix identifikatzailea ezagutzen baduzu, metodo hau erabili dezakezu:</string>
+    <string name="login_connect_using_matrix_id_submit">Hasi saioa nire Matrix identifikatzailearekin</string>
+    <string name="login_signin_matrix_id_title">Hasi saioa</string>
+    <string name="login_signin_matrix_id_notice">Sartu zure identifikatzailea eta pasahitza</string>
+    <string name="login_signin_matrix_id_hint">Erabili identifikatzailea</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Hau ez da baliozko erabiltzaile identifikatzailea. Formatu hau espero zen: \'@erabiltzailea:zerbitzaria.eus\'</string>
+    <string name="autodiscover_well_known_error">Ezin izan da baliozko hasiera-zerbitzari bat aurkitu. Egiaztatu identifikatzailea</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Hegaldi modua ezarrita dago</string>
+
+    <string name="choose_locale_current_locale_title">Uneko hizkuntza</string>
+    <string name="choose_locale_other_locales_title">Beste hizkuntza erabilgarriak</string>
+    <string name="choose_locale_loading_locales">Hizkuntza erabilgarriak kargatzen…</string>
+
+    <string name="open_terms_of">Ireki %s zerbitzariko baldintzak</string>
+    <string name="disconnect_identity_server_dialog_content">Deskonektatu %s identitate zerbitzaritik\?</string>
+    <string name="identity_server_error_outdated_identity_server">Identitate zerbitzaria zaharkituta dago. RiotX-k API V2 besterik ez du onartzen.</string>
+    <string name="identity_server_error_outdated_home_server">Ezin da eragiketa hau burutu. Hasiera-zerbitzaria zaharkituta dago.</string>
+    <string name="identity_server_error_no_identity_server_configured">Konfiguratu identitate-zerbitzari bat aurretik.</string>
+    <string name="identity_server_error_terms_not_signed">Onartu identitate-zerbitzariaren baldintzak aurretik zerbitzariaren ezarpenetan.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Zure pribatutasuna babesteko, RiotX-k erabiltzaileeen e-mail eta telefonoak hasheatuta bidaltzen ditu.</string>
+    <string name="identity_server_error_binding_error">Asoziazioak huts egin du.</string>
+    <string name="identity_server_error_no_current_binding_error">Ez dago asoziaziorik identifikatzaile honekin.</string>
+
+    <string name="identity_server_set_default_notice">Zure hasiera-zerbitzariak (%1$s) identitate-zerbitzari gisa %2$s erabiltzea proposatzen du</string>
+    <string name="identity_server_set_default_submit">Erabili %1$s</string>
+    <string name="identity_server_set_alternative_notice">Bestela, beste identitate-zerbitzari baten URLa sartu dezakezu</string>
+    <string name="identity_server_set_alternative_notice_no_default">Sartu identitate-zerbitzari baten URLa</string>
+    <string name="identity_server_set_alternative_submit">Bidali</string>
 
 </resources>

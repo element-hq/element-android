@@ -31,14 +31,15 @@ import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -68,6 +69,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     init {
         observeRoomMemberSummaries()
         observeRoomSummary()
+        observePowerLevel()
     }
 
     private fun observeRoomMemberSummaries() {
@@ -118,6 +120,18 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
     }
 
+    private fun observePowerLevel() {
+        PowerLevelsObservableFactory(room).createObservable()
+                .subscribe {
+                    val permissions = ActionPermissions(
+                            canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
+                    )
+                    setState {
+                        copy(actionsPermissions = permissions)
+                    }
+                }.disposeOnClear()
+    }
+
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary()
                 .unwrap()
@@ -135,22 +149,22 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
         roomMembers
                 .forEach { roomMember ->
-                    val memberPowerLevel = powerLevelsHelper.getUserPowerLevel(roomMember.userId)
+                    val userRole = powerLevelsHelper.getUserRole(roomMember.userId)
                     when {
-                        roomMember.membership == Membership.INVITE                            -> invites.add(roomMember)
-                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL     -> admins.add(roomMember)
-                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL -> moderators.add(roomMember)
-                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL      -> users.add(roomMember)
-                        else                                                                  -> customs.add(roomMember)
+                        roomMember.membership == Membership.INVITE -> invites.add(roomMember)
+                        userRole == Role.Admin                     -> admins.add(roomMember)
+                        userRole == Role.Moderator                 -> moderators.add(roomMember)
+                        userRole == Role.Default                   -> users.add(roomMember)
+                        else                                       -> customs.add(roomMember)
                     }
                 }
 
         return listOf(
-                PowerLevelCategory.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
-                PowerLevelCategory.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
-                PowerLevelCategory.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
-                PowerLevelCategory.INVITE to invites.sortedWith(roomMemberSummaryComparator),
-                PowerLevelCategory.USER to users.sortedWith(roomMemberSummaryComparator)
+                RoomMemberListCategories.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
+                RoomMemberListCategories.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
+                RoomMemberListCategories.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
+                RoomMemberListCategories.INVITE to invites.sortedWith(roomMemberSummaryComparator),
+                RoomMemberListCategories.USER to users.sortedWith(roomMemberSummaryComparator)
         )
     }
 

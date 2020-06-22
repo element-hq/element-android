@@ -17,6 +17,7 @@
 package im.vector.riotx.features.roomprofile.members
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.args
@@ -46,6 +47,13 @@ class RoomMemberListFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.menu_room_member_list
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val canInvite = withState(viewModel) {
+            it.actionsPermissions.canInvite
+        }
+        menu.findItem(R.id.menu_room_member_list_add_member).isVisible = canInvite
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_room_member_list_add_member -> {
@@ -61,6 +69,9 @@ class RoomMemberListFragment @Inject constructor(
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
+            invalidateOptionsMenu()
+        }
     }
 
     override fun onDestroyView() {

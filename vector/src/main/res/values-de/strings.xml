@@ -975,9 +975,6 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
 
-    <string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
-
-Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="missing_permissions_error">Nicht berechtigt, diese Aktion durchzuführen.</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
@@ -1061,10 +1058,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="call_anyway">Trotzdem anrufen</string>
     <string name="room_participants_action_kick">Kicken</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Bist du sicher, dass du diesen Benutzer aus diesem Chat kicken möchtest?</item>
-        <item quantity="other">Bist du sicher, dass du diese Benutzer aus diesem Chat kicken möchtest?</item>
-    </plurals>
     <string name="reason_hint">Grund</string>
 
     <string name="settings_inline_url_preview_summary">Im Chat Linkvorschau aktivieren, wenn dein Heimserver diese Funktion unterstützt.</string>

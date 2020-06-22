@@ -400,9 +400,6 @@ Anda mungkin ingin masuk dengan akun lain, atau tambahkan email ini ke akun Anda
     <string name="room_participants_action_set_admin">Jadikan admin</string>
     <string name="room_participants_action_ignore">Sembunyikan semua pesan dari pengguna ini</string>
     <string name="room_participants_action_unignore">Tunjukkan semua pesan dari pengguna ini</string>
-    <string name="room_participants_action_unignore_prompt">Tunjukkan semua pesan dari pengguna ini?
-
-Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</string>
     <string name="room_participants_invite_search_another_user">ID Pengguna, Nama atau email</string>
     <string name="room_participants_action_mention">Sebut</string>
     <string name="room_participants_action_devices_list">Tunjukkan Daftar Perangkat</string>
@@ -965,9 +962,6 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="video_call_in_progress">Panggilan Video Sedang Berlangsung…</string>
 
     <string name="room_participants_action_kick">Keluarkan</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">Apakah Anda yakin ingin mengeluarkan pengguna-pengguna tersebut dari percakapan ini?</item>
-    </plurals>
     <string name="reason_hint">Alasan</string>
 
     <string name="room_sliding_menu_version_x">Versi %s</string>

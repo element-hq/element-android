@@ -961,8 +961,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="many" />
     </plurals>
 
-    <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
-Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <plurals name="room_details_selected">
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
@@ -1035,11 +1033,6 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_kick">Wyrzuć</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Czy chcesz wyrzucić tego użytkownika z rozmowy\?</item>
-        <item quantity="few">Czy chcesz wyrzucić tych użytkowników z rozmowy\?</item>
-        <item quantity="many" />
-    </plurals>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
     <string name="show_info_area_messages_and_errors">Dla komunikatów i błędów</string>
@@ -1804,7 +1797,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="room_join_rules_public">%1$s ustawił(-a) pokój dostępnym publicznie dla każdego, kto zna link.</string>
     <string name="room_join_rules_invite">%1$s ustawił(-a) pokój tylko dla zaproszonych.</string>
-    <string name="timeline_unread_messages">Nieprztane wiadomości</string>
+    <string name="timeline_unread_messages">Nieprzeczytane wiadomości</string>
 
     <string name="login_splash_title">Wyzwól swoją komunikację</string>
     <string name="login_splash_text1">Czatuj z osobami bezpośrednio lub w grupach</string>

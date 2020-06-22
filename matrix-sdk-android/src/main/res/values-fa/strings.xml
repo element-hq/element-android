@@ -7,17 +7,17 @@
     <string name="notice_room_invite_no_invitee">دعوت %s</string>
     <string name="notice_room_invite">‫%1$s، %2$s را دعوت کرد</string>
     <string name="notice_room_invite_you">%1$s دعوتتان کرد</string>
-    <string name="notice_room_join">%1$s پیوست</string>
-    <string name="notice_room_leave">%1$s رفت</string>
+    <string name="notice_room_join">%1$s به اتاق پیوست</string>
+    <string name="notice_room_leave">%1$s اتاق را ترک کرد</string>
     <string name="notice_room_reject">%1$s دعوت را رد کرد</string>
     <string name="notice_room_kick">%1$s، %2$s را اخراج کرد</string>
     <string name="notice_room_unban">%1$s، انسداد %2$s را رفع کرد</string>
     <string name="notice_room_ban">%1$s، %2$s را مسدود کرد</string>
     <string name="notice_room_withdraw">%1$s دعوت %2$s را نپذیرفت</string>
     <string name="notice_avatar_url_changed">%1$s تصویرش را عوض کرد</string>
-    <string name="notice_display_name_set">%1$s نام نمایشیش را به %2$s تنظیم کرد</string>
+    <string name="notice_display_name_set">%1$s نام نمایشی خود را به %2$s تنظیم کرد</string>
     <string name="notice_display_name_changed_from">%1$s نام نمایشیش را از %2$s به %3$s تغییر داد</string>
-    <string name="notice_display_name_removed">%1$s نام نمایشیش (%2$s) را برداشت</string>
+    <string name="notice_display_name_removed">%1$s نام نمایشیش (%2$s) را پاک کرد</string>
     <string name="notice_room_topic_changed">%1$s موضوع را به %2$s تغییر داد</string>
     <string name="notice_room_name_changed">%1$s نام اتاق را به %2$s تغییر داد</string>
     <string name="notice_placed_video_call">%s یک تماس تصویری برقرار کرد.</string>
@@ -38,18 +38,18 @@
     <string name="notice_voip_finished">گردهمایی صوتی پایان یافت</string>
 
     <string name="notice_avatar_changed_too">(تصویر هم عوض شد)</string>
-    <string name="notice_room_name_removed">%1$s نام اتاق را برداشت</string>
-    <string name="notice_room_topic_removed">%1$s موضوع اتاق را برداشت</string>
-    <string name="notice_event_redacted">پیام برداشته شد</string>
-    <string name="notice_event_redacted_by">پیام به دست %1$s برداشته شد</string>
-    <string name="notice_event_redacted_with_reason">پیام برداشته شد [دلیل: %1$s]</string>
-    <string name="notice_event_redacted_by_with_reason">پیام به دست %1$s برداشته شد [دلیل: %2$s]</string>
+    <string name="notice_room_name_removed">%1$s نام اتاق را پاک کرد</string>
+    <string name="notice_room_topic_removed">%1$s موضوع اتاق را پاک کرد</string>
+    <string name="notice_event_redacted">پیام پاک شد</string>
+    <string name="notice_event_redacted_by">پیام به دست %1$s پاک شد</string>
+    <string name="notice_event_redacted_with_reason">پیام پاک شد [دلیل: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">پیام به دست %1$s پاک شد [دلیل: %2$s]</string>
     <string name="notice_room_third_party_invite">%1$s دعوتی برای پیوستن %2$s به اتاق فرستاد</string>
     <string name="notice_room_third_party_revoked_invite">%1$s دعوت پیوستن به اتاق %2$s را باطل کرد</string>
     <string name="notice_room_third_party_registered_invite">%1$s دعوت برای %2$s را پذیرفت</string>
 
     <string name="notice_crypto_unable_to_decrypt">** ناتوان در رمزگشایی: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">افزارهٔ فرستنده، کلیدهای این پیام را برایمان نفرستاده است.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">دستگاه فرستنده، کلیدهای این پیام را برایمان نفرستاده است.</string>
 
     <string name="message_reply_to_prefix">در پاسخ به</string>
 
@@ -62,7 +62,7 @@
 
     <string name="room_error_join_failed_empty_room">در حال حاضر امکان بازپیوست به اتاقی خالی وجود ندارد‌‌.</string>
 
-    <string name="encrypted_message">پیام رمزنگاشته</string>
+    <string name="encrypted_message">پیام رمزنگاری شده</string>
 
     <string name="medium_email">نشانی رایانامه</string>
     <string name="medium_phone_number">شماره تلفن</string>
@@ -115,7 +115,7 @@
     <string name="verification_emoji_pizza">پیتزا</string>
     <string name="verification_emoji_cake">کیک</string>
     <string name="verification_emoji_heart">قلب</string>
-    <string name="verification_emoji_smiley">لبخندک</string>
+    <string name="verification_emoji_smiley">لبخند</string>
     <string name="verification_emoji_robot">آدم‌آهنی</string>
     <string name="verification_emoji_hat">کلاه</string>
     <string name="verification_emoji_glasses">عینک</string>
@@ -126,7 +126,7 @@
     <string name="verification_emoji_hourglass">ساعت شنی</string>
     <string name="verification_emoji_clock">ساعت</string>
     <string name="verification_emoji_gift">هدیه</string>
-    <string name="verification_emoji_lightbulb">حباب لامپ</string>
+    <string name="verification_emoji_lightbulb">لامپ</string>
     <string name="verification_emoji_book">کتاب</string>
     <string name="verification_emoji_pencil">مداد</string>
     <string name="verification_emoji_paperclip">گیره کاغذ</string>
@@ -162,19 +162,19 @@
 \nدر حال درون‌ریزی اتاق‌های دعوت‌شده</string>
     <string name="initial_sync_start_importing_account_left_rooms">همگام‌سازی نخستین:
 \nدر حال درون‌ریزی اتاق‌های ترک‌شده</string>
-    <string name="initial_sync_start_importing_account_groups">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی اجتماع‌ها</string>
+    <string name="initial_sync_start_importing_account_groups">همگام‌سازی نخستین: 
+\nدر حال درون‌ریزی انجمن‌ها</string>
     <string name="initial_sync_start_importing_account_data">همگام‌سازی نخستین:
 \nدر حال درون‌ریزی داده‌های حساب</string>
 
     <string name="event_status_sending_message">در حال فرستادن پیام…</string>
-    <string name="clear_timeline_send_queue">پاک‌سازی صفِ در حال فرستادن</string>
+    <string name="clear_timeline_send_queue">پاک‌سازی صفِ در حال ارسال</string>
 
     <string name="notice_room_invite_no_invitee_with_reason">دعوت %1$s. دلیل: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s، %2$s را دعوت کرد. دلیل: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s دعوتتان کرد. دلیل: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s پیوست. دلیل: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s رفت. دلیل: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s به اتاق پیوست. دلیل: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s اتاق را ترک کرد. دلیل: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s دعوت را رد کرد. دلیل: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s، %2$s را اخراج کرد. دلیل: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s انسداد %2$s را رفع کرد. دلیل: %3$s</string>
@@ -190,14 +190,14 @@
     </plurals>
 
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق برداشت.</item>
-        <item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق برداشت.</item>
+        <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق پاک کرد.</item>
+        <item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
     </plurals>
 
-    <string name="notice_room_aliases_added_and_removed">%1$s برای نشانی این اتاق، %2$s را افزود و %3$s را برداشت.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s برای نشانی این اتاق، %2$s را افزود و %3$s را پاک کرد.</string>
 
     <string name="notice_room_canonical_alias_set">%1$s نشانی اصلی این اتاق را به %2$s تنظیم کرد.</string>
-    <string name="notice_room_canonical_alias_unset">%1$s نشانی اصلی را برای این اتاق برداشت.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s نشانی اصلی را برای این اتاق پاک کرد.</string>
 
     <string name="notice_room_guest_access_can_join">%1$s اجازه داد میمهانان به گروه بپیوندند.</string>
     <string name="notice_room_guest_access_forbidden">%1$s جلوی پیوستن میمهانان به گروه را گرفت.</string>
@@ -207,4 +207,7 @@
 
     <string name="key_verification_request_fallback_message">%s درخواست تأیید کلیدتان را دارد، ولی کارخواهتان تأیید کلید درون گپ را پشتیبانی نمی‌کند. برای تأیید کلیدها لازم است از تأییدیهٔ کلید قدیمی استفاده کنید.</string>
 
+    <string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
+    <string name="notice_profile_change_redacted">%1$s نمایه خود را به‌روز کرد %2$s</string>
+    <string name="could_not_redact">نمی‌توان ویرایش کرد</string>
 </resources>

@@ -284,10 +284,6 @@
     <string name="room_participants_invite_search_another_user">ID Përdoruesi, Emër ose email-i</string>
     <string name="room_participants_action_mention">Përmendje</string>
     <string name="room_participants_action_devices_list">Shfaq Listë Sesionesh</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Jeni i sigurt se doni të përzihet ky përdorues nga kjo fjalosje?</item>
-        <item quantity="other">Jeni i sigurt se doni të përzihen këta përdorues nga kjo fjalosje?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">Jeni i sigurt se doni të dëbohet ky përdorues nga kjo fjalosje?</string>
     <string name="reason_hint">Arsye</string>
 
@@ -870,9 +866,6 @@
         <item quantity="one">1 anëtar</item>
         <item quantity="other">%d anëtarë</item>
     </plurals>
-    <string name="room_participants_action_unignore_prompt">Të shfaqen krejt mesazhet nga ky përdorues\?
-\n
-\nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
     <string name="room_participants_power_level_prompt">S’do të jeni në gjendje ta zhbëni këtë ndryshim, ngaqë po e promovoni përdoruesin të ketë të njëjtën shkallë pushteti si ju vetë.
 \nJeni i sigurt\?</string>
 
@@ -1642,7 +1635,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_discovery_confirm_mail">Ju dërguam një email ripohimi te %s, hapeni dhe klikoni mbi lidhjen e ripohimit</string>
     <string name="settings_discovery_mail_pending">Pezull</string>
 
-    <string name="settings_discovery_enter_identity_server">Jepni një shërbyes të ri identitetesh</string>
+    <string name="settings_discovery_enter_identity_server">Jepni një URL shërbyesi identitetesh</string>
     <string name="settings_discovery_bad_identity_server">S’u lidh dot te shërbyes identitetesh</string>
     <string name="settings_discovery_please_enter_server">Ju lutemi, jepni URL-në e shërbyesit të identiteteve</string>
     <string name="settings_discovery_no_terms_title">Shërbyesi i identiteteve s’ka kushte shërbimi</string>
@@ -2360,4 +2353,46 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     </plurals>
     <string name="invite_users_to_room_failure">S’ftuam dot përdorues. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
 
+    <string name="event_redacted">Mesazhi u fshi</string>
+    <string name="settings_show_redacted">Shfaq mesazhe të hequr</string>
+    <string name="settings_show_redacted_summary">Shfaq një vendmbajtëse për mesazhe të hequr</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ju dërguam një email ripohimi te %s, ju lutemi, së pari, shihni email-in tuaj dhe klikoni mbi lidhjen e ripohimit</string>
+    <string name="settings_text_message_sent_wrong_code">Kodi i verifikimit s’është i saktë.</string>
+
+    <string name="uploads_media_title">MEDIA</string>
+    <string name="uploads_media_no_result">S’ka media në këtë dhomë</string>
+    <string name="uploads_files_title">KARTELA</string>
+    <string name="uploads_files_subtitle">%1$s më %2$s</string>
+    <string name="uploads_files_no_result">S’ka kartela në këtë dhomë</string>
+
+    <string name="login_connect_using_matrix_id_notice">Ndryshe, nëse keni tashmë një llogari dhe e dini identifikuesin tuaj Matrix dhe fjalëkalimin tuaj, mund të përdorni këtë metodë:</string>
+    <string name="login_connect_using_matrix_id_submit">Hyrje me identifikuesin tim Matrix</string>
+    <string name="login_signin_matrix_id_title">Hyni</string>
+    <string name="login_signin_matrix_id_notice">Jepni identifikuesin tuaj dhe fjalëkalimin tuaj</string>
+    <string name="login_signin_matrix_id_hint">Identifikues përdoruesi</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Ky s’është identifikues i vlefshëm përdoruesi. Formati i pritur: \'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">S’arrihet të gjendet një shërbyes Home i vlefshëm. Ju lutemi, kontrolloni identifikuesin tuaj</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Mënyra aeroplan është aktive</string>
+
+    <string name="bootstrap_progress_compute_curve_key">Po merret kyç “curve”</string>
+    <string name="choose_locale_current_locale_title">Gjuhë e tanishme</string>
+    <string name="choose_locale_other_locales_title">Gjuhë të tjera të gatshme</string>
+    <string name="choose_locale_loading_locales">Po ngarkohen gjuhë të gatshme…</string>
+
+    <string name="disconnect_identity_server_dialog_content">Të bëhet shkëputja prej shërbyesit tuaj të identitetit %s\?</string>
+    <string name="identity_server_error_outdated_identity_server">Ky shërbyes identitetesh është i vjetruar. RiotX mbulon vetëm API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Ky veprim s’është i mundshëm. Shërbyesi Home është i vjetruar.</string>
+    <string name="identity_server_error_no_identity_server_configured">Ju lutemi, së pari formësoni një shërbyes identitetesh.</string>
+    <string name="identity_server_error_terms_not_signed">Ju lutemi, së pari pranoni te rregullimet termat e shërbyesit të identiteteve.</string>
+    <string name="identity_server_error_binding_error">Përshoqërimi dështoi.</string>
+    <string name="identity_server_error_no_current_binding_error">Aktualisht s’ka përshoqërim me këtë identifikues.</string>
+
+    <string name="identity_server_set_default_notice">Shërbyesi juaj Home (%1$s) propozon të përdoret %2$s si shërbyes i juaji identitetesh</string>
+    <string name="identity_server_set_default_submit">Përdor %1$s</string>
+    <string name="identity_server_set_alternative_notice">Ndryshe, mund të jepni një tjetër URL shërbyesi identitetesh</string>
+    <string name="identity_server_set_alternative_notice_no_default">Jepni URL-në e një shërbyesi identitetesh</string>
+    <string name="identity_server_set_alternative_submit">Parashtroje</string>
+
+    <string name="open_terms_of">Hap termat e %s</string>
 </resources>

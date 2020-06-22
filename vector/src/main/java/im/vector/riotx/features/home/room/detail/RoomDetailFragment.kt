@@ -56,10 +56,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
@@ -88,6 +86,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
@@ -160,6 +159,7 @@ import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.widgets.WidgetActivity
@@ -285,7 +285,10 @@ class RoomDetailFragment @Inject constructor(
             renderTombstoneEventHandling(it)
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
+            if (!canSend) {
+                return@selectSubscribe
+            }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
                 is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
@@ -370,8 +373,10 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
+        autoCompleter.clear()
         debouncer.cancelAll()
         recyclerView.cleanup()
+
         super.onDestroyView()
     }
 
@@ -442,22 +447,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
             }
-
-            override fun resendUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun deleteUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun closeScreen() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun jumpToBottom() {
-                vectorBaseActivity.notImplemented()
-            }
         }
     }
 
@@ -481,11 +470,26 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                if (session.integrationManagerService().isIntegrationEnabled()) {
+                    navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                } else {
+                    displayDisabledIntegrationDialog()
+                }
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun displayDisabledIntegrationDialog() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.disabled_integration_dialog_title)
+                .setMessage(R.string.disabled_integration_dialog_content)
+                .setPositiveButton(R.string.settings) { _, _ ->
+                    navigator.openSettings(requireActivity(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     private fun renderRegularMode(text: String) {
@@ -611,6 +615,12 @@ class RoomDetailFragment @Inject constructor(
                 }
 
                 override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                    val canSendMessage = withState(roomDetailViewModel) {
+                        it.canSendMessage
+                    }
+                    if (!canSendMessage) {
+                        return false
+                    }
                     return when (model) {
                         is MessageFileItem,
                         is MessageImageVideoItem,
@@ -735,37 +745,35 @@ class RoomDetailFragment @Inject constructor(
             val uid = session.myUserId
             val meMember = state.myRoomMember()
             avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
+            if (state.tombstoneEvent == null) {
+                if (state.canSendMessage) {
+                    composerLayout.visibility = View.VISIBLE
+                    composerLayout.setRoomEncrypted(summary.isEncrypted, summary.roomEncryptionTrustLevel)
+                    notificationAreaView.render(NotificationAreaView.State.Hidden)
+                } else {
+                    composerLayout.visibility = View.GONE
+                    notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                }
+            } else {
+                composerLayout.visibility = View.GONE
+                notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
+            }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
-
             // Intercept click event
             inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
-        val isRoomEncrypted = summary?.isEncrypted ?: false
-        if (state.tombstoneEvent == null) {
-            composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(isRoomEncrypted, state.asyncRoomSummary.invoke()?.roomEncryptionTrustLevel)
-            notificationAreaView.render(NotificationAreaView.State.Hidden)
-        } else {
-            composerLayout.visibility = View.GONE
-            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
-        }
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let { roomSummary ->
-            if (roomSummary.membership.isLeft()) {
-                Timber.w("The room has been left")
-                activity?.finish()
-            } else {
-                roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
+            roomToolbarTitleView.text = roomSummary.displayName
+            avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-                renderSubTitle(state.typingMessage, roomSummary.topic)
-            }
+            renderSubTitle(state.typingMessage, roomSummary.topic)
             jumpToBottomView.count = roomSummary.notificationCount
             jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
 
@@ -865,28 +873,17 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun promptConfirmationToRedactEvent(action: EventSharedAction.Redact) {
-        val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
-        val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
-        val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
-        val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
-
-        reasonCheckBox.isVisible = action.askForReason
-        reasonTextInputLayout.isVisible = action.askForReason
-
-        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
-
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.delete_event_dialog_title)
-                .setView(layout)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    val reason = reasonInput.text.toString()
-                            .takeIf { action.askForReason }
-                            ?.takeIf { reasonCheckBox.isChecked }
-                            ?.takeIf { it.isNotBlank() }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = action.askForReason,
+                        confirmationRes = R.string.delete_event_dialog_content,
+                        positiveRes = R.string.remove,
+                        reasonHintRes = R.string.delete_event_dialog_reason_hint,
+                        titleRes = R.string.delete_event_dialog_title
+                ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
@@ -1380,7 +1377,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun focusComposerAndShowKeyboard() {
-        composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        if (composerLayout.isVisible) {
+            composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        }
     }
 
     private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {

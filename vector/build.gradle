@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 22
+ext.versionMinor = 23
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -107,9 +107,8 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "im.vector.riotx"
-        // Set to API 19 because motionLayout is min API 18.
-        // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
-        minSdkVersion 19
+        // Set to API 21: see #405
+        minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
 
@@ -192,8 +191,14 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
+                obfuscate false
+                optimizeCode true
+                proguardFiles 'proguard-rules.pro'
+            }
         }
     }
 
@@ -248,7 +253,7 @@ android {
 
 dependencies {
 
-    def epoxy_version = '3.9.0'
+    def epoxy_version = '3.11.0'
     def fragment_version = '1.2.0'
     def arrow_version = "0.8.2"
     def coroutines_version = "1.3.2"
@@ -395,6 +400,9 @@ dependencies {
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+
+    // Activate when you want to check for leaks, from time to time.
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
