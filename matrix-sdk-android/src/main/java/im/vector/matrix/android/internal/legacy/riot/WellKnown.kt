@@ -60,7 +60,6 @@ class WellKnown {
     @Json(name = "m.identity_server")
     var identityServer: WellKnownBaseConfig? = null
 
-
     @JvmField
     @Json(name = "m.integrations")
     var integrations: Map<String, *>? = null

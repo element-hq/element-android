@@ -37,4 +37,3 @@ class WellKnownBaseConfig {
     @Json(name = "base_url")
     var baseURL: String? = null
 }
-

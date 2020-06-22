@@ -37,4 +37,3 @@ class WellKnownPreferredConfig {
     @Json(name = "preferredDomain")
     var preferredDomain: String? = null
 }
-
