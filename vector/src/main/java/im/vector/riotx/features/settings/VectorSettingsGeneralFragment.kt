@@ -79,7 +79,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<EditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
+        findPreference<EditTextPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
@@ -858,44 +858,23 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
      * Update the displayname.
      */
     private fun onDisplayNameClick(value: String?) {
-        notImplemented()
-        /* TODO
-        if (!TextUtils.equals(session.myUser.displayname, value)) {
+        value ?: return
+        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
+        if (currentDisplayName != value) {
             displayLoadingView()
 
-            session.myUser.updateDisplayName(value, object : MatrixCallback<Unit> {
-                override fun onSuccess(info: Void?) {
+            session.setDisplayName(session.myUserId, value, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
                     // refresh the settings value
-                    PreferenceManager.getDefaultSharedPreferences(activity).edit {
-                        putString(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value)
-                    }
-
+                    mDisplayNamePreference.summary = value
                     onCommonDone(null)
-
-                    refreshDisplay()
                 }
 
-                override fun onNetworkError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
-                }
-
-                override fun onMatrixError(e: MatrixError) {
-                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
-                        activity?.runOnUiThread {
-                            hideLoadingView()
-                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
-                        }
-                    } else {
-                        onCommonDone(e.localizedMessage)
-                    }
-                }
-
-                override fun onUnexpectedError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
+                override fun onFailure(failure: Throwable) {
+                    onCommonDone(failure.localizedMessage)
                 }
             })
         }
-        */
     }
 
     companion object {
