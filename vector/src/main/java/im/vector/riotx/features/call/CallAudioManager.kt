@@ -156,7 +156,7 @@ class CallAudioManager(
                 if (audioManager != null && isBluetoothHeadsetConnected(audioManager!!)) {
                     audioManager?.stopBluetoothSco()
                     audioManager?.isBluetoothScoOn = false
-                    audioManager?.setSpeakerphoneOn(false)
+                    audioManager?.isSpeakerphoneOn = false
                 }
                 bluetoothAdapter?.closeProfileProxy(BluetoothProfile.HEADSET, it)
             }
