@@ -141,7 +141,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
             id(titleRes)
-            title(stringProvider.getString(titleRes).toUpperCase())
+            title(stringProvider.getString(titleRes))
             expanded(isExpanded)
             unreadNotificationCount(unreadCount)
             showHighlighted(showHighlighted)

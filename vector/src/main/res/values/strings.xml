@@ -461,7 +461,7 @@
 
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_direct_chats">Direct Messages</string>
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
