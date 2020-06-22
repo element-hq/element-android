@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 data class KeyRequestListViewState(
         val incomingRequests: Async<List<IncomingRoomKeyRequest>> = Uninitialized,
-        val outgoingRoomKeyRequest: Async<List<OutgoingRoomKeyRequest>> = Uninitialized
+        val outgoingRoomKeyRequests: Async<List<OutgoingRoomKeyRequest>> = Uninitialized
 ) : MvRxState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
@@ -49,14 +49,14 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
 
     fun refresh() {
         viewModelScope.launch {
-            session.cryptoService().getOutgoingRoomKeyRequest().let {
+            session.cryptoService().getOutgoingRoomKeyRequests().let {
                 setState {
                     copy(
-                            outgoingRoomKeyRequest = Success(it)
+                            outgoingRoomKeyRequests = Success(it)
                     )
                 }
             }
-            session.cryptoService().getIncomingRoomKeyRequest().let {
+            session.cryptoService().getIncomingRoomKeyRequests().let {
                 setState {
                     copy(
                             incomingRequests = Success(it)
