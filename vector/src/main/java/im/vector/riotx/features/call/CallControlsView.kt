@@ -39,8 +39,10 @@ class CallControlsView @JvmOverloads constructor(
 
     @BindView(R.id.ringingControls)
     lateinit var ringingControls: ViewGroup
+
     @BindView(R.id.iv_icr_accept_call)
     lateinit var ringingControlAccept: ImageView
+
     @BindView(R.id.iv_icr_end_call)
     lateinit var ringingControlDecline: ImageView
 
@@ -96,8 +98,20 @@ class CallControlsView @JvmOverloads constructor(
 
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
-        muteIcon.setImageResource(if (state.isAudioMuted) R.drawable.ic_microphone_off else R.drawable.ic_microphone_on)
-        videoToggleIcon.setImageResource(if (state.isVideoEnabled) R.drawable.ic_video else R.drawable.ic_video_off)
+        if (state.isAudioMuted) {
+            muteIcon.setImageResource(R.drawable.ic_microphone_off)
+            muteIcon.contentDescription = resources.getString(R.string.a11y_unmute_microphone)
+        } else {
+            muteIcon.setImageResource(R.drawable.ic_microphone_on)
+            muteIcon.contentDescription = resources.getString(R.string.a11y_mute_microphone)
+        }
+        if (state.isVideoEnabled) {
+            videoToggleIcon.setImageResource(R.drawable.ic_video)
+            videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
+        } else {
+            videoToggleIcon.setImageResource(R.drawable.ic_video_off)
+            videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
+        }
 
         when (callState) {
             is CallState.Idle,
