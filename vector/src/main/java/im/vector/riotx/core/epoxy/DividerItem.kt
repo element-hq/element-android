@@ -29,6 +29,7 @@ abstract class DividerItem : VectorEpoxyModel<DividerItem.Holder>() {
     @EpoxyAttribute var color: Int = -1
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         if (color != -1) {
             holder.view.setBackgroundColor(color)
         }

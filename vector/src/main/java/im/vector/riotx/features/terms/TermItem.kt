@@ -45,6 +45,7 @@ abstract class TermItem : EpoxyModelWithHolder<TermItem.Holder>() {
     var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.checkbox.isChecked = checked
         holder.title.text = name
         holder.description.text = description

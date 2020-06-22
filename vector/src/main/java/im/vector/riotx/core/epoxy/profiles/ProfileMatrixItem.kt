@@ -40,6 +40,7 @@ abstract class ProfileMatrixItem : VectorEpoxyModel<ProfileMatrixItem.Holder>() 
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         val bestName = matrixItem.getBestName()
         val matrixId = matrixItem.id.takeIf { it != bestName }
         holder.view.setOnClickListener(clickListener)

@@ -16,6 +16,7 @@
 
 package im.vector.riotx.core.epoxy
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -38,11 +39,13 @@ abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>
 
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null
 
+    @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
     }
 
+    @CallSuper
     override fun unbind(holder: H) {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
         coroutineScope.coroutineContext.cancelChildren()

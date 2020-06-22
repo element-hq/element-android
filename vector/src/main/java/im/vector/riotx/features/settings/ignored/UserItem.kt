@@ -43,6 +43,7 @@ abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
     var itemClickAction: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.root.setOnClickListener { itemClickAction?.invoke() }
 
         avatarRenderer.render(matrixItem, holder.avatarImage)
