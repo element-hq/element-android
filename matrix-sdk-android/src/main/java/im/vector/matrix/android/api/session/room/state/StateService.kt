@@ -38,6 +38,11 @@ interface StateService {
     fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
+     * Update the history readability of the room
+     */
+    fun updateHistoryReadability(readability: String, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
      * Update the avatar of the room
      */
     fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable

@@ -27,12 +27,16 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
@@ -45,7 +49,8 @@ import javax.inject.Inject
 class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider
 ) : VectorBaseFragment(), RoomSettingsController.Callback {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
@@ -153,7 +158,36 @@ class RoomSettingsFragment @Inject constructor(
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onHistoryVisibilityClicked() {
-        
+    override fun onHistoryVisibilityClicked() = withState(viewModel) { state ->
+        val historyVisibilities = arrayOf(
+                RoomHistoryVisibility.SHARED,
+                RoomHistoryVisibility.INVITED,
+                RoomHistoryVisibility.JOINED,
+                RoomHistoryVisibility.WORLD_READABLE
+        )
+        val currentHistoryVisibility =
+                state.newHistoryVisibility ?: state.historyVisibilityEvent?.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val currentHistoryVisibilityIndex = historyVisibilities.indexOf(currentHistoryVisibility)
+
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(R.string.room_settings_room_read_history_rules_pref_title)
+            setSingleChoiceItems(historyVisibilities.map { formatHistoryVisibility(it) }.toTypedArray(), currentHistoryVisibilityIndex) { dialog, which ->
+                if (which != currentHistoryVisibilityIndex) {
+                    viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(historyVisibilities[which]))
+                }
+                dialog.cancel()
+            }
+            show()
+        }
+        return@withState
+    }
+
+    private fun formatHistoryVisibility(historyVisibility: RoomHistoryVisibility): String {
+        return when (historyVisibility) {
+            RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
+            RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
+            RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
+            RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
+        }
     }
 }

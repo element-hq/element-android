@@ -58,6 +58,7 @@ class RoomSettingsController @Inject constructor(
         val roomSummary = data?.roomSummary?.invoke() ?: return
 
         val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
+        val newHistoryVisibility = data.newHistoryVisibility?.let { formatRoomHistoryVisibility(it) }
 
         buildProfileSection(
                 stringProvider.getString(R.string.settings)
@@ -88,7 +89,7 @@ class RoomSettingsController @Inject constructor(
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = historyVisibility.toString(),
+                subtitle = newHistoryVisibility ?: historyVisibility,
                 dividerColor = dividerColor,
                 divider = false,
                 editable = true,
@@ -131,6 +132,10 @@ class RoomSettingsController @Inject constructor(
     private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
+        return formatRoomHistoryVisibility(historyVisibility)
+    }
+
+    private fun formatRoomHistoryVisibility(historyVisibility: RoomHistoryVisibility): String {
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
             RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
