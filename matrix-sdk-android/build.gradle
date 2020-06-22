@@ -163,7 +163,7 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
     // Web RTC
-    // TODO meant for development purposes only
+    // TODO meant for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
     implementation 'org.webrtc:google-webrtc:1.0.+'
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'

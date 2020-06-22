@@ -255,19 +255,25 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                     }
                 }
             }
-            EventType.CALL_ANSWER ->
+            EventType.CALL_ANSWER     ->
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_answered_call_by_you)
                 } else {
                     sp.getString(R.string.notice_answered_call, senderName)
                 }
-            EventType.CALL_HANGUP ->
+            EventType.CALL_HANGUP     ->
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_ended_call_by_you)
                 } else {
                     sp.getString(R.string.notice_ended_call, senderName)
                 }
-            else                  -> null
+            EventType.CALL_CANDIDATES ->
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_call_candidates_by_you)
+                } else {
+                    sp.getString(R.string.notice_call_candidates, senderName)
+                }
+            else                      -> null
         }
     }
 

@@ -420,7 +420,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                                      roomName: String,
                                      roomId: String,
                                      matrixId: String,
-                                     callId: String, fromBg: Boolean = false): Notification {
+                                     callId: String,
+                                     fromBg: Boolean = false): Notification {
         val builder = NotificationCompat.Builder(context, if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(roomName))
                 .apply {

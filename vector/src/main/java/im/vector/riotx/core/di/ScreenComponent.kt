@@ -149,7 +149,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: BootstrapBottomSheet)
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
     fun inject(bottomSheet: RoomWidgetsBottomSheet)
-    fun inject(callControlsBottomSheet: CallControlsBottomSheet)
+    fun inject(bottomSheet: CallControlsBottomSheet)
 
     /* ==========================================================================================
      * Others

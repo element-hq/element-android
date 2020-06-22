@@ -28,7 +28,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.riotx.R
-import kotlinx.android.synthetic.main.fragment_call_controls.view.*
+import kotlinx.android.synthetic.main.view_call_controls.view.*
 import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
@@ -54,7 +54,7 @@ class CallControlsView @JvmOverloads constructor(
     lateinit var videoToggleIcon: ImageView
 
     init {
-        ConstraintLayout.inflate(context, R.layout.fragment_call_controls, this)
+        ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         ButterKnife.bind(this)
     }

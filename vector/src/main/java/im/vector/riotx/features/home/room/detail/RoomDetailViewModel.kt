@@ -383,15 +383,16 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
-        R.id.clear_message_queue         ->
+        R.id.clear_message_queue ->
             // For now always disable when not in developer mode, worker cancellation is not working properly
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
-        R.id.resend_all                  -> timeline.failedToDeliverEventCount() > 0
-        R.id.clear_all                   -> timeline.failedToDeliverEventCount() > 0
-        R.id.open_matrix_apps            -> true
-        R.id.voice_call, R.id.video_call -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
-        R.id.hangup_call                 -> webRtcPeerConnectionManager.currentCall != null
-        else                             -> false
+        R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
+        R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+        R.id.open_matrix_apps    -> true
+        R.id.voice_call,
+        R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
+        R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
+        else                     -> false
     }
 
 // PRIVATE METHODS *****************************************************************************

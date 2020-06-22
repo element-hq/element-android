@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.call
 
 import im.vector.matrix.android.api.session.call.TurnServerResponse
-import im.vector.matrix.android.api.session.call.VoipApi
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -28,7 +27,7 @@ internal abstract class GetTurnServerTask : Task<GetTurnServerTask.Params, TurnS
 }
 
 internal class DefaultGetTurnServerTask @Inject constructor(private val voipAPI: VoipApi,
-                                                             private val eventBus: EventBus) : GetTurnServerTask() {
+                                                            private val eventBus: EventBus) : GetTurnServerTask() {
 
     override suspend fun execute(params: Params): TurnServerResponse {
         return executeRequest(eventBus) {

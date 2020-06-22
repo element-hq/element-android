@@ -77,7 +77,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
                 tools:text="@sample/matrix.json/data/roomTopic" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -115,7 +114,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activeCallView"
         tools:listitem="@layout/item_timeline_event_base" />
-
 
     <FrameLayout
         android:id="@+id/bannersContainer"
@@ -202,7 +200,6 @@
             tools:visibility="visible" />
     </androidx.cardview.widget.CardView>
 
-
     <im.vector.riotx.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"
         android:layout_width="wrap_content"
@@ -219,6 +216,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="16dp"
         app:tint="@color/black" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

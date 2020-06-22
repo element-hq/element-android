@@ -106,71 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_end_call"-->
-    <!--        android:layout_width="64dp"-->
-    <!--        android:layout_height="64dp"-->
-    <!--        android:background="@drawable/oval_destructive"-->
-    <!--        android:src="@drawable/ic_call_end"-->
-    <!--        android:tint="@color/white"-->
-    <!--        android:padding="8dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        android:layout_marginBottom="32dp"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"/>-->
-
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--        android:id="@+id/layout_call_actions"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="80dp"-->
-    <!--        android:layout_marginBottom="48dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        android:background="@drawable/bg_call_actions">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/iv_call_speaker"-->
-    <!--            android:layout_width="32dp"-->
-    <!--            android:layout_height="32dp"-->
-    <!--            android:src="@drawable/ic_call_speaker_default"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            android:layout_marginStart="32dp"/>-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/iv_call_flip_camera"-->
-    <!--            android:layout_width="32dp"-->
-    <!--            android:layout_height="32dp"-->
-    <!--            android:src="@drawable/ic_call_flip_camera_default"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            android:layout_marginStart="32dp"/>-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/iv_call_videocam_off"-->
-    <!--            android:layout_width="32dp"-->
-    <!--            android:layout_height="32dp"-->
-    <!--            android:src="@drawable/ic_call_videocam_off_default"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/iv_call_mute"-->
-    <!--            android:layout_width="32dp"-->
-    <!--            android:layout_height="32dp"-->
-    <!--            android:src="@drawable/ic_call_mute_default"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            android:layout_marginEnd="32dp"/>-->
-
-    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <FrameLayout
         android:id="@+id/hud_fragment_container"
@@ -181,5 +116,7 @@
             android:id="@+id/call_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

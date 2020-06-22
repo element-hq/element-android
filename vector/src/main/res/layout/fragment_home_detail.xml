@@ -63,7 +63,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
-
     <im.vector.riotx.core.ui.views.ActiveCallView
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
@@ -79,7 +78,6 @@
         android:background="?riotx_header_panel_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/activeCallPiPWrap"
@@ -99,6 +97,7 @@
             android:layout_height="120dp"
             android:visibility="gone"
             tools:visibility="visible" />
+
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

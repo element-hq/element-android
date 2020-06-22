@@ -20,7 +20,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.call.CallSignalingService
-import im.vector.matrix.android.api.session.call.VoipApi
 import im.vector.matrix.android.internal.session.SessionScope
 import retrofit2.Retrofit
 
@@ -38,8 +37,11 @@ internal abstract class CallModule {
     }
 
     @Binds
-    abstract fun bindCallService(service:DefaultCallSignalingService): CallSignalingService
+    abstract fun bindCallSignalingService(service: DefaultCallSignalingService): CallSignalingService
 
     @Binds
-    abstract fun bindTurnServerTask(task: DefaultGetTurnServerTask): GetTurnServerTask
+    abstract fun bindGetTurnServerTask(task: DefaultGetTurnServerTask): GetTurnServerTask
+
+    @Binds
+    abstract fun bindCallEventsObserverTask(task: DefaultCallEventsObserverTask): CallEventsObserverTask
 }

@@ -246,11 +246,11 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindCallEventObserver(callEventObserver: CallEventObserver): LiveEntityObserver
+    abstract fun bindCallEventObserver(observer: CallEventObserver): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomTombstoneEventLiveObserver(roomTombstoneEventLiveObserver: RoomTombstoneEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): LiveEntityObserver
 
     @Binds
     @IntoSet

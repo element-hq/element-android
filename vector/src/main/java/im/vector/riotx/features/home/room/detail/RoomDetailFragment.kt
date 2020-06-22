@@ -517,7 +517,6 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.voice_call,
             R.id.video_call          -> {
-                    // TODO CALL We should check/ask for permission here first
                     val activeCall = sharedCallActionViewModel.activeCall.value
                     val isVideoCall = item.itemId == R.id.video_call
                     if (activeCall != null) {

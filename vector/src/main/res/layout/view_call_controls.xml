@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ringingControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="16dp"
         tools:background="@color/password_strength_bar_ok"
         tools:visibility="visible">
 
+        <!-- TODO a11y -->
         <ImageView
             android:id="@+id/iv_icr_accept_call"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_positive"
             android:clickable="true"
             android:focusable="true"
@@ -33,7 +30,6 @@
             android:id="@+id/iv_icr_end_call"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_destructive"
             android:clickable="true"
             android:focusable="true"
@@ -55,39 +51,36 @@
         android:id="@+id/connectedControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="16dp"
         android:visibility="gone"
         tools:background="@color/password_strength_bar_low"
+        tools:layout_marginTop="120dp"
         tools:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_leftMiniControl"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_positive"
-            android:backgroundTint="?attr/riotx_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/ic_home_bottom_chat"
             android:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?attr/riotx_background"
             tools:ignore="MissingConstraints" />
-
 
         <ImageView
             android:id="@+id/iv_mute_toggle"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_positive"
-            android:backgroundTint="?attr/riotx_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_microphone_off"
             android:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?attr/riotx_background"
             tools:ignore="MissingConstraints"
             tools:src="@drawable/ic_microphone_on" />
 
@@ -95,7 +88,6 @@
             android:id="@+id/iv_end_call"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_destructive"
             android:clickable="true"
             android:focusable="true"
@@ -108,37 +100,33 @@
             android:id="@+id/iv_video_toggle"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_positive"
-            android:backgroundTint="?attr/riotx_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call_videocam_off_default"
             android:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?attr/riotx_background"
             tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/iv_more"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginBottom="32dp"
             android:background="@drawable/oval_positive"
-            android:backgroundTint="?attr/riotx_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
             android:src="@drawable/ic_more_vertical"
             android:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?attr/riotx_background"
             tools:ignore="MissingConstraints" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="iv_leftMiniControl, iv_mute_toggle, iv_end_call,iv_video_toggle,iv_more"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -208,4 +196,4 @@
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-</LinearLayout>
+</FrameLayout>

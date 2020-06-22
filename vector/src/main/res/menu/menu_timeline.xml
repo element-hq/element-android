@@ -34,6 +34,7 @@
         app:iconTint="@color/riotx_destructive_accent"
         app:showAsAction="always"
         tools:visible="true" />
+
     <item
         android:id="@+id/resend_all"
         android:icon="@drawable/ic_refresh_cw"

@@ -38,10 +38,6 @@ fun Session.configureAndStart(context: Context,
     startSyncing(context)
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
-
-    // TODO P1 From HomeActivity
-    // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
-    // @Inject lateinit var keyRequestHandler: KeyRequestHandler
 }
 
 fun Session.startSyncing(context: Context) {

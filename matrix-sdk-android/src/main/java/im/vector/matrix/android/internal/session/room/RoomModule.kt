@@ -24,8 +24,6 @@ import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.call.CallEventsObserverTask
-import im.vector.matrix.android.internal.session.call.DefaultCallEventsObserverTask
 import im.vector.matrix.android.internal.session.room.alias.DefaultGetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -203,8 +201,4 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
-
-    // TODO is this in the correct module?
-    @Binds
-    abstract fun bindCallEventsObserverTask(task: DefaultCallEventsObserverTask): CallEventsObserverTask
 }

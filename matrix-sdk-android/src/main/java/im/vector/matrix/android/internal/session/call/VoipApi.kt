@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.call
+package im.vector.matrix.android.internal.session.call
 
+import im.vector.matrix.android.api.session.call.TurnServerResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.GET
 
-// TODO Move to internal
 internal interface VoipApi {
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "voip/turnServer")

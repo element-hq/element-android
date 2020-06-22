@@ -22,32 +22,21 @@ import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 
 interface CallsListener {
-//    /**
-//     * Called when there is an incoming call within the room.
-//     * @param peerSignalingClient the incoming call
-//     */
-//    fun onIncomingCall(peerSignalingClient: PeerSignalingClient)
-//
-//    /**
-//     * An outgoing call is started.
-//     *
-//     * @param peerSignalingClient the outgoing call
-//     */
-//    fun onOutgoingCall(peerSignalingClient: PeerSignalingClient)
-//
-//    /**
-//     * Called when a called has been hung up
-//     *
-//     * @param peerSignalingClient the incoming call
-//     */
-//    fun onCallHangUp(peerSignalingClient: PeerSignalingClient)
-
+    /**
+     * Called when there is an incoming call within the room.
+     */
     fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent)
 
     fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent)
 
+    /**
+     * An outgoing call is started.
+     */
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent)
 
+    /**
+     * Called when a called has been hung up
+     */
     fun onCallHangupReceived(callHangupContent: CallHangupContent)
 
     fun onCallManagedByOtherSession(callId: String)

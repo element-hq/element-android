@@ -27,7 +27,7 @@ import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
-class ActiveCallViewHolder() {
+class ActiveCallViewHolder {
 
     private var activeCallPiP: SurfaceViewRenderer? = null
     private var activeCallView: ActiveCallView? = null

@@ -34,8 +34,8 @@ import javax.inject.Inject
 internal class CallEventObserver @Inject constructor(
         @SessionDatabase realmConfiguration: RealmConfiguration,
         @UserId private val userId: String,
-        private val task: CallEventsObserverTask)  :
-        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+        private val task: CallEventsObserverTask
+) : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
         EventEntity.whereTypes(it, listOf(

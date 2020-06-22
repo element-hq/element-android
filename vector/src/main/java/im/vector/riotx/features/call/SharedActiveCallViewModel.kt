@@ -19,13 +19,7 @@ package im.vector.riotx.features.call
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.session.call.MxCall
-import im.vector.riotx.core.platform.VectorSharedAction
 import javax.inject.Inject
-
-sealed class CallActions : VectorSharedAction {
-    data class GoToCallActivity(val mxCall: MxCall) : CallActions()
-    data class ToggleVisibility(val visible: Boolean) : CallActions()
-}
 
 class SharedActiveCallViewModel @Inject constructor(
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
