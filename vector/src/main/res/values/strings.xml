@@ -862,6 +862,9 @@
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
 
+    <string name="disabled_integration_dialog_title">Integrations are disabled</string>
+    <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
+
     <string name="settings_user_interface">User interface</string>
     <string name="settings_interface_language">Language</string>
     <string name="settings_select_language">Choose language</string>
@@ -1162,8 +1165,6 @@
     <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
     <!-- Widget Integration Manager -->
-    <string name="integration_manager_not_enabled_title">Integrations are disabled</string>
-    <string name="integration_manager_not_enabled_msg">Enable integrations in settings to allow this action.</string>
 
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>

@@ -32,6 +32,9 @@ private val DEFINED_TYPES by lazy {
     )
 }
 
+/**
+ * Ref: https://github.com/matrix-org/matrix-doc/issues/1236
+ */
 sealed class WidgetType(open val preferred: String, open val legacy: String = preferred) {
     object Jitsi : WidgetType("m.jitsi", "jitsi")
     object TradingView : WidgetType("m.tradingview")

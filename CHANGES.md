@@ -5,10 +5,11 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - "Add Matrix app" menu is now always visible (#1495)
 
 Bugfix 🐛:
- -
+ - Fix dark theme issue on login screen (#1097)
+ - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
 
 Translations 🗣:
  -
@@ -18,6 +19,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
 
 Other changes:
  -

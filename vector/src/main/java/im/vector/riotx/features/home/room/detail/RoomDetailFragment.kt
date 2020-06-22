@@ -315,7 +315,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
                 RoomDetailViewEvents.DisplayPromptForIntegrationManager  -> displayPromptForIntegrationManager()
                 is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
-                is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayEnableIntegrationsWarning()
+                is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
             }.exhaustive
         }
@@ -351,17 +351,6 @@ class RoomDetailFragment @Inject constructor(
                     )
                 }
                 .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun displayEnableIntegrationsWarning() {
-        AlertDialog.Builder(requireContext())
-                .setTitle(R.string.integration_manager_not_enabled_title)
-                .setMessage(R.string.integration_manager_not_enabled_msg)
-                .setPositiveButton(R.string.open_settings) { _, _ ->
-                    navigator.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
-                }
-                .setNegativeButton(R.string.cancel, null)
                 .show()
     }
 
@@ -494,6 +483,17 @@ class RoomDetailFragment @Inject constructor(
             }
             else                     -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun displayDisabledIntegrationDialog() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.disabled_integration_dialog_title)
+                .setMessage(R.string.disabled_integration_dialog_content)
+                .setPositiveButton(R.string.settings) { _, _ ->
+                    navigator.openSettings(requireActivity(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     private fun renderRegularMode(text: String) {
