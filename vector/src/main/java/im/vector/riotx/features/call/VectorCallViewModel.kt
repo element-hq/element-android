@@ -93,30 +93,34 @@ class VectorCallViewModel @AssistedInject constructor(
     var call: MxCall? = null
 
     var connectionTimoutTimer: Timer? = null
+    var hasBeenConnectedOnce = false
 
     private val callStateListener = object : MxCall.StateListener {
         override fun onStateUpdate(call: MxCall) {
             val callState = call.state
             if (callState is CallState.Connected && callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                hasBeenConnectedOnce = true
                 connectionTimoutTimer?.cancel()
                 connectionTimoutTimer = null
             } else {
                 // do we reset as long as it's moving?
                 connectionTimoutTimer?.cancel()
-                connectionTimoutTimer = Timer().apply {
-                    schedule(object : TimerTask() {
-                        override fun run() {
-                            session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
-                                override fun onFailure(failure: Throwable) {
-                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(null))
-                                }
+                if (hasBeenConnectedOnce) {
+                    connectionTimoutTimer = Timer().apply {
+                        schedule(object : TimerTask() {
+                            override fun run() {
+                                session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
+                                    override fun onFailure(failure: Throwable) {
+                                        _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(null))
+                                    }
 
-                                override fun onSuccess(data: TurnServerResponse) {
-                                    _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(data))
-                                }
-                            })
-                        }
-                    }, 30_000)
+                                    override fun onSuccess(data: TurnServerResponse) {
+                                        _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(data))
+                                    }
+                                })
+                            }
+                        }, 30_000)
+                    }
                 }
             }
             setState {
