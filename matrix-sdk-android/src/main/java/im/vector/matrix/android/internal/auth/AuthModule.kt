@@ -64,7 +64,7 @@ internal abstract class AuthModule {
     }
 
     @Binds
-    abstract fun bindLegacySessionImporter(service: DefaultLegacySessionImporter): LegacySessionImporter
+    abstract fun bindLegacySessionImporter(importer: DefaultLegacySessionImporter): LegacySessionImporter
 
     @Binds
     abstract fun bindSessionParamsStore(store: RealmSessionParamsStore): SessionParamsStore
