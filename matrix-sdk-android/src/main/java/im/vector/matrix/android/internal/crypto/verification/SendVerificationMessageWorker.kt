@@ -85,7 +85,7 @@ internal class SendVerificationMessageWorker(context: Context,
         private const val OUTPUT_KEY_FAILED = "failed"
 
         fun hasFailed(outputData: Data): Boolean {
-            return outputData.getBoolean(SendVerificationMessageWorker.OUTPUT_KEY_FAILED, false)
+            return outputData.getBoolean(OUTPUT_KEY_FAILED, false)
         }
     }
 }

@@ -28,7 +28,7 @@ import kotlin.math.ceil
  */
 object HkdfSha256 {
 
-    public fun deriveSecret(inputKeyMaterial: ByteArray, salt: ByteArray?, info: ByteArray, outputLength: Int): ByteArray {
+    fun deriveSecret(inputKeyMaterial: ByteArray, salt: ByteArray?, info: ByteArray, outputLength: Int): ByteArray {
         return expand(extract(salt, inputKeyMaterial), info, outputLength)
     }
 

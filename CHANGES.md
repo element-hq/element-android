@@ -23,6 +23,8 @@ Build 🧱:
 
 Other changes:
  - Fix minor typo in contribution guide (#1512)
+ - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
+ - Random housekeeping clean-ups indicated by Lint (#1520)
 
 Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
