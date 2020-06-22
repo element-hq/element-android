@@ -51,7 +51,8 @@ class CallAudioManager(
     private var connectedBlueToothHeadset: BluetoothProfile? = null
     private var wantsBluetoothConnection = false
 
-    private var bluetoothAdapter : BluetoothAdapter? = null
+    private var bluetoothAdapter: BluetoothAdapter? = null
+
     init {
         executor.execute {
             audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -179,7 +180,9 @@ class CallAudioManager(
     }
 
     private fun isBluetoothHeadsetConnected(audioManager: AudioManager) =
-            isBluetoothHeadsetOn() && !connectedBlueToothHeadset?.connectedDevices.isNullOrEmpty() && (wantsBluetoothConnection || audioManager.isBluetoothScoOn)
+            isBluetoothHeadsetOn()
+                    && !connectedBlueToothHeadset?.connectedDevices.isNullOrEmpty()
+                    && (wantsBluetoothConnection || audioManager.isBluetoothScoOn)
 
     fun setCurrentSoundDevice(device: SoundDevice) {
         executor.execute {
