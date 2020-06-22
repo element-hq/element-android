@@ -217,10 +217,6 @@
             </intent-filter>
         </service>
 
-<!--        <service-->
-<!--            android:name=".features.call.service.CallHeadsUpService"-->
-<!--            android:exported="false" />-->
-
         <!-- Receivers -->
 
         <receiver
