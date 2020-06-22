@@ -1262,11 +1262,11 @@ internal class DefaultCryptoService @Inject constructor(
         return "DefaultCryptoService of $userId ($deviceId)"
     }
 
-    override fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest> {
+    override fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest> {
         return cryptoStore.getOutgoingRoomKeyRequests()
     }
 
-    override fun getIncomingRoomKeyRequest(): List<IncomingRoomKeyRequest> {
+    override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
         return cryptoStore.getIncomingRoomKeyRequests()
     }
 

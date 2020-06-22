@@ -138,7 +138,9 @@ interface CryptoService {
 
     fun removeSessionListener(listener: NewSessionListener)
 
-    fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest>
-    fun getIncomingRoomKeyRequest(): List<IncomingRoomKeyRequest>
+    fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+
+    fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
+
     fun getGossipingEventsTrail(): List<Event>
 }
