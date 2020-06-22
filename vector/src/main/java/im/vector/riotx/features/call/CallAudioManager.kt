@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.call
 
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.Context
@@ -50,19 +51,30 @@ class CallAudioManager(
     private var connectedBlueToothHeadset: BluetoothProfile? = null
     private var wantsBluetoothConnection = false
 
+    private var bluetoothAdapter : BluetoothAdapter? = null
     init {
         executor.execute {
             audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         }
         val bm = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
-        bm?.adapter?.getProfileProxy(applicationContext, object : BluetoothProfile.ServiceListener {
+        val adapter = bm?.adapter
+        Timber.d("## VOIP Bluetooth adapter $adapter")
+        bluetoothAdapter = adapter
+        adapter?.getProfileProxy(applicationContext, object : BluetoothProfile.ServiceListener {
             override fun onServiceDisconnected(profile: Int) {
-                connectedBlueToothHeadset = null
+                Timber.d("## VOIP onServiceDisconnected $profile")
+                if (profile == BluetoothProfile.HEADSET) {
+                    connectedBlueToothHeadset = null
+                    configChange?.invoke()
+                }
             }
 
             override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
-                connectedBlueToothHeadset = proxy
-                configChange?.invoke()
+                Timber.d("## VOIP onServiceConnected $profile , proxy:$proxy")
+                if (profile == BluetoothProfile.HEADSET) {
+                    connectedBlueToothHeadset = proxy
+                    configChange?.invoke()
+                }
             }
         }, BluetoothProfile.HEADSET)
     }
@@ -140,6 +152,17 @@ class CallAudioManager(
             setMicrophoneMute(savedIsMicrophoneMute)
             audioManager?.mode = savedAudioMode
 
+            connectedBlueToothHeadset?.let {
+                if (audioManager != null && isBluetoothHeadsetConnected(audioManager!!)) {
+                    audioManager?.stopBluetoothSco()
+                    audioManager?.isBluetoothScoOn = false
+                    audioManager?.setSpeakerphoneOn(false)
+                }
+                bluetoothAdapter?.closeProfileProxy(BluetoothProfile.HEADSET, it)
+            }
+
+            audioManager?.mode = AudioManager.MODE_NORMAL
+
             @Suppress("DEPRECATION")
             audioManager?.abandonAudioFocus(audioFocusChangeListener)
         }
@@ -150,10 +173,13 @@ class CallAudioManager(
         if (audioManager.isSpeakerphoneOn) {
             return SoundDevice.SPEAKER
         } else {
-            if (isBluetoothHeadsetOn() && (wantsBluetoothConnection || audioManager.isBluetoothScoOn)) return SoundDevice.WIRELESS_HEADSET
+            if (isBluetoothHeadsetConnected(audioManager)) return SoundDevice.WIRELESS_HEADSET
             return if (isHeadsetOn()) SoundDevice.HEADSET else SoundDevice.PHONE
         }
     }
+
+    private fun isBluetoothHeadsetConnected(audioManager: AudioManager) =
+            isBluetoothHeadsetOn() && !connectedBlueToothHeadset?.connectedDevices.isNullOrEmpty() && (wantsBluetoothConnection || audioManager.isBluetoothScoOn)
 
     fun setCurrentSoundDevice(device: SoundDevice) {
         executor.execute {
@@ -225,7 +251,19 @@ class CallAudioManager(
     }
 
     private fun isBluetoothHeadsetOn(): Boolean {
-        return connectedBlueToothHeadset != null
+        Timber.v("## VOIP: AudioManager isBluetoothHeadsetOn")
+        try {
+            if (connectedBlueToothHeadset == null) return false.also {
+                Timber.v("## VOIP: AudioManager no connected bluetooth headset")
+            }
+            if (audioManager?.isBluetoothScoAvailableOffCall == false) return false.also {
+                Timber.v("## VOIP: AudioManager isBluetoothScoAvailableOffCall false")
+            }
+            return true
+        } catch (failure: Throwable) {
+            Timber.e("## VOIP: AudioManager isBluetoothHeadsetOn failure ${failure.localizedMessage}")
+            return false
+        }
     }
 
     /** Sets the speaker phone mode.  */
