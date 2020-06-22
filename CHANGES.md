@@ -2,7 +2,7 @@ Changes in RiotX 0.23.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Call with WebRTC support (##611)
 
 Improvements 🙌:
  - "Add Matrix app" menu is now always visible (#1495)

@@ -43,6 +43,8 @@
     <string name="notice_placed_video_call_by_you">You placed a video call.</string>
     <string name="notice_placed_voice_call">%s placed a voice call.</string>
     <string name="notice_placed_voice_call_by_you">You placed a voice call.</string>
+    <string name="notice_call_candidates">%s sent data to setup the call.</string>
+    <string name="notice_call_candidates_by_you">You sent data to setup the call.</string>
     <string name="notice_answered_call">%s answered the call.</string>
     <string name="notice_answered_call_by_you">You answered the call.</string>
     <string name="notice_ended_call">%s ended the call.</string>
@@ -361,5 +363,9 @@
     <string name="notice_end_to_end_unknown_algorithm_by_you">You turned on end-to-end encryption (unrecognised algorithm %1$s).</string>
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
+
+    <string name="call_notification_answer">Accept</string>
+    <string name="call_notification_reject">Decline</string>
+    <string name="call_notification_hangup">Hang Up</string>
 
 </resources>

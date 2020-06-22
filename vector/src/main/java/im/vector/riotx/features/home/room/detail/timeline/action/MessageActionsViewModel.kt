@@ -184,6 +184,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.CALL_INVITE,
+            EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
                 noticeEventFormatter.format(timelineEvent)

@@ -59,6 +59,7 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
+import im.vector.matrix.android.internal.session.call.CallEventObserver
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
@@ -242,6 +243,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindCallEventObserver(observer: CallEventObserver): LiveEntityObserver
 
     @Binds
     @IntoSet

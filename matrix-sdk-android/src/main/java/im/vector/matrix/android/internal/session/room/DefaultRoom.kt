@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.call.RoomCallService
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
@@ -58,6 +59,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val stateService: StateService,
                                                private val uploadsService: UploadsService,
                                                private val reportingService: ReportingService,
+                                               private val roomCallService: RoomCallService,
                                                private val readService: ReadService,
                                                private val typingService: TypingService,
                                                private val tagsService: TagsService,
@@ -74,6 +76,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         StateService by stateService,
         UploadsService by uploadsService,
         ReportingService by reportingService,
+        RoomCallService by roomCallService,
         ReadService by readService,
         TypingService by typingService,
         TagsService by tagsService,

@@ -30,6 +30,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -66,6 +67,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.subscribeLogError
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
@@ -96,7 +98,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stickerPickerActionHandler: StickerPickerActionHandler
+        private val stickerPickerActionHandler: StickerPickerActionHandler,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -121,8 +124,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    var timeline = room.createTimeline(eventId, timelineSettings)
-        private set
+    val timeline = room.createTimeline(eventId, timelineSettings)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -135,6 +137,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
+    private var canDoCall = false
 
     @AssistedInject.Factory
     interface Factory {
@@ -213,6 +216,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
+    fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
+
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.UserIsTyping                     -> handleUserIsTyping(action)
@@ -252,11 +257,23 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
-        }
+            is RoomDetailAction.StartCall                        -> handleStartCall(action)
+            is RoomDetailAction.EndCall                          -> handleEndCall()
+        }.exhaustive
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+    }
+
+    private fun handleStartCall(action: RoomDetailAction.StartCall) {
+        room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
+            webRtcPeerConnectionManager.startOutgoingCall(room.roomId, it, action.isVideo)
+        }
+    }
+
+    private fun handleEndCall() {
+        webRtcPeerConnectionManager.endCall()
     }
 
     private fun handleSelectStickerAttachment() {
@@ -367,11 +384,14 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
         R.id.clear_message_queue ->
-            /* For now always disable on production, worker cancellation is not working properly */
+            // For now always disable when not in developer mode, worker cancellation is not working properly
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
         R.id.open_matrix_apps    -> true
+        R.id.voice_call,
+        R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
+        R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
         else                     -> false
     }
 
@@ -999,6 +1019,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .execute { async ->
                     val typingRoomMembers =
                             typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds.orEmpty(), room)
+
+                    canDoCall = async.invoke()?.canStartCall.orFalse()
 
                     copy(
                             asyncRoomSummary = async,

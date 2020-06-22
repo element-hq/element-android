@@ -31,6 +31,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
@@ -133,6 +134,8 @@ interface VectorComponent {
     fun alertManager(): PopupAlertManager
 
     fun reAuthHelper(): ReAuthHelper
+
+    fun webRtcPeerConnectionManager(): WebRtcPeerConnectionManager
 
     @Component.Factory
     interface Factory {

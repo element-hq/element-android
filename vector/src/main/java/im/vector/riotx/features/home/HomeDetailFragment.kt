@@ -37,7 +37,12 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.ui.views.ActiveCallView
+import im.vector.riotx.core.ui.views.ActiveCallViewHolder
 import im.vector.riotx.core.ui.views.KeysBackupBanner
+import im.vector.riotx.features.call.SharedActiveCallViewModel
+import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
@@ -46,6 +51,11 @@ import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
+import kotlinx.android.synthetic.main.fragment_home_detail.activeCallPiP
+import kotlinx.android.synthetic.main.fragment_home_detail.activeCallPiPWrap
+import kotlinx.android.synthetic.main.fragment_home_detail.activeCallView
+import kotlinx.android.synthetic.main.fragment_home_detail.syncStateView
+import kotlinx.android.synthetic.main.fragment_room_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,8 +66,9 @@ private const val INDEX_ROOMS = 2
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
-        private val alertManager: PopupAlertManager
-) : VectorBaseFragment(), KeysBackupBanner.Delegate {
+        private val alertManager: PopupAlertManager,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
@@ -65,16 +76,21 @@ class HomeDetailFragment @Inject constructor(
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
 
     override fun getLayoutResId() = R.layout.fragment_home_detail
+
+    private val activeCallViewHolder = ActiveCallViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
+        setupActiveCallView()
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
@@ -105,6 +121,13 @@ class HomeDetailFragment @Inject constructor(
                 }
             }
         }
+
+        sharedCallActionViewModel
+                .activeCall
+                .observe(viewLifecycleOwner, Observer {
+                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
+                    invalidateOptionsMenu()
+                })
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -203,6 +226,15 @@ class HomeDetailFragment @Inject constructor(
         homeKeysBackupBanner.delegate = this
     }
 
+    private fun setupActiveCallView() {
+        activeCallViewHolder.bind(
+                activeCallPiP,
+                activeCallView,
+                activeCallPiPWrap,
+                this
+        )
+    }
+
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
@@ -282,5 +314,21 @@ class HomeDetailFragment @Inject constructor(
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
         RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_home
+    }
+
+    override fun onTapToReturnToCall() {
+        sharedCallActionViewModel.activeCall.value?.let { call ->
+            VectorCallActivity.newIntent(
+                    context = requireContext(),
+                    callId = call.callId,
+                    roomId = call.roomId,
+                    otherUserId = call.otherUserId,
+                    isIncomingCall = !call.isOutgoing,
+                    isVideoCall = call.isVideoCall,
+                    mode = null
+            ).let {
+                startActivity(it)
+            }
+        }
     }
 }

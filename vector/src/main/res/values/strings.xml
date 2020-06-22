@@ -211,6 +211,20 @@
     <string name="call_failed_no_ice_use_alt">Try using %s</string>
     <string name="call_failed_dont_ask_again">Do not ask me again</string>
 
+    <string name="call_failed_no_connection">RiotX Call Failed</string>
+    <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
+
+    <string name="call_select_sound_device">Select Sound Device</string>
+    <string name="sound_device_phone">Phone</string>
+    <string name="sound_device_speaker">Speaker</string>
+    <string name="sound_device_headset">Headset</string>
+    <string name="sound_device_wireless_headset">Wireless Headset</string>
+    <string name="call_switch_camera">Switch Camera</string>
+    <string name="call_camera_front">Front</string>
+    <string name="call_camera_back">Back</string>
+    <string name="call_format_turn_hd_off">Turn HD off</string>
+    <string name="call_format_turn_hd_on">Turn HD on</string>
+
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
@@ -362,6 +376,8 @@
     <string name="incoming_voice_call">Incoming Voice Call</string>
     <string name="call_in_progress">Call In Progress…</string>
     <string name="video_call_in_progress">Video Call In Progress…</string>
+    <string name="active_call_with_duration">Active Call (%s)</string>
+    <string name="return_to_call">Return to call</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
@@ -2455,5 +2471,10 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
     <string name="identity_server_set_alternative_submit">Submit</string>
     <string name="power_level_edit_title">Set role</string>
+    <string name="a11y_open_chat">Open chat</string>
+    <string name="a11y_mute_microphone">Mute the microphone</string>
+    <string name="a11y_unmute_microphone">Unmute the microphone</string>
+    <string name="a11y_stop_camera">Stop the camera</string>
+    <string name="a11y_start_camera">Start the camera</string>
 
 </resources>
