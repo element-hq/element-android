@@ -111,6 +111,15 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
+    override fun updateHistoryReadability(readability: String, callback: MatrixCallback<Unit>): Cancelable {
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                body = mapOf("history_visibility" to readability),
+                callback = callback,
+                stateKey = null
+        )
+    }
+
     override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
         val cancelableBag = CancelableBag()
         val workerParams = UploadAvatarWorker.Params(sessionId, avatarUri, fileName)

@@ -111,6 +111,10 @@ class RxRoom(private val room: Room) {
         room.updateName(name, it)
     }
 
+    fun updateHistoryReadability(readability: String) = completableBuilder<Unit> {
+        room.updateHistoryReadability(readability, it)
+    }
+
     fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {
         room.updateAvatar(avatarUri, fileName, it)
     }

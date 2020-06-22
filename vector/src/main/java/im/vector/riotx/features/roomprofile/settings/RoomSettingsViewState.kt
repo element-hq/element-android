@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
@@ -32,6 +33,7 @@ data class RoomSettingsViewState(
         val newName: String? = null,
         val newTopic: String? = null,
         val newAvatar: MultiPickerImageType? = null,
+        val newHistoryVisibility: RoomHistoryVisibility? = null,
         val showSaveAction: Boolean = false
 ) : MvRxState {
 
