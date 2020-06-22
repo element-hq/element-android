@@ -252,7 +252,7 @@ class KeyShareTests : InstrumentedTest {
             }
         })
 
-        val txId: String = "m.testVerif12"
+        val txId = "m.testVerif12"
         aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
                 ?: "", txId)
 

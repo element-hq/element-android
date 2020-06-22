@@ -69,7 +69,7 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: " + hsUri)
+                throw RuntimeException("Invalid home server URI: $hsUri")
             }
             // ensure trailing /
             val hsString = hsUri.toString().ensureTrailingSlash()
