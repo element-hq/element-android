@@ -207,13 +207,15 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
+        val now = System.currentTimeMillis()
         val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
                 continue
             }
+            val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                 val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                     event.prevContent
