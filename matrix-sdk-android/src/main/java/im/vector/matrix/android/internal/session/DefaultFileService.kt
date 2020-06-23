@@ -58,6 +58,7 @@ internal class DefaultFileService @Inject constructor(
     /**
      * Download file in the cache folder, and eventually decrypt it
      * TODO implement clear file, to delete "MF"
+     * TODO looks like files are copied 3 times
      */
     override fun downloadFile(downloadMode: FileService.DownloadMode,
                               id: String,
@@ -87,20 +88,30 @@ internal class DefaultFileService @Inject constructor(
                             return@flatMap Try.Failure(e)
                         }
 
-                        var inputStream = response.body?.byteStream()
-                        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
-
-                        if (!response.isSuccessful || inputStream == null) {
+                        if (!response.isSuccessful) {
                             return@flatMap Try.Failure(IOException())
                         }
 
+                        val source = response.body?.source()
+                                ?: return@flatMap Try.Failure(IOException())
+
+                        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
+
                         if (elementToDecrypt != null) {
                             Timber.v("## decrypt file")
-                            inputStream = MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
-                                    ?: return@flatMap Try.Failure(IllegalStateException("Decryption error"))
+                            val decryptedStream = MXEncryptedAttachments.decryptAttachment(source.inputStream(), elementToDecrypt)
+                            response.close()
+                            if (decryptedStream == null) {
+                                return@flatMap Try.Failure(IllegalStateException("Decryption error"))
+                            } else {
+                                decryptedStream.use {
+                                    writeToFile(decryptedStream, destFile)
+                                }
+                            }
+                        } else {
+                            writeToFile(source.inputStream(), destFile)
+                            response.close()
                         }
-
-                        writeToFile(inputStream, destFile)
                     }
 
                     Try.just(copyFile(destFile, downloadMode))

@@ -167,6 +167,7 @@ import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
@@ -209,6 +210,7 @@ class RoomDetailFragment @Inject constructor(
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
+        private val notificationUtils: NotificationUtils,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -486,8 +488,19 @@ class RoomDetailFragment @Inject constructor(
         if (action.throwable != null) {
             activity.toast(errorFormatter.toHumanReadable(action.throwable))
         } else if (action.file != null) {
-            activity.toast(getString(R.string.downloaded_file, action.file.path))
-            addEntryToDownloadManager(activity, action.file, action.mimeType)
+            addEntryToDownloadManager(activity, action.file, action.mimeType)?.let {
+                // This is a temporary solution to help users find downloaded files
+                // there is a better way to do that
+                // On android Q+ this method returns the file URI, on older
+                // it returns null, and the download manager handles the notification
+                notificationUtils.buildDownloadFileNotification(
+                        it,
+                        action.file.name ?: "file",
+                        action.mimeType
+                ).let { notification ->
+                    notificationUtils.showNotificationMessage("DL", action.file.absolutePath.hashCode(), notification)
+                }
+            }
         }
     }
 
@@ -524,24 +537,24 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.voice_call,
             R.id.video_call          -> {
-                    val activeCall = sharedCallActionViewModel.activeCall.value
-                    val isVideoCall = item.itemId == R.id.video_call
-                    if (activeCall != null) {
-                        // resume existing if same room, if not prompt to kill and then restart new call?
-                        if (activeCall.roomId == roomDetailArgs.roomId) {
-                            onTapToReturnToCall()
-                        }
+                val activeCall = sharedCallActionViewModel.activeCall.value
+                val isVideoCall = item.itemId == R.id.video_call
+                if (activeCall != null) {
+                    // resume existing if same room, if not prompt to kill and then restart new call?
+                    if (activeCall.roomId == roomDetailArgs.roomId) {
+                        onTapToReturnToCall()
+                    }
 //                        else {
-                            // TODO might not work well, and should prompt
+                    // TODO might not work well, and should prompt
 //                            webRtcPeerConnectionManager.endCall()
 //                            safeStartCall(it, isVideoCall)
 //                        }
-                    } else {
-                        safeStartCall(isVideoCall)
-                    }
+                } else {
+                    safeStartCall(isVideoCall)
+                }
                 true
             }
-            R.id.hangup_call -> {
+            R.id.hangup_call         -> {
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
