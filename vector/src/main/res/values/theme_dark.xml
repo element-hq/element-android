@@ -54,6 +54,8 @@
         <item name="android:colorBackground">?riotx_background</item>
         <item name="colorOnBackground">?riotx_text_primary</item>
 
+        <item name="riotx_bottom_sheet_background">@color/riotx_bottom_sheet_background_dark</item>
+
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/riotx_accent</item>
 

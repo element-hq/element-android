@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:orientation="vertical">
+    android:background="?riotx_bottom_sheet_background"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/bottomSheetTitle"
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:textColor="?android:textColorSecondary"
+        android:textColor="?riotx_text_primary"
         android:textSize="16sp"
         tools:text="@string/reactions" />
 

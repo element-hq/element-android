@@ -4,6 +4,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_bottom_sheet_background"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
@@ -16,8 +17,8 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_title"
-        android:textSize="20sp"
         android:textColor="?riotx_text_primary"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -59,9 +60,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:textColor="?riotx_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="?riotx_text_primary"
                 tools:text="User name" />
 
             <TextView
@@ -69,8 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="14sp"
                 android:textColor="?riotx_text_secondary"
+                android:textSize="14sp"
                 tools:text="\@foo:matrix.org" />
         </LinearLayout>
     </LinearLayout>
@@ -100,7 +101,7 @@
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:layout_marginRight="@dimen/layout_vertical_margin"
             android:text="@string/decline"
-            android:textAllCaps="true"/>
+            android:textAllCaps="true" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/widgetPermissionContinue"
