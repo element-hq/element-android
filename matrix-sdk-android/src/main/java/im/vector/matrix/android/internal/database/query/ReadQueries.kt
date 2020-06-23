@@ -22,8 +22,9 @@ import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import io.realm.Realm
+import io.realm.RealmConfiguration
 
-internal fun isEventRead(monarchy: Monarchy,
+internal fun isEventRead(realmConfiguration: RealmConfiguration,
                          userId: String?,
                          roomId: String?,
                          eventId: String?): Boolean {
@@ -35,14 +36,14 @@ internal fun isEventRead(monarchy: Monarchy,
     }
     var isEventRead = false
 
-    monarchy.doWithRealm { realm ->
-        val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@doWithRealm
+    Realm.getInstance(realmConfiguration).use{ realm ->
+        val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@use
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
         isEventRead = if (eventToCheck == null || eventToCheck.root?.sender == userId) {
             true
         } else {
             val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-                    ?: return@doWithRealm
+                    ?: return@use
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex
                     ?: Int.MIN_VALUE
             val eventToCheckIndex = eventToCheck.displayIndex
@@ -54,13 +55,13 @@ internal fun isEventRead(monarchy: Monarchy,
     return isEventRead
 }
 
-internal fun isReadMarkerMoreRecent(monarchy: Monarchy,
+internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
                                     roomId: String?,
                                     eventId: String?): Boolean {
     if (roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }
-    return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+    return Realm.getInstance(realmConfiguration).use { realm ->
         val eventToCheck = TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()
         val eventToCheckChunk = eventToCheck?.chunk?.firstOrNull()
         val readMarker = ReadMarkerEntity.where(realm, roomId).findFirst() ?: return false

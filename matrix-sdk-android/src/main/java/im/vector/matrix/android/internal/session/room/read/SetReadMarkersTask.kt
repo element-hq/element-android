@@ -75,7 +75,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         } else {
             params.readReceiptEventId
         }
-        if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy, params.roomId, fullyReadEventId)) {
+        if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy.realmConfiguration, params.roomId, fullyReadEventId)) {
             if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")
             } else {
@@ -83,7 +83,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             }
         }
         if (readReceiptEventId != null
-                && !isEventRead(monarchy, userId, params.roomId, readReceiptEventId)) {
+                && !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
@@ -24,36 +23,34 @@ import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.getOrNull
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
+import io.realm.Realm
 import javax.inject.Inject
 
-internal class RoomAvatarResolver @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                      @UserId private val userId: String) {
+internal class RoomAvatarResolver @Inject constructor(@UserId private val userId: String) {
 
     /**
      * Compute the room avatar url
+     * @param realm: the current instance of realm
      * @param roomId the roomId of the room to resolve avatar
      * @return the room avatar url, can be a fallback to a room member avatar or null
      */
-    fun resolve(roomId: String): String? {
-        var res: String? = null
-        monarchy.doWithRealm { realm ->
-            val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_AVATAR, stateKey = "")?.root
-            res = ContentMapper.map(roomName?.content).toModel<RoomAvatarContent>()?.avatarUrl
-            if (!res.isNullOrEmpty()) {
-                return@doWithRealm
-            }
-            val roomMembers = RoomMemberHelper(realm, roomId)
-            val members = roomMembers.queryActiveRoomMembersEvent().findAll()
-            // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
-            if (members.size == 1) {
-                res = members.firstOrNull()?.avatarUrl
-            } else if (members.size == 2) {
-                val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
-                res = firstOtherMember?.avatarUrl
-            }
+    fun resolve(realm: Realm, roomId: String): String? {
+        var res: String?
+        val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_AVATAR, stateKey = "")?.root
+        res = ContentMapper.map(roomName?.content).toModel<RoomAvatarContent>()?.avatarUrl
+        if (!res.isNullOrEmpty()) {
+            return res
+        }
+        val roomMembers = RoomMemberHelper(realm, roomId)
+        val members = roomMembers.queryActiveRoomMembersEvent().findAll()
+        // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
+        if (members.size == 1) {
+            res = members.firstOrNull()?.avatarUrl
+        } else if (members.size == 2) {
+            val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
+            res = firstOtherMember?.avatarUrl
         }
         return res
     }

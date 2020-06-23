@@ -69,7 +69,6 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         }.also {
             Timber.v("Finish handling toDevice in $it ms")
         }
-
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {
@@ -104,7 +103,6 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
             tokenStore.saveToken(realm, syncResponse.nextBatch)
         }
-
         // Everything else we need to do outside the transaction
         syncResponse.rooms?.also {
             checkPushRules(it, isInitialSync)

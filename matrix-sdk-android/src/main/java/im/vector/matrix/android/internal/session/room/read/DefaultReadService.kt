@@ -83,7 +83,7 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override fun isEventRead(eventId: String): Boolean {
-        return isEventRead(monarchy, userId, roomId, eventId)
+        return isEventRead(monarchy.realmConfiguration, userId, roomId, eventId)
     }
 
     override fun getReadMarkerLive(): LiveData<Optional<String>> {

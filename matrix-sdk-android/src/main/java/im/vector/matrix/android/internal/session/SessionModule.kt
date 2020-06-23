@@ -37,15 +37,12 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesSer
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
-import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
-import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.InMemorySessionDatabase
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -283,7 +280,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
-
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
