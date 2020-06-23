@@ -122,7 +122,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             it.summary = session.getUser(session.myUserId)?.displayName ?: ""
             it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                onDisplayNameClick(newValue?.let { (it as String).trim() })
+                newValue
+                        ?.let { value -> (value as? String)?.trim() }
+                        ?.let { value -> onDisplayNameChanged(value) }
                 false
             }
         }
@@ -857,20 +859,21 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     /**
      * Update the displayname.
      */
-    private fun onDisplayNameClick(value: String?) {
-        value ?: return
+    private fun onDisplayNameChanged(value: String) {
         val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
         if (currentDisplayName != value) {
             displayLoadingView()
 
             session.setDisplayName(session.myUserId, value, object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
+                    if (!isAdded) return
                     // refresh the settings value
                     mDisplayNamePreference.summary = value
                     onCommonDone(null)
                 }
 
                 override fun onFailure(failure: Throwable) {
+                    if (!isAdded) return
                     onCommonDone(failure.localizedMessage)
                 }
             })
