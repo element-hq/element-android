@@ -33,8 +33,8 @@
     <string name="notice_display_name_set_by_you">You set your display name to %1$s</string>
     <string name="notice_display_name_changed_from">%1$s changed their display name from %2$s to %3$s</string>
     <string name="notice_display_name_changed_from_by_you">You changed your display name from %1$s to %2$s</string>
-    <string name="notice_display_name_removed">%1$s removed their display name (%2$s)</string>
-    <string name="notice_display_name_removed_by_you">You removed your display name (%1$s)</string>
+    <string name="notice_display_name_removed">%1$s removed their display name (it was %2$s)</string>
+    <string name="notice_display_name_removed_by_you">You removed your display name (it was %1$s)</string>
     <string name="notice_room_topic_changed">%1$s changed the topic to: %2$s</string>
     <string name="notice_room_topic_changed_by_you">You changed the topic to: %1$s</string>
     <string name="notice_room_name_changed">%1$s changed the room name to: %2$s</string>

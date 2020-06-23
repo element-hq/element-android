@@ -34,7 +34,8 @@ import javax.inject.Inject
 internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
                                                          private val monarchy: Monarchy,
                                                          private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
-                                                         private val getProfileInfoTask: GetProfileInfoTask) : ProfileService {
+                                                         private val getProfileInfoTask: GetProfileInfoTask,
+                                                         private val setDisplayNameTask: SetDisplayNameTask) : ProfileService {
 
     override fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
         val params = GetProfileInfoTask.Params(userId)
@@ -50,6 +51,14 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                             matrixCallback.onFailure(failure)
                         }
                     }
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return setDisplayNameTask
+                .configureWith(SetDisplayNameTask.Params(userId = userId, newDisplayName = newDisplayName)) {
+                    callback = matrixCallback
                 }
                 .executeBy(taskExecutor)
     }

@@ -35,11 +35,18 @@ interface ProfileService {
     }
 
     /**
-     * Return the current dispayname for this user
+     * Return the current display name for this user
      * @param userId the userId param to look for
      *
      */
     fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
+
+    /**
+     * Update the display name for this user
+     * @param userId the userId to update the display name of
+     * @param newDisplayName the new display name of the user
+     */
+    fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Return the current avatarUrl for this user.
