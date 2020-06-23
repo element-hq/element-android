@@ -37,6 +37,8 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesSer
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
+import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
+import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -63,6 +65,8 @@ import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
+import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
+import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -70,6 +74,8 @@ import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEve
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
 import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
+import im.vector.matrix.android.internal.session.widgets.DefaultWidgetURLFormatter
+import im.vector.matrix.android.internal.session.widgets.WidgetManager
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -236,27 +242,48 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): LiveEntityObserver
+    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventsPruner(pruner: EventsPruner): LiveEntityObserver
+    abstract fun bindEventsPruner(pruner: EventsPruner): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): LiveEntityObserver
+    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): LiveEntityObserver
+    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindWidgetManager(observer: WidgetManager): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindIntegrationManager(observer: IntegrationManager): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindWidgetUrlFormatter(observer: DefaultWidgetURLFormatter): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindShieldTrustUpdated(observer: ShieldTrustUpdater): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
+
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
