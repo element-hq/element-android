@@ -24,9 +24,11 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.Locale
@@ -68,6 +70,20 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             newTopic = roomSummary?.topic
                     )
                 }
+
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive.subscribe {
+            val powerLevelsHelper = PowerLevelsHelper(it)
+            val permissions = RoomSettingsViewState.ActionPermissions(
+                    canChangeName = powerLevelsHelper.isUserAbleToChangeRoomName(session.myUserId),
+                    canChangeTopic = powerLevelsHelper.isUserAbleToChangeRoomTopic(session.myUserId),
+                    canChangeCanonicalAlias = powerLevelsHelper.isUserAbleToChangeRoomCanonicalAlias(session.myUserId),
+                    canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId),
+                    canChangeHistoryReadability = powerLevelsHelper.isUserAbleToChangeRoomHistoryReadability(session.myUserId)
+            )
+            setState { copy(actionPermissions = permissions) }
+        }.disposeOnClear()
     }
 
     override fun handle(action: RoomSettingsAction) {

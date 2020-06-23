@@ -35,8 +35,17 @@ data class RoomSettingsViewState(
         val newAvatar: MultiPickerImageType? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
         val newAlias: String? = null,
-        val showSaveAction: Boolean = false
+        val showSaveAction: Boolean = false,
+        val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+
+    data class ActionPermissions(
+            val canChangeName: Boolean = false,
+            val canChangeTopic: Boolean = false,
+            val canChangeCanonicalAlias: Boolean = false,
+            val canChangeAvatar: Boolean = false,
+            val canChangeHistoryReadability: Boolean = false
+    )
 }

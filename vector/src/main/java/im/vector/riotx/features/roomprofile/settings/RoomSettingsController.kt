@@ -67,7 +67,7 @@ class RoomSettingsController @Inject constructor(
 
         formEditTextItem {
             id("name")
-            /*enabled(enableFormElement)*/
+            enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
             hint(stringProvider.getString(R.string.room_settings_name_hint))
 
@@ -78,7 +78,7 @@ class RoomSettingsController @Inject constructor(
 
         formEditTextItem {
             id("topic")
-            /*enabled(enableFormElement)*/
+            enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
             hint(stringProvider.getString(R.string.room_settings_topic_hint))
 
@@ -89,7 +89,7 @@ class RoomSettingsController @Inject constructor(
 
         formEditTextItem {
             id("alias")
-            /*enabled(enableFormElement)*/
+            enabled(data.actionPermissions.canChangeCanonicalAlias)
             value(data.newAlias ?: roomSummary.canonicalAlias)
             hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
 
@@ -104,7 +104,7 @@ class RoomSettingsController @Inject constructor(
                 subtitle = newHistoryVisibility ?: historyVisibility,
                 dividerColor = dividerColor,
                 divider = false,
-                editable = true,
+                editable = data.actionPermissions.canChangeHistoryReadability,
                 action = { callback?.onHistoryVisibilityClicked() }
         )
 
@@ -114,7 +114,7 @@ class RoomSettingsController @Inject constructor(
                 subtitle = "",
                 dividerColor = dividerColor,
                 divider = true,
-                editable = true,
+                editable = data.actionPermissions.canChangeAvatar,
                 accessoryMatrixItem = roomSummary.toMatrixItem(),
                 avatarRenderer = avatarRenderer,
                 action = { callback?.onPhotoClicked() }
