@@ -32,13 +32,14 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor,
         private val setReadMarkersTask: SetReadMarkersTask,
         private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,

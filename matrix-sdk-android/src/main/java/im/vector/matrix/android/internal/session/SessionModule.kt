@@ -43,6 +43,7 @@ import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.InMemorySessionDatabase
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -165,9 +166,9 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
+        @SessionDatabase
         @SessionScope
-        fun providesMonarchy(@SessionDatabase
-                             realmConfiguration: RealmConfiguration): Monarchy {
+        fun providesMonarchy(@SessionDatabase realmConfiguration: RealmConfiguration): Monarchy {
             return Monarchy.Builder()
                     .setRealmConfiguration(realmConfiguration)
                     .build()

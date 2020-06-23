@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import javax.inject.Inject
@@ -30,7 +31,7 @@ internal interface SaveIgnoredUsersTask : Task<SaveIgnoredUsersTask.Params, Unit
     )
 }
 
-internal class DefaultSaveIgnoredUsersTask @Inject constructor(private val monarchy: Monarchy) : SaveIgnoredUsersTask {
+internal class DefaultSaveIgnoredUsersTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : SaveIgnoredUsersTask {
 
     override suspend fun execute(params: SaveIgnoredUsersTask.Params) {
         monarchy.awaitTransaction { realm ->

@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.membership.admin.MembershipAdminTask
@@ -43,7 +44,7 @@ import io.realm.RealmQuery
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val inviteTask: InviteTask,

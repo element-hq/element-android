@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityF
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ import javax.inject.Inject
  * This class computes room display name
  */
 internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
-                                                           private val monarchy: Monarchy,
+                                                           @SessionDatabase private val monarchy: Monarchy,
                                                            @UserId private val userId: String
 ) {
 

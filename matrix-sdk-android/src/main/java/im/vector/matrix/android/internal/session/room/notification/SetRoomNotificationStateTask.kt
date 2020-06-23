@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.internal.database.model.PushRuleEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.pushers.AddPushRuleTask
 import im.vector.matrix.android.internal.session.pushers.RemovePushRuleTask
 import im.vector.matrix.android.internal.task.Task
@@ -34,7 +35,7 @@ internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateT
     )
 }
 
-internal class DefaultSetRoomNotificationStateTask @Inject constructor(private val monarchy: Monarchy,
+internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                                        private val removePushRuleTask: RemovePushRuleTask,
                                                                        private val addPushRuleTask: AddPushRuleTask)
     : SetRoomNotificationStateTask {

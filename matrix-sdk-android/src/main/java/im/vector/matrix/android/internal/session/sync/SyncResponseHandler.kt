@@ -21,6 +21,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.reportSubtask
@@ -31,7 +32,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-internal class SyncResponseHandler @Inject constructor(private val monarchy: Monarchy,
+internal class SyncResponseHandler @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                        private val roomSyncHandler: RoomSyncHandler,
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,

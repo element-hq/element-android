@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.isReadMarkerMoreRecent
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -53,7 +54,7 @@ private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,

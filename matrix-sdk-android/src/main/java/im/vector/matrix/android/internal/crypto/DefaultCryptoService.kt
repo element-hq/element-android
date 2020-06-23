@@ -84,6 +84,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
@@ -168,7 +169,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,

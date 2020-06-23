@@ -39,6 +39,7 @@ import im.vector.matrix.android.internal.database.query.findLastForwardChunkOfRo
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -48,7 +49,7 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     /**
      * <pre>

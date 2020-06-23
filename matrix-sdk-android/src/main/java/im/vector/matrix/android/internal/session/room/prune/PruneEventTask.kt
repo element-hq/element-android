@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -40,7 +41,7 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
     )
 }
 
-internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
+internal class DefaultPruneEventTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : PruneEventTask {
 
     override suspend fun execute(params: PruneEventTask.Params) {
         monarchy.awaitTransaction { realm ->

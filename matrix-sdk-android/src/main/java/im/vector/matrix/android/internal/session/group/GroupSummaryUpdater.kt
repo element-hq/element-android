@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -37,7 +38,7 @@ private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 internal class GroupSummaryUpdater @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
-        private val monarchy: Monarchy)
+        @SessionDatabase private val monarchy: Monarchy)
     : RealmLiveEntityObserver<GroupEntity>(monarchy.realmConfiguration) {
 
     override val query = Monarchy.Query { GroupEntity.where(it) }

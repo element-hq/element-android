@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -46,7 +47,7 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,

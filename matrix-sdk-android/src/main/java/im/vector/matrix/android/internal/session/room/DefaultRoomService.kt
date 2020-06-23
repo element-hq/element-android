@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.findByAlias
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -46,7 +47,7 @@ import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val roomSummaryMapper: RoomSummaryMapper,
         private val createRoomTask: CreateRoomTask,
         private val joinRoomTask: JoinRoomTask,

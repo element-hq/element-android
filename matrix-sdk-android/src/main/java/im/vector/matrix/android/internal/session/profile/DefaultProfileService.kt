@@ -26,13 +26,14 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.kotlin.where
 import javax.inject.Inject
 
 internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
-                                                         private val monarchy: Monarchy,
+                                                         @SessionDatabase private val monarchy: Monarchy,
                                                          private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
                                                          private val getProfileInfoTask: GetProfileInfoTask) : ProfileService {
 

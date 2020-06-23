@@ -24,11 +24,12 @@ import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.getOrNull
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import javax.inject.Inject
 
-internal class RoomAvatarResolver @Inject constructor(private val monarchy: Monarchy,
+internal class RoomAvatarResolver @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                       @UserId private val userId: String) {
 
     /**

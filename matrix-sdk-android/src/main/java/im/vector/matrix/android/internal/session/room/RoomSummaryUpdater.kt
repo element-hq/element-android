@@ -39,6 +39,7 @@ import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.whereType
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
@@ -57,7 +58,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
         private val eventBus: EventBus,
-        private val monarchy: Monarchy) {
+        @SessionDatabase private val monarchy: Monarchy) {
 
     companion object {
         // TODO: maybe allow user of SDK to give that list

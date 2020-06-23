@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.database.model.WellknownIntegrationManagerConfigEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
@@ -58,7 +59,7 @@ import javax.inject.Inject
 @SessionScope
 internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
                                                       private val taskExecutor: TaskExecutor,
-                                                      private val monarchy: Monarchy,
+                                                      @SessionDatabase private val monarchy: Monarchy,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: AccountDataDataSource,
                                                       private val widgetFactory: WidgetFactory) {

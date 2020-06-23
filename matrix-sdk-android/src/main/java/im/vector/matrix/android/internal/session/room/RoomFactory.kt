@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
@@ -42,7 +43,7 @@ internal interface RoomFactory {
 }
 
 @SessionScope
-internal class DefaultRoomFactory @Inject constructor(private val monarchy: Monarchy,
+internal class DefaultRoomFactory @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                       private val roomSummaryMapper: RoomSummaryMapper,
                                                       private val cryptoService: CryptoService,
                                                       private val timelineServiceFactory: DefaultTimelineService.Factory,

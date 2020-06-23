@@ -43,6 +43,7 @@ import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -50,7 +51,7 @@ import java.security.InvalidParameterException
 import javax.inject.Inject
 
 internal class DefaultRoom @Inject constructor(override val roomId: String,
-                                               private val monarchy: Monarchy,
+                                               @SessionDatabase private val monarchy: Monarchy,
                                                private val roomSummaryMapper: RoomSummaryMapper,
                                                private val timelineService: TimelineService,
                                                private val sendService: SendService,

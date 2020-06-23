@@ -31,12 +31,13 @@ import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapp
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import org.greenrobot.eventbus.EventBus
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                  private val monarchy: Monarchy,
+                                                                  @SessionDatabase private val monarchy: Monarchy,
                                                                   private val eventBus: EventBus,
                                                                   private val taskExecutor: TaskExecutor,
                                                                   private val contextOfEventTask: GetContextOfEventTask,
