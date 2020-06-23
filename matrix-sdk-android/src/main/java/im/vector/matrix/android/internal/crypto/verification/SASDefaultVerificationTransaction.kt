@@ -273,7 +273,7 @@ internal abstract class SASDefaultVerificationTransaction(
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
                     // Check the signature
                     val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)
-                    if (mac != theirMacSafe.mac.get(it)) {
+                    if (mac != theirMacSafe.mac[it]) {
                         // WRONG!
                         Timber.e("## SAS Verification: mac mismatch for MasterKey with id $keyIDNoPrefix")
                         cancel(CancelCode.MismatchedKeys)
