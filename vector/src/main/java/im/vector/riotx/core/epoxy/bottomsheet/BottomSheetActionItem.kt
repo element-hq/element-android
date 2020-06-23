@@ -31,6 +31,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.platform.CheckableImageView
 import im.vector.riotx.features.themes.ThemeUtils
 
 /**
@@ -42,18 +43,28 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
+
     @EpoxyAttribute
     var textRes: Int = 0
+
     @EpoxyAttribute
     var showExpand = false
+
     @EpoxyAttribute
     var expanded = false
+
+    @EpoxyAttribute
+    var showSelected = false
+
     @EpoxyAttribute
     var selected = false
+
     @EpoxyAttribute
     var subMenuItem = false
+
     @EpoxyAttribute
     var destructive = false
+
     @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
@@ -62,16 +73,21 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
             listener.onClick(it)
         }
         holder.startSpace.isVisible = subMenuItem
-        val tintColor = if (destructive) {
-            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
-        } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        val tintColor = when {
+            destructive -> ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+            selected    -> ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            else        -> ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
+        }
+        val iconTintColor = when {
+            destructive || selected -> tintColor
+            else                    -> ThemeUtils.getColor(holder.view.context, R.attr.riotx_icon_color)
         }
         holder.icon.setImageResource(iconRes)
-        ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
+        ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(iconTintColor))
         holder.text.setText(textRes)
         holder.text.setTextColor(tintColor)
-        holder.selected.isInvisible = !selected
+        holder.selected.isInvisible = !showSelected
+        holder.selected.isChecked = selected
         if (showExpand) {
             val expandDrawable = if (expanded) {
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
@@ -91,6 +107,6 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         val startSpace by bind<View>(R.id.actionStartSpace)
         val icon by bind<ImageView>(R.id.actionIcon)
         val text by bind<TextView>(R.id.actionTitle)
-        val selected by bind<ImageView>(R.id.actionSelected)
+        val selected by bind<CheckableImageView>(R.id.actionSelected)
     }
 }

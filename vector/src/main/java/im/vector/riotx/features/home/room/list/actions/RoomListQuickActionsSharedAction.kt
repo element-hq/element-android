@@ -27,24 +27,19 @@ sealed class RoomListQuickActionsSharedAction(
         val destructive: Boolean = false)
     : VectorSharedAction {
 
-    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
-            R.string.room_list_quick_actions_notifications_all_noisy,
-            R.drawable.ic_room_actions_notifications_all_noisy
-    )
-
     data class NotificationsAll(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all,
-            R.drawable.ic_room_actions_notifications_all
+            R.drawable.ic_room_actions_notifications_all_messages_24dp
     )
 
-    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickActionsSharedAction(
-            R.string.room_list_quick_actions_notifications_mentions,
-            R.drawable.ic_room_actions_notifications_mentions
+    data class NotificationsMentionsKeywords(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_notifications_mentions_and_keywords,
+            R.drawable.ic_room_actions_notifications_mentions_keywords_24dp
     )
 
-    data class NotificationsMute(val roomId: String) : RoomListQuickActionsSharedAction(
-            R.string.room_list_quick_actions_notifications_mute,
-            R.drawable.ic_room_actions_notifications_mutes
+    data class NotificationsNone(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_notifications_none,
+            R.drawable.ic_room_actions_notifications_none_24dp
     )
 
     data class Settings(val roomId: String) : RoomListQuickActionsSharedAction(

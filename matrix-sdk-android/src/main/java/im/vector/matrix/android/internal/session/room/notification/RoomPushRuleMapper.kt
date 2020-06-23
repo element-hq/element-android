@@ -45,9 +45,13 @@ internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
     }
 }
 
+/**
+ * FIXME This is the trickiest part...
+ */
 internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule? {
     return when {
-        this == RoomNotificationState.ALL_MESSAGES       -> null
+        this == RoomNotificationState.ALL_MESSAGES -> null
+        /* TODO
         this == RoomNotificationState.ALL_MESSAGES_NOISY -> {
             val rule = PushRule(
                     actions = listOf(Action.Notify, Action.Sound()).toJson(),
@@ -56,7 +60,8 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
             )
             return RoomPushRule(RuleSetKey.ROOM, rule)
         }
-        else                                             -> {
+         */
+        else                                       -> {
             val condition = PushCondition(
                     kind = Condition.Kind.EventMatch.value,
                     key = "room_id",
@@ -68,7 +73,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
                     ruleId = roomId,
                     conditions = listOf(condition)
             )
-            val kind = if (this == RoomNotificationState.MUTE) {
+            val kind = if (this == RoomNotificationState.NONE) {
                 RuleSetKey.OVERRIDE
             } else {
                 RuleSetKey.ROOM
@@ -83,16 +88,17 @@ internal fun RoomPushRule.toRoomNotificationState(): RoomNotificationState {
         val actions = rule.getActions()
         if (actions.contains(Action.DoNotNotify)) {
             if (kind == RuleSetKey.OVERRIDE) {
-                RoomNotificationState.MUTE
+                RoomNotificationState.NONE
             } else {
-                RoomNotificationState.MENTIONS_ONLY
+                RoomNotificationState.MENTIONS_AND_KEYWORDS
             }
         } else if (actions.contains(Action.Notify)) {
             val hasSoundAction = actions.find {
                 it is Action.Sound
             } != null
             if (hasSoundAction) {
-                RoomNotificationState.ALL_MESSAGES_NOISY
+                RoomNotificationState.ALL_MESSAGES
+                // TODO RoomNotificationState.ALL_MESSAGES_NOISY
             } else {
                 RoomNotificationState.ALL_MESSAGES
             }

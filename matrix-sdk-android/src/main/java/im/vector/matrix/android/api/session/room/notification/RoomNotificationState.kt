@@ -21,22 +21,17 @@ package im.vector.matrix.android.api.session.room.notification
  */
 enum class RoomNotificationState {
     /**
-     * All the messages will trigger a noisy notification
-     */
-    ALL_MESSAGES_NOISY,
-
-    /**
      * All the messages will trigger a notification
      */
     ALL_MESSAGES,
 
     /**
-     * Only the messages with user display name / user name will trigger notifications
+     * Only the messages with user display name / user name, or keywords will trigger notifications
      */
-    MENTIONS_ONLY,
+    MENTIONS_AND_KEYWORDS,
 
     /**
      * No notifications
      */
-    MUTE
+    NONE
 }

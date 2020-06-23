@@ -191,6 +191,10 @@
     <color name="riotx_room_active_widgets_banner_text_dark">#E3E8F0</color>
     <color name="riotx_room_active_widgets_banner_text_black">#E3E8F0</color>
 
+    <attr name="riotx_icon_color" format="color" />
+    <color name="riotx_icon_color_light">#61708B</color>
+    <color name="riotx_icon_color_dark">#989DA5</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>

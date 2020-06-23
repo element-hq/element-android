@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="50dp"
+    android:minHeight="64dp"
     android:paddingLeft="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/layout_horizontal_margin"
@@ -30,43 +30,41 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/actionStartSpace"
         android:scaleType="center"
-        android:tint="?riotx_text_secondary"
+        android:tint="?riotx_icon_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_room_actions_notifications_all" />
+        tools:src="@drawable/ic_room_actions_notifications_all_messages_24dp" />
 
     <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/actionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="18dp"
         android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?riotx_text_primary"
         android:textSize="17sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/actionSelected"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/actionStartSpace"
+        app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="zbla azjazjaz s sdkqdskdsqk kqsdkdqsk kdqsksqdk" />
 
-
-    <ImageView
+    <im.vector.riotx.core.platform.CheckableImageView
         android:id="@+id/actionSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_check_white_24dp"
-        android:tint="@color/riotx_accent"
+        android:layout_marginEnd="6dp"
+        android:checked="true"
+        android:src="@drawable/ic_radio_button"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,10 +59,10 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         val selectedRoomState = state.roomNotificationState()
-        RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
+        // TODO Handle default (different for Room and DM)
+        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
+        RoomListQuickActionsSharedAction.NotificationsMentionsKeywords(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        RoomListQuickActionsSharedAction.NotificationsNone(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
 
         if (showAll) {
             // Leave
@@ -74,15 +74,17 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
     }
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
+        val showSelected = roomNotificationState != null
+
         val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
-            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
-            is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
-            else                                                          -> false
+            is RoomListQuickActionsSharedAction.NotificationsAll              -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords -> roomNotificationState == RoomNotificationState.MENTIONS_AND_KEYWORDS
+            is RoomListQuickActionsSharedAction.NotificationsNone             -> roomNotificationState == RoomNotificationState.NONE
+            else                                                              -> false
         }
         return bottomSheetActionItem {
             id("action_$index")
+            showSelected(showSelected)
             selected(selected)
             iconRes(iconResId)
             textRes(titleRes)

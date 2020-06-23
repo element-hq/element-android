@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_message_preview"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="72dp">
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewAvatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
         android:background="@drawable/circle"
         android:contentDescription="@string/avatar"
@@ -22,7 +21,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0"
         tools:src="@tools:sample/avatars" />
 
     <im.vector.riotx.core.platform.EllipsizingTextView
@@ -31,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"

@@ -115,19 +115,14 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
-        is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
-            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES_NOISY))
-        }
-        is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+        is RoomListQuickActionsSharedAction.NotificationsAll              ->
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES))
-        }
-        is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
-            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_ONLY))
-        }
-        is RoomListQuickActionsSharedAction.NotificationsMute         -> {
-            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MUTE))
-        }
-        else                                                          -> Timber.v("$action not handled")
+        is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords ->
+            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_AND_KEYWORDS))
+        is RoomListQuickActionsSharedAction.NotificationsNone             ->
+            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.NONE))
+        else                                                              ->
+            Timber.v("$action not handled")
     }
 
     private fun onLeaveRoom() {
