@@ -44,6 +44,7 @@ class RoomSettingsController @Inject constructor(
         fun onTopicChanged(topic: String)
         fun onPhotoClicked()
         fun onHistoryVisibilityClicked()
+        fun onAliasChanged(alias: String)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -83,6 +84,17 @@ class RoomSettingsController @Inject constructor(
 
             onTextChange { text ->
                 callback?.onTopicChanged(text)
+            }
+        }
+
+        formEditTextItem {
+            id("alias")
+            /*enabled(enableFormElement)*/
+            value(data.newAlias ?: roomSummary.canonicalAlias)
+            hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
+
+            onTextChange { text ->
+                callback?.onAliasChanged(text)
             }
         }
 

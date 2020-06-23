@@ -111,6 +111,15 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
+    override fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable {
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
+                body = mapOf("alias" to alias),
+                callback = callback,
+                stateKey = null
+        )
+    }
+
     override fun updateHistoryReadability(readability: String, callback: MatrixCallback<Unit>): Cancelable {
         return sendStateEvent(
                 eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
