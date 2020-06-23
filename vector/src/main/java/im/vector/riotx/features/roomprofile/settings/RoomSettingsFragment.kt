@@ -190,4 +190,8 @@ class RoomSettingsFragment @Inject constructor(
             RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
         }
     }
+
+    override fun onAliasChanged(alias: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomAlias(alias))
+    }
 }

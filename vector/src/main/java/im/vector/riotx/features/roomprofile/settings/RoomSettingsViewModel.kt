@@ -89,6 +89,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 setState { copy(newHistoryVisibility = action.visibility) }
                 setState { copy(showSaveAction = shouldShowSaveAction(this)) }
             }
+            is RoomSettingsAction.SetRoomAlias -> {
+                setState { copy(newAlias = action.alias) }
+                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
+            }
             is RoomSettingsAction.Save                     -> saveSettings()
         }
     }
@@ -97,6 +101,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         val summary = state.roomSummary.invoke()
         return summary?.displayName != state.newName ||
                 summary?.topic != state.newTopic ||
+                summary?.canonicalAlias != state.newAlias ||
                 state.newHistoryVisibility != null ||
                 state.newAvatar != null
     }
@@ -113,6 +118,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         }
         if (summary?.topic != state.newTopic) {
             operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
+        }
+
+        if (summary?.canonicalAlias != state.newAlias) {
+            operationList.add(room.rx().updateCanonicalAlias(state.newAlias ?: ""))
         }
 
         if (state.newHistoryVisibility != null) {

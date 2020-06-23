@@ -34,6 +34,7 @@ data class RoomSettingsViewState(
         val newTopic: String? = null,
         val newAvatar: MultiPickerImageType? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
+        val newAlias: String? = null,
         val showSaveAction: Boolean = false
 ) : MvRxState {
 
