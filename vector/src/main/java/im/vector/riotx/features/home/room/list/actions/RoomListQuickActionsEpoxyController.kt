@@ -59,9 +59,15 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         val selectedRoomState = state.roomNotificationState()
-        // TODO Handle default (different for Room and DM)
-        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMentionsKeywords(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        if (state.roomSummary()?.isDirect == true) {
+            // In this case, default is All
+            RoomListQuickActionsSharedAction.NotificationsAllDefault(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
+            RoomListQuickActionsSharedAction.NotificationsMentionsKeywords(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        } else {
+            // In this case, default is MentionsKeywords
+            RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
+            RoomListQuickActionsSharedAction.NotificationsMentionsKeywordsDefault(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        }
         RoomListQuickActionsSharedAction.NotificationsNone(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
 
         if (showAll) {
@@ -77,10 +83,14 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         val showSelected = roomNotificationState != null
 
         val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAll              -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
-            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords -> roomNotificationState == RoomNotificationState.MENTIONS_AND_KEYWORDS
-            is RoomListQuickActionsSharedAction.NotificationsNone             -> roomNotificationState == RoomNotificationState.NONE
-            else                                                              -> false
+            is RoomListQuickActionsSharedAction.NotificationsAll,
+            is RoomListQuickActionsSharedAction.NotificationsAllDefault              -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords,
+            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywordsDefault -> roomNotificationState == RoomNotificationState.MENTIONS_AND_KEYWORDS
+            is RoomListQuickActionsSharedAction.NotificationsNone                    -> roomNotificationState == RoomNotificationState.NONE
+            is RoomListQuickActionsSharedAction.Settings,
+            is RoomListQuickActionsSharedAction.Favorite,
+            is RoomListQuickActionsSharedAction.Leave                                -> false
         }
         return bottomSheetActionItem {
             id("action_$index")

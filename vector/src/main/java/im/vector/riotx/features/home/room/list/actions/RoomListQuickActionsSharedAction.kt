@@ -32,8 +32,18 @@ sealed class RoomListQuickActionsSharedAction(
             R.drawable.ic_room_actions_notifications_all_messages_24dp
     )
 
+    data class NotificationsAllDefault(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_notifications_all_default,
+            R.drawable.ic_room_actions_notifications_all_messages_24dp
+    )
+
     data class NotificationsMentionsKeywords(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_mentions_and_keywords,
+            R.drawable.ic_room_actions_notifications_mentions_keywords_24dp
+    )
+
+    data class NotificationsMentionsKeywordsDefault(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_notifications_mentions_and_keywords_default,
             R.drawable.ic_room_actions_notifications_mentions_keywords_24dp
     )
 

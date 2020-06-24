@@ -22,11 +22,13 @@ package im.vector.matrix.android.api.session.room.notification
 enum class RoomNotificationState {
     /**
      * All the messages will trigger a notification
+     * This is the default for DMs
      */
     ALL_MESSAGES,
 
     /**
      * Only the messages with user display name / user name, or keywords will trigger notifications
+     * This is the default for Rooms
      */
     MENTIONS_AND_KEYWORDS,
 

@@ -217,22 +217,28 @@ class RoomListFragment @Inject constructor(
 
     private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
         when (quickAction) {
-            is RoomListQuickActionsSharedAction.NotificationsAll              -> {
+            is RoomListQuickActionsSharedAction.NotificationsAll                     -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
             }
-            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords -> {
+            is RoomListQuickActionsSharedAction.NotificationsAllDefault              -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
+            }
+            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywords        -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_AND_KEYWORDS))
             }
-            is RoomListQuickActionsSharedAction.NotificationsNone             -> {
+            is RoomListQuickActionsSharedAction.NotificationsMentionsKeywordsDefault -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_AND_KEYWORDS))
+            }
+            is RoomListQuickActionsSharedAction.NotificationsNone                    -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.NONE))
             }
-            is RoomListQuickActionsSharedAction.Settings                      -> {
+            is RoomListQuickActionsSharedAction.Settings                             -> {
                 navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
-            is RoomListQuickActionsSharedAction.Favorite                      -> {
+            is RoomListQuickActionsSharedAction.Favorite                             -> {
                 roomListViewModel.handle(RoomListAction.ToggleFavorite(quickAction.roomId))
             }
-            is RoomListQuickActionsSharedAction.Leave                         -> {
+            is RoomListQuickActionsSharedAction.Leave                                -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)
