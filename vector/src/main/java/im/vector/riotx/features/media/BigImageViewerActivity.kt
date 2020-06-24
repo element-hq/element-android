@@ -16,19 +16,38 @@
 
 package im.vector.riotx.features.media
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.net.toUri
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.features.roomprofile.AvatarSelectorView
+import im.vector.riotx.multipicker.MultiPicker
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.activity_big_image_viewer.*
+import java.io.File
 import javax.inject.Inject
 
-class BigImageViewerActivity : VectorBaseActivity() {
+class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
+    @Inject lateinit var colorProvider: ColorProvider
+
+    private var uri: Uri? = null
+    private lateinit var avatarSelector: AvatarSelectorView
+
+    override fun getMenuRes() = R.menu.vector_big_avatar_viewer
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -45,7 +64,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val uri = sessionHolder.getSafeActiveSession()
+        uri = sessionHolder.getSafeActiveSession()
                 ?.contentUrlResolver()
                 ?.resolveFullSize(intent.getStringExtra(EXTRA_IMAGE_URL))
                 ?.toUri()
@@ -57,9 +76,111 @@ class BigImageViewerActivity : VectorBaseActivity() {
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.bigAvatarEditAction).isVisible = uri != null
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.bigAvatarEditAction) {
+            showAvatarSelector()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showAvatarSelector() {
+        if (!::avatarSelector.isInitialized) {
+            avatarSelector = AvatarSelectorView(this, layoutInflater, this)
+        }
+        avatarSelector.show(bigImageViewerToolbar, false)
+    }
+
+    private var avatarCameraUri: Uri? = null
+    override fun onTypeSelected(type: AvatarSelectorView.Type) {
+        when (type) {
+            AvatarSelectorView.Type.CAMERA  -> {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
+            AvatarSelectorView.Type.GALLERY -> {
+                MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            }
+        }
+    }
+
+    private fun onRoomAvatarSelected(image: MultiPickerImageType) {
+        val destinationFile = File(cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        UCrop.of(uri, destinationFile.toUri())
+                .withOptions(
+                        UCrop.Options()
+                                .apply {
+                                    setAllowedGestures(
+                                            /* tabScale = */ UCropActivity.SCALE,
+                                            /* tabRotate = */ UCropActivity.ALL,
+                                            /* tabAspectRatio = */ UCropActivity.SCALE
+                                    )
+                                    setToolbarTitle(image.displayName)
+                                    // Disable freestyle crop, usability was not easy
+                                    // setFreeStyleCropEnabled(true)
+                                    // Color used for toolbar icon and text
+                                    setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
+                                    // Background
+                                    setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    // Status bar color (pb in dark mode, icon of the status bar are dark)
+                                    setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
+                                    // Known issue: there is still orange color used by the lib
+                                    // https://github.com/Yalantis/uCrop/issues/602
+                                    setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
+                                    // Hide the logo (does not work)
+                                    setLogoColor(Color.TRANSPARENT)
+                                }
+                )
+                .start(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
+                    avatarCameraUri?.let { uri ->
+                        MultiPicker.get(MultiPicker.CAMERA)
+                                .getTakenPhoto(this, requestCode, resultCode, uri)
+                                ?.let {
+                                    onRoomAvatarSelected(it)
+                                }
+                    }
+                }
+                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                    MultiPicker
+                            .get(MultiPicker.IMAGE)
+                            .getSelectedFiles(this, requestCode, resultCode, data)
+                            .firstOrNull()?.let {
+                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
+                                // onRoomAvatarSelected(it)
+                                onAvatarCropped(it.contentUri)
+                            }
+                }
+                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun onAvatarCropped(uri: Uri?) {
+        if (uri != null) {
+            setResult(Activity.RESULT_OK, Intent().setData(uri))
+            this@BigImageViewerActivity.finish()
+        } else {
+            Toast.makeText(this, "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     companion object {
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
+        const val REQUEST_CODE = 1000
 
         fun newIntent(context: Context, title: String?, imageUrl: String): Intent {
             return Intent(context, BigImageViewerActivity::class.java).apply {

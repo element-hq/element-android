@@ -27,7 +27,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -55,6 +57,7 @@ import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.multipicker.MultiPicker
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.parcel.Parcelize
@@ -242,7 +245,10 @@ class RoomProfileFragment @Inject constructor(
         if (matrixItem.avatarUrl.isNullOrEmpty()) {
             showAvatarSelector()
         } else {
-            navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, view, ViewCompat.getTransitionName(view) ?: "")
+
+            startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
         }
     }
 
@@ -320,6 +326,7 @@ class RoomProfileFragment @Inject constructor(
                             }
                 }
                 UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+                BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
