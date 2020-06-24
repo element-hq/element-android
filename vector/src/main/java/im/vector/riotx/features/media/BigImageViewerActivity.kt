@@ -77,7 +77,7 @@ class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.bigAvatarEditAction).isVisible = uri != null
+        menu.findItem(R.id.bigAvatarEditAction).isVisible = shouldShowEditAction()
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -87,6 +87,10 @@ class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shouldShowEditAction(): Boolean {
+        return uri != null && intent.getBooleanExtra(EXTRA_CAN_EDIT_IMAGE, false)
     }
 
     private fun showAvatarSelector() {
@@ -180,12 +184,14 @@ class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback
     companion object {
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
+        private const val EXTRA_CAN_EDIT_IMAGE = "EXTRA_CAN_EDIT_IMAGE"
         const val REQUEST_CODE = 1000
 
-        fun newIntent(context: Context, title: String?, imageUrl: String): Intent {
+        fun newIntent(context: Context, title: String?, imageUrl: String, canEditImage: Boolean = false): Intent {
             return Intent(context, BigImageViewerActivity::class.java).apply {
                 putExtra(EXTRA_TITLE, title)
                 putExtra(EXTRA_IMAGE_URL, imageUrl)
+                putExtra(EXTRA_CAN_EDIT_IMAGE, canEditImage)
             }
         }
     }

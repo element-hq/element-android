@@ -25,11 +25,13 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import java.util.UUID
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomProfileViewState,
@@ -63,6 +65,13 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                 .execute {
                     copy(roomSummary = it)
                 }
+
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive.subscribe {
+            val powerLevelsHelper = PowerLevelsHelper(it)
+            setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
+        }.disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) = when (action) {
