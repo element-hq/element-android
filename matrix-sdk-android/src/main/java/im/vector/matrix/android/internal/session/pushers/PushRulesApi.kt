@@ -25,6 +25,9 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#push-rules-api
+ */
 internal interface PushRulesApi {
     /**
      * Get all push rules
@@ -37,12 +40,12 @@ internal interface PushRulesApi {
      *
      * @param kind   the notification kind (sender, room...)
      * @param ruleId the ruleId
-     * @param enable the new enable status
+     * @param body   the new enable status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
     fun updateEnableRuleStatus(@Path("kind") kind: String,
                                @Path("ruleId") ruleId: String,
-                               @Body enable: Boolean?)
+                               @Body body: EnabledBody)
             : Call<Unit>
 
     /**

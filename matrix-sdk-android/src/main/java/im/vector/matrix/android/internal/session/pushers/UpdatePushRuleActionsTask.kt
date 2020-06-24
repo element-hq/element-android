@@ -39,7 +39,11 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
         if (params.oldPushRule.enabled != params.newPushRule.enabled) {
             // First change enabled state
             executeRequest<Unit>(eventBus) {
-                apiCall = pushRulesApi.updateEnableRuleStatus(params.kind.value, params.newPushRule.ruleId, params.newPushRule.enabled)
+                apiCall = pushRulesApi.updateEnableRuleStatus(
+                        params.kind.value,
+                        params.newPushRule.ruleId,
+                        EnabledBody(enabled = params.newPushRule.enabled)
+                )
             }
         }
 
