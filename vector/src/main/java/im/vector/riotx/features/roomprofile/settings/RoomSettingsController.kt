@@ -21,19 +21,16 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
-import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.form.formEditTextItem
-import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
 // TODO Add other feature here (waiting for design)
 class RoomSettingsController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
@@ -42,7 +39,6 @@ class RoomSettingsController @Inject constructor(
         fun onEnableEncryptionClicked()
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
-        fun onPhotoClicked()
         fun onHistoryVisibilityClicked()
         fun onAliasChanged(alias: String)
     }
@@ -106,18 +102,6 @@ class RoomSettingsController @Inject constructor(
                 divider = false,
                 editable = data.actionPermissions.canChangeHistoryReadability,
                 action = { callback?.onHistoryVisibilityClicked() }
-        )
-
-        buildProfileAction(
-                id = "photo",
-                title = stringProvider.getString(R.string.room_settings_room_photo),
-                subtitle = "",
-                dividerColor = dividerColor,
-                divider = true,
-                editable = data.actionPermissions.canChangeAvatar,
-                accessoryMatrixItem = roomSummary.toMatrixItem(),
-                avatarRenderer = avatarRenderer,
-                action = { callback?.onPhotoClicked() }
         )
 
         if (roomSummary.isEncrypted) {

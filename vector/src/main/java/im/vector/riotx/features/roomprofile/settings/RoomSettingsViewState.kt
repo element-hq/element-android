@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 
 data class RoomSettingsViewState(
         val roomId: String,
@@ -32,7 +31,6 @@ data class RoomSettingsViewState(
         val isLoading: Boolean = false,
         val newName: String? = null,
         val newTopic: String? = null,
-        val newAvatar: MultiPickerImageType? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
         val newAlias: String? = null,
         val showSaveAction: Boolean = false,
@@ -45,7 +43,6 @@ data class RoomSettingsViewState(
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false,
             val canChangeCanonicalAlias: Boolean = false,
-            val canChangeAvatar: Boolean = false,
             val canChangeHistoryReadability: Boolean = false
     )
 }

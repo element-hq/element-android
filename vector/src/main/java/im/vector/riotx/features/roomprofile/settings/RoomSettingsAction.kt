@@ -18,12 +18,10 @@ package im.vector.riotx.features.roomprofile.settings
 
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 
 sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetRoomName(val newName: String) : RoomSettingsAction()
     data class SetRoomTopic(val newTopic: String) : RoomSettingsAction()
-    data class SetRoomAvatar(val image: MultiPickerImageType) : RoomSettingsAction()
     data class SetRoomHistoryVisibility(val visibility: RoomHistoryVisibility) : RoomSettingsAction()
     data class SetRoomAlias(val alias: String) : RoomSettingsAction()
     object EnableEncryption : RoomSettingsAction()
