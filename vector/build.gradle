@@ -390,6 +390,9 @@ dependencies {
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 
+    // TODO meant for development purposes only
+    implementation 'org.webrtc:google-webrtc:1.0.+'
+
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'

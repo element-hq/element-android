@@ -14,6 +14,7 @@
 
         <im.vector.riotx.core.preference.VectorEditTextPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
+            android:persistent="false"
             android:summary="@string/settings_display_name"
             android:title="@string/settings_display_name" />
 

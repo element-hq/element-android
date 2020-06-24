@@ -51,7 +51,7 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
     override fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable {
         return setRoomNotificationStateTask
                 .configureWith(SetRoomNotificationStateTask.Params(roomId, roomNotificationState)) {
-                    this.callback = callback
+                    this.callback = matrixCallback
                 }
                 .executeBy(taskExecutor)
     }

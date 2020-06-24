@@ -62,9 +62,9 @@ class ContactPicker(override val requestCode: Int) : Picker<MultiPickerContactTy
 
                     val contactId = cursor.getInt(idColumn)
                     var name = cursor.getString(nameColumn)
-                    var photoUri = cursor.getString(photoUriColumn)
-                    var phoneNumberList = mutableListOf<String>()
-                    var emailList = mutableListOf<String>()
+                    val photoUri = cursor.getString(photoUriColumn)
+                    val phoneNumberList = mutableListOf<String>()
+                    val emailList = mutableListOf<String>()
 
                     getRawContactId(context.contentResolver, contactId)?.let { rawContactId ->
                         val selection = ContactsContract.Data.RAW_CONTACT_ID + " = ?"

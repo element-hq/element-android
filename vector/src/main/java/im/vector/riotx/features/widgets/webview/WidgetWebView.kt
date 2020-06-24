@@ -24,7 +24,6 @@ import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import im.vector.fragments.roomwidgets.WebviewPermissionUtils
 import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.webview.VectorWebViewClient

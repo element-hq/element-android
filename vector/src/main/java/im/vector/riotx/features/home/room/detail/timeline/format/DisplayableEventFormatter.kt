@@ -29,7 +29,6 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 class DisplayableEventFormatter @Inject constructor(
-//        private val sessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val noticeEventFormatter: NoticeEventFormatter

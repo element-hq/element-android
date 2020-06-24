@@ -4,9 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/video_call"
+        android:icon="@drawable/ic_video"
+        android:title="@string/action_video_call"
+        android:visible="false"
+        app:iconTint="@color/riotx_accent"
+        app:showAsAction="always"
+        tools:visible="true" />
+
+    <item
         android:id="@+id/open_matrix_apps"
         android:title="@string/room_add_matrix_apps"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/voice_call"
+        android:icon="@drawable/ic_phone"
+        android:title="@string/call"
+        android:visible="false"
+        app:iconTint="@color/riotx_accent"
+        app:showAsAction="always"
+        tools:visible="true" />
+
+    <item
+        android:id="@+id/hangup_call"
+        android:icon="@drawable/ic_call_end"
+        android:title="@string/call_notification_hangup"
+        android:visible="false"
+        app:iconTint="@color/riotx_destructive_accent"
+        app:showAsAction="always"
+        tools:visible="true" />
 
     <item
         android:id="@+id/resend_all"
