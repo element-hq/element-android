@@ -24,6 +24,7 @@ Build 🧱:
  - SDK is now API level 21 minimum, and so RiotX (#405)
 
 Other changes:
+ - Use `SharedPreferences#edit` extension function consistently (#1545)
  - Use `retrofit2.Call.awaitResponse` extension provided by Retrofit 2. (#1526)
  - Fix minor typo in contribution guide (#1512)
  - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)

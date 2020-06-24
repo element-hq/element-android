@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database
 
 import android.content.Context
+import androidx.core.content.edit
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
@@ -54,10 +55,9 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
             Timber.v("************************************************************")
             deleteRealmFiles()
         }
-        sharedPreferences
-                .edit()
-                .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", true)
-                .apply()
+        sharedPreferences.edit {
+            putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", true)
+        }
 
         val realmConfiguration = RealmConfiguration.Builder()
                 .compactOnLaunch()
@@ -73,10 +73,9 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         // Try creating a realm instance and if it succeeds we can clear the flag
         Realm.getInstance(realmConfiguration).use {
             Timber.v("Successfully create realm instance")
-            sharedPreferences
-                    .edit()
-                    .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
-                    .apply()
+            sharedPreferences.edit {
+                putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
+            }
         }
         return realmConfiguration
     }
