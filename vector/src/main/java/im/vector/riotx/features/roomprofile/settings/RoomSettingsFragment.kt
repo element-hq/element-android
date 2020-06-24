@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.roomprofile.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -40,8 +38,6 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
-import im.vector.riotx.multipicker.MultiPicker
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -132,30 +128,6 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onTopicChanged(topic: String) {
         viewModel.handle(RoomSettingsAction.SetRoomTopic(topic))
-    }
-
-    override fun onPhotoClicked() {
-        MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-    }
-
-    private fun onRoomPhotoSelected(selectedImage: MultiPickerImageType) {
-        viewModel.handle(RoomSettingsAction.SetRoomAvatar(selectedImage))
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                onRoomPhotoSelected(it)
-                            }
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onHistoryVisibilityClicked() = withState(viewModel) { state ->

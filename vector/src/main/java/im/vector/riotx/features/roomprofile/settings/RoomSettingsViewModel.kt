@@ -32,7 +32,6 @@ import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.Locale
-import java.util.UUID
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
@@ -79,7 +78,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                     canChangeName = powerLevelsHelper.isUserAbleToChangeRoomName(session.myUserId),
                     canChangeTopic = powerLevelsHelper.isUserAbleToChangeRoomTopic(session.myUserId),
                     canChangeCanonicalAlias = powerLevelsHelper.isUserAbleToChangeRoomCanonicalAlias(session.myUserId),
-                    canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId),
                     canChangeHistoryReadability = powerLevelsHelper.isUserAbleToChangeRoomHistoryReadability(session.myUserId)
             )
             setState { copy(actionPermissions = permissions) }
@@ -95,10 +93,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             }
             is RoomSettingsAction.SetRoomTopic             -> {
                 setState { copy(newTopic = action.newTopic) }
-                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
-            }
-            is RoomSettingsAction.SetRoomAvatar            -> {
-                setState { copy(newAvatar = action.image) }
                 setState { copy(showSaveAction = shouldShowSaveAction(this)) }
             }
             is RoomSettingsAction.SetRoomHistoryVisibility -> {
@@ -118,8 +112,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         return summary?.displayName != state.newName ||
                 summary?.topic != state.newTopic ||
                 summary?.canonicalAlias != state.newAlias ||
-                state.newHistoryVisibility != null ||
-                state.newAvatar != null
+                state.newHistoryVisibility != null
     }
 
     private fun saveSettings() = withState { state ->
@@ -144,17 +137,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility.name.toLowerCase(Locale.ROOT)))
         }
 
-        if (state.newAvatar != null) {
-            operationList.add(room.rx().updateAvatar(state.newAvatar.contentUri, state.newAvatar.displayName ?: UUID.randomUUID().toString()))
-        }
-
         Observable
                 .fromIterable(operationList)
                 .flatMapCompletable { it }
                 .subscribe(
                         {
                             postLoading(false)
-                            setState { copy(newAvatar = null, newHistoryVisibility = null) }
+                            setState { copy(newHistoryVisibility = null) }
                             setState { copy(showSaveAction = shouldShowSaveAction(this)) }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
