@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.sticker
+package im.vector.riotx.features.home.room.detail.widget
 
-object StickerPickerConstants {
+object WidgetRequestCodes {
     const val STICKER_PICKER_REQUEST_CODE = 16000
+    const val INTEGRATION_MANAGER_REQUEST_CODE = 16001
 }

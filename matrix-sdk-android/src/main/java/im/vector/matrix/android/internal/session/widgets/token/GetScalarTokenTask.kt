@@ -67,8 +67,7 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
             throw IllegalStateException("Scalar token is null")
         }
         scalarTokenStore.setToken(serverUrl, registerWidgetResponse.scalarToken)
-        widgetsAPI.validateToken(registerWidgetResponse.scalarToken, WIDGET_API_VERSION)
-        return registerWidgetResponse.scalarToken
+        return validateToken(widgetsAPI, serverUrl, registerWidgetResponse.scalarToken)
     }
 
     private suspend fun validateToken(widgetsAPI: WidgetsAPI, serverUrl: String, scalarToken: String): String {
