@@ -25,7 +25,9 @@ import javax.inject.Inject
 internal interface AddPushRuleTask : Task<AddPushRuleTask.Params, Unit> {
     data class Params(
             val kind: RuleKind,
-            val pushRule: PushRule
+            val pushRule: PushRule,
+            val beforeRuleId: String?,
+            val afterRuleId: String?
     )
 }
 
@@ -36,7 +38,13 @@ internal class DefaultAddPushRuleTask @Inject constructor(
 
     override suspend fun execute(params: AddPushRuleTask.Params) {
         return executeRequest(eventBus) {
-            apiCall = pushRulesApi.addRule(params.kind.value, params.pushRule.ruleId, params.pushRule)
+            apiCall = pushRulesApi.addRule(
+                    kind = params.kind.value,
+                    ruleId = params.pushRule.ruleId,
+                    beforeRuleId = params.beforeRuleId,
+                    afterRuleId = params.afterRuleId,
+                    rule = params.pushRule
+            )
         }
     }
 }

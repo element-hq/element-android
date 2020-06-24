@@ -31,7 +31,7 @@ internal data class GetPushRulesResponse(
         val global: RuleSet,
 
         /**
-         * Device specific rules, apply only to current device
+         * Device specific rules, apply only to current device. Not used anymore
          */
         @Json(name = "device")
         val device: RuleSet? = null

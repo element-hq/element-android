@@ -48,7 +48,7 @@ internal class DefaultSetRoomNotificationStateTask @Inject constructor(private v
         }
         val newRoomPushRule = params.roomNotificationState.toRoomPushRule(params.roomId)
         if (newRoomPushRule != null) {
-            addPushRuleTask.execute(AddPushRuleTask.Params(newRoomPushRule.kind, newRoomPushRule.rule))
+            addPushRuleTask.execute(AddPushRuleTask.Params(newRoomPushRule.kind, newRoomPushRule.rule, null, null))
         }
     }
 }

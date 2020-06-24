@@ -111,9 +111,13 @@ internal class DefaultPushRuleService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
+    override fun addPushRule(kind: RuleKind,
+                             pushRule: PushRule,
+                             beforeRuleId: String?,
+                             afterRuleId: String?,
+                             callback: MatrixCallback<Unit>): Cancelable {
         return addPushRuleTask
-                .configureWith(AddPushRuleTask.Params(kind, pushRule)) {
+                .configureWith(AddPushRuleTask.Params(kind, pushRule, beforeRuleId, afterRuleId)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

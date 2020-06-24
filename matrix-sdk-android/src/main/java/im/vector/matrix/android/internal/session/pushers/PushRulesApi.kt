@@ -24,6 +24,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#push-rules-api
@@ -74,15 +75,22 @@ internal interface PushRulesApi {
             : Call<Unit>
 
     /**
-     * Add the ruleID enable status
+     * This endpoint allows the creation, modification and deletion of pushers for this user ID. The
+     * behaviour of this endpoint varies depending on the values in the JSON body.
      *
-     * @param kind   the notification kind (sender, room...)
-     * @param ruleId the ruleId.
-     * @param rule   the rule to add.
+     * @param kind         the notification kind (sender, room...)
+     * @param ruleId       the ruleId.
+     * @param beforeRuleId Use 'before' with a rule_id as its value to make the new rule the next-most important rule with
+     *                     respect to the given user defined rule. It is not possible to add a rule relative to a predefined server rule.
+     * @param afterRuleId  This makes the new rule the next-less important rule relative to the given user defined rule. It
+     *                     is not possible to add a rule relative to a predefined server rule.
+     * @param rule         the rule to add. Note: only a subset of PushRule is documented: actions, condition, pattern. We should create a dedicated model
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
     fun addRule(@Path("kind") kind: String,
                 @Path("ruleId") ruleId: String,
+                @Query("before") beforeRuleId: String?,
+                @Query("after") afterRuleId: String?,
                 @Body rule: PushRule)
             : Call<Unit>
 }
