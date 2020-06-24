@@ -241,14 +241,13 @@ class RoomProfileFragment @Inject constructor(
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 
-    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
-        if (matrixItem.avatarUrl.isNullOrEmpty()) {
-            showAvatarSelector()
-        } else {
-            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!)
+    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
+        if (matrixItem.avatarUrl?.isNotEmpty() == true) {
+            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, view, ViewCompat.getTransitionName(view) ?: "")
-
             startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
+        } else if (it.canChangeAvatar) {
+            showAvatarSelector()
         }
     }
 
