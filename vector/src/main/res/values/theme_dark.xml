@@ -56,6 +56,7 @@
 
         <item name="riotx_bottom_sheet_background">@color/riotx_bottom_sheet_background_dark</item>
         <item name="riotx_icon_color">@color/riotx_icon_color_dark</item>
+        <item name="riotx_disabled_view_color">@color/riotx_disabled_view_color_dark</item>
 
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/riotx_accent</item>
@@ -125,7 +126,7 @@
         <!--Header/Panel Text Secondary-->
         <item name="vctr_list_header_secondary_text_color">#FFC8C8CD</item>
 
-        <item name="vctr_list_bottom_sheet_divider_color">@color/list_divider_color_dark</item>
+        <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_dark</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_dark</item>
 
         <item name="vctr_redacted_message_color">@color/list_divider_color_dark</item>

@@ -71,10 +71,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         RoomListQuickActionsSharedAction.NotificationsNone(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
 
         if (showAll) {
-            // Leave
-            dividerItem {
-                id("leave_separator")
-            }
             RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
         }
     }

@@ -46,7 +46,6 @@
         <attr name="vctr_list_header_primary_text_color" format="color" />
         <attr name="vctr_list_header_secondary_text_color" format="color" />
 
-        <attr name="vctr_list_bottom_sheet_divider_color" format="color" />
         <attr name="vctr_list_divider_color" format="color" />
 
         <attr name="vctr_redacted_message_color" format="color" />
