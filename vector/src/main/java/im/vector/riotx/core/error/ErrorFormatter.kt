@@ -40,14 +40,14 @@ class DefaultErrorFormatter @Inject constructor(
             null                         -> null
             is IdentityServiceError      -> identityServerError(throwable)
             is Failure.NetworkConnection -> {
-                when {
-                    throwable.ioException is SocketTimeoutException ->
+                when (throwable.ioException) {
+                    is SocketTimeoutException ->
                         stringProvider.getString(R.string.error_network_timeout)
-                    throwable.ioException is UnknownHostException   ->
+                    is UnknownHostException   ->
                         // Invalid homeserver?
                         // TODO Check network state, airplane mode, etc.
                         stringProvider.getString(R.string.login_error_unknown_host)
-                    else                                            ->
+                    else                      ->
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
