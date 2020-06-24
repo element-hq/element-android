@@ -43,7 +43,7 @@ class VectorSwitchPreference : SwitchPreference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         // display the title in multi-line to avoid ellipsis.
-        holder.itemView.findViewById<TextView>(android.R.id.title)?.setSingleLine(false)
+        holder.itemView.findViewById<TextView>(android.R.id.title)?.isSingleLine = false
 
         super.onBindViewHolder(holder)
     }

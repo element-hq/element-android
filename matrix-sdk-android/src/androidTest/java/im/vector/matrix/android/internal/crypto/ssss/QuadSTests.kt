@@ -144,7 +144,7 @@ class QuadSTests : InstrumentedTest {
 
         val secretAccountData = assertAccountData(aliceSession, "secret.of.life")
 
-        val encryptedContent = secretAccountData.content.get("encrypted") as? Map<*, *>
+        val encryptedContent = secretAccountData.content["encrypted"] as? Map<*, *>
         assertNotNull("Element should be encrypted", encryptedContent)
         assertNotNull("Secret should be encrypted with default key", encryptedContent?.get(keyId))
 

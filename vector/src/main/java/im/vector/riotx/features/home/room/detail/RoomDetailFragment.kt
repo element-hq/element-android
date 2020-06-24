@@ -144,7 +144,6 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
-import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
@@ -159,6 +158,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
 import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -330,20 +330,31 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                         -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents             -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess                   -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure                   -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage                     -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent                 -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError                 -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState               -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
-                is RoomDetailViewEvents.SendMessageResult               -> renderSendMessageResult(it)
-                RoomDetailViewEvents.DisplayPromptForIntegrationManager -> displayPromptForIntegrationManager()
-                is RoomDetailViewEvents.OpenStickerPicker               -> openStickerPicker(it)
+                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
+                RoomDetailViewEvents.DisplayPromptForIntegrationManager  -> displayPromptForIntegrationManager()
+                is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
+                is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
+                is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
             }.exhaustive
         }
+    }
+
+    private fun openIntegrationManager(screen: String? = null) {
+        navigator.openIntegrationManager(
+                fragment = this,
+                roomId = roomDetailArgs.roomId,
+                integId = null,
+                screen = screen
+        )
     }
 
     private fun setupWidgetsBannerView() {
@@ -362,10 +373,7 @@ class RoomDetailFragment @Inject constructor(
                 .setView(v)
                 .setPositiveButton(R.string.yes) { _, _ ->
                     // Open integration manager, to the sticker installation page
-                    navigator.openIntegrationManager(
-                            context = requireContext(),
-                            roomId = roomDetailArgs.roomId,
-                            integId = null,
+                    openIntegrationManager(
                             screen = WidgetType.StickerPicker.preferred
                     )
                 }
@@ -508,11 +516,7 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                if (session.integrationManagerService().isIntegrationEnabled()) {
-                    navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
-                } else {
-                    displayDisabledIntegrationDialog()
-                }
+                roomDetailViewModel.handle(RoomDetailAction.OpenIntegrationManager)
                 true
             }
             R.id.voice_call,
@@ -645,16 +649,16 @@ class RoomDetailFragment @Inject constructor(
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE            -> {
+                AttachmentsPreviewActivity.REQUEST_CODE        -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
                     val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
                     roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
                 }
-                REACTION_SELECT_REQUEST_CODE                       -> {
+                REACTION_SELECT_REQUEST_CODE                   -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
-                StickerPickerConstants.STICKER_PICKER_REQUEST_CODE -> {
+                WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE -> {
                     val content = WidgetActivity.getOutput(data).toModel<MessageStickerContent>() ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
                 }

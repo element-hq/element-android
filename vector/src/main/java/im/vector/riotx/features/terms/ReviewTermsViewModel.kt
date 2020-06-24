@@ -139,7 +139,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
                     )
                 }
             } catch (failure: Throwable) {
-                Timber.e(failure, "Failed to agree to terms")
+                Timber.e(failure, "Failed to load terms")
                 setState {
                     copy(
                             termsList = Uninitialized
