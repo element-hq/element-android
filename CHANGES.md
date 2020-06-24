@@ -26,7 +26,7 @@ Build 🧱:
  - Upgrade gradle from 5.4.1 to 5.6.4
 
 Other changes:
- -
+ - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.3 (2020-07-01)
 ===================================================
