@@ -52,7 +52,7 @@ data class MessageActionState(
         val actions: List<EventSharedAction> = emptyList(),
         val expendedReportContentMenu: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
-        ) : MvRxState {
+) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
 

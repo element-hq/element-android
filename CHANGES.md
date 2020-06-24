@@ -11,6 +11,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
  - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
+ - User could not redact message that they have sent (#1543)
 
 Translations 🗣:
  -
