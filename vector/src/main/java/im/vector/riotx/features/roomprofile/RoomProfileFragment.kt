@@ -17,15 +17,23 @@
 
 package im.vector.riotx.features.roomprofile
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropActivity
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -36,7 +44,9 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -45,10 +55,13 @@ import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.riotx.multipicker.MultiPicker
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @Parcelize
@@ -59,8 +72,9 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
-        val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment(), RoomProfileController.Callback {
+        val roomProfileViewModelFactory: RoomProfileViewModel.Factory,
+        val colorProvider: ColorProvider
+) : VectorBaseFragment(), RoomProfileController.Callback, AvatarSelectorView.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -68,6 +82,8 @@ class RoomProfileFragment @Inject constructor(
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
+
+    private lateinit var avatarSelector: AvatarSelectorView
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
@@ -96,6 +112,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
                 is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
                 is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
+                RoomProfileViewEvents.OnChangeAvatarSuccess -> dismissLoadingDialog()
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -222,6 +239,97 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
-        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+        if (matrixItem.avatarUrl.isNullOrEmpty()) {
+            showAvatarSelector()
+        } else {
+            navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+        }
+    }
+
+    private fun showAvatarSelector() {
+        if (!::avatarSelector.isInitialized) {
+            avatarSelector = AvatarSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomProfileFragment)
+        }
+        avatarSelector.show(vector_coordinator_layout, false)
+    }
+
+    private var avatarCameraUri: Uri? = null
+    override fun onTypeSelected(type: AvatarSelectorView.Type) {
+        when (type) {
+            AvatarSelectorView.Type.CAMERA  -> {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
+            AvatarSelectorView.Type.GALLERY -> {
+                MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            }
+        }
+    }
+
+    private fun onRoomAvatarSelected(image: MultiPickerImageType) {
+        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        UCrop.of(uri, destinationFile.toUri())
+                .withOptions(
+                        UCrop.Options()
+                                .apply {
+                                    setAllowedGestures(
+                                            /* tabScale = */ UCropActivity.SCALE,
+                                            /* tabRotate = */ UCropActivity.ALL,
+                                            /* tabAspectRatio = */ UCropActivity.SCALE
+                                    )
+                                    setToolbarTitle(image.displayName)
+                                    // Disable freestyle crop, usability was not easy
+                                    // setFreeStyleCropEnabled(true)
+                                    // Color used for toolbar icon and text
+                                    setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
+                                    // Background
+                                    setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    // Status bar color (pb in dark mode, icon of the status bar are dark)
+                                    setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
+                                    // Known issue: there is still orange color used by the lib
+                                    // https://github.com/Yalantis/uCrop/issues/602
+                                    setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
+                                    // Hide the logo (does not work)
+                                    setLogoColor(Color.TRANSPARENT)
+                                }
+                )
+                .start(requireContext(), this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
+                    avatarCameraUri?.let { uri ->
+                        MultiPicker.get(MultiPicker.CAMERA)
+                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
+                                ?.let {
+                                    onRoomAvatarSelected(it)
+                                }
+                    }
+                }
+                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                    MultiPicker
+                            .get(MultiPicker.IMAGE)
+                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
+                            .firstOrNull()?.let {
+                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
+                                // onRoomAvatarSelected(it)
+                                onAvatarCropped(it.contentUri)
+                            }
+                }
+                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun onAvatarCropped(uri: Uri?) {
+        if (uri != null) {
+            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomAvatar(uri, getFilenameFromUri(context, uri)))
+        } else {
+            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        }
     }
 }
