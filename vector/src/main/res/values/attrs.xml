@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- FIXME This declare-styleable is not necessary, we should only use file color_riotx.xml, to declare attr and the related colors -->
     <declare-styleable name="VectorStyles">
 
         <attr name="vctr_bottom_nav_background_color" format="color" />
