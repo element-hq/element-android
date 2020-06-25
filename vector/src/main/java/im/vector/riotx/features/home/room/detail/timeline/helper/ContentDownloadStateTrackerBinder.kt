@@ -16,6 +16,9 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
+import android.graphics.drawable.Drawable
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -30,7 +33,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
                                                             private val messageColorProvider: MessageColorProvider,
                                                             private val errorFormatter: ErrorFormatter) {
 
-    private val updateListeners = mutableMapOf<String, ContentDownloadStateTracker.UpdateListener>()
+    private val updateListeners = mutableMapOf<String, ContentDownloadUpdater>()
 
     fun bind(mxcUrl: String,
              holder: MessageFileItem.Holder) {
@@ -46,6 +49,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val downloadStateTracker = session.contentDownloadProgressTracker()
             updateListeners[mxcUrl]?.also {
+                it.stop()
                 downloadStateTracker.unTrack(mxcUrl, it)
             }
         }
@@ -72,8 +76,18 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
         }
     }
 
-    // avoid blink effect when setting icon
-    private var hasDLResource = false
+    private var animatedDrawable:  AnimatedVectorDrawableCompat? = null
+    private var animationLoopCallback = object : Animatable2Compat.AnimationCallback() {
+        override fun onAnimationEnd(drawable: Drawable?) {
+            animatedDrawable?.start()
+        }
+    }
+
+    fun stop() {
+        animatedDrawable?.unregisterAnimationCallback(animationLoopCallback)
+        animatedDrawable?.stop()
+        animatedDrawable = null
+    }
 
     private fun handleIdle() {
         holder.fileDownloadProgress.progress = 0
@@ -92,19 +106,23 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
         val percent = 100L * (current.toFloat() / total.toFloat())
         holder.fileDownloadProgress.isIndeterminate = false
         holder.fileDownloadProgress.progress = percent.toInt()
-        if (!hasDLResource) {
-            holder.fileImageView.setImageResource(R.drawable.ic_download)
-            hasDLResource = true
+        if (animatedDrawable == null) {
+            animatedDrawable = AnimatedVectorDrawableCompat.create(holder.view.context, R.drawable.ic_download_anim)
+            holder.fileImageView.setImageDrawable(animatedDrawable)
+            animatedDrawable?.start()
+            animatedDrawable?.registerAnimationCallback(animationLoopCallback)
         }
     }
 
     private fun handleFailure() {
+        stop()
         holder.fileDownloadProgress.isIndeterminate = false
         holder.fileDownloadProgress.progress = 0
         holder.fileImageView.setImageResource(R.drawable.ic_close_round)
     }
 
     private fun handleSuccess() {
+        stop()
         holder.fileDownloadProgress.isIndeterminate = false
         holder.fileDownloadProgress.progress = 100
         holder.fileImageView.setImageResource(R.drawable.ic_paperclip)
