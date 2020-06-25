@@ -17,26 +17,44 @@
 
 package im.vector.matrix.android.internal.session.profile
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.content.UploadAvatarWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import io.realm.kotlin.where
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
+private const val UPLOAD_AVATAR_WORK = "UPLOAD_AVATAR_WORK"
 
 internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
                                                          @SessionDatabase private val monarchy: Monarchy,
+                                                         @SessionId private val sessionId: String,
+                                                         private val workManagerProvider: WorkManagerProvider,
+                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                          private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
                                                          private val getProfileInfoTask: GetProfileInfoTask,
-                                                         private val setDisplayNameTask: SetDisplayNameTask) : ProfileService {
+                                                         private val setDisplayNameTask: SetDisplayNameTask,
+                                                         private val setAvatarUrlTask: SetAvatarUrlTask) : ProfileService {
 
     override fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
         val params = GetProfileInfoTask.Params(userId)
@@ -62,6 +80,41 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                     callback = matrixCallback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        val cancelableBag = CancelableBag()
+        val workerParams = UploadAvatarWorker.Params(sessionId, newAvatarUri, fileName)
+        val workerData = WorkerParamsFactory.toData(workerParams)
+
+        val uploadAvatarWork = workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadAvatarWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManagerProvider.workManager
+                .beginUniqueWork("${userId}_$UPLOAD_AVATAR_WORK", ExistingWorkPolicy.REPLACE, uploadAvatarWork)
+                .enqueue()
+
+        cancelableBag.add(CancelableWork(workManagerProvider.workManager, uploadAvatarWork.id))
+
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
+            workManagerProvider.workManager.getWorkInfoByIdLiveData(uploadAvatarWork.id)
+                    .observeForever { info ->
+                        if (info != null && info.state.isFinished) {
+                            val result = WorkerParamsFactory.fromData<UploadAvatarWorker.OutputParams>(info.outputData)
+                            cancelableBag.add(
+                                    setAvatarUrlTask
+                                            .configureWith(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = result?.imageUrl!!)) {
+                                                callback = matrixCallback
+                                            }
+                                            .executeBy(taskExecutor)
+                            )
+                        }
+                    }
+        }
+        return cancelableBag
     }
 
     override fun getAvatarUrl(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {

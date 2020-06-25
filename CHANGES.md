@@ -10,6 +10,7 @@ Improvements 🙌:
  - Handle `/op`, `/deop`, and `/nick` commands (#12)
  - Prioritising Recovery key over Recovery passphrase (#1463)
  - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Update user avatar (#1054)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
