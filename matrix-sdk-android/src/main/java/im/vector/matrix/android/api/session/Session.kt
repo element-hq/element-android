@@ -47,7 +47,6 @@ import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
-import java.io.File
 
 /**
  * This interface defines interactions with a session.
