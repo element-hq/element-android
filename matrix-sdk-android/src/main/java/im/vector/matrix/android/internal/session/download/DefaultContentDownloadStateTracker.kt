@@ -27,6 +27,8 @@ import javax.inject.Inject
 class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListener, ContentDownloadStateTracker {
 
     private val mainHandler = Handler(Looper.getMainLooper())
+
+    // TODO this will grow undefinitly..
     private val states = mutableMapOf<String, ContentDownloadStateTracker.State>()
     private val listeners = mutableMapOf<String, MutableList<ContentDownloadStateTracker.UpdateListener>>()
 
@@ -34,6 +36,14 @@ class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListene
         val listeners = listeners.getOrPut(key) { ArrayList() }
         if (!listeners.contains(updateListener)) {
             listeners.add(updateListener)
+        }
+        val currentState = states[key] ?: ContentDownloadStateTracker.State.Idle
+        mainHandler.post {
+            try {
+                updateListener.onDownloadStateUpdate(currentState)
+            } catch (e: Exception) {
+                Timber.e(e, "## ContentUploadStateTracker.onUpdate() failed")
+            }
         }
     }
 
@@ -51,21 +61,25 @@ class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListene
 
     override fun update(url: String, bytesRead: Long, contentLength: Long, done: Boolean) {
         Timber.v("## DL Progress url:$url read:$bytesRead total:$contentLength done:$done")
-        listeners[url]?.forEach {
-            tryThis {
-                if (done) {
-                    it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Success)
-                } else {
-                    it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
-                }
-            }
+        if (done) {
+            updateState(url, ContentDownloadStateTracker.State.Success)
+        } else {
+            updateState(url, ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
         }
     }
 
     override fun error(url: String, errorCode: Int) {
         Timber.v("## DL Progress Error code:$errorCode")
+        updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
         listeners[url]?.forEach {
             tryThis { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+        }
+    }
+
+    private fun updateState(url: String, state: ContentDownloadStateTracker.State) {
+        states[url] = state
+        listeners[url]?.forEach {
+            tryThis { it.onDownloadStateUpdate(state) }
         }
     }
 }
