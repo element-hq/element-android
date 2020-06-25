@@ -13,9 +13,5 @@ abstract class GenericLoaderItem : VectorEpoxyModel<GenericLoaderItem.Holder>() 
 
     // Maybe/Later add some style configuration, SMALL/BIG ?
 
-    override fun bind(holder: Holder) {
-        super.bind(holder)
-    }
-
     class Holder : VectorEpoxyHolder()
 }
