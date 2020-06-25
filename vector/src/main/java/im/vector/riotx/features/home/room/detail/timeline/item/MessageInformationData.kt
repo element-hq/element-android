@@ -41,9 +41,7 @@ data class MessageInformationData(
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe : Boolean,
-        val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
-        // used for file messages
-        val isDowloaded: Boolean = true
+        val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
 
     val matrixItem: MatrixItem

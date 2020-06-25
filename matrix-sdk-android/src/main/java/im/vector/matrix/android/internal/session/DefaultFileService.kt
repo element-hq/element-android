@@ -41,9 +41,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okio.buffer
+import okio.sink
+import okio.source
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -83,7 +87,6 @@ internal class DefaultFileService @Inject constructor(
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,
                               callback: MatrixCallback<File>): Cancelable {
-
         val unwrappedUrl = url ?: return NoOpCancellable.also {
             callback.onFailure(IllegalArgumentException("url is null"))
         }
@@ -180,8 +183,19 @@ internal class DefaultFileService @Inject constructor(
                     tryThis { otherCallbacks.onSuccess(file) }
                 }
             })
-
         }.toCancelable()
+    }
+
+    fun storeDataFor(url: String, mimeType: String?, inputStream: InputStream) {
+        val file = File(downloadFolder, fileForUrl(url, mimeType))
+        val source = inputStream.source().buffer()
+        file.sink().buffer().let { sink ->
+            source.use { input ->
+                sink.use { output ->
+                    output.writeAll(input)
+                }
+            }
+        }
     }
 
     private fun fileForUrl(url: String, mimeType: String?): String {
@@ -194,7 +208,7 @@ internal class DefaultFileService @Inject constructor(
     }
 
     override fun fileState(mxcUrl: String, mimeType: String?): FileService.FileState {
-        if (isFileInCache(mxcUrl,mimeType)) return FileService.FileState.IN_CACHE
+        if (isFileInCache(mxcUrl, mimeType)) return FileService.FileState.IN_CACHE
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
