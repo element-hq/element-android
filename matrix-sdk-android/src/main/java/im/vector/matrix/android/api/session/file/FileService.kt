@@ -50,8 +50,7 @@ interface FileService {
 
     /**
      * Download a file.
-     * Result will be a decrypted file, stored in the cache folder. id parameter will be used to create a sub folder to avoid name collision.
-     * You can pass the eventId
+     * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
     fun downloadFile(
             downloadMode: DownloadMode,
@@ -70,9 +69,19 @@ interface FileService {
      */
     fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
 
+    /**
+     * Get information on the given file.
+     * Mimetype should be the same one as passed to downloadFile (limitation for now)
+     */
     fun fileState(mxcUrl: String, mimeType: String?) : FileState
 
+    /**
+     * Clears all the files downloaded  by the service
+     */
     fun clearCache()
 
+    /**
+     * Get size of cached files
+     */
     fun getCacheSize() : Int
 }
