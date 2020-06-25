@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.content
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.os.Build
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
@@ -43,6 +42,7 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.UUID
 import javax.inject.Inject
@@ -161,70 +161,58 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
                 return try {
-                    // Temporary disable compressing for Android 10 and above.
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val contentUploadResponse = if (params.isEncrypted) {
-                            Timber.v("Encrypt file")
-                            notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
-
-                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(inputStream, attachment.getSafeMimeType())
-                            uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
-
-                            fileUploader
-                                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
-                        } else {
-                            fileUploader
-                                    .uploadByteArray(inputStream.readBytes(), attachment.name, attachment.getSafeMimeType(), progressListener)
-                        }
-                        handleSuccess(params,
-                                contentUploadResponse.contentUri,
-                                uploadedFileEncryptedFileInfo,
-                                uploadedThumbnailUrl,
-                                uploadedThumbnailEncryptedFileInfo,
-                                newImageAttributes)
-                    } else {
-                        val cacheFile = File.createTempFile(attachment.name ?: UUID.randomUUID().toString(), ".jpg", context.cacheDir)
-                        cacheFile.parentFile?.mkdirs()
-                        if (cacheFile.exists()) {
-                            cacheFile.delete()
-                        }
-                        cacheFile.createNewFile()
-                        cacheFile.deleteOnExit()
-
-                        val outputStream = FileOutputStream(cacheFile)
-                        outputStream.use {
-                            inputStream.copyTo(outputStream)
-                        }
-
-                        val contentUploadResponse = if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
-                            Compressor.compress(context, cacheFile) {
-                                default(
-                                        width = MAX_IMAGE_SIZE,
-                                        height = MAX_IMAGE_SIZE
-                                )
-                            }.also { compressedFile ->
-                                val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                                BitmapFactory.decodeFile(compressedFile.absolutePath, options)
-                                val fileSize = compressedFile.length().toInt()
-                                newImageAttributes = NewImageAttributes(
-                                        options.outWidth,
-                                        options.outHeight,
-                                        fileSize
-                                )
-                            }.let { compressedFile ->
-                                fileUploader.uploadFile(compressedFile, attachment.name, attachment.getSafeMimeType(), progressListener)
-                            }
-                        } else {
-                            fileUploader.uploadFile(cacheFile, attachment.name, attachment.getSafeMimeType(), progressListener)
-                        }
-
-                        handleSuccess(params,
-                                contentUploadResponse.contentUri,
-                                uploadedFileEncryptedFileInfo,
-                                uploadedThumbnailUrl,
-                                uploadedThumbnailEncryptedFileInfo,
-                                newImageAttributes)
+                    var cacheFile = File.createTempFile(attachment.name ?: UUID.randomUUID().toString(), ".jpg", context.cacheDir)
+                    cacheFile.parentFile?.mkdirs()
+                    if (cacheFile.exists()) {
+                        cacheFile.delete()
                     }
+                    cacheFile.createNewFile()
+                    cacheFile.deleteOnExit()
+
+                    val outputStream = FileOutputStream(cacheFile)
+                    outputStream.use {
+                        inputStream.copyTo(outputStream)
+                    }
+
+                    if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
+                        cacheFile = Compressor.compress(context, cacheFile) {
+                            default(
+                                    width = MAX_IMAGE_SIZE,
+                                    height = MAX_IMAGE_SIZE
+                            )
+                        }.also { compressedFile ->
+                            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                            BitmapFactory.decodeFile(compressedFile.absolutePath, options)
+                            val fileSize = compressedFile.length().toInt()
+                            newImageAttributes = NewImageAttributes(
+                                    options.outWidth,
+                                    options.outHeight,
+                                    fileSize
+                            )
+                        }
+                    }
+
+                    val contentUploadResponse = if (params.isEncrypted) {
+                        Timber.v("Encrypt file")
+                        notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
+
+                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(cacheFile), attachment.getSafeMimeType())
+                        uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
+
+                        fileUploader
+                                .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+                    } else {
+                        fileUploader
+                                .uploadFile(cacheFile, attachment.name, attachment.getSafeMimeType(), progressListener)
+                    }
+
+                    handleSuccess(params,
+                            contentUploadResponse.contentUri,
+                            uploadedFileEncryptedFileInfo,
+                            uploadedThumbnailUrl,
+                            uploadedThumbnailEncryptedFileInfo,
+                            newImageAttributes)
+
                 } catch (t: Throwable) {
                     Timber.e(t)
                     handleFailure(params, t)

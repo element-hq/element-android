@@ -21,7 +21,6 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -144,12 +143,6 @@ class AttachmentsPreviewFragment @Inject constructor(
             attachmentPreviewerBigList.scrollToPosition(state.currentAttachmentIndex)
             attachmentPreviewerMiniatureList.scrollToPosition(state.currentAttachmentIndex)
             attachmentPreviewerSendImageOriginalSize.text = resources.getQuantityString(R.plurals.send_images_with_original_size, state.attachments.size)
-
-            // Temporary disable compressing for Android 10 and above.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                attachmentPreviewerSendImageOriginalSize.isChecked = true
-                attachmentPreviewerSendImageOriginalSize.isEnabled = false
-            }
         }
     }
 
