@@ -2404,6 +2404,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="media_file_added_to_gallery">Media file added to the Gallery</string>
     <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
+    <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
     <string name="use_other_session_content_description">Use the latest Riot on your other devices, Riot Web, Riot Desktop, Riot iOS, RiotX for Android, or another cross-signing capable Matrix client</string>

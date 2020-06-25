@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
@@ -33,6 +34,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
+import im.vector.riotx.features.notifications.NotificationUtils
 import okio.buffer
 import okio.sink
 import okio.source
@@ -297,7 +299,7 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     }
 }
 
-fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?): Boolean {
+fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         val externalContentUri: Uri
         val values = ContentValues()
@@ -335,7 +337,10 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
                 values.put(MediaStore.Downloads.DATE_TAKEN, System.currentTimeMillis())
             }
         }
-        context.contentResolver.insert(externalContentUri, values)?.let { uri ->
+        val uri = context.contentResolver.insert(externalContentUri, values)
+        if (uri == null) {
+            Toast.makeText(context, R.string.error_saving_media_file, Toast.LENGTH_LONG).show()
+        } else {
             val source = file.inputStream().source().buffer()
             context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
                 source.use { input ->
@@ -343,6 +348,13 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
                         output.writeAll(input)
                     }
                 }
+            }
+            notificationUtils.buildDownloadFileNotification(
+                    uri,
+                    title,
+                    mediaMimeType ?: "application/octet-stream"
+            ).let { notification ->
+                notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
             }
         }
         // TODO add notification?
@@ -352,9 +364,7 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             mediaScanIntent.data = Uri.fromFile(file)
             context.sendBroadcast(mediaScanIntent)
         }
-        return true
     }
-    return false
 }
 
 /**
