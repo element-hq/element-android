@@ -861,10 +861,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
         val mxcUrl = action.messageFileContent.getFileUrl()
-        val isDownloaded = mxcUrl?.let { session.isFileInCache(it, action.messageFileContent.mimeType) } ?: false
+        val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
         if (isDownloaded) {
             // we can open it
-            session.getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
+            session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
                         action.messageFileContent.mimeType,
                         uri,
@@ -872,7 +872,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ))
             }
         } else {
-            session.downloadFile(
+            session.fileService().downloadFile(
                     FileService.DownloadMode.FOR_INTERNAL_USE,
                     action.eventId,
                     action.messageFileContent.getFileName(),

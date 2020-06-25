@@ -91,7 +91,7 @@ internal class DefaultSession @Inject constructor(
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
-        private val fileService: Lazy<FileService>,
+        private val defaultFileService: Lazy<FileService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val widgetService: Lazy<WidgetService>,
@@ -122,7 +122,6 @@ internal class DefaultSession @Inject constructor(
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
-        FileService by fileService.get(),
         TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
@@ -246,6 +245,8 @@ internal class DefaultSession @Inject constructor(
     override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun identityService() = defaultIdentityService
+
+    override fun fileService(): FileService = defaultFileService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
 

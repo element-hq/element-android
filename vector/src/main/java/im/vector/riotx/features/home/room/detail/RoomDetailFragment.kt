@@ -1339,7 +1339,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        session.downloadFile(
+        session.fileService().downloadFile(
                 FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 action.eventId,
                 action.messageContent.body,
@@ -1357,7 +1357,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
-        session.downloadFile(
+        session.fileService().downloadFile(
                 downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 id = action.eventId,
                 fileName = action.messageContent.body,

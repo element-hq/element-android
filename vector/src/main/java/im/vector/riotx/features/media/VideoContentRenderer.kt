@@ -65,7 +65,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession()
+                activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
                                 downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                                 id = data.eventId,
@@ -104,7 +104,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession()
+                activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
                                 downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                                 id = data.eventId,

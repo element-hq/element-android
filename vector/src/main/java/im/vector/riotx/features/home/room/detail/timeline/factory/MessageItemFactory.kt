@@ -245,7 +245,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .izLocalFile(messageContent.getFileUrl().isLocalFile())
-                .izDownloaded(session.isFileInCache(mxcUrl, messageContent.mimeType))
+                .izDownloaded(session.fileService().isFileInCache(mxcUrl, messageContent.mimeType))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)

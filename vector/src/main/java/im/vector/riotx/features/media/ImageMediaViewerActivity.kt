@@ -133,7 +133,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     }
 
     private fun onShareActionClicked() {
-        session.downloadFile(
+        session.fileService().downloadFile(
                 FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 mediaData.eventId,
                 mediaData.filename,

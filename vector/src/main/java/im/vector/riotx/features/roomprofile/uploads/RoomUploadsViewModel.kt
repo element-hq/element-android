@@ -136,7 +136,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val file = awaitCallback<File> {
-                    session.downloadFile(
+                    session.fileService().downloadFile(
                             downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                             id = action.uploadEvent.eventId,
                             fileName = action.uploadEvent.contentWithAttachmentContent.body,
@@ -157,7 +157,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val file = awaitCallback<File> {
-                    session.downloadFile(
+                    session.fileService().downloadFile(
                             FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                             action.uploadEvent.eventId,
                             action.uploadEvent.contentWithAttachmentContent.body,
