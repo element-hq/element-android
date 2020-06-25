@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.database
 
 import android.content.Context
 import android.util.Base64
+import androidx.core.content.edit
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.internal.session.securestorage.SecretStoringUtils
 import io.realm.RealmConfiguration
@@ -67,10 +68,9 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
         val key = generateKeyForRealm()
         val encodedKey = Base64.encodeToString(key, Base64.NO_PADDING)
         val toStore = secretStoringUtils.securelyStoreString(encodedKey, alias)
-        sharedPreferences
-                .edit()
-                .putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore!!, Base64.NO_PADDING))
-                .apply()
+        sharedPreferences.edit {
+            putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore!!, Base64.NO_PADDING))
+        }
         return key
     }
 
@@ -107,10 +107,9 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
         if (hasKeyForDatabase(alias)) {
             secretStoringUtils.safeDeleteKey(alias)
 
-            sharedPreferences
-                    .edit()
-                    .remove("${ENCRYPTED_KEY_PREFIX}_$alias")
-                    .apply()
+            sharedPreferences.edit {
+                remove("${ENCRYPTED_KEY_PREFIX}_$alias")
+            }
         }
     }
 

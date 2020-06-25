@@ -42,6 +42,7 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -100,10 +101,14 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.ui.views.ActiveCallView
+import im.vector.riotx.core.ui.views.ActiveCallViewHolder
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
 import im.vector.riotx.core.utils.KeyboardStateUtils
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
@@ -117,6 +122,8 @@ import im.vector.riotx.core.utils.createJSonViewerStyleProvider
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.isValidUrl
+import im.vector.riotx.core.utils.onPermissionResultAudioIpCall
+import im.vector.riotx.core.utils.onPermissionResultVideoIpCall
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
@@ -127,6 +134,9 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
+import im.vector.riotx.features.call.SharedActiveCallViewModel
+import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -134,7 +144,6 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
-import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
@@ -149,6 +158,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
 import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -196,16 +206,21 @@ class RoomDetailFragment @Inject constructor(
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
-        private val colorProvider: ColorProvider) :
+        private val colorProvider: ColorProvider,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
-        RoomWidgetsBannerView.Callback {
+        RoomWidgetsBannerView.Callback,
+        ActiveCallView.Callback {
 
     companion object {
+
+        private const val AUDIO_CALL_PERMISSION_REQUEST_CODE = 1
+        private const val VIDEO_CALL_PERMISSION_REQUEST_CODE = 2
 
         /**
          * Sanitize the display name.
@@ -243,6 +258,8 @@ class RoomDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_timeline
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
+    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
     private var modelBuildListener: OnModelBuildFinishedListener? = null
@@ -255,10 +272,12 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
+    private val activeCallViewHolder = ActiveCallViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
@@ -267,6 +286,7 @@ class RoomDetailFragment @Inject constructor(
         setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
+        setupActiveCallView()
         setupJumpToBottomView()
         setupWidgetsBannerView()
 
@@ -280,6 +300,13 @@ class RoomDetailFragment @Inject constructor(
                     handleActions(it)
                 }
                 .disposeOnDestroyView()
+
+        sharedCallActionViewModel
+                .activeCall
+                .observe(viewLifecycleOwner, Observer {
+                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
+                    invalidateOptionsMenu()
+                })
 
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
@@ -303,20 +330,31 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                         -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents             -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess                   -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure                   -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage                     -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent                 -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError                 -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState               -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
-                is RoomDetailViewEvents.SendMessageResult               -> renderSendMessageResult(it)
-                RoomDetailViewEvents.DisplayPromptForIntegrationManager -> displayPromptForIntegrationManager()
-                is RoomDetailViewEvents.OpenStickerPicker               -> openStickerPicker(it)
+                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
+                RoomDetailViewEvents.DisplayPromptForIntegrationManager  -> displayPromptForIntegrationManager()
+                is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
+                is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
+                is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
             }.exhaustive
         }
+    }
+
+    private fun openIntegrationManager(screen: String? = null) {
+        navigator.openIntegrationManager(
+                fragment = this,
+                roomId = roomDetailArgs.roomId,
+                integId = null,
+                screen = screen
+        )
     }
 
     private fun setupWidgetsBannerView() {
@@ -335,10 +373,7 @@ class RoomDetailFragment @Inject constructor(
                 .setView(v)
                 .setPositiveButton(R.string.yes) { _, _ ->
                     // Open integration manager, to the sticker installation page
-                    navigator.openIntegrationManager(
-                            context = requireContext(),
-                            roomId = roomDetailArgs.roomId,
-                            integId = null,
+                    openIntegrationManager(
                             screen = WidgetType.StickerPicker.preferred
                     )
                 }
@@ -372,6 +407,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
+        activeCallView.callback = null
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
@@ -381,6 +417,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
+        activeCallViewHolder.unBind(webRtcPeerConnectionManager)
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -408,6 +445,15 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupJumpToReadMarkerView() {
         jumpToReadMarkerView.callback = this
+    }
+
+    private fun setupActiveCallView() {
+        activeCallViewHolder.bind(
+                activeCallPiP,
+                activeCallView,
+                activeCallPiPWrap,
+                this
+        )
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
@@ -470,11 +516,30 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                if (session.integrationManagerService().isIntegrationEnabled()) {
-                    navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
-                } else {
-                    displayDisabledIntegrationDialog()
-                }
+                roomDetailViewModel.handle(RoomDetailAction.OpenIntegrationManager)
+                true
+            }
+            R.id.voice_call,
+            R.id.video_call          -> {
+                    val activeCall = sharedCallActionViewModel.activeCall.value
+                    val isVideoCall = item.itemId == R.id.video_call
+                    if (activeCall != null) {
+                        // resume existing if same room, if not prompt to kill and then restart new call?
+                        if (activeCall.roomId == roomDetailArgs.roomId) {
+                            onTapToReturnToCall()
+                        }
+//                        else {
+                            // TODO might not work well, and should prompt
+//                            webRtcPeerConnectionManager.endCall()
+//                            safeStartCall(it, isVideoCall)
+//                        }
+                    } else {
+                        safeStartCall(isVideoCall)
+                    }
+                true
+            }
+            R.id.hangup_call -> {
+                roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
@@ -490,6 +555,26 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+    }
+
+    private fun safeStartCall(isVideoCall: Boolean) {
+        val startCallAction = RoomDetailAction.StartCall(isVideoCall)
+        roomDetailViewModel.pendingAction = startCallAction
+        if (isVideoCall) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
+                            this, VIDEO_CALL_PERMISSION_REQUEST_CODE,
+                            R.string.permissions_rationale_msg_camera_and_audio)) {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(startCallAction)
+            }
+        } else {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
+                            this, AUDIO_CALL_PERMISSION_REQUEST_CODE,
+                            R.string.permissions_rationale_msg_record_audio)) {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(startCallAction)
+            }
+        }
     }
 
     private fun renderRegularMode(text: String) {
@@ -564,16 +649,16 @@ class RoomDetailFragment @Inject constructor(
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE            -> {
+                AttachmentsPreviewActivity.REQUEST_CODE        -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
                     val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
                     roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
                 }
-                REACTION_SELECT_REQUEST_CODE                       -> {
+                REACTION_SELECT_REQUEST_CODE                   -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
-                StickerPickerConstants.STICKER_PICKER_REQUEST_CODE -> {
+                WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE -> {
                     val content = WidgetActivity.getOutput(data).toModel<MessageStickerContent>() ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
                 }
@@ -735,6 +820,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(roomDetailViewModel) { state ->
         renderRoomSummary(state)
+        invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
@@ -1084,6 +1170,22 @@ class RoomDetailFragment @Inject constructor(
                     if (pendingType != null) {
                         attachmentsHelper.pendingType = null
                         launchAttachmentProcess(pendingType)
+                    }
+                }
+                AUDIO_CALL_PERMISSION_REQUEST_CODE      -> {
+                    if (onPermissionResultAudioIpCall(requireContext(), grantResults)) {
+                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                            roomDetailViewModel.pendingAction = null
+                            roomDetailViewModel.handle(it)
+                        }
+                    }
+                }
+                VIDEO_CALL_PERMISSION_REQUEST_CODE      -> {
+                    if (onPermissionResultVideoIpCall(requireContext(), grantResults)) {
+                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                            roomDetailViewModel.pendingAction = null
+                            roomDetailViewModel.handle(it)
+                        }
                     }
                 }
             }
@@ -1468,5 +1570,21 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
+    }
+
+    override fun onTapToReturnToCall() {
+        sharedCallActionViewModel.activeCall.value?.let { call ->
+            VectorCallActivity.newIntent(
+                    context = requireContext(),
+                    callId = call.callId,
+                    roomId = call.roomId,
+                    otherUserId = call.otherUserId,
+                    isIncomingCall = !call.isOutgoing,
+                    isVideoCall = call.isVideoCall,
+                    mode = null
+            ).let {
+                startActivity(it)
+            }
+        }
     }
 }

@@ -52,7 +52,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object DisplayPromptForIntegrationManager: RoomDetailViewEvents()
 
+    object DisplayEnableIntegrationsWarning: RoomDetailViewEvents()
+
     data class OpenStickerPicker(val widget: Widget): RoomDetailViewEvents()
+
+    object OpenIntegrationManager: RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()

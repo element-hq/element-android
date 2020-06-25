@@ -22,6 +22,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.core.platform.ConfigurationViewModel
+import im.vector.riotx.features.call.SharedActiveCallViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
@@ -84,6 +85,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SharedActiveCallViewModel::class)
+    fun bindSharedActiveCallViewModel(viewModel: SharedActiveCallViewModel): ViewModel
 
     @Binds
     @IntoMap

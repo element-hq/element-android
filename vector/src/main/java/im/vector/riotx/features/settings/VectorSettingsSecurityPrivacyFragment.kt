@@ -337,7 +337,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
      * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
-        showDeviceListPref.isEnabled = devices.size > 0
+        showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 //        val userId = session.myUserId
 //        val deviceId = session.sessionParams.deviceId

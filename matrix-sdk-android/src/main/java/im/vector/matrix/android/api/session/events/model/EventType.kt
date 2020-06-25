@@ -58,7 +58,6 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
 
     // Call Events
-
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
     const val CALL_ANSWER = "m.call.answer"

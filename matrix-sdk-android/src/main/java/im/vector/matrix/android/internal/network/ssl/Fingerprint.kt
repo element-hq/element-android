@@ -33,7 +33,7 @@ data class Fingerprint(
 
     @Throws(CertificateException::class)
     fun matchesCert(cert: X509Certificate): Boolean {
-        var o: Fingerprint? = when (hashType) {
+        val o: Fingerprint? = when (hashType) {
             HashType.SHA256 -> newSha256Fingerprint(cert)
             HashType.SHA1   -> newSha1Fingerprint(cert)
         }

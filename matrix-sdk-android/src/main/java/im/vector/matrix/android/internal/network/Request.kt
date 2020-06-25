@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
+import retrofit2.awaitResponse
 import java.io.IOException
 
-internal suspend inline fun <DATA> executeRequest(eventBus: EventBus?,
+internal suspend inline fun <DATA : Any> executeRequest(eventBus: EventBus?,
                                                   block: Request<DATA>.() -> Unit) = Request<DATA>(eventBus).apply(block).execute()
 
-internal class Request<DATA>(private val eventBus: EventBus?) {
+internal class Request<DATA : Any>(private val eventBus: EventBus?) {
 
     var isRetryable = false
     var initialDelay: Long = 100L
