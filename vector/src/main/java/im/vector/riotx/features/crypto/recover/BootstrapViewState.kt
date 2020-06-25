@@ -19,13 +19,18 @@ package im.vector.riotx.features.crypto.recover
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import com.nulabinc.zxcvbn.Strength
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.riotx.core.platform.WaitingViewData
 
 data class BootstrapViewState(
-        val step: BootstrapStep = BootstrapStep.SetupSecureBackup,
+        val step: BootstrapStep = BootstrapStep.SetupPassphrase(false),
+        val passphrase: String? = null,
         val migrationRecoveryKey: String? = null,
+        val passphraseRepeat: String? = null,
         val crossSigningInitialization: Async<Unit> = Uninitialized,
+        val passphraseStrength: Async<Strength> = Uninitialized,
+        val passphraseConfirmMatch: Async<Unit> = Uninitialized,
         val recoveryKeyCreationInfo: SsssKeyCreationInfo? = null,
         val initializationWaitingViewData: WaitingViewData? = null,
         val recoverySaveFileProcess: Async<Unit> = Uninitialized

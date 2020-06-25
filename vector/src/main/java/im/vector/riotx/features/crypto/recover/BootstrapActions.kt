@@ -24,13 +24,17 @@ sealed class BootstrapActions : VectorViewModelAction {
     // Navigation
 
     object GoBack : BootstrapActions()
+    data class GoToConfirmPassphrase(val passphrase: String) : BootstrapActions()
     object GoToCompleted : BootstrapActions()
     object GoToEnterAccountPassword : BootstrapActions()
 
     object SetupRecoveryKey : BootstrapActions()
 
+    data class DoInitialize(val passphrase: String) : BootstrapActions()
     object DoInitializeGeneratedKey : BootstrapActions()
     object TogglePasswordVisibility : BootstrapActions()
+    data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
+    data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()
     data class ReAuth(val pass: String) : BootstrapActions()
     object RecoveryKeySaved : BootstrapActions()
     object Completed : BootstrapActions()

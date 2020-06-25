@@ -51,11 +51,15 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_bootstrap_migrate_backup
 
-    private val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
+    val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        withState(sharedViewModel) {
+            // set initial value (useful when coming back)
+            bootstrapMigrateEditText.setText(it.passphrase ?: "")
+        }
         bootstrapMigrateEditText.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

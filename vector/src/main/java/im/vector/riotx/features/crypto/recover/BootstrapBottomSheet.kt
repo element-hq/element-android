@@ -132,6 +132,16 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 bootstrapTitleText.text = getString(R.string.upgrade_security)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
+            is BootstrapStep.SetupPassphrase             -> {
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
+                bootstrapTitleText.text = getString(R.string.set_recovery_passphrase, getString(R.string.recovery_passphrase))
+                showFragment(BootstrapEnterPassphraseFragment::class, Bundle())
+            }
+            is BootstrapStep.ConfirmPassphrase           -> {
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
+                bootstrapTitleText.text = getString(R.string.confirm_recovery_passphrase, getString(R.string.recovery_passphrase))
+                showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
+            }
             is BootstrapStep.AccountPassword             -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 bootstrapTitleText.text = getString(R.string.account_password)
