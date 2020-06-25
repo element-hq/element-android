@@ -25,5 +25,4 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>() {
 
     class Holder : VectorEpoxyHolder()
-
 }

@@ -54,7 +54,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 })
     }
 
-    fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>>{
+    fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                 { roomSummaryMapper.map(it) }

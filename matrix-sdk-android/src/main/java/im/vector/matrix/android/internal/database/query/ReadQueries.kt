@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.database.query
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
@@ -36,7 +35,7 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
     }
     var isEventRead = false
 
-    Realm.getInstance(realmConfiguration).use{ realm ->
+    Realm.getInstance(realmConfiguration).use { realm ->
         val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@use
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
         isEventRead = if (eventToCheck == null || eventToCheck.root?.sender == userId) {

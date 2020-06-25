@@ -34,5 +34,4 @@ interface TypingUsersTracker {
      * Returns a LiveData of the sender information of all currently typing users in a room, excluding yourself.
      */
     fun getTypingUsersLive(roomId: String): LiveData<List<SenderInfo>>
-
 }

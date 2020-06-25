@@ -202,5 +202,4 @@ interface Session :
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
-
 }

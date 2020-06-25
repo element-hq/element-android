@@ -27,16 +27,16 @@ internal interface SessionLifecycleObserver {
     Called when the session is opened
      */
     @MainThread
-    fun onStart(){
-        //noop
+    fun onStart() {
+        // noop
     }
 
     /*
     Called when the session is cleared
      */
     @MainThread
-    fun onClearCache(){
-        //noop
+    fun onClearCache() {
+        // noop
     }
 
     /*
@@ -44,6 +44,6 @@ internal interface SessionLifecycleObserver {
      */
     @MainThread
     fun onStop() {
-        //noop
+        // noop
     }
 }

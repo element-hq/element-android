@@ -30,7 +30,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -59,7 +58,6 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.android.internal.extensions.observeK
 import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -1045,7 +1043,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observeTypings(){
+    private fun observeTypings() {
         typingHelper.getTypingMessage(initialState.roomId)
                 .asObservable()
                 .subscribe {
