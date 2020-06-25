@@ -238,4 +238,17 @@ internal class DefaultFileService @Inject constructor(
                 file
         }
     }
+
+    override fun getCacheSize(): Int {
+        return downloadFolder.walkTopDown()
+                .onEnter {
+                    Timber.v("Get size of ${it.absolutePath}")
+                    true
+                }
+                .sumBy { it.length().toInt() }
+    }
+
+    override fun clearCache() {
+        downloadFolder.deleteRecursively()
+    }
 }

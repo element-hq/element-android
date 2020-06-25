@@ -71,4 +71,8 @@ interface FileService {
     fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
 
     fun fileState(mxcUrl: String, mimeType: String?) : FileState
+
+    fun clearCache()
+
+    fun getCacheSize() : Int
 }
