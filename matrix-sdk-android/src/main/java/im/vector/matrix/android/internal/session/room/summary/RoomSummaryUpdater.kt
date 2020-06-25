@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room
+package im.vector.matrix.android.internal.session.room.summary
 
-import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -40,10 +39,10 @@ import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
-import im.vector.matrix.android.internal.session.sync.RoomSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
@@ -56,8 +55,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
         private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
-        private val eventBus: EventBus,
-        private val monarchy: Monarchy) {
+        private val eventBus: EventBus) {
 
     companion object {
         // TODO: maybe allow user of SDK to give that list
@@ -85,7 +83,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false,
-               ephemeralResult: RoomSyncHandler.EphemeralResult? = null,
                inviterId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
@@ -121,24 +118,22 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
-                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
 
-        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
-        roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
+        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId).toString()
+        roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
-               .orEmpty()
+                .orEmpty()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
-        roomSummaryEntity.typingUserIds.clear()
-        roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
 
         if (roomSummaryEntity.membership == Membership.INVITE && inviterId != null) {
             roomSummaryEntity.inviterId = inviterId

@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -37,7 +38,7 @@ internal interface CallEventsObserverTask : Task<CallEventsObserverTask.Params, 
 }
 
 internal class DefaultCallEventsObserverTask @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val cryptoService: CryptoService,
         private val callService: DefaultCallSignalingService) : CallEventsObserverTask {
 

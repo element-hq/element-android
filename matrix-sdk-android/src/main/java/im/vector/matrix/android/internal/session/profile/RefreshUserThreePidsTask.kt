@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.profile
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -27,7 +28,7 @@ import javax.inject.Inject
 internal abstract class RefreshUserThreePidsTask : Task<Unit, Unit>
 
 internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                                   private val monarchy: Monarchy,
+                                                                   @SessionDatabase private val monarchy: Monarchy,
                                                                    private val eventBus: EventBus) : RefreshUserThreePidsTask() {
 
     override suspend fun execute(params: Unit) {

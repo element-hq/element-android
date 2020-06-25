@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
+import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createUIHandler
@@ -44,6 +45,7 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
+                                              private val typingUsersTracker: DefaultTypingUsersTracker,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver)
     : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
@@ -196,7 +198,14 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     private fun updateStateTo(newState: SyncState) {
         Timber.v("Update state from $state to $newState")
+        if (newState == state) {
+            return
+        }
         state = newState
+        // We clear typing users if the sync is not running
+        if (newState !is SyncState.Running) {
+            typingUsersTracker.clear()
+        }
         debouncer.debounce("post_state", Runnable {
             liveState.value = newState
         }, 150)

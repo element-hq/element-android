@@ -51,6 +51,7 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     lateinit var listener: () -> Unit
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.view.setOnClickListener {
             listener.invoke()
         }

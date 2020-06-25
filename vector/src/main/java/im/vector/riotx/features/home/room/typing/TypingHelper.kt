@@ -16,10 +16,9 @@
 
 package im.vector.riotx.features.home.room.typing
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.members.MembershipService
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
@@ -28,42 +27,37 @@ class TypingHelper @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider
 ) {
+
     /**
-     * Exclude current user from the list of typing users
+     * Return true if some users are currently typing in the room (excluding yourself).
      */
-    fun excludeCurrentUser(
-            typingUserIds: List<String>
-    ): List<String> {
-        return typingUserIds
-                .filter { it != session.myUserId }
+    fun hasTypingUsers(roomId: String): LiveData<Boolean> {
+        val liveData = session.typingUsersTracker().getTypingUsersLive(roomId)
+        return Transformations.map(liveData) {
+            it.isNotEmpty()
+        }
     }
 
     /**
-     * Convert a list of userId to a list of maximum 3 UserItems
+     * Returns a human readable String of currently typing users in the room (excluding yourself).
      */
-    fun toTypingRoomMembers(
-            typingUserIds: List<String>,
-            membershipService: MembershipService?
-    ): List<MatrixItem.UserItem> {
-        return excludeCurrentUser(typingUserIds)
-                .take(3)
-                .mapNotNull { membershipService?.getRoomMember(it) }
-                .map { it.toMatrixItem() }
-    }
-
-    /**
-     * Convert a list of typing UserItems to a human readable String
-     */
-    fun toTypingMessage(typingUserItems: List<MatrixItem.UserItem>): String? {
-        return when {
-            typingUserItems.isEmpty() ->
-                null
-            typingUserItems.size == 1 ->
-                stringProvider.getString(R.string.room_one_user_is_typing, typingUserItems[0].getBestName())
-            typingUserItems.size == 2 ->
-                stringProvider.getString(R.string.room_two_users_are_typing, typingUserItems[0].getBestName(), typingUserItems[1].getBestName())
-            else                      ->
-                stringProvider.getString(R.string.room_many_users_are_typing, typingUserItems[0].getBestName(), typingUserItems[1].getBestName())
+    fun getTypingMessage(roomId: String): LiveData<String> {
+        val liveData = session.typingUsersTracker().getTypingUsersLive(roomId)
+        return Transformations.map(liveData) { typingUsers ->
+            when {
+                typingUsers.isEmpty() ->
+                    ""
+                typingUsers.size == 1 ->
+                    stringProvider.getString(R.string.room_one_user_is_typing, typingUsers[0].disambiguatedDisplayName)
+                typingUsers.size == 2 ->
+                    stringProvider.getString(R.string.room_two_users_are_typing,
+                            typingUsers[0].disambiguatedDisplayName,
+                            typingUsers[1].disambiguatedDisplayName)
+                else                  ->
+                    stringProvider.getString(R.string.room_many_users_are_typing,
+                            typingUsers[0].disambiguatedDisplayName,
+                            typingUsers[1].disambiguatedDisplayName)
+            }
         }
     }
 }

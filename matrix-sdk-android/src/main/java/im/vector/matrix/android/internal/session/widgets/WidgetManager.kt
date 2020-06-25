@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.widgets.WidgetManagementFailure
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
@@ -54,17 +55,19 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val taskExecutor: TaskExecutor,
                                                  private val createWidgetTask: CreateWidgetTask,
                                                  private val widgetFactory: WidgetFactory,
-                                                 @UserId private val userId: String) : IntegrationManagerService.Listener {
+                                                 @UserId private val userId: String)
+
+    : IntegrationManagerService.Listener, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
-    fun start() {
+    override fun onStart() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         integrationManager.addListener(this)
     }
 
-    fun stop() {
+    override fun onStop() {
         integrationManager.removeListener(this)
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }

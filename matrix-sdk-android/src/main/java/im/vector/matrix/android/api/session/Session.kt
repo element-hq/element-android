@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
+import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 
@@ -145,6 +146,11 @@ interface Session :
      * Returns the ContentUploadProgressTracker associated with the session
      */
     fun contentUploadProgressTracker(): ContentUploadStateTracker
+
+    /**
+     * Returns the TypingUsersTracker associated with the session
+     */
+    fun typingUsersTracker(): TypingUsersTracker
 
     /**
      * Returns the cryptoService associated with the session

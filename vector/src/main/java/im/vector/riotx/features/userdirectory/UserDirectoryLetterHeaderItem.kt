@@ -29,6 +29,7 @@ abstract class UserDirectoryLetterHeaderItem : VectorEpoxyModel<UserDirectoryLet
     @EpoxyAttribute var letter: String = ""
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.letterView.text = letter
     }
 

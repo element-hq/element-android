@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.AddPushRuleTask
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
@@ -47,7 +48,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
         private val taskExecutor: TaskExecutor,
-        private val monarchy: Monarchy
+        @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
 
     private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()

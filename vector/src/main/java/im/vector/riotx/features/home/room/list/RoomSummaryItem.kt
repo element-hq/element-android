@@ -32,18 +32,21 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.observeK
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.typing.TypingHelper
+import timber.log.Timber
 
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
+    @EpoxyAttribute lateinit var typingHelper: TypingHelper
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
-    @EpoxyAttribute var typingString: CharSequence? = null
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
@@ -63,8 +66,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.typingView.setTextOrHide(typingString)
-        holder.lastEventView.isInvisible = holder.typingView.isVisible
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -72,6 +73,11 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarDecorationImageView.isVisible = encryptionTrustLevel != null
         holder.roomAvatarDecorationImageView.setImageResource(encryptionTrustLevel.toImageRes())
         renderSelection(holder, showSelected)
+        typingHelper.getTypingMessage(matrixItem.id).observeK(this) {
+            Timber.v("Observe typing for room ${matrixItem.id}: $it")
+            holder.typingView.setTextOrHide(it)
+            holder.lastEventView.isInvisible = holder.typingView.isVisible
+        }
     }
 
     private fun renderSelection(holder: Holder, isSelected: Boolean) {

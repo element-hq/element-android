@@ -28,6 +28,7 @@ abstract class HelpFooterItem : VectorEpoxyModel<HelpFooterItem.Holder>() {
     var text: String? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textView.text = text
     }
 

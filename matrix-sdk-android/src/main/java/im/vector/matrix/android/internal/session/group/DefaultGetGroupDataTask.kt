@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
@@ -36,7 +37,7 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val eventBus: EventBus
 ) : GetGroupDataTask {
 

@@ -61,11 +61,14 @@ class ShortcutsHandler @Inject constructor(
                             .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)
-                                val bitmap = avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), iconSize)
-
+                                val bitmap = try {
+                                    avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), iconSize)
+                                } catch (failure: Throwable) {
+                                    null
+                                }
                                 ShortcutInfoCompat.Builder(context, room.roomId)
                                         .setShortLabel(room.displayName)
-                                        .setIcon(bitmap.toProfileImageIcon())
+                                        .setIcon(bitmap?.toProfileImageIcon())
                                         .setIntent(intent)
                                         .build()
                             }

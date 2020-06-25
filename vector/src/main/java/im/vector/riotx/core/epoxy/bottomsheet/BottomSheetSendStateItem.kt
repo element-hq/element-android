@@ -41,6 +41,7 @@ abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateI
     var drawableStart: Int = 0
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.progress.isVisible = showProgress
         holder.text.setCompoundDrawablesWithIntrinsicBounds(drawableStart, 0, 0, 0)
         holder.text.text = text

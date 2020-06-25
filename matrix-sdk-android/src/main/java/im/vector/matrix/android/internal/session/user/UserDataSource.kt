@@ -31,10 +31,11 @@ import im.vector.matrix.android.internal.database.model.IgnoredUserEntityFields
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
-internal class UserDataSource @Inject constructor(private val monarchy: Monarchy) {
+internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
         monarchy.createDataSourceFactory { realm ->

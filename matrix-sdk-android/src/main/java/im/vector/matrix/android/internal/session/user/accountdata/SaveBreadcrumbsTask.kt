@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmList
@@ -37,7 +38,7 @@ internal interface SaveBreadcrumbsTask : Task<SaveBreadcrumbsTask.Params, Unit> 
 }
 
 internal class DefaultSaveBreadcrumbsTask @Inject constructor(
-        private val monarchy: Monarchy
+        @SessionDatabase private val monarchy: Monarchy
 ) : SaveBreadcrumbsTask {
 
     override suspend fun execute(params: SaveBreadcrumbsTask.Params) {

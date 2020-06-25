@@ -33,6 +33,7 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
     abstract val attachment: ContentAttachmentData
 
     override fun bind(holder: H) {
+        super.bind(holder)
         if (attachment.type == ContentAttachmentData.Type.VIDEO || attachment.type == ContentAttachmentData.Type.IMAGE) {
             Glide.with(holder.view.context)
                     .asBitmap()

@@ -30,7 +30,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -59,6 +58,7 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -73,6 +73,7 @@ import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
+import im.vector.riotx.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
@@ -101,6 +102,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
+        private val roomSummaryHolder: RoomSummaryHolder,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
@@ -139,7 +141,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
-    private var canDoCall = false
 
     @AssistedInject.Factory
     interface Factory {
@@ -165,6 +166,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
+        observeTypings()
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
@@ -1035,17 +1037,19 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    val typingRoomMembers =
-                            typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds.orEmpty(), room)
-
-                    canDoCall = async.invoke()?.canStartCall.orFalse()
-
                     copy(
-                            asyncRoomSummary = async,
-                            typingRoomMembers = typingRoomMembers,
-                            typingMessage = typingHelper.toTypingMessage(typingRoomMembers)
+                            asyncRoomSummary = async
                     )
                 }
+    }
+
+    private fun observeTypings() {
+        typingHelper.getTypingMessage(initialState.roomId)
+                .asObservable()
+                .subscribe {
+                    setState { copy(typingMessage = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun getUnreadState() {
@@ -1105,6 +1109,8 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+
+            roomSummaryHolder.set(summary)
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
                     session.getUser(inviterId)
@@ -1134,6 +1140,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
+        roomSummaryHolder.clear()
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

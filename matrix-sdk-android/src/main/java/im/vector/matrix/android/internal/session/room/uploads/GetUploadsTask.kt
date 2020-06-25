@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.TimelineEventFilter
 import im.vector.matrix.android.internal.database.query.whereType
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -54,7 +55,7 @@ internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult
 internal class DefaultGetUploadsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val tokenStore: SyncTokenStore,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val eventBus: EventBus)
     : GetUploadsTask {
 

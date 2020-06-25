@@ -33,6 +33,7 @@ abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
     @EpoxyAttribute var widgetClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.widgetName.text = widget.name
         holder.view.onClick(widgetClicked)
     }

@@ -47,6 +47,7 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -92,7 +93,7 @@ private fun VerificationState?.toState(newState: VerificationState): Verificatio
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
 internal class DefaultEventRelationsAggregationTask @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val cryptoService: CryptoService) : EventRelationsAggregationTask {
 
     // OPT OUT serer aggregation until API mature enough

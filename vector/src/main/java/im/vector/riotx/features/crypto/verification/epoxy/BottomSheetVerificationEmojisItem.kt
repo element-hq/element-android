@@ -47,6 +47,7 @@ abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute lateinit var emojiRepresentation6: EmojiRepresentation
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         bindEmojiView(holder.emoji0View, emojiRepresentation0)
         bindEmojiView(holder.emoji1View, emojiRepresentation1)
         bindEmojiView(holder.emoji2View, emojiRepresentation2)
