@@ -869,6 +869,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     if (!isAdded) return
                     // refresh the settings value
                     mDisplayNamePreference.summary = value
+                    mDisplayNamePreference.text = value
                     onCommonDone(null)
                 }
 
