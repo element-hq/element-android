@@ -346,6 +346,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
+                is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
             }.exhaustive
         }
     }
