@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.file
 
+import android.net.Uri
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
@@ -50,7 +51,16 @@ interface FileService {
             downloadMode: DownloadMode,
             id: String,
             fileName: String,
+            mimeType: String?,
             url: String?,
             elementToDecrypt: ElementToDecrypt?,
             callback: MatrixCallback<File>): Cancelable
+
+    fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean
+
+    /**
+     * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
+     * (if not other app won't be able to access it)
+     */
+    fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
 }

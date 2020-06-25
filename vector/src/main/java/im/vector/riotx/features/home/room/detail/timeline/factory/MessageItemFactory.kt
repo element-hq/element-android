@@ -57,6 +57,7 @@ import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -99,6 +100,7 @@ class MessageItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+        private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
@@ -140,8 +142,8 @@ class MessageItemFactory @Inject constructor(
             is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent                -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
@@ -184,20 +186,22 @@ class MessageItemFactory @Inject constructor(
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      callback: TimelineEventController.Callback?,
+//                                      callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
                 .attributes(attributes)
                 .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .mxcUrl(messageContent.getFileUrl() ?: "")
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .filename(messageContent.body)
-                .iconRes(R.drawable.filetype_audio)
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener {
-                            callback?.onAudioMessageClicked(messageContent)
-                        }))
+                .iconRes(R.drawable.ic_paperclip)
+//                .clickListener(
+//                        DebouncedClickListener(View.OnClickListener {
+//                            callback?.onAudioMessageClicked(messageContent)
+//                        }))
     }
 
     private fun buildVerificationRequestMessageItem(messageContent: MessageVerificationRequestContent,
@@ -245,22 +249,24 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
-                                     informationData: MessageInformationData,
+//                                     informationData: MessageInformationData,
                                      highlight: Boolean,
-                                     callback: TimelineEventController.Callback?,
+//                                     callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .mxcUrl(messageContent.getFileUrl() ?: "")
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .filename(messageContent.body)
-                .iconRes(R.drawable.filetype_attachment)
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener {
-                            callback?.onFileMessageClicked(informationData.eventId, messageContent)
-                        }))
+                .iconRes(R.drawable.ic_paperclip)
+//                .clickListener(
+//                        DebouncedClickListener(View.OnClickListener {
+//                            callback?.onFileMessageClicked(informationData.eventId, messageContent)
+//                        }))
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent,
@@ -282,6 +288,7 @@ class MessageItemFactory @Inject constructor(
         val data = ImageContentRenderer.Data(
                 eventId = informationData.eventId,
                 filename = messageContent.body,
+                mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 height = messageContent.info?.height,
@@ -318,6 +325,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 eventId = informationData.eventId,
                 filename = messageContent.body,
+                mimeType = messageContent.mimeType,
                 url = messageContent.videoInfo?.thumbnailFile?.url
                         ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
@@ -330,6 +338,7 @@ class MessageItemFactory @Inject constructor(
         val videoData = VideoContentRenderer.Data(
                 eventId = informationData.eventId,
                 filename = messageContent.body,
+                mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 thumbnailMediaData = thumbnailData

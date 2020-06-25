@@ -18,8 +18,8 @@ package im.vector.riotx.features.home.room.detail
 
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.platform.VectorViewModelAction
@@ -39,7 +39,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailAction()
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailAction()
     object MarkAllAsRead : RoomDetailAction()
-    data class DownloadFile(val eventId: String, val messageFileContent: MessageFileContent) : RoomDetailAction()
+    data class DownloadOrOpen(val eventId: String, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
     data class HandleTombstoneEvent(val event: Event) : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()

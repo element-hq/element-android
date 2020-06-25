@@ -13,8 +13,20 @@
             android:authorities="${applicationId}.workmanager-init"
             android:exported="false"
             tools:node="remove" />
-
+        <!--
+         The SDK offers a secured File provider to access downloaded files.
+         Access to these file will be given via the FileService, with a temporary
+         read access permission
+        -->
+        <provider
+            android:name="im.vector.matrix.android.api.session.file.MatrixSDKFileProvider"
+            android:authorities="${applicationId}.mx-sdk.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/sdk_provider_paths" />
+        </provider>
     </application>
-
 
 </manifest>

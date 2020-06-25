@@ -46,6 +46,7 @@ import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
 
 /**
  * This interface defines interactions with a session.
@@ -151,6 +152,11 @@ interface Session :
      * Returns the TypingUsersTracker associated with the session
      */
     fun typingUsersTracker(): TypingUsersTracker
+
+    /**
+     * Returns the ContentDownloadStateTracker associated with the session
+     */
+    fun contentDownloadProgressTracker(): ContentDownloadStateTracker
 
     /**
      * Returns the cryptoService associated with the session

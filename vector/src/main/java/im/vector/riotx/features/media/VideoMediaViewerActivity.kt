@@ -82,6 +82,7 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
                 FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 mediaData.eventId,
                 mediaData.filename,
+                mediaData.mimeType,
                 mediaData.url,
                 mediaData.elementToDecrypt,
                 object : MatrixCallback<File> {

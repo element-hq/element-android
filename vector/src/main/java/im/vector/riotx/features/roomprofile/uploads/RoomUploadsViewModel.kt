@@ -137,12 +137,13 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.downloadFile(
-                            FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            action.uploadEvent.eventId,
-                            action.uploadEvent.contentWithAttachmentContent.body,
-                            action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
-                            action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
-                            it
+                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                            id = action.uploadEvent.eventId,
+                            fileName = action.uploadEvent.contentWithAttachmentContent.body,
+                            url = action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
+                            mimeType = action.uploadEvent.contentWithAttachmentContent.mimeType,
+                            elementToDecrypt = action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
+                            callback = it
                     )
                 }
                 _viewEvents.post(RoomUploadsViewEvents.FileReadyForSharing(file))
@@ -161,6 +162,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
                             action.uploadEvent.eventId,
                             action.uploadEvent.contentWithAttachmentContent.body,
                             action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
+                            action.uploadEvent.contentWithAttachmentContent.mimeType,
                             action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
                             it)
                 }

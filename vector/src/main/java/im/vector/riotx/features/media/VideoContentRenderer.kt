@@ -40,6 +40,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
     data class Data(
             val eventId: String,
             val filename: String,
+            val mimeType: String?,
             val url: String?,
             val elementToDecrypt: ElementToDecrypt?,
             val thumbnailMediaData: ImageContentRenderer.Data
@@ -66,12 +67,13 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession()
                         .downloadFile(
-                                FileService.DownloadMode.FOR_INTERNAL_USE,
-                                data.eventId,
-                                data.filename,
-                                data.url,
-                                data.elementToDecrypt,
-                                object : MatrixCallback<File> {
+                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                                id = data.eventId,
+                                fileName = data.filename,
+                                mimeType = null,
+                                url = data.url,
+                                elementToDecrypt = data.elementToDecrypt,
+                                callback = object : MatrixCallback<File> {
                                     override fun onSuccess(data: File) {
                                         thumbnailView.isVisible = false
                                         loadingView.isVisible = false
@@ -104,12 +106,13 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession()
                         .downloadFile(
-                                FileService.DownloadMode.FOR_INTERNAL_USE,
-                                data.eventId,
-                                data.filename,
-                                data.url,
-                                null,
-                                object : MatrixCallback<File> {
+                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                                id = data.eventId,
+                                fileName = data.filename,
+                                mimeType = data.mimeType,
+                                url = data.url,
+                                elementToDecrypt = null,
+                                callback = object : MatrixCallback<File> {
                                     override fun onSuccess(data: File) {
                                         thumbnailView.isVisible = false
                                         loadingView.isVisible = false

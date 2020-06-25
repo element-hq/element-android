@@ -43,14 +43,15 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationMessage
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionDownloadsDirectory
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
+import im.vector.matrix.android.internal.di.WithProgress
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
@@ -60,9 +61,11 @@ import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrateg
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.call.CallEventObserver
+import im.vector.matrix.android.internal.session.download.DownloadProgressInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
@@ -160,10 +163,10 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @SessionCacheDirectory
+        @SessionDownloadsDirectory
         fun providesCacheDir(@SessionId sessionId: String,
                              context: Context): File {
-            return File(context.cacheDir, sessionId)
+            return File(context.cacheDir, "downloads/$sessionId")
         }
 
         @JvmStatic
@@ -214,6 +217,27 @@ internal abstract class SessionModule {
                         }
                     }
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        @WithProgress
+        fun providesProgressOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                                         downloadProgressInterceptor: DownloadProgressInterceptor): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(downloadProgressInterceptor)
+
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
+                    }.build()
         }
 
         @JvmStatic

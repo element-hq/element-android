@@ -35,6 +35,7 @@ import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import okio.buffer
 import okio.sink
+import okio.source
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -335,11 +336,16 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             }
         }
         context.contentResolver.insert(externalContentUri, values)?.let { uri ->
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
-                return true
+            val source = file.inputStream().source().buffer()
+            context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
+                source.use { input ->
+                    sink.use { output ->
+                        output.writeAll(input)
+                    }
+                }
             }
         }
+        // TODO add notification?
     } else {
         @Suppress("DEPRECATION")
         Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
