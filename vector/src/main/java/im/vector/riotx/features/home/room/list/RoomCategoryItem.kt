@@ -44,7 +44,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
             DrawableCompat.setTint(it, tintColor)
         }
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
-        holder.titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
+        holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }
     }

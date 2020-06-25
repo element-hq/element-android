@@ -60,6 +60,7 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
+import im.vector.matrix.android.internal.session.call.CallEventObserver
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
@@ -72,7 +73,6 @@ import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStor
 import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.session.widgets.DefaultWidgetURLFormatter
-import im.vector.matrix.android.internal.session.widgets.WidgetManager
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -263,7 +263,7 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindWidgetManager(observer: WidgetManager): SessionLifecycleObserver
+    abstract fun bindCallEventObserver(observer: CallEventObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet

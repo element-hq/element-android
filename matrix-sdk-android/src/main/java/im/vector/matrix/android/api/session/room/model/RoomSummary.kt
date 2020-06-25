@@ -61,6 +61,9 @@ data class RoomSummary constructor(
     val isFavorite: Boolean
         get() = tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE }
 
+    val canStartCall: Boolean
+        get() = isDirect && joinedMembersCount == 2
+
     companion object {
         const val NOT_IN_BREADCRUMBS = -1
     }

@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 22
+ext.versionMinor = 23
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -107,9 +107,8 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "im.vector.riotx"
-        // Set to API 19 because motionLayout is min API 18.
-        // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
-        minSdkVersion 19
+        // Set to API 21: see #405
+        minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
 
@@ -192,8 +191,14 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
+                obfuscate false
+                optimizeCode true
+                proguardFiles 'proguard-rules.pro'
+            }
         }
     }
 
@@ -384,6 +389,9 @@ dependencies {
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+
+    // TODO meant for development purposes only
+    implementation 'org.webrtc:google-webrtc:1.0.+'
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

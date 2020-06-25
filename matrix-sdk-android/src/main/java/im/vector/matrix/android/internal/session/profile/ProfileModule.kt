@@ -51,4 +51,7 @@ internal abstract class ProfileModule {
 
     @Binds
     abstract fun bindUnbindThreePidsTask(task: DefaultUnbindThreePidsTask): UnbindThreePidsTask
+
+    @Binds
+    abstract fun bindSetDisplayNameTask(task: DefaultSetDisplayNameTask): SetDisplayNameTask
 }

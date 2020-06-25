@@ -1,4 +1,37 @@
-Changes in RiotX 0.22.0 (2020-XX-XX)
+Changes in RiotX 0.23.0 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ - Call with WebRTC support (##611)
+ - Add capability to change the display name (#1529)
+
+Improvements 🙌:
+ - "Add Matrix app" menu is now always visible (#1495)
+
+Bugfix 🐛:
+ - Fix dark theme issue on login screen (#1097)
+ - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
+ - User could not redact message that they have sent (#1543)
+ - Use vendor prefix for non merged MSC (#1537)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
+
+Other changes:
+ - Use `SharedPreferences#edit` extension function consistently (#1545)
+ - Use `retrofit2.Call.awaitResponse` extension provided by Retrofit 2. (#1526)
+ - Fix minor typo in contribution guide (#1512)
+ - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
+ - Random housekeeping clean-ups indicated by Lint (#1520, #1541)
+
+Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
 
 Features ✨:
@@ -23,15 +56,7 @@ Bugfix 🐛:
  - Fix status bar icon contrast on API in [21,23[
  - Wrong /query request (#1444)
  - Make Credentials.homeServer optional because it is deprecated (#1443)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
+ - Fix issue on dark themes, after alert popup dismiss
 
 Other changes:
  - Send plain text in the body of events containing formatted body, as per https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes

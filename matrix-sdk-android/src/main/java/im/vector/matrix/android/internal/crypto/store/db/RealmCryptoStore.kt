@@ -897,9 +897,9 @@ internal class RealmCryptoStore @Inject constructor(
             it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
         }.firstOrNull {
             it.requestBody?.algorithm == requestBody.algorithm
-            it.requestBody?.roomId == requestBody.roomId
-            it.requestBody?.senderKey == requestBody.senderKey
-            it.requestBody?.sessionId == requestBody.sessionId
+                    && it.requestBody?.roomId == requestBody.roomId
+                    && it.requestBody?.senderKey == requestBody.senderKey
+                    && it.requestBody?.sessionId == requestBody.sessionId
         }
     }
 
@@ -1266,7 +1266,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 deviceInfoEntity.trustLevelEntity = it
                             }
                         } else {
-                            locallyVerified?.let { trustEntity.locallyVerified = it  }
+                            locallyVerified?.let { trustEntity.locallyVerified = it }
                             trustEntity.crossSignedVerified = crossSignedVerified
                         }
                     }

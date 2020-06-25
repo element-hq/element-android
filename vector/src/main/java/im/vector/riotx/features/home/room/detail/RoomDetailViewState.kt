@@ -57,7 +57,6 @@ data class RoomDetailViewState(
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
-        val typingRoomMembers: List<MatrixItem.UserItem>? = null,
         val typingMessage: String? = null,
         val sendMode: SendMode = SendMode.REGULAR(""),
         val tombstoneEvent: Event? = null,

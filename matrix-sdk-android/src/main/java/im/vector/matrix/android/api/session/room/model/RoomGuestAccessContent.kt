@@ -29,6 +29,7 @@ data class RoomGuestAccessContent(
         @Json(name = "guest_access") val guestAccess: GuestAccess? = null
 )
 
+@JsonClass(generateAdapter = false)
 enum class GuestAccess(val value: String) {
     @Json(name = "can_join")
     CanJoin("can_join"),

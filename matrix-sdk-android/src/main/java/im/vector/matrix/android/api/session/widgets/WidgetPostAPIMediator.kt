@@ -90,6 +90,6 @@ interface WidgetPostAPIMediator {
         /**
          * Triggered when a widget is posting
          */
-        fun handleWidgetRequest(eventData: JsonDict): Boolean
+        fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean
     }
 }

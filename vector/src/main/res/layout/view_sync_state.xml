@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -36,16 +37,26 @@
         tools:layout_marginTop="10dp"
         tools:visibility="visible" />
 
-    <TextView
+    <FrameLayout
         android:id="@+id/syncStateNoNetworkAirplane"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/notification_accent_color"
-        android:gravity="center"
-        android:text="@string/no_connectivity_to_the_server_indicator_airplane"
-        android:textColor="@color/white"
         android:visibility="gone"
         tools:layout_marginTop="10dp"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/no_connectivity_to_the_server_indicator_airplane"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/ic_airplane_16dp"
+            app:drawableTint="@color/white" />
+
+    </FrameLayout>
 
 </merge>

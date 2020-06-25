@@ -40,6 +40,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.webview.WebViewEventListener
 import im.vector.riotx.features.widgets.webview.clearAfterWidget
@@ -77,7 +78,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
             Timber.v("Observed view events: $it")
             when (it) {
                 is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
-                is WidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
+                is WidgetViewEvents.OnURLFormatted            -> loadFormattedUrl(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
                 is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
             }
@@ -86,11 +87,17 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                viewModel.handle(WidgetAction.OnTermsReviewed)
-            } else {
-                vectorBaseActivity.finish()
+        when (requestCode) {
+            ReviewTermsActivity.TERMS_REQUEST_CODE              -> {
+                Timber.v("On terms results")
+                if (resultCode == Activity.RESULT_OK) {
+                    viewModel.handle(WidgetAction.OnTermsReviewed)
+                } else {
+                    vectorBaseActivity.finish()
+                }
+            }
+            WidgetRequestCodes.INTEGRATION_MANAGER_REQUEST_CODE -> {
+                viewModel.handle(WidgetAction.LoadFormattedUrl)
             }
         }
     }
@@ -139,7 +146,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
         when (item.itemId) {
             R.id.action_edit            -> {
-                navigator.openIntegrationManager(requireContext(), state.roomId, state.widgetId, state.widgetKind.screenId)
+                navigator.openIntegrationManager(this, state.roomId, state.widgetId, state.widgetKind.screenId)
                 return@withState true
             }
             R.id.action_delete          -> {
@@ -261,9 +268,9 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
         )
     }
 
-    private fun loadFormattedUrl(loadFormattedUrl: WidgetViewEvents.LoadFormattedURL) {
+    private fun loadFormattedUrl(event: WidgetViewEvents.OnURLFormatted) {
         widgetWebView.clearHistory()
-        widgetWebView.loadUrl(loadFormattedUrl.formattedURL)
+        widgetWebView.loadUrl(event.formattedURL)
     }
 
     private fun setStateError(message: String?) {
@@ -280,7 +287,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     private fun displayIntegrationManager(event: WidgetViewEvents.DisplayIntegrationManager) {
         navigator.openIntegrationManager(
-                context = vectorBaseActivity,
+                fragment = this,
                 roomId = fragmentArgs.roomId,
                 integId = event.integId,
                 screen = event.integType

@@ -19,17 +19,39 @@ package im.vector.matrix.android.api.session.room.model.call
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This event is sent by callers after sending an invite and by the callee after answering.
+ * Its purpose is to give the other party additional ICE candidates to try using to communicate.
+ */
 @JsonClass(generateAdapter = true)
 data class CallCandidatesContent(
+        /**
+         * Required. The ID of the call this event relates to.
+         */
         @Json(name = "call_id") val callId: String,
-        @Json(name = "version") val version: Int,
-        @Json(name = "candidates") val candidates: List<Candidate> = emptyList()
+        /**
+         * Required. Array of objects describing the candidates.
+         */
+        @Json(name = "candidates") val candidates: List<Candidate> = emptyList(),
+        /**
+         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
+         */
+        @Json(name = "version") val version: Int = 0
 ) {
 
     @JsonClass(generateAdapter = true)
     data class Candidate(
+            /**
+             * Required. The SDP media type this candidate is intended for.
+             */
             @Json(name = "sdpMid") val sdpMid: String,
-            @Json(name = "sdpMLineIndex") val sdpMLineIndex: String,
+            /**
+             * Required. The index of the SDP 'm' line this candidate is intended for.
+             */
+            @Json(name = "sdpMLineIndex") val sdpMLineIndex: Int,
+            /**
+             * Required. The SDP 'a' line of the candidate.
+             */
             @Json(name = "candidate") val candidate: String
     )
 }

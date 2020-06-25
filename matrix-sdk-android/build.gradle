@@ -23,7 +23,7 @@ android {
     testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "0.0.1"
@@ -35,6 +35,10 @@ android {
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
         resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
+
+        defaultConfig {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
     }
 
     buildTypes {
@@ -49,9 +53,6 @@ android {
         release {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
-
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -113,6 +114,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.core:core-ktx:1.1.0"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
@@ -160,6 +162,10 @@ dependencies {
 
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
+
+    // Web RTC
+    // TODO meant for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
+    implementation 'org.webrtc:google-webrtc:1.0.+'
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'

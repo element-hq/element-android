@@ -241,14 +241,14 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val eventWireContent = event.content.toContent()
         assertNotNull(eventWireContent)
 
-        assertNull(eventWireContent.get("body"))
-        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent.get("algorithm"))
+        assertNull(eventWireContent["body"])
+        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent["algorithm"])
 
-        assertNotNull(eventWireContent.get("ciphertext"))
-        assertNotNull(eventWireContent.get("session_id"))
-        assertNotNull(eventWireContent.get("sender_key"))
+        assertNotNull(eventWireContent["ciphertext"])
+        assertNotNull(eventWireContent["session_id"])
+        assertNotNull(eventWireContent["sender_key"])
 
-        assertEquals(senderSession.sessionParams.deviceId, eventWireContent.get("device_id"))
+        assertEquals(senderSession.sessionParams.deviceId, eventWireContent["device_id"])
 
         assertNotNull(event.eventId)
         assertEquals(roomId, event.roomId)
@@ -257,7 +257,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
         val eventContent = event.toContent()
         assertNotNull(eventContent)
-        assertEquals(clearMessage, eventContent.get("body"))
+        assertEquals(clearMessage, eventContent["body"])
         assertEquals(senderSession.myUserId, event.senderId)
     }
 

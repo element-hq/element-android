@@ -14,8 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.sticker
+package im.vector.riotx.features.call
 
-object StickerPickerConstants {
-    const val STICKER_PICKER_REQUEST_CODE = 16000
+enum class CameraType {
+    FRONT,
+    BACK
+}
+
+data class CameraProxy(
+        val name: String,
+        val type: CameraType
+)
+
+sealed class CaptureFormat(val width: Int, val height: Int, val fps: Int) {
+    object HD : CaptureFormat(1280, 720, 30)
+    object SD : CaptureFormat(640, 480, 30)
 }

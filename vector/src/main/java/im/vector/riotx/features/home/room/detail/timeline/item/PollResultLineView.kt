@@ -64,8 +64,8 @@ class PollResultLineView @JvmOverloads constructor(
         set(value) {
             field = value
             // Text in main color
-            labelTextView.setTypeface(labelTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
-            percentTextView.setTypeface(percentTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
+            labelTextView.setTypeface(labelTextView.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
+            percentTextView.setTypeface(percentTextView.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
         }
 
     init {
