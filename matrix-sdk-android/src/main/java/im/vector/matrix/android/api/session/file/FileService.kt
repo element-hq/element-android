@@ -42,6 +42,12 @@ interface FileService {
         FOR_EXTERNAL_SHARE
     }
 
+    enum class FileState {
+        IN_CACHE,
+        DOWNLOADING,
+        UNKNOWN
+    }
+
     /**
      * Download a file.
      * Result will be a decrypted file, stored in the cache folder. id parameter will be used to create a sub folder to avoid name collision.
@@ -63,4 +69,6 @@ interface FileService {
      * (if not other app won't be able to access it)
      */
     fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
+
+    fun fileState(mxcUrl: String, mimeType: String?) : FileState
 }

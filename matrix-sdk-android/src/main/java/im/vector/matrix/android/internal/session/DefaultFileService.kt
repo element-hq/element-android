@@ -22,16 +22,17 @@ import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.di.CacheDirectory
 import im.vector.matrix.android.internal.di.ExternalFilesDirectory
 import im.vector.matrix.android.internal.di.SessionDownloadsDirectory
 import im.vector.matrix.android.internal.di.WithProgress
-import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.toCancelable
@@ -66,8 +67,13 @@ internal class DefaultFileService @Inject constructor(
     private val downloadFolder = File(sessionCacheDirectory, "MF")
 
     /**
+     * Retain ongoing downloads to avoid re-downloading and already downloading file
+     * map of mxCurl to callbacks
+     */
+    private val ongoing = mutableMapOf<String, ArrayList<MatrixCallback<File>>>()
+
+    /**
      * Download file in the cache folder, and eventually decrypt it
-     * TODO implement clear file, to delete "MF"
      * TODO looks like files are copied 3 times
      */
     override fun downloadFile(downloadMode: FileService.DownloadMode,
@@ -77,10 +83,29 @@ internal class DefaultFileService @Inject constructor(
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,
                               callback: MatrixCallback<File>): Cancelable {
+
+        val unwrappedUrl = url ?: return NoOpCancellable.also {
+            callback.onFailure(IllegalArgumentException("url is null"))
+        }
+
+        Timber.v("## FileService downloadFile $unwrappedUrl")
+
+        synchronized(ongoing) {
+            val existing = ongoing[unwrappedUrl]
+            if (existing != null) {
+                Timber.v("## FileService downloadFile is already downloading.. ")
+                existing.add(callback)
+                return NoOpCancellable
+            } else {
+                // mark as tracked
+                ongoing[unwrappedUrl] = ArrayList()
+                // and proceed to download
+            }
+        }
+
         return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
-                    val unwrappedUrl = url ?: throw IllegalArgumentException("url is null")
                     if (!downloadFolder.exists()) {
                         downloadFolder.mkdirs()
                     }
@@ -94,7 +119,7 @@ internal class DefaultFileService @Inject constructor(
 
                         val request = Request.Builder()
                                 .url(resolvedUrl)
-                                .header("matrix-sdk:mxc_URL", url ?: "")
+                                .header("matrix-sdk:mxc_URL", url)
                                 .build()
 
                         val response = try {
@@ -131,8 +156,31 @@ internal class DefaultFileService @Inject constructor(
 
                     Try.just(copyFile(destFile, downloadMode))
                 }
-            }
-                    .foldToCallback(callback)
+            }.fold({
+                callback.onFailure(it)
+                // notify concurrent requests
+                val toNotify = synchronized(ongoing) {
+                    ongoing[unwrappedUrl]?.also {
+                        ongoing.remove(unwrappedUrl)
+                    }
+                }
+                toNotify?.forEach { otherCallbacks ->
+                    tryThis { otherCallbacks.onFailure(it) }
+                }
+            }, { file ->
+                callback.onSuccess(file)
+                // notify concurrent requests
+                val toNotify = synchronized(ongoing) {
+                    ongoing[unwrappedUrl]?.also {
+                        ongoing.remove(unwrappedUrl)
+                    }
+                }
+                Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
+                toNotify?.forEach { otherCallbacks ->
+                    tryThis { otherCallbacks.onSuccess(file) }
+                }
+            })
+
         }.toCancelable()
     }
 
@@ -142,7 +190,15 @@ internal class DefaultFileService @Inject constructor(
     }
 
     override fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean {
-        return File(downloadFolder,  fileForUrl(mxcUrl, mimeType)).exists()
+        return File(downloadFolder, fileForUrl(mxcUrl, mimeType)).exists()
+    }
+
+    override fun fileState(mxcUrl: String, mimeType: String?): FileService.FileState {
+        if (isFileInCache(mxcUrl,mimeType)) return FileService.FileState.IN_CACHE
+        val isDownloading = synchronized(ongoing) {
+            ongoing[mxcUrl] != null
+        }
+        return if (isDownloading) FileService.FileState.DOWNLOADING else FileService.FileState.UNKNOWN
     }
 
     /**
@@ -158,6 +214,7 @@ internal class DefaultFileService @Inject constructor(
     }
 
     private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
+        // TODO some of this seems outdated, will need to be re-worked
         return when (downloadMode) {
             FileService.DownloadMode.TO_EXPORT          ->
                 file.copyTo(File(externalFilesDirectory, file.name), true)
