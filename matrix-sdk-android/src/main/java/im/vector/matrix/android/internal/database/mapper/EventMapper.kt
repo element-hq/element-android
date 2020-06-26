@@ -93,7 +93,7 @@ internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long? = null): EventEntity {
+internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
         this.ageLocalTs = ageLocalTs
