@@ -15,9 +15,9 @@
  */
 package im.vector.matrix.android.internal.crypto.model
 
-import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
-import im.vector.matrix.android.internal.crypto.model.rest.RestDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceKeys
+import im.vector.matrix.android.internal.crypto.model.rest.UnsignedDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 
@@ -27,7 +27,7 @@ data class CryptoDeviceInfo(
         var algorithms: List<String>? = null,
         override val keys: Map<String, String>? = null,
         override val signatures: Map<String, Map<String, String>>? = null,
-        val unsigned: JsonDict? = null,
+        val unsigned: UnsignedDeviceInfo? = null,
         var trustLevel: DeviceTrustLevel? = null,
         var isBlocked: Boolean = false,
         val firstTimeSeenLocalTs: Long? = null
@@ -61,7 +61,7 @@ data class CryptoDeviceInfo(
      * @return the display name
      */
     fun displayName(): String? {
-        return unsigned?.get("device_display_name") as? String
+        return unsigned?.deviceDisplayName
     }
 
     override fun signalableJSONDictionary(): Map<String, Any> {
@@ -74,7 +74,7 @@ data class CryptoDeviceInfo(
     }
 }
 
-internal fun CryptoDeviceInfo.toRest(): RestDeviceInfo {
+internal fun CryptoDeviceInfo.toRest(): DeviceKeys {
     return CryptoInfoMapper.map(this)
 }
 

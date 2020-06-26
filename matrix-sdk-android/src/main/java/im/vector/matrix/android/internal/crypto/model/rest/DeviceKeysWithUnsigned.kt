@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class DeviceKeys(
+data class DeviceKeysWithUnsigned(
         /**
          * Required. The ID of the user the device belongs to. Must match the user ID used when logging in.
          */
@@ -51,5 +51,11 @@ data class DeviceKeys(
          * The signature is calculated using the process described at https://matrix.org/docs/spec/appendices.html#signing-json.
          */
         @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>?
+        val signatures: Map<String, Map<String, String>>?,
+
+        /**
+         * Additional data added to the device key information by intermediate servers, and not covered by the signatures.
+         */
+        @Json(name = "unsigned")
+        val unsigned: UnsignedDeviceInfo? = null
 )

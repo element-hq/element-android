@@ -31,6 +31,8 @@ Other changes:
  - Fix minor typo in contribution guide (#1512)
  - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
  - Random housekeeping clean-ups indicated by Lint (#1520, #1541)
+ - Keys Backup API now use the unstable prefix (#1503)
+ - Remove deviceId from /keys/upload/{deviceId} as not spec-compliant (#1502)
 
 Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================

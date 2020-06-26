@@ -933,9 +933,7 @@ internal class DefaultCryptoService @Inject constructor(
                 signatures = objectSigner.signObject(canonicalJson)
         )
 
-        // For now, we set the device id explicitly, as we may not be using the
-        // same one as used in login.
-        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, getMyDevice().deviceId)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
         return uploadKeysTask.execute(uploadDeviceKeysParams)
     }
 
