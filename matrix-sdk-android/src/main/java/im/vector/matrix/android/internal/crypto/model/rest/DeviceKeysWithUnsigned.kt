@@ -59,4 +59,3 @@ data class DeviceKeysWithUnsigned(
         @Json(name = "unsigned")
         val unsigned: UnsignedDeviceInfo? = null
 )
-

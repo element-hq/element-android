@@ -53,4 +53,3 @@ data class DeviceKeys(
         @Json(name = "signatures")
         val signatures: Map<String, Map<String, String>>?
 )
-
