@@ -303,7 +303,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startMigrationFlow(previousStep: BootstrapStep, passphrase: String?, recoveryKey: String?) {//TODO Rename param
+    private fun startMigrationFlow(previousStep: BootstrapStep, passphrase: String?, recoveryKey: String?) { // TODO Rename param
         setState {
             copy(step = BootstrapStep.Initializing)
         }
@@ -369,7 +369,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
         }
-
 
         viewModelScope.launch(Dispatchers.IO) {
             val userPasswordAuth = userPassword?.let {

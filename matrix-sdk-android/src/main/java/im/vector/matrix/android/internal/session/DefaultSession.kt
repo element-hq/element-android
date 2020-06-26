@@ -145,6 +145,7 @@ internal class DefaultSession @Inject constructor(
     override fun open() {
         assert(!isOpen)
         isOpen = true
+        cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach { it.onStart() }
         }

@@ -174,7 +174,11 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun open() {
-        realmLocker = Realm.getInstance(realmConfiguration)
+        synchronized(this) {
+            if (realmLocker == null) {
+                realmLocker = Realm.getInstance(realmConfiguration)
+            }
+        }
     }
 
     override fun close() {

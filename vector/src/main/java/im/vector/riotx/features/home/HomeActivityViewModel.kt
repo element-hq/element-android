@@ -128,7 +128,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 val mxCrossSigningInfo = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
                 if (mxCrossSigningInfo != null) {
                     // Cross-signing is already set up for this user, is it trusted?
-                    if(!mxCrossSigningInfo.isTrusted()) {
+                    if (!mxCrossSigningInfo.isTrusted()) {
                         // New session
                         _viewEvents.post(HomeActivityViewEvents.OnNewSession(session.getUser(session.myUserId)?.toMatrixItem()))
                     }
