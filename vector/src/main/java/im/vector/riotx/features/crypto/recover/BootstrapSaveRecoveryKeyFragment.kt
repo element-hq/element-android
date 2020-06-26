@@ -48,7 +48,12 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
 
         recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
         recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
-        recoveryContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.GoToCompleted) }
+        recoveryContinue.clickableView.debouncedClicks {
+            // We do not display the final Fragment anymore
+            // TODO Do some cleanup
+            // sharedViewModel.handle(BootstrapActions.GoToCompleted)
+            sharedViewModel.handle(BootstrapActions.Completed)
+        }
     }
 
     private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->

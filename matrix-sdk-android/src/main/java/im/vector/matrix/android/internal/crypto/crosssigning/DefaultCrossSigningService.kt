@@ -150,6 +150,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             this.callbackThread = TaskThread.CRYPTO
             this.callback = object : MatrixCallback<InitializeCrossSigningTask.Result> {
                 override fun onFailure(failure: Throwable) {
+                    Timber.e(failure, "Error in initializeCrossSigning()")
                     callback.onFailure(failure)
                 }
 
