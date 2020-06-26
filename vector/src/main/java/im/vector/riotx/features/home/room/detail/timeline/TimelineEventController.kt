@@ -41,6 +41,7 @@ import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.ReadMarkerVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
@@ -60,6 +61,7 @@ import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+                                                  private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -227,6 +229,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         timelineMediaSizeProvider.recyclerView = null
         contentUploadStateTrackerBinder.clear()
+        contentDownloadStateTrackerBinder.clear()
         timeline?.removeListener(this)
         super.onDetachedFromRecyclerView(recyclerView)
     }

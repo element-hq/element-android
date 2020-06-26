@@ -27,8 +27,6 @@ import javax.inject.Inject
 class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListener, ContentDownloadStateTracker {
 
     private val mainHandler = Handler(Looper.getMainLooper())
-
-    // TODO this will grow undefinitly..
     private val states = mutableMapOf<String, ContentDownloadStateTracker.State>()
     private val listeners = mutableMapOf<String, MutableList<ContentDownloadStateTracker.UpdateListener>>()
 
@@ -54,6 +52,7 @@ class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListene
     }
 
     override fun clear() {
+        states.clear()
         listeners.clear()
     }
 

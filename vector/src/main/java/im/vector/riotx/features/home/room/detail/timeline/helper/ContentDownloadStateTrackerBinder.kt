@@ -57,7 +57,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
 
     fun clear() {
         activeSessionHolder.getSafeActiveSession()?.also {
-            it.contentUploadProgressTracker().clear()
+            it.contentDownloadProgressTracker().clear()
         }
     }
 }
@@ -76,7 +76,7 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
         }
     }
 
-    private var animatedDrawable:  AnimatedVectorDrawableCompat? = null
+    private var animatedDrawable: AnimatedVectorDrawableCompat? = null
     private var animationLoopCallback = object : Animatable2Compat.AnimationCallback() {
         override fun onAnimationEnd(drawable: Drawable?) {
             animatedDrawable?.start()
