@@ -54,6 +54,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper
 ) : VectorViewModel<BootstrapViewState, BootstrapActions, BootstrapViewEvents>(initialState) {
 
+    private var doesKeyBackupExist: Boolean = false
     private var isBackupCreatedFromPassphrase: Boolean = false
     private val zxcvbn = Zxcvbn()
 
@@ -77,8 +78,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
             if (version == null) {
                 // we just resume plain bootstrap
+                doesKeyBackupExist = false
                 setState {
-                    copy(step = BootstrapStep.FirstForm(keyBackUpExist = false))
+                    copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
                 }
             } else {
                 // we need to get existing backup passphrase/key and convert to SSSS
@@ -89,9 +91,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     // strange case... just finish?
                     _viewEvents.post(BootstrapViewEvents.Dismiss)
                 } else {
+                    doesKeyBackupExist = true
                     isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                     setState {
-                        copy(step = BootstrapStep.FirstForm(keyBackUpExist = true))
+                        copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
                     }
                 }
             }
@@ -463,14 +466,20 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
             }
             is BootstrapStep.SetupPassphrase                 -> {
-                // do we let you cancel from here?
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+                setState {
+                    copy(
+                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
+                            // Also reset the passphrase
+                            passphrase = null,
+                            passphraseRepeat = null
+                    )
+                }
             }
             is BootstrapStep.ConfirmPassphrase               -> {
                 setState {
                     copy(
                             step = BootstrapStep.SetupPassphrase(
-                                    isPasswordVisible = (state.step as? BootstrapStep.ConfirmPassphrase)?.isPasswordVisible ?: false
+                                    isPasswordVisible = state.step.isPasswordVisible
                             )
                     )
                 }
