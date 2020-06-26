@@ -216,7 +216,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             uploadedThumbnailUrl,
                             uploadedThumbnailEncryptedFileInfo,
                             newImageAttributes)
-
                 } catch (t: Throwable) {
                     Timber.e(t)
                     handleFailure(params, t)
