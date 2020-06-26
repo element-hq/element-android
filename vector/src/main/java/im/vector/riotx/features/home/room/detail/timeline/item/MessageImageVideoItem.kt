@@ -75,6 +75,10 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         return true
     }
 
+    override fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
+        return 0
+    }
+
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)

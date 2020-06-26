@@ -171,6 +171,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return attributes.informationData.sentByMe
     }
 
+    open fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
+        return round(96*density).toInt()
+    }
+
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
         super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
 
@@ -200,11 +204,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 val density = bubbleView.resources.displayMetrics.density
                 // TODO 96 = 2 * avatar size?
                 if (reverseBubble) {
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = round(96 * density).toInt()
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(density, reverseBubble)
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
                 } else {
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = round(96 * density).toInt()
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(density, reverseBubble)
                 }
                 /*
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = round(20*density).toInt()
