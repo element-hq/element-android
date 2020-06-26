@@ -70,12 +70,13 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             // We ignore all the already known members
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                     ?: realm.createObject(roomId)
-
+            val now = System.currentTimeMillis()
             for (roomMemberEvent in response.roomMemberEvents) {
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
                     continue
                 }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+                val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

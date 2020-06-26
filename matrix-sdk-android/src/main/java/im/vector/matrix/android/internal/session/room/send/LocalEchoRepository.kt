@@ -55,7 +55,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             throw IllegalStateException("You should have set an eventId for your event")
         }
         val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val eventEntity = event.toEntity(roomId, SendState.UNSENT)
+            val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = TimelineEventEntity.nextId(realm)
