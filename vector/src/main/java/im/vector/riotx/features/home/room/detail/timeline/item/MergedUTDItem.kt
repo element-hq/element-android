@@ -16,7 +16,9 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.util.TypedValue
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -32,6 +34,9 @@ abstract class MergedUTDItem : BasedMergedItem<MergedUTDItem.Holder>() {
     @EpoxyAttribute
     override lateinit var attributes: Attributes
 
+    @EpoxyAttribute
+    var big: Boolean? = false
+
     override fun getViewType() = STUB_ID
 
     override fun bind(holder: Holder) {
@@ -39,7 +44,17 @@ abstract class MergedUTDItem : BasedMergedItem<MergedUTDItem.Holder>() {
 
         holder.mergedTile.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginEnd = leftGuideline
+            if (big == true) {
+                this.height = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        800f,
+                        holder.view.context.resources.displayMetrics
+                ).toInt()
+            } else {
+                this.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            }
         }
+
 //        if (attributes.isCollapsed) {
 //            // Take the oldest data
 //            val data = distinctMergeData.lastOrNull()

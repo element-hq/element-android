@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
-import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
@@ -40,6 +39,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreatio
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedUTDItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedUTDItem_
 import im.vector.riotx.features.settings.VectorPreferences
+import timber.log.Timber
 import javax.inject.Inject
 
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -64,7 +64,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                requestModelBuild: () -> Unit)
             : BasedMergedItem<*>? {
         return if (shouldMergedAsCannotDecryptGroup(event, nextEvent)) {
-            buildUTDMergedSummary(currentPosition, items, event, eventIdToHighlight, requestModelBuild, callback)
+            Timber.v("## MERGE: Candidate for merge, top event ${event.eventId}")
+            buildUTDMergedSummary(currentPosition, items, event, eventIdToHighlight, /*requestModelBuild,*/ callback)
         } else if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                 && event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
@@ -139,33 +140,37 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
 
     // Event should be UTD
     // Next event should not
-    private fun shouldMergedAsCannotDecryptGroup(event: TimelineEvent, nextEvent: TimelineEvent?) : Boolean {
-        if (!vectorPreferences.hideE2ETechnicalErrors()) return false
+    private fun shouldMergedAsCannotDecryptGroup(event: TimelineEvent, nextEvent: TimelineEvent?): Boolean {
+        if (!vectorPreferences.mergeUTDinTimeline()) return false
         // if event is not UTD return false
-        if (event.root.getClearType() != EventType.ENCRYPTED || event.root.mCryptoError != MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) return false
+        if (!isEventUTD(event)) return false
         // At this point event cannot be decrypted
         // Let's check if older event is not UTD
-        return nextEvent == null || nextEvent.root.getClearType() != EventType.ENCRYPTED
+        return nextEvent == null || !isEventUTD(event)
+    }
+
+    private fun isEventUTD(event: TimelineEvent): Boolean {
+        return event.root.getClearType() == EventType.ENCRYPTED && !event.root.isRedacted()
     }
 
     private fun buildUTDMergedSummary(currentPosition: Int,
-                                               items: List<TimelineEvent>,
-                                               event: TimelineEvent,
-                                               eventIdToHighlight: String?,
-                                               requestModelBuild: () -> Unit,
-                                               callback: TimelineEventController.Callback?): MergedUTDItem_? {
-        var prevEvent = if (currentPosition > 0) items[currentPosition - 1] else null
+                                      items: List<TimelineEvent>,
+                                      event: TimelineEvent,
+                                      eventIdToHighlight: String?,
+                                      // requestModelBuild: () -> Unit,
+                                      callback: TimelineEventController.Callback?): MergedUTDItem_? {
+        Timber.v("## MERGE: buildUTDMergedSummary from position $currentPosition")
+        var prevEvent = items.prevOrNull(currentPosition)
         var tmpPos = currentPosition - 1
         val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }
 
-        while (prevEvent != null
-                && prevEvent.root.getClearType() == EventType.ENCRYPTED
-                && prevEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+        while (prevEvent != null && isEventUTD(prevEvent)) {
             mergedEvents.add(prevEvent)
             tmpPos--
             prevEvent = if (tmpPos >= 0) items[tmpPos] else null
         }
 
+        Timber.v("## MERGE: buildUTDMergedSummary merge group size ${mergedEvents.size}")
         if (mergedEvents.size < 3) return null
 
         var highlighted = false
@@ -187,37 +192,28 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     mergedData.add(data)
                 }
         val mergedEventIds = mergedEvents.map { it.localId }
-        // We try to find if one of the item id were used as mergeItemCollapseStates key
-        // => handle case where paginating from mergeable events and we get more
-        val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-        val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                ?: true
-        val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
-        if (isCollapsed) {
-            collapsedEventIds.addAll(mergedEventIds)
-        } else {
-            collapsedEventIds.removeAll(mergedEventIds)
-        }
+
+        collapsedEventIds.addAll(mergedEventIds)
+
         val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
 
         val attributes = MergedUTDItem.Attributes(
-                isCollapsed = isCollapsed,
+                isCollapsed = true,
                 mergeData = mergedData,
                 avatarRenderer = avatarRenderer,
-                onCollapsedStateChanged = {
-                    mergeItemCollapseStates[event.localId] = it
-                    requestModelBuild()
-                }
+                onCollapsedStateChanged = {}
         )
         return MergedUTDItem_()
                 .id(mergeId)
+                .big(mergedEventIds.size > 5)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .highlighted(isCollapsed && highlighted)
+                .highlighted(highlighted)
                 .attributes(attributes)
                 .also {
                     it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                 }
     }
+
     private fun buildRoomCreationMergedSummary(currentPosition: Int,
                                                items: List<TimelineEvent>,
                                                event: TimelineEvent,

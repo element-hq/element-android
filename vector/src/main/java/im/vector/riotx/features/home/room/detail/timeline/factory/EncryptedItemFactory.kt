@@ -56,7 +56,22 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
             EventType.ENCRYPTED == event.root.getClearType() -> {
                 val cryptoError = event.root.mCryptoError
 
-                val spannableStr = if (vectorPreferences.hideE2ETechnicalErrors()) {
+                val spannableStr = if (vectorPreferences.developerMode()) {
+                    val errorDescription =
+                            if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                            } else {
+                                // TODO i18n
+                                cryptoError?.name
+                            }
+
+                    val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
+                            ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                    span(message) {
+                        textStyle = "italic"
+                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                    }
+                } else {
                     val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                     if (cryptoError == null) {
                         span(stringProvider.getString(R.string.encrypted_message)) {
@@ -92,21 +107,6 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                 }
                             }
                         }
-                    }
-                } else {
-                    val errorDescription =
-                            if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
-                            } else {
-                                // TODO i18n
-                                cryptoError?.name
-                            }
-
-                    val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                            ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
-                   span(message) {
-                        textStyle = "italic"
-                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                     }
                 }
 
