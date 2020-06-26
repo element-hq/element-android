@@ -59,7 +59,7 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
 
-            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED).let {
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealmOrUpdate(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
@@ -71,7 +71,7 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldNotAdd_whenAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED).let {
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealmOrUpdate(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
@@ -141,7 +141,7 @@ internal class ChunkEntityTest : InstrumentedTest {
                                    events: List<Event>,
                                    direction: PaginationDirection) {
         events.forEach { event ->
-            val fakeEvent = event.toEntity(roomId, SendState.SYNCED).let {
+            val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealmOrUpdate(it)
             }
             addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
