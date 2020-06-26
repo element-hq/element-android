@@ -458,12 +458,17 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         )
                     }
                 } else {
-                    _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+                    setState {
+                        copy(
+                                step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
+                                // Also reset the passphrase
+                                passphrase = null,
+                                passphraseRepeat = null,
+                                // Also reset the key
+                                migrationRecoveryKey = null
+                        )
+                    }
                 }
-            }
-            is BootstrapStep.GetBackupSecretKeyForMigration  -> {
-                // do we let you cancel from here?
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
             }
             is BootstrapStep.SetupPassphrase                 -> {
                 setState {
@@ -500,7 +505,16 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
             }
             is BootstrapStep.GetBackupSecretForMigration     -> {
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+                setState {
+                    copy(
+                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
+                            // Also reset the passphrase
+                            passphrase = null,
+                            passphraseRepeat = null,
+                            // Also reset the key
+                            migrationRecoveryKey = null
+                    )
+                }
             }
         }.exhaustive
     }

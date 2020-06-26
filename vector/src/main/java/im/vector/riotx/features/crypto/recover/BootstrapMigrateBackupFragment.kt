@@ -86,17 +86,12 @@ class BootstrapMigrateBackupFragment @Inject constructor(
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.GetBackupSecretForMigration) {
-            return@withState
-        }
-        val isEnteringKey =
-                when (state.step) {
-                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
-                    else                                             -> true
-                }
+        val getBackupSecretForMigration = state.step as? BootstrapStep.GetBackupSecretForMigration ?: return@withState
+
+        val isEnteringKey = getBackupSecretForMigration.useKey()
 
         val secret = bootstrapMigrateEditText.text?.toString()
-        if (secret.isNullOrBlank()) {
+        if (secret.isNullOrEmpty()) {
             val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
             bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
@@ -112,15 +107,9 @@ class BootstrapMigrateBackupFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.GetBackupSecretForMigration) {
-            return@withState
-        }
+        val getBackupSecretForMigration = state.step as? BootstrapStep.GetBackupSecretForMigration ?: return@withState
 
-        val isEnteringKey =
-                when (state.step) {
-                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
-                    else                                             -> true
-                }
+        val isEnteringKey = getBackupSecretForMigration.useKey()
 
         if (isEnteringKey) {
             bootstrapMigrateShowPassword.isVisible = false

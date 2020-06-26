@@ -104,3 +104,10 @@ sealed class BootstrapStep {
     data class SaveRecoveryKey(val isSaved: Boolean) : BootstrapStep()
     object DoneSuccess : BootstrapStep()
 }
+
+fun BootstrapStep.GetBackupSecretForMigration.useKey(): Boolean {
+    return when (this) {
+        is BootstrapStep.GetBackupSecretPassForMigration -> useKey
+        else                                             -> true
+    }
+}

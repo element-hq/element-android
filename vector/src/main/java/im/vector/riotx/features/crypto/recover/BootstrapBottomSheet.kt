@@ -169,10 +169,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 showFragment(BootstrapConclusionFragment::class, Bundle())
             }
             is BootstrapStep.GetBackupSecretForMigration -> {
-                val isKey = when (state.step) {
-                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
-                    else                                             -> true
-                }
+                val isKey = state.step.useKey()
                 val drawableRes = if (isKey) R.drawable.ic_security_key_24dp else R.drawable.ic_security_phrase_24dp
                 bootstrapIcon.isVisible = true
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
