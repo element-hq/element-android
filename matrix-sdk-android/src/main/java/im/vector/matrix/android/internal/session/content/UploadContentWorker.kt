@@ -161,8 +161,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
                 return try {
-                    // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should copy
-                    // it to a cache folder by using InputStream and OutputStream.
+                    // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
+                    // copy it to a cache folder by using InputStream and OutputStream.
                     // https://github.com/zetbaitsu/Compressor/pull/150
                     // As soon as the above PR is merged, we can use attachment.queryUri instead of creating a cacheFile.
                     var cacheFile = File.createTempFile(attachment.name ?: UUID.randomUUID().toString(), ".jpg", context.cacheDir)
