@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
@@ -44,7 +45,6 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Parcelize
     data class Args(
-            val isNewAccount: Boolean,
             val initCrossSigningOnly: Boolean
     ) : Parcelable
 
@@ -122,43 +122,49 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) { state ->
         when (state.step) {
-            is BootstrapStep.SetupSecureBackup           -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+            is BootstrapStep.CheckingMigration           -> {
+                bootstrapIcon.isVisible = false
+                bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
+                showFragment(BootstrapWaitingFragment::class, Bundle())
+            }
+            is BootstrapStep.FirstForm                   -> {
+                bootstrapIcon.isVisible = false
                 bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
                 showFragment(BootstrapSetupRecoveryKeyFragment::class, Bundle())
             }
-            is BootstrapStep.CheckingMigration           -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
-                bootstrapTitleText.text = getString(R.string.upgrade_security)
-                showFragment(BootstrapWaitingFragment::class, Bundle())
-            }
             is BootstrapStep.SetupPassphrase             -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
-                bootstrapTitleText.text = getString(R.string.set_recovery_passphrase, getString(R.string.recovery_passphrase))
+                bootstrapIcon.isVisible = true
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_phrase_24dp))
+                bootstrapTitleText.text = getString(R.string.set_a_security_phrase_title)
                 showFragment(BootstrapEnterPassphraseFragment::class, Bundle())
             }
             is BootstrapStep.ConfirmPassphrase           -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
-                bootstrapTitleText.text = getString(R.string.confirm_recovery_passphrase, getString(R.string.recovery_passphrase))
+                bootstrapIcon.isVisible = true
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_phrase_24dp))
+                bootstrapTitleText.text = getString(R.string.set_a_security_phrase_title)
                 showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
             }
             is BootstrapStep.AccountPassword             -> {
+                bootstrapIcon.isVisible = true
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 bootstrapTitleText.text = getString(R.string.account_password)
                 showFragment(BootstrapAccountPasswordFragment::class, Bundle())
             }
             is BootstrapStep.Initializing                -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+                bootstrapIcon.isVisible = true
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 bootstrapTitleText.text = getString(R.string.bootstrap_loading_title)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
             is BootstrapStep.SaveRecoveryKey             -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+                bootstrapIcon.isVisible = true
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 bootstrapTitleText.text = getString(R.string.bottom_sheet_save_your_recovery_key_title)
                 showFragment(BootstrapSaveRecoveryKeyFragment::class, Bundle())
             }
             is BootstrapStep.DoneSuccess                 -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_secure_backup_24dp))
+                bootstrapIcon.isVisible = true
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 bootstrapTitleText.text = getString(R.string.bootstrap_finish_title)
                 showFragment(BootstrapConclusionFragment::class, Bundle())
             }
@@ -167,7 +173,8 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
                     else                                             -> true
                 }
-                val drawableRes = if (isKey) R.drawable.ic_secure_backup_24dp else R.drawable.ic_message_password
+                val drawableRes = if (isKey) R.drawable.ic_security_key_24dp else R.drawable.ic_security_phrase_24dp
+                bootstrapIcon.isVisible = true
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
                         requireContext(),
                         drawableRes)
@@ -183,10 +190,10 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         const val EXTRA_ARGS = "EXTRA_ARGS"
 
-        fun show(fragmentManager: FragmentManager, isAccountCreation: Boolean, initCrossSigningOnly: Boolean) {
+        fun show(fragmentManager: FragmentManager, initCrossSigningOnly: Boolean) {
             BootstrapBottomSheet().apply {
                 isCancelable = false
-                arguments = Bundle().apply { this.putParcelable(EXTRA_ARGS, Args(isAccountCreation, initCrossSigningOnly)) }
+                arguments = Bundle().apply { this.putParcelable(EXTRA_ARGS, Args(initCrossSigningOnly)) }
             }.show(fragmentManager, "BootstrapBottomSheet")
         }
     }

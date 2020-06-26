@@ -29,7 +29,7 @@
                 android:layout_height="32dp"
                 android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_secure_backup_24dp"
+                android:src="@drawable/ic_security_key_24dp"
                 android:tint="?riotx_text_primary" />
 
             <TextView

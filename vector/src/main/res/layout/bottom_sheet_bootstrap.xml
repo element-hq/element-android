@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_message_password"
+            android:src="@drawable/ic_security_key_24dp"
             android:tint="?riotx_text_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,7 @@
             android:id="@+id/bootstrapTitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:textColor="?riotx_text_primary"
@@ -40,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bootstrapIcon"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/recovery_passphrase" />
+            tools:text="@string/bottom_sheet_setup_secure_backup_title" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/bottomSheetFragmentContainer"

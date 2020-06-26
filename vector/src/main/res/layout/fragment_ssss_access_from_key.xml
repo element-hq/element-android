@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_key"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_key"
-            android:src="@drawable/ic_secure_backup_24dp" />
+            android:src="@drawable/ic_security_key_24dp" />
 
         <TextView
             android:id="@+id/ssss_restore_with_key"

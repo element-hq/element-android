@@ -17,6 +17,8 @@
 package im.vector.riotx.features.crypto.recover
 
 /**
+ * TODO The schema is not up to date
+ *
  *                        ┌───────────────────────────────────┐
  *                        │  BootstrapStep.SetupSecureBackup  │
  *                        └───────────────────────────────────┘
@@ -83,13 +85,16 @@ package im.vector.riotx.features.crypto.recover
  */
 
 sealed class BootstrapStep {
-    object SetupSecureBackup : BootstrapStep()
+    // This is the first step
+    object CheckingMigration : BootstrapStep()
+
+    // Use will be asked to choose between passphrase or recovery key, or to start process if a key backup exists
+    data class FirstForm(val keyBackUpExist: Boolean) : BootstrapStep()
 
     data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
     data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
 
     data class AccountPassword(val isPasswordVisible: Boolean, val failure: String? = null) : BootstrapStep()
-    object CheckingMigration : BootstrapStep()
 
     abstract class GetBackupSecretForMigration : BootstrapStep()
     data class GetBackupSecretPassForMigration(val isPasswordVisible: Boolean, val useKey: Boolean) : GetBackupSecretForMigration()

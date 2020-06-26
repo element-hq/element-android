@@ -18,7 +18,9 @@ package im.vector.riotx.features.crypto.recover
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_bootstrap_setup_recovery.*
@@ -33,10 +35,35 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() : VectorBaseFragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bootstrapSetupSecureSubmit.clickableView.debouncedClicks { setupRecoveryKey() }
+        // Actions when a key backup exist
+        bootstrapSetupSecureSubmit.clickableView.debouncedClicks {
+            sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
+        }
+
+        // Actions when there is no key backup
+        bootstrapSetupSecureUseSecurityKey.clickableView.debouncedClicks {
+            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
+        }
+        bootstrapSetupSecureUseSecurityPassphrase.clickableView.debouncedClicks {
+            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
+        }
     }
 
-    private fun setupRecoveryKey() {
-        sharedViewModel.handle(BootstrapActions.SetupRecoveryKey)
+    override fun invalidate() = withState(sharedViewModel) { state ->
+        if (state.step is BootstrapStep.FirstForm) {
+            if (state.step.keyBackUpExist) {
+                // Display the set up action
+                bootstrapSetupSecureSubmit.isVisible = true
+                bootstrapSetupSecureUseSecurityKey.isVisible = false
+                bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
+                bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
+            } else {
+                // Choose between create a passphrase or use a recovery key
+                bootstrapSetupSecureSubmit.isVisible = false
+                bootstrapSetupSecureUseSecurityKey.isVisible = true
+                bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
+                bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
+            }
+        }
     }
 }

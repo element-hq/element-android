@@ -19,7 +19,6 @@ package im.vector.riotx.features.crypto.recover
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.text.toSpannable
 import androidx.core.view.isGone
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
@@ -29,16 +28,12 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.colorizeMatchingText
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapConfirmPassphraseFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+class BootstrapConfirmPassphraseFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_passphrase
 
@@ -49,12 +44,8 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
 
         ssss_passphrase_security_progress.isGone = true
 
-        val recPassPhrase = getString(R.string.recovery_passphrase)
-        bootstrapDescriptionText.text = getString(R.string.bootstrap_info_confirm_text, recPassPhrase)
-                .toSpannable()
-                .colorizeMatchingText(recPassPhrase, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-
-        ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_confirm_passphrase)
+        bootstrapDescriptionText.text = getString(R.string.set_a_security_phrase_again_notice)
+        ssss_passphrase_enter_edittext.hint = getString(R.string.set_a_security_phrase_hint)
 
         withState(sharedViewModel) {
             // set initial value (useful when coming back)

@@ -28,7 +28,9 @@ sealed class BootstrapActions : VectorViewModelAction {
     object GoToCompleted : BootstrapActions()
     object GoToEnterAccountPassword : BootstrapActions()
 
-    object SetupRecoveryKey : BootstrapActions()
+    data class Start(val userWantsToEnterPassphrase: Boolean) : BootstrapActions()
+
+    object StartKeyBackupMigration : BootstrapActions()
 
     data class DoInitialize(val passphrase: String) : BootstrapActions()
     object DoInitializeGeneratedKey : BootstrapActions()

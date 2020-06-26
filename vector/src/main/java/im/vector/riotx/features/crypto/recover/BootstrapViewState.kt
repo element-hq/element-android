@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.riotx.core.platform.WaitingViewData
 
 data class BootstrapViewState(
-        val step: BootstrapStep = BootstrapStep.SetupPassphrase(false),
+        val step: BootstrapStep = BootstrapStep.CheckingMigration,
         val passphrase: String? = null,
         val migrationRecoveryKey: String? = null,
         val passphraseRepeat: String? = null,

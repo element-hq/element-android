@@ -2306,8 +2306,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
     <!-- %s will be replaced by recovery_passphrase -->
     <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
-    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t use your account password.</string>
 
+    <string name="bootstrap_info_text_2">Enter a security phrase only you know, used to secure secrets on your server.</string>
 
     <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
     <string name="bootstrap_loading_title">Setting up recovery.</string>
@@ -2481,12 +2482,24 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_setup_secure_backup">Set up Secure Backup</string>
 
-    <string name="bottom_sheet_setup_secure_backup_title">Set up Secure Backup</string>
-    <string name="bottom_sheet_setup_secure_backup_content_1">Backup your encryption keys with your account data in case you lose access to your logins.</string>
-    <string name="bottom_sheet_setup_secure_backup_content_2">Your keys will be secured with a unique Recovery Key.</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Secure backup</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Set up</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generate a security key to store somewhere safe like a password manager or a safe.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Use a Security Phrase</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Enter a secret phrase only you know, and generate a key for backup.</string>
 
-    <string name="bottom_sheet_save_your_recovery_key_title">Save your Recovery Key</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Store your Recovery Key somewhere safe. It can be used to unlock your encrypted messages and data.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Save your Security Key</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Store your Security Key somewhere safe, like a password manager or a safe.</string>
+
+    <string name="set_a_security_phrase_title">Set a Security Phrase</string>
+    <string name="set_a_security_phrase_notice">Enter a security phrase only you know, used to secure secrets on your server.</string>
+    <string name="set_a_security_phrase_hint">Security Phrase</string>
+    <string name="set_a_security_phrase_again_notice">Enter your Security Phrase again to confirm it.</string>
+
+    <string name="save_your_security_key_title">Save your Security Key</string>
+    <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
 
 </resources>
