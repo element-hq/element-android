@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
  - User could not redact message that they have sent (#1543)
  - Use vendor prefix for non merged MSC (#1537)
+ - Compress images before sending (#1333)
 
 Translations 🗣:
  -
