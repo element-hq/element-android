@@ -1,3 +1,7 @@
+Useful links:
+- https://codelabs.developers.google.com/codelabs/webrtc-web/#0
+
+
    ╔════════════════════════════════════════════════╗
    ║                                                ║
    ║A] Placing a call offer                         ║
