@@ -24,6 +24,7 @@ import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
@@ -35,6 +36,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
@@ -42,7 +45,9 @@ import kotlinx.android.synthetic.main.fragment_bootstrap_migrate_backup.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapMigrateBackupFragment @Inject constructor() : VectorBaseFragment() {
+class BootstrapMigrateBackupFragment @Inject constructor(
+        private val colorProvider: ColorProvider
+) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_bootstrap_migrate_backup
 
@@ -135,6 +140,8 @@ class BootstrapMigrateBackupFragment @Inject constructor() : VectorBaseFragment(
 
             val recKey = getString(R.string.bootstrap_migration_use_recovery_key)
             bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
+                    .toSpannable()
+                    .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
             bootstrapMigrateUseFile.isVisible = false
         }
