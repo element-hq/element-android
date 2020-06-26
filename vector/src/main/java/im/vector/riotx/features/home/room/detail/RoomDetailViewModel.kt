@@ -41,6 +41,7 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
@@ -448,8 +449,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleSetUserPowerLevel(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.ClearScalarToken         -> {
                             // TODO
@@ -665,6 +666,22 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         launchSlashCommandFlow {
             room.invite(invite.userId, invite.reason, it)
+        }
+    }
+
+    private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
+        val currentPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                ?.content
+                ?.toModel<PowerLevelsContent>() ?: return
+
+        launchSlashCommandFlow {
+            if (setUserPowerLevel.powerLevel == null) {
+                currentPowerLevelsContent.users.remove(setUserPowerLevel.userId)
+            } else {
+                currentPowerLevelsContent.users[setUserPowerLevel.userId] = setUserPowerLevel.powerLevel
+            }
+
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
         }
     }
 

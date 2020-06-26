@@ -7,6 +7,7 @@ Features ✨:
 
 Improvements 🙌:
  - "Add Matrix app" menu is now always visible (#1495)
+ - Handle `/op` and `/deop` commands (#12)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
