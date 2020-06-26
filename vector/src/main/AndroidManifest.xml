@@ -15,7 +15,8 @@
 
     <!-- Call feature -->
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <!-- Commented because Google PlayStore does not like we add permission if we are not requiring it. And it was added for future use -->
+    <!--uses-permission android:name="android.permission.READ_CALL_LOG" /-->
     <!-- Needed for voice call to toggle speaker on or off -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- READ_PHONE_STATE is needed only if your calling app reads numbers from the `PHONE_STATE`
