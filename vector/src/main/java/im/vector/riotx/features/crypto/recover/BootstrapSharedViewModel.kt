@@ -35,6 +35,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyF
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.WaitingViewData
@@ -48,6 +49,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
         @Assisted val args: BootstrapBottomSheet.Args,
         private val stringProvider: StringProvider,
+        private val errorFormatter: ErrorFormatter,
         private val session: Session,
         private val bootstrapTask: BootstrapCrossSigningTask,
         private val migrationTask: BackupToQuadSMigrationTask,
@@ -301,7 +303,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startMigrationFlow(prevState: BootstrapStep, passphrase: String?, recoveryKey: String?) {
+    private fun startMigrationFlow(previousStep: BootstrapStep, passphrase: String?, recoveryKey: String?) {//TODO Rename param
         setState {
             copy(step = BootstrapStep.Initializing)
         }
@@ -316,38 +318,37 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             migrationTask.invoke(this, BackupToQuadSMigrationTask.Params(passphrase, recoveryKey, progressListener)) {
-                if (it is BackupToQuadSMigrationTask.Result.Success) {
-                    setState {
-                        copy(
-                                passphrase = passphrase,
-                                passphraseRepeat = passphrase,
-                                migrationRecoveryKey = recoveryKey
-                        )
-                    }
-                    val userPassword = reAuthHelper.data
-                    if (userPassword == null) {
+                when (it) {
+                    is BackupToQuadSMigrationTask.Result.Success -> {
                         setState {
                             copy(
-                                    step = BootstrapStep.AccountPassword(false)
+                                    passphrase = passphrase,
+                                    passphraseRepeat = passphrase,
+                                    migrationRecoveryKey = recoveryKey
                             )
                         }
-                    } else {
-                        startInitializeFlow(userPassword)
+                        val userPassword = reAuthHelper.data
+                        if (userPassword == null) {
+                            setState {
+                                copy(
+                                        step = BootstrapStep.AccountPassword(false)
+                                )
+                            }
+                        } else {
+                            startInitializeFlow(userPassword)
+                        }
                     }
-                } else {
-                    _viewEvents.post(
-                            BootstrapViewEvents.ModalError(
-                                    (it as? BackupToQuadSMigrationTask.Result.Failure)?.error
-                                            ?: stringProvider.getString(R.string.matrix_error
-                                            )
-                            )
-                    )
-                    setState {
-                        copy(
-                                step = prevState
+                    is BackupToQuadSMigrationTask.Result.Failure -> {
+                        _viewEvents.post(
+                                BootstrapViewEvents.ModalError(it.toHumanReadable())
                         )
+                        setState {
+                            copy(
+                                    step = previousStep
+                            )
+                        }
                     }
-                }
+                }.exhaustive
             }
         }
     }
@@ -517,6 +518,16 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
         }.exhaustive
+    }
+
+    private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {
+        return when (this) {
+            is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)
+            is BackupToQuadSMigrationTask.Result.ErrorFailure          -> errorFormatter.toHumanReadable(throwable)
+            // is BackupToQuadSMigrationTask.Result.NoKeyBackupVersion,
+            // is BackupToQuadSMigrationTask.Result.IllegalParams,
+            else                                                       -> stringProvider.getString(R.string.unexpected_error)
+        }
     }
 
     // ======================================
