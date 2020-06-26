@@ -539,8 +539,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleChangeDisplayNameSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.DiscardSession           -> {
                             if (room.isEncrypted()) {
@@ -682,6 +682,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
 
             room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
+        }
+    }
+
+    private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
+        launchSlashCommandFlow {
+            session.setDisplayName(session.myUserId, changeDisplayName.displayName, it)
         }
     }
 
