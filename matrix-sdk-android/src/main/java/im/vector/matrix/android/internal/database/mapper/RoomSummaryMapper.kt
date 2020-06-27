@@ -19,9 +19,11 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import javax.inject.Inject
 
-internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper) {
+internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper,
+                                                     private val typingUsersTracker: DefaultTypingUsersTracker) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags.map {
@@ -31,6 +33,8 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
             timelineEventMapper.map(it, buildReadReceipts = false)
         }
+        // typings are updated through the sync where room summary entity gets updated no matter what, so it's ok get there
+        val typingUsers = typingUsersTracker.getTypingUsers(roomSummaryEntity.roomId)
 
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
@@ -46,6 +50,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 notificationCount = roomSummaryEntity.notificationCount,
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 tags = tags,
+                typingUsers = typingUsers,
                 membership = roomSummaryEntity.membership,
                 versioningState = roomSummaryEntity.versioningState,
                 readMarkerId = roomSummaryEntity.readMarkerId,

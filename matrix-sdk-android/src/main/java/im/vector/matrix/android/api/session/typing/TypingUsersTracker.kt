@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.session.typing
 
-import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
 
 /**
@@ -30,8 +29,4 @@ interface TypingUsersTracker {
      */
     fun getTypingUsers(roomId: String): List<SenderInfo>
 
-    /**
-     * Returns a LiveData of the sender information of all currently typing users in a room, excluding yourself.
-     */
-    fun getTypingUsersLive(roomId: String): LiveData<List<SenderInfo>>
 }

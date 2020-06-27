@@ -30,6 +30,7 @@ import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.riotx.features.home.room.typing.TypingHelper
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
@@ -102,13 +103,15 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 dateFormatter.formatMessageDay(date)
             }
         }
+        val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
                 .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
-                .typingHelper(typingHelper)
+                .typingMessage(typingMessage)
+                .lastEvent(latestFormattedEvent.toString())
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
                 .showSelected(showSelected)

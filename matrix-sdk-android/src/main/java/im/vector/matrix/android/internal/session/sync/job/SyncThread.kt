@@ -202,10 +202,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             return
         }
         state = newState
-        // We clear typing users if the sync is not running
-        if (newState !is SyncState.Running) {
-            typingUsersTracker.clear()
-        }
         debouncer.debounce("post_state", Runnable {
             liveState.value = newState
         }, 150)
