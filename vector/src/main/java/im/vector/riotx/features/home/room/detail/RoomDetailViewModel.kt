@@ -675,12 +675,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ?.toModel<PowerLevelsContent>() ?: return
 
         launchSlashCommandFlow {
-            if (setUserPowerLevel.powerLevel == null) {
-                currentPowerLevelsContent.users.remove(setUserPowerLevel.userId)
-            } else {
-                currentPowerLevelsContent.users[setUserPowerLevel.userId] = setUserPowerLevel.powerLevel
-            }
-
+            currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
             room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
         }
     }
