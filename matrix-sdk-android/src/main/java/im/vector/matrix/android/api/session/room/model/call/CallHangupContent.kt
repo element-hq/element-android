@@ -40,6 +40,7 @@ data class CallHangupContent(
          */
         @Json(name = "reason") val reason: Reason? = null
 ) {
+    @JsonClass(generateAdapter = false)
     enum class Reason {
         @Json(name = "ice_failed")
         ICE_FAILED,
