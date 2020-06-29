@@ -28,6 +28,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DimensionConverter
+import timber.log.Timber
 
 /**
  * Children must override getViewType()
@@ -40,12 +41,13 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var dimensionConverter: DimensionConverter
 
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
+        Timber.v("Bind event item with ids: ${getEventIds()}")
         holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginStart = leftGuideline
         }

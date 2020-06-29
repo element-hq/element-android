@@ -71,11 +71,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || isTileTypeMessage(nextEvent)
 
         val time = dateFormatter.formatMessageHour(date)
-        val formattedMemberName = span(event.senderInfo.disambiguatedDisplayName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
-        }
-
         val e2eDecoration = getE2EDecoration(event)
+        
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -83,7 +80,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 time = time,
                 ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = event.senderInfo.avatarUrl,
-                memberName = formattedMemberName,
+                memberName = event.senderInfo.disambiguatedDisplayName,
                 showInformation = showInformation,
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
