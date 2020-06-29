@@ -52,10 +52,10 @@ internal class Request<DATA : Any>(private val eventBus: EventBus?) {
             // Check if this is a certificateException
             CertUtil.getCertificateException(exception)
                     // TODO Support certificate error once logged
-                    //?.also { unrecognizedCertificateException ->
+                    // ?.also { unrecognizedCertificateException ->
                     //    // Send the error to the bus, for a global management
                     //    eventBus?.post(GlobalError.CertificateError(unrecognizedCertificateException))
-                    //}
+                    // }
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
             if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {

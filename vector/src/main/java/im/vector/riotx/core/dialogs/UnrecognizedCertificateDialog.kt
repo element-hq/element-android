@@ -145,7 +145,6 @@ class UnrecognizedCertificateDialog @Inject constructor(
         builder.setOnDismissListener {
             Timber.d("Dismissed!")
             openDialogIds.remove(dialogId)
-
         }
 
         builder.show()
