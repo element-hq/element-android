@@ -17,6 +17,7 @@
 package im.vector.riotx.features.media
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -31,19 +32,19 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.features.roomprofile.AvatarSelectorView
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.multipicker.MultiPicker
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.activity_big_image_viewer.*
 import java.io.File
 import javax.inject.Inject
 
-class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback {
+class BigImageViewerActivity : VectorBaseActivity() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var stringProvider: StringProvider
 
     private var uri: Uri? = null
-    private lateinit var avatarSelector: AvatarSelectorView
 
     override fun getMenuRes() = R.menu.vector_big_avatar_viewer
 
@@ -91,23 +92,24 @@ class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback
         return uri != null && intent.getBooleanExtra(EXTRA_CAN_EDIT_IMAGE, false)
     }
 
-    private fun showAvatarSelector() {
-        if (!::avatarSelector.isInitialized) {
-            avatarSelector = AvatarSelectorView(this, layoutInflater, this)
-        }
-        avatarSelector.show(bigImageViewerToolbar, false)
-    }
-
     private var avatarCameraUri: Uri? = null
-    override fun onTypeSelected(type: AvatarSelectorView.Type) {
-        when (type) {
-            AvatarSelectorView.Type.CAMERA  -> {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-            }
-            AvatarSelectorView.Type.GALLERY -> {
-                MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-            }
-        }
+    private fun showAvatarSelector() {
+        AlertDialog
+                .Builder(this)
+                .setItems(arrayOf(
+                        stringProvider.getString(R.string.attachment_type_camera),
+                        stringProvider.getString(R.string.attachment_type_gallery)
+                )) { dialog, which ->
+                    dialog.cancel()
+                    when (which) {
+                        0 -> {
+                            avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+                        }
+                        1 -> {
+                            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+                        }
+                    }
+                }.show()
     }
 
     private fun onRoomAvatarSelected(image: MultiPickerImageType) {

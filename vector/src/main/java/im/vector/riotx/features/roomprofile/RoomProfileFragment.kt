@@ -47,6 +47,9 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -76,7 +79,7 @@ class RoomProfileFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory,
         val colorProvider: ColorProvider
-) : VectorBaseFragment(), RoomProfileController.Callback, AvatarSelectorView.Callback {
+) : VectorBaseFragment(), RoomProfileController.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -84,8 +87,6 @@ class RoomProfileFragment @Inject constructor(
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
-
-    private lateinit var avatarSelector: AvatarSelectorView
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
@@ -251,21 +252,25 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun showAvatarSelector() {
-        if (!::avatarSelector.isInitialized) {
-            avatarSelector = AvatarSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomProfileFragment)
-        }
-        avatarSelector.show(vector_coordinator_layout, false)
+        AlertDialog
+                .Builder(requireContext())
+                .setItems(arrayOf(
+                        getString(R.string.attachment_type_camera),
+                        getString(R.string.attachment_type_gallery)
+                )) { dialog, which ->
+                    dialog.cancel()
+                    onAvatarTypeSelected(isCamera = (which == 0))
+                }.show()
     }
 
     private var avatarCameraUri: Uri? = null
-    override fun onTypeSelected(type: AvatarSelectorView.Type) {
-        when (type) {
-            AvatarSelectorView.Type.CAMERA  -> {
+    private fun onAvatarTypeSelected(isCamera: Boolean) {
+        if (isCamera) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                 avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
-            AvatarSelectorView.Type.GALLERY -> {
-                MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-            }
+        } else {
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
         }
     }
 

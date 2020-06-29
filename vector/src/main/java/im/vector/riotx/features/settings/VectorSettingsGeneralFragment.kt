@@ -64,7 +64,6 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.media.createUCropWithDefaultSettings
-import im.vector.riotx.features.roomprofile.AvatarSelectorView
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
 import im.vector.riotx.multipicker.MultiPicker
@@ -76,7 +75,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
 
-class VectorSettingsGeneralFragment : VectorSettingsBaseFragment(), AvatarSelectorView.Callback {
+class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
@@ -84,7 +83,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment(), AvatarSelect
     private var mDisplayedEmails = ArrayList<String>()
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
-    private lateinit var avatarSelector: AvatarSelectorView
     private var avatarCameraUri: Uri? = null
 
     private val mUserSettingsCategory by lazy {
@@ -296,7 +294,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment(), AvatarSelect
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onTypeSelected(AvatarSelectorView.Type.CAMERA)
+                onAvatarTypeSelected(true)
             }
         }
     }
@@ -404,24 +402,24 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment(), AvatarSelect
      * Update the avatar.
      */
     private fun onUpdateAvatarClick() {
-        if (!::avatarSelector.isInitialized) {
-            avatarSelector = AvatarSelectorView(activity!!, activity!!.layoutInflater, this)
-        }
-        mUserAvatarPreference.mAvatarView?.let {
-            avatarSelector.show(it, false)
-        }
+        AlertDialog
+                .Builder(requireContext())
+                .setItems(arrayOf(
+                        getString(R.string.attachment_type_camera),
+                        getString(R.string.attachment_type_gallery)
+                )) { dialog, which ->
+                    dialog.cancel()
+                    onAvatarTypeSelected(isCamera = (which == 0))
+                }.show()
     }
 
-    override fun onTypeSelected(type: AvatarSelectorView.Type) {
-        when (type) {
-            AvatarSelectorView.Type.CAMERA  -> {
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                    avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-                }
+    private fun onAvatarTypeSelected(isCamera: Boolean) {
+        if (isCamera) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
-            AvatarSelectorView.Type.GALLERY -> {
-                MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-            }
+        } else {
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
         }
     }
 
