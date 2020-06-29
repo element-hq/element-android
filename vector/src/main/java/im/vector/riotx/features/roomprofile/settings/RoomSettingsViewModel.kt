@@ -109,10 +109,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun shouldShowSaveAction(state: RoomSettingsViewState): Boolean {
         val summary = state.roomSummary.invoke()
-        return summary?.displayName != state.newName ||
-                summary?.topic != state.newTopic ||
-                summary?.canonicalAlias != state.newAlias ||
-                state.newHistoryVisibility != null
+        return summary?.displayName != state.newName
+                || summary?.topic != state.newTopic
+                || summary?.canonicalAlias != state.newAlias
+                || state.newHistoryVisibility != null
     }
 
     private fun saveSettings() = withState { state ->
