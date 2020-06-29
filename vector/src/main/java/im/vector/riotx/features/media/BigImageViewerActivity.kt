@@ -19,7 +19,6 @@ package im.vector.riotx.features.media
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -27,7 +26,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.yalantis.ucrop.UCrop
-import com.yalantis.ucrop.UCropActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -115,32 +113,8 @@ class BigImageViewerActivity : VectorBaseActivity(), AvatarSelectorView.Callback
     private fun onRoomAvatarSelected(image: MultiPickerImageType) {
         val destinationFile = File(cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
-        UCrop.of(uri, destinationFile.toUri())
-                .withOptions(
-                        UCrop.Options()
-                                .apply {
-                                    setAllowedGestures(
-                                            /* tabScale = */ UCropActivity.SCALE,
-                                            /* tabRotate = */ UCropActivity.ALL,
-                                            /* tabAspectRatio = */ UCropActivity.SCALE
-                                    )
-                                    setToolbarTitle(image.displayName)
-                                    // Disable freestyle crop, usability was not easy
-                                    // setFreeStyleCropEnabled(true)
-                                    // Color used for toolbar icon and text
-                                    setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
-                                    setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
-                                    // Background
-                                    setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
-                                    // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                    setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
-                                    // Known issue: there is still orange color used by the lib
-                                    // https://github.com/Yalantis/uCrop/issues/602
-                                    setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
-                                    // Hide the logo (does not work)
-                                    setLogoColor(Color.TRANSPARENT)
-                                }
-                )
+        createUCropWithDefaultSettings(this, uri, destinationFile.toUri(), image.displayName)
+                .apply { withAspectRatio(1f, 1f) }
                 .start(this)
     }
 

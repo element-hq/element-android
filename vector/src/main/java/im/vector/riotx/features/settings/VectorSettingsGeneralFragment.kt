@@ -20,7 +20,6 @@ package im.vector.riotx.features.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.util.Patterns
@@ -41,7 +40,6 @@ import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
-import com.yalantis.ucrop.UCropActivity
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.failure.isInvalidPassword
@@ -65,6 +63,7 @@ import im.vector.riotx.core.utils.getSizeOfFiles
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import im.vector.riotx.features.media.createUCropWithDefaultSettings
 import im.vector.riotx.features.roomprofile.AvatarSelectorView
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
@@ -429,32 +428,8 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment(), AvatarSelect
     private fun onAvatarSelected(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
-        UCrop.of(uri, destinationFile.toUri())
-                .withOptions(
-                        UCrop.Options()
-                                .apply {
-                                    setAllowedGestures(
-                                            /* tabScale = */ UCropActivity.SCALE,
-                                            /* tabRotate = */ UCropActivity.ALL,
-                                            /* tabAspectRatio = */ UCropActivity.SCALE
-                                    )
-                                    setToolbarTitle(image.displayName)
-                                    // Disable freestyle crop, usability was not easy
-                                    // setFreeStyleCropEnabled(true)
-                                    // Color used for toolbar icon and text
-                                    setToolbarColor(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
-                                    setToolbarWidgetColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_primary_text_color))
-                                    // Background
-                                    setRootViewBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
-                                    // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                    setStatusBarColor(ThemeUtils.getColor(requireContext(), R.attr.riotx_header_panel_background))
-                                    // Known issue: there is still orange color used by the lib
-                                    // https://github.com/Yalantis/uCrop/issues/602
-                                    setActiveControlsWidgetColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
-                                    // Hide the logo (does not work)
-                                    setLogoColor(Color.TRANSPARENT)
-                                }
-                )
+        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+                .apply { withAspectRatio(1f, 1f) }
                 .start(requireContext(), this)
     }
 
