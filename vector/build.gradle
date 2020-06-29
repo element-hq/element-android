@@ -14,9 +14,10 @@ androidExtensions {
     experimental = true
 }
 
+// Note: 2 digits max for each value
 ext.versionMajor = 0
-ext.versionMinor = 23
-ext.versionPatch = 0
+ext.versionMinor = 91
+ext.versionPatch = 2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -106,7 +107,7 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "im.vector.riotx"
+        applicationId "im.vector.app"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
@@ -177,7 +178,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "RiotX dbg"
+            resValue "string", "app_name", "Riot.imX dbg"
 
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -186,7 +187,7 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "RiotX"
+            resValue "string", "app_name", "Riot.imX"
 
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -230,6 +231,9 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
+
+        // TODO Restore true once pb with WorkManager is fixed
+        abortOnError false
     }
 
     compileOptions {

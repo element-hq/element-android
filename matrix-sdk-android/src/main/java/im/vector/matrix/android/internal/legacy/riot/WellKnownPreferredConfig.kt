@@ -13,17 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package im.vector.matrix.android.api.session.room.model.call
+package im.vector.matrix.android.internal.legacy.riot
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = false)
-enum class SdpType {
-    @Json(name = "offer")
-    OFFER,
+/*
+ * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ */
 
-    @Json(name = "answer")
-    ANSWER
+/**
+ * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
+ * <pre>
+ * {
+ *     "preferredDomain": "https://jitsi.riot.im/"
+ * }
+ * </pre>
+ */
+@JsonClass(generateAdapter = true)
+class WellKnownPreferredConfig {
+
+    @JvmField
+    @Json(name = "preferredDomain")
+    var preferredDomain: String? = null
 }

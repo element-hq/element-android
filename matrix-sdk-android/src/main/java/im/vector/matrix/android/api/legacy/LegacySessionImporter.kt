@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model.call
+package im.vector.matrix.android.api.legacy
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+interface LegacySessionImporter {
 
-@JsonClass(generateAdapter = false)
-enum class SdpType {
-    @Json(name = "offer")
-    OFFER,
-
-    @Json(name = "answer")
-    ANSWER
+    /**
+     * Will eventually import a session created by the legacy app.
+     */
+    fun process()
 }

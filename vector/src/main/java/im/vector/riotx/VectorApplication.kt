@@ -37,6 +37,7 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
@@ -57,15 +58,15 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.concurrent.Executors
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
     lateinit var appContext: Context
-    // font thread handler
+    @Inject lateinit var legacySessionImporter: LegacySessionImporter
     @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
@@ -84,6 +85,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
     lateinit var vectorComponent: VectorComponent
+    // font thread handler
     private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
@@ -121,6 +123,10 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         emojiCompatWrapper.init(fontRequest)
 
         notificationUtils.createNotificationChannels()
+
+        // It can takes time, but do we care?
+        legacySessionImporter.process()
+
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)

@@ -61,3 +61,6 @@
 
 ### OLM JNI ###
 -keep class org.matrix.olm.** { *; }
+
+### Webrtc
+-keep class org.webrtc.** { *; }
