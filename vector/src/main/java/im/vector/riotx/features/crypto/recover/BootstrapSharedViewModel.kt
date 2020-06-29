@@ -68,35 +68,44 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private var _pendingSession: String? = null
 
     init {
-        // need to check if user have an existing keybackup
-        setState {
-            copy(step = BootstrapStep.CheckingMigration)
-        }
 
-        // We need to check if there is an existing backup
-        viewModelScope.launch(Dispatchers.IO) {
-            val version = awaitCallback<KeysVersionResult?> {
-                session.cryptoService().keysBackupService().getCurrentVersion(it)
+        if (args.initCrossSigningOnly) {
+            // Go straight to account password
+            setState {
+                copy(step = BootstrapStep.AccountPassword(false))
             }
-            if (version == null) {
-                // we just resume plain bootstrap
-                doesKeyBackupExist = false
-                setState {
-                    copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+
+        } else {
+            // need to check if user have an existing keybackup
+            setState {
+                copy(step = BootstrapStep.CheckingMigration)
+            }
+
+            // We need to check if there is an existing backup
+            viewModelScope.launch(Dispatchers.IO) {
+                val version = awaitCallback<KeysVersionResult?> {
+                    session.cryptoService().keysBackupService().getCurrentVersion(it)
                 }
-            } else {
-                // we need to get existing backup passphrase/key and convert to SSSS
-                val keyVersion = awaitCallback<KeysVersionResult?> {
-                    session.cryptoService().keysBackupService().getVersion(version.version ?: "", it)
-                }
-                if (keyVersion == null) {
-                    // strange case... just finish?
-                    _viewEvents.post(BootstrapViewEvents.Dismiss)
-                } else {
-                    doesKeyBackupExist = true
-                    isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                if (version == null) {
+                    // we just resume plain bootstrap
+                    doesKeyBackupExist = false
                     setState {
                         copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+                    }
+                } else {
+                    // we need to get existing backup passphrase/key and convert to SSSS
+                    val keyVersion = awaitCallback<KeysVersionResult?> {
+                        session.cryptoService().keysBackupService().getVersion(version.version ?: "", it)
+                    }
+                    if (keyVersion == null) {
+                        // strange case... just finish?
+                        _viewEvents.post(BootstrapViewEvents.Dismiss)
+                    } else {
+                        doesKeyBackupExist = true
+                        isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                        setState {
+                            copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+                        }
                     }
                 }
             }
@@ -383,12 +392,17 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             bootstrapTask.invoke(this,
                     Params(
                             userPasswordAuth = userPasswordAuth,
+                            initOnlyCrossSigning = args.initCrossSigningOnly,
                             progressListener = progressListener,
                             passphrase = state.passphrase,
                             keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } }
                     )
             ) { bootstrapResult ->
                 when (bootstrapResult) {
+                    is BootstrapResult.SuccessCrossSigningOnly                 -> {
+                        // TPD
+                        _viewEvents.post(BootstrapViewEvents.Dismiss)
+                    }
                     is BootstrapResult.Success                 -> {
                         setState {
                             copy(
@@ -435,7 +449,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             }
                         }
                     }
-                }
+                }.exhaustive
             }
         }
     }

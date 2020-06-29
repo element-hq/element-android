@@ -40,12 +40,14 @@ import im.vector.riotx.core.platform.ViewModelTask
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
+import java.lang.IllegalArgumentException
 import java.util.UUID
 import javax.inject.Inject
 
 sealed class BootstrapResult {
 
     data class Success(val keyInfo: SsssKeyCreationInfo) : BootstrapResult()
+    object SuccessCrossSigningOnly : BootstrapResult()
 
     abstract class Failure(val error: String?) : BootstrapResult()
 
@@ -67,6 +69,7 @@ interface BootstrapProgressListener {
 
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
+        val initOnlyCrossSigning: Boolean = false,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null
@@ -94,10 +97,19 @@ class BootstrapCrossSigningTask @Inject constructor(
                 awaitCallback<Unit> {
                     crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
                 }
+                if (params.initOnlyCrossSigning) {
+                    return BootstrapResult.SuccessCrossSigningOnly
+                }
             } catch (failure: Throwable) {
                 return handleInitializeXSigningError(failure)
             }
+        } else {
+            // not sure how this can happen??
+            if (params.initOnlyCrossSigning) {
+                return handleInitializeXSigningError(IllegalArgumentException("Cross signing already setup"))
+            }
         }
+
 
         val keyInfo: SsssKeyCreationInfo
 
