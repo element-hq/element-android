@@ -56,6 +56,9 @@ class CrossSigningSettingsFragment @Inject constructor(
                 CrossSigningSettingsViewEvents.SetUpRecovery -> {
                     navigator.upgradeSessionSecurity(requireActivity(), false)
                 }
+                CrossSigningSettingsViewEvents.SetupCrossSigning -> {
+                    navigator.upgradeSessionSecurity(requireActivity(), true)
+                }
             }.exhaustive
         }
     }
@@ -91,5 +94,9 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     override fun verifySession() {
         viewModel.handle(CrossSigningSettingsAction.VerifySession)
+    }
+
+    override fun initCrossSigning() {
+        viewModel.handle(CrossSigningSettingsAction.SetupCrossSigning)
     }
 }

@@ -2372,6 +2372,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_message_placeholder">Message…</string>
 
     <string name="upgrade_security">Encryption upgrade available</string>
+    <string name="setup_cross_signing">Enable Cross Signing</string>
     <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
 
     <!-- %s will be replaced by recovery_key -->

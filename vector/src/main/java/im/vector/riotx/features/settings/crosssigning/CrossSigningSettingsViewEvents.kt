@@ -26,4 +26,5 @@ sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
 
     object SetUpRecovery : CrossSigningSettingsViewEvents()
     object VerifySession : CrossSigningSettingsViewEvents()
+    object SetupCrossSigning : CrossSigningSettingsViewEvents()
 }

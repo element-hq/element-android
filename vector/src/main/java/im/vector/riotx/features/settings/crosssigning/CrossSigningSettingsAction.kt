@@ -21,4 +21,5 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 sealed class CrossSigningSettingsAction : VectorViewModelAction {
     object SetUpRecovery : CrossSigningSettingsAction()
     object VerifySession : CrossSigningSettingsAction()
+    object SetupCrossSigning : CrossSigningSettingsAction()
 }

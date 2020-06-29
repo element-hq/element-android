@@ -55,8 +55,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                             xSigningIsEnableInAccount = xSigningIsEnableInAccount,
                             xSigningKeysAreTrusted = xSigningKeysAreTrusted,
                             xSigningKeyCanSign = xSigningKeyCanSign,
-
-                            deviceHasToBeVerified = hasSeveralDevices && (xSigningIsEnableInAccount || xSigningKeysAreTrusted),
+                            deviceHasToBeVerified = hasSeveralDevices && (xSigningIsEnableInAccount && !xSigningKeyCanSign),
                             recoveryHasToBeSetUp = !session.sharedSecretStorageService.isRecoverySetup()
                     )
                 }
@@ -74,6 +73,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
             }
             CrossSigningSettingsAction.VerifySession -> {
                 _viewEvents.post(CrossSigningSettingsViewEvents.VerifySession)
+            }
+            CrossSigningSettingsAction.SetupCrossSigning -> {
+                _viewEvents.post(CrossSigningSettingsViewEvents.SetupCrossSigning)
             }
         }.exhaustive
     }

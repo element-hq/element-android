@@ -35,6 +35,7 @@ class CrossSigningSettingsController @Inject constructor(
     interface InteractionListener {
         fun setupRecovery()
         fun verifySession()
+        fun initCrossSigning()
     }
 
     var interactionListener: InteractionListener? = null
@@ -72,13 +73,27 @@ class CrossSigningSettingsController @Inject constructor(
         }
 
         if (data.recoveryHasToBeSetUp) {
-            bottomSheetVerificationActionItem {
-                id("setup_recovery")
-                title(stringProvider.getString(R.string.settings_setup_secure_backup))
-                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                iconRes(R.drawable.ic_arrow_right)
-                listener {
-                    interactionListener?.setupRecovery()
+            if (data.xSigningIsEnableInAccount) {
+                bottomSheetVerificationActionItem {
+                    id("setup_recovery")
+                    title(stringProvider.getString(R.string.settings_setup_secure_backup))
+                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    iconRes(R.drawable.ic_arrow_right)
+                    listener {
+                        interactionListener?.setupRecovery()
+                    }
+                }
+            } else {
+                // Propose to setup cross signing
+                bottomSheetVerificationActionItem {
+                    id("setup_xSgning")
+                    title(stringProvider.getString(R.string.setup_cross_signing))
+                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    subTitle(stringProvider.getString(R.string.security_prompt_text))
+                    iconRes(R.drawable.ic_arrow_right)
+                    listener {
+                        interactionListener?.initCrossSigning()
+                    }
                 }
             }
         }
