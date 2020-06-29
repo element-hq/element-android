@@ -106,7 +106,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                             val result = WorkerParamsFactory.fromData<UploadAvatarWorker.OutputParams>(info.outputData)
                             cancelableBag.add(
                                     setAvatarUrlTask
-                                            .configureWith(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = result?.imageUrl!!)) {
+                                            .configureWith(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = result!!.imageUrl!!)) {
                                                 callback = matrixCallback
                                             }
                                             .executeBy(taskExecutor)
