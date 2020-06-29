@@ -71,7 +71,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(listener)
-        if (listener == null || !editable) {
+        if (listener == null) {
             holder.view.isClickable = false
         }
         holder.title.text = title
