@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.identity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
 import im.vector.matrix.android.internal.di.IdentityDatabase
@@ -26,6 +27,7 @@ import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.SessionScope
@@ -46,8 +48,13 @@ internal abstract class IdentityModule {
         @SessionScope
         @AuthenticatedIdentity
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
+                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider,
+                                 homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+            return okHttpClient
+                    .newBuilder()
+                    .addAccessTokenInterceptor(accessTokenProvider)
+                    .addSocketFactory(homeServerConnectionConfig)
+                    .build()
         }
 
         @JvmStatic

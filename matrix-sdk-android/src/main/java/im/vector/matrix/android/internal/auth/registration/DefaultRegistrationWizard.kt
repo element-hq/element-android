@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.auth.registration
 
-import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
@@ -41,7 +40,7 @@ import okhttp3.OkHttpClient
  * This class execute the registration request and is responsible to keep the session of interactive authentication
  */
 internal class DefaultRegistrationWizard(
-        private val okHttpClient: Lazy<OkHttpClient>,
+        private val okHttpClient: OkHttpClient,
         private val retrofitFactory: RetrofitFactory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionCreator: SessionCreator,

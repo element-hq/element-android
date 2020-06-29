@@ -18,6 +18,7 @@ package im.vector.riotx.features.login
 
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
+import im.vector.matrix.android.internal.network.ssl.Fingerprint
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class LoginAction : VectorViewModelAction {
@@ -61,4 +62,6 @@ sealed class LoginAction : VectorViewModelAction {
     data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents) : LoginAction()
+
+    data class UserAcceptCertificate(val fingerprint: Fingerprint) : LoginAction()
 }

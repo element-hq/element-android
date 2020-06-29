@@ -34,16 +34,19 @@ import javax.net.ssl.X509TrustManager
 internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
                                   private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
 
+    // Set to false to perform some test
+    private val USE_DEAFULT_TRUST_MANAGER = true
+
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null) {
+            if (defaultTrustManager != null && USE_DEAFULT_TRUST_MANAGER) {
                 defaultTrustManager.checkClientTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints == null || fingerprints.isEmpty()) {
+            if (fingerprints.isNullOrEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -54,14 +57,14 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null) {
+            if (defaultTrustManager != null && USE_DEAFULT_TRUST_MANAGER) {
                 defaultTrustManager.checkServerTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
             if (fingerprints == null || fingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
+                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
 
