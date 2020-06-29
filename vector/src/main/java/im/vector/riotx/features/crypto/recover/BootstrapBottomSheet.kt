@@ -77,24 +77,17 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     KeepItSafeDialog().show(requireActivity())
                 }
                 is BootstrapViewEvents.SkipBootstrap -> {
-                    promptSkip(event.genKeyOption)
+                    promptSkip()
                 }
             }
         }
     }
 
-    private fun promptSkip(genKeyOption: Boolean) {
+    private fun promptSkip() {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.are_you_sure)
-                .setMessage(if (genKeyOption) R.string.bootstrap_skip_text else R.string.bootstrap_skip_text_no_gen_key)
+                .setMessage(R.string.bootstrap_cancel_text)
                 .setPositiveButton(R.string._continue, null)
-                .apply {
-                    if (genKeyOption) {
-                        setNeutralButton(R.string.generate_message_key) { _, _ ->
-                            viewModel.handle(BootstrapActions.DoInitializeGeneratedKey)
-                        }
-                    }
-                }
                 .setNegativeButton(R.string.skip) { _, _ ->
                     dismiss()
                 }
