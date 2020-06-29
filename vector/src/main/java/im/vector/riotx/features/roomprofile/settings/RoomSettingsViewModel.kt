@@ -129,8 +129,9 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
         }
 
-        if (summary?.canonicalAlias != state.newAlias) {
-            operationList.add(room.rx().updateCanonicalAlias(state.newAlias ?: ""))
+        if (state.newAlias != null && summary?.canonicalAlias != state.newAlias) {
+            operationList.add(room.rx().addRoomAlias(state.newAlias))
+            operationList.add(room.rx().updateCanonicalAlias(state.newAlias))
         }
 
         if (state.newHistoryVisibility != null) {
@@ -139,7 +140,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         Observable
                 .fromIterable(operationList)
-                .flatMapCompletable { it }
+                .concatMapCompletable { it }
                 .subscribe(
                         {
                             postLoading(false)

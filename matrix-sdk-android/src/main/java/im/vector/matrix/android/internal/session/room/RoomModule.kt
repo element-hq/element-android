@@ -24,6 +24,8 @@ import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasTask
+import im.vector.matrix.android.internal.session.room.alias.DefaultAddRoomAliasTask
 import im.vector.matrix.android.internal.session.room.alias.DefaultGetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -189,6 +191,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetRoomIdByAliasTask(task: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
+
+    @Binds
+    abstract fun bindAddRoomAliasTask(task: DefaultAddRoomAliasTask): AddRoomAliasTask
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask

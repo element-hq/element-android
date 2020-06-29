@@ -28,9 +28,8 @@ import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.content.FileUploader
+import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
@@ -42,10 +41,9 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val taskExecutor: TaskExecutor,
                                                                private val sendStateTask: SendStateTask,
-                                                               @SessionId private val sessionId: String,
-                                                               private val workManagerProvider: WorkManagerProvider,
                                                                private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                               private val fileUploader: FileUploader
+                                                               private val fileUploader: FileUploader,
+                                                               private val addRoomAliasTask: AddRoomAliasTask
 ) : StateService {
 
     @AssistedInject.Factory
@@ -104,6 +102,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 callback = callback,
                 stateKey = null
         )
+    }
+
+    override fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable {
+        return addRoomAliasTask
+                .configureWith(AddRoomAliasTask.Params(roomId, roomAlias)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable {
