@@ -568,6 +568,7 @@ class LoginViewModel @AssistedInject constructor(
                     action.initialDeviceName,
                     object : MatrixCallback<Session> {
                         override fun onSuccess(data: Session) {
+                            reAuthHelper.data = action.password
                             onSessionCreated(data)
                         }
 
