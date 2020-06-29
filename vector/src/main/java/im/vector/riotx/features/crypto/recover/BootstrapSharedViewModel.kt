@@ -74,7 +74,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             setState {
                 copy(step = BootstrapStep.AccountPassword(false))
             }
-
         } else {
             // need to check if user have an existing keybackup
             setState {

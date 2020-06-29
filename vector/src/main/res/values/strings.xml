@@ -2,7 +2,6 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-
     <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
     <!-- NOTE TO TRANSLATORS: Value MUST have 4 letters and MUST be in this list: https://www.unicode.org/iso15924/iso15924-codes.html. Example:  "Arab", "Cyrl", "Latn", etc. -->
@@ -35,7 +34,6 @@
     <string name="title_activity_verify_device">Verify session</string>
 
     <!-- Signing out screen -->
-
     <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
@@ -46,7 +44,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
-
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
@@ -2079,8 +2076,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_request_you_accepted">You accepted</string>
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
-
-
     <string name="verification_verify_device">Verify this session</string>
     <string name="verification_verify_device_manually">Manually verify</string>
 
@@ -2166,7 +2161,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
-
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
@@ -2490,7 +2484,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generate a security key to store somewhere safe like a password manager or a safe.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Use a Security Phrase</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Enter a secret phrase only you know, and generate a key for backup.</string>
-
 
     <string name="bottom_sheet_save_your_recovery_key_title">Save your Security Key</string>
     <string name="bottom_sheet_save_your_recovery_key_content">Store your Security Key somewhere safe, like a password manager or a safe.</string>

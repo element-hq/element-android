@@ -110,7 +110,6 @@ class BootstrapCrossSigningTask @Inject constructor(
             }
         }
 
-
         val keyInfo: SsssKeyCreationInfo
 
         val ssssService = session.sharedSecretStorageService
