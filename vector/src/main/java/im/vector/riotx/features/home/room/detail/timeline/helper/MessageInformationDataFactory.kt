@@ -33,14 +33,12 @@ import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReferencesInfoData
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
@@ -72,7 +70,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val time = dateFormatter.formatMessageHour(date)
         val e2eDecoration = getE2EDecoration(event)
-        
+
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",

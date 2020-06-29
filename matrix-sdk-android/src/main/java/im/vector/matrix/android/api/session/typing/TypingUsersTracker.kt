@@ -28,5 +28,4 @@ interface TypingUsersTracker {
      * Returns the sender information of all currently typing users in a room, excluding yourself.
      */
     fun getTypingUsers(roomId: String): List<SenderInfo>
-
 }
