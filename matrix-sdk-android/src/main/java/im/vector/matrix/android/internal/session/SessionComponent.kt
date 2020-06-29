@@ -32,7 +32,6 @@ import im.vector.matrix.android.internal.session.account.AccountModule
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.call.CallModule
 import im.vector.matrix.android.internal.session.content.ContentModule
-import im.vector.matrix.android.internal.session.content.UploadAvatarWorker
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.filter.FilterModule
 import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
@@ -117,8 +116,6 @@ internal interface SessionComponent {
     fun inject(worker: GetGroupDataWorker)
 
     fun inject(worker: UploadContentWorker)
-
-    fun inject(worker: UploadAvatarWorker)
 
     fun inject(worker: SyncWorker)
 
