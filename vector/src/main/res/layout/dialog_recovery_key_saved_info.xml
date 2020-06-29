@@ -27,9 +27,10 @@
                 android:id="@+id/bootstrapIcon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:contentDescription="@string/avatar"
+                android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_message_key" />
+                android:src="@drawable/ic_security_key_24dp"
+                android:tint="?riotx_text_primary" />
 
             <TextView
                 android:id="@+id/bootstrapTitleText"
@@ -49,6 +50,7 @@
             android:id="@+id/keepItSafeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?riotx_text_secondary"
             android:textSize="16sp"
             tools:text="@string/bootstrap_crosssigning_save_usb" />
 

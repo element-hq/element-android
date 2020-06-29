@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.settings.crosssigning
 
-import im.vector.riotx.core.platform.VectorSharedAction
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-/**
- * Supported navigation actions for [HomeActivity]
- */
-sealed class HomeActivitySharedAction : VectorSharedAction {
-    object OpenDrawer : HomeActivitySharedAction()
-    object CloseDrawer : HomeActivitySharedAction()
-    object OpenGroup : HomeActivitySharedAction()
+sealed class CrossSigningSettingsAction : VectorViewModelAction {
+    object SetUpRecovery : CrossSigningSettingsAction()
+    object VerifySession : CrossSigningSettingsAction()
+    object SetupCrossSigning : CrossSigningSettingsAction()
 }

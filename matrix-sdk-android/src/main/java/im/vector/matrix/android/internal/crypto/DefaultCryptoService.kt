@@ -29,11 +29,13 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
@@ -326,35 +328,67 @@ internal class DefaultCryptoService @Inject constructor(
      * and, then, if this is the first time, this new device will be announced to all other users
      * devices.
      *
-     * @param isInitialSync true if it starts from an initial sync
      */
-    fun start(isInitialSync: Boolean) {
-        if (isStarted.get() || isStarting.get()) {
-            return
-        }
-        isStarting.set(true)
-
+    fun start() {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            internalStart(isInitialSync)
+            internalStart()
         }
         // Just update
         fetchDevicesList(NoOpMatrixCallback())
     }
 
-    private suspend fun internalStart(isInitialSync: Boolean) {
-        // Open the store
-        cryptoStore.open()
-        runCatching {
+    fun ensureDevice() {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            // Open the store
+            cryptoStore.open()
+            // TODO why do that everytime? we should mark that it was done
             uploadDeviceKeys()
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
-            keysBackupService.checkAndStartKeysBackup()
-            if (isInitialSync) {
-                // refresh the devices list for each known room members
-                deviceListManager.invalidateAllDeviceLists()
-                deviceListManager.refreshOutdatedDeviceLists()
-            } else {
-                incomingGossipingRequestManager.processReceivedGossipingRequests()
+            // this can throw if no backup
+            tryThis {
+                keysBackupService.checkAndStartKeysBackup()
             }
+        }
+    }
+
+    fun onSyncWillProcess(isInitialSync: Boolean) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            if (isInitialSync) {
+                try {
+                    // On initial sync, we start all our tracking from
+                    // scratch, so mark everything as untracked. onCryptoEvent will
+                    // be called for all e2e rooms during the processing of the sync,
+                    // at which point we'll start tracking all the users of that room.
+                    deviceListManager.invalidateAllDeviceLists()
+                    // always track my devices?
+                    deviceListManager.startTrackingDeviceList(listOf(userId))
+                    deviceListManager.refreshOutdatedDeviceLists()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## CRYPTO onSyncWillProcess ")
+                }
+            }
+        }
+    }
+
+    private fun internalStart() {
+        if (isStarted.get() || isStarting.get()) {
+            return
+        }
+        isStarting.set(true)
+
+        // Open the store
+        cryptoStore.open()
+
+        runCatching {
+//            if (isInitialSync) {
+//                // refresh the devices list for each known room members
+//                deviceListManager.invalidateAllDeviceLists()
+//                deviceListManager.refreshOutdatedDeviceLists()
+//            } else {
+
+            // Why would we do that? it will be called at end of syn
+                incomingGossipingRequestManager.processReceivedGossipingRequests()
+//            }
         }.fold(
                 {
                     isStarting.set(false)
@@ -623,10 +657,10 @@ internal class DefaultCryptoService @Inject constructor(
                                      roomId: String,
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            if (!isStarted()) {
-                Timber.v("## CRYPTO | encryptEventContent() : wait after e2e init")
-                internalStart(false)
-            }
+//            if (!isStarted()) {
+//                Timber.v("## CRYPTO | encryptEventContent() : wait after e2e init")
+//                internalStart(false)
+//            }
             val userIds = getRoomUserIds(roomId)
             var alg = roomEncryptorsStore.get(roomId)
             if (alg == null) {
@@ -835,6 +869,10 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
+            MASTER_KEY_SSSS_NAME -> {
+                crossSigningService.onSecretMSKGossip(secretValue)
+                true
+            }
             SELF_SIGNING_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretSSKGossip(secretValue)
                 true
@@ -1153,10 +1191,10 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            if (!isStarted()) {
-                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
-                internalStart(false)
-            }
+//            if (!isStarted()) {
+//                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
+//                internalStart(false)
+//            }
             roomDecryptorProvider
                     .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
                     ?.requestKeysForEvent(event) ?: run {

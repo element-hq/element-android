@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorSharedAction
+import com.airbnb.mvrx.MvRxState
+import im.vector.matrix.android.api.session.InitialSyncProgressService
 
-/**
- * Supported navigation actions for [HomeActivity]
- */
-sealed class HomeActivitySharedAction : VectorSharedAction {
-    object OpenDrawer : HomeActivitySharedAction()
-    object CloseDrawer : HomeActivitySharedAction()
-    object OpenGroup : HomeActivitySharedAction()
-}
+data class HomeActivityViewState(
+        val initialSyncProgressServiceStatus: InitialSyncProgressService.Status = InitialSyncProgressService.Status.Idle
+) : MvRxState

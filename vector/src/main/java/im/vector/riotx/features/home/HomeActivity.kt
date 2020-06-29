@@ -19,6 +19,7 @@ package im.vector.riotx.features.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -26,12 +27,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
+import im.vector.matrix.android.api.session.InitialSyncProgressService
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -41,7 +40,6 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
-import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.PopupAlertManager
@@ -50,14 +48,24 @@ import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import im.vector.riotx.push.fcm.FcmHelper
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import timber.log.Timber
 import javax.inject.Inject
 
+@Parcelize
+data class HomeActivityArgs(
+        val clearNotification: Boolean,
+        val accountCreation: Boolean
+) : Parcelable
+
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+
+    private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+    @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -98,35 +106,40 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer                 -> drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer                -> drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup                  -> {
+                        is HomeActivitySharedAction.OpenDrawer  -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer -> drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup   -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-                        }
-                        is HomeActivitySharedAction.PromptForSecurityBootstrap -> {
-                            BootstrapBottomSheet.show(supportFragmentManager, true)
                         }
                     }.exhaustive
                 }
                 .disposeOnDestroy()
 
-        if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
+        val args = intent.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+
+        if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
-            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
-        }
-        if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
-            sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
-            sharedActionViewModel.isAccountCreation = true
-            intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
-        activeSessionHolder.getSafeActiveSession()?.getInitialSyncProgressStatus()?.observe(this, Observer { status ->
-            if (status == null) {
+        homeActivityViewModel.observeViewEvents {
+            when (it) {
+                is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
+                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
+            }.exhaustive
+        }
+        homeActivityViewModel.subscribe(this) { renderState(it) }
+
+        shortcutsHandler.observeRoomsAndBuildShortcuts()
+                .disposeOnDestroy()
+    }
+
+    private fun renderState(state: HomeActivityViewState) {
+        when (val status = state.initialSyncProgressServiceStatus) {
+            is InitialSyncProgressService.Status.Idle        -> {
                 waiting_view.isVisible = false
-                promptCompleteSecurityIfNeeded()
-            } else {
-                sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = false
+            }
+            is InitialSyncProgressService.Status.Progressing -> {
                 Timber.v("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
                     // block interactions
@@ -143,67 +156,32 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 }
                 waiting_view.isVisible = true
             }
-        })
-
-        // Ask again if the app is relaunched
-        if (!sharedActionViewModel.hasDisplayedCompleteSecurityPrompt
-                && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
-            promptCompleteSecurityIfNeeded()
-        }
-
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        }.exhaustive
     }
 
-    private fun promptCompleteSecurityIfNeeded() {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
-        if (!session.hasAlreadySynced()) return
-        if (sharedActionViewModel.hasDisplayedCompleteSecurityPrompt) return
-
-        // ensure keys are downloaded
-        session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
-                runOnUiThread {
-                    alertCompleteSecurity(session)
-                }
-            }
-        })
-    }
-
-    private fun alertCompleteSecurity(session: Session) {
-        val myCrossSigningKeys = session.cryptoService().crossSigningService()
-                .getMyCrossSigningKeys()
-        val crossSigningEnabledOnAccount = myCrossSigningKeys != null
-
-        if (!crossSigningEnabledOnAccount && !sharedActionViewModel.isAccountCreation) {
-            // Do not propose for SSO accounts, because we do not support yet confirming account credentials using SSO
-            if (session.getHomeServerCapabilities().canChangePassword) {
-                // We need to ask
-                promptSecurityEvent(
-                        session,
-                        R.string.upgrade_security,
-                        R.string.security_prompt_text
-                ) {
-                    it.navigator.upgradeSessionSecurity(it)
-                }
-            } else {
-                // Do not do it again
-                sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            }
-        } else if (myCrossSigningKeys?.isTrusted() == false) {
-            // We need to ask
-            promptSecurityEvent(
-                    session,
-                    R.string.crosssigning_verify_this_session,
-                    R.string.confirm_your_identity
-            ) {
-                it.navigator.waitSessionVerification(it)
-            }
+    private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
+        // We need to ask
+        promptSecurityEvent(
+                events.userItem,
+                R.string.upgrade_security,
+                R.string.security_prompt_text
+        ) {
+            it.navigator.upgradeSessionSecurity(it, true)
         }
     }
 
-    private fun promptSecurityEvent(session: Session, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
-        sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
+    private fun handleOnNewSession(event: HomeActivityViewEvents.OnNewSession) {
+        // We need to ask
+        promptSecurityEvent(
+                event.userItem,
+                R.string.crosssigning_verify_this_session,
+                R.string.confirm_your_identity
+        ) {
+            it.navigator.waitSessionVerification(it)
+        }
+    }
+
+    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = "upgradeSecurity",
@@ -211,7 +189,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         description = getString(descRes),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
-                    matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
+                    matrixItem = userItem
                     colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
@@ -225,9 +203,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION) == true) {
+        if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
-            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
     }
 
@@ -290,14 +267,15 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     }
 
     companion object {
-        private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
-        private const val EXTRA_ACCOUNT_CREATION = "EXTRA_ACCOUNT_CREATION"
-
         fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
+            val args = HomeActivityArgs(
+                    clearNotification = clearNotification,
+                    accountCreation = accountCreation
+            )
+
             return Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, clearNotification)
-                        putExtra(EXTRA_ACCOUNT_CREATION, accountCreation)
+                        putExtra(MvRx.KEY_ARG, args)
                     }
         }
     }

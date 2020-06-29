@@ -19,7 +19,6 @@ package im.vector.riotx.features.crypto.recover
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.editorActionEvents
@@ -27,17 +26,13 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.settings.VectorLocale
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapEnterPassphraseFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+class BootstrapEnterPassphraseFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_passphrase
 
@@ -46,12 +41,9 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recPassPhrase = getString(R.string.recovery_passphrase)
-        bootstrapDescriptionText.text = getString(R.string.bootstrap_info_text, recPassPhrase)
-                .toSpannable()
-                .colorizeMatchingText(recPassPhrase, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+        bootstrapDescriptionText.text = getString(R.string.set_a_security_phrase_notice)
+        ssss_passphrase_enter_edittext.hint = getString(R.string.set_a_security_phrase_hint)
 
-        ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_enter_passphrase)
         withState(sharedViewModel) {
             // set initial value (useful when coming back)
             ssss_passphrase_enter_edittext.setText(it.passphrase ?: "")

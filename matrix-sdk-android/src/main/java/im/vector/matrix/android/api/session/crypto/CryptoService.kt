@@ -99,7 +99,9 @@ interface CryptoService {
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
 
     fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
+
     fun getMyDevicesInfo() : List<DeviceInfo>
+
     fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
 
     fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)

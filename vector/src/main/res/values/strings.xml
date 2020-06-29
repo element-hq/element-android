@@ -2,7 +2,6 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-
     <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
     <!-- NOTE TO TRANSLATORS: Value MUST have 4 letters and MUST be in this list: https://www.unicode.org/iso15924/iso15924-codes.html. Example:  "Arab", "Cyrl", "Latn", etc. -->
@@ -35,7 +34,6 @@
     <string name="title_activity_verify_device">Verify session</string>
 
     <!-- Signing out screen -->
-
     <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
@@ -46,7 +44,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
-
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
@@ -117,6 +114,7 @@
     <string name="action_mark_room_read">Mark as read</string>
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
+    <string name="action_copy">Copy</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -2078,8 +2076,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_request_you_accepted">You accepted</string>
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
-
-
     <string name="verification_verify_device">Verify this session</string>
     <string name="verification_verify_device_manually">Manually verify</string>
 
@@ -2165,7 +2161,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
-
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
@@ -2305,8 +2300,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
     <!-- %s will be replaced by recovery_passphrase -->
     <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
-    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t use your account password.</string>
 
+    <string name="bootstrap_info_text_2">Enter a security phrase only you know, used to secure secrets on your server.</string>
 
     <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
     <string name="bootstrap_loading_title">Setting up recovery.</string>
@@ -2339,7 +2335,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="bootstrap_skip_text">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
     <string name="bootstrap_skip_text_no_gen_key">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.</string>
-
+    <string name="bootstrap_cancel_text">If you cancel now, you may lose encrypted messages &amp; data if you lose access to your logins.\n\nYou can also set up Secure Backup &amp; manage your keys in Settings.</string>
 
     <string name="encryption_enabled">Encryption enabled</string>
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
@@ -2370,6 +2366,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_message_placeholder">Message…</string>
 
     <string name="upgrade_security">Encryption upgrade available</string>
+    <string name="setup_cross_signing">Enable Cross Signing</string>
     <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
 
     <!-- %s will be replaced by recovery_key -->
@@ -2477,5 +2474,26 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="a11y_unmute_microphone">Unmute the microphone</string>
     <string name="a11y_stop_camera">Stop the camera</string>
     <string name="a11y_start_camera">Start the camera</string>
+
+    <string name="settings_setup_secure_backup">Set up Secure Backup</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Secure backup</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Set up</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generate a security key to store somewhere safe like a password manager or a safe.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Use a Security Phrase</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Enter a secret phrase only you know, and generate a key for backup.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Save your Security Key</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Store your Security Key somewhere safe, like a password manager or a safe.</string>
+
+    <string name="set_a_security_phrase_title">Set a Security Phrase</string>
+    <string name="set_a_security_phrase_notice">Enter a security phrase only you know, used to secure secrets on your server.</string>
+    <string name="set_a_security_phrase_hint">Security Phrase</string>
+    <string name="set_a_security_phrase_again_notice">Enter your Security Phrase again to confirm it.</string>
+
+    <string name="save_your_security_key_title">Save your Security Key</string>
+    <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
 
 </resources>

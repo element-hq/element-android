@@ -212,7 +212,9 @@ internal interface IMXCryptoStore {
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
     fun getMyDevicesInfo() : List<DeviceInfo>
+
     fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+
     fun saveMyDevicesInfo(info: List<DeviceInfo>)
     /**
      * Store the crypto algorithm for a room.
@@ -397,6 +399,7 @@ internal interface IMXCryptoStore {
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
+    fun storeMSKPrivateKey(msk: String?)
     fun storeSSKPrivateKey(ssk: String?)
     fun storeUSKPrivateKey(usk: String?)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.core.utils
 
-import im.vector.riotx.core.platform.VectorSharedAction
+import org.amshove.kluent.shouldBe
+import org.junit.Test
+import java.lang.Thread.sleep
 
-/**
- * Supported navigation actions for [HomeActivity]
- */
-sealed class HomeActivitySharedAction : VectorSharedAction {
-    object OpenDrawer : HomeActivitySharedAction()
-    object CloseDrawer : HomeActivitySharedAction()
-    object OpenGroup : HomeActivitySharedAction()
+class TemporaryStoreTest {
+
+    @Test
+    fun testTemporaryStore() {
+        // Keep the data 30 millis
+        val store = TemporaryStore<String>(30)
+
+        store.data = "test"
+        store.data shouldBe "test"
+        sleep(15)
+        store.data shouldBe "test"
+        sleep(20)
+        store.data shouldBe null
+    }
 }

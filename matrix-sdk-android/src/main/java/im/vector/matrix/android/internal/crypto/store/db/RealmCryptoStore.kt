@@ -174,7 +174,11 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun open() {
-        realmLocker = Realm.getInstance(realmConfiguration)
+        synchronized(this) {
+            if (realmLocker == null) {
+                realmLocker = Realm.getInstance(realmConfiguration)
+            }
+        }
     }
 
     override fun close() {
@@ -392,6 +396,14 @@ internal class RealmCryptoStore @Inject constructor(
                             null
                         }
                     }
+        }
+    }
+
+    override fun storeMSKPrivateKey(msk: String?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                xSignMasterPrivateKey = msk
+            }
         }
     }
 

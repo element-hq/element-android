@@ -51,8 +51,9 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         measureTimeMillis {
             if (!cryptoService.isStarted()) {
                 Timber.v("Should start cryptoService")
-                cryptoService.start(isInitialSync)
+                cryptoService.start()
             }
+            cryptoService.onSyncWillProcess(isInitialSync)
         }.also {
             Timber.v("Finish handling start cryptoService in $it ms")
         }
