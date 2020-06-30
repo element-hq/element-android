@@ -31,16 +31,21 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
 import butterknife.BindView
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewViewModel
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsViewModel
+import javax.inject.Inject
 
-class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
+class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), ServerBackupStatusViewModel.Factory {
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
     lateinit var sheetTitle: TextView
@@ -84,12 +89,22 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
         isCancelable = true
     }
 
-    private lateinit var viewModel: SignOutViewModel
+    @Inject
+    lateinit var viewModelFactory: ServerBackupStatusViewModel.Factory
+
+    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
+        return viewModelFactory.create(initialState)
+    }
+
+    private val viewModel: ServerBackupStatusViewModel by fragmentViewModel(ServerBackupStatusViewModel::class)
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
         setupClickableView.setOnClickListener {
             context?.let { context ->
@@ -234,4 +249,5 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
             }
         }
     }
+
 }

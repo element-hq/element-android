@@ -24,8 +24,10 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -58,22 +60,12 @@ class KeysBackupBanner @JvmOverloads constructor(
     var delegate: Delegate? = null
     private var state: State = State.Initial
 
-    private var scrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE
-        set(value) {
-            field = value
-
-            val pendingV = pendingVisibility
-
-            if (pendingV != null) {
-                pendingVisibility = null
-                visibility = pendingV
-            }
-        }
-
-    private var pendingVisibility: Int? = null
-
     init {
         setupView()
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)
+            putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, "")
+        }
     }
 
     /**
@@ -91,7 +83,8 @@ class KeysBackupBanner @JvmOverloads constructor(
         state = newState
 
         hideAll()
-
+        val parent = parent as ViewGroup
+        TransitionManager.beginDelayedTransition(parent)
         when (newState) {
             State.Initial    -> renderInitial()
             State.Hidden     -> renderHidden()
@@ -100,22 +93,6 @@ class KeysBackupBanner @JvmOverloads constructor(
             is State.Update  -> renderUpdate(newState.version)
             State.BackingUp  -> renderBackingUp()
         }
-    }
-
-    override fun setVisibility(visibility: Int) {
-        if (scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            // Wait for scroll state to be idle
-            pendingVisibility = visibility
-            return
-        }
-
-        if (visibility != getVisibility()) {
-            // Schedule animation
-            val parent = parent as ViewGroup
-            TransitionManager.beginDelayedTransition(parent)
-        }
-
-        super.setVisibility(visibility)
     }
 
     override fun onClick(v: View?) {
@@ -166,6 +143,8 @@ class KeysBackupBanner @JvmOverloads constructor(
         ButterKnife.bind(this)
 
         setOnClickListener(this)
+        textView1.setOnClickListener(this)
+        textView2.setOnClickListener(this)
     }
 
     private fun renderInitial() {
@@ -218,10 +197,10 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderBackingUp() {
-        // Do not render when backing up anymore
-        isVisible = false
-
-        textView1.setText(R.string.keys_backup_banner_in_progress)
+        isVisible = true
+        textView1.setText(R.string.keys_backup_banner_setup_line1)
+        textView2.isVisible = true
+        textView2.setText(R.string.keys_backup_banner_in_progress)
         loading.isVisible = true
     }
 

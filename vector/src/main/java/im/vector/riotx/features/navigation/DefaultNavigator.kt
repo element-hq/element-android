@@ -199,7 +199,15 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
-        context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+        // if cross signing is enabled we should propose full 4S
+        sessionHolder.getSafeActiveSession()?.let { session ->
+            if (session.cryptoService().crossSigningService().canCrossSign() && context is VectorBaseActivity) {
+                BootstrapBottomSheet.show(context.supportFragmentManager, false)
+            } else {
+                context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+            }
+        }
+
     }
 
     override fun openKeysBackupManager(context: Context) {
