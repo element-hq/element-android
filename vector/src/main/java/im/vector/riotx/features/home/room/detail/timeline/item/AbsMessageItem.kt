@@ -61,6 +61,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName
+            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
             attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
@@ -74,6 +75,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.memberNameView.setOnLongClickListener(null)
         }
     }
+
+    override fun unbind(holder: H) {
+        holder.avatarImageView.setOnClickListener(null)
+        holder.avatarImageView.setOnLongClickListener(null)
+        holder.memberNameView.setOnClickListener(null)
+        holder.memberNameView.setOnLongClickListener(null)
+        super.unbind(holder)
+    }
+
+    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.senderId)
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
@@ -96,5 +107,25 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null
-    ) : AbsBaseMessageItem.Attributes
+    ) : AbsBaseMessageItem.Attributes {
+
+        // Have to override as it's used to diff epoxy items
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Attributes
+
+            if (avatarSize != other.avatarSize) return false
+            if (informationData != other.informationData) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = avatarSize
+            result = 31 * result + informationData.hashCode()
+            return result
+        }
+    }
 }

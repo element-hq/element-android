@@ -40,7 +40,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var dimensionConverter: DimensionConverter
 
     @CallSuper

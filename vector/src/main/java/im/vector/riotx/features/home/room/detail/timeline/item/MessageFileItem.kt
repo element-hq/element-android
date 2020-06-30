@@ -36,7 +36,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: View.OnClickListener? = null
     @EpoxyAttribute
     var izLocalFile = false

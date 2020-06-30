@@ -33,14 +33,12 @@ import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReferencesInfoData
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
@@ -71,11 +69,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || isTileTypeMessage(nextEvent)
 
         val time = dateFormatter.formatMessageHour(date)
-        val formattedMemberName = span(event.senderInfo.disambiguatedDisplayName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
-        }
-
         val e2eDecoration = getE2EDecoration(event)
+
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -83,7 +78,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 time = time,
                 ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = event.senderInfo.avatarUrl,
-                memberName = formattedMemberName,
+                memberName = event.senderInfo.disambiguatedDisplayName,
                 showInformation = showInformation,
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }

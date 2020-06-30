@@ -59,7 +59,6 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -98,12 +97,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         userPreferencesProvider: UserPreferencesProvider,
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
-        private val typingHelper: TypingHelper,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummaryHolder: RoomSummaryHolder,
+        private val typingHelper: TypingHelper,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
@@ -167,7 +166,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
-        observeTypings()
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
@@ -1061,15 +1059,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observeTypings() {
-        typingHelper.getTypingMessage(initialState.roomId)
-                .asObservable()
-                .subscribe {
-                    setState { copy(typingMessage = it) }
-                }
-                .disposeOnClear()
-    }
-
     private fun getUnreadState() {
         Observable
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
@@ -1127,8 +1116,11 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-
             roomSummaryHolder.set(summary)
+            setState {
+                val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
+                copy(typingMessage = typingMessage)
+            }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
                     session.getUser(inviterId)

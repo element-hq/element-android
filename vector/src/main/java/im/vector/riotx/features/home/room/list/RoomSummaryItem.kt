@@ -32,28 +32,28 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.extensions.observeK
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.typing.TypingHelper
-import timber.log.Timber
 
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var typingHelper: TypingHelper
+    @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
+    // Used only for diff calculation
+    @EpoxyAttribute lateinit var lastEvent: String
+    // We use DoNotHash here as Spans are not implementing equals/hashcode
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
-    @EpoxyAttribute var itemLongClickListener: View.OnLongClickListener? = null
-    @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
     @EpoxyAttribute var showSelected: Boolean = false
 
     override fun bind(holder: Holder) {
@@ -73,11 +73,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarDecorationImageView.isVisible = encryptionTrustLevel != null
         holder.roomAvatarDecorationImageView.setImageResource(encryptionTrustLevel.toImageRes())
         renderSelection(holder, showSelected)
-        typingHelper.getTypingMessage(matrixItem.id).observeK(this) {
-            Timber.v("Observe typing for room ${matrixItem.id}: $it")
-            holder.typingView.setTextOrHide(it)
-            holder.lastEventView.isInvisible = holder.typingView.isVisible
-        }
+        holder.typingView.setTextOrHide(typingMessage)
+        holder.lastEventView.isInvisible = holder.typingView.isVisible
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.rootView.setOnClickListener(null)
+        holder.rootView.setOnLongClickListener(null)
+        super.unbind(holder)
     }
 
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
