@@ -35,12 +35,12 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
                                   private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
 
     // Set to false to perform some test
-    private val USE_DEAFULT_TRUST_MANAGER = true
+    private val USE_DEFAULT_TRUST_MANAGER = true
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null && USE_DEAFULT_TRUST_MANAGER) {
+            if (defaultTrustManager != null && USE_DEFAULT_TRUST_MANAGER) {
                 defaultTrustManager.checkClientTrusted(chain, s)
                 return
             }
@@ -57,7 +57,7 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null && USE_DEAFULT_TRUST_MANAGER) {
+            if (defaultTrustManager != null && USE_DEFAULT_TRUST_MANAGER) {
                 defaultTrustManager.checkServerTrusted(chain, s)
                 return
             }

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
@@ -41,7 +41,7 @@ import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 internal class DefaultTermsService @Inject constructor(
-        @Unauthenticated
+        @UnauthenticatedWithCertificate
         private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
         private val accountDataDataSource: AccountDataDataSource,
         private val termsAPI: TermsAPI,

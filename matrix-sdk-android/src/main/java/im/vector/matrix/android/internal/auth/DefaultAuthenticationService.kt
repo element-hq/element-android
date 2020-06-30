@@ -215,7 +215,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         // Create a fake userId, for the getWellknown task
         val fakeUserId = "@alice:$domain"
-        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId))
+        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId, homeServerConnectionConfig))
 
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
@@ -327,9 +327,11 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    override fun getWellKnownData(matrixId: String, callback: MatrixCallback<WellknownResult>): Cancelable {
+    override fun getWellKnownData(matrixId: String,
+                                  homeServerConnectionConfig: HomeServerConnectionConfig?,
+                                  callback: MatrixCallback<WellknownResult>): Cancelable {
         return getWellknownTask
-                .configureWith(GetWellknownTask.Params(matrixId)) {
+                .configureWith(GetWellknownTask.Params(matrixId, homeServerConnectionConfig)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

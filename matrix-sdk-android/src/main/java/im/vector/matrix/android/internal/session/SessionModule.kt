@@ -48,6 +48,7 @@ import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
@@ -186,15 +187,26 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
+        @UnauthenticatedWithCertificate
+        fun providesOkHttpClientWithCertificate(@Unauthenticated okHttpClient: OkHttpClient,
+                                                homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+            return okHttpClient
+                    .newBuilder()
+                    .addSocketFactory(homeServerConnectionConfig)
+                    .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
         @Authenticated
-        fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
+        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                                  @Authenticated accessTokenProvider: AccessTokenProvider,
-                                 homeServerConnectionConfig: HomeServerConnectionConfig,
                                  @SessionId sessionId: String,
                                  @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
-            return okHttpClient.newBuilder()
+            return okHttpClient
+                    .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
-                    .addSocketFactory(homeServerConnectionConfig)
                     .apply {
                         if (testInterceptor != null) {
                             testInterceptor.sessionId = sessionId

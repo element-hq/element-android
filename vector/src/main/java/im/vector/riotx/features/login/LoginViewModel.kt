@@ -496,7 +496,8 @@ class LoginViewModel @AssistedInject constructor(
             )
         }
 
-        authenticationService.getWellKnownData(action.username, object : MatrixCallback<WellknownResult> {
+        // TODO Handle certificate error in this case. Direct login is deactivated now, so we will handle that later
+        authenticationService.getWellKnownData(action.username, null, object : MatrixCallback<WellknownResult> {
             override fun onSuccess(data: WellknownResult) {
                 when (data) {
                     is WellknownResult.Prompt          ->
