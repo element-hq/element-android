@@ -48,6 +48,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.OptionItem
+import im.vector.matrix.android.api.session.room.model.message.getFileName
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
@@ -243,7 +244,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EnterEditMode                    -> handleEditAction(action)
             is RoomDetailAction.EnterQuoteMode                   -> handleQuoteAction(action)
             is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
-            is RoomDetailAction.DownloadFile                     -> handleDownloadFile(action)
+            is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
             is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
@@ -858,30 +859,44 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDownloadFile(action: RoomDetailAction.DownloadFile) {
-        session.downloadFile(
-                FileService.DownloadMode.TO_EXPORT,
-                action.eventId,
-                action.messageFileContent.getFileName(),
-                action.messageFileContent.getFileUrl(),
-                action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                action.messageFileContent.getMimeType(),
-                                data,
-                                null
-                        ))
-                    }
+    private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
+        val mxcUrl = action.messageFileContent.getFileUrl()
+        val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
+        if (isDownloaded) {
+            // we can open it
+            session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
+                _viewEvents.post(RoomDetailViewEvents.OpenFile(
+                        action.messageFileContent.mimeType,
+                        uri,
+                        null
+                ))
+            }
+        } else {
+            session.fileService().downloadFile(
+                    FileService.DownloadMode.FOR_INTERNAL_USE,
+                    action.eventId,
+                    action.messageFileContent.getFileName(),
+                    action.messageFileContent.mimeType,
+                    mxcUrl,
+                    action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                    object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    data,
+                                    null
+                            ))
+                        }
 
-                    override fun onFailure(failure: Throwable) {
-                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                action.messageFileContent.getMimeType(),
-                                null,
-                                failure
-                        ))
-                    }
-                })
+                        override fun onFailure(failure: Throwable) {
+                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    null,
+                                    failure
+                            ))
+                        }
+                    })
+        }
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {

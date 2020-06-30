@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -90,7 +91,7 @@ internal class DefaultSession @Inject constructor(
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
-        private val fileService: Lazy<FileService>,
+        private val defaultFileService: Lazy<FileService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val widgetService: Lazy<WidgetService>,
@@ -100,6 +101,7 @@ internal class DefaultSession @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val typingUsersTracker: TypingUsersTracker,
+        private val contentDownloadStateTracker: ContentDownloadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
@@ -120,7 +122,6 @@ internal class DefaultSession @Inject constructor(
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
-        FileService by fileService.get(),
         TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
@@ -239,9 +240,13 @@ internal class DefaultSession @Inject constructor(
 
     override fun typingUsersTracker() = typingUsersTracker
 
+    override fun contentDownloadProgressTracker(): ContentDownloadStateTracker = contentDownloadStateTracker
+
     override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun identityService() = defaultIdentityService
+
+    override fun fileService(): FileService = defaultFileService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
 

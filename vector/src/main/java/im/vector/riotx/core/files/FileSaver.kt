@@ -19,12 +19,14 @@ package im.vector.riotx.core.files
 import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
 import arrow.core.Try
 import okio.buffer
 import okio.sink
+import okio.source
 import timber.log.Timber
 import java.io.File
 
@@ -56,7 +58,7 @@ fun addEntryToDownloadManager(context: Context,
                               file: File,
                               mimeType: String,
                               title: String = file.name,
-                              description: String = file.name) {
+                              description: String = file.name) : Uri? {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
@@ -65,17 +67,31 @@ fun addEntryToDownloadManager(context: Context,
                 put(MediaStore.Downloads.MIME_TYPE, mimeType)
                 put(MediaStore.Downloads.SIZE, file.length())
             }
-            context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
+            return context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                    ?.let { uri ->
+                        Timber.v("## addEntryToDownloadManager(): $uri")
+                val source = file.inputStream().source().buffer()
+                context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
+                    source.use { input ->
+                        sink.use { output ->
+                            output.writeAll(input)
+                        }
+                    }
                 }
+                        uri
+            } ?: run {
+                Timber.v("## addEntryToDownloadManager(): context.contentResolver.insert failed")
+
+                null
             }
         } else {
-            val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
+            val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
             @Suppress("DEPRECATION")
             downloadManager?.addCompletedDownload(title, description, true, mimeType, file.absolutePath, file.length(), true)
+            return null
         }
     } catch (e: Exception) {
         Timber.e(e, "## addEntryToDownloadManager(): Exception")
     }
+    return null
 }

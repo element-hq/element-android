@@ -12,6 +12,7 @@ Improvements 🙌:
  - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
  - Update user avatar (#1054)
  - Allow self-signed certificate (#1564)
+ - Improve file download and open in timeline
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)

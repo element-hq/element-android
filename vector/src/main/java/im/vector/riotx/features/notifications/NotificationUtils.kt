@@ -480,6 +480,26 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .build()
     }
 
+    fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setGroup(stringProvider.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_download)
+                .setContentText(stringProvider.getString(R.string.downloaded_file, fileName))
+                .setAutoCancel(true)
+                .apply {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, mimeType)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    PendingIntent.getActivity(
+                            context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+                    ).let {
+                        setContentIntent(it)
+                    }
+                }
+                .build()
+    }
+
     /**
      * Build a notification for a Room
      */

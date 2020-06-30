@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.util
+package im.vector.matrix.android.api.session.file
 
-import androidx.annotation.WorkerThread
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import android.net.Uri
+import androidx.core.content.FileProvider
 
 /**
- * Save an input stream to a file with Okio
+ * We have to declare our own file provider to avoid collision with apps using the sdk
+ * and having their own
  */
-@WorkerThread
-fun writeToFile(inputStream: InputStream, outputFile: File) {
-    FileOutputStream(outputFile).use {
-        inputStream.copyTo(it)
+class MatrixSDKFileProvider : FileProvider() {
+    override fun getType(uri: Uri): String? {
+        return super.getType(uri) ?: "plain/text"
     }
 }

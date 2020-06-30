@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.file
 
+import android.net.Uri
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
@@ -31,26 +32,58 @@ interface FileService {
          * Download file in external storage
          */
         TO_EXPORT,
+
         /**
          * Download file in cache
          */
         FOR_INTERNAL_USE,
+
         /**
          * Download file in file provider path
          */
         FOR_EXTERNAL_SHARE
     }
 
+    enum class FileState {
+        IN_CACHE,
+        DOWNLOADING,
+        UNKNOWN
+    }
+
     /**
      * Download a file.
-     * Result will be a decrypted file, stored in the cache folder. id parameter will be used to create a sub folder to avoid name collision.
-     * You can pass the eventId
+     * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
     fun downloadFile(
             downloadMode: DownloadMode,
             id: String,
             fileName: String,
+            mimeType: String?,
             url: String?,
             elementToDecrypt: ElementToDecrypt?,
             callback: MatrixCallback<File>): Cancelable
+
+    fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean
+
+    /**
+     * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
+     * (if not other app won't be able to access it)
+     */
+    fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
+
+    /**
+     * Get information on the given file.
+     * Mimetype should be the same one as passed to downloadFile (limitation for now)
+     */
+    fun fileState(mxcUrl: String, mimeType: String?): FileState
+
+    /**
+     * Clears all the files downloaded by the service
+     */
+    fun clearCache()
+
+    /**
+     * Get size of cached files
+     */
+    fun getCacheSize(): Int
 }

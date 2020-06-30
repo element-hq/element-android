@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
-import im.vector.matrix.android.internal.di.SessionCacheDirectory
+import im.vector.matrix.android.internal.di.SessionDownloadsDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
@@ -44,7 +44,7 @@ internal class CleanupSession @Inject constructor(
         @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
         @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         @SessionFilesDirectory private val sessionFiles: File,
-        @SessionCacheDirectory private val sessionCache: File,
+        @SessionDownloadsDirectory private val sessionCache: File,
         private val realmKeysUtils: RealmKeysUtils,
         @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
         @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,

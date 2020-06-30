@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.net.Uri
 import androidx.annotation.StringRes
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
@@ -45,8 +46,14 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     data class DownloadFileState(
-            val mimeType: String,
+            val mimeType: String?,
             val file: File?,
+            val throwable: Throwable?
+    ) : RoomDetailViewEvents()
+
+    data class OpenFile(
+            val mimeType: String?,
+            val uri: Uri?,
             val throwable: Throwable?
     ) : RoomDetailViewEvents()
 

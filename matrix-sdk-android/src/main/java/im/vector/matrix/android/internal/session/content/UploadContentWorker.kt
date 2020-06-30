@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVideoConte
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.network.ProgressRequestBody
+import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -71,6 +72,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
     @Inject lateinit var fileUploader: FileUploader
     @Inject lateinit var contentUploadStateTracker: DefaultContentUploadStateTracker
+    @Inject lateinit var fileService: DefaultFileService
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -208,6 +210,13 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     } else {
                         fileUploader
                                 .uploadFile(cacheFile, attachment.name, attachment.getSafeMimeType(), progressListener)
+                    }
+
+                    // If it's a file update the file service so that it does not redownload?
+                    if (params.attachment.type == ContentAttachmentData.Type.FILE) {
+                        context.contentResolver.openInputStream(attachment.queryUri)?.let {
+                            fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
+                        }
                     }
 
                     handleSuccess(params,
