@@ -29,3 +29,7 @@ internal annotation class AuthenticatedIdentity
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class Unauthenticated
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class UnauthenticatedWithCertificate

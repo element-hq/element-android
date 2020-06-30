@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachmen
 import im.vector.matrix.android.internal.di.CacheDirectory
 import im.vector.matrix.android.internal.di.ExternalFilesDirectory
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -49,7 +49,7 @@ internal class DefaultFileService @Inject constructor(
         @SessionCacheDirectory
         private val sessionCacheDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
-        @Unauthenticated
+        @UnauthenticatedWithCertificate
         private val okHttpClient: OkHttpClient,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor

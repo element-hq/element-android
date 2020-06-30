@@ -27,6 +27,7 @@ import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.core.utils.AssetReader
@@ -88,6 +89,8 @@ interface VectorComponent {
     fun avatarRenderer(): AvatarRenderer
 
     fun activeSessionHolder(): ActiveSessionHolder
+
+    fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 

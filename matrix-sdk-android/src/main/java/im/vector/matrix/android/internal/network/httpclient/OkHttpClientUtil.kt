@@ -16,24 +16,38 @@
 
 package im.vector.matrix.android.internal.network.httpclient
 
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.ssl.CertUtil
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import okhttp3.OkHttpClient
+import timber.log.Timber
 
-internal fun OkHttpClient.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider): OkHttpClient {
-    return newBuilder()
-            .apply {
-                // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
-                val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
-                interceptors().removeAll(existingCurlInterceptors)
+internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider): OkHttpClient.Builder {
+    // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+    val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+    interceptors().removeAll(existingCurlInterceptors)
 
-                addInterceptor(AccessTokenInterceptor(accessTokenProvider))
+    addInterceptor(AccessTokenInterceptor(accessTokenProvider))
 
-                // Re add eventually the curl logging interceptors
-                existingCurlInterceptors.forEach {
-                    addInterceptor(it)
-                }
-            }
-            .build()
+    // Re add eventually the curl logging interceptors
+    existingCurlInterceptors.forEach {
+        addInterceptor(it)
+    }
+
+    return this
+}
+
+internal fun OkHttpClient.Builder.addSocketFactory(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient.Builder {
+    try {
+        val pair = CertUtil.newPinnedSSLSocketFactory(homeServerConnectionConfig)
+        sslSocketFactory(pair.sslSocketFactory, pair.x509TrustManager)
+        hostnameVerifier(CertUtil.newHostnameVerifier(homeServerConnectionConfig))
+        connectionSpecs(CertUtil.newConnectionSpecs(homeServerConnectionConfig))
+    } catch (e: Exception) {
+        Timber.e(e, "addSocketFactory failed")
+    }
+
+    return this
 }

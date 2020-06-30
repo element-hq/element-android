@@ -43,6 +43,8 @@ import im.vector.matrix.android.internal.auth.version.isSupportedBySdk
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
+import im.vector.matrix.android.internal.network.ssl.UnrecognizedCertificateException
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
@@ -121,7 +123,11 @@ internal class DefaultAuthenticationService @Inject constructor(
                         callback.onSuccess(it)
                     },
                     {
-                        callback.onFailure(it)
+                        if (it is UnrecognizedCertificateException) {
+                            callback.onFailure(Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUri.toString(), it.fingerprint))
+                        } else {
+                            callback.onFailure(it)
+                        }
                     }
             )
         }
@@ -209,7 +215,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         // Create a fake userId, for the getWellknown task
         val fakeUserId = "@alice:$domain"
-        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId))
+        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId, homeServerConnectionConfig))
 
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
@@ -248,7 +254,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultRegistrationWizard(
-                                okHttpClient,
+                                buildClient(it),
                                 retrofitFactory,
                                 coroutineDispatchers,
                                 sessionCreator,
@@ -269,7 +275,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultLoginWizard(
-                                okHttpClient,
+                                buildClient(it),
                                 retrofitFactory,
                                 coroutineDispatchers,
                                 sessionCreator,
@@ -321,9 +327,11 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    override fun getWellKnownData(matrixId: String, callback: MatrixCallback<WellknownResult>): Cancelable {
+    override fun getWellKnownData(matrixId: String,
+                                  homeServerConnectionConfig: HomeServerConnectionConfig?,
+                                  callback: MatrixCallback<WellknownResult>): Cancelable {
         return getWellknownTask
-                .configureWith(GetWellknownTask.Params(matrixId)) {
+                .configureWith(GetWellknownTask.Params(matrixId, homeServerConnectionConfig)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -347,7 +355,14 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(buildClient(homeServerConnectionConfig), homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
+    }
+
+    private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        return okHttpClient.get()
+                .newBuilder()
+                .addSocketFactory(homeServerConnectionConfig)
+                .build()
     }
 }

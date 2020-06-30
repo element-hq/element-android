@@ -11,6 +11,7 @@ Improvements 🙌:
  - Prioritising Recovery key over Recovery passphrase (#1463)
  - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
  - Update user avatar (#1054)
+ - Allow self-signed certificate (#1564)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)

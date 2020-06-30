@@ -108,14 +108,22 @@ else
   chmod u+x ${checkLongFilesScript}
 fi
 
-echo
-echo "Search for long files..."
+maxLines=2500
 
-${checkLongFilesScript} 2500 \
+echo
+echo "Search for kotlin files with more than ${maxLines} lines..."
+
+${checkLongFilesScript} ${maxLines} \
+    ./matrix-sdk-android/src/main/java \
+    ./matrix-sdk-android-rx/src/main/java \
+    ./vector/src/androidTest/java \
+    ./vector/src/debug/java \
+    ./vector/src/fdroid/java \
+    ./vector/src/gplay/java \
     ./vector/src/main/java \
-    ./vector/src/main/res/layout \
-    ./vector/src/main/res/values \
-    ./vector/src/main/res/values-v21 \
+    ./vector/src/release/java \
+    ./vector/src/sharedTest/java \
+    ./vector/src/test/java
 
 resultLongFiles=$?
 

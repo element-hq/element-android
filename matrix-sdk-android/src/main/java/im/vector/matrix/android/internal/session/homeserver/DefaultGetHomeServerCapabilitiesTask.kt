@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.internal.auth.version.Versions
@@ -43,6 +44,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val eventBus: EventBus,
         private val getWellknownTask: GetWellknownTask,
         private val configExtractor: IntegrationManagerConfigExtractor,
+        private val homeServerConnectionConfig: HomeServerConnectionConfig,
         @UserId
         private val userId: String
 ) : GetHomeServerCapabilitiesTask {
@@ -78,7 +80,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         }.getOrNull()
 
         val wellknownResult = runCatching {
-            getWellknownTask.execute(GetWellknownTask.Params(userId))
+            getWellknownTask.execute(GetWellknownTask.Params(userId, homeServerConnectionConfig))
         }.getOrNull()
 
         insertInDb(capabilities, uploadCapabilities, versions, wellknownResult)
