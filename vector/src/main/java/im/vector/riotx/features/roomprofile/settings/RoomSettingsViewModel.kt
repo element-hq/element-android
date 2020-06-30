@@ -65,7 +65,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
                 RoomSettingsViewState::roomSummary) { newName,
-                                                      newAlias,
+                                                      newCanonicalAlias,
                                                       newTopic,
                                                       newHistoryVisibility,
                                                       asyncSummary ->
@@ -74,7 +74,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 copy(
                         showSaveAction = summary?.name != newName
                                 || summary?.topic != newTopic
-                                || summary?.canonicalAlias != newAlias
+                                || summary?.canonicalAlias != newCanonicalAlias?.takeIf { it.isNotEmpty() }
                                 || newHistoryVisibility != null
                 )
             }
