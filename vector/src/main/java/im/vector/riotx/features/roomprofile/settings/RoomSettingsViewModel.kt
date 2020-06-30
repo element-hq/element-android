@@ -66,7 +66,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             roomSummary = async,
                             newName = roomSummary?.displayName,
-                            newTopic = roomSummary?.topic
+                            newTopic = roomSummary?.topic,
+                            newAlias = roomSummary?.canonicalAlias
                     )
                 }
 
@@ -145,7 +146,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         {
                             postLoading(false)
                             setState { copy(newHistoryVisibility = null) }
-                            setState { copy(showSaveAction = shouldShowSaveAction(this)) }
+                            setState { copy(showSaveAction = false) }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {
