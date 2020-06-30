@@ -26,7 +26,6 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
@@ -89,8 +88,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface BaseCallback {
-        fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View)
-        fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean
+        fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View)
+        fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean
     }
 
     interface AvatarCallback {
@@ -283,13 +282,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun getModels(): List<EpoxyModel<*>> {
         buildCacheItemsIfNeeded()
         return modelCache
-                .map {
-                    val eventModel = if (it == null || mergedHeaderItemFactory.isCollapsed(it.localId)) {
+                .map { cacheItemData ->
+                    val eventModel = if (cacheItemData == null || mergedHeaderItemFactory.isCollapsed(cacheItemData.localId)) {
                         null
                     } else {
-                        it.eventModel
+                        cacheItemData.eventModel
                     }
-                    listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
+                    listOf(eventModel,
+                            cacheItemData?.mergedHeaderModel,
+                            cacheItemData?.formattedDayModel?.takeIf { eventModel != null || cacheItemData.mergedHeaderModel != null }
+                    )
                 }
                 .flatten()
                 .filterNotNull()

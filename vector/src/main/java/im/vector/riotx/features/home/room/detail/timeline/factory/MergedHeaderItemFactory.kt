@@ -36,11 +36,16 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MergedMembershipE
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreationItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MergedUTDItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MergedUTDItem_
+import im.vector.riotx.features.settings.VectorPreferences
+import timber.log.Timber
 import javax.inject.Inject
 
-class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer,
+class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                                  private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider,
-                                                  private val activeSessionHolder: ActiveSessionHolder) {
+                                                  private val vectorPreferences: VectorPreferences) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -58,7 +63,10 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
             : BasedMergedItem<*>? {
-        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+        return if (shouldMergedAsCannotDecryptGroup(event, nextEvent)) {
+            Timber.v("## MERGE: Candidate for merge, top event ${event.eventId}")
+            buildUTDMergedSummary(currentPosition, items, event, eventIdToHighlight, /*requestModelBuild,*/ callback)
+        } else if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                 && event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
             // Collapse all room configuration events
@@ -128,6 +136,82 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                         it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                     }
         }
+    }
+
+    // Event should be UTD
+    // Next event should not
+    private fun shouldMergedAsCannotDecryptGroup(event: TimelineEvent, nextEvent: TimelineEvent?): Boolean {
+        if (!vectorPreferences.mergeUTDinTimeline()) return false
+        // if event is not UTD return false
+        if (!isEventUTD(event)) return false
+        // At this point event cannot be decrypted
+        // Let's check if older event is not UTD
+        return nextEvent == null || !isEventUTD(event)
+    }
+
+    private fun isEventUTD(event: TimelineEvent): Boolean {
+        return event.root.getClearType() == EventType.ENCRYPTED && !event.root.isRedacted()
+    }
+
+    private fun buildUTDMergedSummary(currentPosition: Int,
+                                      items: List<TimelineEvent>,
+                                      event: TimelineEvent,
+                                      eventIdToHighlight: String?,
+                                      // requestModelBuild: () -> Unit,
+                                      callback: TimelineEventController.Callback?): MergedUTDItem_? {
+        Timber.v("## MERGE: buildUTDMergedSummary from position $currentPosition")
+        var prevEvent = items.prevOrNull(currentPosition)
+        var tmpPos = currentPosition - 1
+        val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }
+
+        while (prevEvent != null && isEventUTD(prevEvent)) {
+            mergedEvents.add(prevEvent)
+            tmpPos--
+            prevEvent = if (tmpPos >= 0) items[tmpPos] else null
+        }
+
+        Timber.v("## MERGE: buildUTDMergedSummary merge group size ${mergedEvents.size}")
+        if (mergedEvents.size < 3) return null
+
+        var highlighted = false
+        val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
+        mergedEvents.reversed()
+                .forEach { mergedEvent ->
+                    if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
+                        highlighted = true
+                    }
+                    val senderAvatar = mergedEvent.senderInfo.avatarUrl
+                    val senderName = mergedEvent.senderInfo.disambiguatedDisplayName
+                    val data = BasedMergedItem.Data(
+                            userId = mergedEvent.root.senderId ?: "",
+                            avatarUrl = senderAvatar,
+                            memberName = senderName,
+                            localId = mergedEvent.localId,
+                            eventId = mergedEvent.root.eventId ?: ""
+                    )
+                    mergedData.add(data)
+                }
+        val mergedEventIds = mergedEvents.map { it.localId }
+
+        collapsedEventIds.addAll(mergedEventIds)
+
+        val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
+
+        val attributes = MergedUTDItem.Attributes(
+                isCollapsed = true,
+                mergeData = mergedData,
+                avatarRenderer = avatarRenderer,
+                onCollapsedStateChanged = {}
+        )
+        return MergedUTDItem_()
+                .id(mergeId)
+                .big(mergedEventIds.size > 5)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .highlighted(highlighted)
+                .attributes(attributes)
+                .also {
+                    it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
+                }
     }
 
     private fun buildRoomCreationMergedSummary(currentPosition: Int,

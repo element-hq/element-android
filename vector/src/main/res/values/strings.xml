@@ -1734,6 +1734,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+    <string name="labs_merge_e2e_in_timeline">Merge failed to decrypt message in timeline</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
@@ -2501,4 +2502,12 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_settings_topic_hint">Topic</string>
     <string name="room_settings_save_success">You changed room settings successfully</string>
 
+    <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
+    <string name="crypto_utd">Cannot Decrypt</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Due to end-to-end encryption, you might need to wait for someone\'s message to arrive because the encryption keys were not properly sent to you.</string>
+    <string name="crypto_error_withheld_blacklisted">You cannot access this message because you have been blocked by the sender</string>
+    <string name="crypto_error_withheld_unverified">You cannot access this message because your session is not trusted by the sender</string>
+    <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 </resources>

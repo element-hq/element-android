@@ -119,3 +119,13 @@ class MXUsersDevicesMap<E> {
         return "MXUsersDevicesMap $map"
     }
 }
+
+inline fun <T> MXUsersDevicesMap<T>.forEach(action: (String, String, T) -> Unit) {
+    userIds.forEach { userId ->
+        getUserDeviceIds(userId)?.forEach { deviceId ->
+            getObject(userId, deviceId)?.let {
+                action(userId, deviceId, it)
+            }
+        }
+    }
+}

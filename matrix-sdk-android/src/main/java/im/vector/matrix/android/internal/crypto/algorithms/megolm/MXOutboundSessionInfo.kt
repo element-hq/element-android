@@ -23,16 +23,13 @@ import timber.log.Timber
 
 internal class MXOutboundSessionInfo(
         // The id of the session
-        val sessionId: String) {
+        val sessionId: String,
+        val sharedWithHelper: SharedWithHelper) {
     // When the session was created
     private val creationTime = System.currentTimeMillis()
 
     // Number of times this session has been used
     var useCount: Int = 0
-
-    // Devices with which we have shared the session key
-    // userId -> {deviceId -> msgindex}
-    val sharedWithDevices: MXUsersDevicesMap<Int> = MXUsersDevicesMap()
 
     fun needsRotation(rotationPeriodMsgs: Int, rotationPeriodMs: Int): Boolean {
         var needsRotation = false
@@ -53,6 +50,7 @@ internal class MXOutboundSessionInfo(
      * @return true if we have shared the session with devices which aren't in devicesInRoom.
      */
     fun sharedWithTooManyDevices(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): Boolean {
+        val sharedWithDevices = sharedWithHelper.sharedWithDevices()
         val userIds = sharedWithDevices.userIds
 
         for (userId in userIds) {

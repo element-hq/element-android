@@ -18,10 +18,13 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.resources.DrawableProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -29,6 +32,8 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformat
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
+import im.vector.riotx.features.settings.VectorPreferences
+import me.gujun.android.span.image
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -37,7 +42,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                                private val colorProvider: ColorProvider,
                                                private val stringProvider: StringProvider,
                                                private val avatarSizeProvider: AvatarSizeProvider,
-                                               private val attributesFactory: MessageItemAttributesFactory) {
+                                               private val drawableProvider: DrawableProvider,
+                                               private val attributesFactory: MessageItemAttributesFactory,
+                                               private val vectorPreferences: VectorPreferences) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -48,25 +55,63 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
         return when {
             EventType.ENCRYPTED == event.root.getClearType() -> {
                 val cryptoError = event.root.mCryptoError
-                val errorDescription =
-                        if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                            stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
-                        } else {
-                            // TODO i18n
-                            cryptoError?.name
-                        }
 
-                val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
-                val spannableStr = span(message) {
-                    textStyle = "italic"
-                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                val spannableStr = if (vectorPreferences.developerMode()) {
+                    val errorDescription =
+                            if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                            } else {
+                                // TODO i18n
+                                cryptoError?.name
+                            }
+
+                    val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
+                            ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                    span(message) {
+                        textStyle = "italic"
+                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                    }
+                } else {
+                    val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                    if (cryptoError == null) {
+                        span(stringProvider.getString(R.string.encrypted_message)) {
+                            textStyle = "italic"
+                            textColor = colorFromAttribute
+                        }
+                    } else {
+                        when (cryptoError) {
+                            MXCryptoError.ErrorType.KEYS_WITHHELD -> {
+                                span {
+                                    apply {
+                                        drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
+                                            image(it, "baseline")
+                                        }
+                                    }
+                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_final)) {
+                                        textStyle = "italic"
+                                        textColor = colorFromAttribute
+                                    }
+                                }
+                            }
+                            else                                  -> {
+                                span {
+                                    apply {
+                                        drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
+                                            image(it, "baseline")
+                                        }
+                                    }
+                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
+                                        textStyle = "italic"
+                                        textColor = colorFromAttribute
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
-                // TODO This is not correct format for error, change it
-
                 val informationData = messageInformationDataFactory.create(event, nextEvent)
-                val attributes = attributesFactory.create(null, informationData, callback)
+                val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, callback)
                 return MessageTextItem_()
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(highlight)

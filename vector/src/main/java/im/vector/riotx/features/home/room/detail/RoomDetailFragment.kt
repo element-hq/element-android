@@ -86,6 +86,8 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.dialogs.withColoredButton
@@ -340,6 +342,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
                 is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
                 is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
+                is RoomDetailViewEvents.ShowE2EErrorMessage    -> displayE2eError(it.withHeldCode)
                 RoomDetailViewEvents.DisplayPromptForIntegrationManager  -> displayPromptForIntegrationManager()
                 is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
@@ -941,6 +944,20 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
+    private fun displayE2eError(withHeldCode: WithHeldCode?) {
+        val msgId = when (withHeldCode) {
+            WithHeldCode.BLACKLISTED -> R.string.crypto_error_withheld_blacklisted
+            WithHeldCode.UNVERIFIED  -> R.string.crypto_error_withheld_unverified
+            WithHeldCode.UNAUTHORISED,
+            WithHeldCode.UNAVAILABLE -> R.string.crypto_error_withheld_generic
+            else                     -> R.string.notice_crypto_unable_to_decrypt_friendly_desc
+        }
+        AlertDialog.Builder(requireActivity())
+                .setMessage(msgId)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
     private fun promptReasonToReportContent(action: EventSharedAction.ReportContentCustom) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_report_content, null)
@@ -1205,13 +1222,18 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
     }
 
-    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
-        if (messageContent is MessageVerificationRequestContent) {
-            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View) {
+        when (messageContent) {
+            is MessageVerificationRequestContent -> {
+                roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
+            }
+            is EncryptedEventContent             -> {
+                roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
+            }
         }
     }
 
-    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
+    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = roomDetailArgs.roomId
 

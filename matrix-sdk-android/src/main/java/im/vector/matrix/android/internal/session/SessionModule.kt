@@ -51,13 +51,14 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
+import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
-import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.call.CallEventObserver
@@ -80,6 +81,11 @@ import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
+import javax.inject.Qualifier
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MockHttpInterceptor
 
 @Module
 internal abstract class SessionModule {
@@ -182,8 +188,26 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
+                                 @Authenticated accessTokenProvider: AccessTokenProvider,
+                                 @SessionId sessionId: String,
+                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(AccessTokenInterceptor(accessTokenProvider))
+                        if (testInterceptor != null) {
+                            testInterceptor.sessionId = sessionId
+                            addInterceptor(testInterceptor)
+                        }
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
+                    }
+                    .build()
         }
 
         @JvmStatic
