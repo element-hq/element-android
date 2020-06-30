@@ -117,7 +117,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
-            is RoomSettingsAction.SetRoomAlias             -> setState { copy(newCanonicalAlias = action.alias) }
+            is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
             is RoomSettingsAction.Save                     -> saveSettings()
         }.exhaustive
     }

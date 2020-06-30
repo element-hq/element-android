@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomprofile.settings
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
@@ -27,11 +26,12 @@ import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.form.formEditTextItem
+import im.vector.riotx.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import javax.inject.Inject
 
-// TODO Add other feature here (waiting for design)
 class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -55,7 +55,7 @@ class RoomSettingsController @Inject constructor(
         val roomSummary = data?.roomSummary?.invoke() ?: return
 
         val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
-        val newHistoryVisibility = data.newHistoryVisibility?.let { formatRoomHistoryVisibility(it) }
+        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
 
         buildProfileSection(
                 stringProvider.getString(R.string.settings)
@@ -127,17 +127,6 @@ class RoomSettingsController @Inject constructor(
 
     private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
-
-        return formatRoomHistoryVisibility(historyVisibility)
-    }
-
-    private fun formatRoomHistoryVisibility(historyVisibility: RoomHistoryVisibility): String {
-        val formattedVisibility = when (historyVisibility) {
-            RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
-            RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
-            RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
-            RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
-        }
-        return formattedVisibility
+        return roomHistoryVisibilityFormatter.format(historyVisibility)
     }
 }

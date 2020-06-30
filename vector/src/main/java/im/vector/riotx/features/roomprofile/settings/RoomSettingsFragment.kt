@@ -36,6 +36,7 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
@@ -44,6 +45,7 @@ import javax.inject.Inject
 class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
+        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment(), RoomSettingsController.Callback {
 
@@ -141,7 +143,11 @@ class RoomSettingsFragment @Inject constructor(
 
         AlertDialog.Builder(requireContext()).apply {
             setTitle(R.string.room_settings_room_read_history_rules_pref_title)
-            setSingleChoiceItems(historyVisibilities.map { formatHistoryVisibility(it) }.toTypedArray(), currentHistoryVisibilityIndex) { dialog, which ->
+            setSingleChoiceItems(
+                    historyVisibilities
+                            .map { roomHistoryVisibilityFormatter.format(it) }
+                            .toTypedArray(),
+                    currentHistoryVisibilityIndex) { dialog, which ->
                 if (which != currentHistoryVisibilityIndex) {
                     viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(historyVisibilities[which]))
                 }
@@ -152,17 +158,7 @@ class RoomSettingsFragment @Inject constructor(
         return@withState
     }
 
-    // TODO Create a formatter for this enum, it's done 3 times in the project
-    private fun formatHistoryVisibility(historyVisibility: RoomHistoryVisibility): String {
-        return when (historyVisibility) {
-            RoomHistoryVisibility.SHARED         -> getString(R.string.notice_room_visibility_shared)
-            RoomHistoryVisibility.INVITED        -> getString(R.string.notice_room_visibility_invited)
-            RoomHistoryVisibility.JOINED         -> getString(R.string.notice_room_visibility_joined)
-            RoomHistoryVisibility.WORLD_READABLE -> getString(R.string.notice_room_visibility_world_readable)
-        }
-    }
-
     override fun onAliasChanged(alias: String) {
-        viewModel.handle(RoomSettingsAction.SetRoomAlias(alias))
+        viewModel.handle(RoomSettingsAction.SetRoomCanonicalAlias(alias))
     }
 }
