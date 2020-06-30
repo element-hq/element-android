@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
@@ -119,7 +120,7 @@ class RxRoom(private val room: Room) {
         room.updateCanonicalAlias(alias, it)
     }
 
-    fun updateHistoryReadability(readability: String) = completableBuilder<Unit> {
+    fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = completableBuilder<Unit> {
         room.updateHistoryReadability(readability, it)
     }
 

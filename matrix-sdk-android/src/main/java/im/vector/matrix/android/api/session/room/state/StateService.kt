@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
@@ -50,7 +51,7 @@ interface StateService {
     /**
      * Update the history readability of the room
      */
-    fun updateHistoryReadability(readability: String, callback: MatrixCallback<Unit>): Cancelable
+    fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Update the avatar of the room

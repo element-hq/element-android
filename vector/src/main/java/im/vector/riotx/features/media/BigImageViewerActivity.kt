@@ -97,15 +97,15 @@ class BigImageViewerActivity : VectorBaseActivity() {
     }
 
     private fun showAvatarSelector() {
-        AlertDialog
-                .Builder(this)
+        AlertDialog.Builder(this)
                 .setItems(arrayOf(
                         stringProvider.getString(R.string.attachment_type_camera),
                         stringProvider.getString(R.string.attachment_type_gallery)
                 )) { dialog, which ->
                     dialog.cancel()
                     onAvatarTypeSelected(isCamera = (which == 0))
-                }.show()
+                }
+                .show()
     }
 
     private var avatarCameraUri: Uri? = null

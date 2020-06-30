@@ -86,7 +86,7 @@ class RoomSettingsController @Inject constructor(
         formEditTextItem {
             id("alias")
             enabled(data.actionPermissions.canChangeCanonicalAlias)
-            value(data.newAlias ?: roomSummary.canonicalAlias)
+            value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
             hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
 
             onTextChange { text ->

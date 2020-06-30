@@ -32,7 +32,7 @@ data class RoomSettingsViewState(
         val newName: String? = null,
         val newTopic: String? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
-        val newAlias: String? = null,
+        val newCanonicalAlias: String? = null,
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {

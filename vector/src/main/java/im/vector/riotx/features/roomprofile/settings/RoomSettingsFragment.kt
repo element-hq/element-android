@@ -34,7 +34,6 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
@@ -45,8 +44,7 @@ import javax.inject.Inject
 class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
-        private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+        private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment(), RoomSettingsController.Callback {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
@@ -154,12 +152,13 @@ class RoomSettingsFragment @Inject constructor(
         return@withState
     }
 
+    // TODO Create a formatter for this enum, it's done 3 times in the project
     private fun formatHistoryVisibility(historyVisibility: RoomHistoryVisibility): String {
         return when (historyVisibility) {
-            RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
-            RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
-            RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
-            RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
+            RoomHistoryVisibility.SHARED         -> getString(R.string.notice_room_visibility_shared)
+            RoomHistoryVisibility.INVITED        -> getString(R.string.notice_room_visibility_invited)
+            RoomHistoryVisibility.JOINED         -> getString(R.string.notice_room_visibility_joined)
+            RoomHistoryVisibility.WORLD_READABLE -> getString(R.string.notice_room_visibility_world_readable)
         }
     }
 

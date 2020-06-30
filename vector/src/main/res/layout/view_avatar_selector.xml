@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_attachment_type_selector"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
+    android:background="@drawable/bg_attachment_type_selector"
     android:orientation="vertical"
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
@@ -28,9 +28,9 @@
             <ImageButton
                 android:id="@+id/avatarCameraButton"
                 style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_camera_white_24dp"
                 android:contentDescription="@string/attachment_type_camera"
-                tools:background="@color/colorAccent" />
+                android:src="@drawable/ic_attachment_camera_white_24dp"
+                tools:background="@color/riotx_accent" />
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
@@ -50,9 +50,9 @@
             <ImageButton
                 android:id="@+id/avatarGalleryButton"
                 style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_gallery_white_24dp"
                 android:contentDescription="@string/attachment_type_gallery"
-                tools:background="@color/colorAccent" />
+                android:src="@drawable/ic_attachment_gallery_white_24dp"
+                tools:background="@color/riotx_accent" />
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"

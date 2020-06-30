@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
@@ -34,8 +35,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-
-private const val UPLOAD_AVATAR_WORK = "UPLOAD_AVATAR_WORK"
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
@@ -121,7 +120,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
-    override fun updateHistoryReadability(readability: String, callback: MatrixCallback<Unit>): Cancelable {
+    override fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable {
         return sendStateEvent(
                 eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 body = mapOf("history_visibility" to readability),

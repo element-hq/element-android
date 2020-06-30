@@ -32,11 +32,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:background="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/formTextInputTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/formTextInputTextInputLayout"
-        android:background="?attr/colorAccent"
-        tools:text="Add"/>
+        tools:text="Add" />
 
     <View
         android:id="@+id/formTextInputDivider"

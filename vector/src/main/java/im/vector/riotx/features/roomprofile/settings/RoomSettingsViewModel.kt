@@ -27,11 +27,11 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
-import java.util.Locale
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
@@ -55,6 +55,30 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observeRoomSummary()
+        observeState()
+    }
+
+    private fun observeState() {
+        selectSubscribe(
+                RoomSettingsViewState::newName,
+                RoomSettingsViewState::newCanonicalAlias,
+                RoomSettingsViewState::newTopic,
+                RoomSettingsViewState::newHistoryVisibility,
+                RoomSettingsViewState::roomSummary) { newName,
+                                                      newAlias,
+                                                      newTopic,
+                                                      newHistoryVisibility,
+                                                      asyncSummary ->
+            val summary = asyncSummary()
+            setState {
+                copy(
+                        showSaveAction = summary?.displayName != newName
+                                || summary?.topic != newTopic
+                                || summary?.canonicalAlias != newAlias
+                                || newHistoryVisibility != null
+                )
+            }
+        }
     }
 
     private fun observeRoomSummary() {
@@ -67,53 +91,35 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             roomSummary = async,
                             newName = roomSummary?.displayName,
                             newTopic = roomSummary?.topic,
-                            newAlias = roomSummary?.canonicalAlias
+                            newCanonicalAlias = roomSummary?.canonicalAlias
                     )
                 }
 
         val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
 
-        powerLevelsContentLive.subscribe {
-            val powerLevelsHelper = PowerLevelsHelper(it)
-            val permissions = RoomSettingsViewState.ActionPermissions(
-                    canChangeName = powerLevelsHelper.isUserAbleToChangeRoomName(session.myUserId),
-                    canChangeTopic = powerLevelsHelper.isUserAbleToChangeRoomTopic(session.myUserId),
-                    canChangeCanonicalAlias = powerLevelsHelper.isUserAbleToChangeRoomCanonicalAlias(session.myUserId),
-                    canChangeHistoryReadability = powerLevelsHelper.isUserAbleToChangeRoomHistoryReadability(session.myUserId)
-            )
-            setState { copy(actionPermissions = permissions) }
-        }.disposeOnClear()
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val permissions = RoomSettingsViewState.ActionPermissions(
+                            canChangeName = powerLevelsHelper.isUserAbleToChangeRoomName(session.myUserId),
+                            canChangeTopic = powerLevelsHelper.isUserAbleToChangeRoomTopic(session.myUserId),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAbleToChangeRoomCanonicalAlias(session.myUserId),
+                            canChangeHistoryReadability = powerLevelsHelper.isUserAbleToChangeRoomHistoryReadability(session.myUserId)
+                    )
+                    setState { copy(actionPermissions = permissions) }
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
-            is RoomSettingsAction.SetRoomName              -> {
-                setState { copy(newName = action.newName) }
-                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
-            }
-            is RoomSettingsAction.SetRoomTopic             -> {
-                setState { copy(newTopic = action.newTopic) }
-                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
-            }
-            is RoomSettingsAction.SetRoomHistoryVisibility -> {
-                setState { copy(newHistoryVisibility = action.visibility) }
-                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
-            }
-            is RoomSettingsAction.SetRoomAlias -> {
-                setState { copy(newAlias = action.alias) }
-                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
-            }
+            is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
+            is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
+            is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
+            is RoomSettingsAction.SetRoomAlias             -> setState { copy(newCanonicalAlias = action.alias) }
             is RoomSettingsAction.Save                     -> saveSettings()
-        }
-    }
-
-    private fun shouldShowSaveAction(state: RoomSettingsViewState): Boolean {
-        val summary = state.roomSummary.invoke()
-        return summary?.displayName != state.newName
-                || summary?.topic != state.newTopic
-                || summary?.canonicalAlias != state.newAlias
-                || state.newHistoryVisibility != null
+        }.exhaustive
     }
 
     private fun saveSettings() = withState { state ->
@@ -130,13 +136,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
         }
 
-        if (state.newAlias != null && summary?.canonicalAlias != state.newAlias) {
-            operationList.add(room.rx().addRoomAlias(state.newAlias))
-            operationList.add(room.rx().updateCanonicalAlias(state.newAlias))
+        if (state.newCanonicalAlias != null && summary?.canonicalAlias != state.newCanonicalAlias.takeIf { it.isNotEmpty() }) {
+            operationList.add(room.rx().addRoomAlias(state.newCanonicalAlias))
+            operationList.add(room.rx().updateCanonicalAlias(state.newCanonicalAlias))
         }
 
         if (state.newHistoryVisibility != null) {
-            operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility.name.toLowerCase(Locale.ROOT)))
+            operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility))
         }
 
         Observable
@@ -146,7 +152,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         {
                             postLoading(false)
                             setState { copy(newHistoryVisibility = null) }
-                            setState { copy(showSaveAction = false) }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {

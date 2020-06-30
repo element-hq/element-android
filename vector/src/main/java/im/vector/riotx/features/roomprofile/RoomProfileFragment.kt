@@ -46,7 +46,6 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.allGranted
@@ -78,8 +77,7 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
-        val roomProfileViewModelFactory: RoomProfileViewModel.Factory,
-        val colorProvider: ColorProvider
+        val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) : VectorBaseFragment(), RoomProfileController.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -253,15 +251,15 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun showAvatarSelector() {
-        AlertDialog
-                .Builder(requireContext())
+        AlertDialog.Builder(requireContext())
                 .setItems(arrayOf(
                         getString(R.string.attachment_type_camera),
                         getString(R.string.attachment_type_gallery)
                 )) { dialog, which ->
                     dialog.cancel()
                     onAvatarTypeSelected(isCamera = (which == 0))
-                }.show()
+                }
+                .show()
     }
 
     private var avatarCameraUri: Uri? = null

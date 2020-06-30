@@ -28,8 +28,6 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.content.FileUploader
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -38,12 +36,8 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import io.realm.kotlin.where
 import javax.inject.Inject
 
-private const val UPLOAD_AVATAR_WORK = "UPLOAD_AVATAR_WORK"
-
 internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
                                                          @SessionDatabase private val monarchy: Monarchy,
-                                                         @SessionId private val sessionId: String,
-                                                         private val workManagerProvider: WorkManagerProvider,
                                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                          private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
                                                          private val getProfileInfoTask: GetProfileInfoTask,

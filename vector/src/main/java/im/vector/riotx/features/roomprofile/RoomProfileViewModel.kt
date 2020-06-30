@@ -68,10 +68,12 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
 
         val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
 
-        powerLevelsContentLive.subscribe {
-            val powerLevelsHelper = PowerLevelsHelper(it)
-            setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
-        }.disposeOnClear()
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) = when (action) {
@@ -111,11 +113,13 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
     private fun handleChangeAvatar(action: RoomProfileAction.ChangeRoomAvatar) {
         _viewEvents.post(RoomProfileViewEvents.Loading())
         room.rx().updateAvatar(action.uri, action.fileName ?: UUID.randomUUID().toString())
-                .subscribe({
-                    _viewEvents.post(RoomProfileViewEvents.OnChangeAvatarSuccess)
-                }, {
-                    _viewEvents.post(RoomProfileViewEvents.Failure(it))
-                })
+                .subscribe(
+                        {
+                            _viewEvents.post(RoomProfileViewEvents.OnChangeAvatarSuccess)
+                        },
+                        {
+                            _viewEvents.post(RoomProfileViewEvents.Failure(it))
+                        })
                 .disposeOnClear()
     }
 }
