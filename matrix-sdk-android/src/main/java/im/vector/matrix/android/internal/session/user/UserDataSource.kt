@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.fetchCopied
+import io.realm.Case
 import javax.inject.Inject
 
 internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
@@ -91,7 +92,7 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
             } else {
                 query
                         .beginGroup()
-                        .contains(UserEntityFields.DISPLAY_NAME, filter)
+                        .contains(UserEntityFields.DISPLAY_NAME, filter, Case.INSENSITIVE)
                         .or()
                         .contains(UserEntityFields.USER_ID, filter)
                         .endGroup()

@@ -20,6 +20,7 @@ Bugfix 🐛:
  - User could not redact message that they have sent (#1543)
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
+ - Searching by displayname is case sensitive (#1468)
 
 Translations 🗣:
  -
