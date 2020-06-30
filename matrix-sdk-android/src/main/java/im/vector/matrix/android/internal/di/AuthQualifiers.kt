@@ -36,4 +36,4 @@ internal annotation class UnauthenticatedWithCertificate
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class WithProgress
+internal annotation class UnauthenticatedWithCertificateWithProgress

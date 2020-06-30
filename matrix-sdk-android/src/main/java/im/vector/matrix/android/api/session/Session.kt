@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -46,7 +47,6 @@ import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
-import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
 
 /**
  * This interface defines interactions with a session.

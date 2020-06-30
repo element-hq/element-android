@@ -19,7 +19,7 @@ package im.vector.riotx.features.home.room.detail.timeline.helper
 import android.graphics.drawable.Drawable
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenScope

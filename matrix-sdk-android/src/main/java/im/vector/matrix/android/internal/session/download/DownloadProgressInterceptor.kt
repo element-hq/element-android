@@ -20,16 +20,20 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class DownloadProgressInterceptor @Inject constructor(
+internal class DownloadProgressInterceptor @Inject constructor(
         private val downloadStateTracker: DefaultContentDownloadStateTracker
 ) : Interceptor {
 
+    companion object {
+        const val DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER = "matrix-sdk:mxc_URL"
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url.toUrl()
-        val mxcURl = chain.request().header("matrix-sdk:mxc_URL")
+        val mxcURl = chain.request().header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER)
 
         val request = chain.request().newBuilder()
-                .removeHeader("matrix-sdk:mxc_URL")
+                .removeHeader(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER)
                 .build()
 
         val originalResponse = chain.proceed(request)

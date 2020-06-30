@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -53,7 +54,6 @@ import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
-import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore

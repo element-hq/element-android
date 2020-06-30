@@ -32,10 +32,12 @@ interface FileService {
          * Download file in external storage
          */
         TO_EXPORT,
+
         /**
          * Download file in cache
          */
         FOR_INTERNAL_USE,
+
         /**
          * Download file in file provider path
          */
@@ -73,15 +75,15 @@ interface FileService {
      * Get information on the given file.
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
-    fun fileState(mxcUrl: String, mimeType: String?) : FileState
+    fun fileState(mxcUrl: String, mimeType: String?): FileState
 
     /**
-     * Clears all the files downloaded  by the service
+     * Clears all the files downloaded by the service
      */
     fun clearCache()
 
     /**
      * Get size of cached files
      */
-    fun getCacheSize() : Int
+    fun getCacheSize(): Int
 }

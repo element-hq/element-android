@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.download
+package im.vector.matrix.android.api.session.file
 
 interface ContentDownloadStateTracker {
     fun track(key: String, updateListener: UpdateListener)

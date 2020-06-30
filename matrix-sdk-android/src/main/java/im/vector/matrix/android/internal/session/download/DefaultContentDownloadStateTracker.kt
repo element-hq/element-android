@@ -19,12 +19,13 @@ package im.vector.matrix.android.internal.session.download
 import android.os.Handler
 import android.os.Looper
 import im.vector.matrix.android.api.extensions.tryThis
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListener, ContentDownloadStateTracker {
+internal class DefaultContentDownloadStateTracker @Inject constructor() : ProgressListener, ContentDownloadStateTracker {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val states = mutableMapOf<String, ContentDownloadStateTracker.State>()

@@ -49,9 +49,9 @@ import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificateWithProgress
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
-import im.vector.matrix.android.internal.di.WithProgress
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
@@ -222,7 +222,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        @WithProgress
+        @UnauthenticatedWithCertificateWithProgress
         fun providesProgressOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                                          downloadProgressInterceptor: DownloadProgressInterceptor): OkHttpClient {
             return okHttpClient.newBuilder()

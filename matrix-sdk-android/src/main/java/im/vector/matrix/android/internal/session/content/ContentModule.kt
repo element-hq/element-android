@@ -20,7 +20,7 @@ import dagger.Binds
 import dagger.Module
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.internal.session.download.ContentDownloadStateTracker
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.internal.session.download.DefaultContentDownloadStateTracker
 
 @Module

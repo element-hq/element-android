@@ -32,7 +32,8 @@ import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachmen
 import im.vector.matrix.android.internal.di.CacheDirectory
 import im.vector.matrix.android.internal.di.ExternalFilesDirectory
 import im.vector.matrix.android.internal.di.SessionDownloadsDirectory
-import im.vector.matrix.android.internal.di.WithProgress
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificateWithProgress
+import im.vector.matrix.android.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.toCancelable
@@ -60,7 +61,7 @@ internal class DefaultFileService @Inject constructor(
         @SessionDownloadsDirectory
         private val sessionCacheDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
-        @WithProgress
+        @UnauthenticatedWithCertificateWithProgress
         private val okHttpClient: OkHttpClient,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
@@ -122,7 +123,7 @@ internal class DefaultFileService @Inject constructor(
 
                         val request = Request.Builder()
                                 .url(resolvedUrl)
-                                .header("matrix-sdk:mxc_URL", url)
+                                .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
                                 .build()
 
                         val response = try {
