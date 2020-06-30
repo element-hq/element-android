@@ -65,7 +65,7 @@
             android:id="@+id/messageContentMergedUTDStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_merged_utd_stub"
-            tools:layout_marginTop="240dp"
+            tools:layout_marginTop="380dp"
             tools:visibility="visible" />
 
     </FrameLayout>

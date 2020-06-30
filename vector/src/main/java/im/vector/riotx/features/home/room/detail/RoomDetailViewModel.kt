@@ -60,7 +60,6 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.rx.asObservable
 import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
