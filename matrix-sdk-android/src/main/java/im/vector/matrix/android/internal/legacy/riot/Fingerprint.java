@@ -21,8 +21,6 @@ import android.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 /*
@@ -40,20 +38,10 @@ public class Fingerprint {
 
     private final HashType mHashType;
     private final byte[] mBytes;
-    private String mDisplayableHexRepr;
 
     public Fingerprint(HashType hashType, byte[] bytes) {
         mHashType = hashType;
         mBytes = bytes;
-        mDisplayableHexRepr = null;
-    }
-
-    public static Fingerprint newSha256Fingerprint(X509Certificate cert) throws CertificateException {
-        return new Fingerprint(HashType.SHA256, CertUtil.generateSha256Fingerprint(cert));
-    }
-
-    public static Fingerprint newSha1Fingerprint(X509Certificate cert) throws CertificateException {
-        return new Fingerprint(HashType.SHA1, CertUtil.generateSha1Fingerprint(cert));
     }
 
     public HashType getType() {
@@ -62,14 +50,6 @@ public class Fingerprint {
 
     public byte[] getBytes() {
         return mBytes;
-    }
-
-    public String getBytesAsHexString() {
-        if (mDisplayableHexRepr == null) {
-            mDisplayableHexRepr = CertUtil.fingerprintToHexString(mBytes);
-        }
-
-        return mDisplayableHexRepr;
     }
 
     public JSONObject toJson() throws JSONException {
@@ -93,24 +73,6 @@ public class Fingerprint {
         }
 
         return new Fingerprint(hashType, fingerprintBytes);
-    }
-
-    public boolean matchesCert(X509Certificate cert) throws CertificateException {
-        Fingerprint o = null;
-        switch (mHashType) {
-            case SHA256:
-                o = Fingerprint.newSha256Fingerprint(cert);
-                break;
-            case SHA1:
-                o = Fingerprint.newSha1Fingerprint(cert);
-                break;
-        }
-
-        return equals(o);
-    }
-
-    public String toString() {
-        return String.format("Fingerprint{type: '%s', fingeprint: '%s'}", mHashType.toString(), getBytesAsHexString());
     }
 
     @Override
