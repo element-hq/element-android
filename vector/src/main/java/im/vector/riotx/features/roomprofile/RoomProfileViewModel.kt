@@ -25,11 +25,14 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
+import java.util.UUID
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomProfileViewState,
                                                        private val stringProvider: StringProvider,
@@ -62,12 +65,22 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                 .execute {
                     copy(roomSummary = it)
                 }
+
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) = when (action) {
         RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
         is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
         is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
+        is RoomProfileAction.ChangeRoomAvatar            -> handleChangeAvatar(action)
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
@@ -95,5 +108,19 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
         PermalinkFactory.createPermalink(initialState.roomId)?.let { permalink ->
             _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
         }
+    }
+
+    private fun handleChangeAvatar(action: RoomProfileAction.ChangeRoomAvatar) {
+        _viewEvents.post(RoomProfileViewEvents.Loading())
+        room.rx().updateAvatar(action.uri, action.fileName ?: UUID.randomUUID().toString())
+                .subscribe(
+                        {
+                            _viewEvents.post(RoomProfileViewEvents.OnChangeAvatarSuccess)
+                        },
+                        {
+                            _viewEvents.post(RoomProfileViewEvents.Failure(it))
+                        }
+                )
+                .disposeOnClear()
     }
 }

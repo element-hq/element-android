@@ -17,19 +17,26 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
@@ -38,6 +45,7 @@ import javax.inject.Inject
 class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
+        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment(), RoomSettingsController.Callback {
 
@@ -45,6 +53,8 @@ class RoomSettingsFragment @Inject constructor(
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
+
+    override fun getMenuRes() = R.menu.vector_room_settings
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,8 +67,13 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
+                is RoomSettingsViewEvents.Success -> showSuccess()
             }.exhaustive
         }
+    }
+
+    private fun showSuccess() {
+        activity?.toast(R.string.room_settings_save_success)
     }
 
     override fun onDestroyView() {
@@ -66,9 +81,34 @@ class RoomSettingsFragment @Inject constructor(
         super.onDestroyView()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.roomSettingsSaveAction).isVisible = state.showSaveAction
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.roomSettingsSaveAction) {
+            viewModel.handle(RoomSettingsAction.Save)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun invalidate() = withState(viewModel) { viewState ->
         controller.setData(viewState)
         renderRoomSummary(viewState)
+    }
+
+    private fun renderRoomSummary(state: RoomSettingsViewState) {
+        waiting_view.isVisible = state.isLoading
+
+        state.roomSummary()?.let {
+            roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+        }
+
+        invalidateOptionsMenu()
     }
 
     override fun onEnableEncryptionClicked() {
@@ -82,12 +122,43 @@ class RoomSettingsFragment @Inject constructor(
                 .show()
     }
 
-    private fun renderRoomSummary(state: RoomSettingsViewState) {
-        waiting_view.isVisible = state.isLoading
+    override fun onNameChanged(name: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomName(name))
+    }
 
-        state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+    override fun onTopicChanged(topic: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomTopic(topic))
+    }
+
+    override fun onHistoryVisibilityClicked() = withState(viewModel) { state ->
+        val historyVisibilities = arrayOf(
+                RoomHistoryVisibility.SHARED,
+                RoomHistoryVisibility.INVITED,
+                RoomHistoryVisibility.JOINED,
+                RoomHistoryVisibility.WORLD_READABLE
+        )
+        val currentHistoryVisibility =
+                state.newHistoryVisibility ?: state.historyVisibilityEvent?.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val currentHistoryVisibilityIndex = historyVisibilities.indexOf(currentHistoryVisibility)
+
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(R.string.room_settings_room_read_history_rules_pref_title)
+            setSingleChoiceItems(
+                    historyVisibilities
+                            .map { roomHistoryVisibilityFormatter.format(it) }
+                            .toTypedArray(),
+                    currentHistoryVisibilityIndex) { dialog, which ->
+                if (which != currentHistoryVisibilityIndex) {
+                    viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(historyVisibilities[which]))
+                }
+                dialog.cancel()
+            }
+            show()
         }
+        return@withState
+    }
+
+    override fun onAliasChanged(alias: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomCanonicalAlias(alias))
     }
 }

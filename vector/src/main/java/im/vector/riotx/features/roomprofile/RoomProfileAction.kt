@@ -17,11 +17,13 @@
 
 package im.vector.riotx.features.roomprofile
 
+import android.net.Uri
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class RoomProfileAction: VectorViewModelAction {
     object LeaveRoom: RoomProfileAction()
     data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
+    data class ChangeRoomAvatar(val uri: Uri, val fileName: String?) : RoomProfileAction()
     object ShareRoomProfile : RoomProfileAction()
 }

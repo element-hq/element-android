@@ -16,12 +16,16 @@
 
 package im.vector.matrix.android.internal.session.content
 
+import android.content.Context
+import android.net.Uri
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.network.awaitResponse
 import im.vector.matrix.android.internal.network.toFailure
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -31,12 +35,14 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.greenrobot.eventbus.EventBus
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
                                                 private val eventBus: EventBus,
+                                                private val context: Context,
                                                 contentUrlResolver: ContentUrlResolver,
                                                 moshi: Moshi) {
 
@@ -57,6 +63,19 @@ internal class FileUploader @Inject constructor(@Authenticated
                                 progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         val uploadBody = byteArray.toRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
+    }
+
+    suspend fun uploadFromUri(uri: Uri,
+                              filename: String?,
+                              mimeType: String?,
+                              progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+        val inputStream = withContext(Dispatchers.IO) {
+            context.contentResolver.openInputStream(uri)
+        } ?: throw FileNotFoundException()
+
+        inputStream.use {
+            return uploadByteArray(it.readBytes(), filename, mimeType, progressListener)
+        }
     }
 
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {

@@ -50,6 +50,12 @@ internal interface ProfileAPI {
     fun setDisplayName(@Path("userId") userId: String, @Body body: SetDisplayNameBody): Call<Unit>
 
     /**
+     * Change user avatar url.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/avatar_url")
+    fun setAvatarUrl(@Path("userId") userId: String, @Body body: SetAvatarUrlBody): Call<Unit>
+
+    /**
      * Bind a threePid
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-account-3pid-bind
      */

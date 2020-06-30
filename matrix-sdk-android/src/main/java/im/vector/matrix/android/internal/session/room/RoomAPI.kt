@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasBody
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
@@ -310,6 +311,14 @@ internal interface RoomAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
     fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
+
+    /**
+     * Add alias to the room.
+     * @param roomAlias the room alias.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
+    fun addRoomAlias(@Path("roomAlias") roomAlias: String,
+                     @Body body: AddRoomAliasBody): Call<Unit>
 
     /**
      * Inform that the user is starting to type or has stopped typing
