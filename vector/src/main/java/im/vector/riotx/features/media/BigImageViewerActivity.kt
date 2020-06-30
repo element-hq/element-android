@@ -33,6 +33,10 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.multipicker.MultiPicker
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.activity_big_image_viewer.*
@@ -92,7 +96,6 @@ class BigImageViewerActivity : VectorBaseActivity() {
         return uri != null && intent.getBooleanExtra(EXTRA_CAN_EDIT_IMAGE, false)
     }
 
-    private var avatarCameraUri: Uri? = null
     private fun showAvatarSelector() {
         AlertDialog
                 .Builder(this)
@@ -101,15 +104,19 @@ class BigImageViewerActivity : VectorBaseActivity() {
                         stringProvider.getString(R.string.attachment_type_gallery)
                 )) { dialog, which ->
                     dialog.cancel()
-                    when (which) {
-                        0 -> {
-                            avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-                        }
-                        1 -> {
-                            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-                        }
-                    }
+                    onAvatarTypeSelected(isCamera = (which == 0))
                 }.show()
+    }
+
+    private var avatarCameraUri: Uri? = null
+    private fun onAvatarTypeSelected(isCamera: Boolean) {
+        if (isCamera) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
+        } else {
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+        }
     }
 
     private fun onRoomAvatarSelected(image: MultiPickerImageType) {
@@ -146,6 +153,14 @@ class BigImageViewerActivity : VectorBaseActivity() {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            when (requestCode) {
+                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
+            }
+        }
     }
 
     private fun onAvatarCropped(uri: Uri?) {

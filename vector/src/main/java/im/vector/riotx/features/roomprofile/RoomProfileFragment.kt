@@ -49,6 +49,7 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.startSharePlainTextIntent
@@ -309,6 +310,14 @@ class RoomProfileFragment @Inject constructor(
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            when (requestCode) {
+                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
+            }
+        }
     }
 
     private fun onAvatarCropped(uri: Uri?) {
