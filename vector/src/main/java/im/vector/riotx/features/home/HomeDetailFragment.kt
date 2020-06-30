@@ -27,7 +27,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -49,13 +48,9 @@ import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
-import im.vector.riotx.features.workers.signout.SignOutViewModel
+import im.vector.riotx.features.workers.signout.BannerState
+import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
-import kotlinx.android.synthetic.main.fragment_home_detail.activeCallPiP
-import kotlinx.android.synthetic.main.fragment_home_detail.activeCallPiPWrap
-import kotlinx.android.synthetic.main.fragment_home_detail.activeCallView
-import kotlinx.android.synthetic.main.fragment_home_detail.syncStateView
-import kotlinx.android.synthetic.main.fragment_room_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -74,6 +69,7 @@ class HomeDetailFragment @Inject constructor(
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
+    private val serverBackupStatusViewModel: ServerBackupStatusViewModel by fragmentViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
@@ -195,34 +191,15 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupKeysBackupBanner() {
-        // Keys backup banner
-        // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
-        model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
-            when (keysBackupState) {
-                null                               ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
-                KeysBackupState.Disabled           ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false)
-                KeysBackupState.NotTrusted,
-                KeysBackupState.WrongBackUpVersion ->
-                    // In this case, getCurrentBackupVersion() should not return ""
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false)
-                KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp          ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
-                KeysBackupState.ReadyToBackUp      ->
-                    if (model.canRestoreKeys()) {
-                        homeKeysBackupBanner.render(KeysBackupBanner.State.Update(model.getCurrentBackupVersion()), false)
-                    } else {
-                        homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
-                    }
-                else                               ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+        serverBackupStatusViewModel.subscribe(this) {
+            when (val banState = it.bannerState.invoke()) {
+                is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                BannerState.BackingUp ->  homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
+                null,
+                BannerState.Hidden    -> homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
             }
-        })
-
+        }.disposeOnDestroyView()
         homeKeysBackupBanner.delegate = this
     }
 

@@ -71,6 +71,7 @@ import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.ui.UiStateRepository
 import im.vector.riotx.features.widgets.WidgetActivity
 import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import im.vector.riotx.features.workers.signout.SignOutBottomSheetDialogFragment
 
 @Component(
         dependencies = [
@@ -150,6 +151,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
     fun inject(bottomSheet: RoomWidgetsBottomSheet)
     fun inject(bottomSheet: CallControlsBottomSheet)
+    fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
 
     /* ==========================================================================================
      * Others

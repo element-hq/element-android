@@ -57,7 +57,7 @@
         android:id="@+id/homeKeysBackupBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?riotx_keys_backup_banner_accent_color"
+        android:background="?vctr_bottom_nav_background_color"
         android:minHeight="67dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
