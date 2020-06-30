@@ -115,6 +115,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
             true
         }
     }
+    numberOfTimelineEvents++
     timelineEvents.add(timelineEventEntity)
 }
 
