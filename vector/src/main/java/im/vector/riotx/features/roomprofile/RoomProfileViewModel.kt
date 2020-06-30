@@ -119,7 +119,8 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                         },
                         {
                             _viewEvents.post(RoomProfileViewEvents.Failure(it))
-                        })
+                        }
+                )
                 .disposeOnClear()
     }
 }
