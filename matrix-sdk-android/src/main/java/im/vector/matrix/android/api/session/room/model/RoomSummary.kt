@@ -27,7 +27,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
  */
 data class RoomSummary constructor(
         val roomId: String,
+        // Computed display name
         val displayName: String = "",
+        val name: String = "",
         val topic: String = "",
         val avatarUrl: String = "",
         val canonicalAlias: String? = null,

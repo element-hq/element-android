@@ -72,7 +72,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             val summary = asyncSummary()
             setState {
                 copy(
-                        showSaveAction = summary?.displayName != newName
+                        showSaveAction = summary?.name != newName
                                 || summary?.topic != newTopic
                                 || summary?.canonicalAlias != newAlias
                                 || newHistoryVisibility != null
@@ -89,7 +89,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                     copy(
                             historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             roomSummary = async,
-                            newName = roomSummary?.displayName,
+                            newName = roomSummary?.name,
                             newTopic = roomSummary?.topic,
                             newCanonicalAlias = roomSummary?.canonicalAlias
                     )
@@ -129,7 +129,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         val summary = state.roomSummary.invoke()
 
-        if (summary?.displayName != state.newName) {
+        if (summary?.name != state.newName) {
             operationList.add(room.rx().updateName(state.newName ?: ""))
         }
         if (summary?.topic != state.newTopic) {
