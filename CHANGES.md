@@ -14,6 +14,7 @@ Improvements 🙌:
  - Allow self-signed certificate (#1564)
  - Improve file download and open in timeline
  - Catchup tab is removed temporarily (#1565)
+ - Render room avatar change (#1319)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
@@ -22,6 +23,7 @@ Bugfix 🐛:
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
  - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
 
 Translations 🗣:
  -

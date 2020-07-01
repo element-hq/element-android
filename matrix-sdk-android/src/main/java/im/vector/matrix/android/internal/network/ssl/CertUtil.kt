@@ -252,7 +252,8 @@ internal object CertUtil {
         builder.supportsTlsExtensions(hsConfig.shouldAcceptTlsExtensions)
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
-        if (hsConfig.allowHttpExtension) {
+        // TODO: we should display a warning if user enter an http url
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list
