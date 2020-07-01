@@ -44,11 +44,11 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
     sealed class Result {
         object Success : Result()
-        abstract class Failure(val error: String?) : Result()
+        abstract class Failure(val throwable: Throwable?) : Result()
         object InvalidRecoverySecret : Failure(null)
         object NoKeyBackupVersion : Failure(null)
         object IllegalParams : Failure(null)
-        class ErrorFailure(throwable: Throwable) : Failure(throwable.localizedMessage)
+        class ErrorFailure(throwable: Throwable) : Failure(throwable)
     }
 
     data class Params(
@@ -97,7 +97,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
                     when {
                         params.passphrase?.isNotEmpty() == true -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss)
-                            awaitCallback {
+                            awaitCallback<SsssKeyCreationInfo> {
                                 quadS.generateKeyWithPassphrase(
                                         UUID.randomUUID().toString(),
                                         "ssss_key",

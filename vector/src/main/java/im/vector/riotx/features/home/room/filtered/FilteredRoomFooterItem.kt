@@ -34,6 +34,7 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
     var currentFilter: String = ""
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.createRoomButton.setOnClickListener { listener?.createRoom(currentFilter) }
         holder.createDirectChat.setOnClickListener { listener?.createDirectChat() }
         holder.openRoomDirectory.setOnClickListener { listener?.openRoomDirectory(currentFilter) }

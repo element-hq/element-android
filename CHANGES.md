@@ -1,3 +1,49 @@
+Changes in Riot.imX 0.91.3 (2020-07-01)
+===================================================
+
+Notes:
+ - This version is the third beta version of RiotX codebase published as Riot-Android on the PlayStore.
+ - Changelog below includes changes of v0.91.0, v0.91.1, and v0.91.2, because the first beta versions have been tagged and
+ published from the branch feature/migration_from_legacy.
+ - This version uses temporary name `Riot.imX`, to distinguish the app with RiotX app.
+
+Features ✨:
+ - Call with WebRTC support (##611)
+ - Add capability to change the display name (#1529)
+
+Improvements 🙌:
+ - "Add Matrix app" menu is now always visible (#1495)
+ - Handle `/op`, `/deop`, and `/nick` commands (#12)
+ - Prioritising Recovery key over Recovery passphrase (#1463)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Update user avatar (#1054)
+ - Allow self-signed certificate (#1564)
+ - Improve file download and open in timeline
+ - Catchup tab is removed temporarily (#1565)
+ - Render room avatar change (#1319)
+
+Bugfix 🐛:
+ - Fix dark theme issue on login screen (#1097)
+ - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
+ - User could not redact message that they have sent (#1543)
+ - Use vendor prefix for non merged MSC (#1537)
+ - Compress images before sending (#1333)
+ - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
+
+Build 🧱:
+ - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
+
+Other changes:
+ - Use `SharedPreferences#edit` extension function consistently (#1545)
+ - Use `retrofit2.Call.awaitResponse` extension provided by Retrofit 2. (#1526)
+ - Fix minor typo in contribution guide (#1512)
+ - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
+ - Random housekeeping clean-ups indicated by Lint (#1520, #1541)
+ - Keys Backup API now use the unstable prefix (#1503)
+ - Remove deviceId from /keys/upload/{deviceId} as not spec-compliant (#1502)
+
 Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
 

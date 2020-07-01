@@ -41,13 +41,13 @@ import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
@@ -66,7 +66,8 @@ class LoginViewModel @AssistedInject constructor(
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val sessionListener: SessionListener,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider)
+        private val stringProvider: StringProvider,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager)
     : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -85,6 +86,8 @@ class LoginViewModel @AssistedInject constructor(
             }
         }
     }
+
+    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
@@ -117,8 +120,16 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.RegisterAction             -> handleRegisterAction(action)
             is LoginAction.ResetAction                -> handleResetAction(action)
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
+            is LoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
+    }
+
+    private fun handleUserAcceptCertificate(action: LoginAction.UserAcceptCertificate) {
+        // It happen when we get the login flow, so alter the homeserver config and retrieve again the login flow
+        currentHomeServerConnectionConfig
+                ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
+                ?.let { getLoginFlow(it) }
     }
 
     private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
@@ -287,7 +298,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleRegisterWith(action: LoginAction.LoginOrRegister) {
         setState { copy(asyncRegistration = Loading()) }
-        reAuthHelper.rememberAuth(UserPasswordAuth(user = action.username, password = action.password))
+        reAuthHelper.data = action.password
         currentTask = registrationWizard?.createAccount(
                 action.username,
                 action.password,
@@ -485,7 +496,8 @@ class LoginViewModel @AssistedInject constructor(
             )
         }
 
-        authenticationService.getWellKnownData(action.username, object : MatrixCallback<WellknownResult> {
+        // TODO Handle certificate error in this case. Direct login is deactivated now, so we will handle that later
+        authenticationService.getWellKnownData(action.username, null, object : MatrixCallback<WellknownResult> {
             override fun onSuccess(data: WellknownResult) {
                 when (data) {
                     is WellknownResult.Prompt          ->
@@ -567,6 +579,7 @@ class LoginViewModel @AssistedInject constructor(
                     action.initialDeviceName,
                     object : MatrixCallback<Session> {
                         override fun onSuccess(data: Session) {
+                            reAuthHelper.data = action.password
                             onSessionCreated(data)
                         }
 
@@ -613,6 +626,7 @@ class LoginViewModel @AssistedInject constructor(
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
         session.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
+        session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
         setState {
             copy(
                     asyncLoginAction = Success(Unit)
@@ -646,67 +660,74 @@ class LoginViewModel @AssistedInject constructor(
             // This is invalid
             _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            currentTask?.cancel()
-            currentTask = null
-            authenticationService.cancelPendingLoginOrRegistration()
+            getLoginFlow(homeServerConnectionConfig)
+        }
+    }
 
-            setState {
-                copy(
-                        asyncHomeServerLoginFlowRequest = Loading()
-                )
+    private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig) {
+        currentHomeServerConnectionConfig = homeServerConnectionConfig
+
+        currentTask?.cancel()
+        currentTask = null
+        authenticationService.cancelPendingLoginOrRegistration()
+
+        setState {
+            copy(
+                    asyncHomeServerLoginFlowRequest = Loading()
+            )
+        }
+
+        currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(LoginViewEvents.Failure(failure))
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized
+                    )
+                }
             }
 
-            currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
-                override fun onFailure(failure: Throwable) {
-                    _viewEvents.post(LoginViewEvents.Failure(failure))
-                    setState {
-                        copy(
-                                asyncHomeServerLoginFlowRequest = Uninitialized
-                        )
-                    }
-                }
-
-                override fun onSuccess(data: LoginFlowResult) {
-                    when (data) {
-                        is LoginFlowResult.Success            -> {
-                            val loginMode = when {
-                                // SSO login is taken first
-                                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
-                                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
-                                else                                                       -> LoginMode.Unsupported
-                            }
-
-                            if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
-                                notSupported()
-                            } else {
-                                setState {
-                                    copy(
-                                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                                            homeServerUrl = data.homeServerUrl,
-                                            loginMode = loginMode,
-                                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                                    )
-                                }
-                            }
+            override fun onSuccess(data: LoginFlowResult) {
+                when (data) {
+                    is LoginFlowResult.Success            -> {
+                        val loginMode = when {
+                            // SSO login is taken first
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
+                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                            else                                                       -> LoginMode.Unsupported
                         }
-                        is LoginFlowResult.OutdatedHomeserver -> {
+
+                        if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
                             notSupported()
+                        } else {
+                            // FIXME We should post a view event here normally?
+                            setState {
+                                copy(
+                                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                                        homeServerUrl = data.homeServerUrl,
+                                        loginMode = loginMode,
+                                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                                )
+                            }
                         }
                     }
-                }
-
-                private fun notSupported() {
-                    // Notify the UI
-                    _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-
-                    setState {
-                        copy(
-                                asyncHomeServerLoginFlowRequest = Uninitialized
-                        )
+                    is LoginFlowResult.OutdatedHomeserver -> {
+                        notSupported()
                     }
                 }
-            })
-        }
+            }
+
+            private fun notSupported() {
+                // Notify the UI
+                _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
+
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized
+                    )
+                }
+            }
+        })
     }
 
     override fun onCleared() {

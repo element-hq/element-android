@@ -36,17 +36,20 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
+import im.vector.matrix.android.api.session.typing.TypingUsersTracker
+import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
-import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionDownloadsDirectory
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificateWithProgress
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
@@ -57,16 +60,24 @@ import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
+import im.vector.matrix.android.internal.session.call.CallEventObserver
+import im.vector.matrix.android.internal.session.download.DownloadProgressInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
+import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
+import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
+import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
+import im.vector.matrix.android.internal.session.widgets.DefaultWidgetURLFormatter
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -74,6 +85,11 @@ import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
+import javax.inject.Qualifier
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MockHttpInterceptor
 
 @Module
 internal abstract class SessionModule {
@@ -147,10 +163,10 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @SessionCacheDirectory
+        @SessionDownloadsDirectory
         fun providesCacheDir(@SessionId sessionId: String,
                              context: Context): File {
-            return File(context.cacheDir, sessionId)
+            return File(context.cacheDir, "downloads/$sessionId")
         }
 
         @JvmStatic
@@ -163,9 +179,9 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
+        @SessionDatabase
         @SessionScope
-        fun providesMonarchy(@SessionDatabase
-                             realmConfiguration: RealmConfiguration): Monarchy {
+        fun providesMonarchy(@SessionDatabase realmConfiguration: RealmConfiguration): Monarchy {
             return Monarchy.Builder()
                     .setRealmConfiguration(realmConfiguration)
                     .build()
@@ -174,10 +190,54 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
+        @UnauthenticatedWithCertificate
+        fun providesOkHttpClientWithCertificate(@Unauthenticated okHttpClient: OkHttpClient,
+                                                homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+            return okHttpClient
+                    .newBuilder()
+                    .addSocketFactory(homeServerConnectionConfig)
+                    .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
         @Authenticated
-        fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
+        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                                 @Authenticated accessTokenProvider: AccessTokenProvider,
+                                 @SessionId sessionId: String,
+                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+            return okHttpClient
+                    .newBuilder()
+                    .addAccessTokenInterceptor(accessTokenProvider)
+                    .apply {
+                        if (testInterceptor != null) {
+                            testInterceptor.sessionId = sessionId
+                            addInterceptor(testInterceptor)
+                        }
+                    }
+                    .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        @UnauthenticatedWithCertificateWithProgress
+        fun providesProgressOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                                         downloadProgressInterceptor: DownloadProgressInterceptor): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(downloadProgressInterceptor)
+
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
+                    }.build()
         }
 
         @JvmStatic
@@ -233,27 +293,47 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): LiveEntityObserver
+    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventsPruner(pruner: EventsPruner): LiveEntityObserver
+    abstract fun bindEventsPruner(pruner: EventsPruner): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): LiveEntityObserver
+    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): LiveEntityObserver
+    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindCallEventObserver(observer: CallEventObserver): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindIntegrationManager(observer: IntegrationManager): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindWidgetUrlFormatter(observer: DefaultWidgetURLFormatter): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindShieldTrustUpdated(observer: ShieldTrustUpdater): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
@@ -269,4 +349,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
+
+    @Binds
+    abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
 }

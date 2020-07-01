@@ -34,6 +34,7 @@ import com.airbnb.mvrx.MvRxViewId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.jakewharton.rxbinding3.view.clicks
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
@@ -41,6 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
@@ -167,6 +169,18 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     protected fun Disposable.disposeOnDestroyView(): Disposable {
         uiDisposables.add(this)
         return this
+    }
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onClicked() }
+                .disposeOnDestroyView()
     }
 
     /* ==========================================================================================

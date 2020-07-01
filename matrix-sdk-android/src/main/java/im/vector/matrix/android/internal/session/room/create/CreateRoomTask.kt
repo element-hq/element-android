@@ -45,7 +45,7 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,

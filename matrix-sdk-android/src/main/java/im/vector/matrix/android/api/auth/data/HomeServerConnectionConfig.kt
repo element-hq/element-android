@@ -34,10 +34,10 @@ data class HomeServerConnectionConfig(
         val homeServerUri: Uri,
         val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
-        val allowedFingerprints: MutableList<Fingerprint> = ArrayList(),
+        val allowedFingerprints: List<Fingerprint> = emptyList(),
         val shouldPin: Boolean = false,
-        val tlsVersions: MutableList<TlsVersion>? = null,
-        val tlsCipherSuites: MutableList<CipherSuite>? = null,
+        val tlsVersions: List<TlsVersion>? = null,
+        val tlsCipherSuites: List<CipherSuite>? = null,
         val shouldAcceptTlsExtensions: Boolean = true,
         val allowHttpExtension: Boolean = false,
         val forceUsageTlsVersions: Boolean = false
@@ -69,7 +69,7 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: " + hsUri)
+                throw RuntimeException("Invalid home server URI: $hsUri")
             }
             // ensure trailing /
             val hsString = hsUri.toString().ensureTrailingSlash()

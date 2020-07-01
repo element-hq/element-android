@@ -28,6 +28,7 @@ abstract class NoResultItem : VectorEpoxyModel<NoResultItem.Holder>() {
     var text: String? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textView.text = text
     }
 

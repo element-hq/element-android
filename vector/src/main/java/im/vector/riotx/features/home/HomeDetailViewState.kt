@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.session.sync.SyncState
 data class HomeDetailViewState(
         val groupSummary: Option<GroupSummary> = Option.empty(),
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
-        val displayMode: RoomListDisplayMode = RoomListDisplayMode.HOME,
+        val displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE,
         val notificationCountCatchup: Int = 0,
         val notificationHighlightCatchup: Boolean = false,
         val notificationCountPeople: Int = 0,

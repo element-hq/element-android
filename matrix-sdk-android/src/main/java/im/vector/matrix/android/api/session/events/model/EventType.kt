@@ -58,7 +58,6 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
 
     // Call Events
-
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
     const val CALL_ANSWER = "m.call.answer"
@@ -67,6 +66,7 @@ object EventType {
     // Key share events
     const val ROOM_KEY_REQUEST = "m.room_key_request"
     const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
+    const val ROOM_KEY_WITHHELD = "org.matrix.room_key.withheld"
 
     const val REQUEST_SECRET = "m.secret.request"
     const val SEND_SECRET = "m.secret.send"

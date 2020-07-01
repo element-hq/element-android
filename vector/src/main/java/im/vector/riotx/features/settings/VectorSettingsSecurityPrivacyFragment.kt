@@ -119,8 +119,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun refreshXSigningStatus() {
-            val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
-            val xSigningIsEnableInAccount = crossSigningKeys != null
+            val xSigningIsEnableInAccount = session.cryptoService().crossSigningService().isCrossSigningInitialized()
             val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
             val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
@@ -337,7 +336,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
      * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
-        showDeviceListPref.isEnabled = devices.size > 0
+        showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 //        val userId = session.myUserId
 //        val deviceId = session.sessionParams.deviceId
@@ -385,8 +384,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 //                }
 //            }
 //        }
-
-        sendToUnverifiedDevicesPref.isChecked = false
 
         sendToUnverifiedDevicesPref.isChecked = session.cryptoService().getGlobalBlacklistUnverifiedDevices()
 

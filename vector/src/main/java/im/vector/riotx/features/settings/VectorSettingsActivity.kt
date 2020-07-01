@@ -59,6 +59,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
         if (isFirstCreation()) {
             // display the fragment
             when (intent.getIntExtra(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOT)) {
+                EXTRA_DIRECT_ACCESS_GENERAL                          ->
+                    replaceFragment(R.id.vector_settings_page, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
                 EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS                ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
                 EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY                 ->
@@ -137,6 +139,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         const val EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS = 1
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY = 2
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS = 3
+        const val EXTRA_DIRECT_ACCESS_GENERAL = 4
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

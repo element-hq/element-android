@@ -40,12 +40,14 @@ import im.vector.riotx.core.platform.ViewModelTask
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
+import java.lang.IllegalArgumentException
 import java.util.UUID
 import javax.inject.Inject
 
 sealed class BootstrapResult {
 
     data class Success(val keyInfo: SsssKeyCreationInfo) : BootstrapResult()
+    object SuccessCrossSigningOnly : BootstrapResult()
 
     abstract class Failure(val error: String?) : BootstrapResult()
 
@@ -58,7 +60,7 @@ sealed class BootstrapResult {
     class FailedToStorePrivateKeyInSSSS(failure: Throwable) : Failure(failure.localizedMessage)
     object MissingPrivateKey : Failure(null)
 
-    data class PasswordAuthFlowMissing(val sessionId: String, val userId: String) : Failure(null)
+    data class PasswordAuthFlowMissing(val sessionId: String) : Failure(null)
 }
 
 interface BootstrapProgressListener {
@@ -67,31 +69,45 @@ interface BootstrapProgressListener {
 
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
+        val initOnlyCrossSigning: Boolean = false,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null
 )
 
+// TODO Rename to CreateServerRecovery
 class BootstrapCrossSigningTask @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider
 ) : ViewModelTask<Params, BootstrapResult> {
 
     override suspend fun execute(params: Params): BootstrapResult {
-        params.progressListener?.onProgress(
-                WaitingViewData(
-                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
-                        isIndeterminate = true
-                )
-        )
         val crossSigningService = session.cryptoService().crossSigningService()
 
-        try {
-            awaitCallback<Unit> {
-                crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+        // Ensure cross-signing is initialized. Due to migration it is maybe not always correctly initialized
+        if (!crossSigningService.isCrossSigningInitialized()) {
+            params.progressListener?.onProgress(
+                    WaitingViewData(
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
+                            isIndeterminate = true
+                    )
+            )
+
+            try {
+                awaitCallback<Unit> {
+                    crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+                }
+                if (params.initOnlyCrossSigning) {
+                    return BootstrapResult.SuccessCrossSigningOnly
+                }
+            } catch (failure: Throwable) {
+                return handleInitializeXSigningError(failure)
             }
-        } catch (failure: Throwable) {
-            return handleInitializeXSigningError(failure)
+        } else {
+            // not sure how this can happen??
+            if (params.initOnlyCrossSigning) {
+                return handleInitializeXSigningError(IllegalArgumentException("Cross signing already setup"))
+            }
         }
 
         val keyInfo: SsssKeyCreationInfo
@@ -232,9 +248,11 @@ class BootstrapCrossSigningTask @Inject constructor(
         } else {
             val registrationFlowResponse = failure.toRegistrationFlowResponse()
             if (registrationFlowResponse != null) {
-                if (registrationFlowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } != true) {
+                return if (registrationFlowResponse.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }) {
+                    BootstrapResult.PasswordAuthFlowMissing(registrationFlowResponse.session ?: "")
+                } else {
                     // can't do this from here
-                    return BootstrapResult.UnsupportedAuthFlow()
+                    BootstrapResult.UnsupportedAuthFlow()
                 }
             }
         }

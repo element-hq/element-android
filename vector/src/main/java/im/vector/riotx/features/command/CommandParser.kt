@@ -232,7 +232,7 @@ object CommandParser {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.SetUserPowerLevel(userId, 0)
+                            ParsedCommand.SetUserPowerLevel(userId, null)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                         }

@@ -18,12 +18,11 @@ package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceKeys
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
-import im.vector.matrix.android.internal.crypto.model.rest.RestDeviceInfo
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.convertToUTF8
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,11 +30,10 @@ import javax.inject.Inject
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
     data class Params(
             // the device keys to send.
-            val deviceKeys: RestDeviceInfo?,
+            val deviceKeys: DeviceKeys?,
             // the one-time keys to send.
-            val oneTimeKeys: JsonDict?,
-            // the explicit device_id to use for upload (default is to use the same as that used during auth).
-            val deviceId: String)
+            val oneTimeKeys: JsonDict?
+    )
 }
 
 internal class DefaultUploadKeysTask @Inject constructor(
@@ -44,8 +42,6 @@ internal class DefaultUploadKeysTask @Inject constructor(
 ) : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
-        val encodedDeviceId = convertToUTF8(params.deviceId)
-
         val body = KeysUploadBody(
                 deviceKeys = params.deviceKeys,
                 oneTimeKeys = params.oneTimeKeys
@@ -54,11 +50,7 @@ internal class DefaultUploadKeysTask @Inject constructor(
         Timber.i("## Uploading device keys -> $body")
 
         return executeRequest(eventBus) {
-            apiCall = if (encodedDeviceId.isBlank()) {
-                cryptoApi.uploadKeys(body)
-            } else {
-                cryptoApi.uploadKeys(encodedDeviceId, body)
-            }
+            apiCall = cryptoApi.uploadKeys(body)
         }
     }
 }

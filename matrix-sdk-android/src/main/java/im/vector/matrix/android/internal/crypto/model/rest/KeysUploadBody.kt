@@ -20,11 +20,25 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
 
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-keys-upload
+ */
 @JsonClass(generateAdapter = true)
 internal data class KeysUploadBody(
+        /**
+         * Identity keys for the device.
+         *
+         * May be absent if no new identity keys are required.
+         */
         @Json(name = "device_keys")
-        val deviceKeys: RestDeviceInfo? = null,
+        val deviceKeys: DeviceKeys? = null,
 
+        /**
+         * One-time public keys for "pre-key" messages. The names of the properties should be in the
+         * format <algorithm>:<key_id>. The format of the key is determined by the key algorithm.
+         *
+         * May be absent if no new one-time keys are required.
+         */
         @Json(name = "one_time_keys")
         val oneTimeKeys: JsonDict? = null
 )

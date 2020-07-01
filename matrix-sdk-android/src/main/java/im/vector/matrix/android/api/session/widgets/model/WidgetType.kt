@@ -16,6 +16,25 @@
 
 package im.vector.matrix.android.api.session.widgets.model
 
+private val DEFINED_TYPES by lazy {
+    listOf(
+            WidgetType.Jitsi,
+            WidgetType.TradingView,
+            WidgetType.Spotify,
+            WidgetType.Video,
+            WidgetType.GoogleDoc,
+            WidgetType.GoogleCalendar,
+            WidgetType.Etherpad,
+            WidgetType.StickerPicker,
+            WidgetType.Grafana,
+            WidgetType.Custom,
+            WidgetType.IntegrationManager
+    )
+}
+
+/**
+ * Ref: https://github.com/matrix-org/matrix-doc/issues/1236
+ */
 sealed class WidgetType(open val preferred: String, open val legacy: String = preferred) {
     object Jitsi : WidgetType("m.jitsi", "jitsi")
     object TradingView : WidgetType("m.tradingview")
@@ -30,7 +49,7 @@ sealed class WidgetType(open val preferred: String, open val legacy: String = pr
     object IntegrationManager : WidgetType("m.integration_manager")
     data class Fallback(override val preferred: String) : WidgetType(preferred)
 
-    fun matches(type: String?): Boolean {
+    fun matches(type: String): Boolean {
         return type == preferred || type == legacy
     }
 
@@ -39,20 +58,6 @@ sealed class WidgetType(open val preferred: String, open val legacy: String = pr
     }
 
     companion object {
-
-        private val DEFINED_TYPES = listOf(
-                Jitsi,
-                TradingView,
-                Spotify,
-                Video,
-                GoogleDoc,
-                GoogleCalendar,
-                Etherpad,
-                StickerPicker,
-                Grafana,
-                Custom,
-                IntegrationManager
-        )
 
         fun fromString(type: String): WidgetType {
             val matchingType = DEFINED_TYPES.firstOrNull {

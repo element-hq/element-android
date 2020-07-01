@@ -17,12 +17,11 @@
 package im.vector.matrix.android.internal.session.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.call.RoomCallService
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
@@ -37,27 +36,23 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.typing.TypingService
 import im.vector.matrix.android.api.session.room.uploads.UploadsService
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryDataSource
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
 internal class DefaultRoom @Inject constructor(override val roomId: String,
-                                               private val monarchy: Monarchy,
-                                               private val roomSummaryMapper: RoomSummaryMapper,
+                                               private val roomSummaryDataSource: RoomSummaryDataSource,
                                                private val timelineService: TimelineService,
                                                private val sendService: SendService,
                                                private val draftService: DraftService,
                                                private val stateService: StateService,
                                                private val uploadsService: UploadsService,
                                                private val reportingService: ReportingService,
+                                               private val roomCallService: RoomCallService,
                                                private val readService: ReadService,
                                                private val typingService: TypingService,
                                                private val tagsService: TagsService,
@@ -74,6 +69,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         StateService by stateService,
         UploadsService by uploadsService,
         ReportingService by reportingService,
+        RoomCallService by roomCallService,
         ReadService by readService,
         TypingService by typingService,
         TagsService by tagsService,
@@ -82,20 +78,11 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         RoomPushRuleService by roomPushRuleService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                { roomSummaryMapper.map(it) }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
+        return roomSummaryDataSource.getRoomSummaryLive(roomId)
     }
 
     override fun roomSummary(): RoomSummary? {
-        return monarchy.fetchAllMappedSync(
-                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                { roomSummaryMapper.map(it) }
-        ).firstOrNull()
+        return roomSummaryDataSource.getRoomSummary(roomId)
     }
 
     override fun isEncrypted(): Boolean {

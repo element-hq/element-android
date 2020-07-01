@@ -19,7 +19,11 @@ An Android Studio template has been added to the project to help creating all fi
 
 To install the template (to be done only once):
 - Go to folder `./tools/template`.
-- Run the script `./configure.sh`.
+- Mac OSX: Run the script `./configure.sh`.
+
+   Linux: Run `ANDROID_STUDIO=/path/to/android-studio ./configure`
+    - e.g. `ANDROID_STUDIO=/usr/local/android-studio ./configure`
+
 - Restart Android Studio.
 
 To create a new screen:
@@ -27,7 +31,7 @@ To create a new screen:
 - Then right click on the package, and select `New/New Vector/RiotX Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
-- Remainning steps are described as TODO in the generated files, or will be pointed out by the compilator, or at runtime :)
+- Remaining steps are described as TODO in the generated files, or will be pointed out by the compilator, or at runtime :)
 
 Note that if the templates are modified, the only things to do is to restart Android Studio for the change to take effect.
 

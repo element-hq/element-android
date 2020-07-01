@@ -39,7 +39,7 @@ sealed class ParsedCommand {
     class SendRainbowEmote(val message: CharSequence) : ParsedCommand()
     class BanUser(val userId: String, val reason: String?) : ParsedCommand()
     class UnbanUser(val userId: String, val reason: String?) : ParsedCommand()
-    class SetUserPowerLevel(val userId: String, val powerLevel: Int) : ParsedCommand()
+    class SetUserPowerLevel(val userId: String, val powerLevel: Int?) : ParsedCommand()
     class Invite(val userId: String, val reason: String?) : ParsedCommand()
     class JoinRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
     class PartRoom(val roomAlias: String, val reason: String?) : ParsedCommand()

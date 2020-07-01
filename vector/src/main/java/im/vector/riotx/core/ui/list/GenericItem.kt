@@ -74,6 +74,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     var itemClickAction: Action? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.titleText.setTextOrHide(title)
 
         if (titleIconResourceId != -1) {

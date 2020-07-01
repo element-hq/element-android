@@ -28,12 +28,13 @@ import im.vector.matrix.android.api.session.room.notification.RoomPushRuleServic
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.model.PushRuleEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
 internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                       private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      private val monarchy: Monarchy,
+                                                                      @SessionDatabase private val monarchy: Monarchy,
                                                                       private val taskExecutor: TaskExecutor)
     : RoomPushRuleService {
 
@@ -51,7 +52,7 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
     override fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable {
         return setRoomNotificationStateTask
                 .configureWith(SetRoomNotificationStateTask.Params(roomId, roomNotificationState)) {
-                    this.callback = callback
+                    this.callback = matrixCallback
                 }
                 .executeBy(taskExecutor)
     }

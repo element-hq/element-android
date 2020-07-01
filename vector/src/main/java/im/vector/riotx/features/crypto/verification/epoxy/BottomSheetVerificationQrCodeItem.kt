@@ -36,6 +36,7 @@ abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetV
     var animate = false
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.qsrCodeImage.setData(data, animate)
     }
 

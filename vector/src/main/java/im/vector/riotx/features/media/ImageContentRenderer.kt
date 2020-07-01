@@ -49,6 +49,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     data class Data(
             val eventId: String,
             val filename: String,
+            val mimeType: String?,
             val url: String?,
             val elementToDecrypt: ElementToDecrypt?,
             val height: Int?,

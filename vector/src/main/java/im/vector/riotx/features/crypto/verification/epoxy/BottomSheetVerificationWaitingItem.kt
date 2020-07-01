@@ -33,6 +33,7 @@ abstract class BottomSheetVerificationWaitingItem : VectorEpoxyModel<BottomSheet
     var title: CharSequence = ""
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.title.text = title
     }
 

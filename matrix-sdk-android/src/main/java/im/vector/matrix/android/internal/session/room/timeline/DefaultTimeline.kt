@@ -341,6 +341,7 @@ internal class DefaultTimeline(
             listeners.forEach {
                 it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
             }
+            Timber.v("On local echo created: $onLocalEchoCreated")
             inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
             postSnapshot()
         }
@@ -776,7 +777,8 @@ internal class DefaultTimeline(
             `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
         }
         if (settings.filterUseless) {
-            not().equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
+            not()
+                    .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
         }
         if (settings.filterEdits) {
             not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
@@ -790,11 +792,7 @@ internal class DefaultTimeline(
 
     private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
         return filter {
-            val filterType = if (settings.filterTypes) {
-                settings.allowedTypes.contains(it.root.type)
-            } else {
-                true
-            }
+            val filterType = !settings.filterTypes || settings.allowedTypes.contains(it.root.type)
             if (!filterType) return@filter false
 
             val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
@@ -805,7 +803,7 @@ internal class DefaultTimeline(
             }
             if (!filterEdits) return@filter false
 
-            val filterRedacted = settings.filterRedacted && it.root.isRedacted()
+            val filterRedacted = !settings.filterRedacted || it.root.isRedacted()
 
             filterRedacted
         }

@@ -37,6 +37,7 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 var redacts: String? = null,
                                 var decryptionResultJson: String? = null,
                                 var decryptionErrorCode: String? = null,
+                                var decryptionErrorReason: String? = null,
                                 var ageLocalTs: Long? = null
 ) : RealmObject() {
 
@@ -62,5 +63,6 @@ internal open class EventEntity(@Index var eventId: String = "",
         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
+        decryptionErrorReason = null
     }
 }

@@ -32,23 +32,28 @@ import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 @EpoxyModelClass(layout = R.layout.item_breadcrumbs)
 abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
 
+    @EpoxyAttribute var hasTypingUsers: Boolean = false
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
-    @EpoxyAttribute var hasTypingUsers: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
-    @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
-        holder.typingIndicator.isVisible = hasTypingUsers
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
+        holder.typingIndicator.isVisible = hasTypingUsers
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.rootView.setOnClickListener(null)
+        super.unbind(holder)
     }
 
     class Holder : VectorEpoxyHolder() {

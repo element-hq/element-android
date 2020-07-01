@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -38,7 +39,7 @@ internal interface FetchNextTokenAndPaginateTask : Task<FetchNextTokenAndPaginat
 
 internal class DefaultFetchNextTokenAndPaginateTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val filterRepository: FilterRepository,
         private val paginationTask: PaginationTask,
         private val eventBus: EventBus

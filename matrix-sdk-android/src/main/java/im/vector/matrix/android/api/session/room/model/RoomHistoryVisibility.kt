@@ -17,10 +17,12 @@
 package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * Ref: https://matrix.org/docs/spec/client_server/latest#room-history-visibility
  */
+@JsonClass(generateAdapter = false)
 enum class RoomHistoryVisibility {
     /**
      * All events while this is the m.room.history_visibility value may be shared by any

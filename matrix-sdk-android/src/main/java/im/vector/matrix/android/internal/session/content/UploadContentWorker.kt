@@ -17,9 +17,12 @@
 package im.vector.matrix.android.internal.session.content
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
@@ -32,12 +35,17 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVideoConte
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.network.ProgressRequestBody
+import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.util.UUID
 import javax.inject.Inject
 
 private data class NewImageAttributes(
@@ -64,6 +72,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
     @Inject lateinit var fileUploader: FileUploader
     @Inject lateinit var contentUploadStateTracker: DefaultContentUploadStateTracker
+    @Inject lateinit var fileService: DefaultFileService
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -154,18 +163,60 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
                 return try {
+                    // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
+                    // copy it to a cache folder by using InputStream and OutputStream.
+                    // https://github.com/zetbaitsu/Compressor/pull/150
+                    // As soon as the above PR is merged, we can use attachment.queryUri instead of creating a cacheFile.
+                    var cacheFile = File.createTempFile(attachment.name ?: UUID.randomUUID().toString(), ".jpg", context.cacheDir)
+                    cacheFile.parentFile?.mkdirs()
+                    if (cacheFile.exists()) {
+                        cacheFile.delete()
+                    }
+                    cacheFile.createNewFile()
+                    cacheFile.deleteOnExit()
+
+                    val outputStream = FileOutputStream(cacheFile)
+                    outputStream.use {
+                        inputStream.copyTo(outputStream)
+                    }
+
+                    if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
+                        cacheFile = Compressor.compress(context, cacheFile) {
+                            default(
+                                    width = MAX_IMAGE_SIZE,
+                                    height = MAX_IMAGE_SIZE
+                            )
+                        }.also { compressedFile ->
+                            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                            BitmapFactory.decodeFile(compressedFile.absolutePath, options)
+                            val fileSize = compressedFile.length().toInt()
+                            newImageAttributes = NewImageAttributes(
+                                    options.outWidth,
+                                    options.outHeight,
+                                    fileSize
+                            )
+                        }
+                    }
+
                     val contentUploadResponse = if (params.isEncrypted) {
                         Timber.v("Encrypt file")
                         notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
-                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(inputStream, attachment.getSafeMimeType())
+                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(cacheFile), attachment.getSafeMimeType())
                         uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
                         fileUploader
                                 .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
                     } else {
                         fileUploader
-                                .uploadByteArray(inputStream.readBytes(), attachment.name, attachment.getSafeMimeType(), progressListener)
+                                .uploadFile(cacheFile, attachment.name, attachment.getSafeMimeType(), progressListener)
+                    }
+
+                    // If it's a file update the file service so that it does not redownload?
+                    if (params.attachment.type == ContentAttachmentData.Type.FILE) {
+                        context.contentResolver.openInputStream(attachment.queryUri)?.let {
+                            fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
+                        }
                     }
 
                     handleSuccess(params,

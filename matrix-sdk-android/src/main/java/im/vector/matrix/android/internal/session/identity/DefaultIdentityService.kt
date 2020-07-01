@@ -36,9 +36,10 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.network.RetrofitFactory
+import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
@@ -67,7 +68,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityPingTask: IdentityPingTask,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
-        @Unauthenticated
+        @UnauthenticatedWithCertificate
         private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
         @AuthenticatedIdentity
         private val okHttpClient: Lazy<OkHttpClient>,
@@ -82,14 +83,14 @@ internal class DefaultIdentityService @Inject constructor(
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val sessionParams: SessionParams,
         private val taskExecutor: TaskExecutor
-) : IdentityService {
+) : IdentityService, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     private val listeners = mutableSetOf<IdentityServiceListener>()
 
-    fun start() {
+    override fun onStart() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         // Observe the account data change
         accountDataDataSource
@@ -114,7 +115,7 @@ internal class DefaultIdentityService @Inject constructor(
         }
     }
 
-    fun stop() {
+    override fun onStop() {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 

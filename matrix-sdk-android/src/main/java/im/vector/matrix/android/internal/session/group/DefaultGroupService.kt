@@ -26,13 +26,14 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
+internal class DefaultGroupService @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return null

@@ -32,6 +32,7 @@ import im.vector.riotx.core.extensions.startSyncing
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.ShortcutsHandler
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.settings.VectorPreferences
@@ -82,6 +83,7 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var uiStateRepository: UiStateRepository
+    @Inject lateinit var shortcutsHandler: ShortcutsHandler
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -105,6 +107,9 @@ class MainActivity : VectorBaseActivity() {
         // Dismiss all notifications
         notificationDrawerManager.clearAllEvents()
         notificationDrawerManager.persistInfo()
+
+        // Also clear the dynamic shortcuts
+        shortcutsHandler.clearShortcuts()
     }
 
     private fun parseArgs(): MainActivityArgs {

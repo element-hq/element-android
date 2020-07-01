@@ -2,7 +2,6 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-
     <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
     <!-- NOTE TO TRANSLATORS: Value MUST have 4 letters and MUST be in this list: https://www.unicode.org/iso15924/iso15924-codes.html. Example:  "Arab", "Cyrl", "Latn", etc. -->
@@ -35,7 +34,6 @@
     <string name="title_activity_verify_device">Verify session</string>
 
     <!-- Signing out screen -->
-
     <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
@@ -46,7 +44,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
-
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
@@ -117,6 +114,7 @@
     <string name="action_mark_room_read">Mark as read</string>
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
+    <string name="action_copy">Copy</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -211,6 +209,20 @@
     <string name="call_failed_no_ice_use_alt">Try using %s</string>
     <string name="call_failed_dont_ask_again">Do not ask me again</string>
 
+    <string name="call_failed_no_connection">RiotX Call Failed</string>
+    <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
+
+    <string name="call_select_sound_device">Select Sound Device</string>
+    <string name="sound_device_phone">Phone</string>
+    <string name="sound_device_speaker">Speaker</string>
+    <string name="sound_device_headset">Headset</string>
+    <string name="sound_device_wireless_headset">Wireless Headset</string>
+    <string name="call_switch_camera">Switch Camera</string>
+    <string name="call_camera_front">Front</string>
+    <string name="call_camera_back">Back</string>
+    <string name="call_format_turn_hd_off">Turn HD off</string>
+    <string name="call_format_turn_hd_on">Turn HD on</string>
+
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
@@ -286,6 +298,8 @@
     <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
     <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
+    <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
+    <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
     <string name="login_mobile_device">Mobile</string>
 
@@ -362,6 +376,8 @@
     <string name="incoming_voice_call">Incoming Voice Call</string>
     <string name="call_in_progress">Call In Progress…</string>
     <string name="video_call_in_progress">Video Call In Progress…</string>
+    <string name="active_call_with_duration">Active Call (%s)</string>
+    <string name="return_to_call">Return to call</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
@@ -461,7 +477,7 @@
 
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_direct_chats">Direct Messages</string>
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
@@ -862,6 +878,9 @@
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
 
+    <string name="disabled_integration_dialog_title">Integrations are disabled</string>
+    <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
+
     <string name="settings_user_interface">User interface</string>
     <string name="settings_interface_language">Language</string>
     <string name="settings_select_language">Choose language</string>
@@ -1162,6 +1181,7 @@
     <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
     <!-- Widget Integration Manager -->
+
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
@@ -1716,6 +1736,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+    <string name="labs_merge_e2e_in_timeline">Merge failed to decrypt message in timeline</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
@@ -2058,8 +2079,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_request_you_accepted">You accepted</string>
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
-
-
     <string name="verification_verify_device">Verify this session</string>
     <string name="verification_verify_device_manually">Manually verify</string>
 
@@ -2145,7 +2164,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
-
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
@@ -2285,8 +2303,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
     <!-- %s will be replaced by recovery_passphrase -->
     <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
-    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t use your account password.</string>
 
+    <string name="bootstrap_info_text_2">Enter a security phrase only you know, used to secure secrets on your server.</string>
 
     <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
     <string name="bootstrap_loading_title">Setting up recovery.</string>
@@ -2319,7 +2338,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="bootstrap_skip_text">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
     <string name="bootstrap_skip_text_no_gen_key">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.</string>
-
+    <string name="bootstrap_cancel_text">If you cancel now, you may lose encrypted messages &amp; data if you lose access to your logins.\n\nYou can also set up Secure Backup &amp; manage your keys in Settings.</string>
 
     <string name="encryption_enabled">Encryption enabled</string>
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
@@ -2350,6 +2369,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_message_placeholder">Message…</string>
 
     <string name="upgrade_security">Encryption upgrade available</string>
+    <string name="setup_cross_signing">Enable Cross Signing</string>
     <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
 
     <!-- %s will be replaced by recovery_key -->
@@ -2384,6 +2404,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="media_file_added_to_gallery">Media file added to the Gallery</string>
     <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
+    <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
     <string name="use_other_session_content_description">Use the latest Riot on your other devices, Riot Web, Riot Desktop, Riot iOS, RiotX for Android, or another cross-signing capable Matrix client</string>
@@ -2452,5 +2473,44 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
     <string name="identity_server_set_alternative_submit">Submit</string>
     <string name="power_level_edit_title">Set role</string>
+    <string name="a11y_open_chat">Open chat</string>
+    <string name="a11y_mute_microphone">Mute the microphone</string>
+    <string name="a11y_unmute_microphone">Unmute the microphone</string>
+    <string name="a11y_stop_camera">Stop the camera</string>
+    <string name="a11y_start_camera">Start the camera</string>
 
+    <string name="settings_setup_secure_backup">Set up Secure Backup</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Secure backup</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Set up</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generate a security key to store somewhere safe like a password manager or a safe.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Use a Security Phrase</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Enter a secret phrase only you know, and generate a key for backup.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Save your Security Key</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Store your Security Key somewhere safe, like a password manager or a safe.</string>
+
+    <string name="set_a_security_phrase_title">Set a Security Phrase</string>
+    <string name="set_a_security_phrase_notice">Enter a security phrase only you know, used to secure secrets on your server.</string>
+    <string name="set_a_security_phrase_hint">Security Phrase</string>
+    <string name="set_a_security_phrase_again_notice">Enter your Security Phrase again to confirm it.</string>
+
+    <string name="save_your_security_key_title">Save your Security Key</string>
+    <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
+
+    <!-- Room Settings -->
+    <string name="room_settings_name_hint">Room Name</string>
+    <string name="room_settings_topic_hint">Topic</string>
+    <string name="room_settings_save_success">You changed room settings successfully</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
+    <string name="crypto_utd">Cannot Decrypt</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Due to end-to-end encryption, you might need to wait for someone\'s message to arrive because the encryption keys were not properly sent to you.</string>
+    <string name="crypto_error_withheld_blacklisted">You cannot access this message because you have been blocked by the sender</string>
+    <string name="crypto_error_withheld_unverified">You cannot access this message because your session is not trusted by the sender</string>
+    <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 </resources>

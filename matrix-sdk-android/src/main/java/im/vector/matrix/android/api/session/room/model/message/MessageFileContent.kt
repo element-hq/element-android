@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.model.message
 
-import android.content.ClipDescription
+import android.webkit.MimeTypeMap
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
@@ -59,12 +59,12 @@ data class MessageFileContent(
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageWithAttachmentContent {
 
-    fun getMimeType(): String {
-        // Mimetype default to plain text, should not be used
-        return encryptedFileInfo?.mimetype
+    override val mimeType: String?
+        get() = encryptedFileInfo?.mimetype
                 ?: info?.mimeType
-                ?: ClipDescription.MIMETYPE_TEXT_PLAIN
-    }
+                ?: MimeTypeMap.getFileExtensionFromUrl(filename ?: body)?.let { extension ->
+                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                }
 
     fun getFileName(): String {
         return filename ?: body

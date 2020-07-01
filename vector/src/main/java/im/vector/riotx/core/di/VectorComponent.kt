@@ -27,10 +27,12 @@ import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
@@ -88,6 +90,8 @@ interface VectorComponent {
 
     fun activeSessionHolder(): ActiveSessionHolder
 
+    fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
+
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 
     fun emojiCompatWrapper(): EmojiCompatWrapper
@@ -133,6 +137,8 @@ interface VectorComponent {
     fun alertManager(): PopupAlertManager
 
     fun reAuthHelper(): ReAuthHelper
+
+    fun webRtcPeerConnectionManager(): WebRtcPeerConnectionManager
 
     @Component.Factory
     interface Factory {

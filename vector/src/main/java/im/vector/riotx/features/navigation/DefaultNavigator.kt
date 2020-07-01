@@ -30,8 +30,8 @@ import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
@@ -46,7 +46,7 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
-import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
+import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
@@ -124,9 +124,9 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun upgradeSessionSecurity(context: Context) {
+    override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, false)
+            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly)
         }
     }
 
@@ -230,12 +230,13 @@ class DefaultNavigator @Inject constructor(
     override fun openStickerPicker(fragment: Fragment, roomId: String, widget: Widget, requestCode: Int) {
         val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
         val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
-        fragment.startActivityForResult(intent, StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
+        fragment.startActivityForResult(intent, WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE)
     }
 
-    override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?) {
+    override fun openIntegrationManager(fragment: Fragment, roomId: String, integId: String?, screen: String?) {
         val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
-        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+        val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
+        fragment.startActivityForResult(intent, WidgetRequestCodes.INTEGRATION_MANAGER_REQUEST_CODE)
     }
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget) {

@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
 import im.vector.matrix.android.internal.task.Task
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -47,7 +48,8 @@ internal class DefaultDirectLoginTask @Inject constructor(
 ) : DirectLoginTask {
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
-        val authAPI = retrofitFactory.create(okHttpClient, params.homeServerConnectionConfig.homeServerUri.toString())
+        val client = buildClient(params.homeServerConnectionConfig)
+        val authAPI = retrofitFactory.create(client, params.homeServerConnectionConfig.homeServerUri.toString())
                 .create(AuthAPI::class.java)
 
         val loginParams = PasswordLoginParams.userIdentifier(params.userId, params.password, params.deviceName)
@@ -57,5 +59,12 @@ internal class DefaultDirectLoginTask @Inject constructor(
         }
 
         return sessionCreator.createSession(credentials, params.homeServerConnectionConfig)
+    }
+
+    private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        return okHttpClient.get()
+                .newBuilder()
+                .addSocketFactory(homeServerConnectionConfig)
+                .build()
     }
 }

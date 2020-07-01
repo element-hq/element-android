@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.common.CommonTestHelper
+import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.GossipingRequestState
@@ -56,6 +57,7 @@ import java.util.concurrent.CountDownLatch
 class KeyShareTests : InstrumentedTest {
 
     private val mTestHelper = CommonTestHelper(context())
+    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
 
     @Test
     fun test_DoNotSelfShareIfNotTrusted() {
@@ -90,7 +92,7 @@ class KeyShareTests : InstrumentedTest {
         } catch (failure: Throwable) {
         }
 
-        val outgoingRequestBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
+        val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
         // Try to request
         aliceSession2.cryptoService().requestRoomKeyForEvent(receivedEvent.root)
 
@@ -100,10 +102,10 @@ class KeyShareTests : InstrumentedTest {
         var outGoingRequestId: String? = null
 
         mTestHelper.retryPeriodicallyWithLatch(waitLatch) {
-            aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
+            aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
                     .filter { req ->
                         // filter out request that was known before
-                        !outgoingRequestBefore.any { req.requestId == it.requestId }
+                        !outgoingRequestsBefore.any { req.requestId == it.requestId }
                     }
                     .let {
                         val outgoing = it.firstOrNull { it.sessionId == eventMegolmSessionId }
@@ -115,10 +117,10 @@ class KeyShareTests : InstrumentedTest {
 
         Log.v("TEST", "=======> Outgoing requet Id is $outGoingRequestId")
 
-        val outgoingRequestAfter = aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
+        val outgoingRequestAfter = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
 
         // We should have a new request
-        Assert.assertTrue(outgoingRequestAfter.size > outgoingRequestBefore.size)
+        Assert.assertTrue(outgoingRequestAfter.size > outgoingRequestsBefore.size)
         Assert.assertNotNull(outgoingRequestAfter.first { it.sessionId == eventMegolmSessionId })
 
         // The first session should see an incoming request
@@ -126,7 +128,7 @@ class KeyShareTests : InstrumentedTest {
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 // DEBUG LOGS
-                aliceSession.cryptoService().getIncomingRoomKeyRequest().let {
+                aliceSession.cryptoService().getIncomingRoomKeyRequests().let {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
                     Log.v("TEST", "=========================")
                     it.forEach { keyRequest ->
@@ -135,7 +137,7 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "=========================")
                 }
 
-                val incoming = aliceSession.cryptoService().getIncomingRoomKeyRequest().firstOrNull { it.requestId == outGoingRequestId }
+                val incoming = aliceSession.cryptoService().getIncomingRoomKeyRequests().firstOrNull { it.requestId == outGoingRequestId }
                 incoming?.state == GossipingRequestState.REJECTED
             }
         }
@@ -155,7 +157,7 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession.cryptoService().getIncomingRoomKeyRequest().let {
+                aliceSession.cryptoService().getIncomingRoomKeyRequests().let {
                     Log.v("TEST", "Incoming request Session 1")
                     Log.v("TEST", "=========================")
                     it.forEach {
@@ -171,7 +173,7 @@ class KeyShareTests : InstrumentedTest {
         Thread.sleep(6_000)
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession2.cryptoService().getOutgoingRoomKeyRequest().let {
+                aliceSession2.cryptoService().getOutgoingRoomKeyRequests().let {
                     it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == OutgoingGossipingRequestState.CANCELLED }
                 }
             }
@@ -234,6 +236,7 @@ class KeyShareTests : InstrumentedTest {
                     }
                     if (tx.state == VerificationTxState.ShortCodeReady) {
                         session1ShortCode = tx.getDecimalCodeRepresentation()
+                        Thread.sleep(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }
@@ -246,13 +249,14 @@ class KeyShareTests : InstrumentedTest {
                 if (tx is SasVerificationTransaction) {
                     if (tx.state == VerificationTxState.ShortCodeReady) {
                         session2ShortCode = tx.getDecimalCodeRepresentation()
+                        Thread.sleep(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }
             }
         })
 
-        val txId: String = "m.testVerif12"
+        val txId = "m.testVerif12"
         aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
                 ?: "", txId)
 
@@ -285,5 +289,8 @@ class KeyShareTests : InstrumentedTest {
                 keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey == creationInfo.recoveryKey
             }
         }
+
+        mTestHelper.signOutAndClose(aliceSession1)
+        mTestHelper.signOutAndClose(aliceSession2)
     }
 }

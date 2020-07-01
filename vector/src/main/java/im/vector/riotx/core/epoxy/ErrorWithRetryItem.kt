@@ -33,6 +33,7 @@ abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(
     var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textView.text = text
         holder.buttonView.isVisible = listener != null
         holder.buttonView.setOnClickListener { listener?.invoke() }

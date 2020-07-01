@@ -21,9 +21,12 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.call.CallControlsBottomSheet
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
@@ -98,6 +101,7 @@ interface ScreenComponent {
     fun navigator(): Navigator
     fun errorFormatter(): ErrorFormatter
     fun uiStateRepository(): UiStateRepository
+    fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
 
     /* ==========================================================================================
      * Activities
@@ -130,6 +134,7 @@ interface ScreenComponent {
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
     fun inject(activity: WidgetActivity)
+    fun inject(activity: VectorCallActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -146,6 +151,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: BootstrapBottomSheet)
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
     fun inject(bottomSheet: RoomWidgetsBottomSheet)
+    fun inject(bottomSheet: CallControlsBottomSheet)
 
     /* ==========================================================================================
      * Others

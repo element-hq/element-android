@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
+import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.widgets.token.GetScalarTokenTask
@@ -30,17 +31,17 @@ import javax.inject.Inject
 internal class DefaultWidgetURLFormatter @Inject constructor(private val integrationManager: IntegrationManager,
                                                              private val getScalarTokenTask: GetScalarTokenTask,
                                                              private val matrixConfiguration: MatrixConfiguration
-) : IntegrationManagerService.Listener, WidgetURLFormatter {
+) : IntegrationManagerService.Listener, WidgetURLFormatter, SessionLifecycleObserver {
 
     private lateinit var currentConfig: IntegrationManagerConfig
     private var whiteListedUrls: List<String> = emptyList()
 
-    fun start() {
+    override fun onStart() {
         setupWithConfiguration()
         integrationManager.addListener(this)
     }
 
-    fun stop() {
+    override fun onStop() {
         integrationManager.removeListener(this)
     }
 

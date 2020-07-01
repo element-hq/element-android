@@ -52,4 +52,7 @@ data class MessageStickerContent(
          * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageImageInfoContent
+) : MessageImageInfoContent {
+        override val mimeType: String?
+                get() = encryptedFileInfo?.mimetype ?: info?.mimeType
+}

@@ -26,13 +26,14 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.query.process
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import javax.inject.Inject
 
-internal class StateEventDataSource @Inject constructor(private val monarchy: Monarchy) {
+internal class StateEventDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue): Event? {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->

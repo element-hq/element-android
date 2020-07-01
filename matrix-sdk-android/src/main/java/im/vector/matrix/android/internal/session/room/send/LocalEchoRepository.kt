@@ -33,7 +33,8 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -42,7 +43,7 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,
+internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
                                                        private val timelineEventMapper: TimelineEventMapper) {
@@ -54,7 +55,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
             throw IllegalStateException("You should have set an eventId for your event")
         }
         val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val eventEntity = event.toEntity(roomId, SendState.UNSENT)
+            val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = TimelineEventEntity.nextId(realm)

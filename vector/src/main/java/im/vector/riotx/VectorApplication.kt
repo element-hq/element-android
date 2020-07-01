@@ -37,12 +37,14 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.rx.RxConfig
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -56,15 +58,15 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.concurrent.Executors
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
     lateinit var appContext: Context
-    // font thread handler
+    @Inject lateinit var legacySessionImporter: LegacySessionImporter
     @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
@@ -80,7 +82,10 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+
     lateinit var vectorComponent: VectorComponent
+    // font thread handler
     private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
@@ -118,10 +123,15 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         emojiCompatWrapper.init(fontRequest)
 
         notificationUtils.createNotificationChannels()
+
+        // It can takes time, but do we care?
+        legacySessionImporter.process()
+
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
             lastAuthenticatedSession.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
+            lastAuthenticatedSession.callSignalingService().addCallListener(webRtcPeerConnectionManager)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

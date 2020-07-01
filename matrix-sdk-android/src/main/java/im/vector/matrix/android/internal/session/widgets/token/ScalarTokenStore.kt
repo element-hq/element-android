@@ -19,11 +19,12 @@ package im.vector.matrix.android.internal.session.widgets.token
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.ScalarTokenEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.awaitTransaction
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import javax.inject.Inject
 
-internal class ScalarTokenStore @Inject constructor(private val monarchy: Monarchy) {
+internal class ScalarTokenStore @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     fun getToken(apiUrl: String): String? {
         return monarchy.fetchCopyMap({ realm ->

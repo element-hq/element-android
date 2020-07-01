@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
@@ -36,7 +37,7 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         private val accountDataApi: AccountDataAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
         @UserId private val userId: String,
         private val eventBus: EventBus
