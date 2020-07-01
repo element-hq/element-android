@@ -239,12 +239,12 @@ internal object CertUtil {
     fun newConnectionSpecs(hsConfig: HomeServerConnectionConfig): List<ConnectionSpec> {
         val builder = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
         val tlsVersions = hsConfig.tlsVersions
-        if (null != tlsVersions) {
+        if (null != tlsVersions && tlsVersions.isNotEmpty()) {
             builder.tlsVersions(*tlsVersions.toTypedArray())
         }
 
         val tlsCipherSuites = hsConfig.tlsCipherSuites
-        if (null != tlsCipherSuites) {
+        if (null != tlsCipherSuites && tlsCipherSuites.isNotEmpty()) {
             builder.cipherSuites(*tlsCipherSuites.toTypedArray())
         }
 
