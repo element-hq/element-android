@@ -13,6 +13,7 @@ Improvements 🙌:
  - Update user avatar (#1054)
  - Allow self-signed certificate (#1564)
  - Improve file download and open in timeline
+ - Render room avatar change (#1319)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
@@ -21,6 +22,7 @@ Bugfix 🐛:
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
  - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
 
 Translations 🗣:
  -
