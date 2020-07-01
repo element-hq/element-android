@@ -17,6 +17,7 @@
 
 package im.vector.matrix.android.api.session.profile
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.identity.ThreePid
@@ -47,6 +48,14 @@ interface ProfileService {
      * @param newDisplayName the new display name of the user
      */
     fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Update the avatar for this user
+     * @param userId the userId to update the avatar of
+     * @param newAvatarUri the new avatar uri of the user
+     * @param fileName the fileName of selected image
+     */
+    fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Return the current avatarUrl for this user.

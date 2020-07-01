@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.room.model
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.session.room.send.UserDraft
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 /**
@@ -27,7 +28,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
  */
 data class RoomSummary constructor(
         val roomId: String,
+        // Computed display name
         val displayName: String = "",
+        val name: String = "",
         val topic: String = "",
         val avatarUrl: String = "",
         val canonicalAlias: String? = null,
@@ -47,6 +50,7 @@ data class RoomSummary constructor(
         val userDrafts: List<UserDraft> = emptyList(),
         val isEncrypted: Boolean,
         val encryptionEventTs: Long?,
+        val typingUsers: List<SenderInfo>,
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null

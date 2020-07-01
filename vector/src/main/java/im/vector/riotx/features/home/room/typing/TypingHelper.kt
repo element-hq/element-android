@@ -16,48 +16,30 @@
 
 package im.vector.riotx.features.home.room.typing
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
 
-class TypingHelper @Inject constructor(
-        private val session: Session,
-        private val stringProvider: StringProvider
-) {
-
-    /**
-     * Return true if some users are currently typing in the room (excluding yourself).
-     */
-    fun hasTypingUsers(roomId: String): LiveData<Boolean> {
-        val liveData = session.typingUsersTracker().getTypingUsersLive(roomId)
-        return Transformations.map(liveData) {
-            it.isNotEmpty()
-        }
-    }
+class TypingHelper @Inject constructor(private val stringProvider: StringProvider) {
 
     /**
      * Returns a human readable String of currently typing users in the room (excluding yourself).
      */
-    fun getTypingMessage(roomId: String): LiveData<String> {
-        val liveData = session.typingUsersTracker().getTypingUsersLive(roomId)
-        return Transformations.map(liveData) { typingUsers ->
-            when {
-                typingUsers.isEmpty() ->
-                    ""
-                typingUsers.size == 1 ->
-                    stringProvider.getString(R.string.room_one_user_is_typing, typingUsers[0].disambiguatedDisplayName)
-                typingUsers.size == 2 ->
-                    stringProvider.getString(R.string.room_two_users_are_typing,
-                            typingUsers[0].disambiguatedDisplayName,
-                            typingUsers[1].disambiguatedDisplayName)
-                else                  ->
-                    stringProvider.getString(R.string.room_many_users_are_typing,
-                            typingUsers[0].disambiguatedDisplayName,
-                            typingUsers[1].disambiguatedDisplayName)
-            }
+    fun getTypingMessage(typingUsers: List<SenderInfo>): String {
+        return when {
+            typingUsers.isEmpty() ->
+                ""
+            typingUsers.size == 1 ->
+                stringProvider.getString(R.string.room_one_user_is_typing, typingUsers[0].disambiguatedDisplayName)
+            typingUsers.size == 2 ->
+                stringProvider.getString(R.string.room_two_users_are_typing,
+                        typingUsers[0].disambiguatedDisplayName,
+                        typingUsers[1].disambiguatedDisplayName)
+            else                  ->
+                stringProvider.getString(R.string.room_many_users_are_typing,
+                        typingUsers[0].disambiguatedDisplayName,
+                        typingUsers[1].disambiguatedDisplayName)
         }
     }
 }

@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupServ
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -36,7 +37,8 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val credentials: Credentials,
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
-        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository) {
+        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
+        private val taskExecutor: TaskExecutor) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
@@ -49,6 +51,8 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
                 credentials,
                 sendToDeviceTask,
                 messageEncrypter,
-                warnOnUnknownDevicesRepository)
+                warnOnUnknownDevicesRepository,
+                taskExecutor
+        )
     }
 }

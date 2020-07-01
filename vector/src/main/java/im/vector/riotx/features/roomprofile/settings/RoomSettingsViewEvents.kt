@@ -24,4 +24,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  */
 sealed class RoomSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomSettingsViewEvents()
+    object Success : RoomSettingsViewEvents()
 }

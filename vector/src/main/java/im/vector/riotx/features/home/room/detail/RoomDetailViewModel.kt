@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
@@ -47,6 +48,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.OptionItem
+import im.vector.matrix.android.api.session.room.model.message.getFileName
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
@@ -59,7 +61,7 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.rx.asObservable
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -98,12 +100,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         userPreferencesProvider: UserPreferencesProvider,
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
-        private val typingHelper: TypingHelper,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummaryHolder: RoomSummaryHolder,
+        private val typingHelper: TypingHelper,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
@@ -167,7 +169,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
-        observeTypings()
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
@@ -243,7 +244,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EnterEditMode                    -> handleEditAction(action)
             is RoomDetailAction.EnterQuoteMode                   -> handleQuoteAction(action)
             is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
-            is RoomDetailAction.DownloadFile                     -> handleDownloadFile(action)
+            is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
             is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
@@ -261,6 +262,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
+            is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
@@ -857,30 +859,44 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDownloadFile(action: RoomDetailAction.DownloadFile) {
-        session.downloadFile(
-                FileService.DownloadMode.TO_EXPORT,
-                action.eventId,
-                action.messageFileContent.getFileName(),
-                action.messageFileContent.getFileUrl(),
-                action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                action.messageFileContent.getMimeType(),
-                                data,
-                                null
-                        ))
-                    }
+    private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
+        val mxcUrl = action.messageFileContent.getFileUrl()
+        val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
+        if (isDownloaded) {
+            // we can open it
+            session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
+                _viewEvents.post(RoomDetailViewEvents.OpenFile(
+                        action.messageFileContent.mimeType,
+                        uri,
+                        null
+                ))
+            }
+        } else {
+            session.fileService().downloadFile(
+                    FileService.DownloadMode.FOR_INTERNAL_USE,
+                    action.eventId,
+                    action.messageFileContent.getFileName(),
+                    action.messageFileContent.mimeType,
+                    mxcUrl,
+                    action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                    object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    data,
+                                    null
+                            ))
+                        }
 
-                    override fun onFailure(failure: Throwable) {
-                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                action.messageFileContent.getMimeType(),
-                                null,
-                                failure
-                        ))
-                    }
-                })
+                        override fun onFailure(failure: Throwable) {
+                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    null,
+                                    failure
+                            ))
+                        }
+                    })
+        }
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
@@ -1036,6 +1052,19 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleTapOnFailedToDecrypt(action: RoomDetailAction.TapOnFailedToDecrypt) {
+        room.getTimeLineEvent(action.eventId)?.let {
+            val code = when (it.root.mCryptoError) {
+                MXCryptoError.ErrorType.KEYS_WITHHELD -> {
+                    WithHeldCode.fromCode(it.root.mCryptoErrorReason)
+                }
+                else                                  -> null
+            }
+
+            _viewEvents.post(RoomDetailViewEvents.ShowE2EErrorMessage(code))
+        }
+    }
+
     private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
         room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
     }
@@ -1059,15 +1088,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                             asyncRoomSummary = async
                     )
                 }
-    }
-
-    private fun observeTypings() {
-        typingHelper.getTypingMessage(initialState.roomId)
-                .asObservable()
-                .subscribe {
-                    setState { copy(typingMessage = it) }
-                }
-                .disposeOnClear()
     }
 
     private fun getUnreadState() {
@@ -1127,8 +1147,11 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-
             roomSummaryHolder.set(summary)
+            setState {
+                val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
+                copy(typingMessage = typingMessage)
+            }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
                     session.getUser(inviterId)

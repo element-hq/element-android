@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
@@ -100,6 +101,7 @@ interface ScreenComponent {
     fun navigator(): Navigator
     fun errorFormatter(): ErrorFormatter
     fun uiStateRepository(): UiStateRepository
+    fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
 
     /* ==========================================================================================
      * Activities

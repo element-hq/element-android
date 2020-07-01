@@ -16,28 +16,29 @@
 
 package im.vector.matrix.android.internal.network.ssl
 
-import android.util.Pair
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import okhttp3.ConnectionSpec
+import okhttp3.internal.tls.OkHostnameVerifier
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.MessageDigest
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.experimental.and
 
 /**
  * Various utility classes for dealing with X509Certificates
  */
 internal object CertUtil {
+
+    // Set to false to do some test
+    private const val USE_DEFAULT_HOSTNAME_VERIFIER = true
 
     private val hexArray = "0123456789ABCDEF".toCharArray()
 
@@ -95,11 +96,10 @@ internal object CertUtil {
      * @param fingerprint the fingerprint
      * @return the hexa string.
      */
-    @JvmOverloads
     fun fingerprintToHexString(fingerprint: ByteArray, sep: Char = ' '): String {
         val hexChars = CharArray(fingerprint.size * 3)
         for (j in fingerprint.indices) {
-            val v = (fingerprint[j] and 0xFF.toByte()).toInt()
+            val v = (fingerprint[j].toInt() and 0xFF)
             hexChars[j * 3] = hexArray[v.ushr(4)]
             hexChars[j * 3 + 1] = hexArray[v and 0x0F]
             hexChars[j * 3 + 2] = sep
@@ -128,13 +128,18 @@ internal object CertUtil {
         return null
     }
 
+    internal data class PinnedSSLSocketFactory(
+            val sslSocketFactory: SSLSocketFactory,
+            val x509TrustManager: X509TrustManager
+    )
+
     /**
      * Create a SSLSocket factory for a HS config.
      *
      * @param hsConfig the HS config.
      * @return SSLSocket factory
      */
-    fun newPinnedSSLSocketFactory(hsConfig: HomeServerConnectionConfig): Pair<SSLSocketFactory, X509TrustManager> {
+    fun newPinnedSSLSocketFactory(hsConfig: HomeServerConnectionConfig): PinnedSSLSocketFactory {
         try {
             var defaultTrustManager: X509TrustManager? = null
 
@@ -155,7 +160,7 @@ internal object CertUtil {
                     try {
                         tf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
                     } catch (e: Exception) {
-                        Timber.e(e, "## addRule : onBingRuleUpdateFailure failed")
+                        Timber.e(e, "## newPinnedSSLSocketFactory() : TrustManagerFactory.getInstance of default failed")
                     }
                 }
 
@@ -183,7 +188,7 @@ internal object CertUtil {
                 sslSocketFactory = sslContext.socketFactory
             }
 
-            return Pair<SSLSocketFactory, X509TrustManager>(sslSocketFactory, defaultTrustManager)
+            return PinnedSSLSocketFactory(sslSocketFactory, defaultTrustManager!!)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -196,11 +201,14 @@ internal object CertUtil {
      * @return a new HostnameVerifier.
      */
     fun newHostnameVerifier(hsConfig: HomeServerConnectionConfig): HostnameVerifier {
-        val defaultVerifier = HttpsURLConnection.getDefaultHostnameVerifier()
+        val defaultVerifier: HostnameVerifier = OkHostnameVerifier // HttpsURLConnection.getDefaultHostnameVerifier()
         val trustedFingerprints = hsConfig.allowedFingerprints
 
         return HostnameVerifier { hostname, session ->
-            if (defaultVerifier.verify(hostname, session)) return@HostnameVerifier true
+            if (USE_DEFAULT_HOSTNAME_VERIFIER) {
+                if (defaultVerifier.verify(hostname, session)) return@HostnameVerifier true
+            }
+            // TODO How to recover from this error?
             if (trustedFingerprints.isEmpty()) return@HostnameVerifier false
 
             // If remote cert matches an allowed fingerprint, just accept it.

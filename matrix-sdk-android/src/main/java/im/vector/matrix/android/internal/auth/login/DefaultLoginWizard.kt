@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.auth.login
 
 import android.util.Patterns
-import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.login.LoginWizard
@@ -44,7 +43,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 
 internal class DefaultLoginWizard(
-        okHttpClient: Lazy<OkHttpClient>,
+        okHttpClient: OkHttpClient,
         retrofitFactory: RetrofitFactory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionCreator: SessionCreator,

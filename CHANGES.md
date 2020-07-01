@@ -9,6 +9,10 @@ Improvements 🙌:
  - "Add Matrix app" menu is now always visible (#1495)
  - Handle `/op`, `/deop`, and `/nick` commands (#12)
  - Prioritising Recovery key over Recovery passphrase (#1463)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Update user avatar (#1054)
+ - Allow self-signed certificate (#1564)
+ - Improve file download and open in timeline
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
@@ -16,6 +20,7 @@ Bugfix 🐛:
  - User could not redact message that they have sent (#1543)
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
+ - Searching by displayname is case sensitive (#1468)
 
 Translations 🗣:
  -

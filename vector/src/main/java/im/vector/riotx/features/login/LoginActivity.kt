@@ -133,15 +133,14 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     }
                 }
             }
-            is LoginViewEvents.OutdatedHomeserver                         ->
+            is LoginViewEvents.OutdatedHomeserver                         -> {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_content)
                         .setPositiveButton(R.string.ok, null)
                         .show()
-            is LoginViewEvents.Failure                                    ->
-                // This is handled by the Fragments
                 Unit
+            }
             is LoginViewEvents.OpenServerSelection                        ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
@@ -195,7 +194,11 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginViewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-        }
+            is LoginViewEvents.Failure,
+            is LoginViewEvents.Loading                                    ->
+                // This is handled by the Fragments
+                Unit
+        }.exhaustive
     }
 
     private fun updateWithState(loginViewState: LoginViewState) {

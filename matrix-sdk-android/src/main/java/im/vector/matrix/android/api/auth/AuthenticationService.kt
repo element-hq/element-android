@@ -89,6 +89,7 @@ interface AuthenticationService {
      * Perform a wellknown request, using the domain from the matrixId
      */
     fun getWellKnownData(matrixId: String,
+                         homeServerConnectionConfig: HomeServerConnectionConfig?,
                          callback: MatrixCallback<WellknownResult>): Cancelable
 
     /**

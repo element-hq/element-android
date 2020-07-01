@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -51,6 +52,7 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMemberEvent
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.room.typing.TypingEventContent
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
@@ -71,7 +73,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
                                                    @UserId private val userId: String,
-                                                   private val eventBus: EventBus) {
+                                                   private val eventBus: EventBus,
+                                                   private val timelineEventDecryptor: TimelineEventDecryptor) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -162,7 +165,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
-                    syncLocalTimestampMillis
+                    syncLocalTimestampMillis,
+                    isInitialSync
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -259,7 +263,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      eventList: List<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
-                                     syncLocalTimestampMillis: Long): ChunkEntity {
+                                     syncLocalTimestampMillis: Long,
+                                     isInitialSync: Boolean): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
@@ -278,6 +283,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 continue
             }
             eventIds.add(event.eventId)
+
+            if (event.isEncrypted() && !isInitialSync) {
+                decryptIfNeeded(event, roomId)
+            }
+
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
             if (event.stateKey != null) {
@@ -295,9 +305,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
                 ContentMapper.map(rootStateEvent?.content).toModel()
             }
+
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
+
             // Try to remove local echo
             event.unsignedData?.transactionId?.also {
                 val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
@@ -322,6 +334,23 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         // posting new events to timeline if any is registered
         eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = eventIds))
         return chunkEntity
+    }
+
+    private fun decryptIfNeeded(event: Event, roomId: String) {
+        try {
+            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            event.mxDecryptionResult = OlmDecryptionResult(
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            )
+        } catch (e: MXCryptoError) {
+            if (e is MXCryptoError.Base) {
+                event.mCryptoError = e.errorType
+                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+            }
+        }
     }
 
     data class EphemeralResult(

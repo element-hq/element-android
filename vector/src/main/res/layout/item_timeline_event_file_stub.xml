@@ -12,22 +12,33 @@
         android:id="@+id/messageFilee2eIcon"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:src="@drawable/e2e_verified"
+        android:src="@drawable/ic_shield_black"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <!-- the media type -->
-    <ImageView
+    <RelativeLayout
         android:id="@+id/messageFileImageView"
-        android:layout_width="@dimen/chat_avatar_size"
-        android:layout_height="@dimen/chat_avatar_size"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/filetype_attachment" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include layout="@layout/view_file_icon" />
+    </RelativeLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/messageFileImageView"-->
+    <!--        android:layout_width="@dimen/chat_avatar_size"-->
+    <!--        android:layout_height="@dimen/chat_avatar_size"-->
+    <!--        android:layout_marginStart="4dp"-->
+    <!--        android:layout_marginLeft="4dp"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:src="@drawable/filetype_attachment" />-->
 
     <!-- the media -->
     <TextView

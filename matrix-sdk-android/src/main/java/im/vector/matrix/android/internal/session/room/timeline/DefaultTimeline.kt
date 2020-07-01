@@ -777,7 +777,8 @@ internal class DefaultTimeline(
             `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
         }
         if (settings.filterUseless) {
-            not().equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
+            not()
+                    .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
         }
         if (settings.filterEdits) {
             not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)

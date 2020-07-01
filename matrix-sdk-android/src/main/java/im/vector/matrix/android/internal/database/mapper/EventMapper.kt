@@ -45,6 +45,12 @@ internal object EventMapper {
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         eventEntity.unsignedData = uds
+
+        eventEntity.decryptionResultJson = event.mxDecryptionResult?.let {
+            MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(it)
+        }
+        eventEntity.decryptionErrorReason = event.mCryptoErrorReason
+        eventEntity.decryptionErrorCode = event.mCryptoError?.name
         return eventEntity
     }
 
@@ -85,6 +91,7 @@ internal object EventMapper {
             it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
+            it.mCryptoErrorReason = eventEntity.decryptionErrorReason
         }
     }
 }
