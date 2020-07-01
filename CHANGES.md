@@ -21,6 +21,7 @@ Bugfix 🐛:
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
  - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
 
 Translations 🗣:
  -
