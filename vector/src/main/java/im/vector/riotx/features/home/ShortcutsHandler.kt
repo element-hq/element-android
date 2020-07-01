@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home
 
 import android.content.Context
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -26,6 +27,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -51,6 +53,11 @@ class ShortcutsHandler @Inject constructor(
     }
 
     fun observeRoomsAndBuildShortcuts(): Disposable {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            // No op
+            return Observable.empty<Unit>().subscribe()
+        }
+
         return homeRoomListStore
                 .observe()
                 .distinct()
@@ -76,6 +83,25 @@ class ShortcutsHandler @Inject constructor(
                     ShortcutManagerCompat.removeAllDynamicShortcuts(context)
                     ShortcutManagerCompat.addDynamicShortcuts(context, shortcuts)
                 }
+    }
+
+    fun clearShortcuts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            // No op
+            return
+        }
+
+        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+
+        // We can only disabled pinned shortcuts with the API, but at least it will prevent the crash
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                context.getSystemService(ShortcutManager::class.java)
+                        ?.let {
+                            it.disableShortcuts(it.pinnedShortcuts.map { pinnedShortcut -> pinnedShortcut.id })
+                        }
+            }
+        }
     }
 
     // PRIVATE API *********************************************************************************
