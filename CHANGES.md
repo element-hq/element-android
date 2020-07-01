@@ -1,3 +1,27 @@
+Changes in Riot.imX 0.91.4 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
 Changes in Riot.imX 0.91.3 (2020-07-01)
 ===================================================
 
