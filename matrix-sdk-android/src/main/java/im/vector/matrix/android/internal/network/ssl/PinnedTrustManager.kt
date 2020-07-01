@@ -72,16 +72,7 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>,
     private fun checkTrusted(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
-        var found = false
-
-        for (allowedFingerprint in fingerprints) {
-            if (allowedFingerprint.matchesCert(cert)) {
-                found = true
-                break
-            }
-        }
-
-        if (!found) {
+        if (!fingerprints.any { it.matchesCert(cert) }) {
             throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), null)
         }
     }
