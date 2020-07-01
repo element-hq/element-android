@@ -5,7 +5,8 @@
         android:id="@+id/bottom_action_home"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_catchup"
-        android:title="@string/bottom_action_home" />
+        android:title="@string/bottom_action_home"
+        android:visible="false" />
 
     <item
         android:id="@+id/bottom_action_people"

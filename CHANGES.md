@@ -13,6 +13,7 @@ Improvements 🙌:
  - Update user avatar (#1054)
  - Allow self-signed certificate (#1564)
  - Improve file download and open in timeline
+ - Catchup tab is removed temporarily (#1565)
  - Render room avatar change (#1319)
 
 Bugfix 🐛:
