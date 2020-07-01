@@ -134,7 +134,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                     PERMISSIONS_FOR_WRITING_FILES,
                     this,
                     PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                    R.string.permissions_rationale_msg_keys_backup_export
+                    R.string.element_permissions_rationale_msg_keys_backup_export
             )
             if (permissionsChecked) {
                 exportRecoveryKeyToFile(recoveryKey)

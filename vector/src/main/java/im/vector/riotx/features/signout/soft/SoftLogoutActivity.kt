@@ -73,7 +73,7 @@ class SoftLogoutActivity : LoginActivity() {
 
                 // And inform the user
                 showError(getString(
-                        R.string.soft_logout_sso_not_same_user_error,
+                        R.string.element_soft_logout_sso_not_same_user_error,
                         softLogoutViewEvents.currentUserId,
                         softLogoutViewEvents.newUserId)
                 )

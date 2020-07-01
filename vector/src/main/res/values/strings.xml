@@ -2496,4 +2496,35 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="save_your_security_key_title">Save your Security Key</string>
     <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
 
+    <!-- Element (Rebranding) -->
+    <string name="element_call_failed_no_connection">Element Call Failed</string>
+    <string name="element_e2e_re_request_encryption_key_dialog_content">Please launch Element on another device that can decrypt the message so it can send the keys to this session.</string>
+    <string name="element_settings_call_ringtone_use_riot_ringtone">Use default Element ringtone for incoming calls</string>
+    <string name="element_permissions_rationale_msg_record_audio">Element needs permission to access your microphone to perform audio calls.</string>
+    <string name="element_permissions_rationale_msg_camera_and_audio">Element needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="element_settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the Element settings.</string>
+    <string name="element_settings_troubleshoot_test_play_services_failed">Element uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
+    <string name="element_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of Element and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <string name="element_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of Element. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
+    <string name="element_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of Element. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
+    <string name="element_settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for Element. This test should be run using mobile data (no WIFI).\n%1$s</string>
+    <string name="element_settings_opt_in_of_analytics_summary">Element collects anonymous analytics to allow us to improve the application.</string>
+    <string name="element_keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want Element to generate a recovery key.</string>
+    <string name="element_room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in Element"</string>
+    <string name="element_alpha_disclaimer_content_line_1">"While Element is in early development, some features may be missing and you may experience bugs."</string>
+    <string name="element_permissions_rationale_msg_keys_backup_export">Element needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
+    <string name="element_login_server_url_form_modular_notice">Enter the address of the Modular Element or Server you want to use</string>
+    <string name="element_login_server_url_form_other_notice">Enter the address of a server or a Element you want to connect to</string>
+    <string name="element_soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by Element.\nPlease first clear data, then sign in again on another account.</string>
+    <string name="element_settings_developer_mode_fail_fast_summary">Element may crash more often when an unexpected error occurs</string>
+    <string name="element_rendering_event_error_type_of_event_not_handled">"Element does not handle events of type '%1$s'"</string>
+    <string name="element_rendering_event_error_exception">"Element encountered an issue when rendering content of event with id '%1$s'"</string>
+    <string name="element_login_mobile_device_riotx">Element Android</string>
+    <string name="element_use_other_session_content_description">Use the latest Element on your other devices, Element Web, Element Desktop, Element iOS, Element for Android, or another cross-signing capable Matrix client</string>
+    <string name="element_riot_desktop_web">Element Web\nElement Desktop</string>
+    <string name="element_riot_ios_android">Element iOS\nElement for Android</string>
+    <string name="element_use_latest_riot">Use the latest Element on your other devices:</string>
+    <string name="element_identity_server_error_outdated_identity_server">This identity server is outdated. Element support only API V2.</string>
+    <string name="element_identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
+
 </resources>

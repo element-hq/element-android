@@ -39,7 +39,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="21dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/alpha_disclaimer_content_line_1"
+        android:text="@string/element_alpha_disclaimer_content_line_1"
         android:textColor="?riotx_text_primary"
         android:textSize="16sp" />
 

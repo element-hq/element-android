@@ -68,7 +68,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
                 loginServerUrlFormLearnMore.isVisible = true
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
-                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
+                loginServerUrlFormNotice.text = getString(R.string.element_login_server_url_form_modular_notice)
             }
             ServerType.Other   -> {
                 loginServerUrlFormIcon.isVisible = false
@@ -76,7 +76,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
                 loginServerUrlFormLearnMore.isVisible = false
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_other_hint)
-                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_other_notice)
+                loginServerUrlFormNotice.text = getString(R.string.element_login_server_url_form_other_notice)
             }
             else               -> error("This fragment should not be displayed in matrix.org mode")
         }
