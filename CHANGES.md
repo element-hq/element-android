@@ -1,5 +1,11 @@
-Changes in RiotX 0.23.0 (2020-XX-XX)
+Changes in Riot.imX 0.91.3 (2020-07-01)
 ===================================================
+
+Notes:
+ - This version is the third beta version of RiotX codebase published as Riot-Android on the PlayStore.
+ - Changelog below includes changes of v0.91.0, v0.91.1, and v0.91.2, because the first beta versions have been tagged and
+ published from the branch feature/migration_from_legacy.
+ - This version uses temporary name `Riot.imX`, to distinguish the app with RiotX app.
 
 Features ✨:
  - Call with WebRTC support (##611)
@@ -24,12 +30,6 @@ Bugfix 🐛:
  - Compress images before sending (#1333)
  - Searching by displayname is case sensitive (#1468)
  - Fix layout overlap issue (#1407)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
 
 Build 🧱:
  - Enable code optimization (Proguard)
