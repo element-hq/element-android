@@ -197,9 +197,9 @@ internal class DefaultSession @Inject constructor(
         eventBus.unregister(this)
     }
 
-    override fun getSyncStateLive(): LiveData<SyncState> {
-        return getSyncThread().liveState()
-    }
+    override fun getSyncStateLive() = getSyncThread().liveState()
+
+    override fun getSyncState() = getSyncThread().currentState()
 
     override fun hasAlreadySynced(): Boolean {
         return syncTokenStore.getLastToken() != null

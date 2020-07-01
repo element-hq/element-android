@@ -104,7 +104,7 @@ abstract class SyncService : Service() {
         try {
             syncTask.execute(params)
             // Start sync if we were doing an initial sync and the syncThread is not launched yet
-            if (isInitialSync && session.getSyncStateLive().value == SyncState.Idle) {
+            if (isInitialSync && session.getSyncState() == SyncState.Idle) {
                 val isForeground = !backgroundDetectionObserver.isInBackground
                 session.startSync(isForeground)
             }

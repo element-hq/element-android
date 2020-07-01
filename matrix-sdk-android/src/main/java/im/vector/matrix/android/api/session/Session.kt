@@ -128,6 +128,12 @@ interface Session :
     fun getSyncStateLive(): LiveData<SyncState>
 
     /**
+     * This method returns the current sync state.
+     * @return the current [SyncState].
+     */
+    fun getSyncState(): SyncState
+
+    /**
      * This methods return true if an initial sync has been processed
      */
     fun hasAlreadySynced(): Boolean
