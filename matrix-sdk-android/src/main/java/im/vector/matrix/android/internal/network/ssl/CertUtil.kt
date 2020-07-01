@@ -175,7 +175,7 @@ internal object CertUtil {
                 }
             }
 
-            val trustPinned = arrayOf<TrustManager>(PinnedTrustManager(hsConfig.allowedFingerprints, defaultTrustManager))
+            val trustPinned = arrayOf<TrustManager>(PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager))
 
             val sslSocketFactory: SSLSocketFactory
 

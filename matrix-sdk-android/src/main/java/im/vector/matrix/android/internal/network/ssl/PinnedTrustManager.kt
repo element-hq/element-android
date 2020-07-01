@@ -27,26 +27,23 @@ import javax.net.ssl.X509TrustManager
  */
 
 /**
- * @param fingerprints        An array of SHA256 cert fingerprints
+ * @param fingerprints        Not empty array of SHA256 cert fingerprints
  * @param defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
-internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
+internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>,
                                   private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
-
-    // Set to false to perform some test
-    private val USE_DEFAULT_TRUST_MANAGER = true
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null && USE_DEFAULT_TRUST_MANAGER) {
+            if (defaultTrustManager != null) {
                 defaultTrustManager.checkClientTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isNullOrEmpty()) {
+            if (fingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -57,13 +54,13 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (defaultTrustManager != null && USE_DEFAULT_TRUST_MANAGER) {
+            if (defaultTrustManager != null) {
                 defaultTrustManager.checkServerTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints == null || fingerprints.isEmpty()) {
+            if (fingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
@@ -76,12 +73,11 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
         val cert = chain[0]
 
         var found = false
-        if (fingerprints != null) {
-            for (allowedFingerprint in fingerprints) {
-                if (allowedFingerprint.matchesCert(cert)) {
-                    found = true
-                    break
-                }
+
+        for (allowedFingerprint in fingerprints) {
+            if (allowedFingerprint.matchesCert(cert)) {
+                found = true
+                break
             }
         }
 
@@ -91,6 +87,6 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> {
-        return emptyArray()
+        return defaultTrustManager?.acceptedIssuers ?: emptyArray()
     }
 }
