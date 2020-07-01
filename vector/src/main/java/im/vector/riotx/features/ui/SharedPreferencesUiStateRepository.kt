@@ -36,7 +36,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(private val sharedP
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
             VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
-            else                      -> RoomListDisplayMode.HOME
+            else                      -> RoomListDisplayMode.PEOPLE // RoomListDisplayMode.HOME
         }
     }
 
