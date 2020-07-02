@@ -176,7 +176,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                     }
                 }
 
-        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper2
+        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper
         realm.schema.get("OlmInboundGroupSessionEntity")
                 ?.transform { obj ->
                     try {
