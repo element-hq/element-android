@@ -185,6 +185,25 @@
     <color name="riotx_room_active_widgets_banner_text_dark">#E3E8F0</color>
     <color name="riotx_room_active_widgets_banner_text_black">#E3E8F0</color>
 
+    <attr name="riotx_bottom_nav_background_color" format="color" />
+    <color name="riotx_bottom_nav_background_color_light">#FFF3F8FD</color>
+    <color name="riotx_bottom_nav_background_color_dark">@color/primary_color_dark</color>
+    <color name="riotx_bottom_nav_background_color_black">@color/primary_color_black</color>
+    <color name="riotx_bottom_nav_background_color_status">@color/riot_primary_background_color_status</color>
+
+    <attr name="riotx_bottom_nav_background_border_color" format="color" />
+    <color name="riotx_bottom_nav_background_border_color_light">##AAAAAAAA</color>
+    <color name="riotx_bottom_nav_background_border_color_dark">#55555555</color>
+    <color name="riotx_bottom_nav_background_border_color_black">#FF15171b</color>
+    <color name="riotx_bottom_nav_background_border_color_status">FFE9EDF1</color>
+
+    <attr name="riotx_waiting_background_color" format="color" />
+    <color name="riotx_waiting_background_color_light">#FFE9EDF1</color>
+    <color name="riotx_waiting_background_color_dark">#FF15171b</color>
+    <color name="riotx_waiting_background_color_status">#AAAAAAAA</color>
+
+
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>
