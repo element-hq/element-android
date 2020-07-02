@@ -18,6 +18,8 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Fix lint false-positive about WorkManger (#1012)
+ - Upgrade build-tools from 3.5.3 to 3.6.6
+ - Upgrade gradle from 5.4.1 to 5.6.4
 
 Other changes:
  -
