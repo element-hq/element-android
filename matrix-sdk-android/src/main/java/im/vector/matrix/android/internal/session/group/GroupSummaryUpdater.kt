@@ -43,7 +43,8 @@ internal class GroupSummaryUpdater @Inject constructor(
 
     override val query = Monarchy.Query { GroupEntity.where(it) }
 
-    override fun onChange(results: RealmResults<GroupEntity>, changeSet: OrderedCollectionChangeSet) {
+    override fun onChange(results: RealmResults<GroupEntity>) {
+        /*
         // `insertions` for new groups and `changes` to handle left groups
         val modifiedGroupEntity = (changeSet.insertions + changeSet.changes)
                 .asSequence()
@@ -63,6 +64,7 @@ internal class GroupSummaryUpdater @Inject constructor(
                         deleteGroups(it)
                     }
                 }
+         */
     }
 
     private fun fetchGroupsData(groupIds: List<String>) {

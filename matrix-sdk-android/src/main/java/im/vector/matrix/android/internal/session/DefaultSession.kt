@@ -166,6 +166,7 @@ internal class DefaultSession @Inject constructor(
         }
         eventBus.register(this)
         timelineEventDecryptor.start()
+
         taskExecutor.executorScope.launch(Dispatchers.Default) {
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
@@ -176,9 +177,9 @@ internal class DefaultSession @Inject constructor(
                 if (numberOfTimelineEvents < 30_000L) {
                     Timber.v("Db is low enough")
                 } else {
-
                     val hugeChunks = realm.where(ChunkEntity::class.java).greaterThan(ChunkEntityFields.NUMBER_OF_TIMELINE_EVENTS, 250).findAll()
                     Timber.v("There are ${hugeChunks.size} chunks to clean")
+                    /*
                     for (chunk in hugeChunks) {
                         val maxDisplayIndex = chunk.nextDisplayIndex(PaginationDirection.FORWARDS)
                         val thresholdDisplayIndex = maxDisplayIndex - 250
@@ -203,8 +204,9 @@ internal class DefaultSession @Inject constructor(
                             it.deleteFromRealm()
                         }
                     }
-                }
 
+                     */
+                }
             }
         }
     }

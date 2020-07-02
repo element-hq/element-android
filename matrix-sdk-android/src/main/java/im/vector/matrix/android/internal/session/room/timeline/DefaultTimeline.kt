@@ -174,24 +174,13 @@ internal class DefaultTimeline(
                 backgroundRealm.set(realm)
 
                 roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                roomEntity?.sendingTimelineEvents?.addChangeListener { events ->
-                    // Remove in memory as soon as they are known by database
-                    events.forEach { te ->
-                        inMemorySendingEvents.removeAll { te.eventId == it.eventId }
-                    }
-                    postSnapshot()
-                }
-
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
                 handleInitialLoad()
-                nonFilteredEvents.addChangeListener(eventsChangeListener)
-
                 eventRelations = EventAnnotationsSummaryEntity.whereInRoom(realm, roomId)
                         .findAllAsync()
-                        .also { it.addChangeListener(relationsListener) }
 
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)

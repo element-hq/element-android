@@ -18,16 +18,25 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.EventInsertEntity
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
 internal fun EventEntity.copyToRealmOrIgnore(realm: Realm): EventEntity {
-    return realm.where<EventEntity>()
-        .equalTo(EventEntityFields.EVENT_ID, eventId)
-        .equalTo(EventEntityFields.ROOM_ID, roomId)
-        .findFirst() ?: realm.copyToRealm(this)
+    val eventEntity = realm.where<EventEntity>()
+            .equalTo(EventEntityFields.EVENT_ID, eventId)
+            .equalTo(EventEntityFields.ROOM_ID, roomId)
+            .findFirst()
+    return if (eventEntity == null) {
+        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type)
+        realm.insert(insertEntity)
+        // copy this event entity and return it
+        realm.copyToRealm(this)
+    } else {
+        eventEntity
+    }
 }
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {

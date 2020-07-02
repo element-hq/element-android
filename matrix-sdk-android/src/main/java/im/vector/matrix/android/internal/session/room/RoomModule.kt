@@ -44,8 +44,6 @@ import im.vector.matrix.android.internal.session.room.membership.joining.InviteT
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
-import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
-import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
 import im.vector.matrix.android.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
@@ -130,9 +128,6 @@ internal abstract class RoomModule {
     abstract fun bindFileService(service: DefaultFileService): FileService
 
     @Binds
-    abstract fun bindEventRelationsAggregationTask(task: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
-
-    @Binds
     abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
 
     @Binds
@@ -155,9 +150,6 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask
-
-    @Binds
-    abstract fun bindPruneEventTask(task: DefaultPruneEventTask): PruneEventTask
 
     @Binds
     abstract fun bindSetReadMarkersTask(task: DefaultSetReadMarkersTask): SetReadMarkersTask

@@ -42,6 +42,4 @@ internal abstract class CallModule {
     @Binds
     abstract fun bindGetTurnServerTask(task: DefaultGetTurnServerTask): GetTurnServerTask
 
-    @Binds
-    abstract fun bindCallEventsObserverTask(task: DefaultCallEventsObserverTask): CallEventsObserverTask
 }
