@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix Exception when importing keys (#1576)
 
 Translations 🗣:
  -
