@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Fix lint false-positive about WorkManger (#1012)
 
 Other changes:
  -

@@ -247,6 +247,12 @@
 
         <!-- Providers -->
 
+        <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
