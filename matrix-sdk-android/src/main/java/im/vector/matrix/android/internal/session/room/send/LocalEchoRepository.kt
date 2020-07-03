@@ -48,7 +48,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                                                        private val eventBus: EventBus,
                                                        private val timelineEventMapper: TimelineEventMapper) {
 
-    suspend fun createLocalEcho(event: Event) {
+    fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
         val senderId = event.senderId ?: throw IllegalStateException("You should have set a senderIf for your event")
         if (event.eventId == null) {
@@ -70,8 +70,8 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
-        monarchy.awaitTransaction { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
+        monarchy.writeAsync { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@writeAsync
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.update(realm, roomId)
         }
