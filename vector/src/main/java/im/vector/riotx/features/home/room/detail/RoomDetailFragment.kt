@@ -22,6 +22,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
@@ -222,6 +223,7 @@ class RoomDetailFragment @Inject constructor(
 
         private const val AUDIO_CALL_PERMISSION_REQUEST_CODE = 1
         private const val VIDEO_CALL_PERMISSION_REQUEST_CODE = 2
+        private const val SAVE_ATTACHEMENT_REQUEST_CODE = 3
 
         /**
          * Sanitize the display name.
@@ -1194,17 +1196,12 @@ class RoomDetailFragment @Inject constructor(
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             when (requestCode) {
-//                PERMISSION_REQUEST_CODE_DOWNLOAD_FILE   -> {
-//                    val action = roomDetailViewModel.pendingAction
-//                    if (action != null) {
-//                        (action as? RoomDetailAction.DownloadFile)
-//                                ?.messageFileContent
-//                                ?.getFileName()
-//                                ?.let { showSnackWithMessage(getString(R.string.downloading_file, it)) }
-//                        roomDetailViewModel.pendingAction = null
-//                        roomDetailViewModel.handle(action)
-//                    }
-//                }
+                SAVE_ATTACHEMENT_REQUEST_CODE -> {
+                    sharedActionViewModel.pendingAction?.let {
+                        handleActions(it)
+                        sharedActionViewModel.pendingAction = null
+                    }
+                }
                 PERMISSION_REQUEST_CODE_INCOMING_URI    -> {
                     val pendingUri = roomDetailViewModel.pendingUri
                     if (pendingUri != null) {
@@ -1357,6 +1354,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, SAVE_ATTACHEMENT_REQUEST_CODE)) {
+            sharedActionViewModel.pendingAction = action
+            return
+        }
         session.fileService().downloadFile(
                 downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 id = action.eventId,

@@ -10,6 +10,8 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix crash when coming from a notification (#1601)
  - Fix Exception when importing keys (#1576)
+ - File isn't downloaded when another file with the same name already exists (#1578)
+ - saved images don't show up in gallery (#1324)
 
 Translations 🗣:
  -
