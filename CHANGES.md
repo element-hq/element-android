@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix crash when coming from a notification (#1601)
  - Fix Exception when importing keys (#1576)
+ - Fix reply fallback leaking sender locale (#429)
 
 Translations 🗣:
  -
