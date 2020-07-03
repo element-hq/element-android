@@ -175,7 +175,7 @@ internal object CertUtil {
                 }
             }
 
-            val trustPinned = arrayOf<TrustManager>(PinnedTrustManager(hsConfig.allowedFingerprints, defaultTrustManager))
+            val trustPinned = arrayOf<TrustManager>(PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager))
 
             val sslSocketFactory: SSLSocketFactory
 
@@ -239,12 +239,12 @@ internal object CertUtil {
     fun newConnectionSpecs(hsConfig: HomeServerConnectionConfig): List<ConnectionSpec> {
         val builder = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
         val tlsVersions = hsConfig.tlsVersions
-        if (null != tlsVersions) {
+        if (null != tlsVersions && tlsVersions.isNotEmpty()) {
             builder.tlsVersions(*tlsVersions.toTypedArray())
         }
 
         val tlsCipherSuites = hsConfig.tlsCipherSuites
-        if (null != tlsCipherSuites) {
+        if (null != tlsCipherSuites && tlsCipherSuites.isNotEmpty()) {
             builder.cipherSuites(*tlsCipherSuites.toTypedArray())
         }
 
@@ -252,7 +252,8 @@ internal object CertUtil {
         builder.supportsTlsExtensions(hsConfig.shouldAcceptTlsExtensions)
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
-        if (hsConfig.allowHttpExtension) {
+        // TODO: we should display a warning if user enter an http url
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list

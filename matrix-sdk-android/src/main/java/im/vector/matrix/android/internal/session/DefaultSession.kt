@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -45,7 +44,6 @@ import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
@@ -254,9 +252,9 @@ internal class DefaultSession @Inject constructor(
         eventBus.unregister(this)
     }
 
-    override fun getSyncStateLive(): LiveData<SyncState> {
-        return getSyncThread().liveState()
-    }
+    override fun getSyncStateLive() = getSyncThread().liveState()
+
+    override fun getSyncState() = getSyncThread().currentState()
 
     override fun hasAlreadySynced(): Boolean {
         return syncTokenStore.getLastToken() != null

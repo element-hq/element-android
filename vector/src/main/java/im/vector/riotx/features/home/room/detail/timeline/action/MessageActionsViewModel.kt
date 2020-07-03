@@ -179,6 +179,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
+            EventType.STATE_ROOM_AVATAR,
             EventType.STATE_ROOM_MEMBER,
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,

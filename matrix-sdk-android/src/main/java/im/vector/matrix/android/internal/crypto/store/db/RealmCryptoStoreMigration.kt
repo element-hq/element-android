@@ -176,13 +176,14 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                     }
                 }
 
-        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper2
+        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper
         realm.schema.get("OlmInboundGroupSessionEntity")
                 ?.transform { obj ->
                     try {
                         val oldSerializedData = obj.getString("olmInboundGroupSessionData")
                         deserializeFromRealm<MXOlmInboundGroupSession2>(oldSerializedData)?.let { mxOlmInboundGroupSession2 ->
-                            val newOlmInboundGroupSessionWrapper2 = OlmInboundGroupSessionWrapper2()
+                            val sessionKey = mxOlmInboundGroupSession2.mSession.sessionIdentifier()
+                            val newOlmInboundGroupSessionWrapper = OlmInboundGroupSessionWrapper(sessionKey, false)
                                     .apply {
                                         olmInboundGroupSession = mxOlmInboundGroupSession2.mSession
                                         roomId = mxOlmInboundGroupSession2.mRoomId
@@ -191,7 +192,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                                         forwardingCurve25519KeyChain = mxOlmInboundGroupSession2.mForwardingCurve25519KeyChain
                                     }
 
-                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper2))
+                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper))
                         }
                     } catch (e: Exception) {
                         Timber.e(e, "Error")

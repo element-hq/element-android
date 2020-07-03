@@ -1,5 +1,36 @@
-Changes in RiotX 0.23.0 (2020-XX-XX)
+Changes in Riot.imX 0.91.4 (2020-XX-XX)
 ===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ - Fix crash when coming from a notification (#1601)
+ - Fix Exception when importing keys (#1576)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
+Changes in Riot.imX 0.91.3 (2020-07-01)
+===================================================
+
+Notes:
+ - This version is the third beta version of RiotX codebase published as Riot-Android on the PlayStore.
+ - Changelog below includes changes of v0.91.0, v0.91.1, and v0.91.2, because the first beta versions have been tagged and
+ published from the branch feature/migration_from_legacy.
+ - This version uses temporary name `Riot.imX`, to distinguish the app with RiotX app.
 
 Features ✨:
  - Call with WebRTC support (##611)
@@ -13,6 +44,8 @@ Improvements 🙌:
  - Update user avatar (#1054)
  - Allow self-signed certificate (#1564)
  - Improve file download and open in timeline
+ - Catchup tab is removed temporarily (#1565)
+ - Render room avatar change (#1319)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
@@ -21,12 +54,7 @@ Bugfix 🐛:
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
  - Searching by displayname is case sensitive (#1468)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
+ - Fix layout overlap issue (#1407)
 
 Build 🧱:
  - Enable code optimization (Proguard)
