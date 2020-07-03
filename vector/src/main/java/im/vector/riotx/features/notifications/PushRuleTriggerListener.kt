@@ -30,17 +30,17 @@ class PushRuleTriggerListener @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager
 ) : PushRuleService.PushRuleListener {
 
-    var session: Session? = null
+    private var session: Session? = null
 
     override fun onMatchRule(event: Event, actions: List<Action>) {
         Timber.v("Push rule match for event ${event.eventId}")
-        if (session == null) {
+        val safeSession = session ?: return Unit.also {
             Timber.e("Called without active session")
-            return
         }
+
         val notificationAction = actions.toNotificationAction()
         if (notificationAction.shouldNotify) {
-            val notifiableEvent = resolver.resolveEvent(event, session!!)
+            val notifiableEvent = resolver.resolveEvent(event, safeSession)
             if (notifiableEvent == null) {
                 Timber.v("## Failed to resolve event")
                 // TODO
