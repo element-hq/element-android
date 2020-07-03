@@ -667,8 +667,11 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
-        session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+        session.configureAndStart(
+                applicationContext,
+                pushRuleTriggerListener,
+                webRtcPeerConnectionManager,
+                sessionListener)
         setState {
             copy(
                     asyncLoginAction = Success(Unit)

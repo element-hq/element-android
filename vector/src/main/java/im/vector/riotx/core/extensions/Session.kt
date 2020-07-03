@@ -24,12 +24,14 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotx.core.services.VectorSyncService
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
 fun Session.configureAndStart(context: Context,
                               pushRuleTriggerListener: PushRuleTriggerListener,
+                              webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
                               sessionListener: SessionListener) {
     open()
     addListener(sessionListener)
@@ -38,6 +40,7 @@ fun Session.configureAndStart(context: Context,
     startSyncing(context)
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
+    callSignalingService().addCallListener(webRtcPeerConnectionManager)
 }
 
 fun Session.startSyncing(context: Context) {
