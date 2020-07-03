@@ -28,38 +28,48 @@ import im.vector.matrix.android.internal.util.awaitTransaction
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal interface FetchNextTokenAndPaginateTask : Task<FetchNextTokenAndPaginateTask.Params, TokenChunkEventPersistor.Result> {
+internal interface FetchTokenAndPaginateTask : Task<FetchTokenAndPaginateTask.Params, TokenChunkEventPersistor.Result> {
 
     data class Params(
             val roomId: String,
             val lastKnownEventId: String,
+            val direction: PaginationDirection,
             val limit: Int
     )
 }
 
-internal class DefaultFetchNextTokenAndPaginateTask @Inject constructor(
+internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val filterRepository: FilterRepository,
         private val paginationTask: PaginationTask,
         private val eventBus: EventBus
-) : FetchNextTokenAndPaginateTask {
+) : FetchTokenAndPaginateTask {
 
-    override suspend fun execute(params: FetchNextTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
+    override suspend fun execute(params: FetchTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
         val response = executeRequest<EventContextResponse>(eventBus) {
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
         }
-        if (response.end == null) {
-            throw IllegalStateException("No next token found")
+        val fromToken = if (params.direction == PaginationDirection.FORWARDS) {
+            response.end
+        } else {
+            response.start
         }
-        monarchy.awaitTransaction {
-            ChunkEntity.findIncludingEvent(it, params.lastKnownEventId)?.nextToken = response.end
+                ?: throw IllegalStateException("No token found")
+
+        monarchy.awaitTransaction { realm ->
+            val chunkToUpdate = ChunkEntity.findIncludingEvent(realm, params.lastKnownEventId)
+            if (params.direction == PaginationDirection.FORWARDS) {
+                chunkToUpdate?.nextToken = fromToken
+            } else {
+                chunkToUpdate?.prevToken = fromToken
+            }
         }
         val paginationParams = PaginationTask.Params(
                 roomId = params.roomId,
-                from = response.end,
-                direction = PaginationDirection.FORWARDS,
+                from = fromToken,
+                direction = params.direction,
                 limit = params.limit
         )
         return paginationTask.execute(paginationParams)

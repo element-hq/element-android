@@ -164,49 +164,6 @@ internal class DefaultSession @Inject constructor(
         }
         eventBus.register(this)
         timelineEventDecryptor.start()
-
-        taskExecutor.executorScope.launch(Dispatchers.Default) {
-            awaitTransaction(realmConfiguration) { realm ->
-                val allRooms = realm.where(RoomEntity::class.java).findAll()
-                val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
-                val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
-                Timber.v("Number of events in db: $numberOfEvents | Number of timeline events in db: $numberOfTimelineEvents")
-                Timber.v("Number of rooms in db: ${allRooms.size}")
-                if (numberOfTimelineEvents < 30_000L) {
-                    Timber.v("Db is low enough")
-                } else {
-                    val hugeChunks = realm.where(ChunkEntity::class.java).greaterThan(ChunkEntityFields.NUMBER_OF_TIMELINE_EVENTS, 250).findAll()
-                    Timber.v("There are ${hugeChunks.size} chunks to clean")
-                    /*
-                    for (chunk in hugeChunks) {
-                        val maxDisplayIndex = chunk.nextDisplayIndex(PaginationDirection.FORWARDS)
-                        val thresholdDisplayIndex = maxDisplayIndex - 250
-                        val eventsToRemove = chunk.timelineEvents.where().lessThan(TimelineEventEntityFields.DISPLAY_INDEX, thresholdDisplayIndex).findAll()
-                        Timber.v("There are ${eventsToRemove.size} events to clean in chunk: ${chunk.identifier()} from room ${chunk.room?.first()?.roomId}")
-                        chunk.numberOfTimelineEvents = chunk.numberOfTimelineEvents - eventsToRemove.size
-                        eventsToRemove.forEach {
-                            val canDeleteRoot = it.root?.stateKey == null
-                            if (canDeleteRoot) {
-                                it.root?.deleteFromRealm()
-                            }
-                            it.readReceipts?.readReceipts?.deleteAllFromRealm()
-                            it.readReceipts?.deleteFromRealm()
-                            it.annotations?.apply {
-                                editSummary?.deleteFromRealm()
-                                pollResponseSummary?.deleteFromRealm()
-                                referencesSummaryEntity?.deleteFromRealm()
-                                reactionsSummary.deleteAllFromRealm()
-                            }
-                            it.annotations?.deleteFromRealm()
-                            it.readReceipts?.deleteFromRealm()
-                            it.deleteFromRealm()
-                        }
-                    }
-
-                     */
-                }
-            }
-        }
     }
 
     override fun requireBackgroundSync() {

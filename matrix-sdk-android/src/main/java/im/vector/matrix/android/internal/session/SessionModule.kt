@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageProcessor
+import im.vector.matrix.android.internal.database.DatabaseCleaner
 import im.vector.matrix.android.internal.database.EventInsertLiveObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
@@ -339,6 +340,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindDatabaseCleaner(observer: DatabaseCleaner): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService

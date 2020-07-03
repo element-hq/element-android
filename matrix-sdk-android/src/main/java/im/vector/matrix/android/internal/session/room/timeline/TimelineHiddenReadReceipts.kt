@@ -125,7 +125,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
                 .isNotEmpty(ReadReceiptsSummaryEntityFields.READ_RECEIPTS.`$`)
                 .filterReceiptsWithSettings()
                 .findAllAsync()
-                //.also { it.addChangeListener(hiddenReadReceiptsListener) }
+                .also { it.addChangeListener(hiddenReadReceiptsListener) }
     }
 
     /**

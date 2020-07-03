@@ -62,10 +62,10 @@ import im.vector.matrix.android.internal.session.room.tags.AddTagToRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DefaultAddTagToRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DefaultDeleteTagFromRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DeleteTagFromRoomTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchNextTokenAndPaginateTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.FetchNextTokenAndPaginateTask
+import im.vector.matrix.android.internal.session.room.timeline.FetchTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
@@ -176,7 +176,7 @@ internal abstract class RoomModule {
     abstract fun bindPaginationTask(task: DefaultPaginationTask): PaginationTask
 
     @Binds
-    abstract fun bindFetchNextTokenAndPaginateTask(task: DefaultFetchNextTokenAndPaginateTask): FetchNextTokenAndPaginateTask
+    abstract fun bindFetchNextTokenAndPaginateTask(task: DefaultFetchTokenAndPaginateTask): FetchTokenAndPaginateTask
 
     @Binds
     abstract fun bindFetchEditHistoryTask(task: DefaultFetchEditHistoryTask): FetchEditHistoryTask
