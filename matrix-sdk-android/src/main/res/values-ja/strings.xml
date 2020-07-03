@@ -56,8 +56,6 @@
     <string name="notice_crypto_unable_to_decrypt">** 解読できません: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
 
-    <string name="message_reply_to_prefix">に返信</string>
-
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
 
@@ -72,10 +70,5 @@
 
     <string name="medium_email">メールアドレス</string>
     <string name="medium_phone_number">電話番号</string>
-
-    <string name="reply_to_an_image">画像を送信しました。</string>
-    <string name="reply_to_a_video">動画を送りました。</string>
-    <string name="reply_to_an_audio_file">音声ファイルを送信しました。</string>
-    <string name="reply_to_a_file">ファイルを送信しました。</string>
 
 </resources>

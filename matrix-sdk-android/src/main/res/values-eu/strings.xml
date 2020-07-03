@@ -63,13 +63,6 @@
 
     <string name="summary_user_sent_sticker">%1$s erabiltzaileak eranskailu bat bidali du.</string>
 
-    <string name="message_reply_to_prefix">Honi erantzunez</string>
-
-    <string name="reply_to_an_image">irudi bat bidali du.</string>
-    <string name="reply_to_a_video">bideo bat bidali du.</string>
-    <string name="reply_to_an_audio_file">audio fitxategi bat bidali du.</string>
-    <string name="reply_to_a_file">fitxategi bat bidali du.</string>
-
     <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
     <string name="room_displayname_room_invite">Gela gonbidapena</string>
     <string name="room_displayname_two_members">%1$s eta %2$s</string>
