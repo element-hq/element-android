@@ -32,8 +32,6 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import com.github.piasy.biv.BigImageViewer
-import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
@@ -108,7 +106,6 @@ class VectorApplication :
         logInfo()
         LazyThreeTen.init(this)
 
-        BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))

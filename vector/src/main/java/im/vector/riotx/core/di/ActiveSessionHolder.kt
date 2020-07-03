@@ -37,7 +37,8 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
                                               private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
                                               private val pushRuleTriggerListener: PushRuleTriggerListener,
-                                              private val sessionListener: SessionListener
+                                              private val sessionListener: SessionListener,
+                                              private val imageManager: ImageManager
 ) {
 
     private var activeSession: AtomicReference<Session?> = AtomicReference()
@@ -52,6 +53,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
         session.addListener(sessionListener)
         pushRuleTriggerListener.startWithSession(session)
         session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+        imageManager.onSessionStarted(session)
     }
 
     fun clearActiveSession() {
