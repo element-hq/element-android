@@ -49,8 +49,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Fekk ikkje til å dekryptera: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Avsendareiningi hev ikkje sendt oss nyklane fyr denna meldingi.</string>
 
-    <string name="message_reply_to_prefix">Som svar til</string>
-
     <string name="could_not_redact">Kunde ikkje gjera um</string>
     <string name="unable_to_send_message">Fekk ikkje å senda meldingi</string>
 
@@ -63,11 +61,6 @@
 
     <string name="medium_email">Epostadresse</string>
     <string name="medium_phone_number">Telefonnummer</string>
-
-    <string name="reply_to_an_image">sende eit bilæte.</string>
-    <string name="reply_to_a_video">sende ein video.</string>
-    <string name="reply_to_an_audio_file">sende ei ljodfil.</string>
-    <string name="reply_to_a_file">sende ei fil.</string>
 
     <string name="room_displayname_invite_from">Innbjoding frå %s</string>
     <string name="room_displayname_room_invite">Rominnbjoding</string>

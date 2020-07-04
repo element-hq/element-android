@@ -50,8 +50,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Kun nie ountsleuteln: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo da bericht hier gesteurd.</string>
 
-    <string name="message_reply_to_prefix">Als antwoord ip</string>
-
     <string name="could_not_redact">Kosteg nie verwyderd wordn</string>
     <string name="unable_to_send_message">Kosteg ’t bericht nie verzendn</string>
 
@@ -66,11 +64,6 @@
 
     <string name="medium_email">E-mailadresse</string>
     <string name="medium_phone_number">Telefongnumero</string>
-
-    <string name="reply_to_an_image">èt e fotootje gesteurd.</string>
-    <string name="reply_to_a_video">èt e filmtje gesteurd.</string>
-    <string name="reply_to_an_audio_file">èt e geluudsfragment gesteurd.</string>
-    <string name="reply_to_a_file">èt e bestand gesteurd.</string>
 
     <string name="room_displayname_invite_from">Uutnodigienge van %s</string>
     <string name="room_displayname_room_invite">Gespreksuutnodigienge</string>

@@ -70,13 +70,6 @@
 
     <string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
 
-    <string name="message_reply_to_prefix">Vastauksena käyttäjälle</string>
-
-    <string name="reply_to_an_image">oli lähettänyt kuvan.</string>
-    <string name="reply_to_a_video">lähetti videon.</string>
-    <string name="reply_to_an_audio_file">lähetti äänitiedoston.</string>
-    <string name="reply_to_a_file">lähetti tiedoston.</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s ja yksi muu</item>
         <item quantity="other">%1$s ja %2$d muuta</item>
