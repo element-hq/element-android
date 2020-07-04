@@ -17,8 +17,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Ne eblas malĉifri: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">La aparato de la sendanto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
 
-    <string name="message_reply_to_prefix">Responde al</string>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_display_name_set">%1$s ŝanĝis sian vidigan nomon al %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ŝanĝis sian vidigan nomon de %2$s al %3$s</string>
@@ -61,11 +59,6 @@
 
     <string name="medium_email">Retpoŝtadreso</string>
     <string name="medium_phone_number">Telefonnumero</string>
-
-    <string name="reply_to_an_image">sendis bildon.</string>
-    <string name="reply_to_a_video">sendis filmon.</string>
-    <string name="reply_to_an_audio_file">sendis sondosieron.</string>
-    <string name="reply_to_a_file">sendis dosieron.</string>
 
     <string name="room_displayname_invite_from">Invito de %s</string>
     <string name="room_displayname_room_invite">Ĉambra invito</string>

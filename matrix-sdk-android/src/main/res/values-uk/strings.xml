@@ -56,8 +56,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Неможливо розшифрувати: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Пристрій відправника не надіслав нам ключ для цього повідомлення.</string>
 
-    <string name="message_reply_to_prefix">У відповідь на</string>
-
     <string name="could_not_redact">Неможливо відредагувати</string>
     <string name="unable_to_send_message">Не вдалося надіслати повідомлення</string>
 
@@ -70,11 +68,6 @@
 
     <string name="medium_email">Адреса електронної пошти</string>
     <string name="medium_phone_number">Номер телефону</string>
-
-    <string name="reply_to_an_image">надіслав зображення.</string>
-    <string name="reply_to_a_video">надіслав відео.</string>
-    <string name="reply_to_an_audio_file">надіслав аудіо файл.</string>
-    <string name="reply_to_a_file">надіслав файл.</string>
 
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s та 1 інший</item>

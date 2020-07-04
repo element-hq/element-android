@@ -52,8 +52,6 @@
     <string name="notice_crypto_unable_to_decrypt">** 암호를 복호화할 수 없음: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">발신인의 기기에서 이 메시지의 키를 보내지 않았습니다.</string>
 
-    <string name="message_reply_to_prefix">관련 대화</string>
-
     <string name="could_not_redact">검열할 수 없습니다</string>
     <string name="unable_to_send_message">메시지를 보낼 수 없습니다</string>
 
@@ -68,11 +66,6 @@
 
     <string name="medium_email">이메일 주소</string>
     <string name="medium_phone_number">전화번호</string>
-
-    <string name="reply_to_an_image">사진을 보냈습니다.</string>
-    <string name="reply_to_a_video">동영상을 보냈습니다.</string>
-    <string name="reply_to_an_audio_file">오디오 파일을 보냈습니다.</string>
-    <string name="reply_to_a_file">파일을 보냈습니다.</string>
 
     <string name="room_displayname_invite_from">%s에서 초대함</string>
     <string name="room_displayname_room_invite">방 초대</string>
