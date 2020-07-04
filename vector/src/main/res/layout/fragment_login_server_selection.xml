@@ -188,35 +188,23 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/login_continue"
                 android:transitionName="loginSubmitTransition"
-                app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdNotice"
+                app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdSubmit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
-
-            <TextView
-                android:id="@+id/loginServerIKnowMyIdNotice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="start"
-                android:text="@string/login_connect_using_matrix_id_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerSubmit" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginServerIKnowMyIdSubmit"
                 style="@style/Style.Vector.Login.Button.Text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
                 android:text="@string/login_connect_using_matrix_id_submit"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerIKnowMyIdNotice" />
+                app:layout_constraintTop_toBottomOf="@+id/loginServerSubmit" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

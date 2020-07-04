@@ -54,6 +54,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
     private var isSignupMode = false
+
     // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
@@ -138,6 +139,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             loginServerIcon.isVisible = false
             loginTitle.text = getString(R.string.login_signin_matrix_id_title)
             loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
+            loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown            -> error("developer error")
@@ -165,6 +167,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                     loginNotice.text = getString(R.string.login_server_other_text)
                 }
             }
+            loginPasswordNotice.isVisible = false
         }
     }
 

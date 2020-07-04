@@ -2,7 +2,7 @@ Changes in Riot.imX 0.91.4 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Re-activate Wellknown support with updated UI (#1614)
 
 Improvements 🙌:
  -
