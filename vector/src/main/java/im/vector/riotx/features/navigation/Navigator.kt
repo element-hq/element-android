@@ -91,7 +91,7 @@ interface Navigator {
 
     fun openRoomWidget(context: Context, roomId: String, widget: Widget)
 
-    fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
+    fun openImageViewer(activity: Activity, roomId: String?, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)
 }

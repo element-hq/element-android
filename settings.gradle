@@ -1,2 +1,2 @@
-include ':vector', ':matrix-sdk-android', ':matrix-sdk-android-rx', ':diff-match-patch'
+include ':vector', ':matrix-sdk-android', ':matrix-sdk-android-rx', ':diff-match-patch', ':attachment-viewer'
 include ':multipicker'

@@ -1171,7 +1171,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        navigator.openImageViewer(requireActivity(), mediaData, view) { pairs ->
+        navigator.openImageViewer(requireActivity(), roomDetailArgs.roomId, mediaData, view) { pairs ->
             pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
             pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }

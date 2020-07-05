@@ -26,6 +26,7 @@ import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
 import dagger.Lazy
 import im.vector.riotx.R
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
@@ -83,7 +84,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                 setLightStatusBar()
             }
         }
-        if (currentAlerter?.shouldBeDisplayedIn?.invoke(activity) == false) {
+        if (currentAlerter?.shouldBeDisplayedIn?.invoke(activity) == false || activity !is VectorBaseActivity) {
             return
         }
 

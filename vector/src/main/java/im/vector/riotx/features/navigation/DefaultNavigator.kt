@@ -49,11 +49,7 @@ import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
-import im.vector.riotx.features.media.BigImageViewerActivity
-import im.vector.riotx.features.media.ImageContentRenderer
-import im.vector.riotx.features.media.ImageMediaViewerActivity
-import im.vector.riotx.features.media.VideoContentRenderer
-import im.vector.riotx.features.media.VideoMediaViewerActivity
+import im.vector.riotx.features.media.*
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -89,7 +85,8 @@ class DefaultNavigator @Inject constructor(
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId) ?: return
+        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
+                ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
@@ -216,7 +213,8 @@ class DefaultNavigator @Inject constructor(
                 ?.let { avatarUrl ->
                     val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
+                                ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
@@ -244,22 +242,38 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
-    override fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
-        val pairs = ArrayList<Pair<View, String>>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+    override fun openImageViewer(activity: Activity, roomId: String?, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+        VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
+            val pairs = ArrayList<Pair<View, String>>()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                    pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+                }
+                activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                    pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+                }
             }
-            activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-            }
-        }
-        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-        options?.invoke(pairs)
+            pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+            options?.invoke(pairs)
 
-        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
-        activity.startActivity(intent, bundle)
+            val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
+            activity.startActivity(intent, bundle)
+        }
+//        val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
+//        val pairs = ArrayList<Pair<View, String>>()
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+//                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+//            }
+//            activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+//                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+//            }
+//        }
+//        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+//        options?.invoke(pairs)
+//
+//        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
+//        activity.startActivity(intent, bundle)
     }
 
     override fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data) {
