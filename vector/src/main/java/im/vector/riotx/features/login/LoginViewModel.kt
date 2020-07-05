@@ -436,7 +436,6 @@ class LoginViewModel @AssistedInject constructor(
                 }
 
                 override fun onFailure(failure: Throwable) {
-                    // TODO Handled JobCancellationException
                     setState {
                         copy(
                                 asyncResetPassword = Fail(failure)
@@ -478,7 +477,6 @@ class LoginViewModel @AssistedInject constructor(
                 }
 
                 override fun onFailure(failure: Throwable) {
-                    // TODO Handled JobCancellationException
                     setState {
                         copy(
                                 asyncResetMailConfirmed = Fail(failure)
@@ -593,7 +591,6 @@ class LoginViewModel @AssistedInject constructor(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            // TODO Handled JobCancellationException
                             setState {
                                 copy(
                                         asyncLoginAction = Fail(failure)
