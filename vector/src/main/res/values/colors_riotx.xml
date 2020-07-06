@@ -4,8 +4,8 @@
     <!-- Source: https://zpl.io/aBKw9Mk -->
 
     <!-- Accents -->
-    <color name="riotx_accent">#FF00BE8A</color>
-    <color name="riotx_accent_alpha25">#3F00BE8A</color>
+    <color name="riotx_accent">#FF0DBD8B</color>
+    <color name="riotx_accent_alpha25">#3F0DBD8B</color>
 
 
     <color name="riotx_destructive_accent">#FFFF4B55</color>
@@ -13,9 +13,9 @@
     <color name="riotx_button_primary_accent_alpha12">#14368BD6</color>
 
 
-    <color name="riotx_positive_accent">#00BE8A</color>
+    <color name="riotx_positive_accent">#0DBD8B</color>
     <color name="riotx_disabled_accent">#C4C4C4</color>
-    <color name="riotx_positive_accent_alpha12">#1E00BE8A</color>
+    <color name="riotx_positive_accent_alpha12">#1E0DBD8B</color>
     <color name="riotx_button_disabled_alpha12">#1E61708B</color>
 
 
@@ -105,9 +105,9 @@
     <color name="riotx_text_primary_body_contrast_black">#FFA1B2D1</color>
 
     <attr name="riotx_android_secondary" format="color" />
-    <color name="riotx_android_secondary_light">#FF7E899C</color>
-    <color name="riotx_android_secondary_dark">#FF7E899C</color>
-    <color name="riotx_android_secondary_black">#FF7E899C</color>
+    <color name="riotx_android_secondary_light">#FF8F97A3</color>
+    <color name="riotx_android_secondary_dark">#FF8F97A3</color>
+    <color name="riotx_android_secondary_black">#FFA9B2BC</color>
 
     <attr name="riotx_search_placeholder" format="color" />
     <color name="riotx_search_placeholder_light">#FF8F97A3</color>
