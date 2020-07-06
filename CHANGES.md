@@ -1,4 +1,4 @@
-Changes in Riot.imX 0.91.4 (2020-XX-XX)
+Changes in Riot.imX 0.91.5 (2020-XX-XX)
 ===================================================
 
 Features ✨:
@@ -8,11 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- - Fix crash when coming from a notification (#1601)
- - Fix Exception when importing keys (#1576)
- - File isn't downloaded when another file with the same name already exists (#1578)
- - saved images don't show up in gallery (#1324)
- - Fix reply fallback leaking sender locale (#429)
+ -
 
 Translations 🗣:
  -
@@ -21,13 +17,32 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- - Fix lint false-positive about WorkManger (#1012)
- - Upgrade build-tools from 3.5.3 to 3.6.6
- - Upgrade gradle from 5.4.1 to 5.6.4
  - Upgrade some dependencies
+ - Revert to build-tools 3.5.3
 
 Other changes:
  -
+
+Changes in Riot.imX 0.91.4 (2020-07-06)
+===================================================
+
+Features ✨:
+ - Re-activate Wellknown support with updated UI (#1614)
+
+Improvements 🙌:
+ - Upload device keys only once to the homeserver and fix crash when no network (#1629)
+
+Bugfix 🐛:
+ - Fix crash when coming from a notification (#1601)
+ - Fix Exception when importing keys (#1576)
+ - File isn't downloaded when another file with the same name already exists (#1578)
+ - saved images don't show up in gallery (#1324)
+ - Fix reply fallback leaking sender locale (#429)
+
+Build 🧱:
+ - Fix lint false-positive about WorkManager (#1012)
+ - Upgrade build-tools from 3.5.3 to 3.6.3
+ - Upgrade gradle from 5.4.1 to 5.6.4
 
 Changes in Riot.imX 0.91.3 (2020-07-01)
 ===================================================
