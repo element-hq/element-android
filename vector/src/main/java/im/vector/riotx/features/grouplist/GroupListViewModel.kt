@@ -23,6 +23,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.groupSummaryQueryParams
@@ -88,6 +89,8 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
 
     private fun handleSelectGroup(action: GroupListAction.SelectGroup) = withState { state ->
         if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
+            // We take care of refreshing group data when selecting to be sure we get all the rooms and users
+            session.getGroup(action.groupSummary.groupId)?.fetchGroupData(NoOpMatrixCallback())
             setState { copy(selectedGroup = action.groupSummary) }
         }
     }

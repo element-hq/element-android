@@ -68,7 +68,6 @@ import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.call.CallEventProcessor
 import im.vector.matrix.android.internal.session.download.DownloadProgressInterceptor
-import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
@@ -292,10 +291,6 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindNetworkConnectivityChecker(checker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker
-
-    @Binds
-    @IntoSet
-    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
