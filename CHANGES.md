@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Upload device keys only once to the homeserver and fix crash when no network (#1629)
 
 Bugfix 🐛:
  - Fix crash when coming from a notification (#1601)
