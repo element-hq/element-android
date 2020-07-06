@@ -151,8 +151,8 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone()
-            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected()
+            is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(loginViewEvents)
+            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
             is LoginViewEvents.OnLoginFlowRetrieved                       ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         if (loginViewEvents.isSso) {
@@ -228,8 +228,8 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .show()
     }
 
-    private fun onServerSelectionDone() = withState(loginViewModel) { state ->
-        when (state.serverType) {
+    private fun onServerSelectionDone(loginViewEvents: LoginViewEvents.OnServerSelectionDone) {
+        when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.Modular,
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer,
@@ -239,8 +239,9 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
     }
 
-    private fun onSignModeSelected() = withState(loginViewModel) { state ->
-        when (state.signMode) {
+    private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) = withState(loginViewModel) { state ->
+        // state.signMode could not be ready yet. So use value from the ViewEvent
+        when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp             -> {
                 // This is managed by the LoginViewEvents
