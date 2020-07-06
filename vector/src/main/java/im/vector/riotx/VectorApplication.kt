@@ -63,7 +63,13 @@ import java.util.Locale
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
-class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
+import androidx.work.Configuration as WorkConfiguration
+
+class VectorApplication :
+        Application(),
+        HasVectorInjector,
+        MatrixConfiguration.Provider,
+        WorkConfiguration.Provider {
 
     lateinit var appContext: Context
     @Inject lateinit var legacySessionImporter: LegacySessionImporter
@@ -85,6 +91,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
     lateinit var vectorComponent: VectorComponent
+
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
@@ -157,7 +164,11 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
 
-    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build()
+    override fun getWorkManagerConfiguration(): WorkConfiguration {
+        return WorkConfiguration.Builder()
+                .setExecutor(Executors.newCachedThreadPool())
+                .build()
+    }
 
     override fun injector(): VectorComponent {
         return vectorComponent

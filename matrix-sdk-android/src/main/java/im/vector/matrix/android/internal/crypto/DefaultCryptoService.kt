@@ -98,6 +98,7 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -340,7 +341,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     fun ensureDevice() {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
             // TODO why do that everytime? we should mark that it was done

@@ -10,6 +10,9 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix crash when coming from a notification (#1601)
  - Fix Exception when importing keys (#1576)
+ - File isn't downloaded when another file with the same name already exists (#1578)
+ - saved images don't show up in gallery (#1324)
+ - Fix reply fallback leaking sender locale (#429)
 
 Translations 🗣:
  -
@@ -18,7 +21,9 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Fix lint false-positive about WorkManger (#1012)
+ - Upgrade build-tools from 3.5.3 to 3.6.6
+ - Upgrade gradle from 5.4.1 to 5.6.4
 
 Other changes:
  -
