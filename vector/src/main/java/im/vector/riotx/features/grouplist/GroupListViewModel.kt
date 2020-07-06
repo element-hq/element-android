@@ -75,6 +75,11 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 }
                 val optionGroup = Option.just(groupSummary)
                 selectedGroupStore.post(optionGroup)
+            } else {
+                // If selected group is null we force to default. It can happens when leaving the selected group.
+                setState {
+                    copy(selectedGroup = this.asyncGroups()?.find { it.groupId == ALL_COMMUNITIES_GROUP_ID })
+                }
             }
         }
     }
