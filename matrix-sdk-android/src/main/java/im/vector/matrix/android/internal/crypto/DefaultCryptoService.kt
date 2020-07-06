@@ -70,7 +70,6 @@ import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldConte
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
-import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
@@ -344,8 +343,11 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
-            // TODO why do that everytime? we should mark that it was done
-            uploadDeviceKeys()
+            // this can throw if no network
+            tryThis {
+                uploadDeviceKeys()
+            }
+
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryThis {
@@ -390,7 +392,7 @@ internal class DefaultCryptoService @Inject constructor(
 //            } else {
 
             // Why would we do that? it will be called at end of syn
-                incomingGossipingRequestManager.processReceivedGossipingRequests()
+            incomingGossipingRequestManager.processReceivedGossipingRequests()
 //            }
         }.fold(
                 {
@@ -889,7 +891,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME -> {
+            MASTER_KEY_SSSS_NAME       -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -981,7 +983,11 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Upload my user's device keys.
      */
-    private suspend fun uploadDeviceKeys(): KeysUploadResponse {
+    private suspend fun uploadDeviceKeys() {
+        if (cryptoStore.getDeviceKeysUploaded()) {
+            Timber.d("Keys already uploaded, nothing to do")
+            return
+        }
         // Prepare the device keys data to send
         // Sign it
         val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
@@ -992,7 +998,9 @@ internal class DefaultCryptoService @Inject constructor(
         )
 
         val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
-        return uploadKeysTask.execute(uploadDeviceKeysParams)
+        uploadKeysTask.execute(uploadDeviceKeysParams)
+
+        cryptoStore.setDeviceKeysUploaded(true)
     }
 
     /**
