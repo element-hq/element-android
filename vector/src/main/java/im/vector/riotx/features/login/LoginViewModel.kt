@@ -39,6 +39,7 @@ import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.riotx.R
@@ -47,6 +48,7 @@ import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.ensureTrailingSlash
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
@@ -87,7 +89,11 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
+    // Store the last action, to redo it after user has trusted the untrusted certificate
+    private var lastAction: LoginAction? = null
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
+
+    private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
@@ -111,8 +117,8 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.UpdateServerType           -> handleUpdateServerType(action)
             is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is LoginAction.InitWith                   -> handleInitWith(action)
-            is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action)
-            is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action)
+            is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
+            is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is LoginAction.LoginWithToken             -> handleLoginWithToken(action)
             is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword              -> handleResetPassword(action)
@@ -126,10 +132,23 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleUserAcceptCertificate(action: LoginAction.UserAcceptCertificate) {
-        // It happen when we get the login flow, so alter the homeserver config and retrieve again the login flow
-        currentHomeServerConnectionConfig
-                ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                ?.let { getLoginFlow(it) }
+        // It happen when we get the login flow, or during direct authentication.
+        // So alter the homeserver config and retrieve again the login flow
+        when (val finalLastAction = lastAction) {
+            is LoginAction.UpdateHomeServer ->
+                currentHomeServerConnectionConfig
+                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
+                        ?.let { getLoginFlow(it) }
+            is LoginAction.LoginOrRegister  ->
+                handleDirectLogin(
+                        finalLastAction,
+                        HomeServerConnectionConfig.Builder()
+                                // Will be replaced by the task
+                                .withHomeServerUri("https://dummy.org")
+                                .withAllowedFingerPrints(listOf(action.fingerprint))
+                                .build()
+                )
+        }
     }
 
     private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
@@ -333,6 +352,7 @@ class LoginViewModel @AssistedInject constructor(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
                             homeServerUrl = null,
                             loginMode = LoginMode.Unknown,
+                            serverType = ServerType.Unknown,
                             loginModeSupportedTypes = emptyList()
                     )
                 }
@@ -395,7 +415,7 @@ class LoginViewModel @AssistedInject constructor(
             ServerType.Unknown   -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
-                handle(LoginAction.UpdateHomeServer(stringProvider.getString(R.string.matrix_org_server_url)))
+                handle(LoginAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.Modular,
             ServerType.Other     -> _viewEvents.post(LoginViewEvents.OnServerSelectionDone)
         }.exhaustive
@@ -492,23 +512,22 @@ class LoginViewModel @AssistedInject constructor(
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
             SignMode.SignUp             -> handleRegisterWith(action)
-            SignMode.SignInWithMatrixId -> handleDirectLogin(action)
+            SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }.exhaustive
     }
 
-    private fun handleDirectLogin(action: LoginAction.LoginOrRegister) {
+    private fun handleDirectLogin(action: LoginAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
         setState {
             copy(
                     asyncLoginAction = Loading()
             )
         }
 
-        // TODO Handle certificate error in this case. Direct login is deactivated now, so we will handle that later
-        authenticationService.getWellKnownData(action.username, null, object : MatrixCallback<WellknownResult> {
+        authenticationService.getWellKnownData(action.username, homeServerConnectionConfig, object : MatrixCallback<WellknownResult> {
             override fun onSuccess(data: WellknownResult) {
                 when (data) {
                     is WellknownResult.Prompt          ->
-                        onWellknownSuccess(action, data)
+                        onWellknownSuccess(action, data, homeServerConnectionConfig)
                     is WellknownResult.InvalidMatrixId -> {
                         setState {
                             copy(
@@ -529,23 +548,26 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            asyncLoginAction = Fail(failure)
-                    )
-                }
+                onDirectLoginError(failure)
             }
         })
     }
 
-    private fun onWellknownSuccess(action: LoginAction.LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) {
-        val homeServerConnectionConfig = HomeServerConnectionConfig(
-                homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
-                identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
-        )
+    private fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
+                                   wellKnownPrompt: WellknownResult.Prompt,
+                                   homeServerConnectionConfig: HomeServerConnectionConfig?) {
+        val alteredHomeServerConnectionConfig = homeServerConnectionConfig
+                ?.copy(
+                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
+                )
+                ?: HomeServerConnectionConfig(
+                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
+                )
 
         authenticationService.directAuthentication(
-                homeServerConnectionConfig,
+                alteredHomeServerConnectionConfig,
                 action.username,
                 action.password,
                 action.initialDeviceName,
@@ -555,13 +577,27 @@ class LoginViewModel @AssistedInject constructor(
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Fail(failure)
-                            )
-                        }
+                        onDirectLoginError(failure)
                     }
                 })
+    }
+
+    private fun onDirectLoginError(failure: Throwable) {
+        if (failure is Failure.UnrecognizedCertificateFailure) {
+            // Display this error in a dialog
+            _viewEvents.post(LoginViewEvents.Failure(failure))
+            setState {
+                copy(
+                        asyncLoginAction = Uninitialized
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncLoginAction = Fail(failure)
+                )
+            }
+        }
     }
 
     private fun handleLogin(action: LoginAction.LoginOrRegister) {
@@ -679,7 +715,10 @@ class LoginViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    asyncHomeServerLoginFlowRequest = Loading()
+                    asyncHomeServerLoginFlowRequest = Loading(),
+                    // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
+                    // It is also useful to set the value again in the case of a certificate error on matrix.org
+                    serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) ServerType.MatrixOrg else serverType
             )
         }
 

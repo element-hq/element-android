@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
+import im.vector.matrix.android.internal.network.ssl.UnrecognizedCertificateException
 import im.vector.matrix.android.internal.session.homeserver.CapabilitiesAPI
 import im.vector.matrix.android.internal.session.identity.IdentityAuthAPI
 import im.vector.matrix.android.internal.task.Task
@@ -106,6 +107,12 @@ internal class DefaultGetWellknownTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             when (throwable) {
+                is UnrecognizedCertificateException        -> {
+                    throw Failure.UnrecognizedCertificateFailure(
+                            "https://$domain",
+                            throwable.fingerprint
+                    )
+                }
                 is Failure.NetworkConnection               -> {
                     WellknownResult.Ignore
                 }
