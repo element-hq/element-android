@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.util.createBackgroundHandler
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
@@ -31,7 +30,7 @@ import kotlinx.coroutines.cancelChildren
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-internal interface LiveEntityObserver: SessionLifecycleObserver
+internal interface LiveEntityObserver : SessionLifecycleObserver
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val realmConfiguration: RealmConfiguration)
     : LiveEntityObserver, RealmChangeListener<RealmResults<T>> {

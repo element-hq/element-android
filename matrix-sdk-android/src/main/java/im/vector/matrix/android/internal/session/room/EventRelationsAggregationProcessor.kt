@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.PollResponseAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
@@ -96,7 +97,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             EventType.ENCRYPTED
     )
 
-    override fun shouldProcess(eventId: String, eventType: String): Boolean {
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         return allowedTypes.contains(eventType)
     }
 

@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
@@ -39,7 +40,7 @@ internal class RoomCreateEventProcessor @Inject constructor() : EventInsertLiveP
         realm.insertOrUpdate(predecessorRoomSummary)
     }
 
-    override fun shouldProcess(eventId: String, eventType: String): Boolean {
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         return eventType == EventType.STATE_ROOM_CREATE
     }
 }

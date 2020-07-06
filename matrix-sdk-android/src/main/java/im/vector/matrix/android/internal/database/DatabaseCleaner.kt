@@ -34,12 +34,14 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val MAX_NUMBER_OF_EVENTS = 35_000L
+private const val MAX_NUMBER_OF_EVENTS_IN_DB = 35_000L
 private const val MIN_NUMBER_OF_EVENTS_BY_CHUNK = 300
 
 /**
  * This class makes sure to stay under a maximum number of events as it makes Realm to be unusable when listening to events
- * when the database is getting too big.
+ * when the database is getting too big. This will try incrementally to remove the biggest chunks until we get below the threshold.
+ * We make sure to still have a minimum number of events so it's not becoming unusable.
+ * So this won't work for users with a big number of very active rooms.
  */
 internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration,
                                                    private val taskExecutor: TaskExecutor) : SessionLifecycleObserver {
@@ -49,7 +51,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
                 Timber.v("There are ${allRooms.size} rooms in this session")
-                cleanUp(realm, MAX_NUMBER_OF_EVENTS / 2L)
+                cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
             }
         }
     }
@@ -58,7 +60,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
         val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
         val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
         Timber.v("Number of events in db: $numberOfEvents | Number of timeline events in db: $numberOfTimelineEvents")
-        if (threshold <= MIN_NUMBER_OF_EVENTS_BY_CHUNK || numberOfTimelineEvents < MAX_NUMBER_OF_EVENTS) {
+        if (threshold <= MIN_NUMBER_OF_EVENTS_BY_CHUNK || numberOfTimelineEvents < MAX_NUMBER_OF_EVENTS_IN_DB) {
             Timber.v("Db is low enough")
         } else {
             val thresholdChunks = realm.where(ChunkEntity::class.java)

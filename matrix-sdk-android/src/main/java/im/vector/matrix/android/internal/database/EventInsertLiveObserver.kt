@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.database.model.EventInsertEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
-import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
@@ -48,18 +47,18 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
             return
         }
         Timber.v("EventInsertEntity updated with ${results.size} results in db")
-        val filteredEventIds = results.mapNotNull {
-            val shouldProcess = shouldProcess(it)
-            if (shouldProcess) {
-                it.eventId
+        val filteredEvents = results.mapNotNull {
+            if (shouldProcess(it)) {
+                results.realm.copyFromRealm(it)
             } else {
                 null
             }
         }
-        Timber.v("There are ${filteredEventIds.size} events to process")
+        Timber.v("There are ${filteredEvents.size} events to process")
         observerScope.launch {
             awaitTransaction(realmConfiguration) { realm ->
-                filteredEventIds.forEach { eventId ->
+                filteredEvents.forEach { eventInsert ->
+                    val eventId = eventInsert.eventId
                     val event = EventEntity.where(realm, eventId).findFirst()
                     if (event == null) {
                         Timber.v("Event $eventId not found")
@@ -67,7 +66,9 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                     }
                     val domainEvent = event.asDomain()
                     decryptIfNeeded(domainEvent)
-                    processors.forEach {
+                    processors.filter {
+                        it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
+                    }.forEach {
                         it.process(realm, domainEvent)
                     }
                 }
@@ -95,7 +96,7 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
         return processors.any {
-            it.shouldProcess(eventInsertEntity.eventId, eventInsertEntity.eventType)
+            it.shouldProcess(eventInsertEntity.eventId, eventInsertEntity.eventType, eventInsertEntity.insertType)
         }
     }
 }

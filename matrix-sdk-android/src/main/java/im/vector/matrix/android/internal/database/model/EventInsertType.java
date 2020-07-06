@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session
+package im.vector.matrix.android.internal.database.model;
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.database.model.EventInsertType
-import io.realm.Realm
-
-internal interface EventInsertLiveProcessor {
-
-    fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean
-
-    suspend fun process(realm: Realm, event: Event)
+public enum EventInsertType {
+    INITIAL_SYNC,
+    INCREMENTAL_SYNC,
+    PAGINATION,
+    LOCAL_ECHO
 }

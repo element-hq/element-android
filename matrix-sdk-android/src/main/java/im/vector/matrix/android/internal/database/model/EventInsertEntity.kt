@@ -16,13 +16,25 @@
 
 package im.vector.matrix.android.internal.database.model
 
+import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.Index
 
+/**
+ * This class is used to get notification on new events being inserted. It's to avoid realm getting slow when listening to insert
+ * in EventEntity table.
+ */
 internal open class EventInsertEntity(var eventId: String = "",
                                       var eventType: String = ""
 ) : RealmObject() {
 
-    companion object
+    private var insertTypeStr: String = EventInsertType.INCREMENTAL_SYNC.name
+    var insertType: EventInsertType
+        get() {
+            return EventInsertType.valueOf(insertTypeStr)
+        }
+        set(value) {
+            insertTypeStr = value.name
+        }
 
 }

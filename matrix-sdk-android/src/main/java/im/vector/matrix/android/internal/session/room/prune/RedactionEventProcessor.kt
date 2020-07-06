@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
@@ -38,7 +39,7 @@ import javax.inject.Inject
  */
 internal class RedactionEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    override fun shouldProcess(eventId: String, eventType: String): Boolean {
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         return eventType == EventType.REDACTION
     }
 

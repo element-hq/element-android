@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.call
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.database.model.EventInsertEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
 import io.realm.Realm
@@ -37,7 +39,10 @@ internal class CallEventProcessor @Inject constructor(
             EventType.ENCRYPTED
     )
 
-    override fun shouldProcess(eventId: String, eventType: String): Boolean {
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
+        if (insertType != EventInsertType.INCREMENTAL_SYNC) {
+            return false
+        }
         return allowedTypes.contains(eventType)
     }
 

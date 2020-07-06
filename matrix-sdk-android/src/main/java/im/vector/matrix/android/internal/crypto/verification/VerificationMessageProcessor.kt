@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVerificati
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
@@ -58,7 +59,10 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.ENCRYPTED
     )
 
-    override fun shouldProcess(eventId: String, eventType: String): Boolean {
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
+        if (insertType != EventInsertType.INCREMENTAL_SYNC) {
+            return false
+        }
         return allowedTypes.contains(eventType) && !LocalEcho.isLocalEchoId(eventId)
     }
 
