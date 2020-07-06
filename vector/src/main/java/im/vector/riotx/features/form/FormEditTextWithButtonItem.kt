@@ -56,6 +56,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
     }
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
 

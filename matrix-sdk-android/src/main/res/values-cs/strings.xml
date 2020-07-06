@@ -46,8 +46,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Nelze dešifrovat: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Odesílatelovo zařízení neposlalo klíče pro tuto zprávu.</string>
 
-    <string name="message_reply_to_prefix">V odpovědi na</string>
-
     <string name="could_not_redact">Nelze vymazat</string>
     <string name="unable_to_send_message">Zprávu nelze odeslat</string>
 
@@ -62,11 +60,6 @@
 
     <string name="medium_email">E-mailová adresa</string>
     <string name="medium_phone_number">Telefonní číslo</string>
-
-    <string name="reply_to_an_image">odeslal obrázek.</string>
-    <string name="reply_to_a_video">odeslal video.</string>
-    <string name="reply_to_an_audio_file">odeslal zvukový soubor.</string>
-    <string name="reply_to_a_file">odeslal soubor.</string>
 
     <string name="room_displayname_invite_from">Pozvání od %s</string>
     <string name="room_displayname_room_invite">Pozvání do místnosti</string>

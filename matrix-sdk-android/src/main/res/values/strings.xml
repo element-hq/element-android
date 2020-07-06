@@ -112,7 +112,6 @@
     <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
     <!-- Messages -->
-    <string name="message_reply_to_prefix">In reply to</string>
 
     <!-- Room Screen -->
     <string name="could_not_redact">Could not redact</string>
@@ -138,12 +137,6 @@
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
     <string name="medium_phone_number">Phone number</string>
-
-    <!-- Reply to -->
-    <string name="reply_to_an_image">sent an image.</string>
-    <string name="reply_to_a_video">sent a video.</string>
-    <string name="reply_to_an_audio_file">sent an audio file.</string>
-    <string name="reply_to_a_file">sent a file.</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>

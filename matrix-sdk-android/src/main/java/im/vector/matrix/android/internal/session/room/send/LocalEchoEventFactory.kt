@@ -177,7 +177,6 @@ internal class LocalEchoEventFactory @Inject constructor(
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.root.getClearContent().toModel())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
-                stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
                 body.takeFormatted(),
@@ -372,7 +371,6 @@ internal class LocalEchoEventFactory @Inject constructor(
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.root.getClearContent().toModel())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
-                stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
                 userId,
                 body.takeFormatted(),
@@ -434,10 +432,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
-            MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))
-            MessageType.MSGTYPE_IMAGE  -> return TextContent(stringProvider.getString(R.string.reply_to_an_image))
-            MessageType.MSGTYPE_VIDEO  -> return TextContent(stringProvider.getString(R.string.reply_to_a_video))
+            MessageType.MSGTYPE_FILE   -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO  -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE  -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO  -> return TextContent("sent a video.")
             else                       -> return TextContent(content?.body ?: "")
         }
     }
@@ -489,6 +487,6 @@ internal class LocalEchoEventFactory @Inject constructor(
         //     </blockquote>
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
-        const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">%s</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
+        const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">In reply to</a> <a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
     }
 }

@@ -73,6 +73,9 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     override fun showFailure(throwable: Throwable) {
         when (throwable) {
+            is Failure.Cancelled                      ->
+                /* Ignore this error, user has cancelled the action */
+                Unit
             is Failure.ServerError                    ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {

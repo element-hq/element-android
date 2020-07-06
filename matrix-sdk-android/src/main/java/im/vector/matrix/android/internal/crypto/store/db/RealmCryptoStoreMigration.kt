@@ -54,7 +54,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         // 0, 1, 2: legacy Riot-Android
         // 3: migrate to RiotX schema
         // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-        const val CRYPTO_STORE_SCHEMA_VERSION = 10L
+        const val CRYPTO_STORE_SCHEMA_VERSION = 11L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -70,6 +70,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 7) migrateTo8(realm)
         if (oldVersion <= 8) migrateTo9(realm)
         if (oldVersion <= 9) migrateTo10(realm)
+        if (oldVersion <= 10) migrateTo11(realm)
     }
 
     private fun migrateTo1Legacy(realm: DynamicRealm) {
@@ -176,13 +177,14 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                     }
                 }
 
-        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper2
+        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper
         realm.schema.get("OlmInboundGroupSessionEntity")
                 ?.transform { obj ->
                     try {
                         val oldSerializedData = obj.getString("olmInboundGroupSessionData")
                         deserializeFromRealm<MXOlmInboundGroupSession2>(oldSerializedData)?.let { mxOlmInboundGroupSession2 ->
-                            val newOlmInboundGroupSessionWrapper2 = OlmInboundGroupSessionWrapper2()
+                            val sessionKey = mxOlmInboundGroupSession2.mSession.sessionIdentifier()
+                            val newOlmInboundGroupSessionWrapper = OlmInboundGroupSessionWrapper(sessionKey, false)
                                     .apply {
                                         olmInboundGroupSession = mxOlmInboundGroupSession2.mSession
                                         roomId = mxOlmInboundGroupSession2.mRoomId
@@ -191,7 +193,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                                         forwardingCurve25519KeyChain = mxOlmInboundGroupSession2.mForwardingCurve25519KeyChain
                                     }
 
-                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper2))
+                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper))
                         }
                     } catch (e: Exception) {
                         Timber.e(e, "Error")
@@ -444,5 +446,12 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 .addIndex(SharedSessionEntityFields.DEVICE_ID)
                 .addField(SharedSessionEntityFields.CHAIN_INDEX, Long::class.java)
                 .setNullable(SharedSessionEntityFields.CHAIN_INDEX, true)
+    }
+
+    // Version 11L added deviceKeysSentToServer boolean to CryptoMetadataEntity
+    private fun migrateTo11(realm: DynamicRealm) {
+        Timber.d("Step 10 -> 11")
+        realm.schema.get("CryptoMetadataEntity")
+                ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
     }
 }

@@ -842,6 +842,18 @@ internal class RealmCryptoStore @Inject constructor(
         } ?: false
     }
 
+    override fun setDeviceKeysUploaded(uploaded: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer = uploaded
+        }
+    }
+
+    override fun getDeviceKeysUploaded(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
+        } ?: false
+    }
+
     override fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>) {
         doRealmTransaction(realmConfiguration) {
             // Reset all
