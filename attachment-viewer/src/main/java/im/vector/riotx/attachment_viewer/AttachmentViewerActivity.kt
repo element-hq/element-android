@@ -25,7 +25,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_attachment_viewer.*
 import kotlin.math.abs
@@ -36,8 +38,16 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     lateinit var imageTransitionView: ImageView
     lateinit var transitionImageContainer: ViewGroup
 
-    // TODO
+    var topInset = 0
+
     private var overlayView: View? = null
+        set(value) {
+            if (value == overlayView) return
+            overlayView?.let { rootContainer.removeView(it) }
+            rootContainer.addView(value)
+            value?.updatePadding(top = topInset)
+            field = value
+        }
 
     private lateinit var swipeDismissHandler: SwipeToDismissHandler
     private lateinit var directionDetector: SwipeDirectionDetector
@@ -53,6 +63,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     private var wasScaled: Boolean = false
     private var isSwipeToDismissAllowed: Boolean = true
     private lateinit var attachmentsAdapter: AttachmentsAdapter
+    private var isOverlayWasClicked = false
 
 //    private val shouldDismissToBottom: Boolean
 //        get() = e == null
@@ -67,6 +78,20 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // This is important for the dispatchTouchEvent, if not we must correct
+        // the touch coordinates
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+
+//        // clear FLAG_TRANSLUCENT_STATUS flag:
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//
+//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+
         setContentView(R.layout.activity_attachment_viewer)
         attachmentPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         attachmentsAdapter = AttachmentsAdapter()
@@ -83,6 +108,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
                 currentPosition = position
+                overlayView = attachmentsAdapter.attachmentSourceProvider?.overlayViewAtPosition(this@AttachmentViewerActivity, position)
             }
         })
 
@@ -92,6 +118,13 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
 
         scaleDetector = createScaleGestureDetector()
 
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { _, insets ->
+            overlayView?.updatePadding(top = insets.systemWindowInsetTop)
+            topInset = insets.systemWindowInsetTop
+            insets
+        }
+
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -99,9 +132,9 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         // The zoomable view is configured to disallow interception when image is zoomed
 
         // Check if the overlay is visible, and wants to handle the click
-//        if (overlayView.isVisible && overlayView?.dispatchTouchEvent(event) == true) {
-//            return true
-//        }
+        if (overlayView?.isVisible == true && overlayView?.dispatchTouchEvent(ev) == true) {
+            return true
+        }
 
 
         Log.v("ATTACHEMENTS", "================\ndispatchTouchEvent $ev")
@@ -143,14 +176,14 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         attachmentPager.dispatchTouchEvent(event)
 
         swipeDismissHandler.onTouch(rootContainer, event)
-//        isOverlayWasClicked = dispatchOverlayTouch(event)
+        isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
     private fun handleEventActionUp(event: MotionEvent) {
 //        wasDoubleTapped = false
         swipeDismissHandler.onTouch(rootContainer, event)
         attachmentPager.dispatchTouchEvent(event)
-//        isOverlayWasClicked = dispatchOverlayTouch(event)
+        isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
     private fun handleTouchIfNotScaled(event: MotionEvent): Boolean {
@@ -159,7 +192,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {
-            SwipeDirection.Up, SwipeDirection.Down    -> {
+            SwipeDirection.Up, SwipeDirection.Down -> {
                 if (isSwipeToDismissAllowed && !wasScaled && isImagePagerIdle) {
                     swipeDismissHandler.onTouch(rootContainer, event)
                 } else true
@@ -167,7 +200,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             SwipeDirection.Left, SwipeDirection.Right -> {
                 attachmentPager.dispatchTouchEvent(event)
             }
-            else                                      -> true
+            else -> true
         }
     }
 

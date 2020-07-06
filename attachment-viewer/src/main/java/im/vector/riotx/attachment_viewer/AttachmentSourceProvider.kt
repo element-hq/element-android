@@ -16,6 +16,9 @@
 
 package im.vector.riotx.attachment_viewer
 
+import android.content.Context
+import android.view.View
+
 sealed class AttachmentInfo {
     data class Image(val url: String, val data: Any?) : AttachmentInfo()
     data class AnimatedImage(val url: String, val data: Any?) : AttachmentInfo()
@@ -34,5 +37,8 @@ interface AttachmentSourceProvider {
     fun getAttachmentInfoAt(position: Int): AttachmentInfo
 
     fun loadImage(holder: ZoomableImageViewHolder, info: AttachmentInfo.Image)
+
     fun loadImage(holder: AnimatedImageViewHolder, info: AttachmentInfo.AnimatedImage)
+
+    fun overlayViewAtPosition(context: Context, position: Int) : View?
 }

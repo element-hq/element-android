@@ -22,17 +22,15 @@ import android.os.Parcelable
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.transition.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.transition.Transition
+import im.vector.riotx.R
 import im.vector.riotx.attachment_viewer.AttachmentViewerActivity
-import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.di.DaggerScreenComponent
-import im.vector.riotx.core.di.HasVectorInjector
-import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.di.VectorComponent
+import im.vector.riotx.core.di.*
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
@@ -40,7 +38,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-class VectorAttachmentViewerActivity : AttachmentViewerActivity() {
+class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmentProvider.InteractionListener {
 
     @Parcelize
     data class Args(
@@ -103,10 +101,14 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity() {
             }
         }
 
-        setSourceProvider(dataSourceFactory.createProvider(events, index))
+        val sourceProvider = dataSourceFactory.createProvider(events, index)
+        sourceProvider.interactionListener = this
+        setSourceProvider(sourceProvider)
         if (savedInstanceState == null) {
             pager2.setCurrentItem(index, false)
         }
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
 
     }
 
@@ -203,5 +205,13 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity() {
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
         }
 
+    }
+
+    override fun onDismissTapped() {
+        animateClose()
+    }
+
+    override fun onShareTapped() {
+        TODO("Not yet implemented")
     }
 }
