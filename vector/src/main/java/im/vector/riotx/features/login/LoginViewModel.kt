@@ -19,6 +19,7 @@ package im.vector.riotx.features.login
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -53,6 +54,8 @@ import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
@@ -399,9 +402,16 @@ class LoginViewModel @AssistedInject constructor(
         when (action.signMode) {
             SignMode.SignUp             -> startRegistrationFlow()
             SignMode.SignIn             -> startAuthenticationFlow()
-            SignMode.SignInWithMatrixId -> _viewEvents.post(LoginViewEvents.OnSignModeSelected)
+            SignMode.SignInWithMatrixId -> {
+                viewModelScope.launch {
+                    // Add a delay to avoid crash
+                    delay(50)
+                    _viewEvents.post(LoginViewEvents.OnSignModeSelected)
+                }
+                Unit
+            }
             SignMode.Unknown            -> Unit
-        }.exhaustive
+        }
     }
 
     private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
