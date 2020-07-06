@@ -33,9 +33,9 @@ sealed class LoginViewEvents : VectorViewEvents {
     // Navigation event
 
     object OpenServerSelection : LoginViewEvents()
-    object OnServerSelectionDone : LoginViewEvents()
+    data class OnServerSelectionDone(val serverType: ServerType) : LoginViewEvents()
     data class OnLoginFlowRetrieved(val isSso: Boolean) : LoginViewEvents()
-    object OnSignModeSelected : LoginViewEvents()
+    data class OnSignModeSelected(val signMode: SignMode) : LoginViewEvents()
     object OnForgetPasswordClicked : LoginViewEvents()
     object OnResetPasswordSendThreePidDone : LoginViewEvents()
     object OnResetPasswordMailConfirmationSuccess : LoginViewEvents()
