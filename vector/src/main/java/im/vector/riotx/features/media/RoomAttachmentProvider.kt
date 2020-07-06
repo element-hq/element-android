@@ -24,9 +24,10 @@ import im.vector.matrix.android.api.session.room.model.message.MessageWithAttach
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import im.vector.riotx.attachment_viewer.AnimatedImageViewHolder
 import im.vector.riotx.attachment_viewer.AttachmentInfo
 import im.vector.riotx.attachment_viewer.AttachmentSourceProvider
-import im.vector.riotx.attachment_viewer.ImageViewHolder
+import im.vector.riotx.attachment_viewer.ZoomableImageViewHolder
 import javax.inject.Inject
 
 class RoomAttachmentProvider(
@@ -53,14 +54,27 @@ class RoomAttachmentProvider(
                     width = null,
                     height = null
             )
-            AttachmentInfo.Image(
-                    content?.url ?: "",
-                    data
-            )
+            if (content?.mimeType == "image/gif") {
+                AttachmentInfo.AnimatedImage(
+                        content.url ?: "",
+                        data
+                )
+            } else {
+                AttachmentInfo.Image(
+                        content?.url ?: "",
+                        data
+                )
+            }
         }
     }
 
-    override fun loadImage(holder: ImageViewHolder, info: AttachmentInfo.Image) {
+    override fun loadImage(holder: ZoomableImageViewHolder, info: AttachmentInfo.Image) {
+        (info.data as? ImageContentRenderer.Data)?.let {
+            imageContentRenderer.render(it, holder.touchImageView, holder.customTargetView as CustomViewTarget<*, Drawable>)
+        }
+    }
+
+    override fun loadImage(holder: AnimatedImageViewHolder, info: AttachmentInfo.AnimatedImage) {
         (info.data as? ImageContentRenderer.Data)?.let {
             imageContentRenderer.render(it, holder.touchImageView, holder.customTargetView as CustomViewTarget<*, Drawable>)
         }
