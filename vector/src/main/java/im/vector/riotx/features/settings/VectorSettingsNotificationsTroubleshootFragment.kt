@@ -72,7 +72,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 
         mSummaryButton.debouncedClicks {
-            bugReporter.openBugReportScreen(activity!!)
+            bugReporter.openBugReportScreen(requireActivity())
         }
 
         mRunButton.debouncedClicks {

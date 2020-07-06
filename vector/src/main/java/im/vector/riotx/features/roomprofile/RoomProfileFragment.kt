@@ -243,7 +243,7 @@ class RoomProfileFragment @Inject constructor(
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
         if (matrixItem.avatarUrl?.isNotEmpty() == true) {
             val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, view, ViewCompat.getTransitionName(view) ?: "")
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
             startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
         } else if (it.canChangeAvatar) {
             showAvatarSelector()

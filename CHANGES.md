@@ -17,7 +17,8 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Upgrade some dependencies
+ - Revert to build-tools 3.5.3
 
 Other changes:
  -
@@ -40,7 +41,7 @@ Bugfix 🐛:
 
 Build 🧱:
  - Fix lint false-positive about WorkManager (#1012)
- - Upgrade build-tools from 3.5.3 to 3.6.6
+ - Upgrade build-tools from 3.5.3 to 3.6.3
  - Upgrade gradle from 5.4.1 to 5.6.4
 
 Changes in Riot.imX 0.91.3 (2020-07-01)
