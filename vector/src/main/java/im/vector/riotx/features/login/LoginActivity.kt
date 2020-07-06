@@ -235,6 +235,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginServerUrlFormFragment::class.java,
                     option = commonOption)
+            ServerType.Unknown   -> Unit /* Should not happen */
         }
     }
 

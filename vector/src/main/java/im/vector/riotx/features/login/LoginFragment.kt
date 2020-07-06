@@ -166,6 +166,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                     loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                     loginNotice.text = getString(R.string.login_server_other_text)
                 }
+                ServerType.Unknown   -> Unit /* Should not happen */
             }
             loginPasswordNotice.isVisible = false
         }

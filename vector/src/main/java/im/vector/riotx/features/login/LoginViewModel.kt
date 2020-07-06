@@ -321,7 +321,7 @@ class LoginViewModel @AssistedInject constructor(
             LoginAction.ResetHomeServerType -> {
                 setState {
                     copy(
-                            serverType = ServerType.MatrixOrg
+                            serverType = ServerType.Unknown
                     )
                 }
             }
@@ -390,6 +390,15 @@ class LoginViewModel @AssistedInject constructor(
                     serverType = action.serverType
             )
         }
+
+        when (action.serverType) {
+            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.MatrixOrg ->
+                // Request login flow here
+                handle(LoginAction.UpdateHomeServer(stringProvider.getString(R.string.matrix_org_server_url)))
+            ServerType.Modular,
+            ServerType.Other     -> _viewEvents.post(LoginViewEvents.OnServerSelectionDone)
+        }.exhaustive
     }
 
     private fun handleInitWith(action: LoginAction.InitWith) {
@@ -682,7 +691,9 @@ class LoginViewModel @AssistedInject constructor(
                 _viewEvents.post(LoginViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized
+                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            // If we were trying to retrieve matrix.org login flow, also reset the serverType
+                            serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
                     )
                 }
             }

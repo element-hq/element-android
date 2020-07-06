@@ -49,6 +49,7 @@ open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLo
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
                 loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
+            ServerType.Unknown   -> Unit /* Should not happen */
         }
     }
 

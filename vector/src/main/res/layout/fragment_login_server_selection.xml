@@ -43,6 +43,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerTitle" />
 
+            <!-- Use a CheckableConstraintLayout to keep the pressed state when retrieving login flow -->
             <im.vector.riotx.core.platform.CheckableConstraintLayout
                 android:id="@+id/loginServerChoiceMatrixOrg"
                 android:layout_width="match_parent"
@@ -84,7 +85,7 @@
 
             </im.vector.riotx.core.platform.CheckableConstraintLayout>
 
-            <im.vector.riotx.core.platform.CheckableConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginServerChoiceModular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,9 +136,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/loginServerChoiceModularText" />
 
-            </im.vector.riotx.core.platform.CheckableConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <im.vector.riotx.core.platform.CheckableConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginServerChoiceOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,20 +179,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
 
-            </im.vector.riotx.core.platform.CheckableConstraintLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginServerSubmit"
-                style="@style/Style.Vector.Login.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/login_continue"
-                android:transitionName="loginSubmitTransition"
-                app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdSubmit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginServerIKnowMyIdSubmit"
@@ -204,7 +192,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerSubmit" />
+                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
