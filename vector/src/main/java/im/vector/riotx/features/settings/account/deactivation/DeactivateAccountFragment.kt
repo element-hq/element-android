@@ -107,7 +107,7 @@ class DeactivateAccountFragment @Inject constructor(
                     displayErrorDialog(it.throwable)
                 }
                 DeactivateAccountViewEvents.Done            ->
-                    MainActivity.restartApp(activity!!, MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
+                    MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
             }.exhaustive
         }
     }

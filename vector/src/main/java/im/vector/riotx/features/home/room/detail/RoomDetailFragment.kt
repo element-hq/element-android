@@ -1541,7 +1541,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-        Snackbar.make(view!!, message, duration).show()
+        Snackbar.make(requireView(), message, duration).show()
     }
 
     // VectorInviteView.Callback

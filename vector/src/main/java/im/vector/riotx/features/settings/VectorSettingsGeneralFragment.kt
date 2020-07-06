@@ -221,7 +221,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                MainActivity.restartApp(activity!!, MainActivityArgs(clearCache = true))
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
                 false
             }
         }
@@ -622,7 +622,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             var order = addEmailBtn.order
 
             for ((index, email3PID) in currentEmail3PID.withIndex()) {
-                val preference = VectorPreference(activity!!)
+                val preference = VectorPreference(requireActivity())
 
                 preference.title = getString(R.string.settings_email_address)
                 preference.summary = "TODO" // email3PID.address

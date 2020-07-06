@@ -105,7 +105,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     @OnClick(R.id.keys_backup_setup_step3_copy_button)
     fun onCopyButtonClicked() {
-        val dialog = BottomSheetDialog(activity!!)
+        val dialog = BottomSheetDialog(requireActivity())
         dialog.setContentView(R.layout.bottom_sheet_save_recovery_key)
         dialog.setCanceledOnTouchOutside(true)
         val recoveryKey = viewModel.recoveryKey.value!!
@@ -124,7 +124,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                         }
 
                 it.debouncedClicks {
-                    copyToClipboard(activity!!, recoveryKey)
+                    copyToClipboard(requireActivity(), recoveryKey)
                 }
             }
         }
@@ -159,7 +159,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         viewModel.recoveryKey.value?.let {
             viewModel.copyHasBeenMade = true
 
-            copyToClipboard(activity!!, it)
+            copyToClipboard(requireActivity(), it)
         }
     }
 
