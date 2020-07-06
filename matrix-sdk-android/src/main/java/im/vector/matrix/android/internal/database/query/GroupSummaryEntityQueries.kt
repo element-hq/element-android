@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.createObject

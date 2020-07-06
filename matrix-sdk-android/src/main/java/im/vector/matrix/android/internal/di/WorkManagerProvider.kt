@@ -23,7 +23,6 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -49,7 +48,6 @@ internal class WorkManagerProvider @Inject constructor(
                                                                                repeatIntervalTimeUnit: TimeUnit) =
             PeriodicWorkRequestBuilder<W>(repeatInterval, repeatIntervalTimeUnit)
                     .addTag(tag)
-
 
     /**
      * Cancel all works instantiated by the Matrix SDK for the current session, and not those from the SDK client, or for other sessions

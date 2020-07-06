@@ -98,8 +98,7 @@ internal object FilterUtil {
                             state = filter.room.state?.copy(lazyLoadMembers = true)
                                     ?: RoomEventFilter(lazyLoadMembers = true)
                     )
-                            ?: RoomFilter(state = RoomEventFilter(lazyLoadMembers = true),
-                                    timeline = RoomEventFilter(limit = 1500))
+                            ?: RoomFilter(state = RoomEventFilter(lazyLoadMembers = true))
             )
         } else {
             val newRoomEventFilter = filter.room?.state?.copy(lazyLoadMembers = null)?.takeIf { it.hasData() }

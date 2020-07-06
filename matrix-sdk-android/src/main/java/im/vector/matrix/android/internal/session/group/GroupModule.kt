@@ -21,8 +21,6 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.room.DefaultRoomFactory
-import im.vector.matrix.android.internal.session.room.RoomFactory
 import retrofit2.Retrofit
 
 @Module

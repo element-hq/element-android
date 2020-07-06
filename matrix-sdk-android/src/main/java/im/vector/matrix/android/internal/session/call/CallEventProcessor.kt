@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.call
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.model.EventInsertEntity
 import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
