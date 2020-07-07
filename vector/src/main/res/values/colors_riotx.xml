@@ -54,6 +54,12 @@
     <color name="riotx_base_dark">#FF22282F</color>
     <color name="riotx_base_black">#FF000000</color>
 
+    <!-- Background color of bottom sheets -->
+    <attr name="riotx_bottom_sheet_background" format="color" />
+    <color name="riotx_bottom_sheet_background_light">#FFFFFFFF</color>
+    <color name="riotx_bottom_sheet_background_dark">#FF282C35</color>
+    <color name="riotx_bottom_sheet_background_black">#FF000000</color>
+
     <attr name="riotx_base_text_icon_primary" format="color" />
     <color name="riotx_base_text_icon_primary_light">#FFFFFFFF</color>
     <color name="riotx_base_text_icon_primary_dark">#FFEDF3FF</color>

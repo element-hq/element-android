@@ -5,6 +5,7 @@
     android:id="@+id/callControlsWrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?riotx_bottom_sheet_background"
     android:orientation="vertical">
 
     <im.vector.riotx.core.ui.views.BottomSheetActionButton
