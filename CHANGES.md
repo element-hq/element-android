@@ -5,7 +5,9 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
+ - Creating and listening to EventInsertEntity. (#1634)
+ - Handling (almost) properly the groups fetching (#1634)
 
 Bugfix 🐛:
  -
