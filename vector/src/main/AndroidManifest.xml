@@ -37,6 +37,18 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
+    <!-- Even if not documented (here: https://developer.android.com/topic/arc/manifest) and lint rule
+    PermissionImpliesUnsupportedChromeOsHardware does not trig an error, try to make the app compatible with Chromebook -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
     <application
         android:name=".VectorApplication"
         android:allowBackup="false"

@@ -23,7 +23,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
- -
+ - Try to make the app compatible with Chromebook (#1617)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================
