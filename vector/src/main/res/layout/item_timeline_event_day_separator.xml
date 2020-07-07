@@ -22,7 +22,7 @@
         android:background="?riotx_background"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
-        android:textColor="?riotx_header_panel_text_primary"
+        android:textColor="?riotx_header_panel_text_secondary"
         android:textSize="15sp"
         tools:text="@tools:sample/date/day_of_week" />
 

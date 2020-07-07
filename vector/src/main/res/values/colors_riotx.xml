@@ -50,7 +50,7 @@
     <color name="riotx_background_black">#FF000000</color>
 
     <attr name="riotx_base" format="color" />
-    <color name="riotx_base_light">#FF27303A</color>
+    <color name="riotx_base_light">#FFF5F7FA</color>
     <color name="riotx_base_dark">#FF22282F</color>
     <color name="riotx_base_black">#FF000000</color>
 

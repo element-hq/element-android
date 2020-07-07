@@ -21,8 +21,11 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceViewHolder
+import im.vector.riotx.R
+import im.vector.riotx.features.themes.ThemeUtils
 
 /**
  * Customize PreferenceCategory class to redefine some attributes.
@@ -46,6 +49,7 @@ class VectorPreferenceCategory : PreferenceCategory {
         val titleTextView = holder.itemView.findViewById<TextView>(android.R.id.title)
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
+        titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
 
         // "isIconSpaceReserved = false" does not work for preference category, so remove the padding
         if (!isIconSpaceReserved) {

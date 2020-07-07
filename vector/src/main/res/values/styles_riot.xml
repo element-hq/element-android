@@ -202,7 +202,7 @@
 
     <style name="VectorSearchView" parent="Widget.AppCompat.SearchView">
         <item name="searchIcon">@drawable/ic_search</item>
-        <item name="closeIcon">@drawable/ic_x_green</item>
+        <item name="closeIcon">@drawable/ic_x_gray</item>
         <item name="iconifiedByDefault">false</item>
     </style>
 
