@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.RoomJoinRules
 import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.model.RoomThirdPartyInviteContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
@@ -63,6 +64,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
@@ -156,6 +158,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(event, senderName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(event, senderName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(event, senderName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
@@ -251,6 +254,31 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             sp.getString(R.string.notice_made_future_room_visibility_by_you, formattedVisibility)
         } else {
             sp.getString(R.string.notice_made_future_room_visibility, senderName, formattedVisibility)
+        }
+    }
+
+    private fun formatRoomThirdPartyInvite(event: Event, senderName: String?): CharSequence? {
+        val content = event.getClearContent().toModel<RoomThirdPartyInviteContent>()
+        val prevContent = event.resolvedPrevContent()?.toModel<RoomThirdPartyInviteContent>()
+
+        return when {
+            prevContent != null -> {
+                // Revoke case
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_third_party_revoked_invite_by_you, prevContent.displayName)
+                } else {
+                    sp.getString(R.string.notice_room_third_party_revoked_invite, senderName, prevContent.displayName)
+                }
+            }
+            content != null     -> {
+                // Invitation case
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_third_party_invite_by_you, content.displayName)
+                } else {
+                    sp.getString(R.string.notice_room_third_party_invite, senderName, content.displayName)
+                }
+            }
+            else                -> null
         }
     }
 

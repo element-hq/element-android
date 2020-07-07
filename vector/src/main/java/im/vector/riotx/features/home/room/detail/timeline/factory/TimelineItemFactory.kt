@@ -50,6 +50,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_TOPIC,
                 EventType.STATE_ROOM_AVATAR,
                 EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STATE_ROOM_ALIASES,
                 EventType.STATE_ROOM_CANONICAL_ALIAS,
                 EventType.STATE_ROOM_JOIN_RULES,
@@ -96,8 +97,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     verificationConclusionItemFactory.create(event, highlight, callback)
                 }
 
-                // Unhandled event types (yet)
-                EventType.STATE_ROOM_THIRD_PARTY_INVITE -> defaultItemFactory.create(event, highlight, callback)
+                // Unhandled event types
                 else                                    -> {
                     // Should only happen when shouldShowHiddenEvents() settings is ON
                     Timber.v("Type ${event.root.getClearType()} not handled")
