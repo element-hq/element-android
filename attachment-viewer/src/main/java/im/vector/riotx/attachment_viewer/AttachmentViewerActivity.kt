@@ -19,15 +19,19 @@ package im.vector.riotx.attachment_viewer
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_attachment_viewer.*
 import kotlin.math.abs
@@ -39,6 +43,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     lateinit var transitionImageContainer: ViewGroup
 
     var topInset = 0
+    var systemUiVisibility = true
 
     private var overlayView: View? = null
         set(value) {
@@ -52,7 +57,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     private lateinit var swipeDismissHandler: SwipeToDismissHandler
     private lateinit var directionDetector: SwipeDirectionDetector
     private lateinit var scaleDetector: ScaleGestureDetector
-
+    private lateinit var gestureDetector: GestureDetectorCompat
 
     var currentPosition = 0
 
@@ -83,14 +88,10 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         // the touch coordinates
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-
-//        // clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 
         setContentView(R.layout.activity_attachment_viewer)
         attachmentPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
@@ -100,6 +101,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         transitionImageContainer = findViewById(R.id.transitionImageContainer)
         pager2 = attachmentPager
         directionDetector = createSwipeDirectionDetector()
+        gestureDetector = createGestureDetector()
 
         attachmentPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -124,7 +126,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             topInset = insets.systemWindowInsetTop
             insets
         }
-
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -167,7 +168,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         }
 
         scaleDetector.onTouchEvent(event)
-//        gestureDetector.onTouchEvent(event)
+        gestureDetector.onTouchEvent(event)
     }
 
     private fun handleEventActionDown(event: MotionEvent) {
@@ -186,13 +187,35 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
+    private fun handleSingleTap(event: MotionEvent, isOverlayWasClicked: Boolean) {
+        // TODO if there is no overlay, we should at least toggle system bars?
+        if (overlayView != null && !isOverlayWasClicked) {
+            toggleOverlayViewVisibility()
+            super.dispatchTouchEvent(event)
+        }
+    }
+
+    private fun toggleOverlayViewVisibility() {
+        if (systemUiVisibility) {
+            // we hide
+            TransitionManager.beginDelayedTransition(rootContainer)
+            hideSystemUI()
+            overlayView?.isVisible = false
+        } else {
+            // we show
+            TransitionManager.beginDelayedTransition(rootContainer)
+            showSystemUI()
+            overlayView?.isVisible = true
+        }
+    }
+
     private fun handleTouchIfNotScaled(event: MotionEvent): Boolean {
 
         Log.v("ATTACHEMENTS", "handleTouchIfNotScaled ${event}")
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {
-            SwipeDirection.Up, SwipeDirection.Down -> {
+            SwipeDirection.Up, SwipeDirection.Down    -> {
                 if (isSwipeToDismissAllowed && !wasScaled && isImagePagerIdle) {
                     swipeDismissHandler.onTouch(rootContainer, event)
                 } else true
@@ -200,10 +223,9 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             SwipeDirection.Left, SwipeDirection.Right -> {
                 attachmentPager.dispatchTouchEvent(event)
             }
-            else -> true
+            else                                      -> true
         }
     }
-
 
     private fun handleSwipeViewMove(translationY: Float, translationLimit: Int) {
         val alpha = calculateTranslationAlpha(translationY, translationLimit)
@@ -233,11 +255,49 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     private fun createScaleGestureDetector() =
             ScaleGestureDetector(this, ScaleGestureDetector.SimpleOnScaleGestureListener())
 
+    private fun createGestureDetector() =
+            GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    if (isImagePagerIdle) {
+                        handleSingleTap(e, isOverlayWasClicked)
+                    }
+                    return false
+                }
+
+                override fun onDoubleTap(e: MotionEvent?): Boolean {
+                    return super.onDoubleTap(e)
+                }
+            })
 
     protected open fun shouldAnimateDismiss(): Boolean = true
 
     protected open fun animateClose() {
         window.statusBarColor = Color.TRANSPARENT
         finish()
+    }
+
+    private fun hideSystemUI() {
+        systemUiVisibility = false
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    // Shows the system bars by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private fun showSystemUI() {
+        systemUiVisibility = true
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
 }

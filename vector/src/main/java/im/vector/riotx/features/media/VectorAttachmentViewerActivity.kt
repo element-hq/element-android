@@ -109,6 +109,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         }
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
 
     }
 
