@@ -29,7 +29,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.transition.Transition
 import im.vector.riotx.R
-import im.vector.riotx.attachment_viewer.AttachmentViewerActivity
+import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
 import im.vector.riotx.core.di.*
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
@@ -62,7 +62,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
     private var isAnimatingOut = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         Timber.i("onCreate Activity ${this.javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
@@ -80,7 +79,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         val events = room?.getAttachementMessages() ?: emptyList()
         val index = events.indexOfFirst { it.eventId == args.eventId }
         initialIndex = index
-
 
         if (savedInstanceState == null && addTransitionListener()) {
             args.sharedTransitionName?.let {
@@ -110,11 +108,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
-
     }
 
     private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
-
 
     override fun shouldAnimateDismiss(): Boolean {
         return currentPosition != initialIndex
@@ -137,7 +133,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
             transitionImageContainer.isVisible = true
         }
         isAnimatingOut = true
-        ActivityCompat.finishAfterTransition(this);
+        ActivityCompat.finishAfterTransition(this)
     }
 
     /* ==========================================================================================
@@ -180,7 +176,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
     private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
 
-
     private fun getVectorComponent(): VectorComponent {
         return (application as HasVectorInjector).injector()
     }
@@ -205,7 +200,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
         }
-
     }
 
     override fun onDismissTapped() {

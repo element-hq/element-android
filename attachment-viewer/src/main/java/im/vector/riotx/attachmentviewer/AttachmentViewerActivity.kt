@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
 import android.graphics.Color
 import android.os.Bundle
@@ -120,7 +120,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
 
         scaleDetector = createScaleGestureDetector()
 
-
         ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { _, insets ->
             overlayView?.updatePadding(top = insets.systemWindowInsetTop)
             topInset = insets.systemWindowInsetTop
@@ -129,7 +128,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-
         // The zoomable view is configured to disallow interception when image is zoomed
 
         // Check if the overlay is visible, and wants to handle the click
@@ -137,19 +135,17 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             return true
         }
 
-
         Log.v("ATTACHEMENTS", "================\ndispatchTouchEvent $ev")
         handleUpDownEvent(ev)
 
         Log.v("ATTACHEMENTS", "scaleDetector is in progress ${scaleDetector.isInProgress}")
         Log.v("ATTACHEMENTS", "pointerCount ${ev.pointerCount}")
-        Log.v("ATTACHEMENTS", "wasScaled ${wasScaled}")
+        Log.v("ATTACHEMENTS", "wasScaled $wasScaled")
         if (swipeDirection == null && (scaleDetector.isInProgress || ev.pointerCount > 1 || wasScaled)) {
             wasScaled = true
             Log.v("ATTACHEMENTS", "dispatch to pager")
             return attachmentPager.dispatchTouchEvent(ev)
         }
-
 
         Log.v("ATTACHEMENTS", "is current item scaled ${isScaled()}")
         return (if (isScaled()) super.dispatchTouchEvent(ev) else handleTouchIfNotScaled(ev)).also {
@@ -210,8 +206,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
     }
 
     private fun handleTouchIfNotScaled(event: MotionEvent): Boolean {
-
-        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled ${event}")
+        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled $event")
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {

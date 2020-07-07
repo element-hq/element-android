@@ -14,38 +14,26 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
+import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
-import com.github.chrisbanes.photoview.PhotoView
 
-class ZoomableImageViewHolder constructor(itemView: View) :
+class AnimatedImageViewHolder constructor(itemView: View) :
         BaseViewHolder(itemView) {
 
-    val touchImageView: PhotoView = itemView.findViewById(R.id.touchImageView)
+    val touchImageView: ImageView = itemView.findViewById(R.id.imageView)
     val imageLoaderProgress: ProgressBar = itemView.findViewById(R.id.imageLoaderProgress)
 
-    init {
-        touchImageView.setAllowParentInterceptOnEdge(false)
-        touchImageView.setOnScaleChangeListener { scaleFactor, _, _ ->
-            Log.v("ATTACHEMENTS", "scaleFactor $scaleFactor")
-            // It's a bit annoying but when you pitch down the scaling
-            // is not exactly one :/
-            touchImageView.setAllowParentInterceptOnEdge(scaleFactor <= 1.0008f)
-        }
-        touchImageView.setScale(1.0f, true)
-        touchImageView.setAllowParentInterceptOnEdge(true)
-    }
-
-    val customTargetView = object : CustomViewTarget<PhotoView, Drawable>(touchImageView) {
+    val customTargetView = object : CustomViewTarget<ImageView, Drawable>(touchImageView) {
 
         override fun onResourceLoading(placeholder: Drawable?) {
             imageLoaderProgress.isVisible = true
@@ -67,6 +55,9 @@ class ZoomableImageViewHolder constructor(itemView: View) :
                 height = LinearLayout.LayoutParams.MATCH_PARENT
             }
             touchImageView.setImageDrawable(resource)
+            if (resource is Animatable) {
+                resource.start()
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.riotx.attachment_viewer">
+    package="im.vector.riotx.attachmentviewer">
 
     <application>
         <activity
-            android:name="im.vector.riotx.attachment_viewer.AttachmentViewerActivity"
+            android:name="im.vector.riotx.attachmentviewer.AttachmentViewerActivity"
             android:theme="@style/Theme.Transparent" />
     </application>
 

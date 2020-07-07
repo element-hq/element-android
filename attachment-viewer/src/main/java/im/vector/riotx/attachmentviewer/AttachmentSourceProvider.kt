@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
 import android.content.Context
 import android.view.View

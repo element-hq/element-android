@@ -23,14 +23,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.updateLayoutParams
 import im.vector.riotx.R
-import im.vector.riotx.attachment_viewer.AttachmentInfo
 
 class AttachmentOverlayView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-
 
     var onShareCallback: (() -> Unit) ? = null
     var onBack: (() -> Unit) ? = null

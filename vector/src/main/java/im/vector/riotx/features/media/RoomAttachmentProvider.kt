@@ -26,10 +26,10 @@ import im.vector.matrix.android.api.session.room.model.message.MessageWithAttach
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
-import im.vector.riotx.attachment_viewer.AnimatedImageViewHolder
-import im.vector.riotx.attachment_viewer.AttachmentInfo
-import im.vector.riotx.attachment_viewer.AttachmentSourceProvider
-import im.vector.riotx.attachment_viewer.ZoomableImageViewHolder
+import im.vector.riotx.attachmentviewer.AnimatedImageViewHolder
+import im.vector.riotx.attachmentviewer.AttachmentInfo
+import im.vector.riotx.attachmentviewer.AttachmentSourceProvider
+import im.vector.riotx.attachmentviewer.ZoomableImageViewHolder
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import javax.inject.Inject
@@ -108,10 +108,9 @@ class RoomAttachmentProvider(
         val dateString = item.root.localDateTime().let {
             "${dateFormatter.formatMessageDay(it)} at ${dateFormatter.formatMessageHour(it)} "
         }
-        overlayView?.updateWith("${position + 1} of ${attachments.size}","${item.senderInfo.displayName} $dateString" )
+        overlayView?.updateWith("${position + 1} of ${attachments.size}", "${item.senderInfo.displayName} $dateString")
         return overlayView
     }
-
 
 //    override fun loadImage(holder: ImageViewHolder, info: AttachmentInfo.Image) {
 //        (info.data as? ImageContentRenderer.Data)?.let {

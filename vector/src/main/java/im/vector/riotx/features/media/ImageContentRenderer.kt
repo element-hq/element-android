@@ -144,7 +144,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun renderThumbnailDontTransform(data: Data, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
-
         // a11y
         imageView.contentDescription = data.filename
 
@@ -181,8 +180,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         })
                 .dontTransform()
                 .into(imageView)
-
-
     }
 
     private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {

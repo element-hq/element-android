@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -100,7 +100,7 @@ class SwipeToDismissHandler(
                         onDismiss()
                     }
 
-                    //remove the update listener, otherwise it will be saved on the next animation execution:
+                    // remove the update listener, otherwise it will be saved on the next animation execution:
                     swipeView.animate().setUpdateListener(null)
                 })
                 .start()
@@ -112,7 +112,6 @@ internal fun ViewPropertyAnimator.setAnimatorListener(
         onAnimationStart: ((Animator?) -> Unit)? = null
 ) = this.setListener(
         object : AnimatorListenerAdapter() {
-
             override fun onAnimationEnd(animation: Animator?) {
                 onAnimationEnd?.invoke(animation)
             }

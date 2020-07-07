@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
 sealed class SwipeDirection {
     object NotDetected : SwipeDirection()

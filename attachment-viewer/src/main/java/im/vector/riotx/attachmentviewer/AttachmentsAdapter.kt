@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachment_viewer
+package im.vector.riotx.attachmentviewer
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-
 
 abstract class BaseViewHolder constructor(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
@@ -28,16 +27,14 @@ abstract class BaseViewHolder constructor(itemView: View) :
     abstract fun bind(attachmentInfo: AttachmentInfo)
 }
 
-
 class AttachmentViewHolder constructor(itemView: View) :
         BaseViewHolder(itemView) {
 
     override fun bind(attachmentInfo: AttachmentInfo) {
-
     }
 }
 
-//class AttachmentsAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+// class AttachmentsAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
 
     var attachmentSourceProvider: AttachmentSourceProvider? = null
@@ -75,7 +72,6 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
             is AttachmentInfo.Audio -> TODO()
             is AttachmentInfo.File  -> TODO()
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -85,7 +81,7 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         attachmentSourceProvider?.getAttachmentInfoAt(position)?.let {
             holder.bind(it)
-            when(it) {
+            when (it) {
                 is AttachmentInfo.Image -> {
                     attachmentSourceProvider?.loadImage(holder as ZoomableImageViewHolder, it)
                 }
@@ -94,7 +90,6 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
                 }
                 else                    -> {}
             }
-
         }
     }
 
@@ -119,15 +114,13 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
 //        }
 //        return fragment
 //    }
-
 }
 
-
-//private const val ARG_OBJECT = "object"
+// private const val ARG_OBJECT = "object"
 //
-//// Instances of this class are fragments representing a single
-//// object in our collection.
-//class DemoObjectFragment : Fragment() {
+// // Instances of this class are fragments representing a single
+// // object in our collection.
+// class DemoObjectFragment : Fragment() {
 //
 //    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 //        return inflater.inflate(R.layout.view_image_attachment, container, false)
@@ -139,4 +132,4 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
 //            textView.text = getInt(ARG_OBJECT).toString()
 //        }
 //    }
-//}
+// }
