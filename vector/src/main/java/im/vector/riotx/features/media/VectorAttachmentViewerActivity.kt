@@ -30,7 +30,11 @@ import androidx.core.view.isVisible
 import androidx.transition.Transition
 import im.vector.riotx.R
 import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
-import im.vector.riotx.core.di.*
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.di.DaggerScreenComponent
+import im.vector.riotx.core.di.HasVectorInjector
+import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
@@ -136,9 +140,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         ActivityCompat.finishAfterTransition(this)
     }
 
-    /* ==========================================================================================
-    * PRIVATE METHODS
-    * ========================================================================================== */
+    // ==========================================================================================
+    // PRIVATE METHODS
+    // ==========================================================================================
 
     /**
      * Try and add a [Transition.TransitionListener] to the entering shared element
@@ -154,8 +158,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
             // There is an entering shared element transition so add a listener to it
             transition.addListener(
                     onEnd = {
+                        // The listener is also called when we are exiting
+                        // so we use a boolean to avoid reshowing pager at end of dismiss transition
                         if (!isAnimatingOut) {
-                            // The listener is also called when we are exiting
                             transitionImageContainer.isVisible = false
                             pager2.isInvisible = false
                         }
@@ -196,7 +201,11 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         const val EXTRA_ARGS = "EXTRA_ARGS"
         const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
 
-        fun newIntent(context: Context, mediaData: ImageContentRenderer.Data, roomId: String?, eventId: String, sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
+        fun newIntent(context: Context,
+                      mediaData: ImageContentRenderer.Data,
+                      roomId: String?,
+                      eventId: String,
+                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
         }

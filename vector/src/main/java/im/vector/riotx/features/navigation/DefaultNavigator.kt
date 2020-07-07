@@ -49,7 +49,11 @@ import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
-import im.vector.riotx.features.media.*
+import im.vector.riotx.features.media.BigImageViewerActivity
+import im.vector.riotx.features.media.ImageContentRenderer
+import im.vector.riotx.features.media.VectorAttachmentViewerActivity
+import im.vector.riotx.features.media.VideoContentRenderer
+import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -242,7 +246,11 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
-    override fun openImageViewer(activity: Activity, roomId: String?, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+    override fun openImageViewer(activity: Activity,
+                                 roomId: String?,
+                                 mediaData: ImageContentRenderer.Data,
+                                 view: View,
+                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
         VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
