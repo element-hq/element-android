@@ -50,6 +50,7 @@ import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
@@ -60,6 +61,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.createUIHandler
+import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -76,6 +78,7 @@ internal class DefaultSession @Inject constructor(
         private val eventBus: EventBus,
         @SessionId
         override val sessionId: String,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,

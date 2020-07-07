@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun GroupSummaryEntity.Companion.where(realm: Realm, groupId: String? = null): RealmQuery<GroupSummaryEntity> {
@@ -33,4 +34,8 @@ internal fun GroupSummaryEntity.Companion.where(realm: Realm, groupId: String? =
 internal fun GroupSummaryEntity.Companion.where(realm: Realm, groupIds: List<String>): RealmQuery<GroupSummaryEntity> {
     return realm.where<GroupSummaryEntity>()
             .`in`(GroupSummaryEntityFields.GROUP_ID, groupIds.toTypedArray())
+}
+
+internal fun GroupSummaryEntity.Companion.getOrCreate(realm: Realm, groupId: String): GroupSummaryEntity {
+    return where(realm, groupId).findFirst() ?: realm.createObject(groupId)
 }

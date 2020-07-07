@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,25 +16,22 @@
 
 package im.vector.matrix.android.internal.database.model
 
-import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 
 /**
- * This class is used to store group info (groupId and membership) from the sync response.
- * Then GetGroupDataTask is called regularly to fetch group information from the homeserver.
+ * This class is used to get notification on new events being inserted. It's to avoid realm getting slow when listening to insert
+ * in EventEntity table.
  */
-internal open class GroupEntity(@PrimaryKey var groupId: String = "")
-    : RealmObject() {
+internal open class EventInsertEntity(var eventId: String = "",
+                                      var eventType: String = ""
+) : RealmObject() {
 
-    private var membershipStr: String = Membership.NONE.name
-    var membership: Membership
+    private var insertTypeStr: String = EventInsertType.INCREMENTAL_SYNC.name
+    var insertType: EventInsertType
         get() {
-            return Membership.valueOf(membershipStr)
+            return EventInsertType.valueOf(insertTypeStr)
         }
         set(value) {
-            membershipStr = value.name
+            insertTypeStr = value.name
         }
-
-    companion object
 }

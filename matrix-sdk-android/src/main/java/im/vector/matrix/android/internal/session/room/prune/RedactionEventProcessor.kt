@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.matrix.android.internal.session.room.prune
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
@@ -23,32 +23,28 @@ import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
-internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
+/**
+ * Listens to the database for the insertion of any redaction event.
+ * As it will actually delete the content, it should be called last in the list of listener.
+ */
+internal class RedactionEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    data class Params(
-            val redactionEvents: List<Event>
-    )
-}
+    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
+        return eventType == EventType.REDACTION
+    }
 
-internal class DefaultPruneEventTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : PruneEventTask {
-
-    override suspend fun execute(params: PruneEventTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event)
-            }
-        }
+    override suspend fun process(realm: Realm, event: Event) {
+        pruneEvent(realm, event)
     }
 
     private fun pruneEvent(realm: Realm, redactionEvent: Event) {

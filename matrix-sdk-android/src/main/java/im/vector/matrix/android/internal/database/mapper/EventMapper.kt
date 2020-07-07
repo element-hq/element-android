@@ -45,7 +45,6 @@ internal object EventMapper {
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         eventEntity.unsignedData = uds
-
         eventEntity.decryptionResultJson = event.mxDecryptionResult?.let {
             MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(it)
         }
