@@ -846,17 +846,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) {
-        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
-        withState { state ->
-            // For edit, just delete the current draft
-            if (state.sendMode is SendMode.EDIT) {
-                room.deleteDraft(NoOpMatrixCallback())
-            } else {
-                // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
-            }
+    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) = withState {
+        if (it.sendMode is SendMode.EDIT) {
+            room.deleteDraft(NoOpMatrixCallback())
+        } else {
+            // Save a new draft and keep the previously entered text
+            room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
         }
+        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {

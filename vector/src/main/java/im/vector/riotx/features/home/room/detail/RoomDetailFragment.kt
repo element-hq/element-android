@@ -636,7 +636,7 @@ class RoomDetailFragment @Inject constructor(
             val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
-        composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
+        composerLayout.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 
         updateComposerText(defaultContent)
 
