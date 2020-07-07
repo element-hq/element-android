@@ -457,6 +457,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                             handleInviteSlashCommand(slashCommandResult)
                             popDraft()
                         }
+                        is ParsedCommand.Invite3Pid               -> {
+                            handleInvite3pidSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             handleSetUserPowerLevel(slashCommandResult)
                             popDraft()
@@ -675,6 +679,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         launchSlashCommandFlow {
             room.invite(invite.userId, invite.reason, it)
+        }
+    }
+
+    private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
+        launchSlashCommandFlow {
+            room.invite3pid(invite.threePid, it)
         }
     }
 

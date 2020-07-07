@@ -19,6 +19,8 @@ package im.vector.riotx.core.extensions
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
@@ -33,3 +35,16 @@ fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit) = apply { arguments = Bu
  * Check if a CharSequence is an email
  */
 fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+/**
+ * Check if a CharSequence is a phone number
+ * FIXME It does not work?
+ */
+fun CharSequence.isMsisdn(): Boolean {
+    return try {
+        PhoneNumberUtil.getInstance().parse(this, null)
+        true
+    } catch (e: NumberParseException) {
+        false
+    }
+}

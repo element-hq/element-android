@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
+import im.vector.matrix.android.internal.session.room.membership.threepid.ThreePidInviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentBody
 import im.vector.matrix.android.internal.session.room.send.SendResponse
@@ -169,6 +170,14 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
     fun invite(@Path("roomId") roomId: String, @Body body: InviteBody): Call<Unit>
+
+    /**
+     * Invite a user to a room, using a ThreePid
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#id101
+     * @param roomId Required. The room identifier (not alias) to which to invite the user.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
+    fun invite3pid(@Path("roomId") roomId: String, @Body body: ThreePidInviteBody): Call<Unit>
 
     /**
      * Send a generic state events

@@ -62,6 +62,7 @@ import javax.net.ssl.HttpsURLConnection
 @SessionScope
 internal class DefaultIdentityService @Inject constructor(
         private val identityStore: IdentityStore,
+        private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val identityBulkLookupTask: IdentityBulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
@@ -278,7 +279,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private suspend fun lookUpInternal(canRetry: Boolean, threePids: List<ThreePid>): List<FoundThreePid> {
-        ensureToken()
+        ensureIdentityTokenTask.execute(Unit)
 
         return try {
             identityBulkLookupTask.execute(IdentityBulkLookupTask.Params(threePids))
@@ -292,17 +293,6 @@ internal class DefaultIdentityService @Inject constructor(
                 throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
                 else                                   -> throw throwable
             }
-        }
-    }
-
-    private suspend fun ensureToken() {
-        val identityData = identityStore.getIdentityData() ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val url = identityData.identityServerUrl ?: throw IdentityServiceError.NoIdentityServerConfigured
-
-        if (identityData.token == null) {
-            // Try to get a token
-            val token = getNewIdentityServerToken(url)
-            identityStore.setToken(token)
         }
     }
 

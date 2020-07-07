@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.members
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -62,6 +63,12 @@ interface MembershipService {
     fun invite(userId: String,
                reason: String? = null,
                callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Invite a user with email or phone number in the room
+     */
+    fun invite3pid(threePid: ThreePid,
+                   callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Ban a user from the room

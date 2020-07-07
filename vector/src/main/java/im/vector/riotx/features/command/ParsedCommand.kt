@@ -16,6 +16,8 @@
 
 package im.vector.riotx.features.command
 
+import im.vector.matrix.android.api.session.identity.ThreePid
+
 /**
  * Represent a parsed command
  */
@@ -41,6 +43,7 @@ sealed class ParsedCommand {
     class UnbanUser(val userId: String, val reason: String?) : ParsedCommand()
     class SetUserPowerLevel(val userId: String, val powerLevel: Int?) : ParsedCommand()
     class Invite(val userId: String, val reason: String?) : ParsedCommand()
+    class Invite3Pid(val threePid: ThreePid) : ParsedCommand()
     class JoinRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
     class PartRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
     class ChangeTopic(val topic: String) : ParsedCommand()

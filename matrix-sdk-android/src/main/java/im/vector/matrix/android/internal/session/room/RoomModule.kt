@@ -44,6 +44,8 @@ import im.vector.matrix.android.internal.session.room.membership.joining.InviteT
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
+import im.vector.matrix.android.internal.session.room.membership.threepid.DefaultInviteThreePidTask
+import im.vector.matrix.android.internal.session.room.membership.threepid.InviteThreePidTask
 import im.vector.matrix.android.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
@@ -138,6 +140,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindInviteTask(task: DefaultInviteTask): InviteTask
+
+    @Binds
+    abstract fun bindInviteThreePidTask(task: DefaultInviteThreePidTask): InviteThreePidTask
 
     @Binds
     abstract fun bindJoinRoomTask(task: DefaultJoinRoomTask): JoinRoomTask
