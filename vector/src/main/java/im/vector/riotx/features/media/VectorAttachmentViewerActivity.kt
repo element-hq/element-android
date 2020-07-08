@@ -23,11 +23,21 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.transition.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.transition.Transition
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.file.FileService
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -35,10 +45,13 @@ import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.di.VectorComponent
+import im.vector.riotx.core.intent.getMimeTypeFromUri
+import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
@@ -64,6 +77,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
     private var initialIndex = 0
     private var isAnimatingOut = false
+    private var eventList: List<TimelineEvent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +95,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
         val room = args.roomId?.let { session.getRoom(it) }
         val events = room?.getAttachmentMessages() ?: emptyList()
+        eventList = events
         val index = events.indexOfFirst { it.eventId == args.eventId }
         initialIndex = index
 
@@ -228,6 +243,27 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
     }
 
     override fun onShareTapped() {
-        TODO("Not yet implemented")
+        // Share
+        eventList?.get(currentPosition)?.let { timelineEvent ->
+
+            val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
+                    as? MessageWithAttachmentContent
+                    ?: return@let
+            sessionHolder.getSafeActiveSession()?.fileService()?.downloadFile(
+                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                    id = timelineEvent.eventId,
+                    fileName = messageContent.body,
+                    mimeType = messageContent.mimeType,
+                    url = messageContent.getFileUrl(),
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    callback = object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                                shareMedia(this@VectorAttachmentViewerActivity, data, getMimeTypeFromUri(this@VectorAttachmentViewerActivity, data.toUri()))
+                            }
+                        }
+                    }
+            )
+        }
     }
 }

@@ -58,6 +58,9 @@ class AttachmentOverlayView @JvmOverloads constructor(
         findViewById<ImageView>(R.id.overlayBackButton).setOnClickListener {
             onBack?.invoke()
         }
+        findViewById<ImageView>(R.id.overlayShareButton).setOnClickListener {
+            onShareCallback?.invoke()
+        }
     }
 
     fun updateWith(counter: String, senderInfo: String) {
