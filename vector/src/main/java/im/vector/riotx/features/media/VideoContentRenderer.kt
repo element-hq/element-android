@@ -70,7 +70,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                                 downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                                 id = data.eventId,
                                 fileName = data.filename,
-                                mimeType = null,
+                                mimeType = data.mimeType,
                                 url = data.url,
                                 elementToDecrypt = data.elementToDecrypt,
                                 callback = object : MatrixCallback<File> {

@@ -873,13 +873,13 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else {
             session.fileService().downloadFile(
-                    FileService.DownloadMode.FOR_INTERNAL_USE,
-                    action.eventId,
-                    action.messageFileContent.getFileName(),
-                    action.messageFileContent.mimeType,
-                    mxcUrl,
-                    action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
-                    object : MatrixCallback<File> {
+                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                    id = action.eventId,
+                    fileName = action.messageFileContent.getFileName(),
+                    mimeType = action.messageFileContent.mimeType,
+                    url = mxcUrl,
+                    elementToDecrypt = action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                    callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                     action.messageFileContent.mimeType,
