@@ -18,8 +18,10 @@ package im.vector.riotx.features.userdirectory
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.user.model.User
@@ -50,7 +52,16 @@ class PhoneBookFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         setupFilterView()
+        setupOnlyBoundContactsView()
         setupCloseView()
+    }
+
+    private fun setupOnlyBoundContactsView() {
+        phoneBookOnlyBoundContacts.checkedChanges()
+                .subscribe {
+                    phoneBookViewModel.handle(PhoneBookAction.OnlyBoundContacts(it))
+                }
+                .disposeOnDestroyView()
     }
 
     private fun setupFilterView() {
@@ -81,8 +92,9 @@ class PhoneBookFragment @Inject constructor(
         }
     }
 
-    override fun invalidate() = withState(phoneBookViewModel) {
-        phoneBookController.setData(it)
+    override fun invalidate() = withState(phoneBookViewModel) { state ->
+        phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
+        phoneBookController.setData(state)
     }
 
     override fun onMatrixIdClick(matrixId: String) {

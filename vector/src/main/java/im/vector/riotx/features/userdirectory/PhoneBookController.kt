@@ -52,11 +52,11 @@ class PhoneBookController @Inject constructor(
 
     override fun buildModels() {
         val currentState = state ?: return
-        val hasSearch = currentState.searchTerm.isNotBlank()
+        val hasSearch = currentState.searchTerm.isNotEmpty()
         when (val asyncMappedContacts = currentState.mappedContacts) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(currentState.filteredMappedContacts, hasSearch)
+            is Success       -> renderSuccess(currentState.filteredMappedContacts, hasSearch, currentState.onlyBoundContacts)
             is Fail          -> renderFailure(asyncMappedContacts.error)
         }
     }
@@ -75,49 +75,54 @@ class PhoneBookController @Inject constructor(
     }
 
     private fun renderSuccess(mappedContacts: List<ContactModel>,
-                              hasSearch: Boolean) {
+                              hasSearch: Boolean,
+                              onlyBoundContacts: Boolean) {
         if (mappedContacts.isEmpty()) {
             renderEmptyState(hasSearch)
         } else {
-            renderContacts(mappedContacts)
+            renderContacts(mappedContacts, onlyBoundContacts)
         }
     }
 
-    private fun renderContacts(mappedContacts: List<ContactModel>) {
+    private fun renderContacts(mappedContacts: List<ContactModel>, onlyBoundContacts: Boolean) {
         for (mappedContact in mappedContacts) {
             contactItem {
                 id(mappedContact.id)
                 contact(mappedContact)
                 avatarRenderer(avatarRenderer)
             }
-            mappedContact.emails.forEach {
-                contactDetailItem {
-                    id("$mappedContact.id${it.email}")
-                    threePid(it.email)
-                    matrixId(it.matrixId)
-                    clickListener {
-                        if (it.matrixId != null) {
-                            callback?.onMatrixIdClick(it.matrixId)
-                        } else {
-                            callback?.onThreePidClick(ThreePid.Email(it.email))
+            mappedContact.emails
+                    .filter { !onlyBoundContacts || it.matrixId != null }
+                    .forEach {
+                        contactDetailItem {
+                            id("$mappedContact.id${it.email}")
+                            threePid(it.email)
+                            matrixId(it.matrixId)
+                            clickListener {
+                                if (it.matrixId != null) {
+                                    callback?.onMatrixIdClick(it.matrixId)
+                                } else {
+                                    callback?.onThreePidClick(ThreePid.Email(it.email))
+                                }
+                            }
                         }
                     }
-                }
-            }
-            mappedContact.msisdns.forEach {
-                contactDetailItem {
-                    id("$mappedContact.id${it.phoneNumber}")
-                    threePid(it.phoneNumber)
-                    matrixId(it.matrixId)
-                    clickListener {
-                        if (it.matrixId != null) {
-                            callback?.onMatrixIdClick(it.matrixId)
-                        } else {
-                            callback?.onThreePidClick(ThreePid.Msisdn(it.phoneNumber))
+            mappedContact.msisdns
+                    .filter { !onlyBoundContacts || it.matrixId != null }
+                    .forEach {
+                        contactDetailItem {
+                            id("$mappedContact.id${it.phoneNumber}")
+                            threePid(it.phoneNumber)
+                            matrixId(it.matrixId)
+                            clickListener {
+                                if (it.matrixId != null) {
+                                    callback?.onMatrixIdClick(it.matrixId)
+                                } else {
+                                    callback?.onThreePidClick(ThreePid.Msisdn(it.phoneNumber))
+                                }
+                            }
                         }
                     }
-                }
-            }
         }
     }
 

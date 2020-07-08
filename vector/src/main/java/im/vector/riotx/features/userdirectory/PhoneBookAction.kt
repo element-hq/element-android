@@ -20,4 +20,5 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class PhoneBookAction : VectorViewModelAction {
     data class FilterWith(val filter: String) : PhoneBookAction()
+    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : PhoneBookAction()
 }

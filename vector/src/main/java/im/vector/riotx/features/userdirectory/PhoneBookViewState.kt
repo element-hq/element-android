@@ -22,14 +22,14 @@ import com.airbnb.mvrx.MvRxState
 import im.vector.riotx.core.contacts.ContactModel
 
 data class PhoneBookViewState(
-        val searchTerm: String = "",
+        // All the contacts on the phone
         val mappedContacts: Async<List<ContactModel>> = Loading(),
-        val filteredMappedContacts: List<ContactModel> = emptyList()
-        /*
-        val knownUsers: Async<PagedList<User>> = Uninitialized,
-        val directoryUsers: Async<List<User>> = Uninitialized,
-        val selectedUsers: Set<User> = emptySet(),
-        val createAndInviteState: Async<String> = Uninitialized,
-        val filterKnownUsersValue: Option<String> = Option.empty()
-         */
+        // Use to filter contacts by display name
+        val searchTerm: String = "",
+        // Tru to display only bound contacts with their bound 2pid
+        val onlyBoundContacts: Boolean = false,
+        // All contacts, filtered by searchTerm and onlyBoundContacts
+        val filteredMappedContacts: List<ContactModel> = emptyList(),
+        // True when the identity service has return some data
+        val isBoundRetrieved: Boolean = false
 ) : MvRxState

@@ -37,7 +37,9 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private typealias PhoneBookSearch = String
 
@@ -71,13 +73,12 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
 
     private var allContacts: List<ContactModel> = emptyList()
     private var mappedContacts: List<ContactModel> = emptyList()
-    private var foundThreePid: List<FoundThreePid> = emptyList()
 
     init {
         loadContacts()
 
-        selectSubscribe(PhoneBookViewState::searchTerm) {
-            updateState()
+        selectSubscribe(PhoneBookViewState::searchTerm, PhoneBookViewState::onlyBoundContacts) { _, _ ->
+            updateFilteredMappedContacts()
         }
     }
 
@@ -88,7 +89,7 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
             )
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             allContacts = contactsDataSource.getContacts()
             mappedContacts = allContacts
 
@@ -99,7 +100,7 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
             }
 
             performLookup(allContacts)
-            updateState()
+            updateFilteredMappedContacts()
         }
     }
 
@@ -111,24 +112,23 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
             }
             session.identityService().lookUp(threePids, object : MatrixCallback<List<FoundThreePid>> {
                 override fun onFailure(failure: Throwable) {
-                    // Ignore?
+                    // Ignore
+                    Timber.w(failure, "Unable to perform the lookup")
                 }
 
                 override fun onSuccess(data: List<FoundThreePid>) {
-                    foundThreePid = data
-
                     mappedContacts = allContacts.map { contactModel ->
                         contactModel.copy(
                                 emails = contactModel.emails.map { email ->
                                     email.copy(
-                                            matrixId = foundThreePid
+                                            matrixId = data
                                                     .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
                                                     ?.matrixId
                                     )
                                 },
                                 msisdns = contactModel.msisdns.map { msisdn ->
                                     msisdn.copy(
-                                            matrixId = foundThreePid
+                                            matrixId = data
                                                     .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
                                                     ?.matrixId
                                     )
@@ -136,15 +136,25 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
                         )
                     }
 
-                    updateState()
+                    setState {
+                        copy(
+                                isBoundRetrieved = true
+                        )
+                    }
+
+                    updateFilteredMappedContacts()
                 }
             })
         }
     }
 
-    private fun updateState() = withState { state ->
+    private fun updateFilteredMappedContacts() = withState { state ->
         val filteredMappedContacts = mappedContacts
                 .filter { it.displayName.contains(state.searchTerm, true) }
+                .filter { contactModel ->
+                    !state.onlyBoundContacts
+                            || contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
+                }
 
         setState {
             copy(
@@ -155,8 +165,17 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: PhoneBookAction) {
         when (action) {
-            is PhoneBookAction.FilterWith -> handleFilterWith(action)
+            is PhoneBookAction.FilterWith        -> handleFilterWith(action)
+            is PhoneBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
         }.exhaustive
+    }
+
+    private fun handleOnlyBoundContacts(action: PhoneBookAction.OnlyBoundContacts) {
+        setState {
+            copy(
+                    onlyBoundContacts = action.onlyBoundContacts
+            )
+        }
     }
 
     private fun handleFilterWith(action: PhoneBookAction.FilterWith) {
