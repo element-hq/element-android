@@ -349,7 +349,7 @@ internal class DefaultTimeline(
 
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
-                    hasMoreInCache = firstBuiltEvent == null || firstBuiltEvent.displayIndex < firstCacheEvent?.displayIndex ?: Int.MIN_VALUE,
+                    hasMoreInCache = firstBuiltEvent != null && firstBuiltEvent.displayIndex < firstCacheEvent?.displayIndex ?: Int.MIN_VALUE,
                     hasReachedEnd = chunkEntity?.isLastForward ?: false
             )
         }
@@ -369,6 +369,9 @@ internal class DefaultTimeline(
     private fun paginateInternal(startDisplayIndex: Int?,
                                  direction: Timeline.Direction,
                                  count: Int): Boolean {
+        if (count == 0) {
+            return false
+        }
         updateState(direction) { it.copy(requestedPaginationCount = count, isPaginating = true) }
         val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
         val shouldFetchMore = builtCount < count && !hasReachedEnd(direction)
