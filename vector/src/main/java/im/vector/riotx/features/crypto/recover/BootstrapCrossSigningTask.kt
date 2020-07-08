@@ -168,7 +168,6 @@ class BootstrapCrossSigningTask @Inject constructor(
             return BootstrapResult.FailedToSetDefaultSSSSKey(failure)
         }
 
-
         Timber.d("## BootstrapCrossSigningTask: Creating 4S - gathering private keys")
         val xKeys = crossSigningService.getCrossSigningPrivateKeys()
         val mskPrivateKey = xKeys?.master ?: return BootstrapResult.MissingPrivateKey

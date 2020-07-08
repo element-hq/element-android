@@ -65,3 +65,12 @@ fun Session.hasUnsavedKeys(): Boolean {
     return cryptoService().inboundGroupSessionsCount(false) > 0
             && cryptoService().keysBackupService().state != KeysBackupState.ReadyToBackUp
 }
+
+fun Session.cannotLogoutSafely(): Boolean {
+    // has some encrypted chat
+    return hasUnsavedKeys()
+            // has local cross signing keys
+            || (cryptoService().crossSigningService().allPrivateKeysKnown()
+            // That are not backed up
+            && !sharedSecretStorageService.isRecoverySetup())
+}

@@ -207,7 +207,6 @@ class DefaultNavigator @Inject constructor(
                 context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
             }
         }
-
     }
 
     override fun openKeysBackupManager(context: Context) {

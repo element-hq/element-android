@@ -1048,6 +1048,7 @@
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+    <string name="encryption_exported_successfully">Keys successfully exported</string>
 
     <string name="encryption_message_recovery">Encrypted Messages Recovery</string>
     <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
@@ -1505,6 +1506,9 @@ Why choose Riot.im?
     <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
 
     <string name="keys_backup_banner_in_progress">Backing up your keys. This may take several minutes…</string>
+
+
+    <string name="secure_backup_setup">Set Up Secure Backup</string>
 
     <!-- Keys backup info -->
     <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>

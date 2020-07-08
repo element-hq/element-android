@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -194,7 +193,6 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupKeysBackupBanner() {
-
         serverBackupStatusViewModel.subscribe(this) {
             when (val banState = it.bannerState.invoke()) {
                 is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)

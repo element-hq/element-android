@@ -36,7 +36,6 @@ import im.vector.riotx.features.reactions.EmojiChooserViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
-import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
 
 @Module
 interface ViewModelModule {

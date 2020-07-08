@@ -94,9 +94,8 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     init {
         session.cryptoService().keysBackupService().addListener(this)
 
-        keyBackupPublishSubject.onNext(session.cryptoService().keysBackupService().state)
         keysBackupState.value = session.cryptoService().keysBackupService().state
-        session.rx().liveCrossSigningPrivateKeys()
+
         Observable.combineLatest<List<UserAccountData>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
                 session.rx().liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
                 session.rx().liveCrossSigningInfo(session.myUserId),
@@ -126,13 +125,15 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                     BannerState.Hidden
                 }
         )
-                .throttleLast(2000, TimeUnit.MILLISECONDS) // we don't want to flicker or catch transient states
+                .throttleLast(1000, TimeUnit.MILLISECONDS) // we don't want to flicker or catch transient states
                 .distinctUntilChanged()
                 .execute { async ->
                     copy(
                             bannerState = async
                     )
                 }
+
+        keyBackupPublishSubject.onNext(session.cryptoService().keysBackupService().state)
     }
 
     /**

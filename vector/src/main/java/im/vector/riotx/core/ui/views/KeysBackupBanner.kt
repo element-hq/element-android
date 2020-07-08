@@ -21,13 +21,10 @@ import androidx.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
