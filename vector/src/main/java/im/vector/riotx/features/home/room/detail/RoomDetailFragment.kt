@@ -1337,13 +1337,13 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         session.fileService().downloadFile(
-                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                action.eventId,
-                action.messageContent.body,
-                action.messageContent.getFileUrl(),
-                action.messageContent.mimeType,
-                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
+                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                id = action.eventId,
+                fileName = action.messageContent.body,
+                mimeType = action.messageContent.mimeType,
+                url = action.messageContent.getFileUrl(),
+                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         if (isAdded) {
                             shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
