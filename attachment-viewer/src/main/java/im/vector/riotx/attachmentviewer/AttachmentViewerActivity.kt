@@ -143,6 +143,15 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         overlayView = attachmentsAdapter.attachmentSourceProvider?.overlayViewAtPosition(this@AttachmentViewerActivity, position)
     }
 
+    override fun onPause() {
+        attachmentsAdapter.onPause(currentPosition)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        attachmentsAdapter.onResume(currentPosition)
+    }
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         // The zoomable view is configured to disallow interception when image is zoomed
 

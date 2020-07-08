@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.selects.select
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -39,6 +40,7 @@ class VideoViewHolder constructor(itemView: View) :
     private var isSelected = false
     private var mVideoPath: String? = null
     private var progressDisposable: Disposable? = null
+    private var progress: Int = 0
 
     var eventListener: WeakReference<AttachmentEventListener>? = null
 
@@ -89,12 +91,30 @@ class VideoViewHolder constructor(itemView: View) :
         }
     }
 
+    override fun entersBackground() {
+        if (videoView.isPlaying) {
+            progress = videoView.currentPosition
+            progressDisposable?.dispose()
+            progressDisposable = null
+            videoView.stopPlayback()
+            videoView.pause()
+        }
+
+    }
+
+    override fun entersForeground() {
+        onSelected(isSelected)
+    }
+
     override fun onSelected(selected: Boolean) {
         if (!selected) {
             if (videoView.isPlaying) {
+                progress = videoView.currentPosition
                 videoView.stopPlayback()
                 progressDisposable?.dispose()
                 progressDisposable = null
+            } else {
+                progress = 0
             }
         } else {
             if (mVideoPath != null) {
@@ -125,9 +145,12 @@ class VideoViewHolder constructor(itemView: View) :
 
         videoView.setVideoPath(mVideoPath)
         videoView.start()
+        if (progress > 0) {
+            videoView.seekTo(progress)
+        }
     }
 
     override fun bind(attachmentInfo: AttachmentInfo) {
-        Log.v("FOO", "")
+        progress = 0
     }
 }

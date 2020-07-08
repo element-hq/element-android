@@ -28,6 +28,8 @@ abstract class BaseViewHolder constructor(itemView: View) :
     open fun onRecycled() {}
     open fun onAttached() {}
     open fun onDetached() {}
+    open fun entersBackground() {}
+    open fun entersForeground() {}
     open fun onSelected(selected: Boolean) {}
 }
 
@@ -121,6 +123,17 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
         return false
     }
 
+
+    fun onPause(position: Int) {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) as? BaseViewHolder
+        holder?.entersBackground()
+    }
+
+    fun onResume(position: Int) {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) as? BaseViewHolder
+        holder?.entersForeground()
+
+    }
 //    override fun getItemCount(): Int {
 //        return 8
 //    }
