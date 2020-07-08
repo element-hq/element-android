@@ -22,6 +22,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.isImageMessage
+import im.vector.matrix.android.api.session.events.model.isVideoMessage
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
@@ -94,14 +95,14 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
         }
     }
 
-    override fun getAttachementMessages(): List<TimelineEvent> {
+    override fun getAttachmentMessages(): List<TimelineEvent> {
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
         return doWithRealm(monarchy.realmConfiguration) { realm ->
             realm.where<TimelineEventEntity>()
                     .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
                     .findAll()
-                    ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() } }
+                    ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
                     ?: emptyList()
         }
     }

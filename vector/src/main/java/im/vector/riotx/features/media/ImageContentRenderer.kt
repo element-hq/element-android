@@ -44,21 +44,29 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.math.min
 
+interface AttachmentData : Parcelable {
+    val eventId: String
+    val filename: String
+    val mimeType: String?
+    val url: String?
+    val elementToDecrypt: ElementToDecrypt?
+}
+
 class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
 
     @Parcelize
     data class Data(
-            val eventId: String,
-            val filename: String,
-            val mimeType: String?,
-            val url: String?,
-            val elementToDecrypt: ElementToDecrypt?,
+            override val eventId: String,
+            override val filename: String,
+            override val mimeType: String?,
+            override val url: String?,
+            override val elementToDecrypt: ElementToDecrypt?,
             val height: Int?,
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int
-    ) : Parcelable {
+    ) : AttachmentData {
 
         fun isLocalFile() = url.isLocalFile()
     }

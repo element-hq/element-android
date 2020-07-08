@@ -81,7 +81,8 @@ class RoomUploadsMediaFragment @Inject constructor(
     }
 
     override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) {
-        navigator.openVideoViewer(requireActivity(), mediaData)
+        // TODO
+       // navigator.openVideoViewer(requireActivity(), mediaData, null, )
     }
 
     override fun loadMore() {

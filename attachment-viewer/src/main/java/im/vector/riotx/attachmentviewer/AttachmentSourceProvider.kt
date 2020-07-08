@@ -22,7 +22,7 @@ import android.view.View
 sealed class AttachmentInfo {
     data class Image(val url: String, val data: Any?) : AttachmentInfo()
     data class AnimatedImage(val url: String, val data: Any?) : AttachmentInfo()
-    data class Video(val url: String, val data: Any) : AttachmentInfo()
+    data class Video(val url: String, val data: Any, val thumbnail: Image?) : AttachmentInfo()
     data class Audio(val url: String, val data: Any) : AttachmentInfo()
     data class File(val url: String, val data: Any) : AttachmentInfo()
 
@@ -39,6 +39,8 @@ interface AttachmentSourceProvider {
     fun loadImage(holder: ZoomableImageViewHolder, info: AttachmentInfo.Image)
 
     fun loadImage(holder: AnimatedImageViewHolder, info: AttachmentInfo.AnimatedImage)
+
+    fun loadVideo(holder: VideoViewHolder, info: AttachmentInfo.Video)
 
     fun overlayViewAtPosition(context: Context, position: Int) : View?
 }

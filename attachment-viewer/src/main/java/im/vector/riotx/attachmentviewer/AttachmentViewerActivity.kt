@@ -34,15 +34,17 @@ import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_attachment_viewer.*
+import java.lang.ref.WeakReference
 import kotlin.math.abs
 
-abstract class AttachmentViewerActivity : AppCompatActivity() {
+abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventListener {
 
     lateinit var pager2: ViewPager2
     lateinit var imageTransitionView: ImageView
     lateinit var transitionImageContainer: ViewGroup
 
     var topInset = 0
+    var bottomInset = 0
     var systemUiVisibility = true
 
     private var overlayView: View? = null
@@ -50,7 +52,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             if (value == overlayView) return
             overlayView?.let { rootContainer.removeView(it) }
             rootContainer.addView(value)
-            value?.updatePadding(top = topInset)
+            value?.updatePadding(top = topInset, bottom = bottomInset)
             field = value
         }
 
@@ -109,8 +111,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                currentPosition = position
-                overlayView = attachmentsAdapter.attachmentSourceProvider?.overlayViewAtPosition(this@AttachmentViewerActivity, position)
+                onSelectedPositionChanged(position)
             }
         })
 
@@ -121,10 +122,25 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
         scaleDetector = createScaleGestureDetector()
 
         ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { _, insets ->
-            overlayView?.updatePadding(top = insets.systemWindowInsetTop)
+            overlayView?.updatePadding(top = insets.systemWindowInsetTop, bottom = insets.systemWindowInsetBottom)
             topInset = insets.systemWindowInsetTop
+            bottomInset = insets.systemWindowInsetBottom
             insets
         }
+    }
+
+    fun onSelectedPositionChanged(position: Int) {
+        attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(currentPosition)?.let {
+            (it as? BaseViewHolder)?.onSelected(false)
+        }
+        attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(position)?.let {
+            (it as? BaseViewHolder)?.onSelected(true)
+            if (it is VideoViewHolder) {
+                it.eventListener = WeakReference(this)
+            }
+        }
+        currentPosition = position
+        overlayView = attachmentsAdapter.attachmentSourceProvider?.overlayViewAtPosition(this@AttachmentViewerActivity, position)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -263,6 +279,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity() {
                     return super.onDoubleTap(e)
                 }
             })
+
+    override fun onEvent(event: AttachmentEvents) {
+        if (overlayView is AttachmentEventListener) {
+            (overlayView as? AttachmentEventListener)?.onEvent(event)
+        }
+    }
 
     protected open fun shouldAnimateDismiss(): Boolean = true
 

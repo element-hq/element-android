@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
-import im.vector.riotx.features.media.ImageContentRenderer
+import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
@@ -93,9 +93,12 @@ interface Navigator {
 
     fun openImageViewer(activity: Activity,
                         roomId: String?,
-                        mediaData: ImageContentRenderer.Data,
+                        mediaData: AttachmentData,
                         view: View,
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
-    fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)
+    fun openVideoViewer(activity: Activity,
+                        roomId: String?, mediaData: VideoContentRenderer.Data,
+                        view: View,
+                        options: ((MutableList<Pair<View, String>>) -> Unit)?)
 }

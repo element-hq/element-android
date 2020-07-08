@@ -24,7 +24,11 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseViewHolder constructor(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
-    abstract fun bind(attachmentInfo: AttachmentInfo)
+    open fun bind(attachmentInfo: AttachmentInfo) {}
+    open fun onRecycled() {}
+    open fun onAttached() {}
+    open fun onDetached() {}
+    open fun onSelected(selected: Boolean) {}
 }
 
 class AttachmentViewHolder constructor(itemView: View) :
@@ -59,6 +63,7 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
         return when (viewType) {
             R.layout.item_image_attachment -> ZoomableImageViewHolder(itemView)
             R.layout.item_animated_image_attachment -> AnimatedImageViewHolder(itemView)
+            R.layout.item_video_attachment -> VideoViewHolder(itemView)
             else                           -> AttachmentViewHolder(itemView)
         }
     }
@@ -88,9 +93,24 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
                 is AttachmentInfo.AnimatedImage -> {
                     attachmentSourceProvider?.loadImage(holder as AnimatedImageViewHolder, it)
                 }
+                is AttachmentInfo.Video -> {
+                    attachmentSourceProvider?.loadVideo(holder as VideoViewHolder, it)
+                }
                 else                    -> {}
             }
         }
+    }
+
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        holder.onAttached()
+    }
+
+    override fun onViewRecycled(holder: BaseViewHolder) {
+        holder.onRecycled()
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
+        holder.onDetached()
     }
 
     fun isScaled(position: Int): Boolean {

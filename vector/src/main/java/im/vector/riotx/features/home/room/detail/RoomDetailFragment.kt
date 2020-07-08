@@ -1178,7 +1178,10 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        navigator.openVideoViewer(requireActivity(), mediaData)
+        navigator.openVideoViewer(requireActivity(), roomDetailArgs.roomId, mediaData, view) { pairs ->
+            pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+            pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
+        }
     }
 
 //    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {

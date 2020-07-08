@@ -49,11 +49,10 @@ import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
+import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.BigImageViewerActivity
-import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VectorAttachmentViewerActivity
 import im.vector.riotx.features.media.VideoContentRenderer
-import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -248,7 +247,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun openImageViewer(activity: Activity,
                                  roomId: String?,
-                                 mediaData: ImageContentRenderer.Data,
+                                 mediaData: AttachmentData,
                                  view: View,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
         VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
@@ -284,9 +283,28 @@ class DefaultNavigator @Inject constructor(
 //        activity.startActivity(intent, bundle)
     }
 
-    override fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data) {
-        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
-        activity.startActivity(intent)
+    override fun openVideoViewer(activity: Activity,
+                                 roomId: String?, mediaData: VideoContentRenderer.Data,
+                                 view: View,
+                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+//        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
+//        activity.startActivity(intent)
+        VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
+            val pairs = ArrayList<Pair<View, String>>()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                    pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+                }
+                activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                    pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+                }
+            }
+            pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+            options?.invoke(pairs)
+
+            val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
+            activity.startActivity(intent, bundle)
+        }
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

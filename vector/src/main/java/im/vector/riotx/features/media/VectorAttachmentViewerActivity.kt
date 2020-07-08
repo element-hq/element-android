@@ -80,7 +80,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         val session = sessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
 
         val room = args.roomId?.let { session.getRoom(it) }
-        val events = room?.getAttachementMessages() ?: emptyList()
+        val events = room?.getAttachmentMessages() ?: emptyList()
         val index = events.indexOfFirst { it.eventId == args.eventId }
         initialIndex = index
 
@@ -90,12 +90,20 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
                 transitionImageContainer.isVisible = true
 
                 // Postpone transaction a bit until thumbnail is loaded
-                val mediaData: ImageContentRenderer.Data? = intent.getParcelableExtra(EXTRA_IMAGE_DATA)
-                if (mediaData != null) {
+                val mediaData: Parcelable? = intent.getParcelableExtra(EXTRA_IMAGE_DATA)
+                if (mediaData is ImageContentRenderer.Data) {
                     // will be shown at end of transition
                     pager2.isInvisible = true
                     supportPostponeEnterTransition()
                     imageContentRenderer.renderThumbnailDontTransform(mediaData, imageTransitionView) {
+                        // Proceed with transaction
+                        scheduleStartPostponedTransition(imageTransitionView)
+                    }
+                } else if (mediaData is VideoContentRenderer.Data) {
+                    // will be shown at end of transition
+                    pager2.isInvisible = true
+                    supportPostponeEnterTransition()
+                    imageContentRenderer.renderThumbnailDontTransform(mediaData.thumbnailMediaData, imageTransitionView) {
                         // Proceed with transaction
                         scheduleStartPostponedTransition(imageTransitionView)
                     }
@@ -108,6 +116,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         setSourceProvider(sourceProvider)
         if (savedInstanceState == null) {
             pager2.setCurrentItem(index, false)
+            // The page change listener is not notified of the change...
+            pager2.post {
+                onSelectedPositionChanged(index)
+            }
         }
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
@@ -202,7 +214,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
 
         fun newIntent(context: Context,
-                      mediaData: ImageContentRenderer.Data,
+                      mediaData: AttachmentData,
                       roomId: String?,
                       eventId: String,
                       sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
