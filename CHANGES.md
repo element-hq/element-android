@@ -10,7 +10,9 @@ Improvements 🙌:
  - Handling (almost) properly the groups fetching (#1634)
 
 Bugfix 🐛:
- -
+ - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
+ - Regression Composer does not grow, crops out text (#1650)
+ - Bug / Unwanted draft (#698)
 
 Translations 🗣:
  -
