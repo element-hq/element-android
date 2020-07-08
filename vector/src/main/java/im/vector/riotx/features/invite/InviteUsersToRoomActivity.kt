@@ -30,11 +30,14 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
+import im.vector.riotx.features.userdirectory.PhoneBookFragment
+import im.vector.riotx.features.userdirectory.PhoneBookViewModel
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
@@ -53,6 +56,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
     @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
     @Inject lateinit var inviteUsersToRoomViewModelFactory: InviteUsersToRoomViewModel.Factory
+    @Inject lateinit var phoneBookViewModelFactory: PhoneBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
@@ -74,7 +78,9 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                         UserDirectorySharedAction.Close                 -> finish()
                         UserDirectorySharedAction.GoBack                -> onBackPressed()
                         is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                    }
+                        UserDirectorySharedAction.OpenPhoneBook         ->
+                            addFragmentToBackstack(R.id.container, PhoneBookFragment::class.java)
+                    }.exhaustive
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {

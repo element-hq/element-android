@@ -63,6 +63,7 @@ class KnownUsersFragment @Inject constructor(
         setupRecyclerView()
         setupFilterView()
         setupAddByMatrixIdView()
+        setupAddFromPhoneBookView()
         setupCloseView()
         viewModel.selectSubscribe(this, UserDirectoryViewState::selectedUsers) {
             renderSelectedUsers(it)
@@ -93,6 +94,13 @@ class KnownUsersFragment @Inject constructor(
     private fun setupAddByMatrixIdView() {
         addByMatrixId.debouncedClicks {
             sharedActionViewModel.post(UserDirectorySharedAction.OpenUsersDirectory)
+        }
+    }
+
+    private fun setupAddFromPhoneBookView() {
+        addFromPhoneBook.debouncedClicks {
+            // TODO handle Permission first
+            sharedActionViewModel.post(UserDirectorySharedAction.OpenPhoneBook)
         }
     }
 

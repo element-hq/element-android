@@ -103,6 +103,7 @@ import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.PhoneBookFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.widgets.WidgetFragment
 
@@ -528,4 +529,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(WidgetFragment::class)
     fun bindWidgetFragment(fragment: WidgetFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(PhoneBookFragment::class)
+    fun bindPhoneBookFragment(fragment: PhoneBookFragment): Fragment
 }

@@ -21,6 +21,7 @@ import im.vector.riotx.core.platform.VectorSharedAction
 
 sealed class UserDirectorySharedAction : VectorSharedAction {
     object OpenUsersDirectory : UserDirectorySharedAction()
+    object OpenPhoneBook : UserDirectorySharedAction()
     object Close : UserDirectorySharedAction()
     object GoBack : UserDirectorySharedAction()
     data class OnMenuItemSelected(val itemId: Int, val selectedUsers: Set<User>) : UserDirectorySharedAction()

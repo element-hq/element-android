@@ -16,15 +16,8 @@
 
 package im.vector.riotx.features.userdirectory
 
-import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class UserDirectoryAction : VectorViewModelAction {
-    data class FilterKnownUsers(val value: String) : UserDirectoryAction()
-    data class SearchDirectoryUsers(val value: String) : UserDirectoryAction()
-    object ClearFilterKnownUsers : UserDirectoryAction()
-    data class SelectUser(val user: User) : UserDirectoryAction()
-    data class SelectThreePid(val threePid: ThreePid) : UserDirectoryAction()
-    data class RemoveSelectedUser(val user: User) : UserDirectoryAction()
+sealed class PhoneBookAction : VectorViewModelAction {
+    data class FilterWith(val filter: String) : PhoneBookAction()
 }

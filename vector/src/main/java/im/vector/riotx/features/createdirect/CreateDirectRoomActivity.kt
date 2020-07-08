@@ -35,10 +35,12 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
+import im.vector.riotx.features.userdirectory.PhoneBookViewModel
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
@@ -53,6 +55,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
     @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
+    @Inject lateinit var phoneBookViewModelFactory: PhoneBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
@@ -68,12 +71,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        UserDirectorySharedAction.OpenUsersDirectory ->
+                        UserDirectorySharedAction.OpenUsersDirectory    ->
                             addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
-                        UserDirectorySharedAction.Close           -> finish()
-                        UserDirectorySharedAction.GoBack          -> onBackPressed()
+                        UserDirectorySharedAction.Close                 -> finish()
+                        UserDirectorySharedAction.GoBack                -> onBackPressed()
                         is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                    }
+                        UserDirectorySharedAction.OpenPhoneBook         -> TODO()
+                    }.exhaustive
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
