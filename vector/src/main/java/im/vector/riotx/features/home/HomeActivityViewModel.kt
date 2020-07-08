@@ -130,7 +130,14 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // Cross-signing is already set up for this user, is it trusted?
                     if (!mxCrossSigningInfo.isTrusted()) {
                         // New session
-                        _viewEvents.post(HomeActivityViewEvents.OnNewSession(session.getUser(session.myUserId)?.toMatrixItem()))
+                        _viewEvents.post(
+                                HomeActivityViewEvents.OnNewSession(
+                                        session.getUser(session.myUserId)?.toMatrixItem(),
+                                        // If it's an old unverified, we should send requests
+                                        // instead of waiting for an incoming one
+                                        reAuthHelper.data != null
+                                )
+                        )
                     }
                 } else {
                     // Initialize cross-signing

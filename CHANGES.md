@@ -10,7 +10,8 @@ Improvements 🙌:
  - Handling (almost) properly the groups fetching (#1634)
 
 Bugfix 🐛:
- -
+ - Regression |  Share action menu do not work (#1647)
+ - verification issues on transition (#1555)
 
 Translations 🗣:
  -
