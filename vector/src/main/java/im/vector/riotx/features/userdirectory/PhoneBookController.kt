@@ -92,10 +92,11 @@ class PhoneBookController @Inject constructor(
                 avatarRenderer(avatarRenderer)
             }
             mappedContact.emails
-                    .filter { !onlyBoundContacts || it.matrixId != null }
-                    .forEach {
+                    .forEachIndexed { index, it ->
+                        if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
+
                         contactDetailItem {
-                            id("$mappedContact.id${it.email}")
+                            id("${mappedContact.id}-$index-${it.email}")
                             threePid(it.email)
                             matrixId(it.matrixId)
                             clickListener {
@@ -108,10 +109,11 @@ class PhoneBookController @Inject constructor(
                         }
                     }
             mappedContact.msisdns
-                    .filter { !onlyBoundContacts || it.matrixId != null }
-                    .forEach {
+                    .forEachIndexed { index, it ->
+                        if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
+
                         contactDetailItem {
-                            id("$mappedContact.id${it.phoneNumber}")
+                            id("${mappedContact.id}-$index-${it.phoneNumber}")
                             threePid(it.phoneNumber)
                             matrixId(it.matrixId)
                             clickListener {
