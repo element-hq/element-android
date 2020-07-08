@@ -57,6 +57,7 @@ class RoomAttachmentProvider(
     interface InteractionListener {
         fun onDismissTapped()
         fun onShareTapped()
+        fun onPlayPause(play: Boolean)
     }
 
     var interactionListener: InteractionListener? = null
@@ -196,6 +197,9 @@ class RoomAttachmentProvider(
             }
             overlayView?.onShareCallback = {
                 interactionListener?.onShareTapped()
+            }
+            overlayView?.onPlayPause = { play ->
+                interactionListener?.onPlayPause(play)
             }
         }
         val item = attachments[position]

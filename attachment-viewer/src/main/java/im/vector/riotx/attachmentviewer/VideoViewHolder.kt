@@ -26,7 +26,6 @@ import androidx.core.view.isVisible
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.selects.select
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -41,6 +40,7 @@ class VideoViewHolder constructor(itemView: View) :
     private var mVideoPath: String? = null
     private var progressDisposable: Disposable? = null
     private var progress: Int = 0
+    private var wasPaused = false
 
     var eventListener: WeakReference<AttachmentEventListener>? = null
 
@@ -99,7 +99,6 @@ class VideoViewHolder constructor(itemView: View) :
             videoView.stopPlayback()
             videoView.pause()
         }
-
     }
 
     override fun entersForeground() {
@@ -111,11 +110,11 @@ class VideoViewHolder constructor(itemView: View) :
             if (videoView.isPlaying) {
                 progress = videoView.currentPosition
                 videoView.stopPlayback()
-                progressDisposable?.dispose()
-                progressDisposable = null
             } else {
                 progress = 0
             }
+            progressDisposable?.dispose()
+            progressDisposable = null
         } else {
             if (mVideoPath != null) {
                 startPlaying()
@@ -144,13 +143,30 @@ class VideoViewHolder constructor(itemView: View) :
         }
 
         videoView.setVideoPath(mVideoPath)
-        videoView.start()
-        if (progress > 0) {
-            videoView.seekTo(progress)
+        if (!wasPaused) {
+            videoView.start()
+            if (progress > 0) {
+                videoView.seekTo(progress)
+            }
+        }
+    }
+
+    override fun handleCommand(commands: AttachmentCommands) {
+        if (!isSelected) return
+        when (commands) {
+            AttachmentCommands.StartVideo -> {
+                wasPaused = false
+                videoView.start()
+            }
+            AttachmentCommands.PauseVideo -> {
+                wasPaused = true
+                videoView.pause()
+            }
         }
     }
 
     override fun bind(attachmentInfo: AttachmentInfo) {
         progress = 0
+        wasPaused = false
     }
 }

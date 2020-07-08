@@ -21,6 +21,10 @@ sealed class AttachmentEvents {
 }
 
 interface AttachmentEventListener {
-
     fun onEvent(event: AttachmentEvents)
+}
+
+sealed class AttachmentCommands {
+    object PauseVideo : AttachmentCommands()
+    object StartVideo : AttachmentCommands()
 }

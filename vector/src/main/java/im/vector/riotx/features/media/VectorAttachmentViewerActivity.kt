@@ -39,6 +39,7 @@ import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
+import im.vector.riotx.attachmentviewer.AttachmentCommands
 import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerScreenComponent
@@ -240,6 +241,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
     override fun onDismissTapped() {
         animateClose()
+    }
+
+    override fun onPlayPause(play: Boolean) {
+        handle(if (play) AttachmentCommands.StartVideo else AttachmentCommands.PauseVideo)
     }
 
     override fun onShareTapped() {

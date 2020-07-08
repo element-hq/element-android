@@ -152,6 +152,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         super.onResume()
         attachmentsAdapter.onResume(currentPosition)
     }
+
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         // The zoomable view is configured to disallow interception when image is zoomed
 
@@ -300,6 +301,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     protected open fun animateClose() {
         window.statusBarColor = Color.TRANSPARENT
         finish()
+    }
+
+    public fun handle(commands: AttachmentCommands) {
+        (attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(currentPosition) as? BaseViewHolder)?.let {
+            it.handleCommand(commands)
+        }
     }
 
     private fun hideSystemUI() {

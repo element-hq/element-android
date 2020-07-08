@@ -31,6 +31,8 @@ abstract class BaseViewHolder constructor(itemView: View) :
     open fun entersBackground() {}
     open fun entersForeground() {}
     open fun onSelected(selected: Boolean) {}
+
+    open fun handleCommand(commands: AttachmentCommands) {}
 }
 
 class AttachmentViewHolder constructor(itemView: View) :
@@ -123,7 +125,6 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
         return false
     }
 
-
     fun onPause(position: Int) {
         val holder = recyclerView?.findViewHolderForAdapterPosition(position) as? BaseViewHolder
         holder?.entersBackground()
@@ -132,7 +133,6 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
     fun onResume(position: Int) {
         val holder = recyclerView?.findViewHolderForAdapterPosition(position) as? BaseViewHolder
         holder?.entersForeground()
-
     }
 //    override fun getItemCount(): Int {
 //        return 8

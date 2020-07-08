@@ -35,12 +35,15 @@ class AttachmentOverlayView @JvmOverloads constructor(
 
     var onShareCallback: (() -> Unit)? = null
     var onBack: (() -> Unit)? = null
+    var onPlayPause: ((play: Boolean) -> Unit)? = null
 
     private val counterTextView: TextView
     private val infoTextView: TextView
     private val shareImage: ImageView
     private val overlayPlayPauseButton: ImageView
     private val overlaySeekBar: SeekBar
+
+    var isPlaying = false
 
     val videoControlsGroup: Group
 
@@ -61,6 +64,9 @@ class AttachmentOverlayView @JvmOverloads constructor(
         findViewById<ImageView>(R.id.overlayShareButton).setOnClickListener {
             onShareCallback?.invoke()
         }
+        findViewById<ImageView>(R.id.overlayPlayPauseButton).setOnClickListener {
+            onPlayPause?.invoke(!isPlaying)
+        }
     }
 
     fun updateWith(counter: String, senderInfo: String) {
@@ -74,6 +80,7 @@ class AttachmentOverlayView @JvmOverloads constructor(
                 overlayPlayPauseButton.setImageResource(if (!event.isPlaying) R.drawable.ic_play_arrow else R.drawable.ic_pause)
                 val safeDuration = (if (event.duration == 0) 100 else event.duration).toFloat()
                 val percent = ((event.progress / safeDuration) * 100f).toInt().coerceAtMost(100)
+                isPlaying = event.isPlaying
                 overlaySeekBar.progress = percent
             }
         }
