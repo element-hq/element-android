@@ -92,7 +92,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
-        val previousPowerLevelsContent: PowerLevelsContent = event.prevContent.toModel() ?: return null
+        val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.keys)
         userIds.addAll(previousPowerLevelsContent.users.keys)
@@ -120,7 +120,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
-        val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
+        val previousWidgetContent: WidgetContent? = event.resolvedPrevContent().toModel()
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
             if (previousWidgetContent?.isActive().orFalse()) {
@@ -294,7 +294,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomMemberEvent(event: Event, senderName: String?): String? {
         val eventContent: RoomMemberContent? = event.getClearContent().toModel()
-        val prevEventContent: RoomMemberContent? = event.prevContent.toModel()
+        val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
         return if (isMembershipEvent) {
             buildMembershipNotice(event, senderName, eventContent, prevEventContent)
@@ -305,7 +305,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomAliasesEvent(event: Event, senderName: String?): String? {
         val eventContent: RoomAliasesContent? = event.getClearContent().toModel()
-        val prevEventContent: RoomAliasesContent? = event.unsignedData?.prevContent?.toModel()
+        val prevEventContent: RoomAliasesContent? = event.resolvedPrevContent()?.toModel()
 
         val addedAliases = eventContent?.aliases.orEmpty() - prevEventContent?.aliases.orEmpty()
         val removedAliases = prevEventContent?.aliases.orEmpty() - eventContent?.aliases.orEmpty()
