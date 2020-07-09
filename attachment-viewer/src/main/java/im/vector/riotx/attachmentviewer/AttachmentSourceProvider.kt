@@ -19,15 +19,12 @@ package im.vector.riotx.attachmentviewer
 import android.content.Context
 import android.view.View
 
-sealed class AttachmentInfo {
-    data class Image(val url: String, val data: Any?) : AttachmentInfo()
-    data class AnimatedImage(val url: String, val data: Any?) : AttachmentInfo()
-    data class Video(val url: String, val data: Any, val thumbnail: Image?) : AttachmentInfo()
-    data class Audio(val url: String, val data: Any) : AttachmentInfo()
-    data class File(val url: String, val data: Any) : AttachmentInfo()
-
-    fun bind() {
-    }
+sealed class AttachmentInfo(open val uid: String) {
+    data class Image(override val uid: String, val url: String, val data: Any?) : AttachmentInfo(uid)
+    data class AnimatedImage(override val uid: String, val url: String, val data: Any?) : AttachmentInfo(uid)
+    data class Video(override val uid: String, val url: String, val data: Any, val thumbnail: Image?) : AttachmentInfo(uid)
+    data class Audio(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
+    data class File(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
 }
 
 interface AttachmentSourceProvider {
@@ -36,11 +33,13 @@ interface AttachmentSourceProvider {
 
     fun getAttachmentInfoAt(position: Int): AttachmentInfo
 
-    fun loadImage(holder: ZoomableImageViewHolder, info: AttachmentInfo.Image)
+    fun loadImage(target: ImageLoaderTarget, info: AttachmentInfo.Image)
 
-    fun loadImage(holder: AnimatedImageViewHolder, info: AttachmentInfo.AnimatedImage)
+    fun loadImage(target: ImageLoaderTarget, info: AttachmentInfo.AnimatedImage)
 
-    fun loadVideo(holder: VideoViewHolder, info: AttachmentInfo.Video)
+    fun loadVideo(target: VideoLoaderTarget, info: AttachmentInfo.Video)
 
-    fun overlayViewAtPosition(context: Context, position: Int) : View?
+    fun overlayViewAtPosition(context: Context, position: Int): View?
+
+    fun clear(id: String)
 }

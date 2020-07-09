@@ -16,16 +16,9 @@
 
 package im.vector.riotx.attachmentviewer
 
-import android.graphics.drawable.Animatable
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.transition.Transition
 
 class AnimatedImageViewHolder constructor(itemView: View) :
         BaseViewHolder(itemView) {
@@ -33,34 +26,5 @@ class AnimatedImageViewHolder constructor(itemView: View) :
     val touchImageView: ImageView = itemView.findViewById(R.id.imageView)
     val imageLoaderProgress: ProgressBar = itemView.findViewById(R.id.imageLoaderProgress)
 
-    val customTargetView = object : CustomViewTarget<ImageView, Drawable>(touchImageView) {
-
-        override fun onResourceLoading(placeholder: Drawable?) {
-            imageLoaderProgress.isVisible = true
-        }
-
-        override fun onLoadFailed(errorDrawable: Drawable?) {
-            imageLoaderProgress.isVisible = false
-        }
-
-        override fun onResourceCleared(placeholder: Drawable?) {
-            touchImageView.setImageDrawable(placeholder)
-        }
-
-        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-            imageLoaderProgress.isVisible = false
-            // Glide mess up the view size :/
-            touchImageView.updateLayoutParams {
-                width = LinearLayout.LayoutParams.MATCH_PARENT
-                height = LinearLayout.LayoutParams.MATCH_PARENT
-            }
-            touchImageView.setImageDrawable(resource)
-            if (resource is Animatable) {
-                resource.start()
-            }
-        }
-    }
-
-    override fun bind(attachmentInfo: AttachmentInfo) {
-    }
+    internal val target = DefaultImageLoaderTarget(this, this.touchImageView)
 }

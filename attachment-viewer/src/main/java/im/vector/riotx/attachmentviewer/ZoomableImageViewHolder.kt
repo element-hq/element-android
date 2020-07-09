@@ -16,15 +16,9 @@
 
 package im.vector.riotx.attachmentviewer
 
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.transition.Transition
 import com.github.chrisbanes.photoview.PhotoView
 
 class ZoomableImageViewHolder constructor(itemView: View) :
@@ -45,31 +39,5 @@ class ZoomableImageViewHolder constructor(itemView: View) :
         touchImageView.setAllowParentInterceptOnEdge(true)
     }
 
-    val customTargetView = object : CustomViewTarget<PhotoView, Drawable>(touchImageView) {
-
-        override fun onResourceLoading(placeholder: Drawable?) {
-            imageLoaderProgress.isVisible = true
-        }
-
-        override fun onLoadFailed(errorDrawable: Drawable?) {
-            imageLoaderProgress.isVisible = false
-        }
-
-        override fun onResourceCleared(placeholder: Drawable?) {
-            touchImageView.setImageDrawable(placeholder)
-        }
-
-        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-            imageLoaderProgress.isVisible = false
-            // Glide mess up the view size :/
-            touchImageView.updateLayoutParams {
-                width = LinearLayout.LayoutParams.MATCH_PARENT
-                height = LinearLayout.LayoutParams.MATCH_PARENT
-            }
-            touchImageView.setImageDrawable(resource)
-        }
-    }
-
-    override fun bind(attachmentInfo: AttachmentInfo) {
-    }
+    internal val target = DefaultImageLoaderTarget.ZoomableImageTarget(this, touchImageView)
 }

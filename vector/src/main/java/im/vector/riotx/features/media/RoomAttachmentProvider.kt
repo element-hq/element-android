@@ -35,11 +35,10 @@ import im.vector.matrix.android.api.session.room.model.message.MessageWithAttach
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
-import im.vector.riotx.attachmentviewer.AnimatedImageViewHolder
 import im.vector.riotx.attachmentviewer.AttachmentInfo
 import im.vector.riotx.attachmentviewer.AttachmentSourceProvider
-import im.vector.riotx.attachmentviewer.VideoViewHolder
-import im.vector.riotx.attachmentviewer.ZoomableImageViewHolder
+import im.vector.riotx.attachmentviewer.ImageLoaderTarget
+import im.vector.riotx.attachmentviewer.VideoLoaderTarget
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import java.io.File
@@ -86,13 +85,15 @@ class RoomAttachmentProvider(
                 )
                 if (content.mimeType == "image/gif") {
                     AttachmentInfo.AnimatedImage(
-                            content.url ?: "",
-                            data
+                            uid = it.eventId,
+                            url = content.url ?: "",
+                            data = data
                     )
                 } else {
                     AttachmentInfo.Image(
-                            content.url ?: "",
-                            data
+                            uid = it.eventId,
+                            url = content.url ?: "",
+                            data = data
                     )
                 }
             } else if (content is MessageVideoContent) {
@@ -117,9 +118,11 @@ class RoomAttachmentProvider(
                         thumbnailMediaData = thumbnailData
                 )
                 AttachmentInfo.Video(
-                        content.getFileUrl() ?: "",
-                        data,
-                        AttachmentInfo.Image(
+                        uid = it.eventId,
+                        url = content.getFileUrl() ?: "",
+                        data = data,
+                        thumbnail = AttachmentInfo.Image(
+                                uid = it.eventId,
                                 url = content.videoInfo?.thumbnailFile?.url
                                         ?: content.videoInfo?.thumbnailUrl ?: "",
                                 data = thumbnailData
@@ -128,49 +131,72 @@ class RoomAttachmentProvider(
                 )
             } else {
                 AttachmentInfo.Image(
-                        "",
-                        null
+                        uid = it.eventId,
+                        url = "",
+                        data = null
                 )
             }
         }
     }
 
-    override fun loadImage(holder: ZoomableImageViewHolder, info: AttachmentInfo.Image) {
+    override fun loadImage(target: ImageLoaderTarget, info: AttachmentInfo.Image) {
         (info.data as? ImageContentRenderer.Data)?.let {
-            imageContentRenderer.render(it, holder.touchImageView, holder.customTargetView as CustomViewTarget<*, Drawable>)
+            imageContentRenderer.render(it, target.contextView(), object : CustomViewTarget<ImageView, Drawable>(target.contextView()) {
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    target.onLoadFailed(info.uid, errorDrawable)
+                }
+
+                override fun onResourceCleared(placeholder: Drawable?) {
+                    target.onResourceCleared(info.uid, placeholder)
+                }
+
+                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                    target.onResourceReady(info.uid, resource)
+                }
+            })
         }
     }
 
-    override fun loadImage(holder: AnimatedImageViewHolder, info: AttachmentInfo.AnimatedImage) {
+    override fun loadImage(target: ImageLoaderTarget, info: AttachmentInfo.AnimatedImage) {
         (info.data as? ImageContentRenderer.Data)?.let {
-            imageContentRenderer.render(it, holder.touchImageView, holder.customTargetView as CustomViewTarget<*, Drawable>)
+            imageContentRenderer.render(it, target.contextView(), object : CustomViewTarget<ImageView, Drawable>(target.contextView()) {
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    target.onLoadFailed(info.uid, errorDrawable)
+                }
+
+                override fun onResourceCleared(placeholder: Drawable?) {
+                    target.onResourceCleared(info.uid, placeholder)
+                }
+
+                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                    target.onResourceReady(info.uid, resource)
+                }
+            })
         }
     }
 
-    override fun loadVideo(holder: VideoViewHolder, info: AttachmentInfo.Video) {
+    override fun loadVideo(target: VideoLoaderTarget, info: AttachmentInfo.Video) {
         val data = info.data as? VideoContentRenderer.Data ?: return
 //        videoContentRenderer.render(data,
 //                holder.thumbnailImage,
 //                holder.loaderProgressBar,
 //                holder.videoView,
 //                holder.errorTextView)
-        imageContentRenderer.render(data.thumbnailMediaData, holder.thumbnailImage, object : CustomViewTarget<ImageView, Drawable>(holder.thumbnailImage) {
+        imageContentRenderer.render(data.thumbnailMediaData, target.contextView(), object : CustomViewTarget<ImageView, Drawable>(target.contextView()) {
             override fun onLoadFailed(errorDrawable: Drawable?) {
-                holder.thumbnailImage.setImageDrawable(errorDrawable)
+                target.onThumbnailLoadFailed(info.uid, errorDrawable)
             }
 
             override fun onResourceCleared(placeholder: Drawable?) {
+                target.onThumbnailResourceCleared(info.uid, placeholder)
             }
 
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                holder.thumbnailImage.setImageDrawable(resource)
+                target.onThumbnailResourceReady(info.uid, resource)
             }
         })
 
-        holder.thumbnailImage.isVisible = false
-        holder.loaderProgressBar.isVisible = false
-        holder.videoView.isVisible = false
-
+        target.onVideoFileLoading(info.uid)
         fileService.downloadFile(
                 downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                 id = data.eventId,
@@ -180,11 +206,11 @@ class RoomAttachmentProvider(
                 url = data.url,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        holder.videoReady(data)
+                        target.onVideoFileReady(info.uid, data)
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        holder.videoView.isVisible = false
+                        target.onVideoFileLoadFailed(info.uid)
                     }
                 }
         )
@@ -213,6 +239,10 @@ class RoomAttachmentProvider(
         overlayView?.updateWith("${position + 1} of ${attachments.size}", "${item.senderInfo.displayName} $dateString")
         overlayView?.videoControlsGroup?.isVisible = item.root.isVideoMessage()
         return overlayView
+    }
+
+    override fun clear(id: String) {
+        // TODO("Not yet implemented")
     }
 }
 

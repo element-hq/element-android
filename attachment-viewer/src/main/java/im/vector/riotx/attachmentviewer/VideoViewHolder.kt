@@ -44,38 +44,13 @@ class VideoViewHolder constructor(itemView: View) :
 
     var eventListener: WeakReference<AttachmentEventListener>? = null
 
-//    interface Target {
-//        fun onResourceLoading(progress: Int, total: Int)
-//        fun onLoadFailed()
-//        fun onResourceReady(file: File)
-//        fun onThumbnailReady(thumbnail: Drawable?)
-//    }
-
-    init {
-    }
-
     val thumbnailImage: ImageView = itemView.findViewById(R.id.videoThumbnailImage)
     val videoView: VideoView = itemView.findViewById(R.id.videoView)
     val loaderProgressBar: ProgressBar = itemView.findViewById(R.id.videoLoaderProgress)
     val videoControlIcon: ImageView = itemView.findViewById(R.id.videoControlIcon)
     val errorTextView: TextView = itemView.findViewById(R.id.videoMediaViewerErrorView)
 
-//    val videoTarget = object : Target {
-//        override fun onResourceLoading(progress: Int, total: Int) {
-//            videoView.isVisible = false
-//            loaderProgressBar.isVisible = true
-//        }
-//
-//        override fun onLoadFailed() {
-//            loaderProgressBar.isVisible = false
-//        }
-//
-//        override fun onResourceReady(file: File) {
-//        }
-//
-//        override fun onThumbnailReady(thumbnail: Drawable?) {
-//        }
-//    }
+    internal val target = DefaultVideoLoaderTarget(this, thumbnailImage)
 
     override fun onRecycled() {
         super.onRecycled()
@@ -89,6 +64,9 @@ class VideoViewHolder constructor(itemView: View) :
         if (isSelected) {
             startPlaying()
         }
+    }
+
+    fun videoFileLoadError() {
     }
 
     override fun entersBackground() {
@@ -162,7 +140,7 @@ class VideoViewHolder constructor(itemView: View) :
                 wasPaused = true
                 videoView.pause()
             }
-            is AttachmentCommands.SeekTo -> {
+            is AttachmentCommands.SeekTo  -> {
                 val duration = videoView.duration
                 if (duration > 0) {
                     val seekDuration = duration * (commands.percentProgress / 100f)
@@ -173,6 +151,7 @@ class VideoViewHolder constructor(itemView: View) :
     }
 
     override fun bind(attachmentInfo: AttachmentInfo) {
+        super.bind(attachmentInfo)
         progress = 0
         wasPaused = false
     }
