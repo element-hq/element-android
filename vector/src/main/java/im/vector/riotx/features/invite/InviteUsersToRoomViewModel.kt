@@ -53,30 +53,30 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: InviteUsersToRoomAction) {
         when (action) {
-            is InviteUsersToRoomAction.InviteSelectedUsers -> inviteUsersToRoom(action.selectedUsers)
+            is InviteUsersToRoomAction.InviteSelectedUsers -> inviteUsersToRoom(action.invitees)
         }
     }
 
-    private fun inviteUsersToRoom(selectedUsers: Set<PendingInvitee>) {
+    private fun inviteUsersToRoom(invitees: Set<PendingInvitee>) {
         _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
 
-        Observable.fromIterable(selectedUsers).flatMapCompletable { user ->
+        Observable.fromIterable(invitees).flatMapCompletable { user ->
             when (user) {
                 is PendingInvitee.UserPendingInvitee     -> room.rx().invite(user.user.userId, null)
                 is PendingInvitee.ThreePidPendingInvitee -> room.rx().invite3pid(user.threePid)
             }
         }.subscribe(
                 {
-                    val successMessage = when (selectedUsers.size) {
+                    val successMessage = when (invitees.size) {
                         1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                selectedUsers.first().getBestName())
+                                invitees.first().getBestName())
                         2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
-                                selectedUsers.first().getBestName(),
-                                selectedUsers.last().getBestName())
+                                invitees.first().getBestName(),
+                                invitees.last().getBestName())
                         else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
-                                selectedUsers.size - 1,
-                                selectedUsers.first().getBestName(),
-                                selectedUsers.size - 1)
+                                invitees.size - 1,
+                                invitees.first().getBestName(),
+                                invitees.size - 1)
                     }
                     _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
                 },

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class PhoneBookAction : VectorViewModelAction {
-    data class FilterWith(val filter: String) : PhoneBookAction()
-    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : PhoneBookAction()
+sealed class ContactsBookAction : VectorViewModelAction {
+    data class FilterWith(val filter: String) : ContactsBookAction()
+    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : ContactsBookAction()
 }

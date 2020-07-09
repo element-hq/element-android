@@ -20,5 +20,5 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.userdirectory.PendingInvitee
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
-    data class CreateRoomAndInviteSelectedUsers(val selectedUsers: Set<PendingInvitee>) : CreateDirectRoomAction()
+    data class CreateRoomAndInviteSelectedUsers(val invitees: Set<PendingInvitee>) : CreateDirectRoomAction()
 }

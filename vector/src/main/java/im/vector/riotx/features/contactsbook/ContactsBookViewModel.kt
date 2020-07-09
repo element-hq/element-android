@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
@@ -43,26 +43,26 @@ import timber.log.Timber
 
 private typealias PhoneBookSearch = String
 
-class PhoneBookViewModel @AssistedInject constructor(@Assisted
-                                                     initialState: PhoneBookViewState,
-                                                     private val contactsDataSource: ContactsDataSource,
-                                                     private val session: Session)
-    : VectorViewModel<PhoneBookViewState, PhoneBookAction, EmptyViewEvents>(initialState) {
+class ContactsBookViewModel @AssistedInject constructor(@Assisted
+                                                     initialState: ContactsBookViewState,
+                                                        private val contactsDataSource: ContactsDataSource,
+                                                        private val session: Session)
+    : VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: PhoneBookViewState): PhoneBookViewModel
+        fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 
-    companion object : MvRxViewModelFactory<PhoneBookViewModel, PhoneBookViewState> {
+    companion object : MvRxViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: PhoneBookViewState): PhoneBookViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: ContactsBookViewState): ContactsBookViewModel? {
             return when (viewModelContext) {
-                is FragmentViewModelContext -> (viewModelContext.fragment() as PhoneBookFragment).phoneBookViewModelFactory.create(state)
+                is FragmentViewModelContext -> (viewModelContext.fragment() as ContactsBookFragment).contactsBookViewModelFactory.create(state)
                 is ActivityViewModelContext -> {
                     when (viewModelContext.activity<FragmentActivity>()) {
-                        is CreateDirectRoomActivity  -> viewModelContext.activity<CreateDirectRoomActivity>().phoneBookViewModelFactory.create(state)
-                        is InviteUsersToRoomActivity -> viewModelContext.activity<InviteUsersToRoomActivity>().phoneBookViewModelFactory.create(state)
+                        is CreateDirectRoomActivity  -> viewModelContext.activity<CreateDirectRoomActivity>().contactsBookViewModelFactory.create(state)
+                        is InviteUsersToRoomActivity -> viewModelContext.activity<InviteUsersToRoomActivity>().contactsBookViewModelFactory.create(state)
                         else                         -> error("Wrong activity or fragment")
                     }
                 }
@@ -77,7 +77,7 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
     init {
         loadContacts()
 
-        selectSubscribe(PhoneBookViewState::searchTerm, PhoneBookViewState::onlyBoundContacts) { _, _ ->
+        selectSubscribe(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
             updateFilteredMappedContacts()
         }
     }
@@ -163,14 +163,14 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    override fun handle(action: PhoneBookAction) {
+    override fun handle(action: ContactsBookAction) {
         when (action) {
-            is PhoneBookAction.FilterWith        -> handleFilterWith(action)
-            is PhoneBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
+            is ContactsBookAction.FilterWith        -> handleFilterWith(action)
+            is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
         }.exhaustive
     }
 
-    private fun handleOnlyBoundContacts(action: PhoneBookAction.OnlyBoundContacts) {
+    private fun handleOnlyBoundContacts(action: ContactsBookAction.OnlyBoundContacts) {
         setState {
             copy(
                     onlyBoundContacts = action.onlyBoundContacts
@@ -178,7 +178,7 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun handleFilterWith(action: PhoneBookAction.FilterWith) {
+    private fun handleFilterWith(action: ContactsBookAction.FilterWith) {
         setState {
             copy(
                     searchTerm = action.filter

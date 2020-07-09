@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import android.widget.ImageView
 import android.widget.TextView

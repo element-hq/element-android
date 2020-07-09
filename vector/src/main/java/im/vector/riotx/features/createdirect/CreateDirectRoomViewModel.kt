@@ -49,14 +49,14 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.selectedUsers)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.invitees)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selectedUsers: Set<PendingInvitee>) {
+    private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
         val roomParams = CreateRoomParamsBuilder()
                 .apply {
-                    selectedUsers.forEach {
+                    invitees.forEach {
                         when (it) {
                             is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
                             is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)

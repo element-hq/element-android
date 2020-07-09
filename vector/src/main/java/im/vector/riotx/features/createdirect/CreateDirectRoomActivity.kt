@@ -42,8 +42,8 @@ import im.vector.riotx.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
-import im.vector.riotx.features.phonebook.PhoneBookFragment
-import im.vector.riotx.features.phonebook.PhoneBookViewModel
+import im.vector.riotx.features.contactsbook.ContactsBookFragment
+import im.vector.riotx.features.contactsbook.ContactsBookViewModel
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
@@ -60,7 +60,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
     @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
-    @Inject lateinit var phoneBookViewModelFactory: PhoneBookViewModel.Factory
+    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
@@ -106,21 +106,21 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         this,
                         PERMISSION_REQUEST_CODE_READ_CONTACTS,
                         0)) {
-            addFragmentToBackstack(R.id.container, PhoneBookFragment::class.java)
+            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                addFragmentToBackstack(R.id.container, PhoneBookFragment::class.java)
+                addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
             }
         }
     }
 
     private fun onMenuItemSelected(action: UserDirectorySharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selectedUsers))
+            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.invitees))
         }
     }
 

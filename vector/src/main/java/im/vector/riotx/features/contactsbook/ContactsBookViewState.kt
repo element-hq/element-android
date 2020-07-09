@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import im.vector.riotx.core.contacts.MappedContact
 
-data class PhoneBookViewState(
+data class ContactsBookViewState(
         // All the contacts on the phone
         val mappedContacts: Async<List<MappedContact>> = Loading(),
         // Use to filter contacts by display name

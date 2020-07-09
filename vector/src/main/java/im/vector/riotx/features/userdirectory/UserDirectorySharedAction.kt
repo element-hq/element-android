@@ -23,5 +23,5 @@ sealed class UserDirectorySharedAction : VectorSharedAction {
     object OpenPhoneBook : UserDirectorySharedAction()
     object Close : UserDirectorySharedAction()
     object GoBack : UserDirectorySharedAction()
-    data class OnMenuItemSelected(val itemId: Int, val selectedUsers: Set<PendingInvitee>) : UserDirectorySharedAction()
+    data class OnMenuItemSelected(val itemId: Int, val invitees: Set<PendingInvitee>) : UserDirectorySharedAction()
 }

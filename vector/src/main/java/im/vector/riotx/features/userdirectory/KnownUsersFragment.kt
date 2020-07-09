@@ -65,7 +65,7 @@ class KnownUsersFragment @Inject constructor(
         setupAddByMatrixIdView()
         setupAddFromPhoneBookView()
         setupCloseView()
-        viewModel.selectSubscribe(this, UserDirectoryViewState::selectedUsers) {
+        viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
             renderSelectedUsers(it)
         }
     }
@@ -78,7 +78,7 @@ class KnownUsersFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) {
-            val showMenuItem = it.selectedUsers.isNotEmpty()
+            val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
             }
@@ -87,7 +87,7 @@ class KnownUsersFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.selectedUsers))
+        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
         return@withState true
     }
 
@@ -139,14 +139,14 @@ class KnownUsersFragment @Inject constructor(
         knownUsersController.setData(it)
     }
 
-    private fun renderSelectedUsers(selectedUsers: Set<PendingInvitee>) {
+    private fun renderSelectedUsers(invitees: Set<PendingInvitee>) {
         invalidateOptionsMenu()
 
         val currentNumberOfChips = chipGroup.childCount
-        val newNumberOfChips = selectedUsers.size
+        val newNumberOfChips = invitees.size
 
         chipGroup.removeAllViews()
-        selectedUsers.forEach { addChipToGroup(it) }
+        invitees.forEach { addChipToGroup(it) }
 
         // Scroll to the bottom when adding chips. When removing chips, do not scroll
         if (newNumberOfChips >= currentNumberOfChips) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import android.os.Bundle
 import android.view.View
@@ -35,20 +35,20 @@ import im.vector.riotx.features.userdirectory.UserDirectoryAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.riotx.features.userdirectory.UserDirectoryViewModel
-import kotlinx.android.synthetic.main.fragment_phonebook.*
+import kotlinx.android.synthetic.main.fragment_contacts_book.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class PhoneBookFragment @Inject constructor(
-        val phoneBookViewModelFactory: PhoneBookViewModel.Factory,
-        private val phoneBookController: PhoneBookController
-) : VectorBaseFragment(), PhoneBookController.Callback {
+class ContactsBookFragment @Inject constructor(
+        val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
+        private val contactsBookController: ContactsBookController
+) : VectorBaseFragment(), ContactsBookController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_phonebook
+    override fun getLayoutResId() = R.layout.fragment_contacts_book
     private val viewModel: UserDirectoryViewModel by activityViewModel()
 
     // Use activityViewModel to avoid loading several times the data
-    private val phoneBookViewModel: PhoneBookViewModel by activityViewModel()
+    private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
 
@@ -64,7 +64,7 @@ class PhoneBookFragment @Inject constructor(
     private fun setupOnlyBoundContactsView() {
         phoneBookOnlyBoundContacts.checkedChanges()
                 .subscribe {
-                    phoneBookViewModel.handle(PhoneBookAction.OnlyBoundContacts(it))
+                    contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
                 }
                 .disposeOnDestroyView()
     }
@@ -75,20 +75,20 @@ class PhoneBookFragment @Inject constructor(
                 .skipInitialValue()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    phoneBookViewModel.handle(PhoneBookAction.FilterWith(it.toString()))
+                    contactsBookViewModel.handle(ContactsBookAction.FilterWith(it.toString()))
                 }
                 .disposeOnDestroyView()
     }
 
     override fun onDestroyView() {
         phoneBookRecyclerView.cleanup()
-        phoneBookController.callback = null
+        contactsBookController.callback = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        phoneBookController.callback = this
-        phoneBookRecyclerView.configureWith(phoneBookController)
+        contactsBookController.callback = this
+        phoneBookRecyclerView.configureWith(contactsBookController)
     }
 
     private fun setupCloseView() {
@@ -97,9 +97,9 @@ class PhoneBookFragment @Inject constructor(
         }
     }
 
-    override fun invalidate() = withState(phoneBookViewModel) { state ->
+    override fun invalidate() = withState(contactsBookViewModel) { state ->
         phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
-        phoneBookController.setData(state)
+        contactsBookController.setData(state)
     }
 
     override fun onMatrixIdClick(matrixId: String) {

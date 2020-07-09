@@ -27,7 +27,7 @@ data class UserDirectoryViewState(
         val excludedUserIds: Set<String>? = null,
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
-        val selectedUsers: Set<PendingInvitee> = emptySet(),
+        val pendingInvitees: Set<PendingInvitee> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,
         val directorySearchTerm: String = "",
         val filterKnownUsersValue: Option<String> = Option.empty()
@@ -36,7 +36,7 @@ data class UserDirectoryViewState(
     constructor(args: KnownUsersFragmentArgs) : this(excludedUserIds = args.excludedUserIds)
 
     fun getSelectedMatrixId(): List<String> {
-        return selectedUsers
+        return pendingInvitees
                 .mapNotNull {
                     when (it) {
                         is PendingInvitee.UserPendingInvitee     -> it.user.userId

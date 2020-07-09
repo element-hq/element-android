@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.phonebook
+package im.vector.riotx.features.contactsbook
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
@@ -32,12 +32,12 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class PhoneBookController @Inject constructor(
+class ContactsBookController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
-    private var state: PhoneBookViewState? = null
+    private var state: ContactsBookViewState? = null
 
     var callback: Callback? = null
 
@@ -45,7 +45,7 @@ class PhoneBookController @Inject constructor(
         requestModelBuild()
     }
 
-    fun setData(state: PhoneBookViewState) {
+    fun setData(state: ContactsBookViewState) {
         this.state = state
         requestModelBuild()
     }
@@ -64,6 +64,7 @@ class PhoneBookController @Inject constructor(
     private fun renderLoading() {
         loadingItem {
             id("loading")
+            loadingText(stringProvider.getString(R.string.loading_contact_book))
         }
     }
 
@@ -96,7 +97,7 @@ class PhoneBookController @Inject constructor(
                         if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
 
                         contactDetailItem {
-                            id("${mappedContact.id}-$index-${it.email}")
+                            id("${mappedContact.id}-e-$index-${it.email}")
                             threePid(it.email)
                             matrixId(it.matrixId)
                             clickListener {
@@ -113,7 +114,7 @@ class PhoneBookController @Inject constructor(
                         if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
 
                         contactDetailItem {
-                            id("${mappedContact.id}-$index-${it.phoneNumber}")
+                            id("${mappedContact.id}-m-$index-${it.phoneNumber}")
                             threePid(it.phoneNumber)
                             matrixId(it.matrixId)
                             clickListener {
@@ -132,7 +133,7 @@ class PhoneBookController @Inject constructor(
         val noResultRes = if (hasSearch) {
             R.string.no_result_placeholder
         } else {
-            R.string.empty_phone_book
+            R.string.empty_contact_book
         }
         noResultItem {
             id("noResult")

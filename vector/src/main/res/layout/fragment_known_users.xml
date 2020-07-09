@@ -132,7 +132,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:minHeight="@dimen/layout_touch_size"
-            android:text="@string/add_from_phone_book"
+            android:text="@string/search_in_my_contacts"
             android:visibility="visible"
             app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
