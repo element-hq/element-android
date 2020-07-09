@@ -31,7 +31,7 @@ class ContactsDataSource @Inject constructor(
 
     @WorkerThread
     fun getContacts(): List<MappedContact> {
-        val result = mutableListOf<MappedContact>()
+        val map = mutableMapOf<Long, MappedContactBuilder>()
         val contentResolver = context.contentResolver
 
         measureTimeMillis {
@@ -53,70 +53,82 @@ class ContactsDataSource @Inject constructor(
                                 val id = cursor.getLong(ContactsContract.Contacts._ID) ?: continue
                                 val displayName = cursor.getString(ContactsContract.Contacts.DISPLAY_NAME) ?: continue
 
-                                val currentContact = MappedContactBuilder(
+                                val mappedContactBuilder = MappedContactBuilder(
                                         id = id,
                                         displayName = displayName
                                 )
 
                                 cursor.getString(ContactsContract.Data.PHOTO_URI)
                                         ?.let { Uri.parse(it) }
-                                        ?.let { currentContact.photoURI = it }
+                                        ?.let { mappedContactBuilder.photoURI = it }
 
-                                // Get the phone numbers
-                                contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                        arrayOf(
-                                                ContactsContract.CommonDataKinds.Phone.NUMBER
-                                        ),
-                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                        arrayOf(id.toString()),
-                                        null)
-                                        ?.use { innerCursor ->
-                                            while (innerCursor.moveToNext()) {
-                                                innerCursor.getString(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                                                        ?.let {
-                                                            currentContact.msisdns.add(
-                                                                    MappedMsisdn(
-                                                                            phoneNumber = it,
-                                                                            matrixId = null
-                                                                    )
-                                                            )
-                                                        }
-                                            }
-                                        }
 
-                                // Get Emails
-                                contentResolver.query(
-                                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                                        arrayOf(
-                                                ContactsContract.CommonDataKinds.Email.DATA
-                                        ),
-                                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                                        arrayOf(id.toString()),
-                                        null)
-                                        ?.use { innerCursor ->
-                                            while (innerCursor.moveToNext()) {
-                                                // This would allow you get several email addresses
-                                                // if the email addresses were stored in an array
-                                                innerCursor.getString(ContactsContract.CommonDataKinds.Email.DATA)
-                                                        ?.let {
-                                                            currentContact.emails.add(
-                                                                    MappedEmail(
-                                                                            email = it,
-                                                                            matrixId = null
-                                                                    )
-                                                            )
-                                                        }
-                                            }
-                                        }
-
-                                result.add(currentContact.build())
+                                map[id] = mappedContactBuilder
                             }
                         }
                     }
-        }.also { Timber.d("Took ${it}ms to fetch ${result.size} contact(s)") }
 
-        return result
+            // Get the phone numbers
+            contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    arrayOf(
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                            ContactsContract.CommonDataKinds.Phone.NUMBER
+                    ),
+                    null,
+                    null,
+                    null)
+                    ?.use { innerCursor ->
+                        while (innerCursor.moveToNext()) {
+                            val mappedContactBuilder = innerCursor.getLong(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+                                    ?.let { map[it] }
+                                    ?: continue
+                            innerCursor.getString(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                                    ?.let {
+                                        mappedContactBuilder.msisdns.add(
+                                                MappedMsisdn(
+                                                        phoneNumber = it,
+                                                        matrixId = null
+                                                )
+                                        )
+                                    }
+                        }
+                    }
+
+            // Get Emails
+            contentResolver.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    arrayOf(
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID,
+                            ContactsContract.CommonDataKinds.Email.DATA
+                    ),
+                    null,
+                    null,
+                    null)
+                    ?.use { innerCursor ->
+                        while (innerCursor.moveToNext()) {
+                            // This would allow you get several email addresses
+                            // if the email addresses were stored in an array
+                            val mappedContactBuilder = innerCursor.getLong(ContactsContract.CommonDataKinds.Email.CONTACT_ID)
+                                    ?.let { map[it] }
+                                    ?: continue
+                            innerCursor.getString(ContactsContract.CommonDataKinds.Email.DATA)
+                                    ?.let {
+                                        mappedContactBuilder.emails.add(
+                                                MappedEmail(
+                                                        email = it,
+                                                        matrixId = null
+                                                )
+                                        )
+                                    }
+                        }
+                    }
+
+        }.also { Timber.d("Took ${it}ms to fetch ${map.size} contact(s)") }
+
+        return map
+                .values
                 .filter { it.emails.isNotEmpty() || it.msisdns.isNotEmpty() }
+                .map { it.build() }
     }
 
     private fun Cursor.getString(column: String): String? {
