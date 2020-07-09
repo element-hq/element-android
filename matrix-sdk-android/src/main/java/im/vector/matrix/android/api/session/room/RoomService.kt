@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 
@@ -32,7 +32,7 @@ interface RoomService {
     /**
      * Create a room asynchronously
      */
-    fun createRoom(createRoomParams: CreateRoomParams,
+    fun createRoom(createRoomParams: CreateRoomParamsBuilder,
                    callback: MatrixCallback<String>): Cancelable
 
     /**
@@ -113,5 +113,5 @@ interface RoomService {
      */
     fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
-    fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
+    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
 }

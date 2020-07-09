@@ -28,7 +28,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - CreateRoomParams has been replaced by CreateRoomParamsBuilder
 
 Build 🧱:
  - Upgrade some dependencies

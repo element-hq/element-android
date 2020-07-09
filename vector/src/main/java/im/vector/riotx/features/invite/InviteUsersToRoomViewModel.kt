@@ -22,11 +22,11 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.userdirectory.PendingInvitee
 import io.reactivex.Observable
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
@@ -57,11 +57,14 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun inviteUsersToRoom(selectedUsers: Set<User>) {
+    private fun inviteUsersToRoom(selectedUsers: Set<PendingInvitee>) {
         _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
 
         Observable.fromIterable(selectedUsers).flatMapCompletable { user ->
-            room.rx().invite(user.userId, null)
+            when (user) {
+                is PendingInvitee.UserPendingInvitee     -> room.rx().invite(user.user.userId, null)
+                is PendingInvitee.ThreePidPendingInvitee -> room.rx().invite3pid(user.threePid)
+            }
         }.subscribe(
                 {
                     val successMessage = when (selectedUsers.size) {

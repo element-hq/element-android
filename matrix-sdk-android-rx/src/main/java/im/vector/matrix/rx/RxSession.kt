@@ -32,7 +32,7 @@ import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.session.widgets.model.Widget
@@ -110,7 +110,7 @@ class RxSession(private val session: Session) {
                 .startWithCallable { session.getThreePids() }
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
+    fun createRoom(roomParams: CreateRoomParamsBuilder): Single<String> = singleBuilder {
         session.createRoom(roomParams, it)
     }
 

@@ -17,11 +17,8 @@
 package im.vector.matrix.android.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -41,7 +38,7 @@ import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal interface CreateRoomTask : Task<CreateRoomParams, String>
+internal interface CreateRoomTask : Task<CreateRoomParamsBuilder, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
@@ -51,17 +48,12 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
-        private val crossSigningService: CrossSigningService,
-        private val deviceListManager: DeviceListManager,
+        private val createRoomParamsInternalBuilder: CreateRoomParamsInternalBuilder,
         private val eventBus: EventBus
 ) : CreateRoomTask {
 
-    override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomParams = if (canEnableEncryption(params)) {
-            params.enableEncryptionWithAlgorithm()
-        } else {
-            params
-        }
+    override suspend fun execute(params: CreateRoomParamsBuilder): String {
+        val createRoomParams = createRoomParamsInternalBuilder.build(params)
 
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
             apiCall = roomAPI.createRoom(createRoomParams)
@@ -76,36 +68,14 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
-        if (createRoomParams.isDirect()) {
-            handleDirectChatCreation(createRoomParams, roomId)
+        if (params.isDirect()) {
+            handleDirectChatCreation(params, roomId)
         }
         setReadMarkers(roomId)
         return roomId
     }
 
-    private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
-        return params.enableEncryptionIfInvitedUsersSupportIt
-                && crossSigningService.isCrossSigningVerified()
-                && params.invite3pids.isNullOrEmpty()
-                && params.invitedUserIds?.isNotEmpty() == true
-                && params.invitedUserIds.let { userIds ->
-            val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
-
-            userIds.all { userId ->
-                keys.map[userId].let { deviceMap ->
-                    if (deviceMap.isNullOrEmpty()) {
-                        // A user has no device, so do not enable encryption
-                        false
-                    } else {
-                        // Check that every user's device have at least one key
-                        deviceMap.values.all { !it.keys.isNullOrEmpty() }
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {
+    private suspend fun handleDirectChatCreation(params: CreateRoomParamsBuilder, roomId: String) {
         val otherUserId = params.getFirstInvitedUserId()
                 ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
 

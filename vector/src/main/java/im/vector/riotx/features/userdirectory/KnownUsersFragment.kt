@@ -160,10 +160,7 @@ class KnownUsersFragment @Inject constructor(
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
-        chip.text = when (pendingInvitee) {
-            is PendingInvitee.UserPendingInvitee     -> pendingInvitee.user.getBestName()
-            is PendingInvitee.ThreePidPendingInvitee -> pendingInvitee.threePid.value
-        }
+        chip.text = pendingInvitee.getBestName()
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true

@@ -20,6 +20,13 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.user.model.User
 
 sealed class PendingInvitee {
-    data class UserPendingInvitee(val user: User): PendingInvitee()
-    data class ThreePidPendingInvitee(val threePid: ThreePid): PendingInvitee()
+    data class UserPendingInvitee(val user: User) : PendingInvitee()
+    data class ThreePidPendingInvitee(val threePid: ThreePid) : PendingInvitee()
+
+    fun getBestName(): String {
+        return when (this) {
+            is UserPendingInvitee     -> user.getBestName()
+            is ThreePidPendingInvitee -> threePid.value
+        }
+    }
 }

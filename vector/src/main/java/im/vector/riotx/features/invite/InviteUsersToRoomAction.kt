@@ -16,9 +16,9 @@
 
 package im.vector.riotx.features.invite
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.features.userdirectory.PendingInvitee
 
 sealed class InviteUsersToRoomAction : VectorViewModelAction {
-    data class InviteSelectedUsers(val selectedUsers: Set<User>) : InviteUsersToRoomAction()
+    data class InviteSelectedUsers(val selectedUsers: Set<PendingInvitee>) : InviteUsersToRoomAction()
 }

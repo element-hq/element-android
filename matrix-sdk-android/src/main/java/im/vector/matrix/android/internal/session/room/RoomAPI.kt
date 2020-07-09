@@ -18,9 +18,6 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
@@ -28,6 +25,9 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasBody
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
+import im.vector.matrix.android.internal.session.room.create.CreateRoomParams
+import im.vector.matrix.android.internal.session.room.create.CreateRoomResponse
+import im.vector.matrix.android.internal.session.room.create.JoinRoomResponse
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
