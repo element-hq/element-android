@@ -16,11 +16,13 @@
 
 package im.vector.riotx.features.roomprofile.members
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
@@ -37,12 +39,14 @@ import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
@@ -125,7 +129,12 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val permissions = ActionPermissions(
-                            canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
+                            canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId),
+                            canRevokeThreePidInvite = PowerLevelsHelper(it).isUserAllowedToSend(
+                                    userId = session.myUserId,
+                                    isState = true,
+                                    eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE
+                            )
                     )
                     setState {
                         copy(actionsPermissions = permissions)
@@ -177,5 +186,19 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     override fun handle(action: RoomMemberListAction) {
+        when (action) {
+            is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
+        }.exhaustive
+    }
+
+    private fun handleRevokeThreePidInvite(action: RoomMemberListAction.RevokeThreePidInvite) {
+        viewModelScope.launch {
+            room.sendStateEvent(
+                    eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                    stateKey = action.stateKey,
+                    body = emptyMap(),
+                    callback = NoOpMatrixCallback()
+            )
+        }
     }
 }

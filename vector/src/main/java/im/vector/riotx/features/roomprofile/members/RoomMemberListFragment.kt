@@ -20,11 +20,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.matrix.android.api.session.room.model.RoomThirdPartyInviteContent
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
@@ -90,7 +93,19 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun onThreePidInvites(event: Event) {
-        // TODO Display a bottom sheet to revoke invite if power level is high enough
+        // Display a dialog to revoke invite if power level is high enough
+        val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
+        val stateKey = event.stateKey ?: return
+        if (withState(viewModel) { it.actionsPermissions.canRevokeThreePidInvite }) {
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.three_pid_revoke_invite_dialog_title)
+                    .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.revoke) { _, _ ->
+                        viewModel.handle(RoomMemberListAction.RevokeThreePidInvite(stateKey))
+                    }
+                    .show()
+        }
     }
 
     private fun renderRoomSummary(state: RoomMemberListViewState) {

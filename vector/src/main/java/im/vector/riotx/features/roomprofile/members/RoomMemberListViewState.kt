@@ -40,7 +40,8 @@ data class RoomMemberListViewState(
 }
 
 data class ActionPermissions(
-        val canInvite: Boolean = false
+        val canInvite: Boolean = false,
+        val canRevokeThreePidInvite: Boolean = false
 )
 
 typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>
