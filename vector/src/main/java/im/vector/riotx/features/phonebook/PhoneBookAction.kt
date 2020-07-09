@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.userdirectory
+package im.vector.riotx.features.phonebook
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 

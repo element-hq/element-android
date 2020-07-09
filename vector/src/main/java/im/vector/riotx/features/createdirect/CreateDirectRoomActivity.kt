@@ -40,7 +40,7 @@ import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
-import im.vector.riotx.features.userdirectory.PhoneBookViewModel
+import im.vector.riotx.features.phonebook.PhoneBookViewModel
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel

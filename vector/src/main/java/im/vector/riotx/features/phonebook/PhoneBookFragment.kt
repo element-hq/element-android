@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.userdirectory
+package im.vector.riotx.features.phonebook
 
 import android.os.Bundle
 import android.view.View
@@ -30,6 +30,10 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.userdirectory.UserDirectoryAction
+import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
+import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
+import im.vector.riotx.features.userdirectory.UserDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_phonebook.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

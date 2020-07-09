@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.userdirectory
+package im.vector.riotx.features.phonebook
 
-import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.contacts.MappedContact
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.core.epoxy.onClick
+import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_contact_main)
-abstract class ContactItem : VectorEpoxyModel<ContactItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_contact_detail)
+abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>() {
 
-    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var mappedContact: MappedContact
+    @EpoxyAttribute lateinit var threePid: String
+    @EpoxyAttribute var matrixId: String? = null
+    @EpoxyAttribute var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        // If name is empty, use userId as name and force it being centered
-        holder.nameView.text = mappedContact.displayName
-        avatarRenderer.render(mappedContact, holder.avatarImageView)
+        holder.view.onClick(clickListener)
+        holder.nameView.text = threePid
+        holder.matrixIdView.setTextOrHide(matrixId)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val nameView by bind<TextView>(R.id.contactDisplayName)
-        val avatarImageView by bind<ImageView>(R.id.contactAvatar)
+        val nameView by bind<TextView>(R.id.contactDetailName)
+        val matrixIdView by bind<TextView>(R.id.contactDetailMatrixId)
     }
 }

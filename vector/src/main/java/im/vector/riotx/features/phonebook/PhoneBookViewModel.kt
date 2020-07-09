@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.userdirectory
+package im.vector.riotx.features.phonebook
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope

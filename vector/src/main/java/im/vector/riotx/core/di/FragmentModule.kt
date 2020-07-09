@@ -103,7 +103,7 @@ import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
-import im.vector.riotx.features.userdirectory.PhoneBookFragment
+import im.vector.riotx.features.phonebook.PhoneBookFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.widgets.WidgetFragment
 
