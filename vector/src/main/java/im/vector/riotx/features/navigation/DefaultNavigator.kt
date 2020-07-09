@@ -246,20 +246,25 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openImageViewer(activity: Activity,
-                                 roomId: String?,
+                                 roomId: String,
                                  mediaData: AttachmentData,
                                  view: View,
+                                 inMemory: List<AttachmentData>?,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
+        VectorAttachmentViewerActivity.newIntent(activity,
+                mediaData,
+                roomId,
+                mediaData.eventId,
+                inMemory,
+                ViewCompat.getTransitionName(view)).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-                    pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
-                }
-                activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-                    pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-                }
+            activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
             }
+            activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+
             pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
             options?.invoke(pairs)
 
@@ -284,12 +289,18 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openVideoViewer(activity: Activity,
-                                 roomId: String?, mediaData: VideoContentRenderer.Data,
+                                 roomId: String, mediaData: VideoContentRenderer.Data,
                                  view: View,
+                                 inMemory: List<AttachmentData>?,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
 //        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
 //        activity.startActivity(intent)
-        VectorAttachmentViewerActivity.newIntent(activity, mediaData, roomId, mediaData.eventId, ViewCompat.getTransitionName(view)).let { intent ->
+        VectorAttachmentViewerActivity.newIntent(activity,
+                mediaData,
+                roomId,
+                mediaData.eventId,
+                inMemory,
+                ViewCompat.getTransitionName(view)).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {

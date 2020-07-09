@@ -30,14 +30,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.transition.Transition
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.file.FileService
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
-import im.vector.matrix.android.api.session.room.model.message.getFileUrl
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.attachmentviewer.AttachmentCommands
 import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
@@ -52,11 +44,10 @@ import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmentProvider.InteractionListener {
+class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmentProvider.InteractionListener {
 
     @Parcelize
     data class Args(
@@ -69,7 +60,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
     lateinit var sessionHolder: ActiveSessionHolder
 
     @Inject
-    lateinit var dataSourceFactory: RoomAttachmentProviderFactory
+    lateinit var dataSourceFactory: AttachmentProviderFactory
 
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
@@ -78,7 +69,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
     private var initialIndex = 0
     private var isAnimatingOut = false
-    private var eventList: List<TimelineEvent>? = null
+
+    var currentSourceProvider: BaseAttachmentProvider? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,13 +84,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         val args = args() ?: throw IllegalArgumentException("Missing arguments")
-        val session = sessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
-
-        val room = args.roomId?.let { session.getRoom(it) }
-        val events = room?.getAttachmentMessages() ?: emptyList()
-        eventList = events
-        val index = events.indexOfFirst { it.eventId == args.eventId }
-        initialIndex = index
 
         if (savedInstanceState == null && addTransitionListener()) {
             args.sharedTransitionName?.let {
@@ -127,14 +112,41 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
             }
         }
 
-        val sourceProvider = dataSourceFactory.createProvider(events, index)
-        sourceProvider.interactionListener = this
-        setSourceProvider(sourceProvider)
-        if (savedInstanceState == null) {
-            pager2.setCurrentItem(index, false)
-            // The page change listener is not notified of the change...
-            pager2.post {
-                onSelectedPositionChanged(index)
+        val session = sessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
+
+        val room = args.roomId?.let { session.getRoom(it) }
+
+        val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
+        if (inMemoryData != null) {
+            val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room, initialIndex)
+            val index = inMemoryData.indexOfFirst { it.eventId == args.eventId }
+            initialIndex = index
+            sourceProvider.interactionListener = this
+            setSourceProvider(sourceProvider)
+            this.currentSourceProvider = sourceProvider
+            if (savedInstanceState == null) {
+                pager2.setCurrentItem(index, false)
+                // The page change listener is not notified of the change...
+                pager2.post {
+                    onSelectedPositionChanged(index)
+                }
+            }
+        } else {
+            val events = room?.getAttachmentMessages()
+                    ?: emptyList()
+            val index = events.indexOfFirst { it.eventId == args.eventId }
+            initialIndex = index
+
+            val sourceProvider = dataSourceFactory.createProvider(events, index)
+            sourceProvider.interactionListener = this
+            setSourceProvider(sourceProvider)
+            this.currentSourceProvider = sourceProvider
+            if (savedInstanceState == null) {
+                pager2.setCurrentItem(index, false)
+                // The page change listener is not notified of the change...
+                pager2.post {
+                    onSelectedPositionChanged(index)
+                }
             }
         }
 
@@ -228,14 +240,19 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
 
         const val EXTRA_ARGS = "EXTRA_ARGS"
         const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
+        const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
 
         fun newIntent(context: Context,
                       mediaData: AttachmentData,
                       roomId: String?,
                       eventId: String,
+                      inMemoryData: List<AttachmentData>?,
                       sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
+            if (inMemoryData != null) {
+                it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
+            }
         }
     }
 
@@ -252,27 +269,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
     }
 
     override fun onShareTapped() {
-        // Share
-        eventList?.get(currentPosition)?.let { timelineEvent ->
-
-            val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
-                    as? MessageWithAttachmentContent
-                    ?: return@let
-            sessionHolder.getSafeActiveSession()?.fileService()?.downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                    id = timelineEvent.eventId,
-                    fileName = messageContent.body,
-                    mimeType = messageContent.mimeType,
-                    url = messageContent.getFileUrl(),
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                                shareMedia(this@VectorAttachmentViewerActivity, data, getMimeTypeFromUri(this@VectorAttachmentViewerActivity, data.toUri()))
-                            }
-                        }
-                    }
-            )
+        this.currentSourceProvider?.getFileForSharing(currentPosition) { data ->
+            if (data != null && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                shareMedia(this@VectorAttachmentViewerActivity, data, getMimeTypeFromUri(this@VectorAttachmentViewerActivity, data.toUri()))
+            }
         }
     }
 }
