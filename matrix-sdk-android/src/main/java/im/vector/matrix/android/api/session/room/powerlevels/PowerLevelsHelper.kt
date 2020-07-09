@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.api.session.room.powerlevels
 
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 
 /**
@@ -123,60 +122,5 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
             is Int    -> value
             else      -> Role.Moderator.value
         }
-    }
-
-    /**
-     * Check if user have the necessary power level to change room name
-     * @param userId the id of the user to check for.
-     * @return true if able to change room name
-     */
-    fun isUserAbleToChangeRoomName(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        val minPowerLevel = powerLevelsContent.events[EventType.STATE_ROOM_NAME] ?: powerLevelsContent.stateDefault
-        return powerLevel >= minPowerLevel
-    }
-
-    /**
-     * Check if user have the necessary power level to change room topic
-     * @param userId the id of the user to check for.
-     * @return true if able to change room topic
-     */
-    fun isUserAbleToChangeRoomTopic(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        val minPowerLevel = powerLevelsContent.events[EventType.STATE_ROOM_TOPIC] ?: powerLevelsContent.stateDefault
-        return powerLevel >= minPowerLevel
-    }
-
-    /**
-     * Check if user have the necessary power level to change room canonical alias
-     * @param userId the id of the user to check for.
-     * @return true if able to change room canonical alias
-     */
-    fun isUserAbleToChangeRoomCanonicalAlias(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        val minPowerLevel = powerLevelsContent.events[EventType.STATE_ROOM_CANONICAL_ALIAS] ?: powerLevelsContent.stateDefault
-        return powerLevel >= minPowerLevel
-    }
-
-    /**
-     * Check if user have the necessary power level to change room history readability
-     * @param userId the id of the user to check for.
-     * @return true if able to change room history readability
-     */
-    fun isUserAbleToChangeRoomHistoryReadability(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        val minPowerLevel = powerLevelsContent.events[EventType.STATE_ROOM_HISTORY_VISIBILITY] ?: powerLevelsContent.stateDefault
-        return powerLevel >= minPowerLevel
-    }
-
-    /**
-     * Check if user have the necessary power level to change room avatar
-     * @param userId the id of the user to check for.
-     * @return true if able to change room avatar
-     */
-    fun isUserAbleToChangeRoomAvatar(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        val minPowerLevel = powerLevelsContent.events[EventType.STATE_ROOM_AVATAR] ?: powerLevelsContent.stateDefault
-        return powerLevel >= minPowerLevel
     }
 }

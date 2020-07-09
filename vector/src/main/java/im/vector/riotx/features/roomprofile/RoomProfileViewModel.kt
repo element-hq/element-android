@@ -25,6 +25,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -71,7 +72,9 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
         powerLevelsContentLive
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
+                    setState {
+                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, isState = true, eventType = EventType.STATE_ROOM_AVATAR))
+                    }
                 }
                 .disposeOnClear()
     }
