@@ -38,9 +38,14 @@ import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.features.phonebook.PhoneBookFragment
+import im.vector.riotx.features.phonebook.PhoneBookViewModel
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
-import im.vector.riotx.features.phonebook.PhoneBookViewModel
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
@@ -76,7 +81,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         UserDirectorySharedAction.Close                 -> finish()
                         UserDirectorySharedAction.GoBack                -> onBackPressed()
                         is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                        UserDirectorySharedAction.OpenPhoneBook         -> TODO()
+                        UserDirectorySharedAction.OpenPhoneBook         -> openPhoneBook()
                     }.exhaustive
                 }
                 .disposeOnDestroy()
@@ -92,6 +97,24 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
+        }
+    }
+
+    private fun openPhoneBook() {
+        // Check permission first
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
+                        this,
+                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
+                        0)) {
+            addFragmentToBackstack(R.id.container, PhoneBookFragment::class.java)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
+                addFragmentToBackstack(R.id.container, PhoneBookFragment::class.java)
+            }
         }
     }
 
