@@ -17,36 +17,10 @@
 package im.vector.riotx.attachmentviewer
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseViewHolder constructor(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
-
-    open fun onRecycled() {
-        boundResourceUid = null
-    }
-
-    open fun onAttached() {}
-    open fun onDetached() {}
-    open fun entersBackground() {}
-    open fun entersForeground() {}
-    open fun onSelected(selected: Boolean) {}
-
-    open fun handleCommand(commands: AttachmentCommands) {}
-
-    var boundResourceUid: String? = null
-
-    open fun bind(attachmentInfo: AttachmentInfo) {
-        boundResourceUid = attachmentInfo.uid
-    }
-}
-
-class AttachmentViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView)
-
-class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
+class AttachmentsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     var attachmentSourceProvider: AttachmentSourceProvider? = null
         set(value) {
@@ -71,7 +45,7 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
             R.layout.item_image_attachment          -> ZoomableImageViewHolder(itemView)
             R.layout.item_animated_image_attachment -> AnimatedImageViewHolder(itemView)
             R.layout.item_video_attachment          -> VideoViewHolder(itemView)
-            else                                    -> AttachmentViewHolder(itemView)
+            else                                    -> UnsupportedViewHolder(itemView)
         }
     }
 
@@ -81,8 +55,8 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
             is AttachmentInfo.Image         -> R.layout.item_image_attachment
             is AttachmentInfo.Video         -> R.layout.item_video_attachment
             is AttachmentInfo.AnimatedImage -> R.layout.item_animated_image_attachment
-            is AttachmentInfo.Audio         -> TODO()
-            is AttachmentInfo.File          -> TODO()
+//            is AttachmentInfo.Audio         -> TODO()
+//            is AttachmentInfo.File          -> TODO()
         }
     }
 
@@ -103,8 +77,8 @@ class AttachmentsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
                 is AttachmentInfo.Video         -> {
                     attachmentSourceProvider?.loadVideo((holder as VideoViewHolder).target, it)
                 }
-                else                            -> {
-                }
+//                else                            -> {
+////                }
             }
         }
     }
