@@ -13,6 +13,7 @@ Improvements 🙌:
  - Set up SSSS from security settings (#1567)
  - New lab setting to add 'unread notifications' tab to main screen
  - Render third party invite event (#548)
+ - Display three pid invites in the room members list (#548)
 
 Bugfix 🐛:
  - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)

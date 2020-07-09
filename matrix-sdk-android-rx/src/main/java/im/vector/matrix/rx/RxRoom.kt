@@ -72,6 +72,13 @@ class RxRoom(private val room: Room) {
                 }
     }
 
+    fun liveStateEvents(eventTypes: Set<String>): Observable<List<Event>> {
+        return room.getStateEventsLive(eventTypes).asObservable()
+                .startWithCallable {
+                    room.getStateEvents(eventTypes)
+                }
+    }
+
     fun liveReadMarker(): Observable<Optional<String>> {
         return room.getReadMarkerLive().asObservable()
     }

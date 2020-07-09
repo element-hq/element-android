@@ -42,7 +42,10 @@ abstract class ProfileMatrixItem : VectorEpoxyModel<ProfileMatrixItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         val bestName = matrixItem.getBestName()
-        val matrixId = matrixItem.id.takeIf { it != bestName }
+        val matrixId = matrixItem.id
+                .takeIf { it != bestName }
+                // Special case for ThreePid fake matrix item
+                .takeIf { it != "@" }
         holder.view.setOnClickListener(clickListener)
         holder.titleView.text = bestName
         holder.subtitleView.setTextOrHide(matrixId)

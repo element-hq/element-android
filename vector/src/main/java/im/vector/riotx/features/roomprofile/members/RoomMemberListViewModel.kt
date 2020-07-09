@@ -68,6 +68,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
 
     init {
         observeRoomMemberSummaries()
+        observeThirdPartyInvites()
         observeRoomSummary()
         observePowerLevel()
     }
@@ -137,6 +138,13 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
+                }
+    }
+
+    private fun observeThirdPartyInvites() {
+        room.rx().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
+                .execute { async ->
+                    copy(threePidInvites = async)
                 }
     }
 
