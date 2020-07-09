@@ -30,8 +30,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.identity.FoundThreePid
 import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.riotx.core.contacts.ContactModel
 import im.vector.riotx.core.contacts.ContactsDataSource
+import im.vector.riotx.core.contacts.MappedContact
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
@@ -71,8 +71,8 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private var allContacts: List<ContactModel> = emptyList()
-    private var mappedContacts: List<ContactModel> = emptyList()
+    private var allContacts: List<MappedContact> = emptyList()
+    private var mappedContacts: List<MappedContact> = emptyList()
 
     init {
         loadContacts()
@@ -104,7 +104,7 @@ class PhoneBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun performLookup(data: List<ContactModel>) {
+    private fun performLookup(data: List<MappedContact>) {
         viewModelScope.launch {
             val threePids = data.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +

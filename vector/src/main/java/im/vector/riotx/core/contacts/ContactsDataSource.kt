@@ -28,8 +28,8 @@ class ContactsDataSource @Inject constructor(
 ) {
 
     @WorkerThread
-    fun getContacts(): List<ContactModel> {
-        val result = mutableListOf<ContactModel>()
+    fun getContacts(): List<MappedContact> {
+        val result = mutableListOf<MappedContact>()
         val contentResolver = context.contentResolver
 
         contentResolver.query(
@@ -56,7 +56,7 @@ class ContactsDataSource @Inject constructor(
                             val id = cursor.getLong(ContactsContract.Contacts._ID) ?: continue
                             val displayName = cursor.getString(ContactsContract.Contacts.DISPLAY_NAME) ?: continue
 
-                            val currentContact = ContactModelBuilder(
+                            val currentContact = MappedContactBuilder(
                                     id = id,
                                     displayName = displayName
                             )
@@ -108,7 +108,7 @@ class ContactsDataSource @Inject constructor(
                                         }
                                     }
 
-                            result.add(currentContact.toContactModel())
+                            result.add(currentContact.build())
                         }
                     }
                 }

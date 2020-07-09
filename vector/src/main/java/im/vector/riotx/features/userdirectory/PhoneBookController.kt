@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.riotx.R
-import im.vector.riotx.core.contacts.ContactModel
+import im.vector.riotx.core.contacts.MappedContact
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.epoxy.noResultItem
@@ -74,7 +74,7 @@ class PhoneBookController @Inject constructor(
         }
     }
 
-    private fun renderSuccess(mappedContacts: List<ContactModel>,
+    private fun renderSuccess(mappedContacts: List<MappedContact>,
                               hasSearch: Boolean,
                               onlyBoundContacts: Boolean) {
         if (mappedContacts.isEmpty()) {
@@ -84,11 +84,11 @@ class PhoneBookController @Inject constructor(
         }
     }
 
-    private fun renderContacts(mappedContacts: List<ContactModel>, onlyBoundContacts: Boolean) {
+    private fun renderContacts(mappedContacts: List<MappedContact>, onlyBoundContacts: Boolean) {
         for (mappedContact in mappedContacts) {
             contactItem {
                 id(mappedContact.id)
-                contact(mappedContact)
+                mappedContact(mappedContact)
                 avatarRenderer(avatarRenderer)
             }
             mappedContact.emails

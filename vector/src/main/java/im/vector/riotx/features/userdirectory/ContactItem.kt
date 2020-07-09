@@ -21,7 +21,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.contacts.ContactModel
+import im.vector.riotx.core.contacts.MappedContact
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.features.home.AvatarRenderer
@@ -30,13 +30,13 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class ContactItem : VectorEpoxyModel<ContactItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var contact: ContactModel
+    @EpoxyAttribute lateinit var mappedContact: MappedContact
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         // If name is empty, use userId as name and force it being centered
-        holder.nameView.text = contact.displayName
-        avatarRenderer.render(contact, holder.avatarImageView)
+        holder.nameView.text = mappedContact.displayName
+        avatarRenderer.render(mappedContact, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

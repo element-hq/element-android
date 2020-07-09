@@ -18,18 +18,16 @@ package im.vector.riotx.core.contacts
 
 import android.net.Uri
 
-/* TODO Rename to MxContact? */
-
-class ContactModelBuilder(
+class MappedContactBuilder(
         val id: Long,
-        val displayName: String) {
-
+        val displayName: String
+) {
     var photoURI: Uri? = null
     val msisdns = mutableListOf<MappedMsisdn>()
     val emails = mutableListOf<MappedEmail>()
 
-    fun toContactModel(): ContactModel {
-        return ContactModel(
+    fun build(): MappedContact {
+        return MappedContact(
                 id = id,
                 displayName = displayName,
                 photoURI = photoURI,
@@ -39,7 +37,7 @@ class ContactModelBuilder(
     }
 }
 
-data class ContactModel(
+data class MappedContact(
         val id: Long,
         val displayName: String,
         val photoURI: Uri? = null,

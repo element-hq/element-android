@@ -19,17 +19,17 @@ package im.vector.riotx.features.userdirectory
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
-import im.vector.riotx.core.contacts.ContactModel
+import im.vector.riotx.core.contacts.MappedContact
 
 data class PhoneBookViewState(
         // All the contacts on the phone
-        val mappedContacts: Async<List<ContactModel>> = Loading(),
+        val mappedContacts: Async<List<MappedContact>> = Loading(),
         // Use to filter contacts by display name
         val searchTerm: String = "",
         // Tru to display only bound contacts with their bound 2pid
         val onlyBoundContacts: Boolean = false,
         // All contacts, filtered by searchTerm and onlyBoundContacts
-        val filteredMappedContacts: List<ContactModel> = emptyList(),
+        val filteredMappedContacts: List<MappedContact> = emptyList(),
         // True when the identity service has return some data
         val isBoundRetrieved: Boolean = false
 ) : MvRxState
