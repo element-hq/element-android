@@ -140,7 +140,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 intent.type = "text/plain"
                 intent.putExtra(Intent.EXTRA_TITLE, "riot-megolm-export-${session.myUserId}-${System.currentTimeMillis()}.txt")
 
-                startActivityForResult(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step1_manual_export)), REQUEST_CODE_SAVE_MEGOLM_EXPORT)
+                startActivityForResult(
+                        Intent.createChooser(
+                                intent,
+                                getString(R.string.keys_backup_setup_step1_manual_export)
+                        ),
+                        REQUEST_CODE_SAVE_MEGOLM_EXPORT
+                )
             } catch (activityNotFoundException: ActivityNotFoundException) {
                 toast(R.string.error_no_external_application_found)
             }
@@ -172,7 +178,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                                                 if (data) {
                                                     toast(getString(R.string.encryption_exported_successfully))
                                                     Intent().apply {
-                                                       putExtra(MANUAL_EXPORT, true)
+                                                        putExtra(MANUAL_EXPORT, true)
                                                     }.let {
                                                         setResult(Activity.RESULT_OK, it)
                                                         finish()
