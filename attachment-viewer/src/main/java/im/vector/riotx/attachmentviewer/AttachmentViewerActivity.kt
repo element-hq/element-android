@@ -18,7 +18,6 @@ package im.vector.riotx.attachmentviewer
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -161,26 +160,26 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             return true
         }
 
-        Log.v("ATTACHEMENTS", "================\ndispatchTouchEvent $ev")
+        // Log.v("ATTACHEMENTS", "================\ndispatchTouchEvent $ev")
         handleUpDownEvent(ev)
 
-        Log.v("ATTACHEMENTS", "scaleDetector is in progress ${scaleDetector.isInProgress}")
-        Log.v("ATTACHEMENTS", "pointerCount ${ev.pointerCount}")
-        Log.v("ATTACHEMENTS", "wasScaled $wasScaled")
+        // Log.v("ATTACHEMENTS", "scaleDetector is in progress ${scaleDetector.isInProgress}")
+        // Log.v("ATTACHEMENTS", "pointerCount ${ev.pointerCount}")
+        // Log.v("ATTACHEMENTS", "wasScaled $wasScaled")
         if (swipeDirection == null && (scaleDetector.isInProgress || ev.pointerCount > 1 || wasScaled)) {
             wasScaled = true
-            Log.v("ATTACHEMENTS", "dispatch to pager")
+//            Log.v("ATTACHEMENTS", "dispatch to pager")
             return attachmentPager.dispatchTouchEvent(ev)
         }
 
-        Log.v("ATTACHEMENTS", "is current item scaled ${isScaled()}")
+        // Log.v("ATTACHEMENTS", "is current item scaled ${isScaled()}")
         return (if (isScaled()) super.dispatchTouchEvent(ev) else handleTouchIfNotScaled(ev)).also {
-            Log.v("ATTACHEMENTS", "\n================")
+//            Log.v("ATTACHEMENTS", "\n================")
         }
     }
 
     private fun handleUpDownEvent(event: MotionEvent) {
-        Log.v("ATTACHEMENTS", "handleUpDownEvent $event")
+        // Log.v("ATTACHEMENTS", "handleUpDownEvent $event")
         if (event.action == MotionEvent.ACTION_UP) {
             handleEventActionUp(event)
         }
@@ -232,7 +231,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     }
 
     private fun handleTouchIfNotScaled(event: MotionEvent): Boolean {
-        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled $event")
+//        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled $event")
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {

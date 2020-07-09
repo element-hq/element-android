@@ -16,7 +16,6 @@
 
 package im.vector.riotx.attachmentviewer
 
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import com.github.chrisbanes.photoview.PhotoView
@@ -30,7 +29,7 @@ class ZoomableImageViewHolder constructor(itemView: View) :
     init {
         touchImageView.setAllowParentInterceptOnEdge(false)
         touchImageView.setOnScaleChangeListener { scaleFactor, _, _ ->
-            Log.v("ATTACHEMENTS", "scaleFactor $scaleFactor")
+            // Log.v("ATTACHEMENTS", "scaleFactor $scaleFactor")
             // It's a bit annoying but when you pitch down the scaling
             // is not exactly one :/
             touchImageView.setAllowParentInterceptOnEdge(scaleFactor <= 1.0008f)

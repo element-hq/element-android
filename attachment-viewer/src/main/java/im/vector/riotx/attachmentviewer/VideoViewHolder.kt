@@ -16,7 +16,6 @@
 
 package im.vector.riotx.attachmentviewer
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -115,7 +114,7 @@ class VideoViewHolder constructor(itemView: View) :
                         val duration = videoView.duration
                         val progress = videoView.currentPosition
                         val isPlaying = videoView.isPlaying
-                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
+//                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                         eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                     }
         }

@@ -78,7 +78,7 @@ class AttachmentsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                     attachmentSourceProvider?.loadVideo((holder as VideoViewHolder).target, it)
                 }
 //                else                            -> {
-////                }
+// //                }
             }
         }
     }
