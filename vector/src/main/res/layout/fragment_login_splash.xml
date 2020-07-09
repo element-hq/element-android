@@ -20,9 +20,9 @@
 
             <ImageView
                 android:id="@+id/loginSplashLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/riotx_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/element_logo_green"
                 android:transitionName="loginLogoTransition"
                 app:layout_constraintBottom_toTopOf="@+id/loginSplashTitle"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
                 android:id="@+id/loginSplashTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="120dp"
                 android:text="@string/login_splash_title"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
                 android:transitionName="loginTitleTransition"

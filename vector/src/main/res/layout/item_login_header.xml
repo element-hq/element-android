@@ -6,4 +6,4 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="32dp"
     android:importantForAccessibility="no"
-    android:src="@drawable/riotx_logo" />
+    android:src="@drawable/element_logo_green" />
