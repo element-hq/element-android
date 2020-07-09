@@ -17,6 +17,7 @@
 package im.vector.riotx.features.disclaimer
 
 import android.app.Activity
+import android.content.DialogInterface
 import androidx.preference.PreferenceManager
 import android.view.ViewGroup
 import android.widget.TextView
@@ -24,11 +25,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.extensions.setTextWithColoredPart
+import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.core.utils.openPlayStore
+import im.vector.riotx.features.settings.VectorSettingsUrls
+import im.vector.riotx.features.themes.ThemeUtils
 
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
-private const val CURRENT_DISCLAIMER_VALUE = 1
+private const val CURRENT_DISCLAIMER_VALUE = 2
 
 private const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 
@@ -42,22 +47,13 @@ fun showDisclaimerDialog(activity: Activity) {
 
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
 
-        val textView = (dialogLayout as ViewGroup).findViewById<TextView>(R.id.dialogDisclaimerContentLine2)
-        @Suppress("ConstantConditionIf")
-        if (BuildConfig.FLAVOR == "gplay") {
-            textView.setTextWithColoredPart(R.string.alpha_disclaimer_content_line_2_gplay, R.string.alpha_disclaimer_content_line_2_gplay_colored_part)
-
-            textView.setOnClickListener {
-                openPlayStore(activity)
-            }
-        } else {
-            textView.setText(R.string.alpha_disclaimer_content_line_2_fdroid)
-        }
-
         AlertDialog.Builder(activity)
                 .setView(dialogLayout)
                 .setCancelable(false)
-                .setPositiveButton(R.string._continue, null)
+                .setNegativeButton(R.string.element_disclaimer_negative_button, null)
+                .setPositiveButton(R.string.element_disclaimer_positive_button) { _, _ ->
+                    activity.displayInWebView(VectorSettingsUrls.DISCLAIMER_URL)
+                }
                 .show()
     }
 }

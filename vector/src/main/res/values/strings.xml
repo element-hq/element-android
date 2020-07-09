@@ -2527,4 +2527,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="element_identity_server_error_outdated_identity_server">This identity server is outdated. Element support only API V2.</string>
     <string name="element_identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
 
+    <string name="element_disclaimer_title">Riot is now Element!</string>
+    <string name="element_disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
+    <string name="element_disclaimer_negative_button">GOT IT</string>
+    <string name="element_disclaimer_positive_button">LEARN MORE</string>
+
 </resources>
