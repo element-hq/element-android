@@ -18,8 +18,8 @@ package im.vector.riotx.features.settings
 
 object VectorSettingsUrls {
 
-    const val COPYRIGHT = "https://riot.im/copyright"
-    const val TAC = "https://riot.im/tac"
-    const val PRIVACY_POLICY = "https://riot.im/privacy"
+    const val COPYRIGHT = "https://element.io/copyright"
+    const val TAC = "https://element.io/terms-of-service"
+    const val PRIVACY_POLICY = "https://element.io/privacy"
     const val THIRD_PARTY_LICENSES = "file:///android_asset/open_source_licenses.html"
 }
