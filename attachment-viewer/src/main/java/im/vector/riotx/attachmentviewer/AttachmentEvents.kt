@@ -27,4 +27,5 @@ interface AttachmentEventListener {
 sealed class AttachmentCommands {
     object PauseVideo : AttachmentCommands()
     object StartVideo : AttachmentCommands()
+    data class SeekTo(val percentProgress: Int) : AttachmentCommands()
 }

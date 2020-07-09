@@ -303,10 +303,9 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         finish()
     }
 
-    public fun handle(commands: AttachmentCommands) {
-        (attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(currentPosition) as? BaseViewHolder)?.let {
-            it.handleCommand(commands)
-        }
+    fun handle(commands: AttachmentCommands) {
+        (attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(currentPosition) as? BaseViewHolder)
+                ?.handleCommand(commands)
     }
 
     private fun hideSystemUI() {

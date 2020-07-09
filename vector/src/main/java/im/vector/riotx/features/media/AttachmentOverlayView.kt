@@ -36,6 +36,7 @@ class AttachmentOverlayView @JvmOverloads constructor(
     var onShareCallback: (() -> Unit)? = null
     var onBack: (() -> Unit)? = null
     var onPlayPause: ((play: Boolean) -> Unit)? = null
+    var videoSeekTo: ((progress: Int) -> Unit)? = null
 
     private val counterTextView: TextView
     private val infoTextView: TextView
@@ -47,6 +48,8 @@ class AttachmentOverlayView @JvmOverloads constructor(
 
     val videoControlsGroup: Group
 
+    var suspendSeekBarUpdate = false
+
     init {
         View.inflate(context, R.layout.merge_image_attachment_overlay, this)
         setBackgroundColor(Color.TRANSPARENT)
@@ -56,8 +59,6 @@ class AttachmentOverlayView @JvmOverloads constructor(
         videoControlsGroup = findViewById(R.id.overlayVideoControlsGroup)
         overlayPlayPauseButton = findViewById(R.id.overlayPlayPauseButton)
         overlaySeekBar = findViewById(R.id.overlaySeekBar)
-
-        overlaySeekBar.isEnabled = false
         findViewById<ImageView>(R.id.overlayBackButton).setOnClickListener {
             onBack?.invoke()
         }
@@ -67,6 +68,22 @@ class AttachmentOverlayView @JvmOverloads constructor(
         findViewById<ImageView>(R.id.overlayPlayPauseButton).setOnClickListener {
             onPlayPause?.invoke(!isPlaying)
         }
+
+        overlaySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    videoSeekTo?.invoke(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                suspendSeekBarUpdate = true
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                suspendSeekBarUpdate = false
+            }
+        })
     }
 
     fun updateWith(counter: String, senderInfo: String) {
@@ -78,10 +95,12 @@ class AttachmentOverlayView @JvmOverloads constructor(
         when (event) {
             is AttachmentEvents.VideoEvent -> {
                 overlayPlayPauseButton.setImageResource(if (!event.isPlaying) R.drawable.ic_play_arrow else R.drawable.ic_pause)
-                val safeDuration = (if (event.duration == 0) 100 else event.duration).toFloat()
-                val percent = ((event.progress / safeDuration) * 100f).toInt().coerceAtMost(100)
-                isPlaying = event.isPlaying
-                overlaySeekBar.progress = percent
+                if (!suspendSeekBarUpdate) {
+                    val safeDuration = (if (event.duration == 0) 100 else event.duration).toFloat()
+                    val percent = ((event.progress / safeDuration) * 100f).toInt().coerceAtMost(100)
+                    isPlaying = event.isPlaying
+                    overlaySeekBar.progress = percent
+                }
             }
         }
     }

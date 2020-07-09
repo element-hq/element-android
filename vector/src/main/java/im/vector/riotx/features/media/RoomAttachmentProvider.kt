@@ -58,6 +58,7 @@ class RoomAttachmentProvider(
         fun onDismissTapped()
         fun onShareTapped()
         fun onPlayPause(play: Boolean)
+        fun videoSeekTo(percent: Int)
     }
 
     var interactionListener: InteractionListener? = null
@@ -200,6 +201,9 @@ class RoomAttachmentProvider(
             }
             overlayView?.onPlayPause = { play ->
                 interactionListener?.onPlayPause(play)
+            }
+            overlayView?.videoSeekTo = { percent ->
+                interactionListener?.videoSeekTo(percent)
             }
         }
         val item = attachments[position]

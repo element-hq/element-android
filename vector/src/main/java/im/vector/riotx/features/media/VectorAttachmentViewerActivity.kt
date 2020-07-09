@@ -247,6 +247,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), RoomAttachmen
         handle(if (play) AttachmentCommands.StartVideo else AttachmentCommands.PauseVideo)
     }
 
+    override fun videoSeekTo(percent: Int) {
+        handle(AttachmentCommands.SeekTo(percent))
+    }
+
     override fun onShareTapped() {
         // Share
         eventList?.get(currentPosition)?.let { timelineEvent ->
