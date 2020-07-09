@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
-import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.userdirectory.PendingInvitee
+import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.user.model.User
 
-sealed class CreateDirectRoomAction : VectorViewModelAction {
-    data class CreateRoomAndInviteSelectedUsers(val selectedUsers: Set<PendingInvitee>) : CreateDirectRoomAction()
+sealed class PendingInvitee {
+    data class UserPendingInvitee(val user: User): PendingInvitee()
+    data class ThreePidPendingInvitee(val threePid: ThreePid): PendingInvitee()
 }

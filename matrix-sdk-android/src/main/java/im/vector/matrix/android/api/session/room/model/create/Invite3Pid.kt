@@ -30,6 +30,14 @@ data class Invite3Pid(
 
         /**
          * Required.
+         * An access token previously registered with the identity server. Servers can treat this as optional to
+         * distinguish between r0.5-compatible clients and this specification version.
+         */
+        @Json(name = "id_access_token")
+        val idAccessToken: String,
+
+        /**
+         * Required.
          * The kind of address being passed in the address field, for example email.
          */
         val medium: String,

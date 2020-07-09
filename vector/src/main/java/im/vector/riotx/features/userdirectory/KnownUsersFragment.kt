@@ -139,7 +139,7 @@ class KnownUsersFragment @Inject constructor(
         knownUsersController.setData(it)
     }
 
-    private fun renderSelectedUsers(selectedUsers: Set<User>) {
+    private fun renderSelectedUsers(selectedUsers: Set<PendingInvitee>) {
         invalidateOptionsMenu()
 
         val currentNumberOfChips = chipGroup.childCount
@@ -156,22 +156,25 @@ class KnownUsersFragment @Inject constructor(
         }
     }
 
-    private fun addChipToGroup(user: User) {
+    private fun addChipToGroup(pendingInvitee: PendingInvitee) {
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
-        chip.text = user.getBestName()
+        chip.text = when (pendingInvitee) {
+            is PendingInvitee.UserPendingInvitee     -> pendingInvitee.user.getBestName()
+            is PendingInvitee.ThreePidPendingInvitee -> pendingInvitee.threePid.value
+        }
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(UserDirectoryAction.RemoveSelectedUser(user))
+            viewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
         }
     }
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectUser(user))
+        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
     }
 }

@@ -23,9 +23,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.userdirectory.PendingInvitee
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
@@ -52,7 +52,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selectedUsers: Set<User>) {
+    private fun createRoomAndInviteSelectedUsers(selectedUsers: Set<PendingInvitee>) {
         val roomParams = CreateRoomParams(
                 invitedUserIds = selectedUsers.map { it.userId }
         )

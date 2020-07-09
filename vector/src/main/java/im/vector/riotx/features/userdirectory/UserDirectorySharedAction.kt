@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.userdirectory
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorSharedAction
 
 sealed class UserDirectorySharedAction : VectorSharedAction {
@@ -24,5 +23,5 @@ sealed class UserDirectorySharedAction : VectorSharedAction {
     object OpenPhoneBook : UserDirectorySharedAction()
     object Close : UserDirectorySharedAction()
     object GoBack : UserDirectorySharedAction()
-    data class OnMenuItemSelected(val itemId: Int, val selectedUsers: Set<User>) : UserDirectorySharedAction()
+    data class OnMenuItemSelected(val itemId: Int, val selectedUsers: Set<PendingInvitee>) : UserDirectorySharedAction()
 }

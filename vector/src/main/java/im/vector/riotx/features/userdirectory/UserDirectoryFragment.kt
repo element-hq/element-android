@@ -21,7 +21,6 @@ import android.view.View
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -82,9 +81,9 @@ class UserDirectoryFragment @Inject constructor(
         directRoomController.setData(it)
     }
 
-    override fun onItemClick(user: User) {
+    override fun onItemClick(pendingInvitee: PendingInvitee) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectUser(user))
+        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(pendingInvitee))
         sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
     }
 

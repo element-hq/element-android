@@ -51,7 +51,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
 
     fun setData(state: UserDirectoryViewState) {
         this.isFiltering = !state.filterKnownUsersValue.isEmpty()
-        val newSelection = state.selectedUsers.map { it.userId }
+        val newSelection = state.getSelectedMatrixId()
         this.users = state.knownUsers
         if (newSelection != selectedUsers) {
             this.selectedUsers = newSelection
