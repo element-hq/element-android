@@ -40,6 +40,8 @@ interface Navigator {
 
     fun requestSessionVerification(context: Context, otherSessionId: String)
 
+    fun requestSelfSessionVerification(context: Context)
+
     fun waitSessionVerification(context: Context)
 
     fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean)

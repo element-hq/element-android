@@ -51,7 +51,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                     Unit
                 }
                 CrossSigningSettingsViewEvents.VerifySession -> {
-                    navigator.waitSessionVerification(requireActivity())
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 CrossSigningSettingsViewEvents.SetUpRecovery -> {
                     navigator.upgradeSessionSecurity(requireActivity(), false)

@@ -177,7 +177,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            it.navigator.waitSessionVerification(it)
+            if (event.waitForIncomingRequest) {
+                it.navigator.waitSessionVerification(it)
+            } else {
+                it.navigator.requestSelfSessionVerification(it)
+            }
         }
     }
 

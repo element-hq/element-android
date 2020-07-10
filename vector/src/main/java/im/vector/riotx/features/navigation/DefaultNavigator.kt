@@ -116,6 +116,27 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
+    override fun requestSelfSessionVerification(context: Context) {
+        val session = sessionHolder.getSafeActiveSession() ?: return
+        val otherSessions = session.cryptoService()
+                .getCryptoDeviceInfo(session.myUserId)
+                .filter { it.deviceId != session.sessionParams.deviceId }
+                .map { it.deviceId }
+        if (context is VectorBaseActivity) {
+            if (otherSessions.isNotEmpty()) {
+                val pr = session.cryptoService().verificationService().requestKeyVerification(
+                        supportedVerificationMethodsProvider.provide(),
+                        session.myUserId,
+                        otherSessions)
+                VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
+                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            } else {
+                VerificationBottomSheet.forSelfVerification(session)
+                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            }
+        }
+    }
+
     override fun waitSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         if (context is VectorBaseActivity) {
