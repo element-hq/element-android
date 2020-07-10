@@ -34,16 +34,16 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.dialogs.ExportKeysDialog
+import im.vector.riotx.core.extensions.queryExportKeys
 import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
 import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.openFileSelection
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
@@ -52,7 +52,8 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActiv
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val activeSessionHolder: ActiveSessionHolder
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
@@ -119,38 +120,69 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun refreshXSigningStatus() {
-            val xSigningIsEnableInAccount = session.cryptoService().crossSigningService().isCrossSigningInitialized()
-            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+        val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
+        val xSigningIsEnableInAccount = crossSigningKeys != null
+        val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+        val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
-            if (xSigningKeyCanSign) {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
-            } else if (xSigningKeysAreTrusted) {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
-            } else if (xSigningIsEnableInAccount) {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
-            } else {
-                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
-            }
+        if (xSigningKeyCanSign) {
+            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+        } else if (xSigningKeysAreTrusted) {
+            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
+            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+        } else if (xSigningIsEnableInAccount) {
+            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+        } else {
+            mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+        }
 
-            mCrossSigningStatePreference.isVisible = true
+        mCrossSigningStatePreference.isVisible = true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
-                exportKeys()
+                queryExportKeys(activeSessionHolder.getSafeActiveSession()?.myUserId ?: "", REQUEST_CODE_SAVE_MEGOLM_EXPORT)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_SAVE_MEGOLM_EXPORT) {
+            val uri = data?.data
+            if (resultCode == Activity.RESULT_OK && uri != null) {
+                activity?.let { activity ->
+                    ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                        override fun onPassphrase(passphrase: String) {
+                            displayLoadingView()
 
+                            KeysExporter(session)
+                                    .export(requireContext(),
+                                            passphrase,
+                                            uri,
+                                            object : MatrixCallback<Boolean> {
+                                                override fun onSuccess(data: Boolean) {
+                                                    if (data) {
+                                                        requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                                                    } else {
+                                                        requireActivity().toast(getString(R.string.unexpected_error))
+                                                    }
+                                                    hideLoadingView()
+                                                }
+
+                                                override fun onFailure(failure: Throwable) {
+                                                    onCommonDone(failure.localizedMessage)
+                                                }
+                                            })
+                        }
+                    })
+                }
+            }
+        }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_E2E_FILE_REQUEST_CODE -> importKeys(data)
@@ -169,53 +201,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            exportKeys()
+            queryExportKeys(activeSessionHolder.getSafeActiveSession()?.myUserId ?: "", REQUEST_CODE_SAVE_MEGOLM_EXPORT)
             true
         }
 
         importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             importKeys()
             true
-        }
-    }
-
-    /**
-     * Manage the e2e keys export.
-     */
-    private fun exportKeys() {
-        // We need WRITE_EXTERNAL permission
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
-                        this,
-                        PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                        R.string.permissions_rationale_msg_keys_backup_export)) {
-            activity?.let { activity ->
-                ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
-                    override fun onPassphrase(passphrase: String) {
-                        displayLoadingView()
-
-                        KeysExporter(session)
-                                .export(requireContext(),
-                                        passphrase,
-                                        object : MatrixCallback<String> {
-                                            override fun onSuccess(data: String) {
-                                                if (isAdded) {
-                                                    hideLoadingView()
-
-                                                    AlertDialog.Builder(activity)
-                                                            .setMessage(getString(R.string.encryption_export_saved_as, data))
-                                                            .setCancelable(false)
-                                                            .setPositiveButton(R.string.ok, null)
-                                                            .show()
-                                                }
-                                            }
-
-                                            override fun onFailure(failure: Throwable) {
-                                                onCommonDone(failure.localizedMessage)
-                                            }
-                                        })
-                    }
-                })
-            }
         }
     }
 
@@ -515,6 +507,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     companion object {
         private const val REQUEST_E2E_FILE_REQUEST_CODE = 123
+        private const val REQUEST_CODE_SAVE_MEGOLM_EXPORT = 124
 
         private const val PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE"
         private const val DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE"

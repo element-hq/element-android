@@ -507,6 +507,13 @@ internal class DefaultCrossSigningService @Inject constructor(
                 && cryptoStore.getCrossSigningPrivateKeys()?.user != null
     }
 
+    override fun allPrivateKeysKnown(): Boolean {
+        return checkSelfTrust().isVerified()
+                && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
+                && cryptoStore.getCrossSigningPrivateKeys()?.user != null
+                && cryptoStore.getCrossSigningPrivateKeys()?.master != null
+    }
+
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.d("## CrossSigning - Mark user $userId as trusted ")

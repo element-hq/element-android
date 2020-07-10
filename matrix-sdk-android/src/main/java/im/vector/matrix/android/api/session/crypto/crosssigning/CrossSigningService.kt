@@ -61,6 +61,8 @@ interface CrossSigningService {
 
     fun canCrossSign(): Boolean
 
+    fun allPrivateKeysKnown(): Boolean
+
     fun trustUser(otherUserId: String,
                   callback: MatrixCallback<Unit>)
 
