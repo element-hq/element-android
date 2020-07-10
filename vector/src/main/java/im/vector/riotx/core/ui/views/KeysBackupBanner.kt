@@ -17,7 +17,6 @@
 package im.vector.riotx.core.ui.views
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -160,9 +160,9 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            textView1.setText(R.string.keys_backup_banner_setup_line1)
+            textView1.setText(R.string.secure_backup_banner_setup_line1)
             textView2.isVisible = true
-            textView2.setText(R.string.keys_backup_banner_setup_line2)
+            textView2.setText(R.string.secure_backup_banner_setup_line2)
             close.isVisible = true
         }
     }
@@ -195,7 +195,7 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     private fun renderBackingUp() {
         isVisible = true
-        textView1.setText(R.string.keys_backup_banner_setup_line1)
+        textView1.setText(R.string.secure_backup_banner_setup_line1)
         textView2.isVisible = true
         textView2.setText(R.string.keys_backup_banner_in_progress)
         loading.isVisible = true
