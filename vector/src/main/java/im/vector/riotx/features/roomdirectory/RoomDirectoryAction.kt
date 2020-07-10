@@ -23,5 +23,5 @@ sealed class RoomDirectoryAction : VectorViewModelAction {
     data class SetRoomDirectoryData(val roomDirectoryData: RoomDirectoryData) : RoomDirectoryAction()
     data class FilterWith(val filter: String) : RoomDirectoryAction()
     object LoadMore : RoomDirectoryAction()
-    data class JoinRoom(val roomAlias: String?, val roomId: String) : RoomDirectoryAction()
+    data class JoinRoom(val roomId: String) : RoomDirectoryAction()
 }

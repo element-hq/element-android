@@ -21,10 +21,12 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
@@ -55,6 +57,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     init {
         observeRoomSummaries()
+        observeMembershipChanges()
     }
 
     override fun handle(action: RoomListAction) {
@@ -102,35 +105,17 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
                 .execute { async ->
-                    val invitedRooms = async()?.get(RoomCategory.INVITE)?.map { it.roomId }.orEmpty()
-                    val remainingJoining = joiningRoomsIds.intersect(invitedRooms)
-                    val remainingJoinErrors = joiningErrorRoomsIds.intersect(invitedRooms)
-                    val remainingRejecting = rejectingRoomsIds.intersect(invitedRooms)
-                    val remainingRejectErrors = rejectingErrorRoomsIds.intersect(invitedRooms)
-                    copy(
-                            asyncFilteredRooms = async,
-                            joiningRoomsIds = remainingJoining,
-                            joiningErrorRoomsIds = remainingJoinErrors,
-                            rejectingRoomsIds = remainingRejecting,
-                            rejectingErrorRoomsIds = remainingRejectErrors
-                    )
+                    copy(asyncFilteredRooms = async)
                 }
     }
 
     private fun handleAcceptInvitation(action: RoomListAction.AcceptInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
-
-        if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
+        val roomMembershipChange = state.roomMembershipChanges[roomId]
+        if (roomMembershipChange?.isInProgress().orFalse()) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
-        }
-
-        setState {
-            copy(
-                    joiningRoomsIds = joiningRoomsIds + roomId,
-                    rejectingErrorRoomsIds = rejectingErrorRoomsIds - roomId
-            )
         }
 
         session.getRoom(roomId)?.join(callback = object : MatrixCallback<Unit> {
@@ -142,30 +127,17 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             override fun onFailure(failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            joiningRoomsIds = joiningRoomsIds - roomId,
-                            joiningErrorRoomsIds = joiningErrorRoomsIds + roomId
-                    )
-                }
             }
         })
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
-
-        if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
+        val roomMembershipChange = state.roomMembershipChanges[roomId]
+        if (roomMembershipChange?.isInProgress().orFalse()) {
             // Request already sent, should not happen
-            Timber.w("Try to reject an already rejecting room. Should not happen")
+            Timber.w("Try to left an already leaving or joining room. Should not happen")
             return@withState
-        }
-
-        setState {
-            copy(
-                    rejectingRoomsIds = rejectingRoomsIds + roomId,
-                    joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
-            )
         }
 
         session.getRoom(roomId)?.leave(null, object : MatrixCallback<Unit> {
@@ -179,12 +151,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             override fun onFailure(failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            rejectingRoomsIds = rejectingRoomsIds - roomId,
-                            rejectingErrorRoomsIds = rejectingErrorRoomsIds + roomId
-                    )
-                }
             }
         })
     }
@@ -233,6 +199,16 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
         })
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .subscribe {
+                    Timber.v("ChangeMembership states: $it")
+                    setState { copy(roomMembershipChanges = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

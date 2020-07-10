@@ -883,7 +883,7 @@ class RoomDetailFragment @Inject constructor(
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             roomToolbarContentView.isClickable = false
             inviteView.visibility = View.VISIBLE
-            inviteView.render(inviter, VectorInviteView.Mode.LARGE)
+            inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
             // Intercept click event
             inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {

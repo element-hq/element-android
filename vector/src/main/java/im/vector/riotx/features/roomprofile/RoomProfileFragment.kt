@@ -112,7 +112,6 @@ class RoomProfileFragment @Inject constructor(
             when (it) {
                 is RoomProfileViewEvents.Loading            -> showLoading(it.message)
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
-                is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
                 is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
                 RoomProfileViewEvents.OnChangeAvatarSuccess -> dismissLoadingDialog()
             }.exhaustive

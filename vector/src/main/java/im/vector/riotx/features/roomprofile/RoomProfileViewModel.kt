@@ -98,7 +98,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         room.leave(null, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomProfileViewEvents.OnLeaveRoomSuccess)
+                // Do nothing, we will be closing the room automatically when it will get back from sync
             }
 
             override fun onFailure(failure: Throwable) {

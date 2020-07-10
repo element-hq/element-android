@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
@@ -166,6 +167,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         timeline.start()
         timeline.addListener(this)
         observeRoomSummary()
+        observeMembershipChanges()
         observeSummaryState()
         getUnreadState()
         observeSyncState()
@@ -406,7 +408,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
 
     fun isMenuItemVisible(@IdRes itemId: Int): Boolean = com.airbnb.mvrx.withState(this) { state ->
-        if(state.asyncRoomSummary()?.membership != Membership.JOIN){
+        if (state.asyncRoomSummary()?.membership != Membership.JOIN) {
             return@withState false
         }
         when (itemId) {
@@ -629,7 +631,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        session.joinRoom(command.roomAlias, command.reason, object : MatrixCallback<Unit> {
+        session.joinRoom(command.roomAlias, command.reason, emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 session.getRoomSummary(command.roomAlias)
                         ?.roomId
@@ -1145,6 +1147,19 @@ class RoomDetailViewModel @AssistedInject constructor(
                 startTrackingUnreadMessages()
             }
         }
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .map {
+                    it[initialState.roomId] ?: ChangeMembershipState.Unknown
+                }
+                .distinctUntilChanged()
+                .subscribe {
+                    setState { copy(changeMembershipState = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun observeSummaryState() {

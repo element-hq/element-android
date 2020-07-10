@@ -29,6 +29,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.MatrixItem
@@ -159,8 +160,8 @@ class DefaultNavigator @Inject constructor(
         activity.finish()
     }
 
-    override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
-        val intent = RoomPreviewActivity.getIntent(context, publicRoom)
+    override fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData) {
+        val intent = RoomPreviewActivity.getIntent(context, publicRoom, roomDirectoryData)
         context.startActivity(intent)
     }
 

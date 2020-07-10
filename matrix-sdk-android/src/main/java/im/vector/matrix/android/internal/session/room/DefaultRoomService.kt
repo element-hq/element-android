@@ -21,12 +21,14 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.summary.RoomSummaryDataSource
@@ -43,6 +45,7 @@ internal class DefaultRoomService @Inject constructor(
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val taskExecutor: TaskExecutor
 ) : RoomService {
 
@@ -110,5 +113,9 @@ internal class DefaultRoomService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>> {
+        return roomChangeMembershipStateDataSource.getLiveStates()
     }
 }

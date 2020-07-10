@@ -21,6 +21,7 @@ import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -89,13 +90,14 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             roomTopic(publicRoom.topic)
             nbOfMembers(publicRoom.numJoinedMembers)
 
+            val roomChangeMembership = viewState.changeMembershipStates[publicRoom.roomId] ?: ChangeMembershipState.Unknown
+            val isJoined = viewState.joinedRoomsIds.contains(publicRoom.roomId) || roomChangeMembership is ChangeMembershipState.Joined
             val joinState = when {
-                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> JoinState.JOINED
-                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> JoinState.JOINING
-                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> JoinState.JOINING_ERROR
-                else                                                       -> JoinState.NOT_JOINED
+                isJoined                                                    -> JoinState.JOINED
+                roomChangeMembership is ChangeMembershipState.Joining       -> JoinState.JOINING
+                roomChangeMembership is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
+                else                                                        -> JoinState.NOT_JOINED
             }
-
             joinState(joinState)
 
             joinListener {

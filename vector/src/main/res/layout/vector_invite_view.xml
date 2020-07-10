@@ -57,33 +57,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteIdentifierView" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/inviteRejectView"
-        style="@style/VectorButtonStyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:minWidth="120dp"
-        android:text="@string/reject"
-        app:layout_constraintEnd_toStartOf="@+id/inviteAcceptView"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inviteLabelView" />
-
-    <com.google.android.material.button.MaterialButton
+    <im.vector.riotx.core.platform.ButtonStateView
         android:id="@+id/inviteAcceptView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         android:minWidth="120dp"
-        android:text="@string/accept"
+        app:bsv_button_text="@string/accept"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/inviteRejectView"
         app:layout_constraintTop_toTopOf="@id/inviteRejectView" />
+
+    <im.vector.riotx.core.platform.ButtonStateView
+        android:id="@+id/inviteRejectView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:minWidth="120dp"
+        app:bsv_button_text="@string/reject"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="true"
+        app:layout_constraintEnd_toStartOf="@+id/inviteAcceptView"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inviteLabelView"/>
 
     <Space
         android:layout_width="match_parent"

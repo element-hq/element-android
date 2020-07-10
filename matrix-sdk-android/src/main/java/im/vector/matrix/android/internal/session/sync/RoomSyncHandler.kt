@@ -48,6 +48,7 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
+import im.vector.matrix.android.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
@@ -73,6 +74,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
+                                                   private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
                                                    private val eventBus: EventBus,
                                                    private val timelineEventDecryptor: TimelineEventDecryptor) {
@@ -185,6 +187,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         } != null
 
         roomTypingUsersHandler.handle(realm, roomId, ephemeralResult)
+        roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.JOIN)
         roomSummaryUpdater.update(
                 realm,
                 roomId,
@@ -221,6 +224,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val inviterEvent = roomSync.inviteState?.events?.lastOrNull {
             it.type == EventType.STATE_ROOM_MEMBER
         }
+        roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.INVITE)
         roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId)
         return roomEntity
     }
@@ -263,6 +267,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val membership = leftMember?.membership ?: Membership.LEAVE
         roomEntity.membership = membership
         roomEntity.chunks.deleteAllFromRealm()
+        roomTypingUsersHandler.handle(realm, roomId, null)
+        roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
         roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
         return roomEntity
     }
