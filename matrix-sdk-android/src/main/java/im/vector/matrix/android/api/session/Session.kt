@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -59,7 +60,6 @@ interface Session :
         CacheService,
         SignOutService,
         FilterService,
-        FileService,
         TermsService,
         ProfileService,
         PushRuleService,
@@ -128,6 +128,12 @@ interface Session :
     fun getSyncStateLive(): LiveData<SyncState>
 
     /**
+     * This method returns the current sync state.
+     * @return the current [SyncState].
+     */
+    fun getSyncState(): SyncState
+
+    /**
      * This methods return true if an initial sync has been processed
      */
     fun hasAlreadySynced(): Boolean
@@ -153,6 +159,11 @@ interface Session :
     fun typingUsersTracker(): TypingUsersTracker
 
     /**
+     * Returns the ContentDownloadStateTracker associated with the session
+     */
+    fun contentDownloadProgressTracker(): ContentDownloadStateTracker
+
+    /**
      * Returns the cryptoService associated with the session
      */
     fun cryptoService(): CryptoService
@@ -176,6 +187,11 @@ interface Session :
      * Returns the call signaling service associated with the session
      */
     fun callSignalingService(): CallSignalingService
+
+    /**
+     * Returns the file download service associated with the session
+     */
+    fun fileService(): FileService
 
     /**
      * Add a listener to the session.

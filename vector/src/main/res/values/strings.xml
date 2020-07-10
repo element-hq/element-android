@@ -298,6 +298,8 @@
     <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
     <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
+    <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
+    <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
     <string name="login_mobile_device">Mobile</string>
 
@@ -1734,6 +1736,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+    <string name="labs_merge_e2e_in_timeline">Merge failed to decrypt message in timeline</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
@@ -1992,10 +1995,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     </plurals>
 
     <string name="login_connect_using_matrix_id_notice">Alternatively, if you already have an account and you know your Matrix identifier and your password, you can use this method:</string>
-    <string name="login_connect_using_matrix_id_submit">Sign in with my Matrix identifier</string>
-    <string name="login_signin_matrix_id_title">Sign in</string>
-    <string name="login_signin_matrix_id_notice">Enter your identifier and your password</string>
-    <string name="login_signin_matrix_id_hint">User identifier</string>
+    <string name="login_connect_using_matrix_id_submit">Sign in with Matrix ID</string>
+    <string name="login_signin_matrix_id_title">Sign in with Matrix ID</string>
+    <string name="login_signin_matrix_id_notice">If you set up an account on a homeserver, use your Matrix ID (e.g. @user:domain.com) and password below.</string>
+    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
 
@@ -2401,6 +2405,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="media_file_added_to_gallery">Media file added to the Gallery</string>
     <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
+    <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
     <string name="use_other_session_content_description">Use the latest Riot on your other devices, Riot Web, Riot Desktop, Riot iOS, RiotX for Android, or another cross-signing capable Matrix client</string>
@@ -2496,6 +2501,20 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="save_your_security_key_title">Save your Security Key</string>
     <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
 
+    <!-- Room Settings -->
+    <string name="room_settings_name_hint">Room Name</string>
+    <string name="room_settings_topic_hint">Topic</string>
+    <string name="room_settings_save_success">You changed room settings successfully</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
+    <string name="crypto_utd">Cannot Decrypt</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Due to end-to-end encryption, you might need to wait for someone\'s message to arrive because the encryption keys were not properly sent to you.</string>
+    <string name="crypto_error_withheld_blacklisted">You cannot access this message because you have been blocked by the sender</string>
+    <string name="crypto_error_withheld_unverified">You cannot access this message because your session is not trusted by the sender</string>
+    <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
+
     <!-- Element (Rebranding) -->
     <string name="element_call_failed_no_connection">Element Call Failed</string>
     <string name="element_e2e_re_request_encryption_key_dialog_content">Please launch Element on another device that can decrypt the message so it can send the keys to this session.</string>
@@ -2531,7 +2550,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="element_disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
     <string name="element_disclaimer_negative_button">GOT IT</string>
     <string name="element_disclaimer_positive_button">LEARN MORE</string>
-    
+
     <string name="element_login_splash_brand">element</string>
 
 </resources>

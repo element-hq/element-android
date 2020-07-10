@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
@@ -30,8 +31,10 @@ import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -416,6 +419,13 @@ internal interface IMXCryptoStore {
 
     fun updateUsersTrust(check: (String) -> Boolean)
 
+    fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
+
+    fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
+    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String) : SharedSessionResult
+    data class SharedSessionResult(val found: Boolean, val chainIndex: Int?)
+    fun getSharedWithInfo(roomId: String?, sessionId: String) : MXUsersDevicesMap<Int>
     // Dev tools
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
@@ -423,4 +433,7 @@ internal interface IMXCryptoStore {
     fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
     fun getGossipingEventsTrail(): List<Event>
+
+    fun setDeviceKeysUploaded(uploaded: Boolean)
+    fun getDeviceKeysUploaded(): Boolean
 }

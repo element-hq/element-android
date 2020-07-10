@@ -1,5 +1,59 @@
-Changes in RiotX 0.23.0 (2020-XX-XX)
+Changes in Riot.imX 0.91.5 (2020-XX-XX)
 ===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
+ - Creating and listening to EventInsertEntity. (#1634)
+ - Handling (almost) properly the groups fetching (#1634)
+
+Bugfix 🐛:
+ - Regression |  Share action menu do not work (#1647)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - Upgrade some dependencies
+ - Revert to build-tools 3.5.3
+
+Other changes:
+ -
+
+Changes in Riot.imX 0.91.4 (2020-07-06)
+===================================================
+
+Features ✨:
+ - Re-activate Wellknown support with updated UI (#1614)
+
+Improvements 🙌:
+ - Upload device keys only once to the homeserver and fix crash when no network (#1629)
+
+Bugfix 🐛:
+ - Fix crash when coming from a notification (#1601)
+ - Fix Exception when importing keys (#1576)
+ - File isn't downloaded when another file with the same name already exists (#1578)
+ - saved images don't show up in gallery (#1324)
+ - Fix reply fallback leaking sender locale (#429)
+
+Build 🧱:
+ - Fix lint false-positive about WorkManager (#1012)
+ - Upgrade build-tools from 3.5.3 to 3.6.3
+ - Upgrade gradle from 5.4.1 to 5.6.4
+
+Changes in Riot.imX 0.91.3 (2020-07-01)
+===================================================
+
+Notes:
+ - This version is the third beta version of RiotX codebase published as Riot-Android on the PlayStore.
+ - Changelog below includes changes of v0.91.0, v0.91.1, and v0.91.2, because the first beta versions have been tagged and
+ published from the branch feature/migration_from_legacy.
+ - This version uses temporary name `Riot.imX`, to distinguish the app with RiotX app.
 
 Features ✨:
  - Call with WebRTC support (##611)
@@ -9,6 +63,12 @@ Improvements 🙌:
  - "Add Matrix app" menu is now always visible (#1495)
  - Handle `/op`, `/deop`, and `/nick` commands (#12)
  - Prioritising Recovery key over Recovery passphrase (#1463)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Update user avatar (#1054)
+ - Allow self-signed certificate (#1564)
+ - Improve file download and open in timeline
+ - Catchup tab is removed temporarily (#1565)
+ - Render room avatar change (#1319)
 
 Bugfix 🐛:
  - Fix dark theme issue on login screen (#1097)
@@ -16,12 +76,8 @@ Bugfix 🐛:
  - User could not redact message that they have sent (#1543)
  - Use vendor prefix for non merged MSC (#1537)
  - Compress images before sending (#1333)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
+ - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
 
 Build 🧱:
  - Enable code optimization (Proguard)

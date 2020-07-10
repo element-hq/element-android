@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -32,6 +31,7 @@ import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -44,13 +44,13 @@ import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
@@ -61,6 +61,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.createUIHandler
+import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -77,6 +78,7 @@ internal class DefaultSession @Inject constructor(
         private val eventBus: EventBus,
         @SessionId
         override val sessionId: String,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
@@ -90,7 +92,7 @@ internal class DefaultSession @Inject constructor(
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
-        private val fileService: Lazy<FileService>,
+        private val defaultFileService: Lazy<FileService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val widgetService: Lazy<WidgetService>,
@@ -100,6 +102,7 @@ internal class DefaultSession @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val typingUsersTracker: TypingUsersTracker,
+        private val contentDownloadStateTracker: ContentDownloadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
@@ -120,7 +123,6 @@ internal class DefaultSession @Inject constructor(
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
-        FileService by fileService.get(),
         TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
@@ -196,9 +198,9 @@ internal class DefaultSession @Inject constructor(
         eventBus.unregister(this)
     }
 
-    override fun getSyncStateLive(): LiveData<SyncState> {
-        return getSyncThread().liveState()
-    }
+    override fun getSyncStateLive() = getSyncThread().liveState()
+
+    override fun getSyncState() = getSyncThread().currentState()
 
     override fun hasAlreadySynced(): Boolean {
         return syncTokenStore.getLastToken() != null
@@ -239,9 +241,13 @@ internal class DefaultSession @Inject constructor(
 
     override fun typingUsersTracker() = typingUsersTracker
 
+    override fun contentDownloadProgressTracker(): ContentDownloadStateTracker = contentDownloadStateTracker
+
     override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun identityService() = defaultIdentityService
+
+    override fun fileService(): FileService = defaultFileService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
 

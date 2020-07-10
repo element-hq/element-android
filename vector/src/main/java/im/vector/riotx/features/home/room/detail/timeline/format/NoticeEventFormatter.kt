@@ -24,9 +24,9 @@ import im.vector.matrix.android.api.session.room.model.GuestAccess
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
+import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomGuestAccessContent
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.api.session.room.model.RoomJoinRules
 import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
@@ -47,6 +47,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class NoticeEventFormatter @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+                                               private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
                                                private val sp: StringProvider) {
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == sessionHolder.getSafeActiveSession()?.myUserId
@@ -57,6 +58,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root)
             EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
@@ -149,6 +151,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(event, senderName)
             EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(event, senderName)
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(event, senderName)
+            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(event, senderName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
@@ -220,15 +223,27 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         }
     }
 
+    private fun formatRoomAvatarEvent(event: Event, senderName: String?): CharSequence? {
+        val content = event.getClearContent().toModel<RoomAvatarContent>() ?: return null
+        return if (content.avatarUrl.isNullOrEmpty()) {
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_room_avatar_removed_by_you)
+            } else {
+                sp.getString(R.string.notice_room_avatar_removed, senderName)
+            }
+        } else {
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_room_avatar_changed_by_you)
+            } else {
+                sp.getString(R.string.notice_room_avatar_changed, senderName)
+            }
+        }
+    }
+
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
-        val formattedVisibility = when (historyVisibility) {
-            RoomHistoryVisibility.SHARED         -> sp.getString(R.string.notice_room_visibility_shared)
-            RoomHistoryVisibility.INVITED        -> sp.getString(R.string.notice_room_visibility_invited)
-            RoomHistoryVisibility.JOINED         -> sp.getString(R.string.notice_room_visibility_joined)
-            RoomHistoryVisibility.WORLD_READABLE -> sp.getString(R.string.notice_room_visibility_world_readable)
-        }
+        val formattedVisibility = roomHistoryVisibilityFormatter.format(historyVisibility)
         return if (event.isSentByCurrentUser()) {
             sp.getString(R.string.notice_made_future_room_visibility_by_you, formattedVisibility)
         } else {

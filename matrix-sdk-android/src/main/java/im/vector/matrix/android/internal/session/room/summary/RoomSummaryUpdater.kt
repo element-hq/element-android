@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
+import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.crosssigning.SessionToCryptoRoomMembersUpdate
@@ -64,6 +65,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 EventType.MESSAGE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_AVATAR,
                 EventType.STATE_ROOM_MEMBER,
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.CALL_INVITE,
@@ -107,6 +109,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
                 filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
 
+        val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
         val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
         val lastAliasesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
@@ -122,6 +125,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
+        roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()

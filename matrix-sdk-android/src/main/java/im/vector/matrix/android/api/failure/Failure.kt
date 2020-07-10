@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.failure
 
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.internal.network.ssl.Fingerprint
 import java.io.IOException
 
 /**
@@ -32,9 +33,11 @@ import java.io.IOException
 sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     data class Unknown(val throwable: Throwable? = null) : Failure(throwable)
     data class Cancelled(val throwable: Throwable? = null) : Failure(throwable)
+    data class UnrecognizedCertificateFailure(val url: String, val fingerprint: Fingerprint) : Failure()
     data class NetworkConnection(val ioException: IOException? = null) : Failure(ioException)
     data class ServerError(val error: MatrixError, val httpCode: Int) : Failure(RuntimeException(error.toString()))
     object SuccessError : Failure(RuntimeException(RuntimeException("SuccessResult is false")))
+
     // When server send an error, but it cannot be interpreted as a MatrixError
     data class OtherServerError(val errorBody: String, val httpCode: Int) : Failure(RuntimeException("HTTP $httpCode: $errorBody"))
 

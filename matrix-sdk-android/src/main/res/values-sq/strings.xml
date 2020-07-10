@@ -34,8 +34,6 @@
     <string name="notice_crypto_unable_to_decrypt">** S’arrihet të shfshehtëzohet: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
 
-    <string name="message_reply_to_prefix">Në përgjigje të</string>
-
     <string name="could_not_redact">S’u redaktua dot</string>
     <string name="unable_to_send_message">S’arrihet të dërgohet mesazh</string>
 
@@ -50,11 +48,6 @@
 
     <string name="medium_email">Adresë email</string>
     <string name="medium_phone_number">Numër telefoni</string>
-
-    <string name="reply_to_an_image">dërgoi një figurë.</string>
-    <string name="reply_to_a_video">dërgoi një video.</string>
-    <string name="reply_to_an_audio_file">dërgoi një kartelë audio.</string>
-    <string name="reply_to_a_file">dërgoi një kartelë.</string>
 
     <string name="room_displayname_invite_from">Ftesë nga %s</string>
     <string name="room_displayname_room_invite">Ftesë Dhome</string>

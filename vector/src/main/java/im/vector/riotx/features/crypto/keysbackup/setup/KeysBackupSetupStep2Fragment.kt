@@ -176,7 +176,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             else                                                            -> {
                 viewModel.megolmBackupCreationInfo = null
 
-                viewModel.prepareRecoveryKey(activity!!, viewModel.passphrase.value)
+                viewModel.prepareRecoveryKey(requireActivity(), viewModel.passphrase.value)
             }
         }
     }
@@ -188,7 +188,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 
-                viewModel.prepareRecoveryKey(activity!!, null)
+                viewModel.prepareRecoveryKey(requireActivity(), null)
             }
             else                                       -> {
                 // User has entered a passphrase but want to skip this step.

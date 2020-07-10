@@ -22,8 +22,7 @@ import io.realm.annotations.PrimaryKey
 
 /**
  * This class is used to store group info (groupId and membership) from the sync response.
- * Then [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] observes change and
- * makes requests to fetch group information from the homeserver
+ * Then GetGroupDataTask is called regularly to fetch group information from the homeserver.
  */
 internal open class GroupEntity(@PrimaryKey var groupId: String = "")
     : RealmObject() {

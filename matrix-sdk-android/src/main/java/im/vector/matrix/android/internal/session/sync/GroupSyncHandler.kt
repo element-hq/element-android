@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.session.sync
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
+import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
@@ -64,29 +66,33 @@ internal class GroupSyncHandler @Inject constructor() {
                     handleLeftGroup(realm, it.key)
                 }
         }
-
-        /** Note: [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] is observing changes */
         realm.insertOrUpdate(groups)
     }
 
     private fun handleJoinedGroup(realm: Realm,
                                   groupId: String): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
+        val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.JOIN
+        groupSummaryEntity.membership = Membership.JOIN
         return groupEntity
     }
 
     private fun handleInvitedGroup(realm: Realm,
                                    groupId: String): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
+        val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.INVITE
+        groupSummaryEntity.membership = Membership.INVITE
         return groupEntity
     }
 
     private fun handleLeftGroup(realm: Realm,
                                 groupId: String): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
+        val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.LEAVE
+        groupSummaryEntity.membership = Membership.LEAVE
         return groupEntity
     }
 }

@@ -93,8 +93,9 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
     }
 
-    override fun signinFallbackSubmit() {
-        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSignModeSelected))
+    override fun signinFallbackSubmit() = withState(loginViewModel) { state ->
+        // The loginViewModel has been prepared for a SSO/login fallback recovery (above)
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSignModeSelected(state.signMode)))
     }
 
     override fun clearData() {

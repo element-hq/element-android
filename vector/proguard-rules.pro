@@ -21,3 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class im.vector.riotx.features.** { *; }
+
+## print all the rules in a file
+# -printconfiguration ../proguard_files/full-r8-config.txt

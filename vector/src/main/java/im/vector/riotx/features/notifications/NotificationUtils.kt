@@ -205,7 +205,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
-        val i = Intent(context, HomeActivity::class.java)
+        val i = HomeActivity.newIntent(context)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
@@ -307,7 +307,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
 
         val answerCallPendingIntent = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(VectorCallActivity.newIntent(
                         context = context,
                         callId = callId,
@@ -459,7 +459,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         )
 
         val contentPendingIntent = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 // TODO other userId
                 .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, null))
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
@@ -477,6 +477,26 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.call_ended))
                 .setSmallIcon(R.drawable.ic_material_call_end_grey)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
+                .build()
+    }
+
+    fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setGroup(stringProvider.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_download)
+                .setContentText(stringProvider.getString(R.string.downloaded_file, fileName))
+                .setAutoCancel(true)
+                .apply {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, mimeType)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    PendingIntent.getActivity(
+                            context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+                    ).let {
+                        setContentIntent(it)
+                    }
+                }
                 .build()
     }
 
@@ -631,7 +651,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             stringProvider.getString(R.string.join),
                             joinIntentPendingIntent)
 
-                    val contentIntent = Intent(context, HomeActivity::class.java)
+                    val contentIntent = HomeActivity.newIntent(context)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)
@@ -669,7 +689,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setColor(accentColor)
                 .setAutoCancel(true)
                 .apply {
-                    val contentIntent = Intent(context, HomeActivity::class.java)
+                    val contentIntent = HomeActivity.newIntent(context)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + simpleNotifiableEvent.eventId)
@@ -698,7 +718,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(roomIntentTap)
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
     }

@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.session.typing
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.internal.session.SessionScope
@@ -27,7 +25,6 @@ import javax.inject.Inject
 internal class DefaultTypingUsersTracker @Inject constructor() : TypingUsersTracker {
 
     private val typingUsers = mutableMapOf<String, List<SenderInfo>>()
-    private val typingUsersLiveData = mutableMapOf<String, MutableLiveData<List<SenderInfo>>>()
 
     /**
      * Set all currently typing users for a room (excluding yourself)
@@ -36,27 +33,10 @@ internal class DefaultTypingUsersTracker @Inject constructor() : TypingUsersTrac
         val hasNewValue = typingUsers[roomId] != senderInfoList
         if (hasNewValue) {
             typingUsers[roomId] = senderInfoList
-            typingUsersLiveData[roomId]?.postValue(senderInfoList)
-        }
-    }
-
-    /**
-     * Can be called when there is no sync so you don't get stuck with ephemeral data
-     */
-    fun clear() {
-        val roomIds = typingUsers.keys
-        roomIds.forEach {
-            setTypingUsersFromRoom(it, emptyList())
         }
     }
 
     override fun getTypingUsers(roomId: String): List<SenderInfo> {
         return typingUsers[roomId] ?: emptyList()
-    }
-
-    override fun getTypingUsersLive(roomId: String): LiveData<List<SenderInfo>> {
-        return typingUsersLiveData.getOrPut(roomId) {
-            MutableLiveData(getTypingUsers(roomId))
-        }
     }
 }

@@ -106,6 +106,11 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
     compileSdkVersion 29
+
+    // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
+    // Ref: https://issuetracker.google.com/issues/144111441
+    ndkVersion "21.3.6528147"
+
     defaultConfig {
         applicationId "im.vector.app"
         // Set to API 21: see #405
@@ -232,8 +237,7 @@ android {
     lintOptions {
         lintConfig file("lint.xml")
 
-        // TODO Restore true once pb with WorkManager is fixed
-        abortOnError false
+        abortOnError true
     }
 
     compileOptions {
@@ -258,16 +262,16 @@ android {
 dependencies {
 
     def epoxy_version = '3.11.0'
-    def fragment_version = '1.2.0'
+    def fragment_version = '1.2.5'
     def arrow_version = "0.8.2"
     def coroutines_version = "1.3.2"
     def markwon_version = '4.1.2'
     def big_image_viewer_version = '1.6.2'
-    def glide_version = '4.10.0'
+    def glide_version = '4.11.0'
     def moshi_version = '1.8.0'
     def daggerVersion = '2.25.4'
     def autofill_version = "1.0.0"
-    def work_version = '2.3.3'
+    def work_version = '2.3.4'
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
 
@@ -281,12 +285,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha04"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'
+    implementation 'androidx.core:core-ktx:1.3.0'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
@@ -322,17 +326,17 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
 
     // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
     implementation 'me.gujun.android:span:1.7'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
@@ -381,7 +385,7 @@ dependencies {
     // gplay flavor only
     // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade
     // implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    gplayImplementation('com.google.firebase:firebase-messaging:20.0.0') {
+    gplayImplementation('com.google.firebase:firebase-messaging:20.2.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -390,7 +394,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji:emoji-appcompat:1.0.0"
+    implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 

@@ -29,7 +29,7 @@
         <!--            android:title="@string/encryption_information_device_key" />-->
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:enabled="false"
+            android:enabled="true"
             android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
             android:summary="@string/encryption_never_send_to_unverified_devices_summary"
             android:title="@string/encryption_never_send_to_unverified_devices_title" />

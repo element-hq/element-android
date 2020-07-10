@@ -133,13 +133,14 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     }
 
     private fun onShareActionClicked() {
-        session.downloadFile(
-                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                mediaData.eventId,
-                mediaData.filename,
-                mediaData.url,
-                mediaData.elementToDecrypt,
-                object : MatrixCallback<File> {
+        session.fileService().downloadFile(
+                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                id = mediaData.eventId,
+                fileName = mediaData.filename,
+                mimeType = mediaData.mimeType,
+                url = mediaData.url,
+                elementToDecrypt = mediaData.elementToDecrypt,
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         shareMedia(this@ImageMediaViewerActivity, data, getMimeTypeFromUri(this@ImageMediaViewerActivity, data.toUri()))
                     }

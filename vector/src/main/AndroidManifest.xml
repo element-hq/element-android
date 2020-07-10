@@ -205,7 +205,7 @@
 
         <service
             android:name=".core.services.CallService"
-            android:exported="false" >
+            android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -240,13 +240,19 @@
         A media button receiver receives and helps translate hardware media playback buttons,
         such as those found on wired and wireless headsets, into the appropriate callbacks in your app.
            -->
-        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
         <!-- Providers -->
+
+        <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -255,7 +261,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/riotx_provider_paths" />
+                android:resource="@xml/sdk_provider_paths" />
         </provider>
     </application>
 

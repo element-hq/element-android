@@ -63,12 +63,6 @@
     <string name="summary_user_sent_sticker">أرسل ⁨%1$s⁩ ملصقا.</string>
 
     <string name="notice_avatar_changed_too">(تغيّرت الصورة أيضا)</string>
-    <string name="message_reply_to_prefix">ردا على</string>
-
-    <string name="reply_to_an_image">أرسل صورة.</string>
-    <string name="reply_to_a_video">أرسل فديوهًا.</string>
-    <string name="reply_to_an_audio_file">أرسل ملف صوت.</string>
-    <string name="reply_to_a_file">أرسل ملفًا.</string>
 
     <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
     <string name="room_displayname_empty_room">غرفة فارغة</string>

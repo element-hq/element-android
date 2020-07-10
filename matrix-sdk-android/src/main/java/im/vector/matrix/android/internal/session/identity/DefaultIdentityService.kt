@@ -36,7 +36,7 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.SessionLifecycleObserver
@@ -68,7 +68,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityPingTask: IdentityPingTask,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
-        @Unauthenticated
+        @UnauthenticatedWithCertificate
         private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
         @AuthenticatedIdentity
         private val okHttpClient: Lazy<OkHttpClient>,

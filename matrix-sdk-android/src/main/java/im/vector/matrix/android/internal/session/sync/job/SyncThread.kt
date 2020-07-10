@@ -51,7 +51,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
-    private var liveState = MutableLiveData<SyncState>()
+    private var liveState = MutableLiveData<SyncState>(state)
     private val lock = Object()
     private val syncScope = CoroutineScope(SupervisorJob())
     private val debouncer = Debouncer(createUIHandler())
@@ -97,6 +97,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         syncScope.coroutineContext.cancelChildren()
         lock.notify()
     }
+
+    fun currentState() = state
 
     fun liveState(): LiveData<SyncState> {
         return liveState
@@ -202,10 +204,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             return
         }
         state = newState
-        // We clear typing users if the sync is not running
-        if (newState !is SyncState.Running) {
-            typingUsersTracker.clear()
-        }
         debouncer.debounce("post_state", Runnable {
             liveState.value = newState
         }, 150)

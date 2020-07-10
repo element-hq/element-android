@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.auth.login
 import dagger.Lazy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.SessionCreator
@@ -26,6 +27,8 @@ import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
+import im.vector.matrix.android.internal.network.ssl.UnrecognizedCertificateException
 import im.vector.matrix.android.internal.task.Task
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -47,15 +50,38 @@ internal class DefaultDirectLoginTask @Inject constructor(
 ) : DirectLoginTask {
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
-        val authAPI = retrofitFactory.create(okHttpClient, params.homeServerConnectionConfig.homeServerUri.toString())
+        val client = buildClient(params.homeServerConnectionConfig)
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+
+        val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)
 
         val loginParams = PasswordLoginParams.userIdentifier(params.userId, params.password, params.deviceName)
 
-        val credentials = executeRequest<Credentials>(null) {
-            apiCall = authAPI.login(loginParams)
+        val credentials = try {
+            executeRequest<Credentials>(null) {
+                apiCall = authAPI.login(loginParams)
+            }
+        } catch (throwable: Throwable) {
+            when (throwable) {
+                is UnrecognizedCertificateException -> {
+                    throw Failure.UnrecognizedCertificateFailure(
+                            homeServerUrl,
+                            throwable.fingerprint
+                    )
+                }
+                else                                ->
+                    throw throwable
+            }
         }
 
         return sessionCreator.createSession(credentials, params.homeServerConnectionConfig)
+    }
+
+    private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        return okHttpClient.get()
+                .newBuilder()
+                .addSocketFactory(homeServerConnectionConfig)
+                .build()
     }
 }

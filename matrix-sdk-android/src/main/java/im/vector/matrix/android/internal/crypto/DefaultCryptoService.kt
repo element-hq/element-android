@@ -52,6 +52,7 @@ import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporte
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.crypto.algorithms.IMXWithHeldExtension
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
@@ -65,10 +66,10 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
-import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
@@ -96,6 +97,7 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -338,11 +340,14 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     fun ensureDevice() {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
-            // TODO why do that everytime? we should mark that it was done
-            uploadDeviceKeys()
+            // this can throw if no network
+            tryThis {
+                uploadDeviceKeys()
+            }
+
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryThis {
@@ -387,7 +392,7 @@ internal class DefaultCryptoService @Inject constructor(
 //            } else {
 
             // Why would we do that? it will be called at end of syn
-                incomingGossipingRequestManager.processReceivedGossipingRequests()
+            incomingGossipingRequestManager.processReceivedGossipingRequests()
 //            }
         }.fold(
                 {
@@ -807,6 +812,9 @@ internal class DefaultCryptoService @Inject constructor(
                     cryptoStore.saveGossipingEvent(event)
                     onSecretSendReceived(event)
                 }
+                EventType.ROOM_KEY_WITHHELD                      -> {
+                    onKeyWithHeldReceived(event)
+                }
                 else                                             -> {
                     // ignore
                 }
@@ -832,6 +840,20 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         alg.onRoomKeyEvent(event, keysBackupService)
+    }
+
+    private fun onKeyWithHeldReceived(event: Event) {
+        val withHeldContent = event.getClearContent().toModel<RoomKeyWithHeldContent>() ?: return Unit.also {
+            Timber.e("## CRYPTO | Malformed onKeyWithHeldReceived() : missing fields")
+        }
+        Timber.d("## CRYPTO | onKeyWithHeldReceived() received : content <$withHeldContent>")
+        val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(withHeldContent.roomId, withHeldContent.algorithm)
+        if (alg is IMXWithHeldExtension) {
+            alg.onRoomKeyWithHeldEvent(withHeldContent)
+        } else {
+            Timber.e("## CRYPTO | onKeyWithHeldReceived() : Unable to handle WithHeldContent for ${withHeldContent.algorithm}")
+            return
+        }
     }
 
     private fun onSecretSendReceived(event: Event) {
@@ -869,7 +891,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME -> {
+            MASTER_KEY_SSSS_NAME       -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -961,7 +983,11 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Upload my user's device keys.
      */
-    private suspend fun uploadDeviceKeys(): KeysUploadResponse {
+    private suspend fun uploadDeviceKeys() {
+        if (cryptoStore.getDeviceKeysUploaded()) {
+            Timber.d("Keys already uploaded, nothing to do")
+            return
+        }
         // Prepare the device keys data to send
         // Sign it
         val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
@@ -972,7 +998,9 @@ internal class DefaultCryptoService @Inject constructor(
         )
 
         val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
-        return uploadKeysTask.execute(uploadDeviceKeysParams)
+        uploadKeysTask.execute(uploadDeviceKeysParams)
+
+        cryptoStore.setDeviceKeysUploaded(true)
     }
 
     /**
@@ -1197,7 +1225,7 @@ internal class DefaultCryptoService @Inject constructor(
 //            }
             roomDecryptorProvider
                     .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
-                    ?.requestKeysForEvent(event) ?: run {
+                    ?.requestKeysForEvent(event, false) ?: run {
                 Timber.v("## CRYPTO | requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
             }
         }
@@ -1311,6 +1339,13 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getGossipingEventsTrail()
     }
 
+    override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
+        return cryptoStore.getSharedWithInfo(roomId, sessionId)
+    }
+
+    override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
+        return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
+    }
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */

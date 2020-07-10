@@ -27,6 +27,7 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -72,7 +73,10 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     override fun showFailure(throwable: Throwable) {
         when (throwable) {
-            is Failure.ServerError -> {
+            is Failure.Cancelled                      ->
+                /* Ignore this error, user has cancelled the action */
+                Unit
+            is Failure.ServerError                    ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     AlertDialog.Builder(requireActivity())
@@ -83,9 +87,32 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
                 } else {
                     onError(throwable)
                 }
-            }
-            else                   -> onError(throwable)
+            is Failure.UnrecognizedCertificateFailure ->
+                showUnrecognizedCertificateFailure(throwable)
+            else                                      ->
+                onError(throwable)
         }
+    }
+
+    private fun showUnrecognizedCertificateFailure(failure: Failure.UnrecognizedCertificateFailure) {
+        // Ask the user to accept the certificate
+        unrecognizedCertificateDialog.show(requireActivity(),
+                failure.fingerprint,
+                failure.url,
+                object : UnrecognizedCertificateDialog.Callback {
+                    override fun onAccept() {
+                        // User accept the certificate
+                        loginViewModel.handle(LoginAction.UserAcceptCertificate(failure.fingerprint))
+                    }
+
+                    override fun onIgnore() {
+                        // Cannot happen in this case
+                    }
+
+                    override fun onReject() {
+                        // Nothing to do in this case
+                    }
+                })
     }
 
     open fun onError(throwable: Throwable) {

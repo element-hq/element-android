@@ -16,23 +16,34 @@
 
 package im.vector.matrix.android.internal.session.sync
 
+import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.reportSubtask
+import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
+private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
+
 internal class SyncResponseHandler @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                       @SessionId private val sessionId: String,
+                                                       private val workManagerProvider: WorkManagerProvider,
                                                        private val roomSyncHandler: RoomSyncHandler,
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,
@@ -109,8 +120,37 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             checkPushRules(it, isInitialSync)
             userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
         }
+        syncResponse.groups?.also {
+            scheduleGroupDataFetchingIfNeeded(it)
+        }
+
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
+    }
+
+    /**
+     * At the moment we don't get any group data through the sync, so we poll where every hour.
+       You can also force to refetch group data using [Group] API.
+     */
+    private fun scheduleGroupDataFetchingIfNeeded(groupsSyncResponse: GroupsSyncResponse) {
+        val groupIds = ArrayList<String>()
+        groupIds.addAll(groupsSyncResponse.join.keys)
+        groupIds.addAll(groupsSyncResponse.invite.keys)
+        if (groupIds.isEmpty()) {
+            Timber.v("No new groups to fetch data for.")
+            return
+        }
+        Timber.v("There are ${groupIds.size} new groups to fetch data for.")
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(sessionId)
+        val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
+
+        val getGroupWork = workManagerProvider.matrixPeriodicWorkRequestBuilder<GetGroupDataWorker>(1, TimeUnit.HOURS)
+                .setInputData(workData)
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .build()
+
+        workManagerProvider.workManager
+                .enqueueUniquePeriodicWork(GET_GROUP_DATA_WORKER, ExistingPeriodicWorkPolicy.REPLACE, getGroupWork)
     }
 
     private suspend fun checkPushRules(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean) {
