@@ -23,11 +23,10 @@ import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
-import im.vector.riotx.features.media.ImageContentRenderer
-import im.vector.riotx.features.media.VideoContentRenderer
+import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.terms.ReviewTermsActivity
@@ -93,7 +92,10 @@ interface Navigator {
 
     fun openRoomWidget(context: Context, roomId: String, widget: Widget)
 
-    fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
-
-    fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)
+    fun openMediaViewer(activity: Activity,
+                        roomId: String,
+                        mediaData: AttachmentData,
+                        view: View,
+                        inMemory: List<AttachmentData> = emptyList(),
+                        options: ((MutableList<Pair<View, String>>) -> Unit)?)
 }

@@ -8,6 +8,7 @@ Improvements 🙌:
  - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
  - Creating and listening to EventInsertEntity. (#1634)
  - Handling (almost) properly the groups fetching (#1634)
+ - Improve fullscreen media display (#327)
 
 Bugfix 🐛:
  - Regression |  Share action menu do not work (#1647)

@@ -48,6 +48,7 @@ import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.media.VectorAttachmentViewerActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
@@ -135,6 +136,7 @@ interface ScreenComponent {
     fun inject(activity: ReviewTermsActivity)
     fun inject(activity: WidgetActivity)
     fun inject(activity: VectorCallActivity)
+    fun inject(activity: VectorAttachmentViewerActivity)
 
     /* ==========================================================================================
      * BottomSheets
