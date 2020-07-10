@@ -54,15 +54,29 @@ class RoomMemberListController @Inject constructor(
 
     override fun buildModels(data: RoomMemberListViewState?) {
         val roomMembersByPowerLevel = data?.roomMemberSummaries?.invoke() ?: return
+        val threePidInvites = data.threePidInvites().orEmpty()
+        var threePidInvitesDone = threePidInvites.isEmpty()
+
         for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
             if (roomMemberList.isEmpty()) {
                 continue
             }
+
+            if (powerLevelCategory == RoomMemberListCategories.USER && !threePidInvitesDone) {
+                // If there is not regular invite, display threepid invite before the regular user
+                buildProfileSection(
+                        stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
+                )
+
+                buildThreePidInvites(data)
+                threePidInvitesDone = true
+            }
+
             buildProfileSection(
                     stringProvider.getString(powerLevelCategory.titleRes)
             )
             roomMemberList.join(
-                    each = { roomMember ->
+                    each = { _, roomMember ->
                         profileMatrixItem {
                             id(roomMember.userId)
                             matrixItem(roomMember.toMatrixItem())
@@ -73,40 +87,59 @@ class RoomMemberListController @Inject constructor(
                             }
                         }
                     },
-                    between = { roomMemberBefore ->
+                    between = { _, roomMemberBefore ->
                         dividerItem {
                             id("divider_${roomMemberBefore.userId}")
                             color(dividerColor)
                         }
                     }
             )
+            if (powerLevelCategory == RoomMemberListCategories.INVITE) {
+                // Display the threepid invite after the regular invite
+                dividerItem {
+                    id("divider_threepidinvites")
+                    color(dividerColor)
+                }
+                buildThreePidInvites(data)
+                threePidInvitesDone = true
+            }
         }
-        buildThreePidInvites(data)
+
+        if (!threePidInvitesDone) {
+            // If there is not regular invite and no regular user, finally display threepid invite here
+            buildProfileSection(
+                    stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
+            )
+
+            buildThreePidInvites(data)
+        }
     }
 
     private fun buildThreePidInvites(data: RoomMemberListViewState) {
-        if (data.threePidInvites().isNullOrEmpty()) {
-            return
-        }
-
-        buildProfileSection(
-                stringProvider.getString(R.string.room_member_power_level_three_pid_invites)
-        )
-
-        data.threePidInvites()?.forEachIndexed { idx, event ->
-            val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return@forEachIndexed
-
-            profileMatrixItem {
-                id("3pid_$idx")
-                matrixItem(content.toMatrixItem())
-                avatarRenderer(avatarRenderer)
-                editable(data.actionsPermissions.canRevokeThreePidInvite)
-                clickListener { _ ->
-                    callback?.onThreePidInvites(event)
-                }
-            }
-
-        }
+        data.threePidInvites()
+                ?.filter { it.content.toModel<RoomThirdPartyInviteContent>() != null }
+                ?.join(
+                        each = { idx, event ->
+                            event.content.toModel<RoomThirdPartyInviteContent>()
+                                    ?.let { content ->
+                                        profileMatrixItem {
+                                            id("3pid_$idx")
+                                            matrixItem(content.toMatrixItem())
+                                            avatarRenderer(avatarRenderer)
+                                            editable(data.actionsPermissions.canRevokeThreePidInvite)
+                                            clickListener { _ ->
+                                                callback?.onThreePidInvites(event)
+                                            }
+                                        }
+                                    }
+                        },
+                        between = { idx, _ ->
+                            dividerItem {
+                                id("divider3_$idx")
+                                color(dividerColor)
+                            }
+                        }
+                )
     }
 
     private fun RoomThirdPartyInviteContent.toMatrixItem(): MatrixItem {

@@ -2148,7 +2148,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_member_power_level_custom">Custom</string>
     <string name="room_member_power_level_invites">Invites</string>
     <string name="room_member_power_level_users">Users</string>
-    <string name="room_member_power_level_three_pid_invites">Other invites</string>
 
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
