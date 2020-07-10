@@ -45,7 +45,8 @@ import javax.inject.Inject
  * An animated reaction button.
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
-class ReactionButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
+class ReactionButton @JvmOverloads constructor(context: Context,
+                                               attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
@@ -110,9 +111,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         countTextView?.text = TextUtils.formatCountToShortDecimal(reactionCount)
 
 //        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
-
         context.withStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr) {
-
             onDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape)
             offDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape_off)
 
@@ -143,9 +142,10 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
             val status = getBoolean(R.styleable.ReactionButton_toggled, false)
             setChecked(status)
-            setOnClickListener(this@ReactionButton)
-            setOnLongClickListener(this@ReactionButton)
         }
+
+        setOnClickListener(this)
+        setOnLongClickListener(this)
     }
 
     private fun getDrawableFromResource(array: TypedArray, styleableIndexId: Int): Drawable? {
