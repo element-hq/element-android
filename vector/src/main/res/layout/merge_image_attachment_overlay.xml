@@ -74,8 +74,8 @@
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:focusable="true"
         android:contentDescription="@string/share"
+        android:focusable="true"
         android:padding="6dp"
         android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
@@ -85,12 +85,12 @@
 
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/overlayVideoControlsGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/overlayVideoControlsGroup"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:constraint_referenced_ids="overlayBottomBackground,overlayBackButton,overlayPlayPauseButton,overlaySeekBar" />
+        app:constraint_referenced_ids="overlayBottomBackground,overlayBackButton,overlayPlayPauseButton,overlaySeekBar"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/overlayBottomBackground"
@@ -121,11 +121,11 @@
         android:id="@+id/overlaySeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/white"
         android:progressBackgroundTint="@color/white"
         android:thumbTint="@color/white"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayBottomBackground"
         app:layout_constraintStart_toEndOf="@id/overlayPlayPauseButton"

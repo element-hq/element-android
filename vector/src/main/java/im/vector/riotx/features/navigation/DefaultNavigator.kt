@@ -289,7 +289,8 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openVideoViewer(activity: Activity,
-                                 roomId: String, mediaData: VideoContentRenderer.Data,
+                                 roomId: String,
+                                 mediaData: AttachmentData,
                                  view: View,
                                  inMemory: List<AttachmentData>?,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {

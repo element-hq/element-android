@@ -99,7 +99,8 @@ interface Navigator {
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openVideoViewer(activity: Activity,
-                        roomId: String, mediaData: VideoContentRenderer.Data,
+                        roomId: String,
+                        mediaData: VideoContentRenderer.Data,
                         view: View,
                         inMemory: List<AttachmentData>? = null,
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
