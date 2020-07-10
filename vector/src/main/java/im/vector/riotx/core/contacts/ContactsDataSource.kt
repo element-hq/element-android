@@ -70,7 +70,6 @@ class ContactsDataSource @Inject constructor(
                                         ?.let { Uri.parse(it) }
                                         ?.let { mappedContactBuilder.photoURI = it }
 
-
                                 map[id] = mappedContactBuilder
                             }
                         }

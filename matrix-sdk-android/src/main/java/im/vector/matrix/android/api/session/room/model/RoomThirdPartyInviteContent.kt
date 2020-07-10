@@ -64,4 +64,3 @@ data class PublicKeys(
          */
         @Json(name = "public_key") val publicKey: String
 )
-
