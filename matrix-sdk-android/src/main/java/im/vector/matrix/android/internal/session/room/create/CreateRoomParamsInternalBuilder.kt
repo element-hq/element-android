@@ -77,13 +77,11 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
                 topic = builder.topic,
                 invitedUserIds = builder.invitedUserIds,
                 invite3pids = invite3pids,
-                // TODO Support this
-                creationContent = null,
+                creationContent = builder.creationContent,
                 initialStates = initialStates,
                 preset = builder.preset,
                 isDirect = builder.isDirect,
-                // TODO Support this
-                powerLevelContentOverride = null
+                powerLevelContentOverride = builder.powerLevelContentOverride
         )
     }
 

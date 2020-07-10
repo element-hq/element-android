@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.model.create
 
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -46,6 +47,10 @@ class CreateRoomParamsBuilder {
     var preset: CreateRoomPreset? = null
 
     var isDirect: Boolean? = null
+
+    var creationContent: Any? = null
+
+    var powerLevelContentOverride: PowerLevelsContent? = null
 
     /**
      * Mark as a direct message room.
