@@ -39,7 +39,7 @@ class TestDeviceSettings @Inject constructor(private val vectorPreferences: Vect
                     manager?.retry()
                 }
             }
-            description = stringProvider.getString(R.string.element_settings_troubleshoot_test_device_settings_failed)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_failed)
             status = TestStatus.FAILED
         }
     }

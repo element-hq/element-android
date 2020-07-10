@@ -199,11 +199,11 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 .disposeOnDestroy()
 
         if (callArgs.isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.element_permissions_rationale_msg_camera_and_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
                 start()
             }
         } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.element_permissions_rationale_msg_record_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_record_audio)) {
                 start()
             }
         }
@@ -367,7 +367,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         // TODO ask to use default stun, etc...
         AlertDialog
                 .Builder(this)
-                .setTitle(R.string.element_call_failed_no_connection)
+                .setTitle(R.string.call_failed_no_connection)
                 .setMessage(getString(R.string.call_failed_no_connection_description))
                 .setNegativeButton(R.string.ok) { _, _ ->
                     callViewModel.handle(VectorCallViewActions.EndCall)

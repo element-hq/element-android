@@ -58,7 +58,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 
         if (roomPreviewData.worldReadable) {
-            roomPreviewNoPreviewLabel.setText(R.string.element_room_preview_world_readable_room_not_supported_yet)
+            roomPreviewNoPreviewLabel.setText(R.string.room_preview_world_readable_room_not_supported_yet)
         } else {
             roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview)
         }

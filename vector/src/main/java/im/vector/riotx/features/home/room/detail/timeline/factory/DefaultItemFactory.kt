@@ -58,9 +58,9 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                callback: TimelineEventController.Callback?,
                throwable: Throwable? = null): DefaultItem {
         val text = if (throwable == null) {
-            stringProvider.getString(R.string.element_rendering_event_error_type_of_event_not_handled, event.root.getClearType())
+            stringProvider.getString(R.string.rendering_event_error_type_of_event_not_handled, event.root.getClearType())
         } else {
-            stringProvider.getString(R.string.element_rendering_event_error_exception, event.root.eventId)
+            stringProvider.getString(R.string.rendering_event_error_exception, event.root.eventId)
         }
         val informationData = informationDataFactory.create(event, null)
         return create(text, informationData, highlight, callback)

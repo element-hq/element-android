@@ -192,7 +192,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             }
             else                                       -> {
                 // User has entered a passphrase but want to skip this step.
-                viewModel.passphraseError.value = context?.getString(R.string.element_keys_backup_passphrase_not_empty_error_message)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
             }
         }
     }

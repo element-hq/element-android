@@ -48,7 +48,7 @@ class TestPlayServices @Inject constructor(private val context: AppCompatActivit
                 Timber.e("Play Services apk error $resultCode -> ${apiAvailability.getErrorString(resultCode)}.")
             }
 
-            description = stringProvider.getString(R.string.element_settings_troubleshoot_test_play_services_failed, apiAvailability.getErrorString(resultCode))
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_play_services_failed, apiAvailability.getErrorString(resultCode))
             status = TestStatus.FAILED
         }
     }

@@ -131,7 +131,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
                         this,
                         PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                        R.string.element_permissions_rationale_msg_keys_backup_export)) {
+                        R.string.permissions_rationale_msg_keys_backup_export)) {
             ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
                 override fun onPassphrase(passphrase: String) {
                     showWaitingView()

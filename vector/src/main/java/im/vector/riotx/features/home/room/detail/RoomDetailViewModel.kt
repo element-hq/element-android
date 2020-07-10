@@ -1048,7 +1048,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Check if this request is still active and handled by me
         room.getTimeLineEvent(action.eventId)?.let {
             session.cryptoService().reRequestRoomKeyForEvent(it.root)
-            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.element_e2e_re_request_encryption_key_dialog_content)))
+            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
         }
     }
 

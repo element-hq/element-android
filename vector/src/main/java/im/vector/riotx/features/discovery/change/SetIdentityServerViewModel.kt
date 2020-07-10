@@ -105,7 +105,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 when {
                     failure is IdentityServiceError.OutdatedIdentityServer                              ->
-                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.element_identity_server_error_outdated_identity_server, isDefault))
+                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server, isDefault))
                     failure is Failure.NetworkConnection && failure.ioException is UnknownHostException ->
                         _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server, isDefault))
                     else                                                                                ->

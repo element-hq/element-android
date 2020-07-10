@@ -135,7 +135,7 @@
     <string name="user_directory_header">Kasutajate kataloog</string>
     <string name="matrix_only_filter">Vaid need, kellel on Matrixi konto</string>
     <string name="no_conversation_placeholder">Vestlusi ei leidu</string>
-    <string name="no_contact_access_placeholder">Sa pole Riot\'ile andnud ligipääsu kohalikele kontaktidele</string>
+    <string name="no_contact_access_placeholder">Sa pole Element\'ile andnud ligipääsu kohalikele kontaktidele</string>
     <string name="no_result_placeholder">Tulemusi ei ole</string>
     <string name="people_no_identity_server">Isikutuvastusserver ei ole seadistatud.</string>
 

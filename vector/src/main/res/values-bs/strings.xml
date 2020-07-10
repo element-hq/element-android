@@ -85,7 +85,7 @@
     <string name="user_directory_header">Imenik korisnika</string>
     <string name="matrix_only_filter">Samo matriks kontakti</string>
     <string name="no_conversation_placeholder">Nema razgovora</string>
-    <string name="no_contact_access_placeholder">Niste omogućili Riotu pristup vašim lokalnim kontaktima</string>
+    <string name="no_contact_access_placeholder">Niste omogućili Elementu pristup vašim lokalnim kontaktima</string>
     <string name="no_result_placeholder">Nema rezultata</string>
 
     <string name="rooms_header">Sobe</string>

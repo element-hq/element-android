@@ -57,7 +57,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/troubleshootTestTitle"
-        tools:text="@string/element_settings_troubleshoot_test_device_settings_failed"
+        tools:text="@string/settings_troubleshoot_test_device_settings_failed"
         tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton

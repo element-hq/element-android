@@ -25,7 +25,7 @@
         android:textColor="?attr/colorAccent"
         android:textSize="14sp"
         android:textStyle="italic"
-        tools:text="@string/element_rendering_event_error_type_of_event_not_handled" />
+        tools:text="@string/rendering_event_error_type_of_event_not_handled" />
 
 </LinearLayout>
 

@@ -27,7 +27,7 @@
             android:defaultValue="false"
             android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
             android:key="SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
-            android:summary="@string/element_settings_developer_mode_fail_fast_summary"
+            android:summary="@string/settings_developer_mode_fail_fast_summary"
             android:title="@string/settings_developer_mode_fail_fast_title" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
