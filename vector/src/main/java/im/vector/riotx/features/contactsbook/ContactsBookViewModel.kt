@@ -90,7 +90,11 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            allContacts = contactsDataSource.getContacts()
+            allContacts = contactsDataSource.getContacts(
+                    withEmails = true,
+                    // Do not handle phone numbers for the moment
+                    withMsisdn = false
+            )
             mappedContacts = allContacts
 
             setState {
