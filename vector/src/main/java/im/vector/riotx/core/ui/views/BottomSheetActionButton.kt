@@ -25,6 +25,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -117,16 +118,15 @@ class BottomSheetActionButton @JvmOverloads constructor(
         inflate(context, R.layout.item_verification_action, this)
         ButterKnife.bind(this)
 
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BottomSheetActionButton, 0, 0)
-        title = typedArray.getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""
-        subTitle = typedArray.getString(R.styleable.BottomSheetActionButton_actionDescription) ?: ""
-        forceStartPadding = typedArray.getBoolean(R.styleable.BottomSheetActionButton_forceStartPadding, false)
-        leftIcon = typedArray.getDrawable(R.styleable.BottomSheetActionButton_leftIcon)
+        context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
+            title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""
+            subTitle = getString(R.styleable.BottomSheetActionButton_actionDescription) ?: ""
+            forceStartPadding = getBoolean(R.styleable.BottomSheetActionButton_forceStartPadding, false)
+            leftIcon = getDrawable(R.styleable.BottomSheetActionButton_leftIcon)
 
-        rightIcon = typedArray.getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
+            rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
 
-        tint = typedArray.getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
-
-        typedArray.recycle()
+            tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
+        }
     }
 }

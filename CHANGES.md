@@ -25,7 +25,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
- -
+ - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================
