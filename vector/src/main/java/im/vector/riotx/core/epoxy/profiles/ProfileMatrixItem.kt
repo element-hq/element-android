@@ -20,6 +20,7 @@ package im.vector.riotx.core.epoxy.profiles
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
@@ -36,6 +37,7 @@ abstract class ProfileMatrixItem : VectorEpoxyModel<ProfileMatrixItem.Holder>() 
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute var editable: Boolean = true
     @EpoxyAttribute var userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
@@ -46,9 +48,10 @@ abstract class ProfileMatrixItem : VectorEpoxyModel<ProfileMatrixItem.Holder>() 
                 .takeIf { it != bestName }
                 // Special case for ThreePid fake matrix item
                 .takeIf { it != "@" }
-        holder.view.setOnClickListener(clickListener)
+        holder.view.setOnClickListener(clickListener?.takeIf { editable })
         holder.titleView.text = bestName
         holder.subtitleView.setTextOrHide(matrixId)
+        holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.avatarDecorationImageView.setImageResource(userEncryptionTrustLevel.toImageRes())
     }
@@ -58,5 +61,6 @@ abstract class ProfileMatrixItem : VectorEpoxyModel<ProfileMatrixItem.Holder>() 
         val subtitleView by bind<TextView>(R.id.matrixItemSubtitle)
         val avatarImageView by bind<ImageView>(R.id.matrixItemAvatar)
         val avatarDecorationImageView by bind<ImageView>(R.id.matrixItemAvatarDecoration)
+        val editableView by bind<View>(R.id.matrixItemEditable)
     }
 }

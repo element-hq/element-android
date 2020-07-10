@@ -100,6 +100,7 @@ class RoomMemberListController @Inject constructor(
                 id("3pid_$idx")
                 matrixItem(content.toMatrixItem())
                 avatarRenderer(avatarRenderer)
+                editable(data.actionsPermissions.canRevokeThreePidInvite)
                 clickListener { _ ->
                     callback?.onThreePidInvites(event)
                 }
