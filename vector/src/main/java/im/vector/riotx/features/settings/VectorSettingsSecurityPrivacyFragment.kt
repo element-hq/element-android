@@ -33,6 +33,8 @@ import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.rx.RxSession
+import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.dialogs.ExportKeysDialog
@@ -41,12 +43,17 @@ import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.preference.VectorPreference
+import im.vector.riotx.core.preference.VectorPreferenceCategory
 import im.vector.riotx.core.utils.openFileSelection
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -56,6 +63,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
+    private var disposables = emptyList<Disposable>().toMutableList()
 
     // cryptography
     private val mCryptographyCategory by lazy {
@@ -92,6 +100,109 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // My device name may have been updated
         refreshMyDevice()
         refreshXSigningStatus()
+        session.rx().liveSecretSynchronisationInfo()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    refresh4SSection(it)
+                    refreshXSigningStatus()
+                }.also {
+                    disposables.add(it)
+                }
+    }
+
+    private val secureBackupCategory by lazy {
+        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY)
+    }
+    private val secureBackupPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY)
+    }
+//    private val secureBackupResetPreference by lazy {
+//        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
+//    }
+
+    override fun onPause() {
+        super.onPause()
+        disposables.forEach {
+            it.dispose()
+        }
+        disposables.clear()
+    }
+
+    private fun refresh4SSection(state: RxSession.SecretsSynchronisationInfo) {
+        secureBackupCategory?.isVisible = false
+
+        // it's a lot of if / else if / else
+        // But it's not yet clear how to manage all cases
+        if (!state.isCrossSigningEnabled) {
+            // There is not cross signing, so we can remove the section
+        } else {
+            secureBackupCategory?.isVisible = true
+
+            if (!state.isBackupSetup) {
+                if (state.isCrossSigningEnabled && state.allPrivateKeysKnown) {
+                    // You can setup recovery!
+                    secureBackupCategory?.isVisible = true
+                    secureBackupPreference?.isVisible = true
+                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_setup)
+                    secureBackupPreference?.isEnabled = true
+                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
+                        true
+                    }
+                } else {
+                    // just hide all, you can't setup from here
+                    // you should synchronize to get gossips
+                    secureBackupCategory?.isVisible = false
+                }
+                return
+            }
+
+            // so here we know that 4S is setup
+            if (state.isCrossSigningTrusted && state.allPrivateKeysKnown) {
+                // Looks like we have all cross signing secrets and session is trusted
+                // Let's see if there is a megolm backup
+                if (!state.megolmBackupAvailable || state.megolmSecretKnown) {
+                    // Only option here is to create a new backup if you want?
+                    // aka reset
+                    secureBackupCategory?.isVisible = true
+                    secureBackupPreference?.isVisible = true
+                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_reset)
+                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
+                        true
+                    }
+                } else if (!state.megolmSecretKnown) {
+                    // megolm backup is available but we don't have key
+                    // you could try to synchronize to get missing megolm key ?
+                    secureBackupCategory?.isVisible = true
+                    secureBackupPreference?.isVisible = true
+                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                    secureBackupPreference?.isEnabled = true
+                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        (requireActivity() as? VectorBaseActivity)?.let {
+                            it.navigator.requestSelfSessionVerification(it)
+                        }
+                        true
+                    }
+                } else {
+                    secureBackupCategory?.isVisible = false
+                }
+                return
+            } else {
+                // there is a backup, but this session is not trusted, or is missing some secrets
+                // you should enter passphrase to get them or verify against another session
+                secureBackupCategory?.isVisible = true
+                secureBackupPreference?.isVisible = true
+                secureBackupPreference?.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                secureBackupPreference?.isEnabled = true
+                secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    (requireActivity() as? VectorBaseActivity)?.let {
+                        it.navigator.requestSelfSessionVerification(it)
+                    }
+                    true
+                }
+            }
+        }
     }
 
     override fun bindPref() {
@@ -115,26 +226,43 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         refreshXSigningStatus()
+
+//        secureBackupResetPreference?.let { pref ->
+//            val destructiveColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+//            pref.title = span {
+//                text = getString(R.string.keys_backup_restore_setup_recovery_key)
+//                textColor = destructiveColor
+//            }
+//            pref.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)?.let {
+//                ThemeUtils.tintDrawableWithColor(it, destructiveColor)
+//            }
+//        }
     }
 
+    // Todo this should be refactored and use same state as 4S section
     private fun refreshXSigningStatus() {
         val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
         val xSigningIsEnableInAccount = crossSigningKeys != null
         val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
         val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
-        if (xSigningKeyCanSign) {
-            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
-            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
-        } else if (xSigningKeysAreTrusted) {
-            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
-            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
-        } else if (xSigningIsEnableInAccount) {
-            mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
-            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
-        } else {
-            mCrossSigningStatePreference.setIcon(android.R.color.transparent)
-            mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+        when {
+            xSigningKeyCanSign        -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+            }
+            xSigningKeysAreTrusted    -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+            }
+            xSigningIsEnableInAccount -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+            }
+            else                      -> {
+                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+            }
         }
 
         mCrossSigningStatePreference.isVisible = true
