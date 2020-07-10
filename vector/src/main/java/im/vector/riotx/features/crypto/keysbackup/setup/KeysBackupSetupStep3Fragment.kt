@@ -176,25 +176,24 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                                 os.write(data.toByteArray())
                                 os.flush()
                             }
-                }?.let {
-                    uri.toString()
                 }
-                        ?: throw IOException()
+                        ?: throw IOException("Unable to write the file")
             }
                     .fold(
                             { throwable ->
-                                context?.let {
+                                activity?.let {
                                     AlertDialog.Builder(it)
                                             .setTitle(R.string.dialog_title_error)
-                                            .setMessage(throwable.localizedMessage)
+                                            .setMessage(errorFormatter.toHumanReadable(throwable))
+
                                 }
                             },
-                            { path ->
+                            {
                                 viewModel.copyHasBeenMade = true
-
-                                context?.let {
+                                activity?.let {
                                     AlertDialog.Builder(it)
-                                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
+                                            .setTitle(R.string.dialog_title_success)
+                                            .setMessage(R.string.recovery_key_export_saved)
                                 }
                             }
                     )
