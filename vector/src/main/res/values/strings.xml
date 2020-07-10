@@ -76,6 +76,10 @@
     <string name="disconnect">Disconnect</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
+    <string name="play_video">Play</string>
+    <string name="pause_video">Pause</string>
+
+
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
@@ -1048,6 +1052,7 @@
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+    <string name="encryption_exported_successfully">Keys successfully exported</string>
 
     <string name="encryption_message_recovery">Encrypted Messages Recovery</string>
     <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
@@ -1493,9 +1498,13 @@ Why choose Riot.im?
     <string name="new_recovery_method_popup_title">New Key Backup</string>
     <string name="new_recovery_method_popup_description">A new secure message key backup has been detected.\n\nIf you didn’t set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.</string>
     <string name="new_recovery_method_popup_was_me">It was me</string>
+
     <!-- Keys backup banner -->
     <string name="keys_backup_banner_setup_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_setup_line2">Start using Key Backup</string>
+
+    <string name="secure_backup_banner_setup_line1">Secure Backup</string>
+    <string name="secure_backup_banner_setup_line2">Safeguard against losing access to encrypted messages &amp; data</string>
 
     <string name="keys_backup_banner_recover_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_recover_line2">Use Key Backup</string>
@@ -1503,7 +1512,10 @@ Why choose Riot.im?
     <string name="keys_backup_banner_update_line1">New secure message keys</string>
     <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
 
-    <string name="keys_backup_banner_in_progress">Backing up keys…</string>
+    <string name="keys_backup_banner_in_progress">Backing up your keys. This may take several minutes…</string>
+
+
+    <string name="secure_backup_setup">Set Up Secure Backup</string>
 
     <!-- Keys backup info -->
     <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>

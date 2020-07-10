@@ -20,8 +20,12 @@ import arrow.core.Option
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.ActiveSessionDataSource
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.session.SessionListener
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,23 +34,42 @@ import javax.inject.Singleton
 class ActiveSessionHolder @Inject constructor(private val authenticationService: AuthenticationService,
                                               private val sessionObservableStore: ActiveSessionDataSource,
                                               private val keyRequestHandler: KeyRequestHandler,
-                                              private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler
+                                              private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
+                                              private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+                                              private val pushRuleTriggerListener: PushRuleTriggerListener,
+                                              private val sessionListener: SessionListener,
+                                              private val imageManager: ImageManager
 ) {
 
     private var activeSession: AtomicReference<Session?> = AtomicReference()
 
     fun setActiveSession(session: Session) {
+        Timber.w("setActiveSession of ${session.myUserId}")
         activeSession.set(session)
         sessionObservableStore.post(Option.just(session))
+
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
+        session.addListener(sessionListener)
+        pushRuleTriggerListener.startWithSession(session)
+        session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+        imageManager.onSessionStarted(session)
     }
 
     fun clearActiveSession() {
+        // Do some cleanup first
+        getSafeActiveSession()?.let {
+            Timber.w("clearActiveSession of ${it.myUserId}")
+            it.callSignalingService().removeCallListener(webRtcPeerConnectionManager)
+            it.removeListener(sessionListener)
+        }
+
         activeSession.set(null)
         sessionObservableStore.post(Option.empty())
+
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
+        pushRuleTriggerListener.stop()
     }
 
     fun hasActiveSession(): Boolean {

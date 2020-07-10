@@ -8,6 +8,8 @@
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/VectorAppBarLayoutStyle"
+        android:id="@+id/roomUploadsAppBar"
+        android:transitionName="toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">

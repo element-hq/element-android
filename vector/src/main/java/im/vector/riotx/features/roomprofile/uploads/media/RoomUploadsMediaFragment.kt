@@ -20,23 +20,34 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.appbar.AppBarLayout
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.trackItemsVisibilityChange
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsAction
+import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewModel
+import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewState
 import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
+import kotlinx.android.synthetic.main.fragment_room_uploads.*
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(
@@ -76,12 +87,86 @@ class RoomUploadsMediaFragment @Inject constructor(
         controller.listener = null
     }
 
-    override fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data) {
-        navigator.openImageViewer(requireActivity(), mediaData, view, null)
+    // It's very strange i can't just access
+    // the app bar using find by id...
+    private fun trickFindAppBar(): AppBarLayout? {
+        return activity?.supportFragmentManager?.fragments
+                ?.filterIsInstance<RoomUploadsFragment>()
+                ?.firstOrNull()
+                ?.roomUploadsAppBar
     }
 
-    override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) {
-        navigator.openVideoViewer(requireActivity(), mediaData)
+    override fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data) = withState(uploadsViewModel) { state ->
+        val inMemory = getItemsArgs(state)
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = state.roomId,
+                mediaData = mediaData,
+                view = view,
+                inMemory = inMemory
+        ) { pairs ->
+            trickFindAppBar()?.let {
+                pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
+            }
+        }
+    }
+
+    private fun getItemsArgs(state: RoomUploadsViewState): List<AttachmentData> {
+        return state.mediaEvents.mapNotNull {
+            when (val content = it.contentWithAttachmentContent) {
+                is MessageImageContent -> {
+                    ImageContentRenderer.Data(
+                            eventId = it.eventId,
+                            filename = content.body,
+                            mimeType = content.mimeType,
+                            url = content.getFileUrl(),
+                            elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                            maxHeight = -1,
+                            maxWidth = -1,
+                            width = null,
+                            height = null
+                    )
+                }
+                is MessageVideoContent -> {
+                    val thumbnailData = ImageContentRenderer.Data(
+                            eventId = it.eventId,
+                            filename = content.body,
+                            mimeType = content.mimeType,
+                            url = content.videoInfo?.thumbnailFile?.url
+                                    ?: content.videoInfo?.thumbnailUrl,
+                            elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
+                            height = content.videoInfo?.height,
+                            maxHeight = -1,
+                            width = content.videoInfo?.width,
+                            maxWidth = -1
+                    )
+                    VideoContentRenderer.Data(
+                            eventId = it.eventId,
+                            filename = content.body,
+                            mimeType = content.mimeType,
+                            url = content.getFileUrl(),
+                            elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                            thumbnailMediaData = thumbnailData
+                    )
+                }
+                else                   -> null
+            }
+        }
+    }
+
+    override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) = withState(uploadsViewModel) { state ->
+        val inMemory = getItemsArgs(state)
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = state.roomId,
+                mediaData = mediaData,
+                view = view,
+                inMemory = inMemory
+        ) { pairs ->
+            trickFindAppBar()?.let {
+                pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
+            }
+        }
     }
 
     override fun loadMore() {

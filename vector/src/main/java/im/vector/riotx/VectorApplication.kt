@@ -32,8 +32,6 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import com.github.piasy.biv.BigImageViewer
-import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
@@ -44,15 +42,12 @@ import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.rx.RxConfig
-import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
@@ -79,16 +74,13 @@ class VectorApplication :
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var sessionListener: SessionListener
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
-    @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
     lateinit var vectorComponent: VectorComponent
 
@@ -114,7 +106,6 @@ class VectorApplication :
         logInfo()
         LazyThreeTen.init(this)
 
-        BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
@@ -137,8 +128,7 @@ class VectorApplication :
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
-            lastAuthenticatedSession.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+            lastAuthenticatedSession.configureAndStart(applicationContext)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

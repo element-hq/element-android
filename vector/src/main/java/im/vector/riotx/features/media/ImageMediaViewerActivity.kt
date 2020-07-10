@@ -91,6 +91,8 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             encryptedImageView.isVisible = false
             // Postpone transaction a bit until thumbnail is loaded
             supportPostponeEnterTransition()
+
+            // We are not passing the exact same image that in the
             imageContentRenderer.renderFitTarget(mediaData, ImageContentRenderer.Mode.THUMBNAIL, imageTransitionView) {
                 // Proceed with transaction
                 scheduleStartPostponedTransition(imageTransitionView)
@@ -134,13 +136,13 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
     private fun onShareActionClicked() {
         session.fileService().downloadFile(
-                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                mediaData.eventId,
-                mediaData.filename,
-                mediaData.mimeType,
-                mediaData.url,
-                mediaData.elementToDecrypt,
-                object : MatrixCallback<File> {
+                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                id = mediaData.eventId,
+                fileName = mediaData.filename,
+                mimeType = mediaData.mimeType,
+                url = mediaData.url,
+                elementToDecrypt = mediaData.elementToDecrypt,
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         shareMedia(this@ImageMediaViewerActivity, data, getMimeTypeFromUri(this@ImageMediaViewerActivity, data.toUri()))
                     }

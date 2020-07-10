@@ -8,6 +8,7 @@ Improvements 🙌:
  - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
  - Creating and listening to EventInsertEntity. (#1634)
  - Handling (almost) properly the groups fetching (#1634)
+ - Improve fullscreen media display (#327)
 
 Bugfix 🐛:
  - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
@@ -15,6 +16,8 @@ Bugfix 🐛:
  - Bug / Unwanted draft (#698)
  - All users seems to be able to see the enable encryption option in room settings (#1341)
  - Leave room only leaves the current version (#1656)
+ - Regression |  Share action menu do not work (#1647)
+ - verification issues on transition (#1555)
 
 Translations 🗣:
  -
@@ -27,7 +30,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
- -
+ - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================

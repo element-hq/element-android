@@ -40,17 +40,20 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
+import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 
-class NoticeEventFormatter @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+class NoticeEventFormatter @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
                                                private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
                                                private val sp: StringProvider) {
 
-    private fun Event.isSentByCurrentUser() = senderId != null && senderId == sessionHolder.getSafeActiveSession()?.myUserId
+    private val currentUserId: String?
+        get() = activeSessionDataSource.currentValue?.orNull()?.myUserId
+
+    private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -449,7 +452,6 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {
             Membership.INVITE -> {
-                val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
                     eventContent.thirdPartyInvite != null -> {
                         val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
@@ -466,7 +468,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                             sp.getString(R.string.notice_room_third_party_registered_invite, userWhoHasAccepted, threePidDisplayName)
                         }
                     }
-                    event.stateKey == selfUserId          ->
+                    event.stateKey == currentUserId       ->
                         eventContent.safeReason?.let { reason ->
                             sp.getString(R.string.notice_room_invite_you_with_reason, senderDisplayName, reason)
                         } ?: sp.getString(R.string.notice_room_invite_you, senderDisplayName)

@@ -406,7 +406,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         setState {
                             copy(
                                     recoveryKeyCreationInfo = bootstrapResult.keyInfo,
-                                    step = BootstrapStep.SaveRecoveryKey(false)
+                                    step = BootstrapStep.SaveRecoveryKey(
+                                            // If a passphrase was used, saving key is optional
+                                            state.passphrase != null
+                                    )
                             )
                         }
                     }

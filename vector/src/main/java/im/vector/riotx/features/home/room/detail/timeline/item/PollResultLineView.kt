@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.withStyledAttributes
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
@@ -73,11 +74,11 @@ class PollResultLineView @JvmOverloads constructor(
         orientation = HORIZONTAL
         ButterKnife.bind(this)
 
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.PollResultLineView, 0, 0)
-        label = typedArray.getString(R.styleable.PollResultLineView_optionName) ?: ""
-        percent = typedArray.getString(R.styleable.PollResultLineView_optionCount) ?: ""
-        optionSelected = typedArray.getBoolean(R.styleable.PollResultLineView_optionSelected, false)
-        isWinner = typedArray.getBoolean(R.styleable.PollResultLineView_optionIsWinner, false)
-        typedArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.PollResultLineView) {
+            label = getString(R.styleable.PollResultLineView_optionName) ?: ""
+            percent = getString(R.styleable.PollResultLineView_optionCount) ?: ""
+            optionSelected = getBoolean(R.styleable.PollResultLineView_optionSelected, false)
+            isWinner = getBoolean(R.styleable.PollResultLineView_optionIsWinner, false)
+        }
     }
 }

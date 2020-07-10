@@ -158,13 +158,13 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            action.uploadEvent.eventId,
-                            action.uploadEvent.contentWithAttachmentContent.body,
-                            action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
-                            action.uploadEvent.contentWithAttachmentContent.mimeType,
-                            action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
-                            it)
+                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                            id = action.uploadEvent.eventId,
+                            fileName = action.uploadEvent.contentWithAttachmentContent.body,
+                            mimeType = action.uploadEvent.contentWithAttachmentContent.mimeType,
+                            url = action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
+                            elementToDecrypt = action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
+                            callback = it)
                 }
                 _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))
             } catch (failure: Throwable) {

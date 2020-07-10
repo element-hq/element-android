@@ -1174,14 +1174,27 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        navigator.openImageViewer(requireActivity(), mediaData, view) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
             pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
             pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        navigator.openVideoViewer(requireActivity(), mediaData)
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
+            pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+            pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
+        }
     }
 
 //    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
@@ -1199,7 +1212,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             when (requestCode) {
-                SAVE_ATTACHEMENT_REQUEST_CODE -> {
+                SAVE_ATTACHEMENT_REQUEST_CODE           -> {
                     sharedActionViewModel.pendingAction?.let {
                         handleActions(it)
                         sharedActionViewModel.pendingAction = null
@@ -1340,13 +1353,13 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         session.fileService().downloadFile(
-                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                action.eventId,
-                action.messageContent.body,
-                action.messageContent.getFileUrl(),
-                action.messageContent.mimeType,
-                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
+                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                id = action.eventId,
+                fileName = action.messageContent.body,
+                mimeType = action.messageContent.mimeType,
+                url = action.messageContent.getFileUrl(),
+                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         if (isAdded) {
                             shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))

@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.media
 
-import android.os.Parcelable
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -38,13 +37,13 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     @Parcelize
     data class Data(
-            val eventId: String,
-            val filename: String,
-            val mimeType: String?,
-            val url: String?,
-            val elementToDecrypt: ElementToDecrypt?,
+            override val eventId: String,
+            override val filename: String,
+            override val mimeType: String?,
+            override val url: String?,
+            override val elementToDecrypt: ElementToDecrypt?,
             val thumbnailMediaData: ImageContentRenderer.Data
-    ) : Parcelable
+    ) : AttachmentData
 
     fun render(data: Data,
                thumbnailView: ImageView,
@@ -70,7 +69,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                                 downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                                 id = data.eventId,
                                 fileName = data.filename,
-                                mimeType = null,
+                                mimeType = data.mimeType,
                                 url = data.url,
                                 elementToDecrypt = data.elementToDecrypt,
                                 callback = object : MatrixCallback<File> {

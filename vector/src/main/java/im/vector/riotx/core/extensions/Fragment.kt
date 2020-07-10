@@ -16,9 +16,16 @@
 
 package im.vector.riotx.core.extensions
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.toast
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 fun VectorBaseFragment.addFragment(frameId: Int, fragment: Fragment) {
     parentFragmentManager.commitTransaction { add(frameId, fragment) }
@@ -89,3 +96,29 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
+
+fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
+    // We need WRITE_EXTERNAL permission
+//    if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
+//                    this,
+//                    PERMISSION_REQUEST_CODE_EXPORT_KEYS,
+//                    R.string.permissions_rationale_msg_keys_backup_export)) {
+    // WRITE permissions are not needed
+    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).let {
+        it.format(Date())
+    }
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+    intent.addCategory(Intent.CATEGORY_OPENABLE)
+    intent.type = "text/plain"
+    intent.putExtra(
+            Intent.EXTRA_TITLE,
+            "riot-megolm-export-$userId-$timestamp.txt"
+    )
+
+    try {
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step1_manual_export)), requestCode)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity?.toast(R.string.error_no_external_application_found)
+    }
+//    }
+}

@@ -22,10 +22,11 @@ import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.settings.VectorPreferences
 import me.gujun.android.span.span
@@ -46,7 +47,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val notificationUtils: NotificationUtils,
                                                     private val vectorPreferences: VectorPreferences,
                                                     private val stringProvider: StringProvider,
-                                                    private val activeSessionHolder: ActiveSessionHolder,
+                                                    private val activeSessionDataSource: ActiveSessionDataSource,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
                                                     private val outdatedDetector: OutdatedEventDetector?) {
@@ -67,6 +68,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
     private var currentRoomId: String? = null
+
+    // TODO Multi-session: this will have to be improved
+    private val currentSession: Session?
+        get() = activeSessionDataSource.currentValue?.orNull()
 
     /**
     Should be called as soon as a new event is ready to be displayed.
@@ -204,7 +209,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
 
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val session = currentSession ?: return
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
@@ -474,7 +479,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
                 if (!file.exists()) file.createNewFile()
                 FileOutputStream(file).use {
-                    activeSessionHolder.getSafeActiveSession()?.securelyStoreObject(eventList, KEY_ALIAS_SECRET_STORAGE, it)
+                    currentSession?.securelyStoreObject(eventList, KEY_ALIAS_SECRET_STORAGE, it)
                 }
             } catch (e: Throwable) {
                 Timber.e(e, "## Failed to save cached notification info")
@@ -487,7 +492,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
                 FileInputStream(file).use {
-                    val events: ArrayList<NotifiableEvent>? = activeSessionHolder.getSafeActiveSession()?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
+                    val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
                         return events.toMutableList()
                     }
