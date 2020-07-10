@@ -293,6 +293,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToBottomView()
         setupWidgetsBannerView()
 
+        roomToolbarContentView.isClickable = false
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
@@ -858,6 +859,7 @@ class RoomDetailFragment @Inject constructor(
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
+            roomToolbarContentView.isClickable = true
             roomWidgetsBannerView.render(state.activeRoomWidgets())
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
@@ -879,6 +881,7 @@ class RoomDetailFragment @Inject constructor(
                 notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
+            roomToolbarContentView.isClickable = false
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
             // Intercept click event
