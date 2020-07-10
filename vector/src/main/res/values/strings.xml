@@ -2531,5 +2531,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="element_disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
     <string name="element_disclaimer_negative_button">GOT IT</string>
     <string name="element_disclaimer_positive_button">LEARN MORE</string>
+    
+    <string name="element_login_splash_brand">element</string>
 
 </resources>

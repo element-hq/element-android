@@ -20,28 +20,43 @@
 
             <ImageView
                 android:id="@+id/loginSplashLogo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:src="@drawable/element_logo_green"
                 android:transitionName="loginLogoTransition"
-                app:layout_constraintBottom_toTopOf="@+id/loginSplashTitle"
+                app:layout_constraintBottom_toTopOf="@+id/brandTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
+                android:id="@+id/brandTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/loginSplashLogo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
+                android:textSize="40sp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textColor="?colorAccent"
+                android:text="@string/element_login_splash_brand"/>
+
+            <TextView
                 android:id="@+id/loginSplashTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/login_splash_title"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:gravity="center"
                 android:transitionName="loginTitleTransition"
                 app:layout_constraintBottom_toTopOf="@+id/loginSplashText1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSplashLogo" />
+                app:layout_constraintTop_toBottomOf="@+id/brandTextView" />
 
             <!-- TODO check relative dimension -->
             <ImageView
@@ -60,7 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="96dp"
                 android:gravity="start"
                 android:text="@string/login_splash_text1"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text"
