@@ -89,7 +89,7 @@ class RoomUploadsMediaFragment @Inject constructor(
 
     // It's very strange i can't just access
     // the app bar using find by id...
-    private fun trickFindAppBar() : AppBarLayout? {
+    private fun trickFindAppBar(): AppBarLayout? {
         return activity?.supportFragmentManager?.fragments
                 ?.filterIsInstance<RoomUploadsFragment>()
                 ?.firstOrNull()
@@ -97,9 +97,14 @@ class RoomUploadsMediaFragment @Inject constructor(
     }
 
     override fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data) = withState(uploadsViewModel) { state ->
-
         val inMemory = getItemsArgs(state)
-        navigator.openImageViewer(requireActivity(), state.roomId, mediaData, view, inMemory) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = state.roomId,
+                mediaData = mediaData,
+                view = view,
+                inMemory = inMemory
+        ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
             }
@@ -151,7 +156,13 @@ class RoomUploadsMediaFragment @Inject constructor(
 
     override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) = withState(uploadsViewModel) { state ->
         val inMemory = getItemsArgs(state)
-        navigator.openVideoViewer(requireActivity(), state.roomId, mediaData, view, inMemory) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = state.roomId,
+                mediaData = mediaData,
+                view = view,
+                inMemory = inMemory
+        ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
             }

@@ -19,7 +19,6 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.core.app.ActivityOptionsCompat
@@ -52,7 +51,6 @@ import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.VectorAttachmentViewerActivity
-import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -245,11 +243,11 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
-    override fun openImageViewer(activity: Activity,
+    override fun openMediaViewer(activity: Activity,
                                  roomId: String,
                                  mediaData: AttachmentData,
                                  view: View,
-                                 inMemory: List<AttachmentData>?,
+                                 inMemory: List<AttachmentData>,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
         VectorAttachmentViewerActivity.newIntent(activity,
                 mediaData,
@@ -265,52 +263,6 @@ class DefaultNavigator @Inject constructor(
                 pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
             }
 
-            pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-            options?.invoke(pairs)
-
-            val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
-            activity.startActivity(intent, bundle)
-        }
-//        val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
-//        val pairs = ArrayList<Pair<View, String>>()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-//                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
-//            }
-//            activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-//                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-//            }
-//        }
-//        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-//        options?.invoke(pairs)
-//
-//        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
-//        activity.startActivity(intent, bundle)
-    }
-
-    override fun openVideoViewer(activity: Activity,
-                                 roomId: String,
-                                 mediaData: AttachmentData,
-                                 view: View,
-                                 inMemory: List<AttachmentData>?,
-                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-//        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
-//        activity.startActivity(intent)
-        VectorAttachmentViewerActivity.newIntent(activity,
-                mediaData,
-                roomId,
-                mediaData.eventId,
-                inMemory,
-                ViewCompat.getTransitionName(view)).let { intent ->
-            val pairs = ArrayList<Pair<View, String>>()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-                    pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
-                }
-                activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-                    pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-                }
-            }
             pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
             options?.invoke(pairs)
 

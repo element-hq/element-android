@@ -1171,14 +1171,24 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        navigator.openImageViewer(requireActivity(), roomDetailArgs.roomId, mediaData, view) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
             pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
             pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        navigator.openVideoViewer(requireActivity(), roomDetailArgs.roomId, mediaData, view) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
             pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
             pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }
@@ -1199,7 +1209,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             when (requestCode) {
-                SAVE_ATTACHEMENT_REQUEST_CODE -> {
+                SAVE_ATTACHEMENT_REQUEST_CODE           -> {
                     sharedActionViewModel.pendingAction?.let {
                         handleActions(it)
                         sharedActionViewModel.pendingAction = null

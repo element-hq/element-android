@@ -237,7 +237,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     }
 
     companion object {
-
         const val EXTRA_ARGS = "EXTRA_ARGS"
         const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
         const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
@@ -246,11 +245,11 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                       mediaData: AttachmentData,
                       roomId: String?,
                       eventId: String,
-                      inMemoryData: List<AttachmentData>?,
+                      inMemoryData: List<AttachmentData>,
                       sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
-            if (inMemoryData != null) {
+            if (inMemoryData.isNotEmpty()) {
                 it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
             }
         }
