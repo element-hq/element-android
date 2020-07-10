@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.media.AttachmentData
-import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.terms.ReviewTermsActivity
