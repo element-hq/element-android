@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 internal class SessionListeners @Inject constructor() {
 
-    private val listeners = ArrayList<Session.Listener>()
+    private val listeners = mutableSetOf<Session.Listener>()
 
     fun addListener(listener: Session.Listener) {
         synchronized(listeners) {

@@ -65,7 +65,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
                              private val height: Int)
     : DataFetcher<InputStream> {
 
-    val client = OkHttpClient()
+    private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java

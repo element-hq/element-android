@@ -22,6 +22,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
@@ -31,7 +32,7 @@ import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallCandidatesContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
-import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.core.services.BluetoothHeadsetReceiver
 import im.vector.riotx.core.services.CallService
 import im.vector.riotx.core.services.WiredHeadsetStateReceiver
@@ -71,8 +72,11 @@ import javax.inject.Singleton
 @Singleton
 class WebRtcPeerConnectionManager @Inject constructor(
         private val context: Context,
-        private val sessionHolder: ActiveSessionHolder
+        private val activeSessionDataSource: ActiveSessionDataSource
 ) : CallsListener {
+
+    private val currentSession: Session?
+        get() = activeSessionDataSource.currentValue?.orNull()
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
@@ -288,15 +292,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun getTurnServer(callback: ((TurnServerResponse?) -> Unit)) {
-        sessionHolder.getActiveSession().callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse?> {
-            override fun onSuccess(data: TurnServerResponse?) {
-                callback(data)
-            }
+        currentSession?.callSignalingService()
+                ?.getTurnServer(object : MatrixCallback<TurnServerResponse?> {
+                    override fun onSuccess(data: TurnServerResponse?) {
+                        callback(data)
+                    }
 
-            override fun onFailure(failure: Throwable) {
-                callback(null)
-            }
-        })
+                    override fun onFailure(failure: Throwable) {
+                        callback(null)
+                    }
+                })
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
@@ -310,7 +315,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.mxCall
                 ?.takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
-                    val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                    val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
                             ?: mxCall.roomId
                     // Start background service with notification
                     CallService.onPendingCall(
@@ -318,7 +323,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                             isVideo = mxCall.isVideoCall,
                             roomName = name,
                             roomId = mxCall.roomId,
-                            matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                            matrixId = currentSession?.myUserId ?: "",
                             callId = mxCall.callId)
                 }
 
@@ -373,14 +378,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val mxCall = callContext.mxCall
         // Update service state
 
-        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
                 ?: mxCall.roomId
         CallService.onPendingCall(
                 context = context,
                 isVideo = mxCall.isVideoCall,
                 roomName = name,
                 roomId = mxCall.roomId,
-                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
         executor.execute {
@@ -563,14 +568,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     ?.let { mxCall ->
                         // Start background service with notification
 
-                        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+                        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
                                 ?: mxCall.otherUserId
                         CallService.onOnGoingCallBackground(
                                 context = context,
                                 isVideo = mxCall.isVideoCall,
                                 roomName = name,
                                 roomId = mxCall.roomId,
-                                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                                matrixId = currentSession?.myUserId ?: "",
                                 callId = mxCall.callId
                         )
                     }
@@ -631,20 +636,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
 
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
-        val createdCall = sessionHolder.getSafeActiveSession()?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
+        val createdCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
 
         audioManager.startForCall(createdCall)
         currentCall = callContext
 
-        val name = sessionHolder.getSafeActiveSession()?.getUser(createdCall.otherUserId)?.getBestName()
+        val name = currentSession?.getUser(createdCall.otherUserId)?.getBestName()
                 ?: createdCall.otherUserId
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
                 isVideo = createdCall.isVideoCall,
                 roomName = name,
                 roomId = createdCall.roomId,
-                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                matrixId = currentSession?.myUserId ?: "",
                 callId = createdCall.callId)
 
         executor.execute {
@@ -693,14 +698,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
 
         // Start background service with notification
-        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onIncomingCallRinging(
                 context = context,
                 isVideo = mxCall.isVideoCall,
                 roomName = name,
                 roomId = mxCall.roomId,
-                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
 
@@ -818,14 +823,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
         val mxCall = call.mxCall
         // Update service state
-        val name = sessionHolder.getSafeActiveSession()?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onPendingCall(
                 context = context,
                 isVideo = mxCall.isVideoCall,
                 roomName = name,
                 roomId = mxCall.roomId,
-                matrixId = sessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
         executor.execute {

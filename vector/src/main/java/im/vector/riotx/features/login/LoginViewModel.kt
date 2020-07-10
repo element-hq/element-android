@@ -49,9 +49,6 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.ensureTrailingSlash
-import im.vector.riotx.features.call.WebRtcPeerConnectionManager
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
-import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import timber.log.Timber
 import java.util.concurrent.CancellationException
@@ -64,13 +61,10 @@ class LoginViewModel @AssistedInject constructor(
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val pushRuleTriggerListener: PushRuleTriggerListener,
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
-        private val sessionListener: SessionListener,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager)
-    : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
+        private val stringProvider: StringProvider
+) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -667,8 +661,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
-        session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+        session.configureAndStart(applicationContext)
         setState {
             copy(
                     asyncLoginAction = Success(Unit)

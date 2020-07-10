@@ -65,19 +65,19 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(context: Context,
-               glideRequest: GlideRequests,
+               glideRequests: GlideRequests,
                matrixItem: MatrixItem,
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(context, matrixItem)
-        buildGlideRequest(glideRequest, matrixItem.avatarUrl)
+        buildGlideRequest(glideRequests, matrixItem.avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
     }
 
     @AnyThread
     @Throws
-    fun shortcutDrawable(context: Context, glideRequest: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
-        return glideRequest
+    fun shortcutDrawable(context: Context, glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
+        return glideRequests
                 .asBitmap()
                 .apply {
                     val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
@@ -98,8 +98,8 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
-    fun getCachedDrawable(glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
-        return buildGlideRequest(glideRequest, matrixItem.avatarUrl)
+    fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem): Drawable {
+        return buildGlideRequest(glideRequests, matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
                 .submit()
                 .get()
@@ -117,9 +117,9 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     // PRIVATE API *********************************************************************************
 
-    private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
+    private fun buildGlideRequest(glideRequests: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = resolvedUrl(avatarUrl)
-        return glideRequest
+        return glideRequests
                 .load(resolvedUrl)
                 .apply(RequestOptions.circleCropTransform())
     }
