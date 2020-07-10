@@ -55,7 +55,7 @@
         tools:text="@tools:sample/first_names"
         tools:visibility="gone" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/composer_related_message_preview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

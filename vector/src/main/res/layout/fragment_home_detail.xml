@@ -28,7 +28,7 @@
                 android:contentDescription="@string/a11y_open_drawer"
                 tools:src="@tools:sample/avatars" />
 
-            <im.vector.riotx.core.platform.EllipsizingTextView
+            <TextView
                 android:id="@+id/groupToolbarTitleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
