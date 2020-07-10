@@ -16,8 +16,13 @@
 
 package im.vector.matrix.android.internal.session.room.membership.leaving
 
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -31,12 +36,22 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
 
 internal class DefaultLeaveRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val stateEventDataSource: StateEventDataSource
 ) : LeaveRoomTask {
 
     override suspend fun execute(params: LeaveRoomTask.Params) {
-        return executeRequest(eventBus) {
-            apiCall = roomAPI.leave(params.roomId, mapOf("reason" to params.reason))
+        leaveRoom(params.roomId, params.reason)
+    }
+
+    private suspend fun leaveRoom(roomId: String, reason: String?) {
+        val roomCreateStateEvent = stateEventDataSource.getStateEvent(roomId, eventType = EventType.STATE_ROOM_CREATE, stateKey = QueryStringValue.NoCondition)
+        val predecessorRoomId = roomCreateStateEvent?.getClearContent()?.toModel<RoomCreateContent>()?.predecessor?.roomId
+        executeRequest<Unit>(eventBus) {
+            apiCall = roomAPI.leave(roomId, mapOf("reason" to reason))
+        }
+        if (predecessorRoomId != null) {
+            leaveRoom(predecessorRoomId, reason)
         }
     }
 }

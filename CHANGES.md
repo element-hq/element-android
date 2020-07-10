@@ -14,6 +14,7 @@ Bugfix 🐛:
  - Regression Composer does not grow, crops out text (#1650)
  - Bug / Unwanted draft (#698)
  - All users seems to be able to see the enable encryption option in room settings (#1341)
+ - Leave room only leaves the current version (#1656)
 
 Translations 🗣:
  -
