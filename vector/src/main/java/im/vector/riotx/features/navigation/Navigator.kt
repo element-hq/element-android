@@ -23,8 +23,8 @@ import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.settings.VectorSettingsActivity
