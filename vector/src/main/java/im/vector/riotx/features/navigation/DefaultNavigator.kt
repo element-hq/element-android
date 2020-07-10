@@ -118,9 +118,10 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSelfSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val otherSessions = session.cryptoService().getCryptoDeviceInfo(session.myUserId).filter {
-            it.deviceId != session.sessionParams.deviceId
-        }.map { it.deviceId }
+        val otherSessions = session.cryptoService()
+                .getCryptoDeviceInfo(session.myUserId)
+                .filter { it.deviceId != session.sessionParams.deviceId }
+                .map { it.deviceId }
         if (context is VectorBaseActivity) {
             if (otherSessions.isNotEmpty()) {
                 val pr = session.cryptoService().verificationService().requestKeyVerification(
