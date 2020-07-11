@@ -43,7 +43,6 @@ import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
-import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.preference.VectorPreferenceCategory
 import im.vector.riotx.core.utils.openFileSelection
@@ -139,9 +138,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 if (info.isCrossSigningEnabled && info.allPrivateKeysKnown) {
                     // You can setup recovery!
                     secureBackupCategory.isVisible = true
-                    secureBackupPreference.isVisible = true
                     secureBackupPreference.title = getString(R.string.settings_secure_backup_setup)
-                    secureBackupPreference.isEnabled = true
                     secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
                         true
@@ -160,7 +157,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                         // Only option here is to create a new backup if you want?
                         // aka reset
                         secureBackupCategory.isVisible = true
-                        secureBackupPreference.isVisible = true
                         secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
                         secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                             BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
@@ -170,11 +166,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                         // megolm backup is available but we don't have key
                         // you could try to synchronize to get missing megolm key ?
                         secureBackupCategory.isVisible = true
-                        secureBackupPreference.isVisible = true
                         secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
-                        secureBackupPreference.isEnabled = true
                         secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                            (requireActivity() as? VectorBaseActivity)?.let {
+                            vectorActivity.let {
                                 it.navigator.requestSelfSessionVerification(it)
                             }
                             true
@@ -186,11 +180,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     // there is a backup, but this session is not trusted, or is missing some secrets
                     // you should enter passphrase to get them or verify against another session
                     secureBackupCategory.isVisible = true
-                    secureBackupPreference.isVisible = true
                     secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
-                    secureBackupPreference.isEnabled = true
                     secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        (requireActivity() as? VectorBaseActivity)?.let {
+                        vectorActivity.let {
                             it.navigator.requestSelfSessionVerification(it)
                         }
                         true
