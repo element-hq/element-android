@@ -23,18 +23,41 @@ import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 class CreateRoomParams {
+    /**
+     * A public visibility indicates that the room will be shown in the published room list.
+     * A private visibility will hide the room from the published room list.
+     * Rooms default to private visibility if this key is not included.
+     * NB: This should not be confused with join_rules which also uses the word public. One of: ["public", "private"]
+     */
     var visibility: RoomDirectoryVisibility? = null
+
+    /**
+     * The desired room alias local part. If this is included, a room alias will be created and mapped to the newly created room.
+     * The alias will belong on the same homeserver which created the room.
+     * For example, if this was set to "foo" and sent to the homeserver "example.com" the complete room alias would be #foo:example.com.
+     */
     var roomAliasName: String? = null
+
+    /**
+     * If this is not null, an m.room.name event will be sent into the room to indicate the name of the room.
+     * See Room Events for more information on m.room.name.
+     */
     var name: String? = null
+
+    /**
+     * If this is not null, an m.room.topic event will be sent into the room to indicate the topic for the room.
+     * See Room Events for more information on m.room.topic.
+     */
     var topic: String? = null
 
     /**
-     * UserIds to invite
+     * A list of user IDs to invite to the room.
+     * This will tell the server to invite everyone in the list to the newly created room.
      */
     val invitedUserIds = mutableListOf<String>()
 
     /**
-     * ThreePids to invite
+     * A list of objects representing third party IDs to invite into the room.
      */
     val invite3pids = mutableListOf<ThreePid>()
 
@@ -44,12 +67,31 @@ class CreateRoomParams {
      */
     var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
 
+    /**
+     * Convenience parameter for setting various default state events based on a preset. Must be either:
+     * private_chat => join_rules is set to invite. history_visibility is set to shared.
+     * trusted_private_chat => join_rules is set to invite. history_visibility is set to shared. All invitees are given the same power level as the
+     * room creator.
+     * public_chat: => join_rules is set to public. history_visibility is set to shared.
+     */
     var preset: CreateRoomPreset? = null
 
+    /**
+     * This flag makes the server set the is_direct flag on the m.room.member events sent to the users in invite and invite_3pid.
+     * See Direct Messaging for more information.
+     */
     var isDirect: Boolean? = null
 
+    /**
+     * Extra keys to be added to the content of the m.room.create.
+     * The server will clobber the following keys: creator.
+     * Future versions of the specification may allow the server to clobber other keys.
+     */
     var creationContent: Any? = null
 
+    /**
+     * The power level content to override in the default power level event
+     */
     var powerLevelContentOverride: PowerLevelsContent? = null
 
     /**
