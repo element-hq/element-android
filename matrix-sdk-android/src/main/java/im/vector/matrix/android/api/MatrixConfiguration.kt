@@ -33,7 +33,7 @@ data class MatrixConfiguration(
         ),
         /**
          * Optional proxy to connect to the matrix servers
-         * You can create one using for instance Proxy(proxyType, InetSocketAddress(hostname, port)
+         * You can create one using for instance Proxy(proxyType, InetSocketAddress.createUnresolved(hostname, port)
          */
         val proxy: Proxy? = null
 ) {

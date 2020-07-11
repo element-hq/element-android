@@ -62,7 +62,6 @@ import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -472,9 +471,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createLocalEcho(event: Event) {
         checkNotNull(event.roomId) { "Your event should have a roomId" }
-        taskExecutor.executorScope.launch {
-            localEchoRepository.createLocalEcho(event)
-        }
+        localEchoRepository.createLocalEcho(event)
     }
 
     companion object {

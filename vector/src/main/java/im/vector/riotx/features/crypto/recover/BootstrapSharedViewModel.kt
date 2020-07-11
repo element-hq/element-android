@@ -69,7 +69,11 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     init {
 
-        if (args.initCrossSigningOnly) {
+        if (args.forceReset4S) {
+            setState {
+                copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, reset = true))
+            }
+        } else if (args.initCrossSigningOnly) {
             // Go straight to account password
             setState {
                 copy(step = BootstrapStep.AccountPassword(false))
@@ -406,7 +410,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         setState {
                             copy(
                                     recoveryKeyCreationInfo = bootstrapResult.keyInfo,
-                                    step = BootstrapStep.SaveRecoveryKey(false)
+                                    step = BootstrapStep.SaveRecoveryKey(
+                                            // If a passphrase was used, saving key is optional
+                                            state.passphrase != null
+                                    )
                             )
                         }
                     }
@@ -551,7 +558,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
             val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             val args: BootstrapBottomSheet.Args = fragment.arguments?.getParcelable(BootstrapBottomSheet.EXTRA_ARGS)
-                    ?: BootstrapBottomSheet.Args(initCrossSigningOnly = true)
+                    ?: BootstrapBottomSheet.Args(initCrossSigningOnly = true, forceReset4S = false)
             return fragment.bootstrapViewModelFactory.create(state, args)
         }
     }

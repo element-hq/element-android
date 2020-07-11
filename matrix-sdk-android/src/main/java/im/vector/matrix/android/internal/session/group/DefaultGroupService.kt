@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
@@ -33,10 +34,15 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-internal class DefaultGroupService @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : GroupService {
+internal class DefaultGroupService @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                       private val groupFactory: GroupFactory) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
-        return null
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            GroupEntity.where(realm, groupId).findFirst()?.let {
+                groupFactory.create(groupId)
+            }
+        }
     }
 
     override fun getGroupSummary(groupId: String): GroupSummary? {

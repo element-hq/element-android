@@ -15,13 +15,13 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.setup
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.OnClick
@@ -33,6 +33,8 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.PasswordStrengthBar
 import im.vector.riotx.features.settings.VectorLocale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() {
@@ -117,9 +119,9 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
-                AsyncTask.execute {
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
                     val strength = zxcvbn.measure(newValue)
-                    activity?.runOnUiThread {
+                    launch(Dispatchers.Main) {
                         viewModel.passwordStrength.value = strength
                     }
                 }
@@ -176,7 +178,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             else                                                            -> {
                 viewModel.megolmBackupCreationInfo = null
 
-                viewModel.prepareRecoveryKey(activity!!, viewModel.passphrase.value)
+                viewModel.prepareRecoveryKey(requireActivity(), viewModel.passphrase.value)
             }
         }
     }
@@ -188,7 +190,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 
-                viewModel.prepareRecoveryKey(activity!!, null)
+                viewModel.prepareRecoveryKey(requireActivity(), null)
             }
             else                                       -> {
                 // User has entered a passphrase but want to skip this step.

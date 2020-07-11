@@ -36,6 +36,9 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 
     private val behaviorRelay = createRelay()
 
+    val currentValue: T?
+        get() = behaviorRelay.value
+
     override fun observe(): Observable<T> {
         return behaviorRelay.hide().observeOn(AndroidSchedulers.mainThread())
     }

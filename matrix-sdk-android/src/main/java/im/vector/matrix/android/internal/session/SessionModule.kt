@@ -39,7 +39,9 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
-import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
+import im.vector.matrix.android.internal.crypto.verification.VerificationMessageProcessor
+import im.vector.matrix.android.internal.database.DatabaseCleaner
+import im.vector.matrix.android.internal.database.EventInsertLiveObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
@@ -64,16 +66,15 @@ import im.vector.matrix.android.internal.network.httpclient.addSocketFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
-import im.vector.matrix.android.internal.session.call.CallEventObserver
+import im.vector.matrix.android.internal.session.call.CallEventProcessor
 import im.vector.matrix.android.internal.session.download.DownloadProgressInterceptor
-import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
-import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
-import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
-import im.vector.matrix.android.internal.session.room.prune.EventsPruner
-import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationProcessor
+import im.vector.matrix.android.internal.session.room.create.RoomCreateEventProcessor
+import im.vector.matrix.android.internal.session.room.prune.RedactionEventProcessor
+import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventProcessor
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
 import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
@@ -293,31 +294,31 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): SessionLifecycleObserver
+    abstract fun bindEventRedactionProcessor(processor: RedactionEventProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindEventsPruner(pruner: EventsPruner): SessionLifecycleObserver
+    abstract fun bindEventRelationsAggregationProcessor(processor: EventRelationsAggregationProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): SessionLifecycleObserver
+    abstract fun bindRoomTombstoneEventProcessor(processor: RoomTombstoneEventProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): SessionLifecycleObserver
+    abstract fun bindRoomCreateEventProcessor(processor: RoomCreateEventProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): SessionLifecycleObserver
+    abstract fun bindVerificationMessageProcessor(processor: VerificationMessageProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): SessionLifecycleObserver
+    abstract fun bindCallEventProcessor(processor: CallEventProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindCallEventObserver(observer: CallEventObserver): SessionLifecycleObserver
+    abstract fun bindEventInsertObserver(observer: EventInsertLiveObserver): SessionLifecycleObserver
 
     @Binds
     @IntoSet
@@ -334,6 +335,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindDatabaseCleaner(observer: DatabaseCleaner): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService

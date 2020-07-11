@@ -35,7 +35,7 @@
         tools:ignore="MissingConstraints"
         tools:src="@drawable/ic_shield_trusted" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/matrixItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         app:layout_goneMarginStart="0dp"
         tools:text="@sample/matrix.json/data/displayName" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/matrixItemSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

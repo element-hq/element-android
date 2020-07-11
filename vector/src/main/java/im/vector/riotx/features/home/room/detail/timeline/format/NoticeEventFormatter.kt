@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.RoomJoinRules
 import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.model.RoomThirdPartyInviteContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
@@ -40,17 +41,20 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
+import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 
-class NoticeEventFormatter @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+class NoticeEventFormatter @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
                                                private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
                                                private val sp: StringProvider) {
 
-    private fun Event.isSentByCurrentUser() = senderId != null && senderId == sessionHolder.getSafeActiveSession()?.myUserId
+    private val currentUserId: String?
+        get() = activeSessionDataSource.currentValue?.orNull()?.myUserId
+
+    private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -60,6 +64,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
@@ -92,7 +97,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
-        val previousPowerLevelsContent: PowerLevelsContent = event.prevContent.toModel() ?: return null
+        val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.keys)
         userIds.addAll(previousPowerLevelsContent.users.keys)
@@ -120,7 +125,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
-        val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
+        val previousWidgetContent: WidgetContent? = event.resolvedPrevContent().toModel()
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
             if (previousWidgetContent?.isActive().orFalse()) {
@@ -153,6 +158,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(event, senderName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(event, senderName)
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(event, senderName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
@@ -251,6 +257,31 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         }
     }
 
+    private fun formatRoomThirdPartyInvite(event: Event, senderName: String?): CharSequence? {
+        val content = event.getClearContent().toModel<RoomThirdPartyInviteContent>()
+        val prevContent = event.resolvedPrevContent()?.toModel<RoomThirdPartyInviteContent>()
+
+        return when {
+            prevContent != null -> {
+                // Revoke case
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_third_party_revoked_invite_by_you, prevContent.displayName)
+                } else {
+                    sp.getString(R.string.notice_room_third_party_revoked_invite, senderName, prevContent.displayName)
+                }
+            }
+            content != null     -> {
+                // Invitation case
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_third_party_invite_by_you, content.displayName)
+                } else {
+                    sp.getString(R.string.notice_room_third_party_invite, senderName, content.displayName)
+                }
+            }
+            else                -> null
+        }
+    }
+
     private fun formatCallEvent(type: String, event: Event, senderName: String?): CharSequence? {
         return when (type) {
             EventType.CALL_INVITE     -> {
@@ -294,7 +325,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomMemberEvent(event: Event, senderName: String?): String? {
         val eventContent: RoomMemberContent? = event.getClearContent().toModel()
-        val prevEventContent: RoomMemberContent? = event.prevContent.toModel()
+        val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
         return if (isMembershipEvent) {
             buildMembershipNotice(event, senderName, eventContent, prevEventContent)
@@ -305,7 +336,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomAliasesEvent(event: Event, senderName: String?): String? {
         val eventContent: RoomAliasesContent? = event.getClearContent().toModel()
-        val prevEventContent: RoomAliasesContent? = event.unsignedData?.prevContent?.toModel()
+        val prevEventContent: RoomAliasesContent? = event.resolvedPrevContent()?.toModel()
 
         val addedAliases = eventContent?.aliases.orEmpty() - prevEventContent?.aliases.orEmpty()
         val removedAliases = prevEventContent?.aliases.orEmpty() - eventContent?.aliases.orEmpty()
@@ -449,7 +480,6 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {
             Membership.INVITE -> {
-                val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
                     eventContent.thirdPartyInvite != null -> {
                         val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
@@ -466,7 +496,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                             sp.getString(R.string.notice_room_third_party_registered_invite, userWhoHasAccepted, threePidDisplayName)
                         }
                     }
-                    event.stateKey == selfUserId          ->
+                    event.stateKey == currentUserId       ->
                         eventContent.safeReason?.let { reason ->
                             sp.getString(R.string.notice_room_invite_you_with_reason, senderDisplayName, reason)
                         } ?: sp.getString(R.string.notice_room_invite_you, senderDisplayName)

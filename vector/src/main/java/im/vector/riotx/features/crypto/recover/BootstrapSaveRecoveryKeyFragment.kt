@@ -78,7 +78,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
             if (resultCode == RESULT_OK && uri != null) {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        sharedViewModel.handle(BootstrapActions.SaveKeyToUri(context!!.contentResolver!!.openOutputStream(uri)!!))
+                        sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
                     } catch (failure: Throwable) {
                         sharedViewModel.handle(BootstrapActions.SaveReqFailed)
                     }

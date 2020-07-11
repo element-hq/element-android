@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/first_names" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/composer_related_message_preview"
         android:layout_width="0dp"
         android:layout_height="match_parent"

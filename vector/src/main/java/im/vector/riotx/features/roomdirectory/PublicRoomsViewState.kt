@@ -19,7 +19,9 @@ package im.vector.riotx.features.roomdirectory
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 
 data class PublicRoomsViewState(
         // The current filter
@@ -30,11 +32,9 @@ data class PublicRoomsViewState(
         val asyncPublicRoomsRequest: Async<List<PublicRoom>> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = false,
-        // Set of roomIds that the user wants to join
-        val joiningRoomsIds: Set<String> = emptySet(),
-        // Set of roomIds that the user wants to join, but an error occurred
-        val joiningErrorRoomsIds: Set<String> = emptySet(),
         // Set of joined roomId,
         val joinedRoomsIds: Set<String> = emptySet(),
-        val roomDirectoryDisplayName: String? = null
+        // keys are room alias or roomId
+        val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
+        val roomDirectoryData: RoomDirectoryData = RoomDirectoryData()
 ) : MvRxState

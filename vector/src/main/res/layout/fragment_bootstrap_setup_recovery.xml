@@ -43,6 +43,7 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_key_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_key_title"
         app:leftIcon="@drawable/ic_security_key_24dp"
+        app:tint="?attr/riotx_text_primary"
         app:rightIcon="@drawable/ic_arrow_right"
         tools:visibility="visible" />
 
@@ -63,6 +64,7 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_phrase_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_phrase_title"
         app:leftIcon="@drawable/ic_security_phrase_24dp"
+        app:tint="?attr/riotx_text_primary"
         app:rightIcon="@drawable/ic_arrow_right"
         tools:visibility="visible" />
 
@@ -70,5 +72,19 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/vctr_list_divider_color" />
+
+    <TextView
+        android:id="@+id/bootstrapSetupWarningTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/reset_secure_backup_warning"
+        android:textColor="@color/riotx_destructive_accent"
+        android:drawableStart="@drawable/ic_warning_small"
+        android:drawablePadding="4dp"
+        android:textSize="14sp" />
 
 </LinearLayout>

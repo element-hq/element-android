@@ -235,11 +235,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParams(
-                            invitedUserIds = listOf(otherUserId)
-                    )
-                            .setDirectMessage()
-                            .enableEncryptionIfInvitedUsersSupportIt()
+                    val roomParams = CreateRoomParams()
+                            .apply {
+                                invitedUserIds.add(otherUserId)
+                                setDirectMessage()
+                                enableEncryptionIfInvitedUsersSupportIt = true
+                            }
 
                     session.createRoom(roomParams, object : MatrixCallback<String> {
                         override fun onSuccess(data: String) {

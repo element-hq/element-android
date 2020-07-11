@@ -16,26 +16,32 @@
 
 package im.vector.riotx.core.extensions
 
+import android.app.Activity
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.selectTxtFileToWrite
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 fun VectorBaseFragment.addFragment(frameId: Int, fragment: Fragment) {
-    parentFragmentManager.commitTransactionNow { add(frameId, fragment) }
+    parentFragmentManager.commitTransaction { add(frameId, fragment) }
 }
 
 fun <T : Fragment> VectorBaseFragment.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    parentFragmentManager.commitTransactionNow {
+    parentFragmentManager.commitTransaction {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
 fun VectorBaseFragment.replaceFragment(frameId: Int, fragment: Fragment) {
-    parentFragmentManager.commitTransactionNow { replace(frameId, fragment) }
+    parentFragmentManager.commitTransaction { replace(frameId, fragment) }
 }
 
 fun <T : Fragment> VectorBaseFragment.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    parentFragmentManager.commitTransactionNow {
+    parentFragmentManager.commitTransaction {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
@@ -51,21 +57,21 @@ fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragm
 }
 
 fun VectorBaseFragment.addChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    childFragmentManager.commitTransactionNow { add(frameId, fragment, tag) }
+    childFragmentManager.commitTransaction { add(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> VectorBaseFragment.addChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    childFragmentManager.commitTransactionNow {
+    childFragmentManager.commitTransaction {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
 fun VectorBaseFragment.replaceChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    childFragmentManager.commitTransactionNow { replace(frameId, fragment, tag) }
+    childFragmentManager.commitTransaction { replace(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> VectorBaseFragment.replaceChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    childFragmentManager.commitTransactionNow {
+    childFragmentManager.commitTransaction {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
@@ -89,3 +95,27 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
+
+fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
+    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+    selectTxtFileToWrite(
+            activity = requireActivity(),
+            fragment = this,
+            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
+            requestCode = requestCode
+    )
+}
+
+fun Activity.queryExportKeys(userId: String, requestCode: Int) {
+    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+    selectTxtFileToWrite(
+            activity = this,
+            fragment = null,
+            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
+            requestCode = requestCode
+    )
+}

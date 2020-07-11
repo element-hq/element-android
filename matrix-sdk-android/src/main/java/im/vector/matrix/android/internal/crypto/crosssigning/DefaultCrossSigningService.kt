@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
@@ -505,6 +506,11 @@ internal class DefaultCrossSigningService @Inject constructor(
     override fun canCrossSign(): Boolean {
         return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
                 && cryptoStore.getCrossSigningPrivateKeys()?.user != null
+    }
+
+    override fun allPrivateKeysKnown(): Boolean {
+        return checkSelfTrust().isVerified()
+                && cryptoStore.getCrossSigningPrivateKeys()?.allKnown().orFalse()
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {

@@ -65,7 +65,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), it)
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
         }
 
         if (encryptedRoom) {
@@ -175,7 +175,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         }
 
         mTestHelper.doSync<Unit> {
-            samSession.joinRoom(room.roomId, null, it)
+            samSession.joinRoom(room.roomId, null, emptyList(), it)
         }
 
         return samSession
@@ -286,9 +286,11 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createDM(alice: Session, bob: Session): String {
         val roomId = mTestHelper.doSync<String> {
             alice.createRoom(
-                    CreateRoomParams(invitedUserIds = listOf(bob.myUserId))
-                            .setDirectMessage()
-                            .enableEncryptionIfInvitedUsersSupportIt(),
+                    CreateRoomParams().apply {
+                        invitedUserIds.add(bob.myUserId)
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = true
+                    },
                     it
             )
         }

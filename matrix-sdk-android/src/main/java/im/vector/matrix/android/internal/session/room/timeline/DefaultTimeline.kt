@@ -29,17 +29,14 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
-import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.TimelineEventFilter
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.database.query.whereInRoom
 import im.vector.matrix.android.internal.database.query.whereRoomId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -72,7 +69,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val fetchNextTokenAndPaginateTask: FetchNextTokenAndPaginateTask,
+        private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val paginationTask: PaginationTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
@@ -98,9 +95,7 @@ internal class DefaultTimeline(
 
     private lateinit var nonFilteredEvents: RealmResults<TimelineEventEntity>
     private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
-    private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
-
-    private var roomEntity: RoomEntity? = null
+    private lateinit var sendingEvents: RealmResults<TimelineEventEntity>
 
     private var prevDisplayIndex: Int? = null
     private var nextDisplayIndex: Int? = null
@@ -120,20 +115,6 @@ internal class DefaultTimeline(
             return@OrderedRealmCollectionChangeListener
         }
         handleUpdates(results, changeSet)
-    }
-
-    private val relationsListener = OrderedRealmCollectionChangeListener<RealmResults<EventAnnotationsSummaryEntity>> { collection, changeSet ->
-        var hasChange = false
-
-        (changeSet.insertions + changeSet.changes).forEach {
-            val eventRelations = collection[it]
-            if (eventRelations != null) {
-                hasChange = rebuildEvent(eventRelations.eventId) { te ->
-                    te.copy(annotations = eventRelations.asDomain())
-                } || hasChange
-            }
-        }
-        if (hasChange) postSnapshot()
     }
 
     // Public methods ******************************************************************************
@@ -173,26 +154,23 @@ internal class DefaultTimeline(
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
 
-                roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                roomEntity?.sendingTimelineEvents?.addChangeListener { events ->
+                val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+                        ?: throw IllegalStateException("Can't open a timeline without a room")
+
+                sendingEvents = roomEntity.sendingTimelineEvents.where().filterEventsWithSettings().findAll()
+                sendingEvents.addChangeListener { events ->
                     // Remove in memory as soon as they are known by database
                     events.forEach { te ->
                         inMemorySendingEvents.removeAll { te.eventId == it.eventId }
                     }
                     postSnapshot()
                 }
-
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
+                filteredEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
-                nonFilteredEvents.addChangeListener(eventsChangeListener)
-
-                eventRelations = EventAnnotationsSummaryEntity.whereInRoom(realm, roomId)
-                        .findAllAsync()
-                        .also { it.addChangeListener(relationsListener) }
-
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
@@ -213,9 +191,8 @@ internal class DefaultTimeline(
             cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
-                roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
-                if (this::eventRelations.isInitialized) {
-                    eventRelations.removeAllChangeListeners()
+                if (this::sendingEvents.isInitialized) {
+                    sendingEvents.removeAllChangeListeners()
                 }
                 if (this::nonFilteredEvents.isInitialized) {
                     nonFilteredEvents.removeAllChangeListeners()
@@ -314,7 +291,7 @@ internal class DefaultTimeline(
         listeners.clear()
     }
 
-    // TimelineHiddenReadReceipts.Delegate
+// TimelineHiddenReadReceipts.Delegate
 
     override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
         return rebuildEvent(eventId) { te ->
@@ -347,7 +324,7 @@ internal class DefaultTimeline(
         }
     }
 
-    // Private methods *****************************************************************************
+// Private methods *****************************************************************************
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
         return builtEventsIdMap[eventId]?.let { builtIndex ->
@@ -372,7 +349,7 @@ internal class DefaultTimeline(
 
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
-                    hasMoreInCache = firstBuiltEvent == null || firstBuiltEvent.displayIndex < firstCacheEvent?.displayIndex ?: Int.MIN_VALUE,
+                    hasMoreInCache = firstBuiltEvent != null && firstBuiltEvent.displayIndex < firstCacheEvent?.displayIndex ?: Int.MIN_VALUE,
                     hasReachedEnd = chunkEntity?.isLastForward ?: false
             )
         }
@@ -392,6 +369,9 @@ internal class DefaultTimeline(
     private fun paginateInternal(startDisplayIndex: Int?,
                                  direction: Timeline.Direction,
                                  count: Int): Boolean {
+        if (count == 0) {
+            return false
+        }
         updateState(direction) { it.copy(requestedPaginationCount = count, isPaginating = true) }
         val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
         val shouldFetchMore = builtCount < count && !hasReachedEnd(direction)
@@ -411,20 +391,16 @@ internal class DefaultTimeline(
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        val sendingEvents = ArrayList<TimelineEvent>()
+        val builtSendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
-            sendingEvents.addAll(inMemorySendingEvents.filterEventsWithSettings())
-            roomEntity?.sendingTimelineEvents
-                    ?.where()
-                    ?.filterEventsWithSettings()
-                    ?.findAll()
-                    ?.forEach { timelineEventEntity ->
-                        if (sendingEvents.find { it.eventId == timelineEventEntity.eventId } == null) {
-                            sendingEvents.add(timelineEventMapper.map(timelineEventEntity))
-                        }
-                    }
+            builtSendingEvents.addAll(inMemorySendingEvents.filterEventsWithSettings())
+            sendingEvents.forEach { timelineEventEntity ->
+                if (builtSendingEvents.find { it.eventId == timelineEventEntity.eventId } == null) {
+                    builtSendingEvents.add(timelineEventMapper.map(timelineEventEntity))
+                }
+            }
         }
-        return sendingEvents
+        return builtSendingEvents
     }
 
     private fun canPaginate(direction: Timeline.Direction): Boolean {
@@ -525,19 +501,25 @@ internal class DefaultTimeline(
         val currentChunk = getLiveChunk()
         val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {
-            if (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse()) {
-                // We are in the case that next event exists, but we do not know the next token.
-                // Fetch (again) the last event to get a nextToken
-                val lastKnownEventId = nonFilteredEvents.firstOrNull()?.eventId
+            if (direction == Timeline.Direction.BACKWARDS
+                    || (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse())) {
+                // We are in the case where event exists, but we do not know the token.
+                // Fetch (again) the last event to get a token
+                val lastKnownEventId = if (direction == Timeline.Direction.FORWARDS) {
+                    nonFilteredEvents.firstOrNull()?.eventId
+                } else {
+                    nonFilteredEvents.lastOrNull()?.eventId
+                }
                 if (lastKnownEventId == null) {
                     updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
                 } else {
-                    val params = FetchNextTokenAndPaginateTask.Params(
+                    val params = FetchTokenAndPaginateTask.Params(
                             roomId = roomId,
                             limit = limit,
+                            direction = direction.toPaginationDirection(),
                             lastKnownEventId = lastKnownEventId
                     )
-                    cancelableBag += fetchNextTokenAndPaginateTask
+                    cancelableBag += fetchTokenAndPaginateTask
                             .configureWith(params) {
                                 this.callback = createPaginationCallback(limit, direction)
                             }
@@ -766,7 +748,7 @@ internal class DefaultTimeline(
         }
     }
 
-// Extension methods ***************************************************************************
+    // Extension methods ***************************************************************************
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS

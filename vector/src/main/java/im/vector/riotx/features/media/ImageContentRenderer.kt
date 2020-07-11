@@ -19,11 +19,13 @@ package im.vector.riotx.features.media
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION_USE_EXIF
 import com.github.piasy.biv.view.BigImageView
@@ -42,21 +44,29 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.math.min
 
+interface AttachmentData : Parcelable {
+    val eventId: String
+    val filename: String
+    val mimeType: String?
+    val url: String?
+    val elementToDecrypt: ElementToDecrypt?
+}
+
 class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
 
     @Parcelize
     data class Data(
-            val eventId: String,
-            val filename: String,
-            val mimeType: String?,
-            val url: String?,
-            val elementToDecrypt: ElementToDecrypt?,
+            override val eventId: String,
+            override val filename: String,
+            override val mimeType: String?,
+            override val url: String?,
+            override val elementToDecrypt: ElementToDecrypt?,
             val height: Int?,
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int
-    ) : Parcelable {
+    ) : AttachmentData {
 
         fun isLocalFile() = url.isLocalFile()
     }
@@ -93,6 +103,25 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
+    fun render(data: Data, contextView: View, target: CustomViewTarget<*, Drawable>) {
+        val req = if (data.elementToDecrypt != null) {
+            // Encrypted image
+            GlideApp
+                    .with(contextView)
+                    .load(data)
+        } else {
+            // Clear image
+            val resolvedUrl = activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
+            GlideApp
+                    .with(contextView)
+                    .load(resolvedUrl)
+        }
+
+        req.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .fitCenter()
+                .into(target)
+    }
+
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
         val size = processSize(data, mode)
 
@@ -119,6 +148,45 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                     }
                 })
                 .fitCenter()
+                .into(imageView)
+    }
+
+    fun renderThumbnailDontTransform(data: Data, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
+        // a11y
+        imageView.contentDescription = data.filename
+
+        val req = if (data.elementToDecrypt != null) {
+            // Encrypted image
+            GlideApp
+                    .with(imageView)
+                    .load(data)
+        } else {
+            // Clear image
+            val resolvedUrl = activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
+            GlideApp
+                    .with(imageView)
+                    .load(resolvedUrl)
+        }
+
+        req.listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?,
+                                      model: Any?,
+                                      target: Target<Drawable>?,
+                                      isFirstResource: Boolean): Boolean {
+                callback?.invoke(false)
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?,
+                                         model: Any?,
+                                         target: Target<Drawable>?,
+                                         dataSource: DataSource?,
+                                         isFirstResource: Boolean): Boolean {
+                callback?.invoke(true)
+                return false
+            }
+        })
+                .dontTransform()
                 .into(imageView)
     }
 

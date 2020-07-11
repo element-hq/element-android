@@ -46,7 +46,8 @@ import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.workers.signout.SignOutViewModel
+import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.riotx.features.workers.signout.ServerBackupStatusViewState
 import im.vector.riotx.push.fcm.FcmHelper
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
@@ -60,12 +61,15 @@ data class HomeActivityArgs(
         val accountCreation: Boolean
 ) : Parcelable
 
-class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory {
+class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory, ServerBackupStatusViewModel.Factory {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
+
+    private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
+    @Inject lateinit var  serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -90,6 +94,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
         return unknownDeviceViewModelFactory.create(initialState)
+    }
+
+    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
+        return serverBackupviewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,7 +185,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            it.navigator.waitSessionVerification(it)
+            if (event.waitForIncomingRequest) {
+                it.navigator.waitSessionVerification(it)
+            } else {
+                it.navigator.requestSelfSessionVerification(it)
+            }
         }
     }
 
@@ -230,7 +242,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         }
 
         // Force remote backup state update to update the banner if needed
-        viewModelProvider.get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
+        serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
     }
 
     override fun configure(toolbar: Toolbar) {

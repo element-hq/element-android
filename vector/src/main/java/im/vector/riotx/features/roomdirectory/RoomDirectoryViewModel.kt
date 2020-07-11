@@ -26,6 +26,7 @@ import com.airbnb.mvrx.appendAt
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -63,18 +64,10 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
     private var currentTask: Cancelable? = null
 
-    // Default RoomDirectoryData
-    private var roomDirectoryData = RoomDirectoryData()
-
     init {
-        setState {
-            copy(
-                    roomDirectoryDisplayName = roomDirectoryData.displayName
-            )
-        }
-
         // Observe joined room (from the sync)
         observeJoinedRooms()
+        observeMembershipChanges()
     }
 
     private fun observeJoinedRooms() {
@@ -91,14 +84,17 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                             ?: emptySet()
 
                     setState {
-                        copy(
-                                joinedRoomsIds = joinedRoomIds,
-                                // Remove (newly) joined room id from the joining room list
-                                joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { removeAll(joinedRoomIds) },
-                                // Remove (newly) joined room id from the joining room list in error
-                                joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { removeAll(joinedRoomIds) }
-                        )
+                        copy(joinedRoomsIds = joinedRoomIds)
                     }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .subscribe {
+                    setState { copy(changeMembershipStates = it) }
                 }
                 .disposeOnClear()
     }
@@ -112,15 +108,15 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         }
     }
 
-    private fun setRoomDirectoryData(action: RoomDirectoryAction.SetRoomDirectoryData) {
-        if (this.roomDirectoryData == action.roomDirectoryData) {
-            return
+    private fun setRoomDirectoryData(action: RoomDirectoryAction.SetRoomDirectoryData) = withState {
+        if (it.roomDirectoryData == action.roomDirectoryData) {
+            return@withState
         }
-
-        this.roomDirectoryData = action.roomDirectoryData
-
+        setState {
+            copy(roomDirectoryData = action.roomDirectoryData)
+        }
         reset("")
-        load("")
+        load("", action.roomDirectoryData)
     }
 
     private fun filterWith(action: RoomDirectoryAction.FilterWith) = withState { state ->
@@ -128,7 +124,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             currentTask?.cancel()
 
             reset(action.filter)
-            load(action.filter)
+            load(action.filter, state.roomDirectoryData)
         }
     }
 
@@ -141,7 +137,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                     publicRooms = emptyList(),
                     asyncPublicRoomsRequest = Loading(),
                     hasMore = false,
-                    roomDirectoryDisplayName = roomDirectoryData.displayName,
                     currentFilter = newFilter
             )
         }
@@ -154,12 +149,11 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                         asyncPublicRoomsRequest = Loading()
                 )
             }
-
-            load(state.currentFilter)
+            load(state.currentFilter, state.roomDirectoryData)
         }
     }
 
-    private fun load(filter: String) {
+    private fun load(filter: String, roomDirectoryData: RoomDirectoryData) {
         currentTask = session.getPublicRooms(roomDirectoryData.homeServer,
                 PublicRoomsParams(
                         limit = PUBLIC_ROOMS_LIMIT,
@@ -204,19 +198,16 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     }
 
     private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
-        if (state.joiningRoomsIds.contains(action.roomId)) {
+        val roomMembershipChange = state.changeMembershipStates[action.roomId]
+        if (roomMembershipChange?.isInProgress().orFalse()) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-
-        setState {
-            copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(action.roomId) }
-            )
-        }
-
-        session.joinRoom(action.roomAlias ?: action.roomId, callback = object : MatrixCallback<Unit> {
+        val viaServers = state.roomDirectoryData.homeServer?.let {
+            listOf(it)
+        } ?: emptyList()
+        session.joinRoom(action.roomId, viaServers = viaServers, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -225,20 +216,12 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             override fun onFailure(failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomDirectoryViewEvents.Failure(failure))
-
-                setState {
-                    copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(action.roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(action.roomId) }
-                    )
-                }
             }
         })
     }
 
     override fun onCleared() {
         super.onCleared()
-
         currentTask?.cancel()
     }
 }

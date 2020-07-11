@@ -114,4 +114,10 @@
         <attr name="forceStartPadding" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="SignoutBottomSheetActionButton">
+        <attr name="iconTint" format="color" />
+        <attr name="actionTitle"/>
+        <attr name="leftIcon" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
 </resources>

@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.setup
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
@@ -25,12 +26,9 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.queryExportKeys
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
-import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
 
@@ -95,7 +93,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .show()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
-                    exportKeysManually()
+                    queryExportKeys(session.myUserId, REQUEST_CODE_SAVE_MEGOLM_EXPORT)
                 }
             }
         }
@@ -127,50 +125,45 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         })
     }
 
-    private fun exportKeysManually() {
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
-                        this,
-                        PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                        R.string.permissions_rationale_msg_keys_backup_export)) {
-            ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
-                override fun onPassphrase(passphrase: String) {
-                    showWaitingView()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_SAVE_MEGOLM_EXPORT) {
+            val uri = data?.data
+            if (resultCode == Activity.RESULT_OK && uri != null) {
+                ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
+                    override fun onPassphrase(passphrase: String) {
+                        showWaitingView()
 
-                    KeysExporter(session)
-                            .export(this@KeysBackupSetupActivity,
-                                    passphrase,
-                                    object : MatrixCallback<String> {
-                                        override fun onSuccess(data: String) {
-                                            hideWaitingView()
-
-                                            AlertDialog.Builder(this@KeysBackupSetupActivity)
-                                                    .setMessage(getString(R.string.encryption_export_saved_as, data))
-                                                    .setCancelable(false)
-                                                    .setPositiveButton(R.string.ok) { _, _ ->
-                                                        val resultIntent = Intent()
-                                                        resultIntent.putExtra(MANUAL_EXPORT, true)
-                                                        setResult(RESULT_OK, resultIntent)
+                        KeysExporter(session)
+                                .export(this@KeysBackupSetupActivity,
+                                        passphrase,
+                                        uri,
+                                        object : MatrixCallback<Boolean> {
+                                            override fun onSuccess(data: Boolean) {
+                                                if (data) {
+                                                    toast(getString(R.string.encryption_exported_successfully))
+                                                    Intent().apply {
+                                                        putExtra(MANUAL_EXPORT, true)
+                                                    }.let {
+                                                        setResult(Activity.RESULT_OK, it)
                                                         finish()
                                                     }
-                                                    .show()
-                                        }
+                                                }
+                                                hideWaitingView()
+                                            }
 
-                                        override fun onFailure(failure: Throwable) {
-                                            toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
-                                            hideWaitingView()
-                                        }
-                                    })
-                }
-            })
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
-                exportKeysManually()
+                                            override fun onFailure(failure: Throwable) {
+                                                toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
+                                                hideWaitingView()
+                                            }
+                                        })
+                    }
+                })
+            } else {
+                toast(getString(R.string.unexpected_error))
+                hideWaitingView()
             }
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
@@ -205,6 +198,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         const val KEYS_VERSION = "KEYS_VERSION"
         const val MANUAL_EXPORT = "MANUAL_EXPORT"
         const val EXTRA_SHOW_MANUAL_EXPORT = "SHOW_MANUAL_EXPORT"
+        const val REQUEST_CODE_SAVE_MEGOLM_EXPORT = 101
 
         fun intent(context: Context, showManualExport: Boolean): Intent {
             val intent = Intent(context, KeysBackupSetupActivity::class.java)

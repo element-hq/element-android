@@ -424,6 +424,33 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
     }
 }
 
+/**
+ * Ask the user to select a location and a file name to write in
+ */
+fun selectTxtFileToWrite(
+        activity: Activity,
+        fragment: Fragment?,
+        defaultFileName: String,
+        chooserHint: String,
+        requestCode: Int
+) {
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+    intent.addCategory(Intent.CATEGORY_OPENABLE)
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_TITLE, defaultFileName)
+
+    try {
+        val chooserIntent = Intent.createChooser(intent, chooserHint)
+        if (fragment != null) {
+            fragment.startActivityForResult(chooserIntent, requestCode)
+        } else {
+            activity.startActivityForResult(chooserIntent, requestCode)
+        }
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}
+
 // ==============================================================================================================
 // Media utils
 // ==============================================================================================================

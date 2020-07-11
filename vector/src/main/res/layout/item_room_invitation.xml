@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roomInvitationAvatarImageView"
         tools:layout_marginStart="20dp" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/roomInvitationNameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/matrix.json/data/displayName" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/roomInvitationSubTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

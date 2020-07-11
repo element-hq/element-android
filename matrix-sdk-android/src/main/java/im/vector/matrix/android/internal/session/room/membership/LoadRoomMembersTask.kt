@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.getOrCreate
@@ -76,7 +77,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                     continue
                 }
                 val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

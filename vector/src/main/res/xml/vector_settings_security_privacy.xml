@@ -49,6 +49,23 @@
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY"
+        android:title="@string/settings_secure_backup_section_title">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY"
+            android:persistent="false"
+            android:icon="@drawable/ic_secure_backup"
+            android:title="@string/settings_secure_backup_setup" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_secure_backup_section_info" />
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
         android:title="@string/settings_cryptography_manage_keys">
 

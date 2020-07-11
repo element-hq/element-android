@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -204,7 +205,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
 
         for (stateEvent in stateEvents) {
             val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
-            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
+            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
             if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null) {
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
@@ -217,7 +218,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             }
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                 val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                     event.prevContent
@@ -240,12 +241,13 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 chunksToDelete.add(it)
             }
         }
-        val shouldUpdateSummary = chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS
         chunksToDelete.forEach {
             it.deleteOnCascade()
         }
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
+        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
+                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
-            val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
             val latestPreviewableEvent = TimelineEventEntity.latestEvent(
                     realm,
                     roomId,

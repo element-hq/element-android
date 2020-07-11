@@ -25,6 +25,7 @@ import io.realm.annotations.RealmModule
         classes = [
             ChunkEntity::class,
             EventEntity::class,
+            EventInsertEntity::class,
             TimelineEventEntity::class,
             FilterEntity::class,
             GroupEntity::class,

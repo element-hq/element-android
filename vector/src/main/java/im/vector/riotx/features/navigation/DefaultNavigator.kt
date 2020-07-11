@@ -19,7 +19,6 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.core.app.ActivityOptionsCompat
@@ -29,6 +28,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.MatrixItem
@@ -49,11 +49,9 @@ import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
+import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.BigImageViewerActivity
-import im.vector.riotx.features.media.ImageContentRenderer
-import im.vector.riotx.features.media.ImageMediaViewerActivity
-import im.vector.riotx.features.media.VideoContentRenderer
-import im.vector.riotx.features.media.VideoMediaViewerActivity
+import im.vector.riotx.features.media.VectorAttachmentViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -89,7 +87,8 @@ class DefaultNavigator @Inject constructor(
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId) ?: return
+        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
+                ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
@@ -116,6 +115,27 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
+    override fun requestSelfSessionVerification(context: Context) {
+        val session = sessionHolder.getSafeActiveSession() ?: return
+        val otherSessions = session.cryptoService()
+                .getCryptoDeviceInfo(session.myUserId)
+                .filter { it.deviceId != session.sessionParams.deviceId }
+                .map { it.deviceId }
+        if (context is VectorBaseActivity) {
+            if (otherSessions.isNotEmpty()) {
+                val pr = session.cryptoService().verificationService().requestKeyVerification(
+                        supportedVerificationMethodsProvider.provide(),
+                        session.myUserId,
+                        otherSessions)
+                VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
+                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            } else {
+                VerificationBottomSheet.forSelfVerification(session)
+                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            }
+        }
+    }
+
     override fun waitSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         if (context is VectorBaseActivity) {
@@ -126,7 +146,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly)
+            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly, false)
         }
     }
 
@@ -159,8 +179,8 @@ class DefaultNavigator @Inject constructor(
         activity.finish()
     }
 
-    override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
-        val intent = RoomPreviewActivity.getIntent(context, publicRoom)
+    override fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData) {
+        val intent = RoomPreviewActivity.getIntent(context, publicRoom, roomDirectoryData)
         context.startActivity(intent)
     }
 
@@ -199,7 +219,14 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
-        context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+        // if cross signing is enabled we should propose full 4S
+        sessionHolder.getSafeActiveSession()?.let { session ->
+            if (session.cryptoService().crossSigningService().canCrossSign() && context is VectorBaseActivity) {
+                BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
+            } else {
+                context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+            }
+        }
     }
 
     override fun openKeysBackupManager(context: Context) {
@@ -216,7 +243,8 @@ class DefaultNavigator @Inject constructor(
                 ?.let { avatarUrl ->
                     val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
+                                ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
@@ -244,27 +272,32 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
-    override fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
-        val pairs = ArrayList<Pair<View, String>>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    override fun openMediaViewer(activity: Activity,
+                                 roomId: String,
+                                 mediaData: AttachmentData,
+                                 view: View,
+                                 inMemory: List<AttachmentData>,
+                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+        VectorAttachmentViewerActivity.newIntent(activity,
+                mediaData,
+                roomId,
+                mediaData.eventId,
+                inMemory,
+                ViewCompat.getTransitionName(view)).let { intent ->
+            val pairs = ArrayList<Pair<View, String>>()
             activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
                 pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
             }
             activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
                 pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
             }
+
+            pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+            options?.invoke(pairs)
+
+            val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
+            activity.startActivity(intent, bundle)
         }
-        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-        options?.invoke(pairs)
-
-        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
-        activity.startActivity(intent, bundle)
-    }
-
-    override fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data) {
-        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
-        activity.startActivity(intent)
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

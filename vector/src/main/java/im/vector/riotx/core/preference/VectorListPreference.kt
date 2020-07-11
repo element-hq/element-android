@@ -90,8 +90,6 @@ class VectorListPreference : ListPreference {
     fun setWarningIconVisible(isVisible: Boolean) {
         mIsWarningIconVisible = isVisible
 
-        if (null != mWarningIconView) {
-            mWarningIconView!!.visibility = if (mIsWarningIconVisible) View.VISIBLE else View.GONE
-        }
+        mWarningIconView?.visibility = if (mIsWarningIconVisible) View.VISIBLE else View.GONE
     }
 }

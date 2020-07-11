@@ -35,13 +35,6 @@ interface RoomDirectoryService {
                        callback: MatrixCallback<PublicRoomsResponse>): Cancelable
 
     /**
-     * Join a room by id, or room alias
-     */
-    fun joinRoom(roomIdOrAlias: String,
-                 reason: String? = null,
-                 callback: MatrixCallback<Unit>): Cancelable
-
-    /**
      * Fetches the overall metadata about protocols supported by the homeserver.
      * Includes both the available protocols and all fields required for queries against each protocol.
      */

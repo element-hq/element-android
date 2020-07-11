@@ -35,7 +35,6 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val groupIds: List<String>,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -48,14 +47,11 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
-        val results = params.groupIds.map { groupId ->
-            runCatching { fetchGroupData(groupId) }
-        }
-        val isSuccessful = results.none { it.isFailure }
-        return if (isSuccessful) Result.success() else Result.retry()
-    }
-
-    private suspend fun fetchGroupData(groupId: String) {
-        getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
+        return runCatching {
+            getGroupDataTask.execute(GetGroupDataTask.Params.FetchAllActive)
+        }.fold(
+                { Result.success() },
+                { Result.retry() }
+        )
     }
 }

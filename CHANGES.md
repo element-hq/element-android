@@ -1,4 +1,42 @@
-Changes in Riot.imX 0.91.4 (2020-XX-XX)
+Changes in Riot.imX 0.91.5 (2020-07-11)
+===================================================
+
+Features ✨:
+ - 3pid invite: it is now possible to invite people by email. An Identity Server has to be configured (#548)
+
+Improvements 🙌:
+ - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
+ - Creating and listening to EventInsertEntity. (#1634)
+ - Handling (almost) properly the groups fetching (#1634)
+ - Improve fullscreen media display (#327)
+ - Setup server recovery banner (#1648)
+ - Set up SSSS from security settings (#1567)
+ - New lab setting to add 'unread notifications' tab to main screen
+ - Render third party invite event (#548)
+ - Display three pid invites in the room members list (#548)
+
+Bugfix 🐛:
+ - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
+ - Regression Composer does not grow, crops out text (#1650)
+ - Bug / Unwanted draft (#698)
+ - All users seems to be able to see the enable encryption option in room settings (#1341)
+ - Leave room only leaves the current version (#1656)
+ - Regression |  Share action menu do not work (#1647)
+ - verification issues on transition (#1555)
+ - Fix issue when restoring keys backup using recovery key
+
+SDK API changes ⚠️:
+ - CreateRoomParams has been updated
+
+Build 🧱:
+ - Upgrade some dependencies
+ - Revert to build-tools 3.5.3
+
+Other changes:
+ - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
+ - Use `Context#withStyledAttributes` extension function (#1546)
+
+Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================
 
 Features ✨:
@@ -16,7 +54,7 @@ Bugfix 🐛:
 
 Build 🧱:
  - Fix lint false-positive about WorkManager (#1012)
- - Upgrade build-tools from 3.5.3 to 3.6.6
+ - Upgrade build-tools from 3.5.3 to 3.6.3
  - Upgrade gradle from 5.4.1 to 5.6.4
 
 Changes in Riot.imX 0.91.3 (2020-07-01)

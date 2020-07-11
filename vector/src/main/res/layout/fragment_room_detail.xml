@@ -43,7 +43,7 @@
                 tools:ignore="MissingConstraints"
                 tools:src="@drawable/ic_shield_trusted" />
 
-            <im.vector.riotx.core.platform.EllipsizingTextView
+            <TextView
                 android:id="@+id/roomToolbarTitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@sample/matrix.json/data/roomName" />
 
-            <im.vector.riotx.core.platform.EllipsizingTextView
+            <TextView
                 android:id="@+id/roomToolbarSubtitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

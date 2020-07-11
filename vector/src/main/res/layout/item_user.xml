@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/itemUserId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@sample/matrix.json/data/mxid" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/itemUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

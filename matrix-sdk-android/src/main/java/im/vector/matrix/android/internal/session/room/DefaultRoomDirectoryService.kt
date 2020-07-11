@@ -24,13 +24,11 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProt
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
 import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
-import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(private val getPublicRoomTask: GetPublicRoomTask,
-                                                               private val joinRoomTask: JoinRoomTask,
                                                                private val getThirdPartyProtocolsTask: GetThirdPartyProtocolsTask,
                                                                private val taskExecutor: TaskExecutor) : RoomDirectoryService {
 
@@ -39,14 +37,6 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
                                 callback: MatrixCallback<PublicRoomsResponse>): Cancelable {
         return getPublicRoomTask
                 .configureWith(GetPublicRoomTask.Params(server, publicRoomsParams)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    override fun joinRoom(roomIdOrAlias: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
-        return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomIdOrAlias, reason)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.securestorage
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
@@ -120,6 +121,13 @@ interface SharedSecretStorageService {
     fun isRecoverySetup(): Boolean {
         return checkShouldBeAbleToAccessSecrets(
                 secretNames = listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                keyId = null
+        ) is IntegrityResult.Success
+    }
+
+    fun isMegolmKeyInBackup(): Boolean {
+        return checkShouldBeAbleToAccessSecrets(
+                secretNames = listOf(KEYBACKUP_SECRET_SSSS_NAME),
                 keyId = null
         ) is IntegrityResult.Success
     }

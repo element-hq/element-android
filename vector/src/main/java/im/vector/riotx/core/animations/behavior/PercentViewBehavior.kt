@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.withStyledAttributes
 
 import im.vector.riotx.R
 import kotlin.math.abs
@@ -67,19 +68,19 @@ class PercentViewBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
     private var isPrepared: Boolean = false
 
     init {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.PercentViewBehavior)
-        dependViewId = a.getResourceId(R.styleable.PercentViewBehavior_behavior_dependsOn, 0)
-        dependType = a.getInt(R.styleable.PercentViewBehavior_behavior_dependType, DEPEND_TYPE_WIDTH)
-        dependTarget = a.getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_dependTarget, UNSPECIFIED_INT)
-        targetX = a.getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetX, UNSPECIFIED_INT)
-        targetY = a.getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetY, UNSPECIFIED_INT)
-        targetWidth = a.getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetWidth, UNSPECIFIED_INT)
-        targetHeight = a.getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetHeight, UNSPECIFIED_INT)
-        targetBackgroundColor = a.getColor(R.styleable.PercentViewBehavior_behavior_targetBackgroundColor, UNSPECIFIED_INT)
-        targetAlpha = a.getFloat(R.styleable.PercentViewBehavior_behavior_targetAlpha, UNSPECIFIED_FLOAT)
-        targetRotateX = a.getFloat(R.styleable.PercentViewBehavior_behavior_targetRotateX, UNSPECIFIED_FLOAT)
-        targetRotateY = a.getFloat(R.styleable.PercentViewBehavior_behavior_targetRotateY, UNSPECIFIED_FLOAT)
-        a.recycle()
+        context.withStyledAttributes(attrs, R.styleable.PercentViewBehavior) {
+            dependViewId = getResourceId(R.styleable.PercentViewBehavior_behavior_dependsOn, 0)
+            dependType = getInt(R.styleable.PercentViewBehavior_behavior_dependType, DEPEND_TYPE_WIDTH)
+            dependTarget = getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_dependTarget, UNSPECIFIED_INT)
+            targetX = getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetX, UNSPECIFIED_INT)
+            targetY = getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetY, UNSPECIFIED_INT)
+            targetWidth = getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetWidth, UNSPECIFIED_INT)
+            targetHeight = getDimensionPixelOffset(R.styleable.PercentViewBehavior_behavior_targetHeight, UNSPECIFIED_INT)
+            targetBackgroundColor = getColor(R.styleable.PercentViewBehavior_behavior_targetBackgroundColor, UNSPECIFIED_INT)
+            targetAlpha = getFloat(R.styleable.PercentViewBehavior_behavior_targetAlpha, UNSPECIFIED_FLOAT)
+            targetRotateX = getFloat(R.styleable.PercentViewBehavior_behavior_targetRotateX, UNSPECIFIED_FLOAT)
+            targetRotateY = getFloat(R.styleable.PercentViewBehavior_behavior_targetRotateY, UNSPECIFIED_FLOAT)
+        }
     }
 
     private fun prepare(parent: CoordinatorLayout, child: View, dependency: View) {

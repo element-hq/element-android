@@ -71,8 +71,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             delay(1500)
             cryptoStore.getOrAddOutgoingSecretShareRequest(secretName, recipients)?.let {
                 // TODO check if there is already one that is being sent?
-                if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {
-                    Timber.v("## CRYPTO - GOSSIP sendSecretShareRequest() : we already request for that session: $it")
+                if (it.state == OutgoingGossipingRequestState.SENDING /**|| it.state == OutgoingGossipingRequestState.SENT*/) {
+                    Timber.v("## CRYPTO - GOSSIP sendSecretShareRequest() : we are already sending for that session: $it")
                     return@launch
                 }
 
