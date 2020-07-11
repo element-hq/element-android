@@ -20,6 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
@@ -104,6 +105,13 @@ class RoomSettingsController @Inject constructor(
                 action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
         )
 
+        buildEncryptionAction(data.actionPermissions, roomSummary)
+    }
+
+    private fun buildEncryptionAction(actionPermissions: RoomSettingsViewState.ActionPermissions, roomSummary: RoomSummary) {
+        if (!actionPermissions.canEnableEncryption) {
+            return
+        }
         if (roomSummary.isEncrypted) {
             buildProfileAction(
                     id = "encryption",

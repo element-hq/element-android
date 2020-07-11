@@ -22,7 +22,9 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
@@ -32,7 +34,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.roomdirectory.JoinState
 import timber.log.Timber
 
-class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: RoomPreviewViewState,
+class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
                                                        private val session: Session)
     : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
@@ -52,30 +54,41 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
 
     init {
         // Observe joined room (from the sync)
-        observeJoinedRooms()
+        observeRoomSummary()
+        observeMembershipChanges()
     }
 
-    private fun observeJoinedRooms() {
+    private fun observeRoomSummary() {
         val queryParams = roomSummaryQueryParams {
-            memberships = listOf(Membership.JOIN)
+            roomId = QueryStringValue.Equals(initialState.roomId)
         }
         session
                 .rx()
                 .liveRoomSummaries(queryParams)
                 .subscribe { list ->
-                    withState { state ->
-                        val isRoomJoined = list
-                                ?.map { it.roomId }
-                                ?.toList()
-                                ?.contains(state.roomId) == true
+                    val isRoomJoined = list.any {
+                        it.membership == Membership.JOIN
+                    }
+                    if (isRoomJoined) {
+                        setState { copy(roomJoinState = JoinState.JOINED) }
+                    }
+                }
+                .disposeOnClear()
+    }
 
-                        if (isRoomJoined) {
-                            setState {
-                                copy(
-                                        roomJoinState = JoinState.JOINED
-                                )
-                            }
-                        }
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .subscribe {
+                    val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
+                    val joinState = when (changeMembership) {
+                        is ChangeMembershipState.Joining       -> JoinState.JOINING
+                        is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
+                        // Other cases are handled by room summary
+                        else                                   -> null
+                    }
+                    if (joinState != null) {
+                        setState { copy(roomJoinState = joinState) }
                     }
                 }
                 .disposeOnClear()
@@ -83,37 +96,27 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
 
     override fun handle(action: RoomPreviewAction) {
         when (action) {
-            is RoomPreviewAction.Join -> handleJoinRoom(action)
+            is RoomPreviewAction.Join -> handleJoinRoom()
         }.exhaustive
     }
 
-    private fun handleJoinRoom(action: RoomPreviewAction.Join) = withState { state ->
+    private fun handleJoinRoom() = withState { state ->
         if (state.roomJoinState == JoinState.JOINING) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-
-        setState {
-            copy(
-                    roomJoinState = JoinState.JOINING,
-                    lastError = null
-            )
-        }
-
-        session.joinRoom(action.roomAlias ?: state.roomId, callback = object : MatrixCallback<Unit> {
+        val viaServers = state.homeServer?.let {
+            listOf(it)
+        } ?: emptyList()
+        session.joinRoom(state.roomId, viaServers = viaServers, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             }
 
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            roomJoinState = JoinState.JOINING_ERROR,
-                            lastError = failure
-                    )
-                }
+                setState { copy(lastError = failure) }
             }
         })
     }

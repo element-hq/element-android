@@ -22,6 +22,7 @@ import android.view.View
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.MatrixItem
@@ -49,7 +50,7 @@ interface Navigator {
 
     fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)
 
-    fun openRoomPreview(publicRoom: PublicRoom, context: Context)
+    fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
 
     fun openCreateRoom(context: Context, initialName: String = "")
 

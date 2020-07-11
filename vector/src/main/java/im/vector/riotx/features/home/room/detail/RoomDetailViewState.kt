@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -64,6 +65,7 @@ data class RoomDetailViewState(
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true,
+        val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
         val canSendMessage: Boolean = true
 ) : MvRxState {
 

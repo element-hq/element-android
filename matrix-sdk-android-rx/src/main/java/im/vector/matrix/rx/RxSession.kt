@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -171,6 +172,10 @@ class RxSession(private val session: Session) {
                 .startWithCallable {
                     session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
                 }
+    }
+
+    fun liveRoomChangeMembershipState(): Observable<Map<String, ChangeMembershipState>> {
+        return session.getChangeMembershipsLive().asObservable()
     }
 
     fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {

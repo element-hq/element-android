@@ -37,7 +37,7 @@
             android:textStyle="bold"
             tools:text="name" />
 
-        <im.vector.riotx.core.platform.EllipsizingTextView
+        <TextView
             android:id="@+id/itemAutocompleteEmojiSubname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -39,5 +39,10 @@ data class UnsignedData(
          * Optional. The previous content for this event. If there is no previous content, this key will be missing.
          */
         @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
-        @Json(name = "m.relations") val relations: AggregatedRelations? = null
+        @Json(name = "m.relations") val relations: AggregatedRelations? = null,
+        /**
+         * Optional. The eventId of the previous state event being replaced.
+         */
+        @Json(name = "replaces_state") val replacesState: String? = null
+
 )

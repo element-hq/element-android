@@ -109,7 +109,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                 return
             }
             val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
-            when (event.getClearType()) {
+            when (event.type) {
                 EventType.REACTION             -> {
                     // we got a reaction!!
                     Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
@@ -161,7 +161,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                     if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE
                             || encryptedEventContent?.relatesTo?.type == RelationType.RESPONSE
                     ) {
-                        // we need to decrypt if needed
                         event.getClearContent().toModel<MessageContent>()?.let {
                             if (encryptedEventContent.relatesTo.type == RelationType.REPLACE) {
                                 Timber.v("###REPLACE in room $roomId for event ${event.eventId}")

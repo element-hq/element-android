@@ -23,7 +23,7 @@
         android:layout_marginTop="4dp"
         tools:src="@tools:sample/avatars" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/messageMemberNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

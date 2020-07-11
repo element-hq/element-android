@@ -13,6 +13,11 @@ Improvements 🙌:
  - Set up SSSS from security settings (#1567)
 
 Bugfix 🐛:
+ - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
+ - Regression Composer does not grow, crops out text (#1650)
+ - Bug / Unwanted draft (#698)
+ - All users seems to be able to see the enable encryption option in room settings (#1341)
+ - Leave room only leaves the current version (#1656)
  - Regression |  Share action menu do not work (#1647)
  - verification issues on transition (#1555)
  - Fix issue when restoring keys backup using recovery key

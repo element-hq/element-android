@@ -19,5 +19,5 @@ package im.vector.riotx.features.roomdirectory.roompreview
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class RoomPreviewAction : VectorViewModelAction {
-    data class Join(val roomAlias: String?) : RoomPreviewAction()
+    object Join : RoomPreviewAction()
 }

@@ -36,7 +36,7 @@
             android:visibility="visible" />
     </FrameLayout>
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/knownUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/knownUserID"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

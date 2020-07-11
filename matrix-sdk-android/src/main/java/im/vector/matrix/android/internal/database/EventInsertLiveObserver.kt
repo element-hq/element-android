@@ -72,7 +72,7 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                         it.process(realm, domainEvent)
                     }
                 }
-                realm.where(EventInsertEntity::class.java).findAll().deleteAllFromRealm()
+                realm.delete(EventInsertEntity::class.java)
             }
         }
     }
@@ -88,8 +88,8 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
             } catch (e: MXCryptoError) {
-                Timber.v("Call service: Failed to decrypt event")
-                // TODO -> we should keep track of this and retry, or aggregation will be broken
+                Timber.v("Failed to decrypt event")
+                // TODO -> we should keep track of this and retry, or some processing will never be handled
             }
         }
     }

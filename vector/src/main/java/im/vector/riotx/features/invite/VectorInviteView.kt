@@ -21,10 +21,12 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.platform.ButtonStateView
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.vector_invite_view.view.*
 import javax.inject.Inject
@@ -50,11 +52,28 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             context.injector().inject(this)
         }
         View.inflate(context, R.layout.vector_invite_view, this)
-        inviteRejectView.setOnClickListener { callback?.onRejectInvite() }
-        inviteAcceptView.setOnClickListener { callback?.onAcceptInvite() }
+        inviteAcceptView.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                callback?.onAcceptInvite()
+            }
+
+            override fun onRetryClicked() {
+                callback?.onAcceptInvite()
+            }
+        }
+
+        inviteRejectView.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                callback?.onRejectInvite()
+            }
+
+            override fun onRetryClicked() {
+                callback?.onRejectInvite()
+            }
+        }
     }
 
-    fun render(sender: User, mode: Mode = Mode.LARGE) {
+    fun render(sender: User, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
             avatarRenderer.render(sender.toMatrixItem(), inviteAvatarView)
@@ -68,5 +87,6 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             inviteNameView.visibility = View.GONE
             inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
         }
+        InviteButtonStateBinder.bind(inviteAcceptView, inviteRejectView, changeMembershipState)
     }
 }
