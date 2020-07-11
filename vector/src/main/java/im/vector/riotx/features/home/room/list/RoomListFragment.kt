@@ -138,8 +138,8 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
-            RoomListDisplayMode.HOME   -> createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
+            RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
+            RoomListDisplayMode.PEOPLE        -> createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
             else                       -> Unit // No button in this mode
         }
@@ -164,8 +164,8 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
-                                    RoomListDisplayMode.HOME   -> createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE -> createChatRoomButton.hide()
+                                    RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS  -> createGroupRoomButton.hide()
                                     else                       -> Unit
                                 }
@@ -207,8 +207,8 @@ class RoomListFragment @Inject constructor(
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
-                RoomListDisplayMode.HOME   -> createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> createChatRoomButton.show()
+                RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
+                RoomListDisplayMode.PEOPLE        -> createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS  -> createGroupRoomButton.show()
                 else                       -> Unit
             }
@@ -258,7 +258,7 @@ class RoomListFragment @Inject constructor(
         roomController.update(state)
         // Mark all as read menu
         when (roomListParams.displayMode) {
-            RoomListDisplayMode.HOME,
+            RoomListDisplayMode.NOTIFICATIONS,
             RoomListDisplayMode.PEOPLE,
             RoomListDisplayMode.ROOMS -> {
                 val newValue = state.hasUnread
@@ -288,7 +288,7 @@ class RoomListFragment @Inject constructor(
                 }
                 .isNullOrEmpty()
         val emptyState = when (roomListParams.displayMode) {
-            RoomListDisplayMode.HOME   -> {
+            RoomListDisplayMode.NOTIFICATIONS -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(
                             getString(R.string.room_list_catchup_welcome_title),
