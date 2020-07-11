@@ -128,18 +128,18 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         disposables.clear()
     }
 
-    private fun refresh4SSection(state: SecretsSynchronisationInfo) {
+    private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         secureBackupCategory.isVisible = false
 
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
-        if (!state.isCrossSigningEnabled) {
+        if (!info.isCrossSigningEnabled) {
             // There is not cross signing, so we can remove the section
         } else {
             secureBackupCategory.isVisible = true
 
-            if (!state.isBackupSetup) {
-                if (state.isCrossSigningEnabled && state.allPrivateKeysKnown) {
+            if (!info.isBackupSetup) {
+                if (info.isCrossSigningEnabled && info.allPrivateKeysKnown) {
                     // You can setup recovery!
                     secureBackupCategory.isVisible = true
                     secureBackupPreference.isVisible = true
@@ -158,10 +158,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
 
             // so here we know that 4S is setup
-            if (state.isCrossSigningTrusted && state.allPrivateKeysKnown) {
+            if (info.isCrossSigningTrusted && info.allPrivateKeysKnown) {
                 // Looks like we have all cross signing secrets and session is trusted
                 // Let's see if there is a megolm backup
-                if (!state.megolmBackupAvailable || state.megolmSecretKnown) {
+                if (!info.megolmBackupAvailable || info.megolmSecretKnown) {
                     // Only option here is to create a new backup if you want?
                     // aka reset
                     secureBackupCategory.isVisible = true
@@ -171,7 +171,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                         BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
                         true
                     }
-                } else if (!state.megolmSecretKnown) {
+                } else if (!info.megolmSecretKnown) {
                     // megolm backup is available but we don't have key
                     // you could try to synchronize to get missing megolm key ?
                     secureBackupCategory.isVisible = true
