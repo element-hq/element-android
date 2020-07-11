@@ -193,14 +193,15 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupKeysBackupBanner() {
-        serverBackupStatusViewModel.subscribe(this) {
-            when (val banState = it.bannerState.invoke()) {
-                is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
-                BannerState.BackingUp ->  homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
-                null,
-                BannerState.Hidden    -> homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
-            }
-        }.disposeOnDestroyView()
+        serverBackupStatusViewModel
+                .subscribe(this) {
+                    when (val banState = it.bannerState.invoke()) {
+                        is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        BannerState.BackingUp -> homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
+                        null,
+                        BannerState.Hidden    -> homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                    }
+                }
         homeKeysBackupBanner.delegate = this
     }
 
