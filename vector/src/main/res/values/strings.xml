@@ -2526,4 +2526,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="crypto_error_withheld_unverified">You cannot access this message because your session is not trusted by the sender</string>
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
+
+    <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 </resources>

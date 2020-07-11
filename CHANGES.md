@@ -25,7 +25,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
- -
+ - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================

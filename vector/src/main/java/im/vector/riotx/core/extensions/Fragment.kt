@@ -16,13 +16,12 @@
 
 package im.vector.riotx.core.extensions
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
+import android.app.Activity
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.toast
+import im.vector.riotx.core.utils.selectTxtFileToWrite
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -98,27 +97,25 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 const val POP_BACK_STACK_EXCLUSIVE = 0
 
 fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
-    // We need WRITE_EXTERNAL permission
-//    if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
-//                    this,
-//                    PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-//                    R.string.permissions_rationale_msg_keys_backup_export)) {
-    // WRITE permissions are not needed
-    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).let {
-        it.format(Date())
-    }
-    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-    intent.addCategory(Intent.CATEGORY_OPENABLE)
-    intent.type = "text/plain"
-    intent.putExtra(
-            Intent.EXTRA_TITLE,
-            "riot-megolm-export-$userId-$timestamp.txt"
-    )
+    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-    try {
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step1_manual_export)), requestCode)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity?.toast(R.string.error_no_external_application_found)
-    }
-//    }
+    selectTxtFileToWrite(
+            activity = requireActivity(),
+            fragment = this,
+            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
+            requestCode = requestCode
+    )
+}
+
+fun Activity.queryExportKeys(userId: String, requestCode: Int) {
+    val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+    selectTxtFileToWrite(
+            activity = this,
+            fragment = null,
+            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
+            requestCode = requestCode
+    )
 }
