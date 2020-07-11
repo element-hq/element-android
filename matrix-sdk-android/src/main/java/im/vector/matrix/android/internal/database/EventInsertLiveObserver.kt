@@ -72,7 +72,7 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                         it.process(realm, domainEvent)
                     }
                 }
-                realm.where(EventInsertEntity::class.java).findAll().deleteAllFromRealm()
+                realm.delete(EventInsertEntity::class.java)
             }
         }
     }
