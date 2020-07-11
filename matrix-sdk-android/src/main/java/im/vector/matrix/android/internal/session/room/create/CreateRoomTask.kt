@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.create
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -92,5 +93,22 @@ internal class DefaultCreateRoomTask @Inject constructor(
     private suspend fun setReadMarkers(roomId: String) {
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, forceReadReceipt = true, forceReadMarker = true)
         return readMarkersTask.execute(setReadMarkerParams)
+    }
+
+    /**
+     * Tells if the created room can be a direct chat one.
+     *
+     * @return true if it is a direct chat
+     */
+    private fun CreateRoomParams.isDirect(): Boolean {
+        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
+                && isDirect == true
+    }
+
+    /**
+     * @return the first invited user id
+     */
+    private fun CreateRoomParams.getFirstInvitedUserId(): String? {
+        return invitedUserIds.firstOrNull() ?: invite3pids.firstOrNull()?.value
     }
 }

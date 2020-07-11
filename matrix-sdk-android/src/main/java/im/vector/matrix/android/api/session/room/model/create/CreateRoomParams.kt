@@ -71,21 +71,4 @@ class CreateRoomParams {
     fun enableEncryption() {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
     }
-
-    /**
-     * Tells if the created room can be a direct chat one.
-     *
-     * @return true if it is a direct chat
-     */
-    fun isDirect(): Boolean {
-        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-                && isDirect == true
-    }
-
-    /**
-     * @return the first invited user id
-     */
-    fun getFirstInvitedUserId(): String? {
-        return invitedUserIds.firstOrNull() ?: invite3pids.firstOrNull()?.value
-    }
 }
