@@ -17,16 +17,13 @@
 package im.vector.riotx.features.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.badge.BadgeDrawable
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -44,10 +41,11 @@ import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
-import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.BannerState
 import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.riotx.features.workers.signout.ServerBackupStatusViewState
@@ -55,19 +53,18 @@ import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val INDEX_CATCHUP = 0
-private const val INDEX_PEOPLE = 1
-private const val INDEX_ROOMS = 2
+private const val INDEX_PEOPLE = 0
+private const val INDEX_ROOMS = 1
+private const val INDEX_CATCHUP = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val alertManager: PopupAlertManager,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory {
-
-    private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -126,6 +123,25 @@ class HomeDetailFragment @Inject constructor(
                     activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
                     invalidateOptionsMenu()
                 })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // update notification tab if needed
+        checkNotificationTabStatus()
+    }
+
+    private fun checkNotificationTabStatus() {
+        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
+        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
+            // As we hide it check if it's not the current item!
+            withState(viewModel) {
+                if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
+                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                }
+            }
+        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -226,24 +242,27 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
+        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
-                else                      -> RoomListDisplayMode.HOME
+                else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
 
-        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
-        menuView.forEachIndexed { index, view ->
-            val itemView = view as BottomNavigationItemView
-            val badgeLayout = LayoutInflater.from(requireContext()).inflate(R.layout.vector_home_badge_unread_layout, menuView, false)
-            val unreadCounterBadgeView: UnreadCounterBadgeView = badgeLayout.findViewById(R.id.actionUnreadCounterBadgeView)
-            itemView.addView(badgeLayout)
-            unreadCounterBadgeViews.add(index, unreadCounterBadgeView)
-        }
+//        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
+
+//        bottomNavigationView.getOrCreateBadge()
+//        menuView.forEachIndexed { index, view ->
+//            val itemView = view as BottomNavigationItemView
+//            val badgeLayout = LayoutInflater.from(requireContext()).inflate(R.layout.vector_home_badge_unread_layout, menuView, false)
+//            val unreadCounterBadgeView: UnreadCounterBadgeView = badgeLayout.findViewById(R.id.actionUnreadCounterBadgeView)
+//            itemView.addView(badgeLayout)
+//            unreadCounterBadgeViews.add(index, unreadCounterBadgeView)
+//        }
     }
 
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
@@ -283,16 +302,28 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         Timber.v(it.toString())
-        unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
-        unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
-        unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         syncStateView.render(it.syncState)
+    }
+
+    private fun BadgeDrawable.render(count: Int, highlight: Boolean) {
+        isVisible = count > 0
+        number = count
+        maxCharacterCount = 3
+        badgeTextColor = ContextCompat.getColor(requireContext(), R.color.white)
+        backgroundColor = if (highlight) {
+            ContextCompat.getColor(requireContext(), R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(requireContext(), R.attr.riotx_unread_room_badge)
+        }
     }
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
         RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-        else                       -> R.id.bottom_action_home
+        else                       -> R.id.bottom_action_notification
     }
 
     override fun onTapToReturnToCall() {

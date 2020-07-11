@@ -147,6 +147,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_MERGE_E2E_ERRORS = "SETTINGS_LABS_MERGE_E2E_ERRORS"
+        const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
 
         // analytics
         const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
@@ -274,6 +275,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAllowedExtendedLogging(): Boolean {
         return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
+    }
+
+    fun labAddNotificationTab(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB, false)
     }
 
     fun failFast(): Boolean {
