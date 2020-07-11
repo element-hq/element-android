@@ -1,8 +1,8 @@
-Changes in Riot.imX 0.91.5 (2020-XX-XX)
+Changes in Riot.imX 0.91.5 (2020-07-11)
 ===================================================
 
 Features ✨:
- -
+ - 3pid invite: it is now possible to invite people by email. An Identity Server has to be configured (#548)
 
 Improvements 🙌:
  - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
@@ -24,9 +24,6 @@ Bugfix 🐛:
  - Regression |  Share action menu do not work (#1647)
  - verification issues on transition (#1555)
  - Fix issue when restoring keys backup using recovery key
-
-Translations 🗣:
- -
 
 SDK API changes ⚠️:
  - CreateRoomParams has been updated
