@@ -162,9 +162,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         return this
     }
 
-    protected fun Disposable.disposeOnDestroy(): Disposable {
+    protected fun Disposable.disposeOnDestroy() {
         uiDisposables.add(this)
-        return this
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -146,7 +146,7 @@ class VerificationRequestController @Inject constructor(
             }
         }
 
-        if (state.isMe && state.currentDeviceCanCrossSign) {
+        if (state.isMe && state.currentDeviceCanCrossSign && !state.selfVerificationMode) {
             dividerItem {
                 id("sep_notMe")
             }

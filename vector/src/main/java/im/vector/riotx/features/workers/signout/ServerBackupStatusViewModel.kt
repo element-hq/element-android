@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -114,9 +115,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                     // So recovery is not setup
                     // Check if cross signing is enabled and local secrets known
                     if (crossSigningInfo.getOrNull()?.isTrusted() == true
-                            && pInfo.getOrNull()?.master != null
-                            && pInfo.getOrNull()?.selfSigned != null
-                            && pInfo.getOrNull()?.user != null
+                            && pInfo.getOrNull()?.allKnown().orFalse()
                     ) {
                         // So 4S is not setup and we have local secrets,
                         return@Function4 BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())

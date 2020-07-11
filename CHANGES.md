@@ -9,6 +9,8 @@ Improvements 🙌:
  - Creating and listening to EventInsertEntity. (#1634)
  - Handling (almost) properly the groups fetching (#1634)
  - Improve fullscreen media display (#327)
+ - Setup server recovery banner (#1648)
+ - Set up SSSS from security settings (#1567)
 
 Bugfix 🐛:
  - Regression |  Share action menu do not work (#1647)

@@ -258,6 +258,30 @@ class BootstrapCrossSigningTask @Inject constructor(
                         )
                     }
                 }
+            } else {
+                Timber.d("## BootstrapCrossSigningTask: Creating 4S - Existing megolm backup found")
+                // ensure we store existing backup secret if we have it!
+                val knownSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
+                if (knownSecret != null && knownSecret.version == serverVersion.version) {
+                    // check it matches
+                    val isValid = awaitCallback<Boolean> {
+                        session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownSecret.recoveryKey, it)
+                    }
+                    if (isValid) {
+                        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key valid and known")
+                        awaitCallback<Unit> {
+                            extractCurveKeyFromRecoveryKey(knownSecret.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                                ssssService.storeSecret(
+                                        KEYBACKUP_SECRET_SSSS_NAME,
+                                        secret,
+                                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it
+                                )
+                            }
+                        }
+                    } else {
+                        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key is unknown by this session")
+                    }
+                }
             }
         } catch (failure: Throwable) {
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")

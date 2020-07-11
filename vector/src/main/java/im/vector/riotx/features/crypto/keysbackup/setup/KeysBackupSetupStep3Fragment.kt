@@ -185,7 +185,6 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                                     AlertDialog.Builder(it)
                                             .setTitle(R.string.dialog_title_error)
                                             .setMessage(errorFormatter.toHumanReadable(throwable))
-
                                 }
                             },
                             {
