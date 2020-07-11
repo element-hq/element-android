@@ -9,6 +9,8 @@ Improvements 🙌:
  - Creating and listening to EventInsertEntity. (#1634)
  - Handling (almost) properly the groups fetching (#1634)
  - Improve fullscreen media display (#327)
+ - Setup server recovery banner (#1648)
+ - Set up SSSS from security settings (#1567)
 
 Bugfix 🐛:
  - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
@@ -18,6 +20,7 @@ Bugfix 🐛:
  - Leave room only leaves the current version (#1656)
  - Regression |  Share action menu do not work (#1647)
  - verification issues on transition (#1555)
+ - Fix issue when restoring keys backup using recovery key
 
 Translations 🗣:
  -
@@ -30,6 +33,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
+ - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
  - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)

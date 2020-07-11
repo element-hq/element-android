@@ -16,7 +16,6 @@
 package im.vector.riotx.features.crypto.keysbackup.setup
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
@@ -27,12 +26,9 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.queryExportKeys
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
-import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
 
@@ -97,7 +93,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .show()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
-                    exportKeysManually()
+                    queryExportKeys(session.myUserId, REQUEST_CODE_SAVE_MEGOLM_EXPORT)
                 }
             }
         }
@@ -127,38 +123,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         .show()
             }
         })
-    }
-
-    private fun exportKeysManually() {
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES,
-                        this,
-                        PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                        R.string.permissions_rationale_msg_keys_backup_export)) {
-            try {
-                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "text/plain"
-                intent.putExtra(Intent.EXTRA_TITLE, "riot-megolm-export-${session.myUserId}-${System.currentTimeMillis()}.txt")
-
-                startActivityForResult(
-                        Intent.createChooser(
-                                intent,
-                                getString(R.string.keys_backup_setup_step1_manual_export)
-                        ),
-                        REQUEST_CODE_SAVE_MEGOLM_EXPORT
-                )
-            } catch (activityNotFoundException: ActivityNotFoundException) {
-                toast(R.string.error_no_external_application_found)
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
-                exportKeysManually()
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

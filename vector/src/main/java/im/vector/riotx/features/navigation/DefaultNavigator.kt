@@ -146,7 +146,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly)
+            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly, false)
         }
     }
 
@@ -222,7 +222,7 @@ class DefaultNavigator @Inject constructor(
         // if cross signing is enabled we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
             if (session.cryptoService().crossSigningService().canCrossSign() && context is VectorBaseActivity) {
-                BootstrapBottomSheet.show(context.supportFragmentManager, false)
+                BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
             } else {
                 context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
             }

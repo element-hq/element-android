@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.store
+package im.vector.matrix.rx
 
-data class PrivateKeysInfo(
-        val master: String? = null,
-        val selfSigned: String? = null,
-        val user: String? = null
-) {
-    fun allKnown() = master != null && selfSigned != null && user != null
-}
+data class SecretsSynchronisationInfo(
+        val isBackupSetup: Boolean,
+        val isCrossSigningEnabled: Boolean,
+        val isCrossSigningTrusted: Boolean,
+        val allPrivateKeysKnown: Boolean,
+        val megolmBackupAvailable: Boolean,
+        val megolmSecretKnown: Boolean,
+        val isMegolmKeyIn4S: Boolean
+)

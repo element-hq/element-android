@@ -89,7 +89,7 @@ sealed class BootstrapStep {
     object CheckingMigration : BootstrapStep()
 
     // Use will be asked to choose between passphrase or recovery key, or to start process if a key backup exists
-    data class FirstForm(val keyBackUpExist: Boolean) : BootstrapStep()
+    data class FirstForm(val keyBackUpExist: Boolean, val reset: Boolean = false) : BootstrapStep()
 
     data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
     data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()

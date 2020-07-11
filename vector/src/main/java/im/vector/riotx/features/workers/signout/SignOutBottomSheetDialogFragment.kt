@@ -121,7 +121,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         super.onActivityCreated(savedInstanceState)
 
         setupRecoveryButton.action = {
-            BootstrapBottomSheet.show(parentFragmentManager, false)
+            BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
         }
 
         exitAnywayButton.action = {
