@@ -175,7 +175,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         }
 
         mTestHelper.doSync<Unit> {
-            samSession.joinRoom(room.roomId, null, it)
+            samSession.joinRoom(room.roomId, null, emptyList(), it)
         }
 
         return samSession
