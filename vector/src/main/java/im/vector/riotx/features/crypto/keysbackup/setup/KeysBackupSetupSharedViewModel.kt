@@ -48,6 +48,9 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
     lateinit var session: Session
 
+    val userId: String
+        get() = session.myUserId
+
     var showManualExport: MutableLiveData<Boolean> = MutableLiveData()
 
     var navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()

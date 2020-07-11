@@ -126,6 +126,7 @@
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Warning</string>
     <string name="dialog_title_error">Error</string>
+    <string name="dialog_title_success">Success</string>
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
@@ -1413,6 +1414,7 @@ Why choose Riot.im?
     <string name="keys_backup_setup_step3_share_recovery_file">Share</string>
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+    <string name="recovery_key_export_saved">The recovery key has been saved.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
     <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
@@ -2526,4 +2528,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="crypto_error_withheld_unverified">You cannot access this message because your session is not trusted by the sender</string>
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
+
+    <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 </resources>

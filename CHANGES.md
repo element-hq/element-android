@@ -13,6 +13,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Regression |  Share action menu do not work (#1647)
  - verification issues on transition (#1555)
+ - Fix issue when restoring keys backup using recovery key
 
 Translations 🗣:
  -
@@ -25,6 +26,7 @@ Build 🧱:
  - Revert to build-tools 3.5.3
 
 Other changes:
+ - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
  - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
