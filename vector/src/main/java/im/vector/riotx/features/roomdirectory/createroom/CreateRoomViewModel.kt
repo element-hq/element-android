@@ -28,7 +28,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
@@ -84,7 +84,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             copy(asyncCreateRoomRequest = Loading())
         }
 
-        val createRoomParams = CreateRoomParamsBuilder()
+        val createRoomParams = CreateRoomParams()
                 .apply {
                     name = state.roomName.takeIf { it.isNotBlank() }
                     // Directory visibility

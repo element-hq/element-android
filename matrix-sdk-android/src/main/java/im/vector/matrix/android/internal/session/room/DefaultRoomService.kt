@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
@@ -49,7 +49,7 @@ internal class DefaultRoomService @Inject constructor(
         private val taskExecutor: TaskExecutor
 ) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParamsBuilder, callback: MatrixCallback<String>): Cancelable {
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
         return createRoomTask
                 .configureWith(createRoomParams) {
                     this.callback = callback

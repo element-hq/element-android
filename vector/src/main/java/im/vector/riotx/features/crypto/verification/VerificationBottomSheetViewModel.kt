@@ -43,7 +43,7 @@ import im.vector.matrix.android.api.session.crypto.verification.VerificationServ
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.LocalEcho
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
@@ -235,7 +235,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParamsBuilder()
+                    val roomParams = CreateRoomParams()
                             .apply {
                                 invitedUserIds.add(otherUserId)
                                 setDirectMessage()

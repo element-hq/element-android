@@ -30,7 +30,7 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -65,7 +65,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParamsBuilder().apply { name = "MyRoom" }, it)
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
         }
 
         if (encryptedRoom) {
@@ -286,7 +286,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createDM(alice: Session, bob: Session): String {
         val roomId = mTestHelper.doSync<String> {
             alice.createRoom(
-                    CreateRoomParamsBuilder().apply {
+                    CreateRoomParams().apply {
                         invitedUserIds.add(bob.myUserId)
                         setDirectMessage()
                         enableEncryptionIfInvitedUsersSupportIt = true

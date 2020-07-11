@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.toMedium
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
@@ -43,7 +43,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
         private val accessTokenProvider: AccessTokenProvider
 ) {
 
-    suspend fun build(builder: CreateRoomParamsBuilder): CreateRoomBody {
+    suspend fun build(builder: CreateRoomParams): CreateRoomBody {
         val invite3pids = builder.invite3pids
                 .takeIf { it.isNotEmpty() }
                 .let {
@@ -85,7 +85,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
         )
     }
 
-    private fun buildHistoryVisibilityEvent(builder: CreateRoomParamsBuilder): Event? {
+    private fun buildHistoryVisibilityEvent(builder: CreateRoomParams): Event? {
         return builder.historyVisibility
                 ?.let {
                     val contentMap = mapOf("history_visibility" to it)
@@ -100,7 +100,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
     /**
      * Add the crypto algorithm to the room creation parameters.
      */
-    private suspend fun buildEncryptionWithAlgorithmEvent(builder: CreateRoomParamsBuilder): Event? {
+    private suspend fun buildEncryptionWithAlgorithmEvent(builder: CreateRoomParams): Event? {
         if (builder.algorithm == null
                 && canEnableEncryption(builder)) {
             // Enable the encryption
@@ -121,7 +121,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
                 }
     }
 
-    private suspend fun canEnableEncryption(builder: CreateRoomParamsBuilder): Boolean {
+    private suspend fun canEnableEncryption(builder: CreateRoomParams): Boolean {
         return (builder.enableEncryptionIfInvitedUsersSupportIt
                 && crossSigningService.isCrossSigningVerified()
                 && builder.invite3pids.isEmpty())

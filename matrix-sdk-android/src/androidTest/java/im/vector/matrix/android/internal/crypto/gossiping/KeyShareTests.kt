@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.session.crypto.verification.VerificationTran
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
@@ -66,7 +66,7 @@ class KeyShareTests : InstrumentedTest {
         // Create an encrypted room and add a message
         val roomId = mTestHelper.doSync<String> {
             aliceSession.createRoom(
-                    CreateRoomParamsBuilder().apply {
+                    CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
                     },

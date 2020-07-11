@@ -22,7 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
@@ -54,7 +54,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
-        val roomParams = CreateRoomParamsBuilder()
+        val roomParams = CreateRoomParams()
                 .apply {
                     invitees.forEach {
                         when (it) {

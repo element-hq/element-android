@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParamsBuilder
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -38,7 +38,7 @@ import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal interface CreateRoomTask : Task<CreateRoomParamsBuilder, String>
+internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
@@ -52,7 +52,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val eventBus: EventBus
 ) : CreateRoomTask {
 
-    override suspend fun execute(params: CreateRoomParamsBuilder): String {
+    override suspend fun execute(params: CreateRoomParams): String {
         val createRoomParams = createRoomParamsInternalBuilder.build(params)
 
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
@@ -75,7 +75,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         return roomId
     }
 
-    private suspend fun handleDirectChatCreation(params: CreateRoomParamsBuilder, roomId: String) {
+    private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {
         val otherUserId = params.getFirstInvitedUserId()
                 ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
 

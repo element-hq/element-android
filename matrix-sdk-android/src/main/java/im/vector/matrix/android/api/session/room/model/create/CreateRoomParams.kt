@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
-class CreateRoomParamsBuilder {
+class CreateRoomParams {
     var visibility: RoomDirectoryVisibility? = null
     var roomAliasName: String? = null
     var name: String? = null
