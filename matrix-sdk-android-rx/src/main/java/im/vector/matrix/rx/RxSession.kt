@@ -17,6 +17,7 @@
 package im.vector.matrix.rx
 
 import androidx.paging.PagedList
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -172,16 +173,6 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    data class SecretsSynchronisationInfo(
-            val isBackupSetup: Boolean = false,
-            val isCrossSigningEnabled: Boolean = false,
-            val isCrossSigningTrusted: Boolean = false,
-            val allPrivateKeysKnown: Boolean = false,
-            val megolmBackupAvailable: Boolean = false,
-            val megolmSecretKnown: Boolean = false,
-            val isMegolmKeyIn4S: Boolean = false
-    )
-
     fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {
         return Observable.combineLatest<List<UserAccountData>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
                 liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
@@ -192,9 +183,9 @@ class RxSession(private val session: Session) {
                     val is4SSetup = session.sharedSecretStorageService.isRecoverySetup()
                     val isCrossSigningEnabled = crossSigningInfo.getOrNull() != null
                     val isCrossSigningTrusted = crossSigningInfo.getOrNull()?.isTrusted() == true
-                    val allPrivateKeysKnown = pInfo.getOrNull()?.master != null
-                            && pInfo.getOrNull()?.selfSigned != null
-                            && pInfo.getOrNull()?.user != null
+                    val allPrivateKeysKnown = pInfo.getOrNull()
+                            ?.let { it.master != null && it.selfSigned != null && it.user != null }
+                            .orFalse()
 
                     val keysBackupService = session.cryptoService().keysBackupService()
                     val currentBackupVersion = keysBackupService.currentBackupVersion

@@ -33,7 +33,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
-import im.vector.matrix.rx.RxSession
+import im.vector.matrix.rx.SecretsSynchronisationInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -128,7 +128,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         disposables.clear()
     }
 
-    private fun refresh4SSection(state: RxSession.SecretsSynchronisationInfo) {
+    private fun refresh4SSection(state: SecretsSynchronisationInfo) {
         secureBackupCategory?.isVisible = false
 
         // it's a lot of if / else if / else
