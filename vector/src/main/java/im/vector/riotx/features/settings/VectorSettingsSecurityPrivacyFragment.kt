@@ -111,10 +111,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private val secureBackupCategory by lazy {
-        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY)
+        findPreference<VectorPreferenceCategory>("SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY")!!
     }
     private val secureBackupPreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY)
+        findPreference<VectorPreference>("SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY")!!
     }
 //    private val secureBackupResetPreference by lazy {
 //        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
@@ -129,30 +129,30 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun refresh4SSection(state: SecretsSynchronisationInfo) {
-        secureBackupCategory?.isVisible = false
+        secureBackupCategory.isVisible = false
 
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
         if (!state.isCrossSigningEnabled) {
             // There is not cross signing, so we can remove the section
         } else {
-            secureBackupCategory?.isVisible = true
+            secureBackupCategory.isVisible = true
 
             if (!state.isBackupSetup) {
                 if (state.isCrossSigningEnabled && state.allPrivateKeysKnown) {
                     // You can setup recovery!
-                    secureBackupCategory?.isVisible = true
-                    secureBackupPreference?.isVisible = true
-                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_setup)
-                    secureBackupPreference?.isEnabled = true
-                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    secureBackupCategory.isVisible = true
+                    secureBackupPreference.isVisible = true
+                    secureBackupPreference.title = getString(R.string.settings_secure_backup_setup)
+                    secureBackupPreference.isEnabled = true
+                    secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
                         true
                     }
                 } else {
                     // just hide all, you can't setup from here
                     // you should synchronize to get gossips
-                    secureBackupCategory?.isVisible = false
+                    secureBackupCategory.isVisible = false
                 }
                 return
             }
@@ -164,38 +164,38 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 if (!state.megolmBackupAvailable || state.megolmSecretKnown) {
                     // Only option here is to create a new backup if you want?
                     // aka reset
-                    secureBackupCategory?.isVisible = true
-                    secureBackupPreference?.isVisible = true
-                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_reset)
-                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    secureBackupCategory.isVisible = true
+                    secureBackupPreference.isVisible = true
+                    secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
+                    secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
                         true
                     }
                 } else if (!state.megolmSecretKnown) {
                     // megolm backup is available but we don't have key
                     // you could try to synchronize to get missing megolm key ?
-                    secureBackupCategory?.isVisible = true
-                    secureBackupPreference?.isVisible = true
-                    secureBackupPreference?.title = getString(R.string.settings_secure_backup_enter_to_setup)
-                    secureBackupPreference?.isEnabled = true
-                    secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    secureBackupCategory.isVisible = true
+                    secureBackupPreference.isVisible = true
+                    secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                    secureBackupPreference.isEnabled = true
+                    secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         (requireActivity() as? VectorBaseActivity)?.let {
                             it.navigator.requestSelfSessionVerification(it)
                         }
                         true
                     }
                 } else {
-                    secureBackupCategory?.isVisible = false
+                    secureBackupCategory.isVisible = false
                 }
                 return
             } else {
                 // there is a backup, but this session is not trusted, or is missing some secrets
                 // you should enter passphrase to get them or verify against another session
-                secureBackupCategory?.isVisible = true
-                secureBackupPreference?.isVisible = true
-                secureBackupPreference?.title = getString(R.string.settings_secure_backup_enter_to_setup)
-                secureBackupPreference?.isEnabled = true
-                secureBackupPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                secureBackupCategory.isVisible = true
+                secureBackupPreference.isVisible = true
+                secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                secureBackupPreference.isEnabled = true
+                secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     (requireActivity() as? VectorBaseActivity)?.let {
                         it.navigator.requestSelfSessionVerification(it)
                     }
