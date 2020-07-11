@@ -69,6 +69,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
@@ -293,7 +294,6 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToBottomView()
         setupWidgetsBannerView()
 
-        roomToolbarContentView.isClickable = false
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
@@ -854,13 +854,14 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomDetailViewModel) { state ->
-        renderRoomSummary(state)
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
+        renderToolbar(summary, state.typingMessage)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            roomToolbarContentView.isClickable = true
             roomWidgetsBannerView.render(state.activeRoomWidgets())
+            jumpToBottomView.count = summary.notificationCount
+            jumpToBottomView.drawBadge = summary.hasUnreadMessages
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
@@ -881,7 +882,6 @@ class RoomDetailFragment @Inject constructor(
                 notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            roomToolbarContentView.isClickable = false
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
             // Intercept click event
@@ -891,15 +891,15 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun renderRoomSummary(state: RoomDetailViewState) {
-        state.asyncRoomSummary()?.let { roomSummary ->
+    private fun renderToolbar(roomSummary: RoomSummary?, typingMessage: String?) {
+        if (roomSummary == null) {
+            roomToolbarContentView.isClickable = false
+        } else {
+            roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
             roomToolbarTitleView.text = roomSummary.displayName
             avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-            renderSubTitle(state.typingMessage, roomSummary.topic)
-            jumpToBottomView.count = roomSummary.notificationCount
-            jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
-
+            renderSubTitle(typingMessage, roomSummary.topic)
             roomToolbarDecorationImageView.let {
                 it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
                 it.isVisible = roomSummary.roomEncryptionTrustLevel != null
