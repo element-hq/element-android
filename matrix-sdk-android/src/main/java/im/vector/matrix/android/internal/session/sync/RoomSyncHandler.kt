@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
@@ -313,14 +314,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     root = eventEntity
                 }
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
-                    roomMemberContentsByUser[event.stateKey] = event.content.toModel()
-                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
+                    val fixedContent = event.getFixedRoomMemberContent()
+                    roomMemberContentsByUser[event.stateKey] = fixedContent
+                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent)
                 }
             }
             roomMemberContentsByUser.getOrPut(event.senderId) {
                 // If we don't have any new state on this user, get it from db
                 val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
-                ContentMapper.map(rootStateEvent?.content).toModel()
+                rootStateEvent?.asDomain()?.getFixedRoomMemberContent()
             }
 
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
@@ -411,4 +413,19 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
         }
     }
+
+    private fun Event.getFixedRoomMemberContent(): RoomMemberContent?{
+        val content = content.toModel<RoomMemberContent>()
+        // if user is leaving, we should grab his last name and avatar from prevContent
+        return if (content?.membership?.isLeft() == true) {
+            val prevContent = resolvedPrevContent().toModel<RoomMemberContent>()
+            content.copy(
+                    displayName = prevContent?.displayName,
+                    avatarUrl = prevContent?.avatarUrl
+            )
+        } else {
+            content
+        }
+    }
+
 }
