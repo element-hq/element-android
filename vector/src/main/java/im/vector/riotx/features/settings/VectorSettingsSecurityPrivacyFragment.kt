@@ -63,7 +63,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
-    private var disposables = emptyList<Disposable>().toMutableList()
+    private var disposables = mutableListOf<Disposable>()
 
     // cryptography
     private val mCryptographyCategory by lazy {
