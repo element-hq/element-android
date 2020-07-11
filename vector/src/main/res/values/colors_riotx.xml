@@ -210,8 +210,8 @@
     <color name="riotx_bottom_nav_icon_color_black">#8E99A4</color>
 
     <attr name="riotx_waiting_background_color" format="color" />
-    <color name="riotx_waiting_background_color_light">#FFE9EDF1</color>
-    <color name="riotx_waiting_background_color_dark">#FF15171b</color>
+    <color name="riotx_waiting_background_color_light">#AAAAAAAA</color>
+    <color name="riotx_waiting_background_color_dark">#55555555</color>
     <color name="riotx_waiting_background_color_status">#AAAAAAAA</color>
 
     <attr name="riotx_disabled_view_color" format="color" />
