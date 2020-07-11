@@ -183,9 +183,7 @@ class RxSession(private val session: Session) {
                     val is4SSetup = session.sharedSecretStorageService.isRecoverySetup()
                     val isCrossSigningEnabled = crossSigningInfo.getOrNull() != null
                     val isCrossSigningTrusted = crossSigningInfo.getOrNull()?.isTrusted() == true
-                    val allPrivateKeysKnown = pInfo.getOrNull()
-                            ?.let { it.master != null && it.selfSigned != null && it.user != null }
-                            .orFalse()
+                    val allPrivateKeysKnown = pInfo.getOrNull()?.allKnown().orFalse()
 
                     val keysBackupService = session.cryptoService().keysBackupService()
                     val currentBackupVersion = keysBackupService.currentBackupVersion
