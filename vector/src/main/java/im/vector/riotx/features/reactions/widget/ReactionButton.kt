@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.withStyledAttributes
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.R
 import im.vector.riotx.core.di.HasScreenInjector
@@ -44,7 +45,8 @@ import javax.inject.Inject
  * An animated reaction button.
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
-class ReactionButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
+class ReactionButton @JvmOverloads constructor(context: Context,
+                                               attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
@@ -109,42 +111,41 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         countTextView?.text = TextUtils.formatCountToShortDecimal(reactionCount)
 
 //        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
+        context.withStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr) {
+            onDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape)
+            offDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape_off)
 
-        val array = context.obtainStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr, 0)
+            circleStartColor = getColor(R.styleable.ReactionButton_circle_start_color, 0)
 
-        onDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape)
-        offDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape_off)
+            if (circleStartColor != 0) {
+                circleView.startColor = circleStartColor
+            }
 
-        circleStartColor = array.getColor(R.styleable.ReactionButton_circle_start_color, 0)
+            circleEndColor = getColor(R.styleable.ReactionButton_circle_end_color, 0)
 
-        if (circleStartColor != 0) {
-            circleView.startColor = circleStartColor
+            if (circleEndColor != 0) {
+                circleView.endColor = circleEndColor
+            }
+
+            dotPrimaryColor = getColor(R.styleable.ReactionButton_dots_primary_color, 0)
+            dotSecondaryColor = getColor(R.styleable.ReactionButton_dots_secondary_color, 0)
+
+            if (dotPrimaryColor != 0 && dotSecondaryColor != 0) {
+                dotsView.setColors(dotPrimaryColor, dotSecondaryColor)
+            }
+
+            getString(R.styleable.ReactionButton_emoji)?.let {
+                reactionString = it
+            }
+
+            reactionCount = getInt(R.styleable.ReactionButton_reaction_count, 0)
+
+            val status = getBoolean(R.styleable.ReactionButton_toggled, false)
+            setChecked(status)
         }
 
-        circleEndColor = array.getColor(R.styleable.ReactionButton_circle_end_color, 0)
-
-        if (circleEndColor != 0) {
-            circleView.endColor = circleEndColor
-        }
-
-        dotPrimaryColor = array.getColor(R.styleable.ReactionButton_dots_primary_color, 0)
-        dotSecondaryColor = array.getColor(R.styleable.ReactionButton_dots_secondary_color, 0)
-
-        if (dotPrimaryColor != 0 && dotSecondaryColor != 0) {
-            dotsView.setColors(dotPrimaryColor, dotSecondaryColor)
-        }
-
-        array.getString(R.styleable.ReactionButton_emoji)?.let {
-            reactionString = it
-        }
-
-        reactionCount = array.getInt(R.styleable.ReactionButton_reaction_count, 0)
-
-        val status = array.getBoolean(R.styleable.ReactionButton_toggled, false)
-        setChecked(status)
         setOnClickListener(this)
         setOnLongClickListener(this)
-        array.recycle()
     }
 
     private fun getDrawableFromResource(array: TypedArray, styleableIndexId: Int): Drawable? {

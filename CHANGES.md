@@ -27,6 +27,7 @@ Build 🧱:
 
 Other changes:
  - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
+ - Use `Context#withStyledAttributes` extension function (#1546)
 
 Changes in Riot.imX 0.91.4 (2020-07-06)
 ===================================================

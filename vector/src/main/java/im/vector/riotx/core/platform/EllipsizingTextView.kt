@@ -38,6 +38,7 @@ import android.text.TextUtils.substring
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.withStyledAttributes
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.regex.Pattern
@@ -71,6 +72,7 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
     private var maxLines = 0
     private var lineSpacingMult = 1.0f
     private var lineAddVertPad = 0.0f
+
     /**
      * The end punctuation which will be removed when appending [.ELLIPSIS].
      */
@@ -408,9 +410,9 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     init {
-        val a = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.maxLines, android.R.attr.ellipsize), defStyle, 0)
-        maxLines = a.getInt(0, Int.MAX_VALUE)
-        a.recycle()
+        context.withStyledAttributes(attrs, intArrayOf(android.R.attr.maxLines, android.R.attr.ellipsize), defStyle) {
+            maxLines = getInt(0, Int.MAX_VALUE)
+        }
         setEndPunctuationPattern(DEFAULT_END_PUNCTUATION)
         val currentTextColor = currentTextColor
         val ellipsizeColor = Color.argb(ELLIPSIZE_ALPHA, Color.red(currentTextColor), Color.green(currentTextColor), Color.blue(currentTextColor))
