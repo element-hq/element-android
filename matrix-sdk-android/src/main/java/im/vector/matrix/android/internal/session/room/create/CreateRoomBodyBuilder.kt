@@ -43,8 +43,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         private val accessTokenProvider: AccessTokenProvider
 ) {
 
-    suspend fun build(builder: CreateRoomParams): CreateRoomBody {
-        val invite3pids = builder.invite3pids
+    suspend fun build(params: CreateRoomParams): CreateRoomBody {
+        val invite3pids = params.invite3pids
                 .takeIf { it.isNotEmpty() }
                 .let {
                     // This can throw Exception if Identity server is not configured
@@ -54,7 +54,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                             ?: throw IdentityServiceError.NoIdentityServerConfigured
                     val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
 
-                    builder.invite3pids.map {
+                    params.invite3pids.map {
                         ThreePidInviteBody(
                                 id_server = identityServerUrlWithoutProtocol,
                                 id_access_token = identityServerAccessToken,
@@ -65,28 +65,28 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 }
 
         val initialStates = listOfNotNull(
-                buildEncryptionWithAlgorithmEvent(builder),
-                buildHistoryVisibilityEvent(builder)
+                buildEncryptionWithAlgorithmEvent(params),
+                buildHistoryVisibilityEvent(params)
         )
                 .takeIf { it.isNotEmpty() }
 
         return CreateRoomBody(
-                visibility = builder.visibility,
-                roomAliasName = builder.roomAliasName,
-                name = builder.name,
-                topic = builder.topic,
-                invitedUserIds = builder.invitedUserIds,
+                visibility = params.visibility,
+                roomAliasName = params.roomAliasName,
+                name = params.name,
+                topic = params.topic,
+                invitedUserIds = params.invitedUserIds,
                 invite3pids = invite3pids,
-                creationContent = builder.creationContent,
+                creationContent = params.creationContent,
                 initialStates = initialStates,
-                preset = builder.preset,
-                isDirect = builder.isDirect,
-                powerLevelContentOverride = builder.powerLevelContentOverride
+                preset = params.preset,
+                isDirect = params.isDirect,
+                powerLevelContentOverride = params.powerLevelContentOverride
         )
     }
 
-    private fun buildHistoryVisibilityEvent(builder: CreateRoomParams): Event? {
-        return builder.historyVisibility
+    private fun buildHistoryVisibilityEvent(params: CreateRoomParams): Event? {
+        return params.historyVisibility
                 ?.let {
                     val contentMap = mapOf("history_visibility" to it)
 
@@ -100,13 +100,13 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     /**
      * Add the crypto algorithm to the room creation parameters.
      */
-    private suspend fun buildEncryptionWithAlgorithmEvent(builder: CreateRoomParams): Event? {
-        if (builder.algorithm == null
-                && canEnableEncryption(builder)) {
+    private suspend fun buildEncryptionWithAlgorithmEvent(params: CreateRoomParams): Event? {
+        if (params.algorithm == null
+                && canEnableEncryption(params)) {
             // Enable the encryption
-            builder.enableEncryption()
+            params.enableEncryption()
         }
-        return builder.algorithm
+        return params.algorithm
                 ?.let {
                     if (it != MXCRYPTO_ALGORITHM_MEGOLM) {
                         throw InvalidParameterException("Unsupported algorithm: $it")
@@ -121,12 +121,12 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 }
     }
 
-    private suspend fun canEnableEncryption(builder: CreateRoomParams): Boolean {
-        return (builder.enableEncryptionIfInvitedUsersSupportIt
+    private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
+        return (params.enableEncryptionIfInvitedUsersSupportIt
                 && crossSigningService.isCrossSigningVerified()
-                && builder.invite3pids.isEmpty())
-                && builder.invitedUserIds.isNotEmpty()
-                && builder.invitedUserIds.let { userIds ->
+                && params.invite3pids.isEmpty())
+                && params.invitedUserIds.isNotEmpty()
+                && params.invitedUserIds.let { userIds ->
             val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
 
             userIds.all { userId ->

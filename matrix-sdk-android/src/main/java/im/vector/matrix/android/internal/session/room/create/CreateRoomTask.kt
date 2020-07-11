@@ -53,10 +53,10 @@ internal class DefaultCreateRoomTask @Inject constructor(
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomParams = createRoomBodyBuilder.build(params)
+        val createRoomBody = createRoomBodyBuilder.build(params)
 
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(createRoomParams)
+            apiCall = roomAPI.createRoom(createRoomBody)
         }
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
