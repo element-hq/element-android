@@ -23,9 +23,10 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.userdirectory.PendingInvitee
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
@@ -48,16 +49,22 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.selectedUsers)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.invitees)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selectedUsers: Set<User>) {
-        val roomParams = CreateRoomParams(
-                invitedUserIds = selectedUsers.map { it.userId }
-        )
-                .setDirectMessage()
-                .enableEncryptionIfInvitedUsersSupportIt()
+    private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
+        val roomParams = CreateRoomParams()
+                .apply {
+                    invitees.forEach {
+                        when (it) {
+                            is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
+                            is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
+                        }.exhaustive
+                    }
+                    setDirectMessage()
+                    enableEncryptionIfInvitedUsersSupportIt = true
+                }
 
         session.rx()
                 .createRoom(roomParams)

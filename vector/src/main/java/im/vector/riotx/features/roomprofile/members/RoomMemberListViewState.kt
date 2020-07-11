@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -30,6 +31,7 @@ data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val threePidInvites: Async<List<Event>> = Uninitialized,
         val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
         val actionsPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
@@ -38,7 +40,8 @@ data class RoomMemberListViewState(
 }
 
 data class ActionPermissions(
-        val canInvite: Boolean = false
+        val canInvite: Boolean = false,
+        val canRevokeThreePidInvite: Boolean = false
 )
 
 typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>

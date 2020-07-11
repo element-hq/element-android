@@ -66,7 +66,10 @@ class KeyShareTests : InstrumentedTest {
         // Create an encrypted room and add a message
         val roomId = mTestHelper.doSync<String> {
             aliceSession.createRoom(
-                    CreateRoomParams(RoomDirectoryVisibility.PRIVATE).enableEncryptionWithAlgorithm(true),
+                    CreateRoomParams().apply {
+                        visibility = RoomDirectoryVisibility.PRIVATE
+                        enableEncryption()
+                    },
                     it
             )
         }
@@ -285,7 +288,7 @@ class KeyShareTests : InstrumentedTest {
         mTestHelper.waitWithLatch(60_000) { latch ->
             val keysBackupService = aliceSession2.cryptoService().keysBackupService()
             mTestHelper.retryPeriodicallyWithLatch(latch) {
-                Log.d("#TEST", "Recovery :${ keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")
+                Log.d("#TEST", "Recovery :${keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")
                 keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey == creationInfo.recoveryKey
             }
         }

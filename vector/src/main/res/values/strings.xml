@@ -2541,4 +2541,15 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
     <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
+
+    <string name="add_from_phone_book">Add from my phone book</string>
+    <string name="empty_phone_book">Your phone book is empty</string>
+    <string name="phone_book_title">Phone book</string>
+    <string name="search_in_my_contacts">Search in my contacts</string>
+    <string name="loading_contact_book">Retrieving your contacts…</string>
+    <string name="empty_contact_book">Your contact book is empty</string>
+    <string name="contacts_book_title">Contacts book</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
+    <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
 </resources>

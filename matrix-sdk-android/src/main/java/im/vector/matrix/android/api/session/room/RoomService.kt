@@ -113,5 +113,5 @@ interface RoomService {
      */
     fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
-    fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
+    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
 }

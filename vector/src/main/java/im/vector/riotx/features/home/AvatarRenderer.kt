@@ -30,6 +30,7 @@ import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.riotx.core.contacts.MappedContact
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
@@ -61,6 +62,23 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 glideRequests,
                 matrixItem,
                 DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
+    fun render(mappedContact: MappedContact, imageView: ImageView) {
+        // Create a Fake MatrixItem, for the placeholder
+        val matrixItem = MatrixItem.UserItem(
+                // Need an id starting with @
+                id = "@${mappedContact.displayName}",
+                displayName = mappedContact.displayName
+        )
+
+        val placeholder = getPlaceholderDrawable(imageView.context, matrixItem)
+        GlideApp.with(imageView)
+                .load(mappedContact.photoURI)
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(placeholder)
+                .into(imageView)
     }
 
     @UiThread

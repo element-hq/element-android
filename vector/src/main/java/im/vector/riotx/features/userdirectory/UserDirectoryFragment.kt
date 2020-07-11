@@ -84,7 +84,7 @@ class UserDirectoryFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectUser(user))
+        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
         sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
     }
 

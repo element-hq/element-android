@@ -79,6 +79,9 @@ internal abstract class IdentityModule {
     abstract fun bindIdentityStore(store: RealmIdentityStore): IdentityStore
 
     @Binds
+    abstract fun bindEnsureIdentityTokenTask(task: DefaultEnsureIdentityTokenTask): EnsureIdentityTokenTask
+
+    @Binds
     abstract fun bindIdentityPingTask(task: DefaultIdentityPingTask): IdentityPingTask
 
     @Binds

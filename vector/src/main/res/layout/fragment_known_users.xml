@@ -123,6 +123,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/knownUsersFilterDivider" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addFromPhoneBook"
+            style="@style/VectorButtonStyleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="@dimen/layout_touch_size"
+            android:text="@string/search_in_my_contacts"
+            android:visibility="visible"
+            app:icon="@drawable/ic_plus_circle"
+            app:iconPadding="13dp"
+            app:iconTint="@color/riotx_accent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addByMatrixId" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
@@ -134,7 +151,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addByMatrixId"
+            app:layout_constraintTop_toBottomOf="@+id/addFromPhoneBook"
             tools:listitem="@layout/item_known_user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

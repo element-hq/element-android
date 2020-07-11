@@ -35,8 +35,15 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.features.contactsbook.ContactsBookFragment
+import im.vector.riotx.features.contactsbook.ContactsBookViewModel
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
@@ -53,6 +60,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
     @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
+    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
@@ -68,12 +76,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        UserDirectorySharedAction.OpenUsersDirectory ->
+                        UserDirectorySharedAction.OpenUsersDirectory    ->
                             addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
-                        UserDirectorySharedAction.Close           -> finish()
-                        UserDirectorySharedAction.GoBack          -> onBackPressed()
+                        UserDirectorySharedAction.Close                 -> finish()
+                        UserDirectorySharedAction.GoBack                -> onBackPressed()
                         is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                    }
+                        UserDirectorySharedAction.OpenPhoneBook         -> openPhoneBook()
+                    }.exhaustive
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
@@ -91,9 +100,27 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
+    private fun openPhoneBook() {
+        // Check permission first
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
+                        this,
+                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
+                        0)) {
+            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
+                addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            }
+        }
+    }
+
     private fun onMenuItemSelected(action: UserDirectorySharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selectedUsers))
+            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.invitees))
         }
     }
 

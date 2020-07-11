@@ -21,6 +21,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -36,6 +37,7 @@ import im.vector.matrix.android.internal.session.room.membership.admin.Membershi
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
+import im.vector.matrix.android.internal.session.room.membership.threepid.InviteThreePidTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -48,6 +50,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val taskExecutor: TaskExecutor,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val inviteTask: InviteTask,
+        private val inviteThreePidTask: InviteThreePidTask,
         private val joinTask: JoinRoomTask,
         private val leaveRoomTask: LeaveRoomTask,
         private val membershipAdminTask: MembershipAdminTask,
@@ -146,6 +149,15 @@ internal class DefaultMembershipService @AssistedInject constructor(
     override fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
         val params = InviteTask.Params(roomId, userId, reason)
         return inviteTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun invite3pid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        val params = InviteThreePidTask.Params(roomId, threePid)
+        return inviteThreePidTask
                 .configureWith(params) {
                     this.callback = callback
                 }
