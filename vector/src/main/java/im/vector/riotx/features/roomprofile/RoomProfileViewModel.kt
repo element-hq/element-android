@@ -73,7 +73,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
-                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, isState = true, eventType = EventType.STATE_ROOM_AVATAR))
+                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,  EventType.STATE_ROOM_AVATAR))
                     }
                 }
                 .disposeOnClear()

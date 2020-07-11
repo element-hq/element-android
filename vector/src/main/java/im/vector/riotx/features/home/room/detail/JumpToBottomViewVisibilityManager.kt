@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.riotx.core.utils.Debouncer
-import timber.log.Timber
 
 /**
  * Show or hide the jumpToBottomView, depending on the scrolling and if the timeline is displaying the more recent event
@@ -67,7 +66,6 @@ class JumpToBottomViewVisibilityManager(
     }
 
     private fun maybeShowJumpToBottomViewVisibility() {
-        Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
         if (layoutManager.findFirstVisibleItemPosition() != 0) {
             jumpToBottomView.show()
         } else {

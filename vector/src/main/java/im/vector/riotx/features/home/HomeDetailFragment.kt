@@ -32,7 +32,6 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransaction
-import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity

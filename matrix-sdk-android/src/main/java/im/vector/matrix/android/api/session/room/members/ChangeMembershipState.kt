@@ -30,5 +30,4 @@ sealed class ChangeMembershipState() {
     fun isSuccessful() = this is Joined || this is Left
 
     fun isFailed() = this is FailedJoining || this is FailedLeaving
-
 }

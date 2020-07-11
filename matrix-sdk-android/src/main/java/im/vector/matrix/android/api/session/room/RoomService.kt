@@ -111,7 +111,7 @@ interface RoomService {
      * It won't know anything about change being done in other client.
      * Keys are roomId or roomAlias, depending of what you used as parameter for the join/leave action
      */
-    fun getChangeMembershipsLive(): LiveData<Map<String,ChangeMembershipState>>
+    fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
     fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
 }

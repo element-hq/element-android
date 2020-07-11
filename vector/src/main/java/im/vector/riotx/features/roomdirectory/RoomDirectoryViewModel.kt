@@ -112,7 +112,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         if (it.roomDirectoryData == action.roomDirectoryData) {
             return@withState
         }
-        setState{
+        setState {
             copy(roomDirectoryData = action.roomDirectoryData)
         }
         reset("")

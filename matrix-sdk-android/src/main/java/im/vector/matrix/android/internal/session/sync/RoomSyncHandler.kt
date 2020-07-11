@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResu
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -414,7 +413,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
     }
 
-    private fun Event.getFixedRoomMemberContent(): RoomMemberContent?{
+    private fun Event.getFixedRoomMemberContent(): RoomMemberContent? {
         val content = content.toModel<RoomMemberContent>()
         // if user is leaving, we should grab his last name and avatar from prevContent
         return if (content?.membership?.isLeft() == true) {
@@ -427,5 +426,4 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             content
         }
     }
-
 }
