@@ -80,8 +80,6 @@ class KeysBackupBanner @JvmOverloads constructor(
         state = newState
 
         hideAll()
-        val parent = parent as ViewGroup
-        TransitionManager.beginDelayedTransition(parent)
         when (newState) {
             State.Initial    -> renderInitial()
             State.Hidden     -> renderHidden()
