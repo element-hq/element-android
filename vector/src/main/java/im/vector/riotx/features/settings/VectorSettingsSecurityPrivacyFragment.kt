@@ -23,6 +23,7 @@ import android.content.Intent
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -51,6 +52,7 @@ import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
+import im.vector.riotx.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -214,16 +216,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
         refreshXSigningStatus()
 
-//        secureBackupResetPreference?.let { pref ->
-//            val destructiveColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
-//            pref.title = span {
-//                text = getString(R.string.keys_backup_restore_setup_recovery_key)
-//                textColor = destructiveColor
-//            }
-//            pref.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)?.let {
-//                ThemeUtils.tintDrawableWithColor(it, destructiveColor)
-//            }
-//        }
+        secureBackupPreference.icon = activity?.let {
+            ThemeUtils.tintDrawable(it,
+                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_settings_icon_tint_color)
+        }
     }
 
     // Todo this should be refactored and use same state as 4S section
