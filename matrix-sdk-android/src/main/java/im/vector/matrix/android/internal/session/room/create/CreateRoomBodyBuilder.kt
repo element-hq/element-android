@@ -34,7 +34,7 @@ import im.vector.matrix.android.internal.session.room.membership.threepid.ThreeP
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
-internal class CreateRoomParamsInternalBuilder @Inject constructor(
+internal class CreateRoomBodyBuilder @Inject constructor(
         private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
         private val crossSigningService: CrossSigningService,
         private val deviceListManager: DeviceListManager,
