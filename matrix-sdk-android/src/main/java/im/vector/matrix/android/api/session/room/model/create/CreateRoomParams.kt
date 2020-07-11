@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
+// TODO Give a way to include other initial states
 class CreateRoomParams {
     /**
      * A public visibility indicates that the room will be shown in the published room list.
