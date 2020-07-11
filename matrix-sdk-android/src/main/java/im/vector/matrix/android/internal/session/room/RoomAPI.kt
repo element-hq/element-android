@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasBody
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
-import im.vector.matrix.android.internal.session.room.create.CreateRoomParams
+import im.vector.matrix.android.internal.session.room.create.CreateRoomBody
 import im.vector.matrix.android.internal.session.room.create.CreateRoomResponse
 import im.vector.matrix.android.internal.session.room.create.JoinRoomResponse
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
@@ -80,7 +80,7 @@ internal interface RoomAPI {
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "createRoom")
-    fun createRoom(@Body param: CreateRoomParams): Call<CreateRoomResponse>
+    fun createRoom(@Body param: CreateRoomBody): Call<CreateRoomResponse>
 
     /**
      * Get a list of messages starting from a reference.

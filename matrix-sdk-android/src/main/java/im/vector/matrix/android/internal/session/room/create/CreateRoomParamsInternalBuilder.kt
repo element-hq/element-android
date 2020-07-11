@@ -43,7 +43,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
         private val accessTokenProvider: AccessTokenProvider
 ) {
 
-    suspend fun build(builder: CreateRoomParamsBuilder): CreateRoomParams {
+    suspend fun build(builder: CreateRoomParamsBuilder): CreateRoomBody {
         val invite3pids = builder.invite3pids
                 .takeIf { it.isNotEmpty() }
                 .let {
@@ -70,7 +70,7 @@ internal class CreateRoomParamsInternalBuilder @Inject constructor(
         )
                 .takeIf { it.isNotEmpty() }
 
-        return CreateRoomParams(
+        return CreateRoomBody(
                 visibility = builder.visibility,
                 roomAliasName = builder.roomAliasName,
                 name = builder.name,

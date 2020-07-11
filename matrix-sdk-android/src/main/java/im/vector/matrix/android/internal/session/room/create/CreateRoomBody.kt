@@ -28,7 +28,7 @@ import im.vector.matrix.android.internal.session.room.membership.threepid.ThreeP
  * Parameter to create a room
  */
 @JsonClass(generateAdapter = true)
-internal data class CreateRoomParams(
+internal data class CreateRoomBody(
         /**
          * A public visibility indicates that the room will be shown in the published room list.
          * A private visibility will hide the room from the published room list.
