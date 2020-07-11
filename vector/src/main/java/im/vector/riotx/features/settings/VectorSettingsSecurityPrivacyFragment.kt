@@ -129,15 +129,12 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
-        secureBackupCategory.isVisible = false
-
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
         if (!info.isCrossSigningEnabled) {
             // There is not cross signing, so we can remove the section
+            secureBackupCategory.isVisible = false
         } else {
-            secureBackupCategory.isVisible = true
-
             if (!info.isBackupSetup) {
                 if (info.isCrossSigningEnabled && info.allPrivateKeysKnown) {
                     // You can setup recovery!
@@ -154,26 +151,40 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     // you should synchronize to get gossips
                     secureBackupCategory.isVisible = false
                 }
-                return
-            }
-
-            // so here we know that 4S is setup
-            if (info.isCrossSigningTrusted && info.allPrivateKeysKnown) {
-                // Looks like we have all cross signing secrets and session is trusted
-                // Let's see if there is a megolm backup
-                if (!info.megolmBackupAvailable || info.megolmSecretKnown) {
-                    // Only option here is to create a new backup if you want?
-                    // aka reset
-                    secureBackupCategory.isVisible = true
-                    secureBackupPreference.isVisible = true
-                    secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
-                    secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
-                        true
+            } else {
+                // so here we know that 4S is setup
+                if (info.isCrossSigningTrusted && info.allPrivateKeysKnown) {
+                    // Looks like we have all cross signing secrets and session is trusted
+                    // Let's see if there is a megolm backup
+                    if (!info.megolmBackupAvailable || info.megolmSecretKnown) {
+                        // Only option here is to create a new backup if you want?
+                        // aka reset
+                        secureBackupCategory.isVisible = true
+                        secureBackupPreference.isVisible = true
+                        secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
+                        secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                            BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
+                            true
+                        }
+                    } else if (!info.megolmSecretKnown) {
+                        // megolm backup is available but we don't have key
+                        // you could try to synchronize to get missing megolm key ?
+                        secureBackupCategory.isVisible = true
+                        secureBackupPreference.isVisible = true
+                        secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                        secureBackupPreference.isEnabled = true
+                        secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                            (requireActivity() as? VectorBaseActivity)?.let {
+                                it.navigator.requestSelfSessionVerification(it)
+                            }
+                            true
+                        }
+                    } else {
+                        secureBackupCategory.isVisible = false
                     }
-                } else if (!info.megolmSecretKnown) {
-                    // megolm backup is available but we don't have key
-                    // you could try to synchronize to get missing megolm key ?
+                } else {
+                    // there is a backup, but this session is not trusted, or is missing some secrets
+                    // you should enter passphrase to get them or verify against another session
                     secureBackupCategory.isVisible = true
                     secureBackupPreference.isVisible = true
                     secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
@@ -184,22 +195,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                         }
                         true
                     }
-                } else {
-                    secureBackupCategory.isVisible = false
-                }
-                return
-            } else {
-                // there is a backup, but this session is not trusted, or is missing some secrets
-                // you should enter passphrase to get them or verify against another session
-                secureBackupCategory.isVisible = true
-                secureBackupPreference.isVisible = true
-                secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
-                secureBackupPreference.isEnabled = true
-                secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    (requireActivity() as? VectorBaseActivity)?.let {
-                        it.navigator.requestSelfSessionVerification(it)
-                    }
-                    true
                 }
             }
         }
