@@ -76,7 +76,7 @@
             android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
-            android:src="@drawable/ic_eye_black"
+            android:src="@drawable/ic_eye"
             android:tint="?attr/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/keys_backup_passphrase_enter_til"

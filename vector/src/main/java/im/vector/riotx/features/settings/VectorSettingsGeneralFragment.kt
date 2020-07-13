@@ -817,7 +817,7 @@ private fun showEmailValidationDialog(pid: ThreePid) {
                 newPasswordText.showPassword(passwordShown)
                 confirmNewPasswordText.showPassword(passwordShown)
 
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             val dialog = AlertDialog.Builder(activity)

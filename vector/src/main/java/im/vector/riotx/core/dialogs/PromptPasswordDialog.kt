@@ -49,7 +49,7 @@ class PromptPasswordDialog {
         showPassword.setOnClickListener {
             passwordVisible = !passwordVisible
             passwordEditText.showPassword(passwordVisible)
-            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
         AlertDialog.Builder(activity)

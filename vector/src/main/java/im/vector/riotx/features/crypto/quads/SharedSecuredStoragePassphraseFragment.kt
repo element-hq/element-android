@@ -97,6 +97,6 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
     override fun invalidate() = withState(sharedViewModel) { state ->
         val shouldBeVisible = state.passphraseVisible
         ssss_passphrase_enter_edittext.showPassword(shouldBeVisible)
-        ssss_view_show_password.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+        ssss_view_show_password.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
     }
 }

@@ -74,7 +74,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
-            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         })
 
         mPassphraseTextEdit.setOnEditorActionListener { _, actionId, _ ->
