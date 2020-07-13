@@ -81,7 +81,7 @@
                 android:layout_marginTop="6dp"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                tools:text="@string/login_server_url_form_modular_notice" />
+                tools:text="@string/login_server_url_form_common_notice" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginServerUrlFormSubmit"

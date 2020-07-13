@@ -1815,14 +1815,14 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="login_continue">Kontynuuj</string>
     <string name="login_connect_to">Połącz z %1$s</string>
-    <string name="login_connect_to_modular">Połącz z Modular</string>
+    <string name="login_connect_to_modular">Połącz z Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Połącz z serwerem niestandardowym</string>
     <string name="login_signin_to">Zaloguj się do %1$s</string>
     <string name="login_signup">Zarejestruj</string>
     <string name="login_signin">Zaloguj się</string>
     <string name="login_signin_sso">Kontynuuj za pomocą logowania jednostopniowego</string>
 
-    <string name="login_server_url_form_modular_hint">Adres Modular</string>
+    <string name="login_server_url_form_modular_hint">Adres Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adres</string>
     <string name="login_server_url_form_modular_text">Hosting premium dla organizacji</string>
     <string name="login_server_url_form_modular_notice">Wprowadź adres Element Modular lub serwera którego chcesz użyć</string>
@@ -1900,7 +1900,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \nZatrzymać proces rejestracji\?</string>
 
     <string name="login_a11y_choose_matrix_org">Wybierz matrix.org</string>
-    <string name="login_a11y_choose_modular">Wybierz modular</string>
+    <string name="login_a11y_choose_modular">Wybierz Element Matrix Services</string>
     <string name="login_a11y_choose_other">Wybierz niestandardowy serwer domowy</string>
     <string name="login_a11y_captcha_container">Wypełnij zadanie Captcha</string>
     <string name="login_terms_title">Zaakceptuj warunki aby kontynuować</string>

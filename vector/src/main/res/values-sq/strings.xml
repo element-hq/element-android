@@ -1787,14 +1787,14 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="login_continue">Vazhdo</string>
     <string name="login_connect_to">Lidhu me %1$s</string>
-    <string name="login_connect_to_modular">Lidhu me një shërbyes modular</string>
+    <string name="login_connect_to_modular">Lidhu me një shërbyes Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Lidhu me një shërbyes vetjak</string>
     <string name="login_signin_to">Hyni te %1$s</string>
     <string name="login_signup">Regjistrohuni</string>
     <string name="login_signin">Hyni</string>
     <string name="login_signin_sso">Vazhdoni me SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Adresë Modulari</string>
+    <string name="login_server_url_form_modular_hint">Adresë Element Matrix Services i</string>
     <string name="login_server_url_form_other_hint">Adresë</string>
     <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
     <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret</string>
@@ -1871,7 +1871,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nTë ndalet procesi i regjistrimit\?</string>
 
     <string name="login_a11y_choose_matrix_org">Përzgjidhni matrix.org</string>
-    <string name="login_a11y_choose_modular">Përzgjidhni modular</string>
+    <string name="login_a11y_choose_modular">Përzgjidhni Element Matrix Services</string>
     <string name="login_a11y_choose_other">Përzgjidhni një shërbyes Home vetjak</string>
     <string name="login_a11y_captcha_container">Ju lutemi, zgjidhni captcha-n</string>
     <string name="login_terms_title">Që të vazhdohet, pranoni terma</string>

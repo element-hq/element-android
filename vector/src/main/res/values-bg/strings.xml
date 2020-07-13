@@ -1824,14 +1824,14 @@
 
     <string name="login_continue">Продължи</string>
     <string name="login_connect_to">Свържи се с %1$s</string>
-    <string name="login_connect_to_modular">Свърже се с Modular</string>
+    <string name="login_connect_to_modular">Свърже се с Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Свържи се със собствен сървър</string>
     <string name="login_signin_to">Влез в %1$s</string>
     <string name="login_signup">Регистрация</string>
     <string name="login_signin">Вход</string>
     <string name="login_signin_sso">Продължи със SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Modular адрес</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services адрес</string>
     <string name="login_server_url_form_other_hint">Адрес</string>
     <string name="login_server_url_form_modular_text">Премиум хостинг за организации</string>
     <string name="login_server_url_form_modular_notice">Въведете адреса на Modular Element или на сървър, който искате да използвате</string>
@@ -1908,7 +1908,7 @@
 \nПрекратяване на процеса на регистрация\?</string>
 
     <string name="login_a11y_choose_matrix_org">Избери matrix.org</string>
-    <string name="login_a11y_choose_modular">Избери Modular</string>
+    <string name="login_a11y_choose_modular">Избери Element Matrix Services</string>
     <string name="login_a11y_choose_other">Избери собствен сървър</string>
     <string name="login_a11y_captcha_container">Моля извършете captcha проверката</string>
     <string name="login_terms_title">Приемете условията за да продължите</string>

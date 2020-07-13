@@ -1464,14 +1464,14 @@
 
     <string name="login_continue">Nastavi</string>
     <string name="login_connect_to">Spoji se na %1$s</string>
-    <string name="login_connect_to_modular">Spoji se na Modular</string>
+    <string name="login_connect_to_modular">Spoji se na Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Spoji se na prilagođenog poslužitelja</string>
     <string name="login_signin_to">Prijavi se na %1$s</string>
     <string name="login_signup">Otvori račun</string>
     <string name="login_signin">Prijavi se</string>
     <string name="login_signin_sso">Nastavi sa SSO-om</string>
 
-    <string name="login_server_url_form_modular_hint">Adresa u Modularu</string>
+    <string name="login_server_url_form_modular_hint">Adresa u Element Matrix Services u</string>
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Plaćeno gošćenje za organizacije</string>
     <string name="login_server_url_form_modular_notice">Unesite adresu Modular Elementa ili poslužitelja koji želite koristiti</string>

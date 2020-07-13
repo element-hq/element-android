@@ -1784,14 +1784,14 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="login_continue">繼續</string>
     <string name="login_connect_to">連線到 %1$s</string>
-    <string name="login_connect_to_modular">連線到 Modular</string>
+    <string name="login_connect_to_modular">連線到 Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">連線到自訂伺服器</string>
     <string name="login_signin_to">登入到 %1$s</string>
     <string name="login_signup">註冊</string>
     <string name="login_signin">登入</string>
     <string name="login_signin_sso">以 SSO 繼續</string>
 
-    <string name="login_server_url_form_modular_hint">Modular 位置</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services 位置</string>
     <string name="login_server_url_form_other_hint">位置</string>
     <string name="login_server_url_form_modular_text">組織有專業主機</string>
     <string name="login_server_url_form_modular_notice">輸入 Modular Element 或您想要使用的伺服器位置</string>
@@ -1868,7 +1868,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n停止註冊程序？</string>
 
     <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
-    <string name="login_a11y_choose_modular">選取 modular</string>
+    <string name="login_a11y_choose_modular">選取 Element Matrix Services</string>
     <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
     <string name="login_a11y_captcha_container">請執行 captcha 挑戰</string>
     <string name="login_terms_title">接受條款以繼續</string>

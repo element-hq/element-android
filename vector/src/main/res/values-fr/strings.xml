@@ -1835,14 +1835,14 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="login_continue">Continuer</string>
     <string name="login_connect_to">Se connecter à %1$s</string>
-    <string name="login_connect_to_modular">Se connecter à Modular</string>
+    <string name="login_connect_to_modular">Se connecter à Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Se connecter à un serveur personnalisé</string>
     <string name="login_signin_to">S’authentifier sur %1$s</string>
     <string name="login_signup">S’inscrire</string>
     <string name="login_signin">S’authentifier</string>
     <string name="login_signin_sso">Continuer avec l’authentification unique</string>
 
-    <string name="login_server_url_form_modular_hint">Adresse Modular</string>
+    <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
     <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
@@ -1919,7 +1919,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \nArrêter le processus de création \?</string>
 
     <string name="login_a11y_choose_matrix_org">Sélectionner matrix.org</string>
-    <string name="login_a11y_choose_modular">Sélectionner Modular</string>
+    <string name="login_a11y_choose_modular">Sélectionner Element Matrix Services</string>
     <string name="login_a11y_choose_other">Sélectionner un serveur d’accueil personnalisé</string>
     <string name="login_a11y_captcha_container">Veuillez compléter le captcha</string>
     <string name="login_terms_title">Acceptez les termes pour continuer</string>

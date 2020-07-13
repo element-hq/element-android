@@ -1881,14 +1881,14 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="login_continue">Jatka</string>
     <string name="login_connect_to">Yhdistä palvelimeen %1$s</string>
-    <string name="login_connect_to_modular">Yhdistä Modulariin</string>
+    <string name="login_connect_to_modular">Yhdistä Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Yhdistä itse määritettyyn palvelimeen</string>
     <string name="login_signin_to">Kirjaudu sisään palvelimeen %1$s</string>
     <string name="login_signup">Rekisteröidy</string>
     <string name="login_signin">Kirjaudu sisään</string>
     <string name="login_signin_sso">Jatka kertakirjautumiseen</string>
 
-    <string name="login_server_url_form_modular_hint">Modularin osoite</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services in osoite</string>
     <string name="login_server_url_form_other_hint">Osoite</string>
     <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
     <string name="login_server_url_form_modular_notice">Syötä Modular Elementin tai haluamasi palvelimen osoite</string>
@@ -1963,7 +1963,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nPeru rekisteröintiprosessi\?</string>
 
     <string name="login_a11y_choose_matrix_org">Valitse matrix.org</string>
-    <string name="login_a11y_choose_modular">Valitse modular</string>
+    <string name="login_a11y_choose_modular">Valitse Element Matrix Services</string>
     <string name="login_a11y_choose_other">Valitse muu kotipalvelin</string>
     <string name="login_a11y_captcha_container">Ratkaise seuraava kuvavarmennushaaste</string>
     <string name="login_terms_title">Hyväksy ehdot jatkaaksesi</string>

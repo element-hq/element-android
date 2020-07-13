@@ -1826,14 +1826,14 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="login_continue">Jarraitu</string>
     <string name="login_connect_to">Konektatu %1$s zerbitzarira</string>
-    <string name="login_connect_to_modular">Konektatu Modular-era</string>
+    <string name="login_connect_to_modular">Konektatu Element Matrix Services-era</string>
     <string name="login_connect_to_a_custom_server">Konektatu zerbitzari pertsonalizatu batera</string>
     <string name="login_signin_to">Hasi saioa %1$s zerbitzarian</string>
     <string name="login_signup">Erregistratu</string>
     <string name="login_signin">Hasi saioa</string>
     <string name="login_signin_sso">Jarraitu SSO-rekin</string>
 
-    <string name="login_server_url_form_modular_hint">Modular helbidea</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services helbidea</string>
     <string name="login_server_url_form_other_hint">Helbidea</string>
     <string name="login_server_url_form_modular_text">Ordainpeko ostatatzea elkarteentzat</string>
     <string name="login_server_url_form_modular_notice">Sartu erabili nahi duzun Modular Element edo zerbitzariaren helbidea</string>
@@ -1910,7 +1910,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \nUtzi erregistratze prozesua\?</string>
 
     <string name="login_a11y_choose_matrix_org">Hautatu matrix.org</string>
-    <string name="login_a11y_choose_modular">Hautatu modular</string>
+    <string name="login_a11y_choose_modular">Hautatu Element Matrix Services</string>
     <string name="login_a11y_choose_other">Hautatu hasiera-zerbitzari pertsonalizatu bat</string>
     <string name="login_a11y_captcha_container">Bete captcha erronka</string>
     <string name="login_terms_title">Onartu baldintzak jarraitzeko</string>

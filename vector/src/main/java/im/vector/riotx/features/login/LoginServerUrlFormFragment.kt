@@ -68,7 +68,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
                 loginServerUrlFormLearnMore.isVisible = true
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
-                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
+                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
             else               -> {
                 loginServerUrlFormIcon.isVisible = false
@@ -76,7 +76,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
                 loginServerUrlFormLearnMore.isVisible = false
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_other_hint)
-                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_other_notice)
+                loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
         }
     }

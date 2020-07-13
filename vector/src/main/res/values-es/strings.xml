@@ -1877,7 +1877,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="login_continue">Continuar</string>
     <string name="login_connect_to">Conectarse a %1$s</string>
-    <string name="login_connect_to_modular">Conectarse a Modular</string>
+    <string name="login_connect_to_modular">Conectarse a Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Conectarse a un servidor externo</string>
     <string name="login_signin_to">Iniciar sesión en %1$s</string>
     <string name="login_signup">Registrarse</string>

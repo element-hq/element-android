@@ -1812,14 +1812,14 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="login_continue">Pokračovat</string>
     <string name="login_connect_to">Připojit k %1$s</string>
-    <string name="login_connect_to_modular">Připojit k Modular</string>
+    <string name="login_connect_to_modular">Připojit k Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Upravit připojení k serveru</string>
     <string name="login_signin_to">Přihlásit se na %1$s</string>
     <string name="login_signup">Založit účet</string>
     <string name="login_signin">Přihlásit se</string>
     <string name="login_signin_sso">Pokračovat s SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Adresa Modular</string>
+    <string name="login_server_url_form_modular_hint">Adresa Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
     <string name="login_server_url_form_modular_notice">Zadejte adresu Modular Element nebo serveru, který chcete použít</string>
@@ -1895,7 +1895,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \nZastavit registrační proces\?</string>
 
     <string name="login_a11y_choose_matrix_org">Vybrat matrix.org</string>
-    <string name="login_a11y_choose_modular">Vybrat modular</string>
+    <string name="login_a11y_choose_modular">Vybrat Element Matrix Services</string>
     <string name="login_a11y_choose_other">Vybrat upravený homeserver</string>
     <string name="login_a11y_captcha_container">Prosím, proveďte vybídnutí captcha</string>
     <string name="login_terms_title">Přijmout všeobecné podmínky a pokračovat</string>

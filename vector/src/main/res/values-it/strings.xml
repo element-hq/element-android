@@ -1880,14 +1880,14 @@
 
     <string name="login_continue">Continua</string>
     <string name="login_connect_to">Connetti a %1$s</string>
-    <string name="login_connect_to_modular">Connetti a Modular</string>
+    <string name="login_connect_to_modular">Connetti a Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Connetti ad un server personalizzato</string>
     <string name="login_signin_to">Accedi a %1$s</string>
     <string name="login_signup">Registrati</string>
     <string name="login_signin">Accedi</string>
     <string name="login_signin_sso">Continua con SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Indirizzo Modular</string>
+    <string name="login_server_url_form_modular_hint">Indirizzo Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Indirizzo</string>
     <string name="login_server_url_form_modular_text">Hosting premium per organizzazioni</string>
     <string name="login_server_url_form_modular_notice">Inserisci l\'indirizzo del Element Modular o del server che vuoi usare</string>
@@ -1964,7 +1964,7 @@
 \nFermare il processo di registrazione\?</string>
 
     <string name="login_a11y_choose_matrix_org">Seleziona matrix.org</string>
-    <string name="login_a11y_choose_modular">Seleziona Modular</string>
+    <string name="login_a11y_choose_modular">Seleziona Element Matrix Services</string>
     <string name="login_a11y_choose_other">Seleziona un server personalizzato</string>
     <string name="login_a11y_captcha_container">Completa la verifica Captcha</string>
     <string name="login_terms_title">Accetta le condizioni per continuare</string>

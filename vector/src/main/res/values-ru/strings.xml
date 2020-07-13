@@ -1869,7 +1869,7 @@
 
     <string name="login_continue">Продолжить</string>
     <string name="login_connect_to">Подключиться к %1$s</string>
-    <string name="login_connect_to_modular">Подключиться к Modular</string>
+    <string name="login_connect_to_modular">Подключиться к Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Подключиться к пользовательскому серверу</string>
     <string name="login_signup">Зарегистрироваться</string>
     <string name="login_signin">Войти в систему</string>
@@ -1946,7 +1946,7 @@
 \nОстановить процесс регистрации\?</string>
 
     <string name="login_a11y_choose_matrix_org">Выбрать matrix.org</string>
-    <string name="login_a11y_choose_modular">Выбрать modular</string>
+    <string name="login_a11y_choose_modular">Выбрать Element Matrix Services</string>
     <string name="login_a11y_choose_other">Выбрать другой сервер</string>
     <string name="login_a11y_captcha_container">Пожалуйста, пройдите проверку капчей</string>
     <string name="login_terms_title">Примите условия для продолжения</string>
