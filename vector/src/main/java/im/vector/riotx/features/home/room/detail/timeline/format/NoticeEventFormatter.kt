@@ -286,7 +286,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         return when (type) {
             EventType.CALL_INVITE     -> {
                 val content = event.getClearContent().toModel<CallInviteContent>() ?: return null
-                val isVideoCall = content.offer?.sdp == CallInviteContent.Offer.SDP_VIDEO
+                val isVideoCall = content.isVideo()
                 return if (isVideoCall) {
                     if (event.isSentByCurrentUser()) {
                         sp.getString(R.string.notice_placed_video_call_by_you)

@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Video calls are shown as a voice ones in the timeline (#1676)
 
 Translations 🗣:
  -
