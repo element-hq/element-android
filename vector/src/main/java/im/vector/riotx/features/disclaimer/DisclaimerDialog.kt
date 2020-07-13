@@ -17,20 +17,14 @@
 package im.vector.riotx.features.disclaimer
 
 import android.app.Activity
-import android.content.DialogInterface
-import androidx.preference.PreferenceManager
-import android.view.ViewGroup
-import android.widget.TextView
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
-import im.vector.riotx.core.dialogs.withColoredButton
-import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.utils.displayInWebView
-import im.vector.riotx.core.utils.openPlayStore
 import im.vector.riotx.features.settings.VectorSettingsUrls
-import im.vector.riotx.features.themes.ThemeUtils
 
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
 private const val CURRENT_DISCLAIMER_VALUE = 2
@@ -55,5 +49,13 @@ fun showDisclaimerDialog(activity: Activity) {
                     activity.displayInWebView(VectorSettingsUrls.DISCLAIMER_URL)
                 }
                 .show()
+    }
+}
+
+fun doNotShowDisclaimerDialog(context: Context) {
+    val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    sharedPrefs.edit {
+        putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
     }
 }

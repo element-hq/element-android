@@ -46,6 +46,7 @@ import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.rx.RxConfig
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.configuration.VectorConfiguration
+import im.vector.riotx.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
@@ -132,7 +133,11 @@ class VectorApplication :
         notificationUtils.createNotificationChannels()
 
         // It can takes time, but do we care?
-        legacySessionImporter.process()
+        val sessionImported = legacySessionImporter.process()
+        if (!sessionImported) {
+            // Do not display the name change popup
+            doNotShowDisclaimerDialog(this)
+        }
 
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
