@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.R
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.openOssLicensesMenuActivity
@@ -103,7 +104,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // third party notice
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.THIRD_PARTY_LICENSES)
+            activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
             false
         }
 
