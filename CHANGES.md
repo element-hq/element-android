@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix regression: not able to create a room without IS configured (#1679)
 
 Translations 🗣:
  -
