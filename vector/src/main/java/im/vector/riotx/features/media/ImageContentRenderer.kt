@@ -151,7 +151,10 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    fun renderThumbnailDontTransform(data: Data, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
+    /**
+     * onlyRetrieveFromCache is true!
+     */
+    fun renderForSharedElementTransition(data: Data, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
         // a11y
         imageView.contentDescription = data.filename
 
@@ -186,7 +189,8 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 return false
             }
         })
-                .dontTransform()
+                .onlyRetrieveFromCache(true)
+                .fitCenter()
                 .into(imageView)
     }
 

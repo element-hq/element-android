@@ -96,7 +96,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                     // will be shown at end of transition
                     pager2.isInvisible = true
                     supportPostponeEnterTransition()
-                    imageContentRenderer.renderThumbnailDontTransform(mediaData, imageTransitionView) {
+                    imageContentRenderer.renderForSharedElementTransition(mediaData, imageTransitionView) {
                         // Proceed with transaction
                         scheduleStartPostponedTransition(imageTransitionView)
                     }
@@ -104,7 +104,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                     // will be shown at end of transition
                     pager2.isInvisible = true
                     supportPostponeEnterTransition()
-                    imageContentRenderer.renderThumbnailDontTransform(mediaData.thumbnailMediaData, imageTransitionView) {
+                    imageContentRenderer.renderForSharedElementTransition(mediaData.thumbnailMediaData, imageTransitionView) {
                         // Proceed with transaction
                         scheduleStartPostponedTransition(imageTransitionView)
                     }
