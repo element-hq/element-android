@@ -124,10 +124,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
         passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
             passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye)
             passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }
