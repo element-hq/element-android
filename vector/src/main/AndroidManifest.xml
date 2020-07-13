@@ -85,6 +85,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.media.ImageMediaViewerActivity" />
+
+        <activity
+            android:name=".features.media.VectorAttachmentViewerActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"

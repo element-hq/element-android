@@ -30,8 +30,15 @@ internal class RoomMemberEventHandler @Inject constructor() {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
-        val roomMember = event.content.toModel<RoomMemberContent>() ?: return false
         val userId = event.stateKey ?: return false
+        val roomMember = event.content.toModel<RoomMemberContent>()
+        return handle(realm, roomId, userId, roomMember)
+    }
+
+    fun handle(realm: Realm, roomId: String, userId: String, roomMember: RoomMemberContent?): Boolean {
+        if (roomMember == null) {
+            return false
+        }
         val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
         realm.insertOrUpdate(roomMemberEntity)
         if (roomMember.membership.isActive()) {

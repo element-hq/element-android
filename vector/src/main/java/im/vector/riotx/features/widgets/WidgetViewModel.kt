@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.widgets
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
@@ -236,7 +237,9 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 _viewEvents.post(WidgetViewEvents.OnURLFormatted(formattedUrl))
             } catch (failure: Throwable) {
                 if (failure is WidgetManagementFailure.TermsNotSignedException) {
-                    _viewEvents.post(WidgetViewEvents.DisplayTerms(initialState.baseUrl, failure.token))
+                    // Terms for IM shouldn't have path appended
+                    val displayTermsBaseUrl = Uri.parse(initialState.baseUrl).buildUpon().path("").toString()
+                    _viewEvents.post(WidgetViewEvents.DisplayTerms(displayTermsBaseUrl, failure.token))
                 }
                 setState { copy(formattedURL = Fail(failure)) }
             }

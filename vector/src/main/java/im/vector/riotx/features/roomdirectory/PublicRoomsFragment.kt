@@ -114,26 +114,22 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
         Timber.v("PublicRoomClicked: $publicRoom")
-
-        when (joinState) {
-            JoinState.JOINED        -> {
-                navigator.openRoom(requireActivity(), publicRoom.roomId)
-            }
-            JoinState.NOT_JOINED,
-            JoinState.JOINING_ERROR -> {
-                // ROOM PREVIEW
-                navigator.openRoomPreview(publicRoom, requireActivity())
-            }
-            else                    -> {
-                Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)
-                        .show()
+        withState(viewModel) { state ->
+            when (joinState) {
+                JoinState.JOINED -> {
+                    navigator.openRoom(requireActivity(), publicRoom.roomId)
+                }
+                else             -> {
+                    // ROOM PREVIEW
+                    navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
+                }
             }
         }
     }
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.getPrimaryAlias(), publicRoom.roomId))
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
     }
 
     override fun loadMore() {

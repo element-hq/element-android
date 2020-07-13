@@ -279,6 +279,7 @@ dependencies {
     implementation project(":matrix-sdk-android-rx")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
+    implementation project(":attachment-viewer")
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -289,7 +290,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'
+    // Keep at 2.0.0-beta4 at the moment, as updating is breaking some UI
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.core:core-ktx:1.3.0'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
@@ -368,6 +370,10 @@ dependencies {
     implementation "com.github.piasy:GlideImageLoader:$big_image_viewer_version"
     implementation "com.github.piasy:ProgressPieIndicator:$big_image_viewer_version"
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
+
+    // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.danikula:videocache:2.7.1'

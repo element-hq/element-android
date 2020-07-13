@@ -250,7 +250,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             is VerificationTxState.Started,
             is VerificationTxState.WaitingOtherReciprocateConfirm -> {
                 showFragment(VerificationQRWaitingFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationQRWaitingFragment.Args(state.isMe, state.otherUserMxItem?.getBestName() ?: ""))
+                    putParcelable(MvRx.KEY_ARG, VerificationQRWaitingFragment.Args(
+                            isMe = state.isMe,
+                            otherUserName = state.otherUserMxItem?.getBestName() ?: ""
+                    ))
                 })
                 return@withState
             }
@@ -349,6 +352,17 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             otherUserId = session.myUserId,
                             selfVerificationMode = true
+                    ))
+                }
+            }
+        }
+        fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
+            return VerificationBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                            otherUserId = session.myUserId,
+                            selfVerificationMode = true,
+                            verificationId = outgoingRequest
                     ))
                 }
             }

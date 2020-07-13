@@ -19,9 +19,9 @@ package im.vector.riotx.features.home.room.list
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
@@ -29,6 +29,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.ButtonStateView
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.invite.InviteButtonStateBinder
 
 @EpoxyModelClass(layout = R.layout.item_room_invitation)
 abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>() {
@@ -37,53 +38,36 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var secondLine: CharSequence? = null
     @EpoxyAttribute var listener: (() -> Unit)? = null
-    @EpoxyAttribute var invitationAcceptInProgress: Boolean = false
-    @EpoxyAttribute var invitationAcceptInError: Boolean = false
-    @EpoxyAttribute var invitationRejectInProgress: Boolean = false
-    @EpoxyAttribute var invitationRejectInError: Boolean = false
+    @EpoxyAttribute lateinit var changeMembershipState: ChangeMembershipState
     @EpoxyAttribute var acceptListener: (() -> Unit)? = null
     @EpoxyAttribute var rejectListener: (() -> Unit)? = null
+
+    private val acceptCallback = object : ButtonStateView.Callback {
+        override fun onButtonClicked() {
+            acceptListener?.invoke()
+        }
+
+        override fun onRetryClicked() {
+            acceptListener?.invoke()
+        }
+    }
+
+    private val rejectCallback = object : ButtonStateView.Callback {
+        override fun onButtonClicked() {
+            rejectListener?.invoke()
+        }
+
+        override fun onRetryClicked() {
+            rejectListener?.invoke()
+        }
+    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
-
-        // When a request is in progress (accept or reject), we only use the accept State button
-        val requestInProgress = invitationAcceptInProgress || invitationRejectInProgress
-
-        when {
-            requestInProgress       -> holder.acceptView.render(ButtonStateView.State.Loading)
-            invitationAcceptInError -> holder.acceptView.render(ButtonStateView.State.Error)
-            else                    -> holder.acceptView.render(ButtonStateView.State.Button)
-        }
-        // ButtonStateView.State.Loaded not used because roomSummary will not be displayed as a room invitation anymore
-
-        holder.acceptView.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                acceptListener?.invoke()
-            }
-
-            override fun onRetryClicked() {
-                acceptListener?.invoke()
-            }
-        }
-
-        holder.rejectView.isVisible = !requestInProgress
-
-        when {
-            invitationRejectInError -> holder.rejectView.render(ButtonStateView.State.Error)
-            else                    -> holder.rejectView.render(ButtonStateView.State.Button)
-        }
-
-        holder.rejectView.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                rejectListener?.invoke()
-            }
-
-            override fun onRetryClicked() {
-                rejectListener?.invoke()
-            }
-        }
+        holder.acceptView.callback = acceptCallback
+        holder.rejectView.callback = rejectCallback
+        InviteButtonStateBinder.bind(holder.acceptView, holder.rejectView, changeMembershipState)
         holder.titleView.text = matrixItem.getBestName()
         holder.subtitleView.setTextOrHide(secondLine)
         avatarRenderer.render(matrixItem, holder.avatarImageView)

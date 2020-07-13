@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package im.vector.riotx.core.platform
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.content.withStyledAttributes
 import androidx.core.widget.NestedScrollView
 import im.vector.riotx.R
 
@@ -34,9 +35,9 @@ class MaxHeightScrollView @JvmOverloads constructor(context: Context, attrs: Att
 
     init {
         if (attrs != null) {
-            val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView)
-            maxHeight = styledAttrs.getDimensionPixelSize(R.styleable.MaxHeightScrollView_maxHeight, DEFAULT_MAX_HEIGHT)
-            styledAttrs.recycle()
+            context.withStyledAttributes(attrs, R.styleable.MaxHeightScrollView) {
+                maxHeight = getDimensionPixelSize(R.styleable.MaxHeightScrollView_maxHeight, DEFAULT_MAX_HEIGHT)
+            }
         }
     }
 

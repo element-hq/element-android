@@ -48,6 +48,7 @@ import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.media.VectorAttachmentViewerActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
@@ -72,6 +73,7 @@ import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.ui.UiStateRepository
 import im.vector.riotx.features.widgets.WidgetActivity
 import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import im.vector.riotx.features.workers.signout.SignOutBottomSheetDialogFragment
 
 @Component(
         dependencies = [
@@ -135,6 +137,7 @@ interface ScreenComponent {
     fun inject(activity: ReviewTermsActivity)
     fun inject(activity: WidgetActivity)
     fun inject(activity: VectorCallActivity)
+    fun inject(activity: VectorAttachmentViewerActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -152,6 +155,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
     fun inject(bottomSheet: RoomWidgetsBottomSheet)
     fun inject(bottomSheet: CallControlsBottomSheet)
+    fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
 
     /* ==========================================================================================
      * Others

@@ -47,6 +47,7 @@ import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import okhttp3.OkHttpClient
 
 /**
  * This interface defines interactions with a session.
@@ -204,6 +205,13 @@ interface Session :
      * @param listener the listener to remove.
      */
     fun removeListener(listener: Listener)
+
+    /**
+     * Will return a OkHttpClient which will manage pinned certificates and Proxy if configured.
+     * It will not add any access-token to the request.
+     * So it is exposed to let the app be able to download image with Glide or any other libraries which accept an OkHttp client.
+     */
+    fun getOkHttpClient(): OkHttpClient
 
     /**
      * A global session listener to get notified for some events.

@@ -25,6 +25,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -71,7 +72,9 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
         powerLevelsContentLive
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState { copy(canChangeAvatar = powerLevelsHelper.isUserAbleToChangeRoomAvatar(session.myUserId)) }
+                    setState {
+                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,  EventType.STATE_ROOM_AVATAR))
+                    }
                 }
                 .disposeOnClear()
     }
@@ -95,7 +98,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         room.leave(null, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomProfileViewEvents.OnLeaveRoomSuccess)
+                // Do nothing, we will be closing the room automatically when it will get back from sync
             }
 
             override fun onFailure(failure: Throwable) {

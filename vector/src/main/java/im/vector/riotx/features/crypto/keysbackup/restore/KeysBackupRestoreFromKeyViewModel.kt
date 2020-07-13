@@ -49,7 +49,7 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val recoveryKey = recoveryCode.value!!
             try {
-                sharedViewModel.recoverUsingBackupPass(recoveryKey)
+                sharedViewModel.recoverUsingBackupRecoveryKey(recoveryKey)
             } catch (failure: Throwable) {
                 recoveryCodeErrorText.postValue(stringProvider.getString(R.string.keys_backup_recovery_code_error_decrypt))
             }

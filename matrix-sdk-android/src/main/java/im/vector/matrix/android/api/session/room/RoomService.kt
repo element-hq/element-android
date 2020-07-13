@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
@@ -104,5 +105,13 @@ interface RoomService {
                          searchOnServer: Boolean,
                          callback: MatrixCallback<Optional<String>>): Cancelable
 
-    fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
+    /**
+     * Return a live data of all local changes membership that happened since the session has been opened.
+     * It allows you to track this in your client to known what is currently being processed by the SDK.
+     * It won't know anything about change being done in other client.
+     * Keys are roomId or roomAlias, depending of what you used as parameter for the join/leave action
+     */
+    fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
+
+    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
 }

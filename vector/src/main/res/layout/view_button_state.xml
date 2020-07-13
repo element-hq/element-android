@@ -29,6 +29,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
+        android:indeterminateOnly="true"
         android:scaleType="center"
         tools:layout_gravity="center_horizontal"
         tools:layout_marginTop="80dp" />

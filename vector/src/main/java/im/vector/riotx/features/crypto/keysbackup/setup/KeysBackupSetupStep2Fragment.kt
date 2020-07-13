@@ -15,13 +15,13 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.setup
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.OnClick
@@ -33,6 +33,8 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.PasswordStrengthBar
 import im.vector.riotx.features.settings.VectorLocale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() {
@@ -117,9 +119,9 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
-                AsyncTask.execute {
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
                     val strength = zxcvbn.measure(newValue)
-                    activity?.runOnUiThread {
+                    launch(Dispatchers.Main) {
                         viewModel.passwordStrength.value = strength
                     }
                 }

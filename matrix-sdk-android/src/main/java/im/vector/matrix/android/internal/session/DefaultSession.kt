@@ -52,6 +52,7 @@ import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
@@ -64,6 +65,7 @@ import im.vector.matrix.android.internal.util.createUIHandler
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -113,8 +115,10 @@ internal class DefaultSession @Inject constructor(
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val taskExecutor: TaskExecutor,
-        private val callSignalingService: Lazy<CallSignalingService>)
-    : Session,
+        private val callSignalingService: Lazy<CallSignalingService>,
+        @UnauthenticatedWithCertificate
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
+) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
@@ -254,6 +258,10 @@ internal class DefaultSession @Inject constructor(
     override fun integrationManagerService() = integrationManagerService
 
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
+
+    override fun getOkHttpClient(): OkHttpClient {
+        return unauthenticatedWithCertificateOkHttpClient.get()
+    }
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

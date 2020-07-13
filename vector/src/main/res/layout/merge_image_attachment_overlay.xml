@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/overlayTopBackground"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/black_alpha"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </View>
+
+
+    <ImageView
+        android:id="@+id/overlayBackButton"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/action_close"
+        android:focusable="true"
+        android:padding="6dp"
+        android:scaleType="centerInside"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
+        app:layout_constraintStart_toStartOf="@id/overlayTopBackground"
+        app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
+        app:srcCompat="@drawable/ic_back_24dp" />
+
+    <TextView
+        android:id="@+id/overlayCounterText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/overlayInfoText"
+        app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
+        app:layout_constraintStart_toEndOf="@id/overlayBackButton"
+        app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="1 of 200" />
+
+    <TextView
+        android:id="@+id/overlayInfoText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
+        app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
+        app:layout_constraintStart_toStartOf="@id/overlayCounterText"
+        app:layout_constraintTop_toBottomOf="@id/overlayCounterText"
+        tools:text="Bill 29 Jun at 19:42" />
+
+    <ImageView
+        android:id="@+id/overlayShareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/share"
+        android:focusable="true"
+        android:padding="6dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
+        app:layout_constraintEnd_toEndOf="@id/overlayTopBackground"
+        app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
+        app:srcCompat="@drawable/ic_share" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/overlayVideoControlsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="overlayBottomBackground,overlayBackButton,overlayPlayPauseButton,overlaySeekBar"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/overlayBottomBackground"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/black_alpha"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/overlayPlayPauseButton"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/play_video"
+        android:focusable="true"
+        android:padding="6dp"
+        android:scaleType="centerInside"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
+        app:layout_constraintStart_toStartOf="@id/overlayBottomBackground"
+        app:layout_constraintTop_toTopOf="@id/overlayBottomBackground"
+        app:srcCompat="@drawable/ic_play_arrow" />
+
+    <SeekBar
+        android:id="@+id/overlaySeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/white"
+        android:progressBackgroundTint="@color/white"
+        android:thumbTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
+        app:layout_constraintEnd_toEndOf="@id/overlayBottomBackground"
+        app:layout_constraintStart_toEndOf="@id/overlayPlayPauseButton"
+        app:layout_constraintTop_toTopOf="@id/overlayBottomBackground" />
+</merge>

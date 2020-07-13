@@ -23,6 +23,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
+import im.vector.riotx.features.contactsbook.ContactsBookFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -528,4 +529,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(WidgetFragment::class)
     fun bindWidgetFragment(fragment: WidgetFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ContactsBookFragment::class)
+    fun bindPhoneBookFragment(fragment: ContactsBookFragment): Fragment
 }

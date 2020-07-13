@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
@@ -166,6 +167,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         timeline.start()
         timeline.addListener(this)
         observeRoomSummary()
+        observeMembershipChanges()
         observeSummaryState()
         getUnreadState()
         observeSyncState()
@@ -405,17 +407,22 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
 
-    fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
-        R.id.clear_message_queue ->
-            // For now always disable when not in developer mode, worker cancellation is not working properly
-            timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
-        R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
-        R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
-        R.id.open_matrix_apps    -> true
-        R.id.voice_call,
-        R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
-        R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
-        else                     -> false
+    fun isMenuItemVisible(@IdRes itemId: Int): Boolean = com.airbnb.mvrx.withState(this) { state ->
+        if (state.asyncRoomSummary()?.membership != Membership.JOIN) {
+            return@withState false
+        }
+        when (itemId) {
+            R.id.clear_message_queue ->
+                // For now always disable when not in developer mode, worker cancellation is not working properly
+                timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
+            R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
+            R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+            R.id.open_matrix_apps    -> true
+            R.id.voice_call,
+            R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
+            R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
+            else                     -> false
+        }
     }
 
 // PRIVATE METHODS *****************************************************************************
@@ -448,6 +455,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.Invite3Pid               -> {
+                            handleInvite3pidSlashCommand(slashCommandResult)
                             popDraft()
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
@@ -624,7 +635,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        session.joinRoom(command.roomAlias, command.reason, object : MatrixCallback<Unit> {
+        session.joinRoom(command.roomAlias, command.reason, emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 session.getRoomSummary(command.roomAlias)
                         ?.roomId
@@ -668,6 +679,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         launchSlashCommandFlow {
             room.invite(invite.userId, invite.reason, it)
+        }
+    }
+
+    private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
+        launchSlashCommandFlow {
+            room.invite3pid(invite.threePid, it)
         }
     }
 
@@ -846,17 +863,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) {
-        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
-        withState { state ->
-            // For edit, just delete the current draft
-            if (state.sendMode is SendMode.EDIT) {
-                room.deleteDraft(NoOpMatrixCallback())
-            } else {
-                // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
-            }
+    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) = withState {
+        if (it.sendMode is SendMode.EDIT) {
+            room.deleteDraft(NoOpMatrixCallback())
+        } else {
+            // Save a new draft and keep the previously entered text
+            room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
         }
+        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
@@ -1143,6 +1157,19 @@ class RoomDetailViewModel @AssistedInject constructor(
                 startTrackingUnreadMessages()
             }
         }
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .map {
+                    it[initialState.roomId] ?: ChangeMembershipState.Unknown
+                }
+                .distinctUntilChanged()
+                .subscribe {
+                    setState { copy(changeMembershipState = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun observeSummaryState() {

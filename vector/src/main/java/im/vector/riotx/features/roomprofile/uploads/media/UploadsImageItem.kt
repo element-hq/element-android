@@ -18,11 +18,13 @@ package im.vector.riotx.features.roomprofile.uploads.media
 
 import android.view.View
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.media.ImageContentRenderer
 
 @EpoxyModelClass(layout = R.layout.item_uploads_image)
@@ -35,8 +37,13 @@ abstract class UploadsImageItem : VectorEpoxyModel<UploadsImageItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener { listener?.onItemClicked(holder.imageView, data) }
+        holder.view.setOnClickListener(
+                DebouncedClickListener(View.OnClickListener { _ ->
+                    listener?.onItemClicked(holder.imageView, data)
+                })
+        )
         imageContentRenderer.render(data, holder.imageView, IMAGE_SIZE_DP)
+        ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
     }
 
     class Holder : VectorEpoxyHolder() {

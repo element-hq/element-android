@@ -69,6 +69,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
@@ -636,7 +637,7 @@ class RoomDetailFragment @Inject constructor(
             val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
-        composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
+        composerLayout.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 
         updateComposerText(defaultContent)
 
@@ -853,12 +854,14 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomDetailViewModel) { state ->
-        renderRoomSummary(state)
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
+        renderToolbar(summary, state.typingMessage)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             roomWidgetsBannerView.render(state.activeRoomWidgets())
+            jumpToBottomView.count = summary.notificationCount
+            jumpToBottomView.drawBadge = summary.hasUnreadMessages
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
@@ -880,7 +883,7 @@ class RoomDetailFragment @Inject constructor(
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
-            inviteView.render(inviter, VectorInviteView.Mode.LARGE)
+            inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
             // Intercept click event
             inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {
@@ -888,15 +891,15 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun renderRoomSummary(state: RoomDetailViewState) {
-        state.asyncRoomSummary()?.let { roomSummary ->
+    private fun renderToolbar(roomSummary: RoomSummary?, typingMessage: String?) {
+        if (roomSummary == null) {
+            roomToolbarContentView.isClickable = false
+        } else {
+            roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
             roomToolbarTitleView.text = roomSummary.displayName
             avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-            renderSubTitle(state.typingMessage, roomSummary.topic)
-            jumpToBottomView.count = roomSummary.notificationCount
-            jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
-
+            renderSubTitle(typingMessage, roomSummary.topic)
             roomToolbarDecorationImageView.let {
                 it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
                 it.isVisible = roomSummary.roomEncryptionTrustLevel != null
@@ -957,7 +960,7 @@ class RoomDetailFragment @Inject constructor(
                 updateComposerText("")
             }
             is RoomDetailViewEvents.SlashCommandResultError    -> {
-                displayCommandError(sendMessageResult.throwable.localizedMessage ?: getString(R.string.unexpected_error))
+                displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
             is RoomDetailViewEvents.SlashCommandNotImplemented -> {
                 displayCommandError(getString(R.string.not_implemented))
@@ -1171,14 +1174,27 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        navigator.openImageViewer(requireActivity(), mediaData, view) { pairs ->
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
             pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
             pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        navigator.openVideoViewer(requireActivity(), mediaData)
+        navigator.openMediaViewer(
+                activity = requireActivity(),
+                roomId = roomDetailArgs.roomId,
+                mediaData = mediaData,
+                view = view
+        ) { pairs ->
+            pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+            pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
+        }
     }
 
 //    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
@@ -1196,7 +1212,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             when (requestCode) {
-                SAVE_ATTACHEMENT_REQUEST_CODE -> {
+                SAVE_ATTACHEMENT_REQUEST_CODE           -> {
                     sharedActionViewModel.pendingAction?.let {
                         handleActions(it)
                         sharedActionViewModel.pendingAction = null

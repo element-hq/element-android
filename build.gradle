@@ -39,6 +39,8 @@ allprojects {
                 includeGroupByRegex "com\\.github\\.yalantis"
                 // JsonViewer
                 includeGroupByRegex 'com\\.github\\.BillCarsonFr'
+                // PhotoView
+                includeGroupByRegex 'com\\.github\\.chrisbanes'
             }
         }
         maven {

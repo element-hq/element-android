@@ -337,7 +337,7 @@ class MessageItemFactory @Inject constructor(
                 .playable(true)
                 .highlighted(highlight)
                 .mediaData(thumbnailData)
-                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
+                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view.findViewById(R.id.messageThumbnailView)) }
     }
 
     private fun buildItemForTextContent(messageContent: MessageTextContent,

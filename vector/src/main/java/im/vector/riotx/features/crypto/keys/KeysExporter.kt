@@ -17,37 +17,34 @@
 package im.vector.riotx.features.crypto.keys
 
 import android.content.Context
-import android.os.Environment
+import android.net.Uri
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.awaitCallback
-import im.vector.riotx.core.files.addEntryToDownloadManager
-import im.vector.riotx.core.files.writeToFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class KeysExporter(private val session: Session) {
 
     /**
      * Export keys and return the file path with the callback
      */
-    fun export(context: Context, password: String, callback: MatrixCallback<String>) {
+    fun export(context: Context, password: String, uri: Uri, callback: MatrixCallback<Boolean>) {
         GlobalScope.launch(Dispatchers.Main) {
             runCatching {
-                val data = awaitCallback<ByteArray> { session.cryptoService().exportRoomKeys(password, it) }
                 withContext(Dispatchers.IO) {
-                    val parentDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    val file = File(parentDir, "element-keys-" + System.currentTimeMillis() + ".txt")
-
-                    writeToFile(data, file)
-
-                    addEntryToDownloadManager(context, file, "text/plain")
-
-                    file.absolutePath
+                    val data = awaitCallback<ByteArray> { session.cryptoService().exportRoomKeys(password, it) }
+                    val os = context.contentResolver?.openOutputStream(uri)
+                    if (os == null) {
+                        false
+                    } else {
+                        os.write(data)
+                        os.flush()
+                        true
+                    }
                 }
             }.foldToCallback(callback)
         }

@@ -28,19 +28,27 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import androidx.transition.TransitionManager
 import butterknife.BindView
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.dialogs.ExportKeysDialog
+import im.vector.riotx.core.extensions.queryExportKeys
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.core.utils.toast
-import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
+import timber.log.Timber
+import javax.inject.Inject
 
-class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
+// TODO this needs to be refactored to current standard and remove legacy
+class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), SignoutCheckViewModel.Factory {
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
     lateinit var sheetTitle: TextView
@@ -48,14 +56,20 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.bottom_sheet_signout_backingup_status_group)
     lateinit var backingUpStatusGroup: ViewGroup
 
-    @BindView(R.id.keys_backup_setup)
-    lateinit var setupClickableView: View
+    @BindView(R.id.setupRecoveryButton)
+    lateinit var setupRecoveryButton: SignoutBottomSheetActionButton
 
-    @BindView(R.id.keys_backup_activate)
-    lateinit var activateClickableView: View
+    @BindView(R.id.setupMegolmBackupButton)
+    lateinit var setupMegolmBackupButton: SignoutBottomSheetActionButton
 
-    @BindView(R.id.keys_backup_dont_want)
-    lateinit var dontWantClickableView: View
+    @BindView(R.id.exportManuallyButton)
+    lateinit var exportManuallyButton: SignoutBottomSheetActionButton
+
+    @BindView(R.id.exitAnywayButton)
+    lateinit var exitAnywayButton: SignoutBottomSheetActionButton
+
+    @BindView(R.id.signOutButton)
+    lateinit var signOutButton: SignoutBottomSheetActionButton
 
     @BindView(R.id.bottom_sheet_signout_icon_progress_bar)
     lateinit var backupProgress: ProgressBar
@@ -66,8 +80,8 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.bottom_sheet_backup_status_text)
     lateinit var backupStatusTex: TextView
 
-    @BindView(R.id.bottom_sheet_signout_button)
-    lateinit var signoutClickableView: View
+    @BindView(R.id.signoutExportingLoading)
+    lateinit var signoutExportingLoading: View
 
     @BindView(R.id.root_layout)
     lateinit var rootLayout: ViewGroup
@@ -78,62 +92,44 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
         fun newInstance() = SignOutBottomSheetDialogFragment()
 
         private const val EXPORT_REQ = 0
+        private const val QUERY_EXPORT_KEYS = 1
     }
 
     init {
         isCancelable = true
     }
 
-    private lateinit var viewModel: SignOutViewModel
+    @Inject
+    lateinit var viewModelFactory: SignoutCheckViewModel.Factory
+
+    override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel {
+        return viewModelFactory.create(initialState)
+    }
+
+    private val viewModel: SignoutCheckViewModel by fragmentViewModel(SignoutCheckViewModel::class)
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshRemoteStateIfNeeded()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = fragmentViewModelProvider.get(SignOutViewModel::class.java)
-
-        setupClickableView.setOnClickListener {
-            context?.let { context ->
-                startActivityForResult(KeysBackupSetupActivity.intent(context, true), EXPORT_REQ)
-            }
+        setupRecoveryButton.action = {
+            BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
         }
 
-        activateClickableView.setOnClickListener {
-            context?.let { context ->
-                startActivity(KeysBackupManageActivity.intent(context))
-            }
-        }
-
-        signoutClickableView.setOnClickListener {
-            this.onSignOut?.run()
-        }
-
-        dontWantClickableView.setOnClickListener { _ ->
+        exitAnywayButton.action = {
             context?.let {
                 AlertDialog.Builder(it)
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
-                        .setPositiveButton(R.string.backup) { _, _ ->
-                            when (viewModel.keysBackupState.value) {
-                                KeysBackupState.NotTrusted -> {
-                                    context?.let { context ->
-                                        startActivity(KeysBackupManageActivity.intent(context))
-                                    }
-                                }
-                                KeysBackupState.Disabled   -> {
-                                    context?.let { context ->
-                                        startActivityForResult(KeysBackupSetupActivity.intent(context, true), EXPORT_REQ)
-                                    }
-                                }
-                                KeysBackupState.BackingUp,
-                                KeysBackupState.WillBackUp -> {
-                                    // keys are already backing up please wait
-                                    context?.toast(R.string.keys_backup_is_not_finished_please_wait)
-                                }
-                                else                       -> {
-                                    // nop
-                                }
-                            }
-                        }
+                        .setPositiveButton(R.string.backup, null)
                         .setNegativeButton(R.string.action_sign_out) { _, _ ->
                             onSignOut?.run()
                         }
@@ -141,71 +137,143 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-        viewModel.keysExportedToFile.observe(viewLifecycleOwner, Observer {
-            val hasExportedToFile = it ?: false
-            if (hasExportedToFile) {
-                // We can allow to sign out
-
-                sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
-
-                signoutClickableView.isVisible = true
-                dontWantClickableView.isVisible = false
-                setupClickableView.isVisible = false
-                activateClickableView.isVisible = false
-                backingUpStatusGroup.isVisible = false
+        exportManuallyButton.action = {
+            withState(viewModel) { state ->
+                queryExportKeys(state.userId, QUERY_EXPORT_KEYS)
             }
-        })
+        }
 
-        viewModel.keysBackupState.observe(viewLifecycleOwner, Observer {
-            if (viewModel.keysExportedToFile.value == true) {
-                // ignore this
-                return@Observer
-            }
-            TransitionManager.beginDelayedTransition(rootLayout)
+        setupMegolmBackupButton.action = {
+            startActivityForResult(KeysBackupSetupActivity.intent(requireContext(), true), EXPORT_REQ)
+        }
+
+        viewModel.observeViewEvents {
             when (it) {
-                KeysBackupState.ReadyToBackUp -> {
-                    signoutClickableView.isVisible = true
-                    dontWantClickableView.isVisible = false
-                    setupClickableView.isVisible = false
-                    activateClickableView.isVisible = false
-                    backingUpStatusGroup.isVisible = true
+                is SignoutCheckViewModel.ViewEvents.ExportKeys -> {
+                    it.exporter
+                            .export(requireContext(),
+                                    it.passphrase,
+                                    it.uri,
+                                    object : MatrixCallback<Boolean> {
+                                        override fun onSuccess(data: Boolean) {
+                                            if (data) {
+                                                viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
+                                            } else {
+                                                viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
+                                            }
+                                        }
 
+                                        override fun onFailure(failure: Throwable) {
+                                            Timber.e("## Failed to export manually keys ${failure.localizedMessage}")
+                                            viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
+                                        }
+                                    })
+                }
+            }
+        }
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        signoutExportingLoading.isVisible = false
+        if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
+            sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            backingUpStatusGroup.isVisible = false
+            // we should show option to setup 4S
+            setupRecoveryButton.isVisible = true
+            setupMegolmBackupButton.isVisible = false
+            signOutButton.isVisible = false
+            // We let the option to ignore and quit
+            exportManuallyButton.isVisible = true
+            exitAnywayButton.isVisible = true
+        } else if (state.keysBackupState == KeysBackupState.Unknown || state.keysBackupState == KeysBackupState.Disabled) {
+            sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            backingUpStatusGroup.isVisible = false
+            // no key backup and cannot setup full 4S
+            // we propose to setup
+            // we should show option to setup 4S
+            setupRecoveryButton.isVisible = false
+            setupMegolmBackupButton.isVisible = true
+            signOutButton.isVisible = false
+            // We let the option to ignore and quit
+            exportManuallyButton.isVisible = true
+            exitAnywayButton.isVisible = true
+        } else {
+            // so keybackup is setup
+            // You should wait until all are uploaded
+            setupRecoveryButton.isVisible = false
+
+            when (state.keysBackupState) {
+                KeysBackupState.ReadyToBackUp -> {
+                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+
+                    // Ok all keys are backedUp
+                    backingUpStatusGroup.isVisible = true
                     backupProgress.isVisible = false
                     backupCompleteImage.isVisible = true
                     backupStatusTex.text = getString(R.string.keys_backup_info_keys_all_backup_up)
 
-                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+                    hideViews(setupMegolmBackupButton, exportManuallyButton, exitAnywayButton)
+                    // You can signout
+                    signOutButton.isVisible = true
                 }
-                KeysBackupState.BackingUp,
-                KeysBackupState.WillBackUp    -> {
-                    backingUpStatusGroup.isVisible = true
-                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
-                    dontWantClickableView.isVisible = true
-                    setupClickableView.isVisible = false
-                    activateClickableView.isVisible = false
 
+                KeysBackupState.WillBackUp,
+                KeysBackupState.BackingUp     -> {
+                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
+
+                    // save in progress
+                    backingUpStatusGroup.isVisible = true
                     backupProgress.isVisible = true
                     backupCompleteImage.isVisible = false
                     backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+
+                    hideViews(setupMegolmBackupButton, setupMegolmBackupButton, signOutButton, exportManuallyButton)
+                    exitAnywayButton.isVisible = true
                 }
                 KeysBackupState.NotTrusted    -> {
-                    backingUpStatusGroup.isVisible = false
-                    dontWantClickableView.isVisible = true
-                    setupClickableView.isVisible = false
-                    activateClickableView.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
+                    // It's not trusted and we know there are unsaved keys..
+                    backingUpStatusGroup.isVisible = false
+
+                    exportManuallyButton.isVisible = true
+                    // option to enter pass/key
+                    setupMegolmBackupButton.isVisible = true
+                    exitAnywayButton.isVisible = true
                 }
                 else                          -> {
-                    backingUpStatusGroup.isVisible = false
-                    dontWantClickableView.isVisible = true
-                    setupClickableView.isVisible = true
-                    activateClickableView.isVisible = false
-                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+                    // mmm.. strange state
+
+                    exitAnywayButton.isVisible = true
                 }
             }
+        }
 
-            // updateSignOutSection()
-        })
+        // final call if keys have been exported
+        when (state.hasBeenExportedToFile) {
+            is Loading -> {
+                signoutExportingLoading.isVisible = true
+                hideViews(setupRecoveryButton,
+                        setupMegolmBackupButton,
+                        exportManuallyButton,
+                        backingUpStatusGroup,
+                        signOutButton)
+                exitAnywayButton.isVisible = true
+            }
+            is Success -> {
+                if (state.hasBeenExportedToFile.invoke()) {
+                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+                    hideViews(setupRecoveryButton,
+                            setupMegolmBackupButton,
+                            exportManuallyButton,
+                            backingUpStatusGroup,
+                            exitAnywayButton)
+                    signOutButton.isVisible = true
+                }
+            }
+            else       -> {
+            }
+        }
+        super.invalidate()
     }
 
     override fun getLayoutResId() = R.layout.bottom_sheet_logout_and_backup
@@ -228,10 +296,26 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == EXPORT_REQ) {
-                val manualExportDone = data?.getBooleanExtra(KeysBackupSetupActivity.MANUAL_EXPORT, false)
-                viewModel.keysExportedToFile.value = manualExportDone
+            if (requestCode == QUERY_EXPORT_KEYS) {
+                val uri = data?.data
+                if (resultCode == Activity.RESULT_OK && uri != null) {
+                    activity?.let { activity ->
+                        ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                            override fun onPassphrase(passphrase: String) {
+                                viewModel.handle(SignoutCheckViewModel.Actions.ExportKeys(passphrase, uri))
+                            }
+                        })
+                    }
+                }
+            } else if (requestCode == EXPORT_REQ) {
+                if (data?.getBooleanExtra(KeysBackupSetupActivity.MANUAL_EXPORT, false) == true) {
+                    viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
+                }
             }
         }
+    }
+
+    private fun hideViews(vararg views: View) {
+        views.forEach { it.isVisible = false }
     }
 }

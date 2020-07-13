@@ -17,7 +17,7 @@
     android:paddingRight="@dimen/layout_horizontal_margin"
     android:paddingBottom="4dp">
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/roomCategoryTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

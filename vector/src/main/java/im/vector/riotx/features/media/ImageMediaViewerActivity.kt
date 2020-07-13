@@ -91,6 +91,8 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             encryptedImageView.isVisible = false
             // Postpone transaction a bit until thumbnail is loaded
             supportPostponeEnterTransition()
+
+            // We are not passing the exact same image that in the
             imageContentRenderer.renderFitTarget(mediaData, ImageContentRenderer.Mode.THUMBNAIL, imageTransitionView) {
                 // Proceed with transaction
                 scheduleStartPostponedTransition(imageTransitionView)

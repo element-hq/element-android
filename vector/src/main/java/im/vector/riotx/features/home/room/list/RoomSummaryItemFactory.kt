@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.list
 
 import android.view.View
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -39,23 +40,20 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary,
-               joiningRoomsIds: Set<String>,
-               joiningErrorRoomsIds: Set<String>,
-               rejectingRoomsIds: Set<String>,
-               rejectingErrorRoomsIds: Set<String>,
+               roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
                listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
-            Membership.INVITE -> createInvitationItem(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
+            Membership.INVITE -> {
+                val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
+                createInvitationItem(roomSummary, changeMembershipState, listener)
+            }
             else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
-    fun createInvitationItem(roomSummary: RoomSummary,
-                             joiningRoomsIds: Set<String>,
-                             joiningErrorRoomsIds: Set<String>,
-                             rejectingRoomsIds: Set<String>,
-                             rejectingErrorRoomsIds: Set<String>,
+    private fun createInvitationItem(roomSummary: RoomSummary,
+                             changeMembershipState: ChangeMembershipState,
                              listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
@@ -70,10 +68,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .avatarRenderer(avatarRenderer)
                 .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
-                .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
-                .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
-                .invitationRejectInProgress(rejectingRoomsIds.contains(roomSummary.roomId))
-                .invitationRejectInError(rejectingErrorRoomsIds.contains(roomSummary.roomId))
+                .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
                 .listener { listener?.onRoomClicked(roomSummary) }

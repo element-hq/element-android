@@ -234,9 +234,8 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private val uiDisposables = CompositeDisposable()
 
-    protected fun Disposable.disposeOnDestroyView(): Disposable {
+    protected fun Disposable.disposeOnDestroyView() {
         uiDisposables.add(this)
-        return this
     }
 
     /* ==========================================================================================

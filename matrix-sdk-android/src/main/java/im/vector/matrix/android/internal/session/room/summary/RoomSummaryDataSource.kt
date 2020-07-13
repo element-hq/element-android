@@ -100,6 +100,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = RoomSummaryEntity.where(realm)
+        query.process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
         query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
         query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
         query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)

@@ -15,10 +15,12 @@
  */
 package im.vector.riotx.features.notifications
 
-import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.ActiveSessionDataSource
 import javax.inject.Inject
 
-class OutdatedEventDetector @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
+class OutdatedEventDetector @Inject constructor(
+        private val activeSessionDataSource: ActiveSessionDataSource
+) {
 
     /**
      * Returns true if the given event is outdated.
@@ -26,10 +28,12 @@ class OutdatedEventDetector @Inject constructor(private val activeSessionHolder:
      * other device.
      */
     fun isMessageOutdated(notifiableEvent: NotifiableEvent): Boolean {
+        val session = activeSessionDataSource.currentValue?.orNull() ?: return false
+
         if (notifiableEvent is NotifiableMessageEvent) {
             val eventID = notifiableEvent.eventId
             val roomID = notifiableEvent.roomId
-            val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomID) ?: return false
+            val room = session.getRoom(roomID) ?: return false
             return room.isEventRead(eventID)
         }
         return false

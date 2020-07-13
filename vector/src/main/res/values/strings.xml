@@ -76,6 +76,10 @@
     <string name="disconnect">Disconnect</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
+    <string name="play_video">Play</string>
+    <string name="pause_video">Pause</string>
+
+
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
@@ -122,9 +126,11 @@
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Warning</string>
     <string name="dialog_title_error">Error</string>
+    <string name="dialog_title_success">Success</string>
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_notification">Notifications</string>
     <string name="bottom_action_favourites">Favourites</string>
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
@@ -838,6 +844,15 @@
     <string name="settings_send_message_with_enter">Send message with enter</string>
     <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
 
+    <string name="settings_secure_backup_section_title">Secure Backup</string>
+    <string name="settings_secure_backup_manage">Manage</string>
+    <string name="settings_secure_backup_setup">Set up Secure Backup</string>
+    <string name="settings_secure_backup_reset">Reset Secure Backup</string>
+    <string name="settings_secure_backup_enter_to_setup">Set up on this device</string>
+    <string name="settings_secure_backup_section_info">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
+    <string name="reset_secure_backup_title">Generate a new Security Key or set a new Security Phrase for your existing backup.</string>
+    <string name="reset_secure_backup_warning">This will replace your current Key or Phrase.</string>
+
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
     <string name="settings_discovery_category">Discovery</string>
@@ -1048,6 +1063,7 @@
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+    <string name="encryption_exported_successfully">Keys successfully exported</string>
 
     <string name="encryption_message_recovery">Encrypted Messages Recovery</string>
     <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
@@ -1408,6 +1424,7 @@ Why choose Element?
     <string name="keys_backup_setup_step3_share_recovery_file">Share</string>
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+    <string name="recovery_key_export_saved">The recovery key has been saved.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
     <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
@@ -1493,9 +1510,13 @@ Why choose Element?
     <string name="new_recovery_method_popup_title">New Key Backup</string>
     <string name="new_recovery_method_popup_description">A new secure message key backup has been detected.\n\nIf you didn’t set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.</string>
     <string name="new_recovery_method_popup_was_me">It was me</string>
+
     <!-- Keys backup banner -->
     <string name="keys_backup_banner_setup_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_setup_line2">Start using Key Backup</string>
+
+    <string name="secure_backup_banner_setup_line1">Secure Backup</string>
+    <string name="secure_backup_banner_setup_line2">Safeguard against losing access to encrypted messages &amp; data</string>
 
     <string name="keys_backup_banner_recover_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_recover_line2">Use Key Backup</string>
@@ -1503,7 +1524,10 @@ Why choose Element?
     <string name="keys_backup_banner_update_line1">New secure message keys</string>
     <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
 
-    <string name="keys_backup_banner_in_progress">Backing up keys…</string>
+    <string name="keys_backup_banner_in_progress">Backing up your keys. This may take several minutes…</string>
+
+
+    <string name="secure_backup_setup">Set Up Secure Backup</string>
 
     <!-- Keys backup info -->
     <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>
@@ -1737,6 +1761,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_merge_e2e_in_timeline">Merge failed to decrypt message in timeline</string>
+    <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
@@ -2523,4 +2548,17 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="element_login_splash_brand">element</string>
 
+
+    <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
+
+    <string name="add_from_phone_book">Add from my phone book</string>
+    <string name="empty_phone_book">Your phone book is empty</string>
+    <string name="phone_book_title">Phone book</string>
+    <string name="search_in_my_contacts">Search in my contacts</string>
+    <string name="loading_contact_book">Retrieving your contacts…</string>
+    <string name="empty_contact_book">Your contact book is empty</string>
+    <string name="contacts_book_title">Contacts book</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
+    <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
 </resources>

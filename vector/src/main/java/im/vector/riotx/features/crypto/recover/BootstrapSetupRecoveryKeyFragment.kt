@@ -58,6 +58,13 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() : VectorBaseFragme
                 bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
                 bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
             } else {
+                if (state.step.reset) {
+                    bootstrapSetupSecureText.text = getString(R.string.reset_secure_backup_title)
+                    bootstrapSetupWarningTextView.isVisible = true
+                } else {
+                    bootstrapSetupSecureText.text = getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
+                    bootstrapSetupWarningTextView.isVisible = false
+                }
                 // Choose between create a passphrase or use a recovery key
                 bootstrapSetupSecureSubmit.isVisible = false
                 bootstrapSetupSecureUseSecurityKey.isVisible = true

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model.create
+package im.vector.riotx.features.contactsbook
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-@JsonClass(generateAdapter = true)
-internal data class CreateRoomResponse(
-        /**
-         * Required. The created room's ID.
-         */
-        @Json(name = "room_id") val roomId: String
-)
-
-internal typealias JoinRoomResponse = CreateRoomResponse
+sealed class ContactsBookAction : VectorViewModelAction {
+    data class FilterWith(val filter: String) : ContactsBookAction()
+    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : ContactsBookAction()
+}

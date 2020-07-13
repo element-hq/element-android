@@ -241,12 +241,13 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 chunksToDelete.add(it)
             }
         }
-        val shouldUpdateSummary = chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS
         chunksToDelete.forEach {
             it.deleteOnCascade()
         }
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
+        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
+                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
-            val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
             val latestPreviewableEvent = TimelineEventEntity.latestEvent(
                     realm,
                     roomId,

@@ -38,4 +38,10 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview
     )
+
+    object VectorAttachmentsPreview : ActivityOtherThemes(
+            R.style.AppTheme_Transparent,
+            R.style.AppTheme_Transparent,
+            R.style.AppTheme_Transparent
+    )
 }

@@ -71,7 +71,7 @@
                         tools:ignore="MissingConstraints"
                         tools:src="@drawable/ic_shield_trusted" />
 
-                    <im.vector.riotx.core.platform.EllipsizingTextView
+                    <TextView
                         android:id="@+id/matrixProfileToolbarTitleView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
