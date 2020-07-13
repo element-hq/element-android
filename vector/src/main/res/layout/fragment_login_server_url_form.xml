@@ -21,12 +21,13 @@
             style="@style/LoginFormContainer"
             android:orientation="vertical">
 
+            <!-- Displayed only for EMS -->
             <ImageView
                 android:id="@+id/loginServerUrlFormIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_logo_modular"
+                android:src="@drawable/ic_logo_element_matrix_services"
                 android:tint="?riotx_text_primary" />
 
             <TextView
