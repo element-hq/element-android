@@ -220,9 +220,9 @@
     <color name="riotx_disabled_view_color_dark">#61708B</color>
 
     <attr name="riotx_list_bottom_sheet_divider_color" format="color" />
-    <color name="riotx_list_bottom_sheet_divider_color_light">#C0C0C2</color>
-    <color name="riotx_list_bottom_sheet_divider_color_dark">#444E60</color>
-    <color name="riotx_list_bottom_sheet_divider_color_black">#444E60</color>
+    <color name="riotx_list_bottom_sheet_divider_color_light">#EEEFEF</color>
+    <color name="riotx_list_bottom_sheet_divider_color_dark">#FF61708B</color>
+    <color name="riotx_list_bottom_sheet_divider_color_black">#FF22262E</color>
 
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
