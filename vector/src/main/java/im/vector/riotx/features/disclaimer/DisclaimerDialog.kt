@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.features.settings.VectorSettingsUrls

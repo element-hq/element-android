@@ -21,7 +21,6 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceViewHolder
 import im.vector.riotx.R
