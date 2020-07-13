@@ -22,7 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.displayInWebView
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import im.vector.riotx.features.settings.VectorSettingsUrls
 
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
@@ -45,7 +45,7 @@ fun showDisclaimerDialog(activity: Activity) {
                 .setCancelable(false)
                 .setNegativeButton(R.string.element_disclaimer_negative_button, null)
                 .setPositiveButton(R.string.element_disclaimer_positive_button) { _, _ ->
-                    activity.displayInWebView(VectorSettingsUrls.DISCLAIMER_URL)
+                    openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
                 }
                 .show()
     }
