@@ -45,7 +45,7 @@
         app:fragment="im.vector.riotx.features.settings.VectorSettingsLabsFragment" />
 
     <im.vector.riotx.core.preference.VectorPreference
-        android:icon="@drawable/ic_settings_root_general"
+        android:icon="@drawable/ic_settings_root_advanced"
         android:title="@string/settings_advanced_settings"
         app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedSettingsFragment" />
 
