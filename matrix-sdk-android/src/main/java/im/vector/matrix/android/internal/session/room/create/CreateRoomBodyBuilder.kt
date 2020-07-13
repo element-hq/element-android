@@ -46,7 +46,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     suspend fun build(params: CreateRoomParams): CreateRoomBody {
         val invite3pids = params.invite3pids
                 .takeIf { it.isNotEmpty() }
-                .let {
+                ?.let { invites ->
                     // This can throw Exception if Identity server is not configured
                     ensureIdentityTokenTask.execute(Unit)
 
@@ -54,7 +54,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                             ?: throw IdentityServiceError.NoIdentityServerConfigured
                     val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
 
-                    params.invite3pids.map {
+                    invites.map {
                         ThreePidInviteBody(
                                 id_server = identityServerUrlWithoutProtocol,
                                 id_access_token = identityServerAccessToken,

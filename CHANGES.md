@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Video calls are shown as a voice ones in the timeline (#1676)
+ - Fix regression: not able to create a room without IS configured (#1679)
 
 Translations 🗣:
  -
