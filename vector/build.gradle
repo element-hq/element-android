@@ -72,7 +72,7 @@ static def getGplayVersionSuffix() {
     if (gitBranchName() == "master") {
         return ""
     } else {
-        return "-dev"
+        return "" // TODO revert this commit "-dev"
     }
 }
 
