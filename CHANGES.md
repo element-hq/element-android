@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix theme issue on Room directory screen (#1613)
 
 Translations 🗣:
  -
