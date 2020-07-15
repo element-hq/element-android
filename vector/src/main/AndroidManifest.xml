@@ -80,8 +80,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="riotx" />
-                <data android:host="riotx" />
+                <data android:scheme="element" />
+                <data android:host="element" />
             </intent-filter>
         </activity>
         <activity android:name=".features.media.ImageMediaViewerActivity" />
