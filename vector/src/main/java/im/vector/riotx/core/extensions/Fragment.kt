@@ -102,7 +102,7 @@ fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
     selectTxtFileToWrite(
             activity = requireActivity(),
             fragment = this,
-            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
             requestCode = requestCode
     )
@@ -114,7 +114,7 @@ fun Activity.queryExportKeys(userId: String, requestCode: Int) {
     selectTxtFileToWrite(
             activity = this,
             fragment = null,
-            defaultFileName = "riot-megolm-export-$userId-$timestamp.txt",
+            defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
             requestCode = requestCode
     )

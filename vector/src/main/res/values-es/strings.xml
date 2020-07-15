@@ -84,7 +84,7 @@
     <string name="local_address_book_header">Agenda de contactos local</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
-    <string name="no_contact_access_placeholder">No permitiste que Riot acceda a tus contactos locales</string>
+    <string name="no_contact_access_placeholder">No permitiste que Element acceda a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
 
     <!-- Rooms fragment -->
@@ -248,26 +248,26 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
-    <string name="permissions_rationale_msg_storage">Riot necesita permiso para acceder a tu biblioteca de fotos y vídeos para enviar y guardar archivos adjuntos.
+    <string name="permissions_rationale_msg_storage">Element necesita permiso para acceder a tu biblioteca de fotos y vídeos para enviar y guardar archivos adjuntos.
 
 Por favor permite el acceso en la próxima ventana emergente para poder enviar archivos desde tu teléfono.</string>
-    <string name="permissions_rationale_msg_camera">Riot necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera">Element necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Por favor permite el acceso en la próxima ventana emergente para poder realizar la llamada.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
+    <string name="permissions_rationale_msg_record_audio">Element necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Por favor permite el acceso en la próxima ventana emergente para poder realizar la llamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
+    <string name="permissions_rationale_msg_camera_and_audio">Element necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
 
 Por favor permite el acceso en las próximas ventanas emergentes para poder realizar la llamada.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+    <string name="permissions_rationale_msg_contacts">Element necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
-Por favor permite el acceso en la próxima ventana emergente para descubrir usuarios accesibles desde Riot en tu agenda de contactos.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+Por favor permite el acceso en la próxima ventana emergente para descubrir usuarios accesibles desde Element en tu agenda de contactos.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
-¿Permitir que Riot acceda a tus contactos ?</string>
+¿Permitir que Element acceda a tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Lo sentimos. Acción no realizada, debido a que faltan permisos</string>
 
@@ -660,7 +660,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando esta sesión y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
+    <string name="e2e_enabling_on_app_update">Element ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
 
 Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
 
@@ -941,7 +941,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="widget_integration_missing_parameter">Falta un parámetro requerido.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
     <string name="speak">Conversar</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicia Riot en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a esta sesión.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicia Element en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a esta sesión.</string>
 
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>
 
@@ -954,10 +954,10 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="e2e_re_request_encryption_key_sent">Solicitud de clave enviada.</string>
 
     <string name="startup_notification_privacy_title">Privacidad de Notificaciones</string>
-    <string name="startup_notification_privacy_message">Riot puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada. Esto podría afectar la duración de la batería.</string>
+    <string name="startup_notification_privacy_message">Element puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada. Esto podría afectar la duración de la batería.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análisis de estadísticas</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita los análisis de estadísticas para ayudarnos a mejorar Riot.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita los análisis de estadísticas para ayudarnos a mejorar Element.</string>
     <string name="lock_screen_hint">Escribe aquí…</string>
 
     <string name="send_bug_report_description_in_english">Si es posible, por favor escribe la descripción en inglés.</string>
@@ -1064,7 +1064,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
@@ -1117,7 +1117,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_troubleshoot_test_device_settings_title">Ajustes de sesión.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Las notificaciones están activadas para esta sesión.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Las notificaciones no están habilitadas para esta sesión. 
-\nPor favor comprueba los ajustes Riot.</string>
+\nPor favor comprueba los ajustes Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Ajustes personalizados.</string>
@@ -1137,17 +1137,17 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="sign_out_bottom_sheet_warning_backing_up">Copia de seguridad en progreso. Si cierras sesión ahora perderás el acceso a tus mensajes encriptados.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">La copia de seguridad debería estar activa ahora en todas tus sesiones para evitar la pérdida del acceso a tus mensajes encriptados.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente:
+    <string name="settings_troubleshoot_test_play_services_failed">Element usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Token Base</string>
     <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperada correctamente:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar token FCM:\n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nEste error esta fuera del control de Riot y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nEste error esta fuera del control de Riot. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nEste error esta fuera del control de Element y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nEste error esta fuera del control de Element. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nEste error esta fuera del control de Riot. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
+\nEste error esta fuera del control de Element. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">añadir cuenta</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token de registro</string>
@@ -1184,19 +1184,19 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_troubleshoot_test_service_boot_title">Inicio automático</string>
     <string name="settings_troubleshoot_test_service_boot_success">El servicio funcionará cuando reinicie el dispositivo.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">El servicio no se iniciará al reiniciar el dispositivo, no recibirá notificaciones hasta que Riot haya sido abierto al menos 1 vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">El servicio no se iniciará al reiniciar el dispositivo, no recibirá notificaciones hasta que Element haya sido abierto al menos 1 vez.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">activar Inicio automático</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprobar restricciones en segundo plano</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Las restricciones de segundo plano están desactivadas para Riot. Este debería funcionar con datos móviles (sin WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Las restricciones de segundo plano están desactivadas para Element. Este debería funcionar con datos móviles (sin WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano están activadas para Riot.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano están activadas para Element.
 \nLa app estará completamente restringida mientras esté en segundo plano y esto podría afectar a las notificaciones.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricciones</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimización de la bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">A Riot no le afecta la Optimización de la bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">A Element no le afecta la Optimización de la bateria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuario deja el dispositivo desenchufado e inmóvil durante cierto periodo de tiempo con la pantalla apagada, el dispositivo entrará en modo hibernación. Esto evita que las apps accedan a la red y postpone sus tareas, sincronizaciones y alarmas.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">ignorar optimización</string>
 
@@ -1223,8 +1223,8 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_send_message_with_enter_summary">La tecla Intro enviará el mensaje en vez de añadir un salto de línea</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Conexión en segundo plano</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot necesita mantener una leve conexión en segundo plano para poder ofrecer notificaciones de confianza.
-\nEn la siguiente pantalla se le pedirá permisos para que Riot siempre funcione en segundo plano, por favor acepte.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element necesita mantener una leve conexión en segundo plano para poder ofrecer notificaciones de confianza.
+\nEn la siguiente pantalla se le pedirá permisos para que Element siempre funcione en segundo plano, por favor acepte.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Conceder permiso</string>
 
     <string name="settings_data_save_mode_summary">El modo de guardado de datos aplica un filtro específico para que las actualizaciones de presencia y las notificaciones de escritura sean eliminadas.</string>
@@ -1286,16 +1286,16 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
 
-    <string name="store_title">Riot.im - Comunicate a tu manera</string>
-    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Riot.im. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
+    <string name="store_title">Element - Comunicate a tu manera</string>
+    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Element. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
     <string name="store_short_description">Una app de chat universal completamente bajo tu control.</string>
-    <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Riot deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
+    <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Element deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
 \nConsigue tu cuenta de matrix.org gratis. Consigue tu servidor en https://modular.im o usa otro servidor de Matrix.
-\nPor qué escoger a Riot.im\?
+\nPor qué escoger a Element\?
 \n
 \n• COMUNICACIÓN COMPLETA: Crea salas para tus equipos, tus amigos, vuestra comunidad - de la forma que quieras! Chatea, comparte archivos, añade widgets y haz llamadas de voz y video - Todo de forma gratuita.
 \n
-\n• POTENTES INTEGRACIONES: Usa Riot.im con las herramientas que conoces y que mas te gustan. Con Riot.im puedes hasta chatear con usuarios y grupos de otras apps de chat.
+\n• POTENTES INTEGRACIONES: Usa Element con las herramientas que conoces y que mas te gustan. Con Element puedes hasta chatear con usuarios y grupos de otras apps de chat.
 \n
 \n• PRIVADA Y SEGURA: Mantén privadas tus conversaciones. La condición de encriptación de extremo a extremo asegura que las conversaciones privadas sigan siendo siempre privadas.
 \n
@@ -1306,7 +1306,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Por favor borra la contraseña si quieres que Riot genere una clave de recuperación.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Por favor borra la contraseña si quieres que Element genere una clave de recuperación.</string>
     <string name="keys_backup_no_session_error">No hay ninguna sesión de Matrix disponible</string>
 
     <string name="keys_backup_setup_step1_title">Nunca se pierden los mensajes cifrados</string>
@@ -1407,7 +1407,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_info_title_signature">Firma</string>
 
     <string name="autodiscover_well_known_autofill_dialog_title">autocompletar opciones del servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%1$s\": 
+    <string name="autodiscover_well_known_autofill_dialog_message">Element ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuración de uso</string>
 
@@ -1531,7 +1531,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="group_all_communities">Todas la comunidades</string>
 
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con RiotX</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con Element</string>
 
     <string name="fab_menu_create_room">Salas</string>
     <string name="fab_menu_create_chat">Mensajes directos</string>
@@ -1548,7 +1548,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
     <string name="room_list_catchup_empty_title">!Estás al día!</string>
-    <string name="alpha_disclaimer_content_line_1">Mientras RiotX esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
+    <string name="alpha_disclaimer_content_line_1">Mientras Element esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
     <string name="preference_voice_and_video">Voz &amp; Video</string>
@@ -1571,7 +1571,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="invite_no_identity_server_error">Para hacer esto, vaya a las opciones y añada un servidor de identidad.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme su contraseña</string>
-    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Riot para móvil</string>
+    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Element para móvil</string>
     <string name="settings_add_3pid_authentication_needed">Se necesita autenticación</string>
 
 
@@ -1598,10 +1598,10 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Riot se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
 \nDependiendo del estado de los recursos del dispositivo, la sincronización puede ser aplazada por el sistema operativo.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
-\nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que Riot está escuchando a nuevos acontecimientos.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
+\nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que Element está escuchando a nuevos acontecimientos.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">No se le notificará de los mensajes entrantes cuando la aplicación esté en segundo plano.</string>
     <string name="settings_set_workmanager_delay">Intervalo de sincronización preferido</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1648,7 +1648,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="identity_server_not_defined">No estás usando ningún Servidor de Identidad</string>
     <string name="identity_server_not_defined_for_password_reset">No hay ningún Servidor de Identidad configurado, esto es requerido para restablecer tu contraseña.</string>
 
-    <string name="security_warning_identity_server">Las versiones anteriores de Riot tenían un error de seguridad que podía dar a su Servidor de Identidad (%1$s) acceso a su cuenta. Si confías en %2$s, puedes ignorar esto; de lo contrario, por favor cierra la sesión y vuelve a entrar.
+    <string name="security_warning_identity_server">Las versiones anteriores de Element tenían un error de seguridad que podía dar a su Servidor de Identidad (%1$s) acceso a su cuenta. Si confías en %2$s, puedes ignorar esto; de lo contrario, por favor cierra la sesión y vuelve a entrar.
 \n
 \nLee más detalles aquí:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
@@ -1689,15 +1689,15 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostrar eventos ocultos en la línea de tiempo</string>
 
-    <string name="store_riotx_title">RiotX - Cliente Matrix de Futura Generación</string>
+    <string name="store_riotx_title">Element - Cliente Matrix de Futura Generación</string>
     <string name="store_riotx_short_description">Un cliente para Matrix más rápido y ligero que usa los últimos frameworks de Android</string>
-    <string name="store_riotx_full_description">RiotX es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. RiotX es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
+    <string name="store_riotx_full_description">Element es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. Element es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
 \n
-\nDescargo de responsabilidad: Esta es una versión beta. RiotX está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
+\nDescargo de responsabilidad: Esta es una versión beta. Element está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
 \n
-\nRiotX soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
+\nElement soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
 \n
-\nNo todas las características de Riot están implementadas en RiotX todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
+\nNo todas las características de Element están implementadas en Element todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
 
     <string name="bottom_action_people_x">Mensajes Directos</string>
 
@@ -1834,7 +1834,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 \n
 \nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Riot necesita permiso para guardar tus claves E2E en la memória del dispositivo.
+    <string name="permissions_rationale_msg_keys_backup_export">Element necesita permiso para guardar tus claves E2E en la memória del dispositivo.
 \n
 \nPorfavor permite el acceso en el siguiente pop-up para poder exportar tus claves manualmente.</string>
 
@@ -1877,15 +1877,15 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="login_continue">Continuar</string>
     <string name="login_connect_to">Conectarse a %1$s</string>
-    <string name="login_connect_to_modular">Conectarse a Modular</string>
+    <string name="login_connect_to_modular">Conectarse a Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Conectarse a un servidor externo</string>
     <string name="login_signin_to">Iniciar sesión en %1$s</string>
     <string name="login_signup">Registrarse</string>
     <string name="login_signin">Iniciar sesión</string>
     <string name="login_server_url_form_other_hint">Dirección</string>
     <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
-    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Riot o servidor que quieres usar</string>
-    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Riot al que quieres conectarte</string>
+    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Element o servidor que quieres usar</string>
+    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Element al que quieres conectarte</string>
 
     <string name="login_sso_error_message">Se produjo un error al cargar la pagina: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">"La aplicación no es capaz de iniciar sesión en este servidor. Este solo soporta el acceso mediante:  %1$s.

@@ -158,7 +158,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
             }
 
             // Unfortunately, this is not supported in lib v7
@@ -180,7 +180,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
             }
 
             it.setOnPreferenceClickListener {
@@ -817,7 +817,7 @@ private fun showEmailValidationDialog(pid: ThreePid) {
                 newPasswordText.showPassword(passwordShown)
                 confirmNewPasswordText.showPassword(passwordShown)
 
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             val dialog = AlertDialog.Builder(activity)

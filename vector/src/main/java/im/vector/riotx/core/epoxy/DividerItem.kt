@@ -21,7 +21,7 @@ import im.vector.riotx.R
 
 /**
  * Default background color is for the bottom sheets (R.attr.vctr_list_bottom_sheet_divider_color).
- * To use in fragment, set color using R.attr.vctr_list_divider_color
+ * To use in fragment, set color using R.attr.riotx_list_divider_color
  */
 @EpoxyModelClass(layout = R.layout.item_divider)
 abstract class DividerItem : VectorEpoxyModel<DividerItem.Holder>() {

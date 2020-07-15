@@ -25,6 +25,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.displayInWebView
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.openOssLicensesMenuActivity
 import javax.inject.Inject
@@ -82,21 +83,21 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // copyright
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.displayInWebView(VectorSettingsUrls.COPYRIGHT)
+            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.COPYRIGHT)
             false
         }
 
         // terms & conditions
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.displayInWebView(VectorSettingsUrls.TAC)
+            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.TAC)
             false
         }
 
         // privacy policy
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.displayInWebView(VectorSettingsUrls.PRIVACY_POLICY)
+            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.PRIVACY_POLICY)
             false
         }
 

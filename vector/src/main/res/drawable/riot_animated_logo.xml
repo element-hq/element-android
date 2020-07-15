@@ -2,15 +2,15 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
     <item
-        android:drawable="@drawable/riot_splash_0_blue"
+        android:drawable="@drawable/element_logo_green"
         android:duration="@integer/splash_animation_velocity" />
     <item
-        android:drawable="@drawable/riot_splash_1_green"
+        android:drawable="@drawable/element_logo_green"
         android:duration="@integer/splash_animation_velocity" />
     <item
-        android:drawable="@drawable/riot_splash_2_pink"
+        android:drawable="@drawable/element_logo_green"
         android:duration="@integer/splash_animation_velocity" />
     <item
-        android:drawable="@drawable/riot_splash_3_red"
+        android:drawable="@drawable/element_logo_green"
         android:duration="@integer/splash_animation_velocity" />
 </animation-list>

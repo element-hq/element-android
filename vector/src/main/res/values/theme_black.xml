@@ -36,6 +36,8 @@
         <item name="riotx_room_active_widgets_banner_bg">@color/riotx_room_active_widgets_banner_bg_black</item>
         <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_black</item>
 
+        <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_black</item>
+
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_black</item>
 
@@ -53,6 +55,8 @@
         <item name="colorOnSurface">#212121</item-->
         <item name="android:colorBackground">?riotx_background</item>
         <item name="colorOnBackground">?riotx_text_primary</item>
+
+        <item name="riotx_bottom_sheet_background">@color/riotx_bottom_sheet_background_black</item>
 
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/riotx_accent</item>
@@ -74,7 +78,7 @@
         <!--Header/Panel Text Secondary-->
         <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
 
-        <item name="vctr_list_bottom_sheet_divider_color">@color/list_divider_color_black</item>
+        <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_black</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_black</item>
 
         <item name="vctr_redacted_message_color">@color/list_divider_color_black</item>
@@ -85,8 +89,8 @@
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
-        <item name="vctr_bottom_nav_background_color">@color/primary_color_black</item>
-        <item name="vctr_bottom_nav_background_border_color">#FF15171b</item>
+        <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>
+        <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_black</item>
 
         <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
     </style>

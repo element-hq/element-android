@@ -20,6 +20,7 @@ interface LegacySessionImporter {
 
     /**
      * Will eventually import a session created by the legacy app.
+     * @return true if a session has been imported
      */
-    fun process()
+    fun process(): Boolean
 }

@@ -84,7 +84,7 @@
     <string name="local_address_book_header">Lokales Adressbuch</string>
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_conversation_placeholder">Keine Konversationen</string>
-    <string name="no_contact_access_placeholder">Sie haben Riot nicht erlaubt, auf lokale Kontakte zuzugreifen</string>
+    <string name="no_contact_access_placeholder">Sie haben Element nicht erlaubt, auf lokale Kontakte zuzugreifen</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
 
     <!-- Rooms fragment -->
@@ -245,20 +245,20 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Riot benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
-    <string name="permissions_rationale_msg_camera">Riot benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
+    <string name="permissions_rationale_msg_storage">Element benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
+    <string name="permissions_rationale_msg_camera">Element benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen."</string>
-    <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
+    <string name="permissions_rationale_msg_record_audio">Element benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
+    <string name="permissions_rationale_msg_camera_and_audio">Element benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
-    <string name="permissions_rationale_msg_contacts">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
+    <string name="permissions_rationale_msg_contacts">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
@@ -650,7 +650,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
 
-    <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
+    <string name="e2e_enabling_on_app_update">Element unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
 
 Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string>
 
@@ -893,7 +893,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
 
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
-    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
+    <string name="startup_notification_privacy_message">Element kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
 
@@ -906,8 +906,8 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
 
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Bitte aktive Analysedaten um uns zu helfen Riot zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Bitte aktive Analysedaten um uns zu helfen Element zu verbessern.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, ich möchte helfen!</string>
 
     <string name="widget_integration_missing_parameter">Ein benötigter Parameter fehlt.</string>
@@ -935,7 +935,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Riot auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Element auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
@@ -1080,7 +1080,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und des Anzeigenamens.</string>
     <string name="settings_call_category">Anrufe</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Nutze den Standard-Klingelton von Riot für eingehende Anrufe</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Nutze den Standard-Klingelton von Element für eingehende Anrufe</string>
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
 
@@ -1110,10 +1110,10 @@ Bitte überprüfe die Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sitzungseinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für diese Sitzung aktiviert.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für diese Sitzung nicht aktiviert. 
-\nBitte überprüfe die Einstellungen für Riot.</string>
+\nBitte überprüfe die Einstellungen für Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
 
-    <string name="settings_troubleshoot_test_play_services_failed">Riot benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
+    <string name="settings_troubleshoot_test_play_services_failed">Element benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play-Dienste</string>
 
@@ -1139,19 +1139,19 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Starte beim Hochfahren</string>
     <string name="settings_troubleshoot_test_service_boot_success">Dienst wird starten, wenn das Gerät neu gestartet wird.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis Riot einmal geöffnet wurde.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis Element einmal geöffnet wurde.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiviere das Starten beim Hochfahren</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Überprüfe Hintergrund-Einschränkungen</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Riot deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Element deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Riot aktiviert.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Element aktiviert.
 \nDie App wird aggressiv eingeschränkt, während sie im Hintergrund arbeiten möchte. Dies könnte Benachrichtigungen beeinflussen.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Einschränkungen deaktivieren</string>
 
     <string name="settings_troubleshoot_test_battery_title">Batterieoptimierung</string>
-    <string name="settings_troubleshoot_test_battery_success">Riot wird nicht von Batterieoptimierungen beeinflusst.</string>
+    <string name="settings_troubleshoot_test_battery_success">Element wird nicht von Batterieoptimierungen beeinflusst.</string>
     <string name="settings_notification_troubleshoot">Fehler bei Benachrichtigungen finden</string>
     <string name="settings_troubleshoot_diagnostic">Diagnose von Fehlern</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, um uns beim nachforschen zu helfen.</string>
@@ -1162,8 +1162,8 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
-    <string name="startup_notification_fdroid_battery_optim_message">"Riot muss eine  Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
-\nAuf dem nächsten Bildschirm wirst Du gefragt, ob Du Riot erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren."</string>
+    <string name="startup_notification_fdroid_battery_optim_message">"Element muss eine  Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
+\nAuf dem nächsten Bildschirm wirst Du gefragt, ob Du Element erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren."</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Berechtigung gewähren</string>
 
     <string name="account_email_error">Beim Verifizieren deiner E-Mail-Adresse trat ein Fehler auf.</string>
@@ -1173,17 +1173,17 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Riot.im - Kommuniziere auf deine Weise</string>
+    <string name="store_title">Element - Kommuniziere auf deine Weise</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
-    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren, wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
+    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Element lässt dich auf die Art kommunizieren, wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 \n
 \nHole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
 \n
-\nWarum solltest du Riot.im wählen\?
+\nWarum solltest du Element wählen\?
 \n
 \n• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
 \n
-\n• MÄCHTIGE INTEGRATIONEN: Benutze Riot.im mit den Werkzeugen die du kennst und liebst. Mit Riot.im kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
+\n• MÄCHTIGE INTEGRATIONEN: Benutze Element mit den Werkzeugen die du kennst und liebst. Mit Element kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
 \n
 \n• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
 \n
@@ -1193,7 +1193,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
-    <string name="store_whats_new">"An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
+    <string name="store_whats_new">"An Element werden ständig Änderungen und Verbesserungen durchgeführt.
 Das vollständige Änderungsprotokoll ist hier zu finden: %1$s.
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
@@ -1222,7 +1222,7 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
     <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn Riot einen Wiederherstellungs-Schlüssel erzeugen soll.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn Element einen Wiederherstellungs-Schlüssel erzeugen soll.</string>
     <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
 
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
@@ -1254,11 +1254,11 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Dieser Fehler ist außerhalb von Riot passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+Dieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nDieser Fehler liegt nicht unter der Kontrolle von Riot. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
+\nDieser Fehler liegt nicht unter der Kontrolle von Element. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
+Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
@@ -1399,7 +1399,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Element hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
@@ -1517,7 +1517,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="group_all_communities">Alle Gemeinschaften</string>
 
     <string name="room_preview_no_preview">Für diesen Raum kann keine Vorschau angezeigt werden</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Die Vorschau von öffentlichen Räumen wird von RiotX noch nicht unterstützt</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Die Vorschau von öffentlichen Räumen wird von Element noch nicht unterstützt</string>
 
     <string name="fab_menu_create_room">Räume</string>
     <string name="fab_menu_create_chat">Direktnachrichten</string>
@@ -1557,7 +1557,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
 
     <string name="alpha_disclaimer_title">Willkommen in der Beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Während sich RiotX in der frühen Entwicklung befindet, fehlen möglicherweise einige Funktionen und es können Fehler auftreten.</string>
+    <string name="alpha_disclaimer_content_line_1">Während sich Element in der frühen Entwicklung befindet, fehlen möglicherweise einige Funktionen und es können Fehler auftreten.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store Beschreibung</string>
     <string name="settings_sdk_version">Matrix SDK Version</string>
     <string name="settings_other_third_party_notices">Sonstige Hinweise Dritter</string>
@@ -1615,7 +1615,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
     <string name="send_suggestion_failed">Der Vorschlag konnte nicht gesendet werden (%s)</string>
 
-    <string name="store_riotx_title">RiotX - Matrix Client der nächsten Generation</string>
+    <string name="store_riotx_title">Element - Matrix Client der nächsten Generation</string>
     <string name="store_riotx_short_description">Ein schnellerer und leichterer Client für Matrix mit den neuesten Android-Frameworks</string>
     <string name="send_file_step_sending_thumbnail">Miniaturbild wird gesendet (%1$s / %2$s)</string>
     <string name="send_file_step_sending_file">Datei wird gesendet (%1$s / %2$s)</string>
@@ -1705,15 +1705,15 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
     <string name="invite_no_identity_server_error">Führe einen Identitätsserver in deinen Einstellungen hinzu um diese Aktion auszuführen.</string>
     <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
-    <string name="settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen Riot tun</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen Element tun</string>
     <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
 
 
     <string name="settings_background_fdroid_sync_mode">Hintergrundsynchronisierungsmodus (experimentell)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Riot wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts schont (Akku). 
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts schont (Akku).
 \nAbhängig von dem Ressourcen-Statuses deines Geräts kann dein System die Synchronisierung verschieben.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar). 
-\nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Riot auf Ereignisse lauscht.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
+\nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Element auf Ereignisse lauscht.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nDie Synchronisierung kann aufgrund deiner Ressourcen (Akku) oder Gerätezustands (schlafend) verschoben werden.</string>
     <string name="settings_integrations">Integrationen</string>
@@ -1742,7 +1742,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
 
-    <string name="security_warning_identity_server">Frühere Versionen von Riot hatten ein Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
+    <string name="security_warning_identity_server">Frühere Versionen von Element hatten ein Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
 \n
 \nWeitere Details gibt es hier (Englisch):
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
@@ -1754,14 +1754,14 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="push_gateway_item_device_name">Sitzungsname:</string>
     <string name="push_gateway_item_format">Format:</string>
 
-    <string name="store_riotx_full_description">RiotX ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
-\nRiotX ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
+    <string name="store_riotx_full_description">Element ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
+\nElement ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
 \n
-\nHinweis: Dies ist eine Beta-Version. RiotX wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
+\nHinweis: Dies ist eine Beta-Version. Element wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
 \n
-\nRiotX unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
+\nElement unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
 \n
-\nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
+\nNicht alle Features in Element sind bisher in Element implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
@@ -1833,7 +1833,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \nWenn du keine weiteren Inhalte dieses Nutzers mehr sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Riot benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
+    <string name="permissions_rationale_msg_keys_backup_export">Element benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
 \n
 \nBitte erlaube den Zugriff im nächsten Pop-Up sodass du deine Schlüssel manuell exportieren kannst.</string>
 
@@ -1879,14 +1879,14 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
     <string name="login_connect_to">Verbinde mit %1$s</string>
-    <string name="login_connect_to_modular">Mit Modular verbinden</string>
+    <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
     <string name="login_connect_to_a_custom_server">Mit einem benutzerdefinierten Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
     <string name="login_signup">Registrieren</string>
     <string name="login_signin">Anmelden</string>
     <string name="login_signin_sso">Mit einmaligem Anmelden fortfahren</string>
 
-    <string name="login_server_url_form_modular_hint">Modular Adresse</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services Adresse</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_sso_error_message">Ein Fehler beim Laden der Seite %1$s (%2$d) ist aufgetreten</string>
     <string name="login_registration_disabled">Es tut uns leid. Dieser Server akzeptiert keine neuen Benutzerkonten.</string>
@@ -1949,8 +1949,8 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Befreie deine Kommunikation</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
-    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Riot oder Servers ein, den du verwenden möchtest</string>
-    <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Riot ein, zu dem du dich verbinden möchtest</string>
+    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
+    <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
 
     <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Heimserver anmelden. Der Heimserver unterstützt die folgenden Anmeldetypen:%1$s.
 \n
@@ -2014,7 +2014,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
-    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzer!n%1$s. Die angegebenen Anmeldeinformationen sind von Benutzer!n %2$s. Dies wird nicht von RiotX unterstützt.
+    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzer!n%1$s. Die angegebenen Anmeldeinformationen sind von Benutzer!n %2$s. Dies wird nicht von Element unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
 
     <string name="permalink_malformed">matrix.to-Link fehlerhaft</string>
@@ -2037,7 +2037,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="autocomplete_limited_results">Zeigt nur die ersten Ergebnisse, gib mehr Buchstaben ein…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Ausfallsicher</string>
-    <string name="settings_developer_mode_fail_fast_summary">RiotX kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
+    <string name="settings_developer_mode_fail_fast_summary">Element kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
 
     <string name="command_description_verify">Überprüfe die angegebenen Benutzer-ID</string>
     <string name="command_description_shrug">Stellt einer Klartextnachricht ¯\\_(ツ)_/¯ voran</string>
@@ -2126,9 +2126,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
     <string name="room_member_jump_to_read_receipt">Springen &amp; als gelesen markieren</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX kann keine Ereignisse vom Typ \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX beherrscht keine Nachrichten vom Typ \'%1$s\'</string>
-    <string name="rendering_event_error_exception">RiotX ist beim verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
+    <string name="rendering_event_error_type_of_event_not_handled">Element kann keine Ereignisse vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element beherrscht keine Nachrichten vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_exception">Element ist beim verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
 
     <string name="unignore">Nicht ignorieren</string>
 
@@ -2261,7 +2261,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
 
-    <string name="login_mobile_device_riotx">RiotX Android</string>
+    <string name="login_mobile_device_riotx">Element Android</string>
 
     <string name="settings_key_requests">Schlüsselanforderungen</string>
 
@@ -2400,13 +2400,13 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="error_adding_media_file_to_gallery">Datei konnte nicht zur Galerie hinzugefügt werden</string>
     <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
 
-    <string name="use_other_session_content_description">Nutze die neueste Version von Riot auf deinen anderen Geräten, Riot Web, Riot Desktop, Riot iOS, RiotX für Android oder einen anderen cross-signing fähigen Matrix client</string>
-    <string name="riot_desktop_web">Riot Web
-\nRiot Desktop</string>
-    <string name="riot_ios_android">Riot iOS
-\nRiot X für Android</string>
+    <string name="use_other_session_content_description">Nutze die neueste Version von Element auf deinen anderen Geräten, Element Web, Element Desktop, Element iOS, Element für Android oder einen anderen cross-signing fähigen Matrix client</string>
+    <string name="riot_desktop_web">Element Web
+\nElement Desktop</string>
+    <string name="riot_ios_android">Element iOS
+\nElement für Android</string>
     <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
-    <string name="use_latest_riot">Nutze die neueste Version von Riot auf deinen anderen Geräten:</string>
+    <string name="use_latest_riot">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
     <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>

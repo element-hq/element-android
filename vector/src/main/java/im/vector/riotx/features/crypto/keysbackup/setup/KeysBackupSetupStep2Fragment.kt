@@ -141,7 +141,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
             mPassphraseConfirmTextEdit.showPassword(shouldBeVisible)
-            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         })
 
         viewModel.confirmPassphraseError.observe(viewLifecycleOwner, Observer {

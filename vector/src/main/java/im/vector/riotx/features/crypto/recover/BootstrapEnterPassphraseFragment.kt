@@ -97,7 +97,7 @@ class BootstrapEnterPassphraseFragment @Inject constructor() : VectorBaseFragmen
         if (state.step is BootstrapStep.SetupPassphrase) {
             val isPasswordVisible = state.step.isPasswordVisible
             ssss_passphrase_enter_edittext.showPassword(isPasswordVisible, updateCursor = false)
-            ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
 
             state.passphraseStrength.invoke()?.let { strength ->
                 val score = strength.score

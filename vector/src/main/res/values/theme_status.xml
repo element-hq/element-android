@@ -21,12 +21,12 @@
 
         <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_status</item>
-        <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status
+        <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_status
         </item>
-        <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
+        <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_status</item>
 
         <!-- waiting view background -->
-        <item name="vctr_waiting_background_color">#AAAAAAAA</item>
+        <item name="riotx_waiting_background_color">@color/riotx_waiting_background_color_status</item>
 
         <!-- application bar text color -->
         <item name="vctr_toolbar_primary_text_color">#FFFFFFFF</item>

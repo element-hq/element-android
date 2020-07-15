@@ -13,7 +13,7 @@
         android:id="@+id/related_message_backround"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?vctr_bottom_nav_background_color"
+        android:background="?riotx_bottom_nav_background_color"
         app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/related_message_background_top_separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?vctr_bottom_nav_background_border_color"
+        android:background="?riotx_bottom_nav_background_border_color"
         app:layout_constraintEnd_toEndOf="@id/related_message_backround"
         app:layout_constraintStart_toStartOf="@+id/related_message_backround"
         app:layout_constraintTop_toTopOf="@id/related_message_backround" />
@@ -30,7 +30,7 @@
         android:id="@+id/related_message_background_bottom_separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?vctr_bottom_nav_background_border_color"
+        android:background="?riotx_bottom_nav_background_border_color"
         app:layout_constraintBottom_toBottomOf="@id/related_message_backround"
         app:layout_constraintEnd_toEndOf="@id/related_message_backround"
         app:layout_constraintStart_toStartOf="@+id/related_message_backround" />

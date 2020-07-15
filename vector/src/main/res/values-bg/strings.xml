@@ -152,7 +152,7 @@
     <string name="user_directory_header">Директория с потребители</string>
     <string name="matrix_only_filter">Само потребители на Matrix</string>
     <string name="no_conversation_placeholder">Няма разговори</string>
-    <string name="no_contact_access_placeholder">Не сте дали достъп на Riot до локалните ви контакти</string>
+    <string name="no_contact_access_placeholder">Не сте дали достъп на Element до локалните ви контакти</string>
     <string name="no_result_placeholder">Няма резултати</string>
 
     <string name="rooms_header">Стаи</string>
@@ -623,7 +623,7 @@
     <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък. В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
 
-    <string name="e2e_enabling_on_app_update">Riot поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
+    <string name="e2e_enabling_on_app_update">Element поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
 
 Може да го направите сега или по-късно от настройките на приложението.</string>
 
@@ -665,24 +665,24 @@
     <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
     <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
     <string name="room_add_matrix_apps">Добави Matrix приложения</string>
-    <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
+    <string name="permissions_rationale_msg_storage">Element иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
 
 Моля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
-    <string name="permissions_rationale_msg_camera">Riot иска разшерение за достъп до Вашата камера, за да прави снимки или да осъществи видео разговори.</string>
+    <string name="permissions_rationale_msg_camera">Element иска разшерение за достъп до Вашата камера, за да прави снимки или да осъществи видео разговори.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
+    <string name="permissions_rationale_msg_record_audio">Element иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
+    <string name="permissions_rationale_msg_camera_and_audio">Element иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_contacts">Riot може да провери контактите ви, за да намери други Matrix потребители по имейл или телефонен номер.
+    <string name="permissions_rationale_msg_contacts">Element може да провери контактите ви, за да намери други Matrix потребители по имейл или телефонен номер.
 \n
 \nАко сте съгласни да споделите списъка с контактите си за тази цел, моля разрешете достъп при предстоящото запитване.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot може да провери контактите ви, за да намери други Matrix потребители по имейл и телефонен номер.
+    <string name="permissions_msg_contacts_warning_other_androids">Element може да провери контактите ви, за да намери други Matrix потребители по имейл и телефонен номер.
 \n
 \nРазрешавате ли да се сподели списъка с контакти за тази цел\?</string>
 
@@ -833,7 +833,7 @@
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомленията <b>няма да показват съдържания на съобщения</b></string>
 
     <string name="startup_notification_privacy_title">Конфиденциалност на известията</string>
-    <string name="startup_notification_privacy_message">Riot може да работи във фонов режим за да получава известия по защитен начин. Може да повлияе на консумацията на енергия.</string>
+    <string name="startup_notification_privacy_message">Element може да работи във фонов режим за да получава известия по защитен начин. Може да повлияе на консумацията на енергия.</string>
     <string name="startup_notification_privacy_button_grant">Разреши достъп</string>
     <string name="startup_notification_privacy_button_other">Избери друг вариант</string>
 
@@ -850,8 +850,8 @@
     <string name="settings_deactivate_my_account">Деактивирай акаунта ми</string>
 
     <string name="settings_opt_in_of_analytics">Изпращане на статистически данни</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot събира анонимни статистики за да ни помогне да подобрим приложението.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Моля, включете изпращането на статистики за да ни помогнете да подобрим Riot.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element събира анонимни статистики за да ни помогне да подобрим приложението.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Моля, включете изпращането на статистики за да ни помогнете да подобрим Element.</string>
     <string name="settings_opt_in_of_analytics_ok">Да, искам да помогна!</string>
 
     <string name="widget_integration_missing_parameter">Липсва задължителен параметър.</string>
@@ -879,7 +879,7 @@
     <string name="e2e_re_request_encryption_key_sent">Заявката за ключове беше изпратена.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Изпратена заявка</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Моля стартирайте Riot на друго устройство можещо да разшифрова съобщението, за да може то да изпрати ключовете до това устройство.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Моля стартирайте Element на друго устройство можещо да разшифрова съобщението, за да може то да изпрати ключовете до това устройство.</string>
 
     <string name="lock_screen_hint">Пишете тук…</string>
 
@@ -1006,7 +1006,7 @@
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
 
     <string name="settings_call_category">Обаждания</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Използвай мелодията по подразбиране на Riot за входящи повиквания</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Използвай мелодията по подразбиране на Element за входящи повиквания</string>
     <string name="settings_call_ringtone_title">Мелодия за входящо повикване</string>
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
 
@@ -1057,12 +1057,12 @@
     <string name="settings_troubleshoot_test_device_settings_title">Настройки на устройството.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомленията са разрешени за това устройство.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Уведомленията са забранени за това устройство.
-Моля, проверете настройките на Riot.</string>
+Моля, проверете настройките на Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Разреши</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Проверка на Google Play услугите</string>
     <string name="settings_troubleshoot_test_play_services_success">APK пакет за Google Play услугите е наличен и с актуална версия.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:
+    <string name="settings_troubleshoot_test_play_services_failed">Element използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Поправи Google Play услугите</string>
 
@@ -1089,25 +1089,25 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">Стартирай при старт на системата</string>
     <string name="settings_troubleshoot_test_service_boot_success">Услугата ще стартира когато устройството се рестартира.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Услугата няма да стартира когато устройството се рестартира. Няма да получавате известия докато Riot не бъде отворен поне веднъж.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Услугата няма да стартира когато устройството се рестартира. Няма да получавате известия докато Element не бъде отворен поне веднъж.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Стартирай при старт на системата</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Проверка на фоновите ограничения</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Ограниченията във фонов режим са изключени за Riot. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Ограниченията във фонов режим са изключени за Element. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Активирани са ограничения във фонов режим за Riot.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Активирани са ограничения във фонов режим за Element.
 Работата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Премахни ограниченията</string>
 
     <string name="settings_troubleshoot_test_battery_title">Оптимизация на батерията</string>
-    <string name="settings_troubleshoot_test_battery_success">Riot не се влияе от Оптимизация на батерията.</string>
+    <string name="settings_troubleshoot_test_battery_success">Element не се влияе от Оптимизация на батерията.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ако потребител остави устройството неподвижно с изключен екран за известно време, то влиза в режим на заспиване. Това предотвратява приложенията да достъпват мрежата и отлага техните задачи, синхронизации и стандартни аларми.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорирай оптимизацията</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Връзка във фонов режим</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot трябва да поддържа ниско-натоварваща връзка във фонов режим, за да може известията да пристигат надеждно.
-На следващия екран, ще бъдете попитани дали да позволите на Riot винаги да работи във фонов режим. Моля, приемете.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element трябва да поддържа ниско-натоварваща връзка във фонов режим, за да може известията да пристигат надеждно.
+На следващия екран, ще бъдете попитани дали да позволите на Element винаги да работи във фонов режим. Моля, приемете.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Разреши</string>
 
     <string name="account_email_error">Възникна грешка при проверката на имейл адреса Ви.</string>
@@ -1117,17 +1117,17 @@
 
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
 
-    <string name="store_title">Riot.im - комуникирайте по свой начин</string>
+    <string name="store_title">Element - комуникирайте по свой начин</string>
     <string name="store_short_description">Универсален и сигурен чат изцяло под ваш контрол.</string>
-    <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Riot позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
+    <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Element позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
 
 Използвайте безплатен matrix.org акаунт, собствен сървър от https://modular.im или друг Matrix сървър.
 
-Защо да изберете Riot.im?
+Защо да изберете Element?
 
 • ПЪЛНА КОМУНИКАЦИЯ: Създавайте каквито пожелаете чат стаи - свързани с работни екипи, приятели или друг вид общности! Чатете, споделяйте файлове, добавяйте приспособления и водете аудио и видео разговори - всичко това, изцяло безплатно.
 
-• МОЩНИ ИНТЕГРАЦИИ: Използвайте Riot.im с досега-познатите Ви инструменти. Посредством Riot.im дори можете да чатите с потребители и групи използващи други чат приложения.
+• МОЩНИ ИНТЕГРАЦИИ: Използвайте Element с досега-познатите Ви инструменти. Посредством Element дори можете да чатите с потребители и групи използващи други чат приложения.
 
 • ЛИЧНО И ЗАЩИТЕНО: Пазете комуникацията си в тайна. Съвременна технология за шифроване от край до край гарантира, че Вашата комуникацията наистина остава Ваша.
 
@@ -1137,7 +1137,7 @@
 
     <string name="video_call_in_progress">В момента тече видео разговор…</string>
 
-    <string name="store_whats_new">"Постоянно правим промени и подобрения по Riot.im.
+    <string name="store_whats_new">"Постоянно правим промени и подобрения по Element.
 Пълният списък с промени може да бъде намерен тук: %1$s.
 За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени."</string>
     <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
@@ -1158,11 +1158,11 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Провери настройките</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Тази грешка е извън контрола на Riot. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
+Тази грешка е извън контрола на Element. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-Тази грешка е извън контрола на Riot. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).</string>
+Тази грешка е извън контрола на Element. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Тази грешка е извън контрола на Riot. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.</string>
+Тази грешка е извън контрола на Element. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Добави акаунт</string>
 
     <string name="settings_noisy_notifications_preferences">Настройка на шумни известия</string>
@@ -1178,7 +1178,7 @@
     <string name="passphrase_empty_error_message">Моля, въведете парола</string>
     <string name="passphrase_passphrase_too_weak">Паролата е прекалено слаба</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Моля, изтрийте паролата, ако искате Riot да генерира ключ за възстановяване.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Моля, изтрийте паролата, ако искате Element да генерира ключ за възстановяване.</string>
     <string name="keys_backup_no_session_error">Не беше открита Matrix сесия</string>
 
     <string name="keys_backup_setup_step1_title">Никога не губете шифровани съобщения</string>
@@ -1341,7 +1341,7 @@
 
     <string name="autodiscover_invalid_response">Невалиден отговор при опит за откриване на адреса на сървъра</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Опции за откриване на сървър</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Element откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
 
@@ -1482,7 +1482,7 @@
     <string name="group_all_communities">Всички общности</string>
 
     <string name="room_preview_no_preview">Тази стая не може да бъде прегледана</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Прегледа на стаи четими от цял свят все още не се поддържа от RiotX</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Прегледа на стаи четими от цял свят все още не се поддържа от ElementX</string>
 
     <string name="fab_menu_create_room">Стаи</string>
     <string name="fab_menu_create_chat">Директни съобщения</string>
@@ -1499,7 +1499,7 @@
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
     <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
-    <string name="alpha_disclaimer_content_line_1">Докато RiotX е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
+    <string name="alpha_disclaimer_content_line_1">Докато Element е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описанието</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
 
@@ -1541,15 +1541,15 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">Показвай скрити събития в чата</string>
 
-    <string name="store_riotx_title">RiotX - следващо поколение Matrix клиент</string>
+    <string name="store_riotx_title">Element - следващо поколение Matrix клиент</string>
     <string name="store_riotx_short_description">По-бърз и по-лек Matrix клиент, използващ последните Android технологии</string>
-    <string name="store_riotx_full_description">RiotX в нов клиент за Matrix протокола (Matrix.org): отворена мрежа за сигурна, децентрализирана комуникация. RiotX е изцяло пренаписан Riot Android клиент, базиран на изцяло пренаписан Matrix Android SDK.
+    <string name="store_riotx_full_description">Element в нов клиент за Matrix протокола (Matrix.org): отворена мрежа за сигурна, децентрализирана комуникация. Element е изцяло пренаписан Riot Android клиент, базиран на изцяло пренаписан Matrix Android SDK.
 \n
-\nЗабележка: Това е бета версия. RiotX в момента се разработва активно и все още има ограничения и (надяваме се не прекалено много) бъгове. Всякаква обратна връзка е добре дошла!
+\nЗабележка: Това е бета версия. Element в момента се разработва активно и все още има ограничения и (надяваме се не прекалено много) бъгове. Всякаква обратна връзка е добре дошла!
 \n
-\nRiotX поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
+\nElement поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
 \n
-\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Настройки на стаи (показване на членове и т.н.) • Обаждания • Приспособления • …</string>
+\nЗасега не всички функции на Element са налични в Element. Основни липсващи (и скоро пристигащи!) функции са: • Настройки на стаи (показване на членове и т.н.) • Обаждания • Приспособления • …</string>
 
     <string name="bottom_action_people_x">Директни съобщения</string>
 
@@ -1601,7 +1601,7 @@
 
     <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
 
-    <string name="security_warning_identity_server">Предишни версии на Riot имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
+    <string name="security_warning_identity_server">Предишни версии на Element имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
 \n
 \nНаучете повече подробности тук:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
@@ -1637,11 +1637,11 @@
     <string name="invite_no_identity_server_error">Добавете сървър за самоличност в настройки за да извършите това действие.</string>
     <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация (експериментално)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Riot ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
 \nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Целящ висока интерактивност</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot ще синхронизира във фонов режим на определен интервал (конфигурируемо).
-\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че Riot слуша за събития.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element ще синхронизира във фонов режим на определен интервал (конфигурируемо).
+\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че Element слуша за събития.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Без фонова синхронизация</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
     <string name="settings_background_sync_update_error">Неуспешно обновяване на настройките.</string>
@@ -1744,7 +1744,7 @@
 \n
 \nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Riot се нуждае от привилегии за да запази E2E ключовете върху диска.
+    <string name="permissions_rationale_msg_keys_backup_export">Element се нуждае от привилегии за да запази E2E ключовете върху диска.
 \n
 \nПозволете достъп на следващия екран, за да може в бъдеще да експортирате ключовете си ръчно.</string>
 
@@ -1752,7 +1752,7 @@
 
     <string name="login_error_no_homeserver_found">Това не е валиден адрес на Matrix сървър</string>
     <string name="settings_add_3pid_confirm_password_title">Потвърдете паролата</string>
-    <string name="settings_add_3pid_flow_not_supported">Не може да направите това от мобилно приложение на Riot</string>
+    <string name="settings_add_3pid_flow_not_supported">Не може да направите това от мобилно приложение на Element</string>
     <string name="settings_add_3pid_authentication_needed">Нужна е автентикация</string>
 
 
@@ -1824,18 +1824,18 @@
 
     <string name="login_continue">Продължи</string>
     <string name="login_connect_to">Свържи се с %1$s</string>
-    <string name="login_connect_to_modular">Свърже се с Modular</string>
+    <string name="login_connect_to_modular">Свърже се с Element Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Свържи се със собствен сървър</string>
     <string name="login_signin_to">Влез в %1$s</string>
     <string name="login_signup">Регистрация</string>
     <string name="login_signin">Вход</string>
     <string name="login_signin_sso">Продължи със SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Modular адрес</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Services адрес</string>
     <string name="login_server_url_form_other_hint">Адрес</string>
     <string name="login_server_url_form_modular_text">Премиум хостинг за организации</string>
-    <string name="login_server_url_form_modular_notice">Въведете адреса на Modular Riot или на сървър, който искате да използвате</string>
-    <string name="login_server_url_form_other_notice">Въведете адреса на сървър или Riot към който да се свържете</string>
+    <string name="login_server_url_form_modular_notice">Въведете адреса на Modular Element или на сървър, който искате да използвате</string>
+    <string name="login_server_url_form_other_notice">Въведете адреса на сървър или Element към който да се свържете</string>
 
     <string name="login_sso_error_message">Възникна грешка при зареждане на страницата: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Приложението не може да влезе в този сървър. Сървъра поддържа следните методи за вход: %1$s.
@@ -1908,7 +1908,7 @@
 \nПрекратяване на процеса на регистрация\?</string>
 
     <string name="login_a11y_choose_matrix_org">Избери matrix.org</string>
-    <string name="login_a11y_choose_modular">Избери Modular</string>
+    <string name="login_a11y_choose_modular">Избери Element Matrix Services</string>
     <string name="login_a11y_choose_other">Избери собствен сървър</string>
     <string name="login_a11y_captcha_container">Моля извършете captcha проверката</string>
     <string name="login_terms_title">Приемете условията за да продължите</string>
@@ -1954,7 +1954,7 @@
 \nВлезте отново за да достъпите профила и съобщенията си.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ще загубите достъпа до защитените съобщения, освен ако не влезете за да възстановите ключовете за шифроване.</string>
     <string name="soft_logout_clear_data_dialog_submit">Изчисти данните</string>
-    <string name="soft_logout_sso_not_same_user_error">Текущата сесия е за потребител %1$s, а вие сте въвели данни за вход за %2$s. RiotX не поддържа това.
+    <string name="soft_logout_sso_not_same_user_error">Текущата сесия е за потребител %1$s, а вие сте въвели данни за вход за %2$s. Element не поддържа това.
 \nПърво изчистете данните, след това влезте отново с друг профил.</string>
 
     <string name="permalink_malformed">matrix.to връзката ви беше невалидна</string>
@@ -1977,7 +1977,7 @@
     <string name="autocomplete_limited_results">Показване само на първите резултати. Въведете още букви…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Бърз-провал</string>
-    <string name="settings_developer_mode_fail_fast_summary">RiotX може да забива по-често когато възникне неочаквана грешка</string>
+    <string name="settings_developer_mode_fail_fast_summary">Element може да забива по-често когато възникне неочаквана грешка</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 

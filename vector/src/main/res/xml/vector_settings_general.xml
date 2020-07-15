@@ -26,22 +26,22 @@
 
         <!-- Note: inputType does not work, it is set also in code, as well as iconTint -->
         <im.vector.riotx.core.preference.VectorEditTextPreference
-            android:icon="@drawable/ic_add_black"
+            android:icon="@drawable/ic_material_add"
             android:inputType="textEmailAddress"
             android:key="ADD_EMAIL_PREFERENCE_KEY"
             android:order="100"
             android:title="@string/settings_add_email_address"
-            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+            app:iconTint="@color/riotx_accent" />
 
         <!-- Phone will be added here -->
 
         <!-- Note: iconTint does not work, it is also done in code -->
         <im.vector.riotx.core.preference.VectorPreference
-            android:icon="@drawable/ic_add_black"
+            android:icon="@drawable/ic_material_add"
             android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
             android:order="200"
             android:title="@string/settings_add_phone_number"
-            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+            app:iconTint="@color/riotx_accent" />
 
         <im.vector.riotx.core.preference.VectorPreference
             android:order="1000"

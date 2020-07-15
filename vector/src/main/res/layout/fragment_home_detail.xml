@@ -108,6 +108,7 @@
         android:layout_height="48dp"
         android:background="?riotx_background"
         app:itemIconSize="20dp"
+        app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

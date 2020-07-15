@@ -129,7 +129,7 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                 val isPasswordVisible = state.step.isPasswordVisible
                 bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
-                bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)

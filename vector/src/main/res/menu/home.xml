@@ -15,6 +15,7 @@
     <item
         android:id="@+id/menu_home_filter"
         android:icon="@drawable/ic_search"
+        app:iconTint="?riotx_text_secondary"
         android:title="@string/home_filter_placeholder_home"
         app:showAsAction="always" />
 

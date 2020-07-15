@@ -220,7 +220,7 @@ class BugReporter @Inject constructor(
                 }
 
                 if (!mIsCancelled) {
-                    val text = "[Riot.imX] " +
+                    val text = "[Element] " +
                             if (forSuggestion) {
                                 "[Suggestion] "
                             } else {
@@ -292,7 +292,7 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
                     // Special for RiotX
-                    builder.addFormDataPart("label", "[Riot.imX]")
+                    builder.addFormDataPart("label", "[Element]")
 
                     // Suggestion
                     if (forSuggestion) {
