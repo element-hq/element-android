@@ -132,7 +132,7 @@ It's worth noting that the response from the homeserver contains the userId of A
 
 ### Login with Msisdn
 
-Not supported yet in RiotX
+Not supported yet in Element
 
 ### Login with SSO
 
