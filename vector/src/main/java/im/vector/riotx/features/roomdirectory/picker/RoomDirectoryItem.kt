@@ -19,6 +19,7 @@ package im.vector.riotx.features.roomdirectory.picker
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -58,6 +59,7 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
                     }
                 }
                 .into(holder.avatarView)
+        holder.avatarView.isInvisible = directoryAvatarUrl.isNullOrBlank() && includeAllNetworks
 
         holder.nameView.text = directoryName
         holder.descritionView.setTextOrHide(directoryDescription)

@@ -116,11 +116,11 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             tokenStore.saveToken(realm, syncResponse.nextBatch)
         }
         // Everything else we need to do outside the transaction
-        syncResponse.rooms?.also {
+        syncResponse.rooms?.let {
             checkPushRules(it, isInitialSync)
             userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
         }
-        syncResponse.groups?.also {
+        syncResponse.groups?.let {
             scheduleGroupDataFetchingIfNeeded(it)
         }
 
