@@ -1,3 +1,13 @@
+Changes in Element 1.0.0 (2020-07-15)
+===================================================
+
+Features ✨:
+ - Re-branding: The app is now called Element. New name, new themes, new icons, etc. More details here: https://element.io/blog/welcome-to-element/ (#1691)
+
+Bugfix 🐛:
+ - Video calls are shown as a voice ones in the timeline (#1676)
+ - Fix regression: not able to create a room without IS configured (#1679)
+
 Changes in Riot.imX 0.91.5 (2020-07-11)
 ===================================================
 
@@ -696,7 +706,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.X.0 (2020-XX-XX)
+Changes in Element 1.X.X (2020-XX-XX)
 ===================================================
 
 Features ✨:

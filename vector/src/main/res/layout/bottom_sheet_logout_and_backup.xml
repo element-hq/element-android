@@ -5,6 +5,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_bottom_sheet_background"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">

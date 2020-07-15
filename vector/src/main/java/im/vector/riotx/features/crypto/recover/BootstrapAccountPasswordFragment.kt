@@ -101,7 +101,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
         if (state.step is BootstrapStep.AccountPassword) {
             val isPasswordVisible = state.step.isPasswordVisible
             bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
-            ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
     }
 }

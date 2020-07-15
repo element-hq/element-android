@@ -1,14 +1,5 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-  <path
-      android:pathData="M12,2L15.09,8.26L22,9.27L17,14.14L18.18,21.02L12,17.77L5.82,21.02L7,14.14L2,9.27L8.91,8.26L12,2Z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:fillType="evenOdd"
-      android:strokeColor="#2E2F32"
-      android:strokeLineCap="round"/>
+<vector android:autoMirrored="true" android:height="24dp"
+    android:viewportHeight="24" android:viewportWidth="24"
+    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#ffffff" android:pathData="M11.2188,1.9096C11.4563,1.1413 12.5438,1.1413 12.7812,1.9096L14.8953,8.751H21.8475C22.6296,8.751 22.9653,9.7436 22.3438,10.2183L16.6847,14.5415L18.8247,21.4668C19.0598,22.2274 18.1798,22.8412 17.5472,22.3579L12,18.1203L6.4529,22.3579C5.8203,22.8412 4.9403,22.2274 5.1754,21.4668L7.3154,14.5415L1.6563,10.2183C1.0347,9.7436 1.3705,8.751 2.1526,8.751H9.1048L11.2188,1.9096Z"/>
 </vector>

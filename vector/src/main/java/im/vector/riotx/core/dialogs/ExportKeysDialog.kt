@@ -68,7 +68,7 @@ class ExportKeysDialog {
             passwordVisible = !passwordVisible
             passPhrase1EditText.showPassword(passwordVisible)
             passPhrase2EditText.showPassword(passwordVisible)
-            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
         val exportDialog = builder.show()

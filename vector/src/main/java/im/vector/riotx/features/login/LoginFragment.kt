@@ -157,8 +157,8 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                 }
                 ServerType.Modular   -> {
                     loginServerIcon.isVisible = true
-                    loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                    loginTitle.text = getString(resId, "Modular")
+                    loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
+                    loginTitle.text = getString(resId, "Element Matrix Services")
                     loginNotice.text = getString(R.string.login_server_modular_text)
                 }
                 ServerType.Other     -> {
@@ -221,10 +221,10 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
             passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye)
             passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }

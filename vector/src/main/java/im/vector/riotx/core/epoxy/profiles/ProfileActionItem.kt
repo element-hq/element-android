@@ -75,17 +75,22 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.view.isClickable = false
         }
         holder.title.text = title
-        val tintColor = if (destructive) {
+        val titleTintColor = if (destructive) {
             ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
         } else {
             ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
         }
-        holder.title.setTextColor(tintColor)
+        val iconTintColor = if (destructive) {
+            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        }
+        holder.title.setTextColor(titleTintColor)
         holder.subtitle.setTextOrHide(subtitle)
         if (iconRes != 0) {
             holder.icon.setImageResource(iconRes)
             if (tintIcon) {
-                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
+                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(iconTintColor))
             } else {
                 ImageViewCompat.setImageTintList(holder.icon, null)
             }
@@ -110,7 +115,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
 
         if (editableRes != 0 && editable) {
             val tintColorSecondary = if (destructive) {
-                tintColor
+                titleTintColor
             } else {
                 ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
             }

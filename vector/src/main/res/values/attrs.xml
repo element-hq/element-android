@@ -3,12 +3,6 @@
 
     <declare-styleable name="VectorStyles">
 
-        <attr name="vctr_bottom_nav_background_color" format="color" />
-        <attr name="vctr_bottom_nav_background_border_color" format="color" />
-
-        <!-- waiting view background -->
-        <attr name="vctr_waiting_background_color" format="color" />
-
         <!-- application bar text color -->
         <attr name="vctr_toolbar_primary_text_color" format="color" />
         <attr name="vctr_toolbar_secondary_text_color" format="color" />
@@ -46,7 +40,6 @@
         <attr name="vctr_list_header_primary_text_color" format="color" />
         <attr name="vctr_list_header_secondary_text_color" format="color" />
 
-        <attr name="vctr_list_bottom_sheet_divider_color" format="color" />
         <attr name="vctr_list_divider_color" format="color" />
 
         <attr name="vctr_redacted_message_color" format="color" />

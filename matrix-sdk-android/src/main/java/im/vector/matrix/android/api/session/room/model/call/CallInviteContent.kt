@@ -59,5 +59,5 @@ data class CallInviteContent(
         }
     }
 
-    fun isVideo(): Boolean = offer?.sdp?.contains(Offer.SDP_VIDEO) == true
+    fun isVideo() = offer?.sdp?.contains(Offer.SDP_VIDEO) == true
 }

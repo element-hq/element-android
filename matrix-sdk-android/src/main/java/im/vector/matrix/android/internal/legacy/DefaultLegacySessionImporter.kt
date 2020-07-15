@@ -53,14 +53,14 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         private var DELETE_PREVIOUS_DATA = true
     }
 
-    override fun process() {
+    override fun process(): Boolean {
         Timber.d("Migration: Importing legacy session")
 
         val list = loginStorage.credentialsList
 
         Timber.d("Migration: found ${list.size} session(s).")
 
-        val legacyConfig = list.firstOrNull() ?: return
+        val legacyConfig = list.firstOrNull() ?: return false
 
         runBlocking {
             Timber.d("Migration: importing a session")
@@ -97,6 +97,9 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 Timber.d("Migration: clear shared prefs - DEACTIVATED")
             }
         }
+
+        // A session has been imported
+        return true
     }
 
     private suspend fun importCredentials(legacyConfig: LegacyHomeServerConnectionConfig) {
