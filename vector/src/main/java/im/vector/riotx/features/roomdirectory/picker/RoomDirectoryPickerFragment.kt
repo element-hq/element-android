@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryD
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
@@ -35,7 +36,6 @@ import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO Set title to R.string.select_room_directory
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
 class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory,
                                                       private val roomDirectoryPickerController: RoomDirectoryPickerController
@@ -89,6 +89,11 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         viewModel.handle(RoomDirectoryAction.SetRoomDirectoryData(roomDirectoryData))
 
         sharedActionViewModel.post(RoomDirectorySharedAction.Back)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.select_room_directory)
     }
 
     override fun retry() {
