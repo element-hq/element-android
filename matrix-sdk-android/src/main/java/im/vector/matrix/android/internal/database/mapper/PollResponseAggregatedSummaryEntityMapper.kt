@@ -19,12 +19,12 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.PollResponseAggregatedSummary
-import im.vector.matrix.android.internal.database.model.PollResponseAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.PollResAggregatedSummaryEntity
 import io.realm.RealmList
 
 internal object PollResponseAggregatedSummaryEntityMapper {
 
-    fun map(entity: PollResponseAggregatedSummaryEntity): PollResponseAggregatedSummary {
+    fun map(entity: PollResAggregatedSummaryEntity): PollResponseAggregatedSummary {
         return PollResponseAggregatedSummary(
                 aggregatedContent = ContentMapper.map(entity.aggregatedContent).toModel(),
                 closedTime = entity.closedTime,
@@ -34,8 +34,8 @@ internal object PollResponseAggregatedSummaryEntityMapper {
         )
     }
 
-    fun map(model: PollResponseAggregatedSummary): PollResponseAggregatedSummaryEntity {
-        return PollResponseAggregatedSummaryEntity(
+    fun map(model: PollResponseAggregatedSummary): PollResAggregatedSummaryEntity {
+        return PollResAggregatedSummaryEntity(
                 aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent()),
                 nbOptions = model.nbOptions,
                 closedTime = model.closedTime,
@@ -45,6 +45,6 @@ internal object PollResponseAggregatedSummaryEntityMapper {
     }
 }
 
-internal fun PollResponseAggregatedSummaryEntity.asDomain(): PollResponseAggregatedSummary {
+internal fun PollResAggregatedSummaryEntity.asDomain(): PollResponseAggregatedSummary {
     return PollResponseAggregatedSummaryEntityMapper.map(this)
 }

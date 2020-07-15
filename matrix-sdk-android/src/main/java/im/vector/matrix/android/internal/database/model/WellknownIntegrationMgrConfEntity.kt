@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.database.model
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-internal open class WellknownIntegrationManagerConfigEntity(
+internal open class WellknownIntegrationMgrConfEntity(
         @PrimaryKey var id: Long = 0,
         var apiUrl: String = "",
         var uiUrl: String = ""

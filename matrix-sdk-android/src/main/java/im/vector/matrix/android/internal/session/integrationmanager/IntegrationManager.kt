@@ -29,7 +29,7 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
-import im.vector.matrix.android.internal.database.model.WellknownIntegrationManagerConfigEntity
+import im.vector.matrix.android.internal.database.model.WellknownIntegrationMgrConfEntity
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.session.SessionLifecycleObserver
@@ -268,7 +268,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
 
     private fun observeWellknownConfig() {
         val liveData = monarchy.findAllMappedWithChanges(
-                { it.where(WellknownIntegrationManagerConfigEntity::class.java) },
+                { it.where(WellknownIntegrationMgrConfEntity::class.java) },
                 { IntegrationManagerConfig(it.uiUrl, it.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER) }
         )
         liveData.observeNotNull(lifecycleOwner) {

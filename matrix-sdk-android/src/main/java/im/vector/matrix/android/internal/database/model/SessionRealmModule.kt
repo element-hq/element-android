@@ -42,7 +42,7 @@ import io.realm.annotations.RealmModule
             EventAnnotationsSummaryEntity::class,
             ReactionAggregatedSummaryEntity::class,
             EditAggregatedSummaryEntity::class,
-            PollResponseAggregatedSummaryEntity::class,
+            PollResAggregatedSummaryEntity::class,
             ReferencesAggregatedSummaryEntity::class,
             PushRulesEntity::class,
             PushRuleEntity::class,
@@ -58,6 +58,6 @@ import io.realm.annotations.RealmModule
             CurrentStateEventEntity::class,
             UserAccountDataEntity::class,
             ScalarTokenEntity::class,
-            WellknownIntegrationManagerConfigEntity::class
+            WellknownIntegrationMgrConfEntity::class
         ])
 internal class SessionRealmModule

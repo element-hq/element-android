@@ -21,7 +21,7 @@ import io.realm.RealmObject
 /**
  * Keep the latest state of a poll
  */
-internal open class PollResponseAggregatedSummaryEntity(
+internal open class PollResAggregatedSummaryEntity(
         // For now we persist this a JSON for greater flexibility
         // #see PollSummaryContent
         var aggregatedContent: String? = null,

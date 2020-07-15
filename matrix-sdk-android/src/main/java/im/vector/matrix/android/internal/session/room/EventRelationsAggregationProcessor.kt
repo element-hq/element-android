@@ -37,7 +37,7 @@ import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEnt
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventInsertType
-import im.vector.matrix.android.internal.database.model.PollResponseAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.PollResAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.ReferencesAggregatedSummaryEntity
@@ -301,7 +301,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
 
         // we have it
         val existingPollSummary = existing.pollResponseSummary
-                ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
+                ?: realm.createObject(PollResAggregatedSummaryEntity::class.java).also {
                     existing.pollResponseSummary = it
                 }
 
