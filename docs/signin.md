@@ -132,7 +132,7 @@ It's worth noting that the response from the homeserver contains the userId of A
 
 ### Login with Msisdn
 
-Not supported yet in RiotX
+Not supported yet in Element
 
 ### Login with SSO
 
@@ -155,9 +155,9 @@ Not supported yet in RiotX
 
 In this case, the user can click on "Sign in with SSO" and the native web browser, or a ChromeCustomTab if the device supports it, will be launched on the page
 
-> https://homeserver.with.sso/_matrix/client/r0/login/sso/redirect?redirectUrl=riotx%3A%2F%2Friotx
+> https://homeserver.with.sso/_matrix/client/r0/login/sso/redirect?redirectUrl=element%3A%2F%element
 
-The parameter `redirectUrl` is set to `riotx://riotx`.
+The parameter `redirectUrl` is set to `element://element`.
 
 ChromeCustomTabs are an intermediate way to display a WebPage, between a WebView and using the external browser. More info can be found [here](https://developer.chrome.com/multidevice/android/customtabs)
 
@@ -167,9 +167,9 @@ During the process, user may be asked to validate an email by clicking on a link
 
 Once the process is finished, the web page will call the `redirectUrl` with an extra parameter `loginToken`
 
-> riotx://riotx?loginToken=MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy
+> element://element?loginToken=MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy
 
-This navigation is intercepted by RiotX by the `LoginActivity`, which will then ask the homeserver to convert this `loginToken` to an access token
+This navigation is intercepted by Element by the `LoginActivity`, which will then ask the homeserver to convert this `loginToken` to an access token
 
 > curl -X POST --data $'{"type":"m.login.token","token":"MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy"}' 'https://homeserver.with.sso/_matrix/client/r0/login'
 
