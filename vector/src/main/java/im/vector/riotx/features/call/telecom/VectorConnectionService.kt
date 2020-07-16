@@ -66,7 +66,7 @@ import im.vector.riotx.core.services.CallService
         connection.connectionCapabilities = Connection.CAPABILITY_MUTE
         connection.audioModeIsVoip = true
         connection.setAddress(Uri.fromParts("tel", "+905000000000", null), TelecomManager.PRESENTATION_ALLOWED)
-        connection.setCallerDisplayName("RiotX Caller", TelecomManager.PRESENTATION_ALLOWED)
+        connection.setCallerDisplayName("Element Caller", TelecomManager.PRESENTATION_ALLOWED)
         connection.statusHints = StatusHints("Testing Hint...", null, null)
 
         bindService(Intent(applicationContext, CallService::class.java), CallServiceConnection(connection), 0)
