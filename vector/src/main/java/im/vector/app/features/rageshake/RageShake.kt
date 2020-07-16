@@ -21,6 +21,7 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
@@ -41,7 +42,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
     var interceptor: (() -> Unit)? = null
 
     fun start() {
-        val sensorManager = activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager ?: return
+        val sensorManager = activity.getSystemService<SensorManager>() ?: return
 
         shakeDetector = ShakeDetector(this).apply {
             setSensitivity(vectorPreferences.getRageshakeSensitivity())
@@ -94,8 +95,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
          * Check if the feature is available
          */
         fun isAvailable(context: Context): Boolean {
-            return (context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager)
-                    ?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+            return context.getSystemService<SensorManager>()?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
         }
     }
 }

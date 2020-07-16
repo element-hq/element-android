@@ -35,6 +35,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -375,7 +376,7 @@ private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: Str
             }
             val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename)
             if (savedFile != null) {
-                val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
+                val downloadManager = context.getSystemService<DownloadManager>()
                 downloadManager?.addCompletedDownload(
                         savedFile.name,
                         title,

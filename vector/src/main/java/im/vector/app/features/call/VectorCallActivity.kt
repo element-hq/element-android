@@ -28,6 +28,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -458,7 +459,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             )
         }
 
-        with(getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager) {
+        with(getSystemService<KeyguardManager>()!!) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 requestDismissKeyguard(this@VectorCallActivity, null)
             }

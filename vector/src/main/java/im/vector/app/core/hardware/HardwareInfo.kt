@@ -23,6 +23,7 @@ import android.hardware.Camera
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
+import androidx.core.content.getSystemService
 import javax.inject.Inject
 
 class HardwareInfo @Inject constructor(
@@ -36,7 +37,7 @@ class HardwareInfo @Inject constructor(
             return Camera.getNumberOfCameras() > 0
         }
 
-        val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager? ?: return Camera.getNumberOfCameras() > 0
+        val manager = context.getSystemService<CameraManager>() ?: return Camera.getNumberOfCameras() > 0
 
         return manager.cameraIdList.any {
             val lensFacing = manager.getCameraCharacteristics(it).get(CameraCharacteristics.LENS_FACING)
