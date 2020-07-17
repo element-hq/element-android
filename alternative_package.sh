@@ -51,5 +51,5 @@ case "$package_add" in
 esac
 
 build_gradle="$mydir/vector/build.gradle"
-sed -i "s|Riot SC|Riot SC.$name_add|g" "$build_gradle"
+sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle"
