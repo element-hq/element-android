@@ -66,6 +66,7 @@ import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.pin.PinFragment
 import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
@@ -534,4 +535,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ContactsBookFragment::class)
     fun bindPhoneBookFragment(fragment: ContactsBookFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(PinFragment::class)
+    fun bindPinFragment(fragment: PinFragment): Fragment
 }

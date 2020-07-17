@@ -78,6 +78,8 @@ interface Navigator {
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 
+    fun openPinCode(activity: Activity, requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
+
     fun openTerms(fragment: Fragment,
                   serviceType: TermsService.ServiceType,
                   baseUrl: String,
