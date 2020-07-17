@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
  - Fix notification not dismissing when entering a room
+ - Fix uploads don't work with Room v6 (#1558)
 
 Translations 🗣:
  -

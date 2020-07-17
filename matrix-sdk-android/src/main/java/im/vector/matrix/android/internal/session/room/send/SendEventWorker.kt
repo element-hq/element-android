@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
@@ -43,9 +44,24 @@ internal class SendEventWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val event: Event,
+            //TODO remove after some time, it's used for compat
+            val event: Event? = null,
+            val eventId: String? = null,
+            val roomId: String? = null,
+            val type: String? = null,
+            val contentStr: String? = null,
             override val lastFailureMessage: String? = null
-    ) : SessionWorkerParams
+    ) : SessionWorkerParams {
+
+        constructor(sessionId: String, event: Event, lastFailureMessage: String? = null) : this(
+                sessionId = sessionId,
+                eventId = event.eventId,
+                roomId = event.roomId,
+                type = event.type,
+                contentStr = ContentMapper.map(event.content),
+                lastFailureMessage = lastFailureMessage
+        )
+    }
 
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
     @Inject lateinit var roomAPI: RoomAPI
@@ -59,41 +75,38 @@ internal class SendEventWorker(context: Context,
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val event = params.event
-        if (event.eventId == null) {
+        if (params.eventId == null || params.roomId == null || params.type == null) {
+            // compat with old params, make it fail if any
+            if (params.event?.eventId != null) {
+                localEchoUpdater.updateSendState(params.event.eventId, SendState.UNDELIVERED)
+            }
             return Result.success()
         }
-
         if (params.lastFailureMessage != null) {
-            localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+            localEchoUpdater.updateSendState(params.eventId, SendState.UNDELIVERED)
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
         return try {
-            sendEvent(event)
+            sendEvent(params.eventId, params.roomId, params.type, params.contentStr)
             Result.success()
         } catch (exception: Throwable) {
             if (exception.shouldBeRetried()) {
                 Result.retry()
             } else {
-                localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+                localEchoUpdater.updateSendState(params.eventId, SendState.UNDELIVERED)
                 // always return success, or the chain will be stuck for ever!
                 Result.success()
             }
         }
     }
 
-    private suspend fun sendEvent(event: Event) {
-        localEchoUpdater.updateSendState(event.eventId!!, SendState.SENDING)
+    private suspend fun sendEvent(eventId: String, roomId: String, type: String, contentStr: String?) {
+        localEchoUpdater.updateSendState(eventId, SendState.SENDING)
         executeRequest<SendResponse>(eventBus) {
-            apiCall = roomAPI.send(
-                    event.eventId,
-                    event.roomId!!,
-                    event.type,
-                    event.content
-            )
+            apiCall = roomAPI.send(eventId, roomId, type, contentStr)
         }
-        localEchoUpdater.updateSendState(event.eventId, SendState.SENT)
+        localEchoUpdater.updateSendState(eventId, SendState.SENT)
     }
 }
