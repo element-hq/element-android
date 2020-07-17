@@ -21,7 +21,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - i18n deactivated account error
 
 Changes in Element 1.0.0 (2020-07-15)
 ===================================================
