@@ -19,10 +19,15 @@ package im.vector.riotx.features.pin
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
+import com.beautycoder.pflockscreen.PFFLockScreenConfiguration
+import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment
+import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment.OnPFLockScreenCodeCreateListener
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import timber.log.Timber
 
 class PinActivity : VectorBaseActivity(), ToolbarConfigurable {
 
@@ -37,11 +42,58 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, PinFragment::class.java)
+            showCreateFragment()
         }
     }
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
+    }
+
+    private fun showCreateFragment() {
+        val createFragment = PFLockScreenFragment()
+        val builder = PFFLockScreenConfiguration.Builder(this)
+                .setNewCodeValidation(true)
+                .setTitle("Choose a PIN for security")
+                .setNewCodeValidationTitle("Confirm PIN")
+                .setMode(PFFLockScreenConfiguration.MODE_CREATE)
+        createFragment.setConfiguration(builder.build())
+        createFragment.setCodeCreateListener(object : OnPFLockScreenCodeCreateListener {
+            override fun onNewCodeValidationFailed() {
+            }
+
+            override fun onCodeCreated(encodedCode: String) {
+                showAuthFragment(encodedCode)
+            }
+        })
+        addFragment(R.id.simpleFragmentContainer, createFragment)
+    }
+
+    private fun showAuthFragment(encodedCode: String) {
+        val authFragment = PFLockScreenFragment()
+        val builder = PFFLockScreenConfiguration.Builder(this)
+                .setUseFingerprint(true)
+                .setTitle("Enter your PIN")
+                .setLeftButton("Forgot PIN?")
+                .setMode(PFFLockScreenConfiguration.MODE_AUTH)
+        authFragment.setConfiguration(builder.build())
+        authFragment.setEncodedPinCode(encodedCode)
+        authFragment.setOnLeftButtonClickListener {
+
+        }
+        authFragment.setLoginListener(object : PFLockScreenFragment.OnPFLockScreenLoginListener {
+            override fun onPinLoginFailed() {
+            }
+
+            override fun onFingerprintSuccessful() {
+            }
+
+            override fun onFingerprintLoginFailed() {
+            }
+
+            override fun onCodeInputSuccessful() {
+            }
+        })
+        replaceFragment(R.id.simpleFragmentContainer, authFragment)
     }
 }
