@@ -28,8 +28,9 @@ class RoomListDisplayModeFilter(private val displayMode: RoomListDisplayMode) : 
             return false
         }
         return when (displayMode) {
+            RoomListDisplayMode.ALL -> true
             RoomListDisplayMode.NOTIFICATIONS ->
-                true //roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE || roomSummary.userDrafts.isNotEmpty()
+                roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE || roomSummary.userDrafts.isNotEmpty()
             RoomListDisplayMode.PEOPLE        -> roomSummary.isDirect && roomSummary.membership.isActive()
             RoomListDisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership.isActive()
             RoomListDisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN

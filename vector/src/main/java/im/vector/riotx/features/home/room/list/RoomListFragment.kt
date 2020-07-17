@@ -138,6 +138,7 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
+            RoomListDisplayMode.ALL,
             RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE        -> createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
@@ -164,6 +165,7 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
+                                    RoomListDisplayMode.ALL,
                                     RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS  -> createGroupRoomButton.hide()
@@ -207,6 +209,7 @@ class RoomListFragment @Inject constructor(
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
+                RoomListDisplayMode.ALL,
                 RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE        -> createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS  -> createGroupRoomButton.show()
@@ -258,6 +261,7 @@ class RoomListFragment @Inject constructor(
         roomController.update(state)
         // Mark all as read menu
         when (roomListParams.displayMode) {
+            RoomListDisplayMode.ALL,
             RoomListDisplayMode.NOTIFICATIONS,
             RoomListDisplayMode.PEOPLE,
             RoomListDisplayMode.ROOMS -> {
@@ -288,6 +292,12 @@ class RoomListFragment @Inject constructor(
                 }
                 .isNullOrEmpty()
         val emptyState = when (roomListParams.displayMode) {
+            RoomListDisplayMode.ALL ->
+                StateView.State.Empty(
+                        getString(R.string.all_list_rooms_empty_title),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
+                        getString(R.string.all_list_rooms_empty_body)
+                )
             RoomListDisplayMode.NOTIFICATIONS -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(

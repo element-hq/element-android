@@ -37,6 +37,8 @@ class SharedPreferencesUiStateRepository @Inject constructor(
     }
 
     override fun getDisplayMode(): RoomListDisplayMode {
+        return RoomListDisplayMode.ALL
+        /*
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
             VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
@@ -46,6 +48,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(
                 RoomListDisplayMode.PEOPLE
             }
         }
+         */
     }
 
     override fun storeDisplayMode(displayMode: RoomListDisplayMode) {

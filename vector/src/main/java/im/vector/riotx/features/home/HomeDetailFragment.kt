@@ -90,8 +90,8 @@ class HomeDetailFragment @Inject constructor(
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
-            bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
-            bottomNavigationView.visibility = if (bottomNavigationView.selectedItemId != R.id.bottom_action_notification) View.VISIBLE else View.GONE
+            //bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+            bottomNavigationView.visibility = View.GONE
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
@@ -249,7 +249,8 @@ class HomeDetailFragment @Inject constructor(
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
-                else                      -> RoomListDisplayMode.NOTIFICATIONS
+                R.id.bottom_action_notification -> RoomListDisplayMode.NOTIFICATIONS
+                else                      -> RoomListDisplayMode.ALL
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
