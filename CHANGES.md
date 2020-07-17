@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
+ - Fix notification not dismissing when entering a room
 
 Translations 🗣:
  -
