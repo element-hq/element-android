@@ -384,23 +384,29 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
     private fun migrateTo8(realm: DynamicRealm) {
         Timber.d("Step 7 -> 8")
-        realm.schema.create("MyDeviceLastSeenInfoEntity")
-                .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
-                .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
-                .addField(MyDeviceLastSeenInfoEntityFields.DISPLAY_NAME, String::class.java)
-                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_IP, String::class.java)
-                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
-                .setNullable(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, true)
+        try {
+            realm.schema.create("MyDeviceLastSeenInfoEntity")
+                    .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
+                    .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
+                    .addField(MyDeviceLastSeenInfoEntityFields.DISPLAY_NAME, String::class.java)
+                    .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_IP, String::class.java)
+                    .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
+                    .setNullable(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, true)
+        } catch (failure: Throwable) {
+        }
 
         val now = System.currentTimeMillis()
-        realm.schema.get("DeviceInfoEntity")
-                ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
-                ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
-                ?.transform { deviceInfoEntity ->
-                    tryThis {
-                        deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
+        try {
+            realm.schema.get("DeviceInfoEntity")
+                    ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
+                    ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
+                    ?.transform { deviceInfoEntity ->
+                        tryThis {
+                            deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
+                        }
                     }
-                }
+        } catch (failure: Throwable) {
+        }
     }
 
     // Fixes duplicate devices in UserEntity#devices
