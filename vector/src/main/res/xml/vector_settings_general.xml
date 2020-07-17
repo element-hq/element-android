@@ -31,7 +31,7 @@
             android:key="ADD_EMAIL_PREFERENCE_KEY"
             android:order="100"
             android:title="@string/settings_add_email_address"
-            app:iconTint="@color/riotx_accent" />
+            app:iconTint="?colorAccent" />
 
         <!-- Phone will be added here -->
 
@@ -41,7 +41,7 @@
             android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
             android:order="200"
             android:title="@string/settings_add_phone_number"
-            app:iconTint="@color/riotx_accent" />
+            app:iconTint="?colorAccent" />
 
         <im.vector.riotx.core.preference.VectorPreference
             android:order="1000"
