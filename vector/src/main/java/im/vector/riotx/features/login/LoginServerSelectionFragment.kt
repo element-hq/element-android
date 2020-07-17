@@ -19,7 +19,6 @@ package im.vector.riotx.features.login
 import android.os.Bundle
 import android.view.View
 import butterknife.OnClick
-import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
@@ -40,11 +39,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     private fun updateSelectedChoice(state: LoginViewState) {
-        state.serverType.let {
-            loginServerChoiceMatrixOrg.isChecked = it == ServerType.MatrixOrg
-            loginServerChoiceModular.isChecked = it == ServerType.Modular
-            loginServerChoiceOther.isChecked = it == ServerType.Other
-        }
+        loginServerChoiceMatrixOrg.isChecked = state.serverType == ServerType.MatrixOrg
     }
 
     private fun initTextViews() {
@@ -61,42 +56,17 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
     fun selectMatrixOrg() {
-        if (loginServerChoiceMatrixOrg.isChecked) {
-            // Consider this is a submit
-            submit()
-        } else {
-            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
-        }
+        loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
     }
 
     @OnClick(R.id.loginServerChoiceModular)
     fun selectModular() {
-        if (loginServerChoiceModular.isChecked) {
-            // Consider this is a submit
-            submit()
-        } else {
-            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
-        }
+        loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
     }
 
     @OnClick(R.id.loginServerChoiceOther)
     fun selectOther() {
-        if (loginServerChoiceOther.isChecked) {
-            // Consider this is a submit
-            submit()
-        } else {
-            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
-        }
-    }
-
-    @OnClick(R.id.loginServerSubmit)
-    fun submit() = withState(loginViewModel) { state ->
-        if (state.serverType == ServerType.MatrixOrg) {
-            // Request login flow here
-            loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
-        } else {
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnServerSelectionDone))
-        }
+        loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
     }
 
     @OnClick(R.id.loginServerIKnowMyIdSubmit)

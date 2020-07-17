@@ -18,4 +18,6 @@ package im.vector.riotx.features.roomprofile.members
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomMemberListAction : VectorViewModelAction
+sealed class RoomMemberListAction : VectorViewModelAction {
+    data class RevokeThreePidInvite(val stateKey: String) : RoomMemberListAction()
+}

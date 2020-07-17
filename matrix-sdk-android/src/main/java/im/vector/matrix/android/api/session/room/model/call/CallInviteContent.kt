@@ -19,23 +19,45 @@ package im.vector.matrix.android.api.session.room.model.call
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This event is sent by the caller when they wish to establish a call.
+ */
 @JsonClass(generateAdapter = true)
 data class CallInviteContent(
-        @Json(name = "call_id") val callId: String,
-        @Json(name = "version") val version: Int,
-        @Json(name = "lifetime") val lifetime: Int,
-        @Json(name = "offer") val offer: Offer
+        /**
+         * Required. A unique identifier for the call.
+         */
+        @Json(name = "call_id") val callId: String?,
+        /**
+         * Required. The session description object
+         */
+        @Json(name = "offer") val offer: Offer?,
+        /**
+         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         */
+        @Json(name = "version") val version: Int? = 0,
+        /**
+         * Required. The time in milliseconds that the invite is valid for.
+         * Once the invite age exceeds this value, clients should discard it.
+         * They should also no longer show the call as awaiting an answer in the UI.
+         */
+        @Json(name = "lifetime") val lifetime: Int?
 ) {
-
     @JsonClass(generateAdapter = true)
     data class Offer(
-            @Json(name = "type") val type: String,
-            @Json(name = "sdp") val sdp: String
+            /**
+             * Required. The type of session description. Must be 'offer'.
+             */
+            @Json(name = "type") val type: SdpType? = SdpType.OFFER,
+            /**
+             * Required. The SDP text of the session description.
+             */
+            @Json(name = "sdp") val sdp: String?
     ) {
         companion object {
             const val SDP_VIDEO = "m=video"
         }
     }
 
-    fun isVideo(): Boolean = offer.sdp.contains(Offer.SDP_VIDEO)
+    fun isVideo() = offer?.sdp?.contains(Offer.SDP_VIDEO) == true
 }

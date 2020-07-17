@@ -44,6 +44,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -69,6 +70,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     protected lateinit var navigator: Navigator
     protected lateinit var errorFormatter: ErrorFormatter
+    protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
 
     private var progress: ProgressDialog? = null
 
@@ -92,6 +94,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         navigator = screenComponent.navigator()
         errorFormatter = screenComponent.errorFormatter()
+        unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
         viewModelFactory = screenComponent.viewModelFactory()
         childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         injectWith(injector())
@@ -231,9 +234,8 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private val uiDisposables = CompositeDisposable()
 
-    protected fun Disposable.disposeOnDestroyView(): Disposable {
+    protected fun Disposable.disposeOnDestroyView() {
         uiDisposables.add(this)
-        return this
     }
 
     /* ==========================================================================================

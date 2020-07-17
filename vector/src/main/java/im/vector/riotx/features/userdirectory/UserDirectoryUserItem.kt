@@ -39,6 +39,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.view.setOnClickListener(clickListener)
         // If name is empty, use userId as name and force it being centered
         if (matrixItem.displayName.isNullOrEmpty()) {

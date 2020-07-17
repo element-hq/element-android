@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.query.whereStateKey
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -39,7 +40,7 @@ internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
     )
 }
 
-internal class DefaultCreateWidgetTask @Inject constructor(private val monarchy: Monarchy,
+internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                            private val roomAPI: RoomAPI,
                                                            @UserId private val userId: String,
                                                            private val eventBus: EventBus) : CreateWidgetTask {

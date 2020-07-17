@@ -107,7 +107,7 @@ class KeyRequestEpoxyController @Inject constructor(
     }
 
     private fun buildOutgoing(data: KeyRequestListViewState?) {
-        data?.outgoingRoomKeyRequest?.let { async ->
+        data?.outgoingRoomKeyRequests?.let { async ->
             when (async) {
                 is Uninitialized,
                 is Loading -> {

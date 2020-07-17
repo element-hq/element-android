@@ -23,6 +23,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 internal interface ProfileAPI {
@@ -41,6 +42,18 @@ internal interface ProfileAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid")
     fun getThreePIDs(): Call<AccountThreePidsResponse>
+
+    /**
+     * Change user display name
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/displayname")
+    fun setDisplayName(@Path("userId") userId: String, @Body body: SetDisplayNameBody): Call<Unit>
+
+    /**
+     * Change user avatar url.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/avatar_url")
+    fun setAvatarUrl(@Path("userId") userId: String, @Body body: SetAvatarUrlBody): Call<Unit>
 
     /**
      * Bind a threePid

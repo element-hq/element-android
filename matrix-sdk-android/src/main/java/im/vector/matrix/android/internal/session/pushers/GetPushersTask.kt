@@ -19,6 +19,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -29,7 +30,7 @@ internal interface GetPushersTask : Task<Unit, Unit>
 
 internal class DefaultGetPushersTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val eventBus: EventBus
 ) : GetPushersTask {
 

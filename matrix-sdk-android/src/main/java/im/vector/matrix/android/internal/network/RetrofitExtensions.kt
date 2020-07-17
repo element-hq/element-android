@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright 2019 New Vector Ltd
+ *  * Copyright 2020 New Vector Ltd
  *  *
  *  * Licensed under the Apache License, Version 2.0 (the "License");
  *  * you may not use this file except in compliance with the License.
@@ -26,31 +26,12 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
 import org.greenrobot.eventbus.EventBus
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
 import java.net.HttpURLConnection
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-
-internal suspend fun <T> Call<T>.awaitResponse(): Response<T> {
-    return suspendCancellableCoroutine { continuation ->
-        continuation.invokeOnCancellation {
-            cancel()
-        }
-        enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                continuation.resume(response)
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                continuation.resumeWithException(t)
-            }
-        })
-    }
-}
 
 internal suspend fun okhttp3.Call.awaitResponse(): okhttp3.Response {
     return suspendCancellableCoroutine { continuation ->

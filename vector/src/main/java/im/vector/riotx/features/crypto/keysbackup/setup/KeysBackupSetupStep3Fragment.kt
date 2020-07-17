@@ -15,8 +15,10 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.setup
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -29,24 +31,26 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotx.R
-import im.vector.riotx.core.files.addEntryToDownloadManager
-import im.vector.riotx.core.files.writeToFile
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
-import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.selectTxtFileToWrite
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() {
+
+    companion object {
+        private const val SAVE_RECOVERY_KEY_REQUEST_CODE = 2754
+    }
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
@@ -105,7 +109,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     @OnClick(R.id.keys_backup_setup_step3_copy_button)
     fun onCopyButtonClicked() {
-        val dialog = BottomSheetDialog(activity!!)
+        val dialog = BottomSheetDialog(requireActivity())
         dialog.setContentView(R.layout.bottom_sheet_save_recovery_key)
         dialog.setCanceledOnTouchOutside(true)
         val recoveryKey = viewModel.recoveryKey.value!!
@@ -124,21 +128,21 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                         }
 
                 it.debouncedClicks {
-                    copyToClipboard(activity!!, recoveryKey)
+                    copyToClipboard(requireActivity(), recoveryKey)
                 }
             }
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_save)?.setOnClickListener {
-            val permissionsChecked = checkPermissions(
-                    PERMISSIONS_FOR_WRITING_FILES,
-                    this,
-                    PERMISSION_REQUEST_CODE_EXPORT_KEYS,
-                    R.string.permissions_rationale_msg_keys_backup_export
+            val userId = viewModel.userId
+            val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            selectTxtFileToWrite(
+                    activity = requireActivity(),
+                    fragment = this,
+                    defaultFileName = "recovery-key-$userId-$timestamp.txt",
+                    chooserHint = getString(R.string.save_recovery_key_chooser_hint),
+                    requestCode = SAVE_RECOVERY_KEY_REQUEST_CODE
             )
-            if (permissionsChecked) {
-                exportRecoveryKeyToFile(recoveryKey)
-            }
             dialog.dismiss()
         }
 
@@ -159,38 +163,36 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         viewModel.recoveryKey.value?.let {
             viewModel.copyHasBeenMade = true
 
-            copyToClipboard(activity!!, it)
+            copyToClipboard(requireActivity(), it)
         }
     }
 
-    private fun exportRecoveryKeyToFile(data: String) {
+    private fun exportRecoveryKeyToFile(uri: Uri, data: String) {
         GlobalScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
-                    val parentDir = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
-
-                    writeToFile(data, file)
-
-                    addEntryToDownloadManager(requireContext(), file, "text/plain")
-
-                    file.absolutePath
+                    requireContext().contentResolver.openOutputStream(uri)
+                            ?.use { os ->
+                                os.write(data.toByteArray())
+                                os.flush()
+                            }
                 }
+                        ?: throw IOException("Unable to write the file")
             }
                     .fold(
                             { throwable ->
-                                context?.let {
+                                activity?.let {
                                     AlertDialog.Builder(it)
                                             .setTitle(R.string.dialog_title_error)
-                                            .setMessage(throwable.localizedMessage)
+                                            .setMessage(errorFormatter.toHumanReadable(throwable))
                                 }
                             },
-                            { path ->
+                            {
                                 viewModel.copyHasBeenMade = true
-
-                                context?.let {
+                                activity?.let {
                                     AlertDialog.Builder(it)
-                                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
+                                            .setTitle(R.string.dialog_title_success)
+                                            .setMessage(R.string.recovery_key_export_saved)
                                 }
                             }
                     )
@@ -200,11 +202,14 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
-                viewModel.recoveryKey.value?.let {
-                    exportRecoveryKeyToFile(it)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            SAVE_RECOVERY_KEY_REQUEST_CODE -> {
+                val uri = data?.data
+                if (resultCode == Activity.RESULT_OK && uri != null) {
+                    viewModel.recoveryKey.value?.let {
+                        exportRecoveryKeyToFile(uri, it)
+                    }
                 }
             }
         }

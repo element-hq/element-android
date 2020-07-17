@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
@@ -30,7 +29,6 @@ import kotlin.math.min
 
 @SessionScope
 internal class OneTimeKeysUploader @Inject constructor(
-        private val credentials: Credentials,
         private val olmDevice: MXOlmDevice,
         private val objectSigner: ObjectSigner,
         private val uploadKeysTask: UploadKeysTask
@@ -153,7 +151,7 @@ internal class OneTimeKeysUploader @Inject constructor(
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
-        val uploadParams = UploadKeysTask.Params(null, oneTimeJson, credentials.deviceId!!)
+        val uploadParams = UploadKeysTask.Params(null, oneTimeJson)
         return uploadKeysTask.execute(uploadParams)
     }
 

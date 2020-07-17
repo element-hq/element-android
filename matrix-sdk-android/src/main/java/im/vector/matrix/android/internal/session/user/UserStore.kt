@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.user
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.UserEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.awaitTransaction
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ internal interface UserStore {
     suspend fun createOrUpdate(userId: String, displayName: String? = null, avatarUrl: String? = null)
 }
 
-internal class RealmUserStore @Inject constructor(private val monarchy: Monarchy) : UserStore {
+internal class RealmUserStore @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : UserStore {
 
     override suspend fun createOrUpdate(userId: String, displayName: String?, avatarUrl: String?) {
         monarchy.awaitTransaction {

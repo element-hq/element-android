@@ -44,6 +44,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun getUserRole(userId: String): Role {
         val value = getUserPowerLevelValue(userId)
+        // I think we should use powerLevelsContent.usersDefault, but Ganfra told me that it was like that on riot-Web
         return Role.fromValue(value, powerLevelsContent.eventsDefault)
     }
 

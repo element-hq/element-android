@@ -15,21 +15,21 @@
         android:id="@+id/related_message_backround"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?vctr_bottom_nav_background_color"
+        android:background="?riotx_bottom_nav_background_color"
         tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/related_message_background_top_separator"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?vctr_bottom_nav_background_border_color"
+        android:background="?riotx_bottom_nav_background_border_color"
         tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/related_message_background_bottom_separator"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?vctr_bottom_nav_background_border_color"
+        android:background="?riotx_bottom_nav_background_border_color"
         tools:ignore="MissingConstraints" />
 
     <ImageView
@@ -55,7 +55,7 @@
         tools:text="@tools:sample/first_names"
         tools:visibility="gone" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/composer_related_message_preview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

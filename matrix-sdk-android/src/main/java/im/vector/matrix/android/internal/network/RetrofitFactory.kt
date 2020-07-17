@@ -26,7 +26,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
-class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
+internal class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
+
+    /**
+     * Use only for authentication service
+     */
+    fun create(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(baseUrl.ensureTrailingSlash())
+                .client(okHttpClient)
+                .addConverterFactory(UnitConverterFactory)
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .build()
+    }
 
     fun create(okHttpClient: Lazy<OkHttpClient>, baseUrl: String): Retrofit {
         return Retrofit.Builder()

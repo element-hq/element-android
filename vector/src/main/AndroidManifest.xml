@@ -3,12 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="im.vector.riotx">
 
+    <!-- Needed for VOIP call to detect and switch to headset-->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- Call feature -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <!-- Commented because Google PlayStore does not like we add permission if we are not requiring it. And it was added for future use -->
+    <!--uses-permission android:name="android.permission.READ_CALL_LOG" /-->
+    <!-- Needed for voice call to toggle speaker on or off -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- READ_PHONE_STATE is needed only if your calling app reads numbers from the `PHONE_STATE`
+            intent action. -->
+
+    <!-- Needed to show incoming calls activity in lock screen-->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Needed for incoming calls  -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -29,6 +47,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.SC.Light"
         tools:replace="android:allowBackup">
+
+        <!-- No limit for screen ratio: avoid black strips -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="9.9" />
 
         <activity
             android:name=".features.MainActivity"
@@ -62,6 +85,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.media.ImageMediaViewerActivity" />
+
+        <activity
+            android:name=".features.media.VectorAttachmentViewerActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"
@@ -108,6 +136,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="riot.im" />
+                <data android:host="element.io" />
                 <data android:pathPrefix="/config/" />
             </intent-filter>
         </activity>
@@ -172,6 +201,7 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
+        <activity android:name=".features.call.VectorCallActivity" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
@@ -180,13 +210,30 @@
 
         <service
             android:name=".core.services.CallService"
-            android:exported="false" />
+            android:exported="false">
+            <!-- in order to get headset button events -->
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".core.services.VectorSyncService"
             android:exported="false" />
 
+        <service
+            android:name=".features.call.telecom.VectorConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+
         <!-- Receivers -->
+
+        <receiver
+            android:name=".features.call.service.CallHeadsUpActionReceiver"
+            android:exported="false" />
 
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver
@@ -194,7 +241,23 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!--
+        A media button receiver receives and helps translate hardware media playback buttons,
+        such as those found on wired and wireless headsets, into the appropriate callbacks in your app.
+           -->
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
         <!-- Providers -->
+
+        <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -203,7 +266,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/riotx_provider_paths" />
+                android:resource="@xml/sdk_provider_paths" />
         </provider>
     </application>
 

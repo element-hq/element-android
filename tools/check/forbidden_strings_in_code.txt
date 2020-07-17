@@ -162,3 +162,10 @@ Formatter\.formatShortFileSize===1
 ### Use kotlin stdlib to test or compare strings
 # DISABLED
 # android\.text\.TextUtils
+
+### This is not a rule, but a warning: the number of "enum class" has changed. For Json classes, it is mandatory that they have `@JsonClass(generateAdapter = false)`. If it is ok, change the value in file forbidden_strings_in_code.txt
+enum class===74
+
+### Do not import temporary legacy classes
+import im.vector.matrix.android.internal.legacy.riot===3
+import org.matrix.androidsdk.crypto.data===2

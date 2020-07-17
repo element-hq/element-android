@@ -87,14 +87,13 @@ class EventMatchCondition(
         // Very simple glob to regexp converter
         private fun simpleGlobToRegExp(glob: String): String {
             var out = "" // "^"
-            for (i in 0 until glob.length) {
-                val c = glob[i]
-                when (c) {
+            for (element in glob) {
+                when (element) {
                     '*'  -> out += ".*"
                     '?'  -> out += '.'.toString()
                     '.'  -> out += "\\."
                     '\\' -> out += "\\\\"
-                    else -> out += c
+                    else -> out += element
                 }
             }
             out += "" // '$'.toString()

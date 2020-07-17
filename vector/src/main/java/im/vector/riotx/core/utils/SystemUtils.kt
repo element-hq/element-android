@@ -162,7 +162,7 @@ fun startImportTextFromFileIntent(fragment: Fragment, requestCode: Int) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
     }
-    if (intent.resolveActivity(fragment.activity!!.packageManager) != null) {
+    if (intent.resolveActivity(fragment.requireActivity().packageManager) != null) {
         fragment.startActivityForResult(intent, requestCode)
     } else {
         fragment.activity?.toast(R.string.error_no_external_application_found)

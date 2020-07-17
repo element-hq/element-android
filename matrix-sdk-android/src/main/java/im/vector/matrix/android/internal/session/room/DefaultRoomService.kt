@@ -17,43 +17,35 @@
 package im.vector.matrix.android.internal.session.room
 
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.findByAlias
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchCopyMap
-import io.realm.Realm
-import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(
-        private val monarchy: Monarchy,
-        private val roomSummaryMapper: RoomSummaryMapper,
         private val createRoomTask: CreateRoomTask,
         private val joinRoomTask: JoinRoomTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
         private val roomGetter: RoomGetter,
+        private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val taskExecutor: TaskExecutor
 ) : RoomService {
 
@@ -74,61 +66,23 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
-        return monarchy
-                .fetchCopyMap({
-                    if (roomIdOrAlias.startsWith("!")) {
-                        // It's a roomId
-                        RoomSummaryEntity.where(it, roomId = roomIdOrAlias).findFirst()
-                    } else {
-                        // Assume it's a room alias
-                        RoomSummaryEntity.findByAlias(it, roomIdOrAlias)
-                    }
-                }, { entity, _ ->
-                    roomSummaryMapper.map(entity)
-                })
+        return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
     override fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
-        return monarchy.fetchAllMappedSync(
-                { roomSummariesQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
-        )
+        return roomSummaryDataSource.getRoomSummaries(queryParams)
     }
 
     override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { roomSummariesQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
-        )
-    }
-
-    private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
-        val query = RoomSummaryEntity.where(realm)
-        query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-        query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
-        query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-        query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
-        return query
+        return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
     override fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
-        return monarchy.fetchAllMappedSync(
-                { breadcrumbsQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
-        )
+        return roomSummaryDataSource.getBreadcrumbs(queryParams)
     }
 
     override fun getBreadcrumbsLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { breadcrumbsQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
-        )
-    }
-
-    private fun breadcrumbsQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
-        return roomSummariesQuery(realm, queryParams)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
+        return roomSummaryDataSource.getBreadcrumbsLive(queryParams)
     }
 
     override fun onRoomDisplayed(roomId: String): Cancelable {
@@ -159,5 +113,9 @@ internal class DefaultRoomService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>> {
+        return roomChangeMembershipStateDataSource.getLiveStates()
     }
 }

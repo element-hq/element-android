@@ -41,6 +41,7 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
     // TODO i18n
     @SuppressLint("SetTextI18n")
     override fun bind(holder: Holder) {
+        super.bind(holder)
         val context = holder.view.context
         if (pushRule.enabled) {
             holder.view.setBackgroundColor(Color.TRANSPARENT)

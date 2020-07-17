@@ -19,7 +19,4 @@ package im.vector.riotx.features.home
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
-class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>() {
-    var hasDisplayedCompleteSecurityPrompt : Boolean = false
-    var isAccountCreation : Boolean = false
-}
+class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>()

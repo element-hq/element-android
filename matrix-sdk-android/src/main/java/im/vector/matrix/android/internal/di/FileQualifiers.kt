@@ -24,7 +24,7 @@ internal annotation class SessionFilesDirectory
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class SessionCacheDirectory
+internal annotation class SessionDownloadsDirectory
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

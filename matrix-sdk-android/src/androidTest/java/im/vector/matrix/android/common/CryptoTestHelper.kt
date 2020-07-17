@@ -17,8 +17,13 @@
 package im.vector.matrix.android.common
 
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.OutgoingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
@@ -34,6 +39,7 @@ import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,6 +47,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import java.util.UUID
 import java.util.concurrent.CountDownLatch
 
 class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
@@ -57,7 +65,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), it)
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
         }
 
         if (encryptedRoom) {
@@ -167,7 +175,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         }
 
         mTestHelper.doSync<Unit> {
-            samSession.joinRoom(room.roomId, null, it)
+            samSession.joinRoom(room.roomId, null, emptyList(), it)
         }
 
         return samSession
@@ -241,14 +249,14 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val eventWireContent = event.content.toContent()
         assertNotNull(eventWireContent)
 
-        assertNull(eventWireContent.get("body"))
-        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent.get("algorithm"))
+        assertNull(eventWireContent["body"])
+        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent["algorithm"])
 
-        assertNotNull(eventWireContent.get("ciphertext"))
-        assertNotNull(eventWireContent.get("session_id"))
-        assertNotNull(eventWireContent.get("sender_key"))
+        assertNotNull(eventWireContent["ciphertext"])
+        assertNotNull(eventWireContent["session_id"])
+        assertNotNull(eventWireContent["sender_key"])
 
-        assertEquals(senderSession.sessionParams.deviceId, eventWireContent.get("device_id"))
+        assertEquals(senderSession.sessionParams.deviceId, eventWireContent["device_id"])
 
         assertNotNull(event.eventId)
         assertEquals(roomId, event.roomId)
@@ -257,7 +265,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
         val eventContent = event.toContent()
         assertNotNull(eventContent)
-        assertEquals(clearMessage, eventContent.get("body"))
+        assertEquals(clearMessage, eventContent["body"])
         assertEquals(senderSession.myUserId, event.senderId)
     }
 
@@ -273,5 +281,144 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
                 authData = createFakeMegolmBackupAuthData()
         )
+    }
+
+    fun createDM(alice: Session, bob: Session): String {
+        val roomId = mTestHelper.doSync<String> {
+            alice.createRoom(
+                    CreateRoomParams().apply {
+                        invitedUserIds.add(bob.myUserId)
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = true
+                    },
+                    it
+            )
+        }
+
+        mTestHelper.waitWithLatch { latch ->
+            val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
+                bob.getRoomSummariesLive(roomSummaryQueryParams { })
+            }
+
+            val newRoomObserver = object : Observer<List<RoomSummary>> {
+                override fun onChanged(t: List<RoomSummary>?) {
+                    val indexOfFirst = t?.indexOfFirst { it.roomId == roomId } ?: -1
+                    if (indexOfFirst != -1) {
+                        latch.countDown()
+                        bobRoomSummariesLive.removeObserver(this)
+                    }
+                }
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                bobRoomSummariesLive.observeForever(newRoomObserver)
+            }
+        }
+
+        mTestHelper.waitWithLatch { latch ->
+            val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
+                bob.getRoomSummariesLive(roomSummaryQueryParams { })
+            }
+
+            val newRoomObserver = object : Observer<List<RoomSummary>> {
+                override fun onChanged(t: List<RoomSummary>?) {
+                    if (bob.getRoom(roomId)
+                                    ?.getRoomMember(bob.myUserId)
+                                    ?.membership == Membership.JOIN) {
+                        latch.countDown()
+                        bobRoomSummariesLive.removeObserver(this)
+                    }
+                }
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                bobRoomSummariesLive.observeForever(newRoomObserver)
+            }
+
+            mTestHelper.doSync<Unit> { bob.joinRoom(roomId, callback = it) }
+        }
+
+        return roomId
+    }
+
+    fun initializeCrossSigning(session: Session) {
+        mTestHelper.doSync<Unit> {
+            session.cryptoService().crossSigningService()
+                    .initializeCrossSigning(UserPasswordAuth(
+                            user = session.myUserId,
+                            password = TestConstants.PASSWORD
+                    ), it)
+        }
+    }
+
+    fun verifySASCrossSign(alice: Session, bob: Session, roomId: String) {
+        assertTrue(alice.cryptoService().crossSigningService().canCrossSign())
+        assertTrue(bob.cryptoService().crossSigningService().canCrossSign())
+
+        val requestID = UUID.randomUUID().toString()
+        val aliceVerificationService = alice.cryptoService().verificationService()
+        val bobVerificationService = bob.cryptoService().verificationService()
+
+        aliceVerificationService.beginKeyVerificationInDMs(
+                VerificationMethod.SAS,
+                requestID,
+                roomId,
+                bob.myUserId,
+                bob.sessionParams.credentials.deviceId!!,
+                null)
+
+        // we should reach SHOW SAS on both
+        var alicePovTx: OutgoingSasVerificationTransaction? = null
+        var bobPovTx: IncomingSasVerificationTransaction? = null
+
+        // wait for alice to get the ready
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
+                Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
+                if (bobPovTx?.state == VerificationTxState.OnStarted) {
+                    bobPovTx?.performAccept()
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID) as? OutgoingSasVerificationTransaction
+                Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
+                alicePovTx?.state == VerificationTxState.ShortCodeReady
+            }
+        }
+        // wait for alice to get the ready
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
+                Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
+                if (bobPovTx?.state == VerificationTxState.OnStarted) {
+                    bobPovTx?.performAccept()
+                }
+                bobPovTx?.state == VerificationTxState.ShortCodeReady
+            }
+        }
+
+        assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
+
+        bobPovTx!!.userHasVerifiedShortCode()
+        alicePovTx!!.userHasVerifiedShortCode()
+
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
+            }
+        }
+
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
+            }
+        }
     }
 }

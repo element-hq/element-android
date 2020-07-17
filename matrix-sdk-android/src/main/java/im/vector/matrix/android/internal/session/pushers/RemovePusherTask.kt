@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -35,7 +36,7 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
 
 internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val eventBus: EventBus
 ) : RemovePusherTask {
 

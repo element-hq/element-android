@@ -86,17 +86,12 @@ class BootstrapMigrateBackupFragment @Inject constructor(
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.GetBackupSecretForMigration) {
-            return@withState
-        }
-        val isEnteringKey =
-                when (state.step) {
-                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
-                    else                                             -> true
-                }
+        val getBackupSecretForMigration = state.step as? BootstrapStep.GetBackupSecretForMigration ?: return@withState
+
+        val isEnteringKey = getBackupSecretForMigration.useKey()
 
         val secret = bootstrapMigrateEditText.text?.toString()
-        if (secret.isNullOrBlank()) {
+        if (secret.isNullOrEmpty()) {
             val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
             bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
@@ -112,15 +107,9 @@ class BootstrapMigrateBackupFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.GetBackupSecretForMigration) {
-            return@withState
-        }
+        val getBackupSecretForMigration = state.step as? BootstrapStep.GetBackupSecretForMigration ?: return@withState
 
-        val isEnteringKey =
-                when (state.step) {
-                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
-                    else                                             -> true
-                }
+        val isEnteringKey = getBackupSecretForMigration.useKey()
 
         if (isEnteringKey) {
             bootstrapMigrateShowPassword.isVisible = false
@@ -128,8 +117,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
             val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
             bootstrapDescriptionText.text = getString(R.string.enter_account_password, recKey)
-                    .toSpannable()
-                    .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
             bootstrapMigrateEditText.hint = recKey
 
@@ -142,7 +129,7 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                 val isPasswordVisible = state.step.isPasswordVisible
                 bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
-                bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)

@@ -27,11 +27,11 @@ import javax.net.ssl.X509TrustManager
  */
 
 /**
- * @param fingerprints        An array of SHA256 cert fingerprints
+ * @param fingerprints        Not empty array of SHA256 cert fingerprints
  * @param defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
-internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
+internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>,
                                   private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
 
     @Throws(CertificateException::class)
@@ -43,7 +43,7 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints == null || fingerprints.isEmpty()) {
+            if (fingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -60,8 +60,8 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints == null || fingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
+            if (fingerprints.isEmpty()) {
+                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
 
@@ -72,22 +72,12 @@ internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
     private fun checkTrusted(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
-        var found = false
-        if (fingerprints != null) {
-            for (allowedFingerprint in fingerprints) {
-                if (allowedFingerprint.matchesCert(cert)) {
-                    found = true
-                    break
-                }
-            }
-        }
-
-        if (!found) {
+        if (!fingerprints.any { it.matchesCert(cert) }) {
             throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), null)
         }
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> {
-        return emptyArray()
+        return defaultTrustManager?.acceptedIssuers ?: emptyArray()
     }
 }

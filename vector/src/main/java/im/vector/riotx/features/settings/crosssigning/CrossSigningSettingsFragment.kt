@@ -21,7 +21,6 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
@@ -31,9 +30,9 @@ import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
 class CrossSigningSettingsFragment @Inject constructor(
-        private val epoxyController: CrossSigningEpoxyController,
+        private val controller: CrossSigningSettingsController,
         val viewModelFactory: CrossSigningSettingsViewModel.Factory
-) : VectorBaseFragment(), CrossSigningEpoxyController.InteractionListener {
+) : VectorBaseFragment(), CrossSigningSettingsController.InteractionListener {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
@@ -43,7 +42,7 @@ class CrossSigningSettingsFragment @Inject constructor(
         super.onActivityCreated(savedInstanceState)
         viewModel.observeViewEvents {
             when (it) {
-                is CrossSigningSettingsViewEvents.Failure         -> {
+                is CrossSigningSettingsViewEvents.Failure    -> {
                     AlertDialog.Builder(requireContext())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(it.throwable))
@@ -51,13 +50,14 @@ class CrossSigningSettingsFragment @Inject constructor(
                             .show()
                     Unit
                 }
-                is CrossSigningSettingsViewEvents.RequestPassword -> {
-                    requestPassword()
+                CrossSigningSettingsViewEvents.VerifySession -> {
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
-                CrossSigningSettingsViewEvents.VerifySession      -> {
-                    (requireActivity() as? VectorBaseActivity)?.let { activity ->
-                        activity.navigator.waitSessionVerification(activity)
-                    }
+                CrossSigningSettingsViewEvents.SetUpRecovery -> {
+                    navigator.upgradeSessionSecurity(requireActivity(), false)
+                }
+                CrossSigningSettingsViewEvents.SetupCrossSigning -> {
+                    navigator.upgradeSessionSecurity(requireActivity(), true)
                 }
             }.exhaustive
         }
@@ -74,31 +74,29 @@ class CrossSigningSettingsFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        epoxyController.setData(state)
+        controller.setData(state)
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(epoxyController, hasFixedSize = false, disableItemAnimation = true)
-        epoxyController.interactionListener = this
+        recyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        controller.interactionListener = this
     }
 
     override fun onDestroyView() {
         recyclerView.cleanup()
-        epoxyController.interactionListener = null
+        controller.interactionListener = null
         super.onDestroyView()
     }
 
-    private fun requestPassword() {
-        PromptPasswordDialog().show(requireActivity()) { password ->
-            viewModel.handle(CrossSigningAction.PasswordEntered(password))
-        }
-    }
-
-    override fun onInitializeCrossSigningKeys() {
-        viewModel.handle(CrossSigningAction.InitializeCrossSigning)
+    override fun setupRecovery() {
+        viewModel.handle(CrossSigningSettingsAction.SetUpRecovery)
     }
 
     override fun verifySession() {
-        viewModel.handle(CrossSigningAction.VerifySession)
+        viewModel.handle(CrossSigningSettingsAction.VerifySession)
+    }
+
+    override fun initCrossSigning() {
+        viewModel.handle(CrossSigningSettingsAction.SetupCrossSigning)
     }
 }

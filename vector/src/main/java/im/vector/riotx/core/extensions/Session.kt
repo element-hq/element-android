@@ -24,24 +24,14 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotx.core.services.VectorSyncService
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
-import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
-fun Session.configureAndStart(context: Context,
-                              pushRuleTriggerListener: PushRuleTriggerListener,
-                              sessionListener: SessionListener) {
+fun Session.configureAndStart(context: Context) {
+    Timber.i("Configure and start session for $myUserId")
     open()
-    addListener(sessionListener)
     setFilter(FilterService.FilterPreset.RiotFilter)
-    Timber.i("Configure and start session for ${this.myUserId}")
     startSyncing(context)
     refreshPushers()
-    pushRuleTriggerListener.startWithSession(this)
-
-    // TODO P1 From HomeActivity
-    // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
-    // @Inject lateinit var keyRequestHandler: KeyRequestHandler
 }
 
 fun Session.startSyncing(context: Context) {
@@ -68,4 +58,13 @@ fun Session.startSyncing(context: Context) {
 fun Session.hasUnsavedKeys(): Boolean {
     return cryptoService().inboundGroupSessionsCount(false) > 0
             && cryptoService().keysBackupService().state != KeysBackupState.ReadyToBackUp
+}
+
+fun Session.cannotLogoutSafely(): Boolean {
+    // has some encrypted chat
+    return hasUnsavedKeys()
+            // has local cross signing keys
+            || (cryptoService().crossSigningService().allPrivateKeysKnown()
+            // That are not backed up
+            && !sharedSecretStorageService.isRecoverySetup())
 }

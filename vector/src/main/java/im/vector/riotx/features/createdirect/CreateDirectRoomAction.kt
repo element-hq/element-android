@@ -16,9 +16,9 @@
 
 package im.vector.riotx.features.createdirect
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.features.userdirectory.PendingInvitee
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
-    data class CreateRoomAndInviteSelectedUsers(val selectedUsers: Set<User>) : CreateDirectRoomAction()
+    data class CreateRoomAndInviteSelectedUsers(val invitees: Set<PendingInvitee>) : CreateDirectRoomAction()
 }

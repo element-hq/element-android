@@ -16,12 +16,15 @@
 
 package im.vector.matrix.rx
 
+import android.net.Uri
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
@@ -69,6 +72,13 @@ class RxRoom(private val room: Room) {
                 }
     }
 
+    fun liveStateEvents(eventTypes: Set<String>): Observable<List<Event>> {
+        return room.getStateEventsLive(eventTypes).asObservable()
+                .startWithCallable {
+                    room.getStateEvents(eventTypes)
+                }
+    }
+
     fun liveReadMarker(): Observable<Optional<String>> {
         return room.getReadMarkerLive().asObservable()
     }
@@ -100,6 +110,34 @@ class RxRoom(private val room: Room) {
 
     fun invite(userId: String, reason: String? = null): Completable = completableBuilder<Unit> {
         room.invite(userId, reason, it)
+    }
+
+    fun invite3pid(threePid: ThreePid): Completable = completableBuilder<Unit> {
+        room.invite3pid(threePid, it)
+    }
+
+    fun updateTopic(topic: String): Completable = completableBuilder<Unit> {
+        room.updateTopic(topic, it)
+    }
+
+    fun updateName(name: String): Completable = completableBuilder<Unit> {
+        room.updateName(name, it)
+    }
+
+    fun addRoomAlias(alias: String): Completable = completableBuilder<Unit> {
+        room.addRoomAlias(alias, it)
+    }
+
+    fun updateCanonicalAlias(alias: String): Completable = completableBuilder<Unit> {
+        room.updateCanonicalAlias(alias, it)
+    }
+
+    fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = completableBuilder<Unit> {
+        room.updateHistoryReadability(readability, it)
+    }
+
+    fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {
+        room.updateAvatar(avatarUri, fileName, it)
     }
 }
 

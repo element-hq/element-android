@@ -29,6 +29,7 @@ abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>(
     @EpoxyAttribute lateinit var formattedDay: CharSequence
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.dayTextView.text = formattedDay
     }
 

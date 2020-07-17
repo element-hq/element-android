@@ -16,6 +16,20 @@
 
 package im.vector.matrix.android.internal.session.group
 
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.group.Group
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 
-internal class DefaultGroup(override val groupId: String) : Group
+internal class DefaultGroup(override val groupId: String,
+                            private val taskExecutor: TaskExecutor,
+                            private val getGroupDataTask: GetGroupDataTask) : Group {
+
+    override fun fetchGroupData(callback: MatrixCallback<Unit>): Cancelable {
+        val params = GetGroupDataTask.Params.FetchWithIds(listOf(groupId))
+        return getGroupDataTask.configureWith(params) {
+            this.callback = callback
+        }.executeBy(taskExecutor)
+    }
+}

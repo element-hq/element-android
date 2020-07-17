@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyController
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -72,10 +73,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
 
         buildRoomModels(filteredSummaries,
-                viewState.joiningRoomsIds,
-                viewState.joiningErrorRoomsIds,
-                viewState.rejectingRoomsIds,
-                viewState.rejectingErrorRoomsIds,
+                viewState.roomMembershipChanges,
                 emptySet())
 
         addFilterFooter(viewState)
@@ -94,10 +92,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 }
                 if (isExpanded) {
                     buildRoomModels(summaries,
-                            viewState.joiningRoomsIds,
-                            viewState.joiningErrorRoomsIds,
-                            viewState.rejectingRoomsIds,
-                            viewState.rejectingErrorRoomsIds,
+                            viewState.roomMembershipChanges,
                             emptySet())
                     // Never set showHelp to true for invitation
                     if (category != RoomCategory.INVITE) {
@@ -141,7 +136,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
             id(titleRes)
-            title(stringProvider.getString(titleRes).toUpperCase())
+            title(stringProvider.getString(titleRes))
             expanded(isExpanded)
             unreadNotificationCount(unreadCount)
             showHighlighted(showHighlighted)
@@ -153,18 +148,12 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     }
 
     private fun buildRoomModels(summaries: List<RoomSummary>,
-                                joiningRoomsIds: Set<String>,
-                                joiningErrorRoomsIds: Set<String>,
-                                rejectingRoomsIds: Set<String>,
-                                rejectingErrorRoomsIds: Set<String>,
+                                roomChangedMembershipStates: Map<String, ChangeMembershipState>,
                                 selectedRoomIds: Set<String>) {
         summaries.forEach { roomSummary ->
             roomSummaryItemFactory
                     .create(roomSummary,
-                            joiningRoomsIds,
-                            joiningErrorRoomsIds,
-                            rejectingRoomsIds,
-                            rejectingErrorRoomsIds,
+                            roomChangedMembershipStates,
                             selectedRoomIds,
                             listener)
                     .addTo(this)

@@ -76,11 +76,4 @@
 
     <string name="summary_user_sent_sticker">%1$s ha enviat un adhesiu.</string>
 
-    <string name="message_reply_to_prefix">En resposta a</string>
-
-    <string name="reply_to_an_image">ha enviat una imatge.</string>
-    <string name="reply_to_a_video">ha enviat un vídeo.</string>
-    <string name="reply_to_an_audio_file">ha enviat un fitxer d\'àudio.</string>
-    <string name="reply_to_a_file">ha enviat un fitxer.</string>
-
 </resources>

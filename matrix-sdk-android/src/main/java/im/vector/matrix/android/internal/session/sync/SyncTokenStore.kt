@@ -18,10 +18,11 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.SyncEntity
+import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.Realm
 import javax.inject.Inject
 
-internal class SyncTokenStore @Inject constructor(private val monarchy: Monarchy) {
+internal class SyncTokenStore @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     fun getLastToken(): String? {
         return Realm.getInstance(monarchy.realmConfiguration).use {

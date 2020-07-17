@@ -24,12 +24,13 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.AccountDataMapper
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-internal class AccountDataDataSource @Inject constructor(private val monarchy: Monarchy,
+internal class AccountDataDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                          private val accountDataMapper: AccountDataMapper) {
 
     fun getAccountDataEvent(type: String): UserAccountDataEvent? {

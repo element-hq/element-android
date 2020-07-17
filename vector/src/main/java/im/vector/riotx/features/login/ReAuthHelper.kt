@@ -16,33 +16,12 @@
 
 package im.vector.riotx.features.login
 
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import java.util.Timer
-import java.util.TimerTask
+import im.vector.riotx.core.utils.TemporaryStore
 import javax.inject.Inject
 import javax.inject.Singleton
 
-const val THREE_MINUTES = 3 * 60_000L
-
+/**
+ * Will store the account password for 3 minutes
+ */
 @Singleton
-class ReAuthHelper @Inject constructor() {
-
-    private var timer: Timer? = null
-
-    private var rememberedInfo: UserPasswordAuth? = null
-
-    fun rememberAuth(password: UserPasswordAuth?) {
-        timer?.cancel()
-        timer = null
-        rememberedInfo = password
-        timer = Timer().apply {
-            schedule(object : TimerTask() {
-                override fun run() {
-                    rememberedInfo = null
-                }
-            }, THREE_MINUTES)
-        }
-    }
-
-    fun rememberedAuth() = rememberedInfo
-}
+class ReAuthHelper @Inject constructor() : TemporaryStore<String>()

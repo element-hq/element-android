@@ -35,7 +35,7 @@ data class LoginViewState(
 
         // User choices
         @PersistState
-        val serverType: ServerType = ServerType.MatrixOrg,
+        val serverType: ServerType = ServerType.Unknown,
         @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState

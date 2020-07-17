@@ -60,7 +60,7 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
             is Loading       -> renderLoading()
             is Success       -> renderSuccess(
                     computeUsersList(asyncUsers(), currentState.directorySearchTerm),
-                    currentState.selectedUsers.map { it.userId },
+                    currentState.getSelectedMatrixId(),
                     hasSearch
             )
             is Fail          -> renderFailure(asyncUsers.error)

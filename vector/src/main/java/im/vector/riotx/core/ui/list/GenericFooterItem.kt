@@ -52,6 +52,7 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     var textColor: Int? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.text.setTextOrHide(text)
         when (style) {
             GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f

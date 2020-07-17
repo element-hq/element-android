@@ -37,7 +37,7 @@ internal class MarkdownParser @Inject constructor(
     fun parse(text: String): TextContent {
         // If no special char are detected, just return plain text
         if (text.contains(mdSpecialChars).not()) {
-            return TextContent(text.toString())
+            return TextContent(text)
         }
 
         val document = parser.parse(text)
@@ -56,7 +56,7 @@ internal class MarkdownParser @Inject constructor(
             val plainText = textContentRenderer.render(document)
             TextContent(plainText, cleanHtmlText.postTreatment())
         } else {
-            TextContent(text.toString())
+            TextContent(text)
         }
     }
 

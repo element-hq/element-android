@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.findByAlias
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
@@ -35,7 +36,7 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
 }
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val roomAPI: RoomAPI,
         private val eventBus: EventBus
 ) : GetRoomIdByAliasTask {

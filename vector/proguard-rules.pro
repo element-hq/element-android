@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class im.vector.riotx.features.** { *; }
+
+## print all the rules in a file
+# -printconfiguration ../proguard_files/full-r8-config.txt

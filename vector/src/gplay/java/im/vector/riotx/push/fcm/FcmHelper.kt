@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.preference.PreferenceManager
 import android.widget.Toast
+import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
@@ -57,10 +58,9 @@ object FcmHelper {
      */
     fun storeFcmToken(context: Context,
                       token: String?) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(PREFS_KEY_FCM_TOKEN, token)
-                .apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putString(PREFS_KEY_FCM_TOKEN, token)
+        }
     }
 
     /**

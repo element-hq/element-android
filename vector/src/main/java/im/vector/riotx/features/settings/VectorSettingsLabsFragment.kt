@@ -34,6 +34,10 @@ class VectorSettingsLabsFragment @Inject constructor(
             it.isChecked = vectorPreferences.labAllowedExtendedLogging()
         }
 
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)?.let {
+            it.isChecked = vectorPreferences.labAddNotificationTab()
+        }
+
 //        val useCryptoPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
 //        val cryptoIsEnabledPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 

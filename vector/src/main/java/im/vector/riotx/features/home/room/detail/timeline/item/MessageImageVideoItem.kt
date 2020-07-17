@@ -38,7 +38,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     var playable: Boolean = false
     @EpoxyAttribute
     var mode = ImageContentRenderer.Mode.THUMBNAIL
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: View.OnClickListener? = null
     @EpoxyAttribute
     lateinit var imageContentRenderer: ImageContentRenderer
@@ -66,6 +66,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     override fun unbind(holder: Holder) {
         GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
+        holder.imageView.setOnClickListener(null)
+        holder.imageView.setOnLongClickListener(null)
         super.unbind(holder)
     }
 

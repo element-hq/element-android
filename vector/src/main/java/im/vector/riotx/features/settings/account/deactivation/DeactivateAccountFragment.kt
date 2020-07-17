@@ -107,13 +107,13 @@ class DeactivateAccountFragment @Inject constructor(
                     displayErrorDialog(it.throwable)
                 }
                 DeactivateAccountViewEvents.Done            ->
-                    MainActivity.restartApp(activity!!, MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
+                    MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
             }.exhaustive
         }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         deactivateAccountPassword.showPassword(state.passwordShown)
-        deactivateAccountPasswordReveal.setImageResource(if (state.passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+        deactivateAccountPasswordReveal.setImageResource(if (state.passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
     }
 }

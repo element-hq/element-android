@@ -20,13 +20,16 @@ package im.vector.riotx.features.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.text.Editable
 import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -36,6 +39,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.yalantis.ucrop.UCrop
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.failure.isInvalidPassword
@@ -44,25 +48,32 @@ import im.vector.matrix.android.api.session.integrationmanager.IntegrationManage
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
+import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.preference.VectorSwitchPreference
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.getSizeOfFiles
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import im.vector.riotx.features.media.createUCropWithDefaultSettings
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
+import im.vector.riotx.multipicker.MultiPicker
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.UUID
 
 class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
@@ -72,6 +83,8 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private var mDisplayedEmails = ArrayList<String>()
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
+    private var avatarCameraUri: Uri? = null
+
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
     }
@@ -79,7 +92,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<EditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
+        findPreference<EditTextPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
@@ -122,7 +135,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             it.summary = session.getUser(session.myUserId)?.displayName ?: ""
             it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                onDisplayNameClick(newValue?.let { (it as String).trim() })
+                newValue
+                        ?.let { value -> (value as? String)?.trim() }
+                        ?.let { value -> onDisplayNameChanged(value) }
                 false
             }
         }
@@ -143,7 +158,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
             }
 
             // Unfortunately, this is not supported in lib v7
@@ -165,7 +180,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
             }
 
             it.setOnPreferenceClickListener {
@@ -206,7 +221,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                MainActivity.restartApp(activity!!, MainActivityArgs(clearCache = true))
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
                 false
             }
         }
@@ -222,7 +237,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
-            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) + session.fileService().getCacheSize()
 
             it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
@@ -232,6 +247,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     displayLoadingView()
 
                     Glide.get(requireContext()).clearMemory()
+                    session.fileService().clearCache()
 
                     var newSize = 0
 
@@ -240,6 +256,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         Glide.get(requireContext()).clearDiskCache()
 
                         newSize = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+                        newSize += session.fileService().getCacheSize()
                     }
 
                     it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
@@ -279,7 +296,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                changeAvatar()
+                onAvatarTypeSelected(true)
             }
         }
     }
@@ -289,8 +306,27 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_NEW_PHONE_NUMBER  -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY -> onPhonebookCountryUpdate(data)
+                REQUEST_NEW_PHONE_NUMBER            -> refreshPhoneNumbersList()
+                REQUEST_PHONEBOOK_COUNTRY           -> onPhonebookCountryUpdate(data)
+                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
+                    avatarCameraUri?.let { uri ->
+                        MultiPicker.get(MultiPicker.CAMERA)
+                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
+                                ?.let {
+                                    onAvatarSelected(it)
+                                }
+                    }
+                }
+                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                    MultiPicker
+                            .get(MultiPicker.IMAGE)
+                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
+                            .firstOrNull()?.let {
+                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
+                                onAvatarCropped(it.contentUri)
+                            }
+                }
+                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
                 /* TODO
                     VectorUtils.TAKE_IMAGE -> {
                         val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
@@ -368,21 +404,59 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
      * Update the avatar.
      */
     private fun onUpdateAvatarClick() {
-        notImplemented()
-
-        /* TODO
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-            changeAvatar()
-        }
-        */
+        AlertDialog
+                .Builder(requireContext())
+                .setItems(arrayOf(
+                        getString(R.string.attachment_type_camera),
+                        getString(R.string.attachment_type_gallery)
+                )) { dialog, which ->
+                    dialog.cancel()
+                    onAvatarTypeSelected(isCamera = (which == 0))
+                }.show()
     }
 
-    private fun changeAvatar() {
-        /* TODO
-        val intent = Intent(activity, VectorMediaPickerActivity::class.java)
-        intent.putExtra(VectorMediaPickerActivity.EXTRA_AVATAR_MODE, true)
-        startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
-        */
+    private fun onAvatarTypeSelected(isCamera: Boolean) {
+        if (isCamera) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
+        } else {
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+        }
+    }
+
+    private fun onAvatarSelected(image: MultiPickerImageType) {
+        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+                .apply { withAspectRatio(1f, 1f) }
+                .start(requireContext(), this)
+    }
+
+    private fun onAvatarCropped(uri: Uri?) {
+        if (uri != null) {
+            uploadAvatar(uri)
+        } else {
+            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun uploadAvatar(uri: Uri) {
+        displayLoadingView()
+
+        session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString(), object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                if (!isAdded) return
+
+                mUserAvatarPreference.refreshAvatar()
+                onCommonDone(null)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                if (!isAdded) return
+                onCommonDone(failure.localizedMessage)
+            }
+        })
     }
 
     // ==============================================================================================================
@@ -503,9 +577,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }    */
     }
 
-    // ==============================================================================================================
-    // Email management
-    // ==============================================================================================================
+// ==============================================================================================================
+// Email management
+// ==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -548,7 +622,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             var order = addEmailBtn.order
 
             for ((index, email3PID) in currentEmail3PID.withIndex()) {
-                val preference = VectorPreference(activity!!)
+                val preference = VectorPreference(requireActivity())
 
                 preference.title = getString(R.string.settings_email_address)
                 preference.summary = "TODO" // email3PID.address
@@ -630,47 +704,47 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
      *
      * @param pid the used pid.
      */
-    /* TODO
-    private fun showEmailValidationDialog(pid: ThreePid) {
-        activity?.let {
-            AlertDialog.Builder(it)
-                    .setTitle(R.string.account_email_validation_title)
-                    .setMessage(R.string.account_email_validation_message)
-                    .setPositiveButton(R.string._continue) { _, _ ->
-                        session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
-                            override fun onSuccess(info: Void?) {
+/* TODO
+private fun showEmailValidationDialog(pid: ThreePid) {
+    activity?.let {
+        AlertDialog.Builder(it)
+                .setTitle(R.string.account_email_validation_title)
+                .setMessage(R.string.account_email_validation_message)
+                .setPositiveButton(R.string._continue) { _, _ ->
+                    session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
+                        override fun onSuccess(info: Void?) {
+                            it.runOnUiThread {
+                                hideLoadingView()
+                                refreshEmailsList()
+                            }
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            onCommonDone(e.localizedMessage)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
                                 it.runOnUiThread {
                                     hideLoadingView()
-                                    refreshEmailsList()
+                                    it.toast(R.string.account_email_validation_error)
                                 }
-                            }
-
-                            override fun onNetworkError(e: Exception) {
+                            } else {
                                 onCommonDone(e.localizedMessage)
                             }
+                        }
 
-                            override fun onMatrixError(e: MatrixError) {
-                                if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                                    it.runOnUiThread {
-                                        hideLoadingView()
-                                        it.toast(R.string.account_email_validation_error)
-                                    }
-                                } else {
-                                    onCommonDone(e.localizedMessage)
-                                }
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { _, _ ->
-                        hideLoadingView()
-                    }
-                    .show()
-        }
-    }    */
+                        override fun onUnexpectedError(e: Exception) {
+                            onCommonDone(e.localizedMessage)
+                        }
+                    })
+                }
+                .setNegativeButton(R.string.cancel) { _, _ ->
+                    hideLoadingView()
+                }
+                .show()
+    }
+}    */
 
     /**
      * Display a dialog which asks confirmation for the deletion of a 3pid
@@ -743,7 +817,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 newPasswordText.showPassword(passwordShown)
                 confirmNewPasswordText.showPassword(passwordShown)
 
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             val dialog = AlertDialog.Builder(activity)
@@ -857,45 +931,26 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     /**
      * Update the displayname.
      */
-    private fun onDisplayNameClick(value: String?) {
-        notImplemented()
-        /* TODO
-        if (!TextUtils.equals(session.myUser.displayname, value)) {
+    private fun onDisplayNameChanged(value: String) {
+        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
+        if (currentDisplayName != value) {
             displayLoadingView()
 
-            session.myUser.updateDisplayName(value, object : MatrixCallback<Unit> {
-                override fun onSuccess(info: Void?) {
+            session.setDisplayName(session.myUserId, value, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    if (!isAdded) return
                     // refresh the settings value
-                    PreferenceManager.getDefaultSharedPreferences(activity).edit {
-                        putString(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value)
-                    }
-
+                    mDisplayNamePreference.summary = value
+                    mDisplayNamePreference.text = value
                     onCommonDone(null)
-
-                    refreshDisplay()
                 }
 
-                override fun onNetworkError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
-                }
-
-                override fun onMatrixError(e: MatrixError) {
-                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
-                        activity?.runOnUiThread {
-                            hideLoadingView()
-                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
-                        }
-                    } else {
-                        onCommonDone(e.localizedMessage)
-                    }
-                }
-
-                override fun onUnexpectedError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
+                override fun onFailure(failure: Throwable) {
+                    if (!isAdded) return
+                    onCommonDone(failure.localizedMessage)
                 }
             })
         }
-        */
     }
 
     companion object {

@@ -58,6 +58,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     lateinit var listener: View.OnClickListener
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.view.setOnClickListener {
             listener.onClick(it)
         }

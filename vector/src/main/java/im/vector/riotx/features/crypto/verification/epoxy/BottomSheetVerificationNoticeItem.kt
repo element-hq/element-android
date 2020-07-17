@@ -33,6 +33,7 @@ abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetV
     var notice: CharSequence = ""
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.notice.text = notice
     }
 

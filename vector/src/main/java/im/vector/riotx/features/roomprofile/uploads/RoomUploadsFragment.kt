@@ -22,7 +22,6 @@ import androidx.core.net.toUri
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -33,6 +32,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_uploads.*
 import javax.inject.Inject
@@ -40,7 +40,8 @@ import javax.inject.Inject
 class RoomUploadsFragment @Inject constructor(
         private val viewModelFactory: RoomUploadsViewModel.Factory,
         private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val notificationUtils: NotificationUtils
 ) : VectorBaseFragment(), RoomUploadsViewModel.Factory by viewModelFactory {
 
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -70,17 +71,13 @@ class RoomUploadsFragment @Inject constructor(
                     shareMedia(requireContext(), it.file, getMimeTypeFromUri(requireContext(), it.file.toUri()))
                 }
                 is RoomUploadsViewEvents.FileReadyForSaving  -> {
-                    val saved = saveMedia(
+                    saveMedia(
                             context = requireContext(),
                             file = it.file,
                             title = it.title,
-                            mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri())
+                            mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
+                            notificationUtils = notificationUtils
                     )
-                    if (saved) {
-                        Snackbar.make(roomUploadsCoordinator, R.string.media_file_added_to_gallery, Snackbar.LENGTH_LONG).show()
-                    } else {
-                        Snackbar.make(roomUploadsCoordinator, R.string.error_adding_media_file_to_gallery, Snackbar.LENGTH_LONG).show()
-                    }
                 }
                 is RoomUploadsViewEvents.Failure             -> showFailure(it.throwable)
             }.exhaustive

@@ -1,3 +1,118 @@
+Changes in Element 1.0.0 (2020-07-15)
+===================================================
+
+Features ✨:
+ - Re-branding: The app is now called Element. New name, new themes, new icons, etc. More details here: https://element.io/blog/welcome-to-element/ (#1691)
+
+Bugfix 🐛:
+ - Video calls are shown as a voice ones in the timeline (#1676)
+ - Fix regression: not able to create a room without IS configured (#1679)
+
+Changes in Riot.imX 0.91.5 (2020-07-11)
+===================================================
+
+Features ✨:
+ - 3pid invite: it is now possible to invite people by email. An Identity Server has to be configured (#548)
+
+Improvements 🙌:
+ - Cleaning chunks with lots of events as long as a threshold has been exceeded (35_000 events in DB) (#1634)
+ - Creating and listening to EventInsertEntity. (#1634)
+ - Handling (almost) properly the groups fetching (#1634)
+ - Improve fullscreen media display (#327)
+ - Setup server recovery banner (#1648)
+ - Set up SSSS from security settings (#1567)
+ - New lab setting to add 'unread notifications' tab to main screen
+ - Render third party invite event (#548)
+ - Display three pid invites in the room members list (#548)
+
+Bugfix 🐛:
+ - Integration Manager: Wrong URL to review terms if URL in config contains path (#1606)
+ - Regression Composer does not grow, crops out text (#1650)
+ - Bug / Unwanted draft (#698)
+ - All users seems to be able to see the enable encryption option in room settings (#1341)
+ - Leave room only leaves the current version (#1656)
+ - Regression |  Share action menu do not work (#1647)
+ - verification issues on transition (#1555)
+ - Fix issue when restoring keys backup using recovery key
+
+SDK API changes ⚠️:
+ - CreateRoomParams has been updated
+
+Build 🧱:
+ - Upgrade some dependencies
+ - Revert to build-tools 3.5.3
+
+Other changes:
+ - Use Intent.ACTION_CREATE_DOCUMENT to save megolm key or recovery key in a txt file
+ - Use `Context#withStyledAttributes` extension function (#1546)
+
+Changes in Riot.imX 0.91.4 (2020-07-06)
+===================================================
+
+Features ✨:
+ - Re-activate Wellknown support with updated UI (#1614)
+
+Improvements 🙌:
+ - Upload device keys only once to the homeserver and fix crash when no network (#1629)
+
+Bugfix 🐛:
+ - Fix crash when coming from a notification (#1601)
+ - Fix Exception when importing keys (#1576)
+ - File isn't downloaded when another file with the same name already exists (#1578)
+ - saved images don't show up in gallery (#1324)
+ - Fix reply fallback leaking sender locale (#429)
+
+Build 🧱:
+ - Fix lint false-positive about WorkManager (#1012)
+ - Upgrade build-tools from 3.5.3 to 3.6.3
+ - Upgrade gradle from 5.4.1 to 5.6.4
+
+Changes in Riot.imX 0.91.3 (2020-07-01)
+===================================================
+
+Notes:
+ - This version is the third beta version of RiotX codebase published as Riot-Android on the PlayStore.
+ - Changelog below includes changes of v0.91.0, v0.91.1, and v0.91.2, because the first beta versions have been tagged and
+ published from the branch feature/migration_from_legacy.
+ - This version uses temporary name `Riot.imX`, to distinguish the app with RiotX app.
+
+Features ✨:
+ - Call with WebRTC support (##611)
+ - Add capability to change the display name (#1529)
+
+Improvements 🙌:
+ - "Add Matrix app" menu is now always visible (#1495)
+ - Handle `/op`, `/deop`, and `/nick` commands (#12)
+ - Prioritising Recovery key over Recovery passphrase (#1463)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
+ - Update user avatar (#1054)
+ - Allow self-signed certificate (#1564)
+ - Improve file download and open in timeline
+ - Catchup tab is removed temporarily (#1565)
+ - Render room avatar change (#1319)
+
+Bugfix 🐛:
+ - Fix dark theme issue on login screen (#1097)
+ - Incomplete predicate in RealmCryptoStore#getOutgoingRoomKeyRequest (#1519)
+ - User could not redact message that they have sent (#1543)
+ - Use vendor prefix for non merged MSC (#1537)
+ - Compress images before sending (#1333)
+ - Searching by displayname is case sensitive (#1468)
+ - Fix layout overlap issue (#1407)
+
+Build 🧱:
+ - Enable code optimization (Proguard)
+ - SDK is now API level 21 minimum, and so RiotX (#405)
+
+Other changes:
+ - Use `SharedPreferences#edit` extension function consistently (#1545)
+ - Use `retrofit2.Call.awaitResponse` extension provided by Retrofit 2. (#1526)
+ - Fix minor typo in contribution guide (#1512)
+ - Fix self-assignment of callback in `DefaultRoomPushRuleService#setRoomNotificationState` (#1520)
+ - Random housekeeping clean-ups indicated by Lint (#1520, #1541)
+ - Keys Backup API now use the unstable prefix (#1503)
+ - Remove deviceId from /keys/upload/{deviceId} as not spec-compliant (#1502)
+
 Changes in RiotX 0.22.0 (2020-06-15)
 ===================================================
 
@@ -591,7 +706,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.X.0 (2020-XX-XX)
+Changes in Element 1.X.X (2020-XX-XX)
 ===================================================
 
 Features ✨:

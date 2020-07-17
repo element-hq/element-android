@@ -37,6 +37,7 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
     var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.view.setOnClickListener(clickListener)
 
         holder.nameView.text = name

@@ -21,7 +21,9 @@ import androidx.work.Constraints
 import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class WorkManagerProvider @Inject constructor(
@@ -37,6 +39,14 @@ internal class WorkManagerProvider @Inject constructor(
      */
     inline fun <reified W : ListenableWorker> matrixOneTimeWorkRequestBuilder() =
             OneTimeWorkRequestBuilder<W>()
+                    .addTag(tag)
+
+    /**
+     * Create a PeriodicWorkRequestBuilder, with the Matrix SDK tag
+     */
+    inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(repeatInterval: Long,
+                                                                               repeatIntervalTimeUnit: TimeUnit) =
+            PeriodicWorkRequestBuilder<W>(repeatInterval, repeatIntervalTimeUnit)
                     .addTag(tag)
 
     /**

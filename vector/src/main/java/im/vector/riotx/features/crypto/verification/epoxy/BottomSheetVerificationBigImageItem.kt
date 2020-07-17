@@ -37,6 +37,7 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
     var contentDescription: String? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.image.setImageResource(imageRes)
 
         if (contentDescription == null) {

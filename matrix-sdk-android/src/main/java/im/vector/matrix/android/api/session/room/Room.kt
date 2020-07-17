@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.session.room.call.RoomCallService
 import im.vector.matrix.android.api.session.room.crypto.RoomCryptoService
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -47,6 +48,7 @@ interface Room :
         StateService,
         UploadsService,
         ReportingService,
+        RoomCallService,
         RelationService,
         RoomCryptoService,
         RoomPushRuleService {

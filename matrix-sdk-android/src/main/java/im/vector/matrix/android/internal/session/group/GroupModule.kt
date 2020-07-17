@@ -37,6 +37,9 @@ internal abstract class GroupModule {
     }
 
     @Binds
+    abstract fun bindGroupFactory(factory: DefaultGroupFactory): GroupFactory
+
+    @Binds
     abstract fun bindGetGroupDataTask(task: DefaultGetGroupDataTask): GetGroupDataTask
 
     @Binds

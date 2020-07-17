@@ -45,9 +45,9 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.settings.VectorPreferences
 
@@ -179,11 +179,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
+            EventType.STATE_ROOM_AVATAR,
             EventType.STATE_ROOM_MEMBER,
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.CALL_INVITE,
+            EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
                 noticeEventFormatter.format(timelineEvent)
@@ -356,6 +358,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
+        // Message sent by the current user can always be redacted
+        if (event.root.senderId == session.myUserId) return true
+        // Check permission for messages sent by other users
         return actionPermissions.canRedact
     }
 

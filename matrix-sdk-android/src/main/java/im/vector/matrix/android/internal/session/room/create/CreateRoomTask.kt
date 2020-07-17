@@ -17,11 +17,9 @@
 package im.vector.matrix.android.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -45,26 +43,21 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
-        private val crossSigningService: CrossSigningService,
-        private val deviceListManager: DeviceListManager,
+        private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val eventBus: EventBus
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomParams = if (canEnableEncryption(params)) {
-            params.enableEncryptionWithAlgorithm()
-        } else {
-            params
-        }
+        val createRoomBody = createRoomBodyBuilder.build(params)
 
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(createRoomParams)
+            apiCall = roomAPI.createRoom(createRoomBody)
         }
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
@@ -76,33 +69,11 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
-        if (createRoomParams.isDirect()) {
-            handleDirectChatCreation(createRoomParams, roomId)
+        if (params.isDirect()) {
+            handleDirectChatCreation(params, roomId)
         }
         setReadMarkers(roomId)
         return roomId
-    }
-
-    private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
-        return params.enableEncryptionIfInvitedUsersSupportIt
-                && crossSigningService.isCrossSigningVerified()
-                && params.invite3pids.isNullOrEmpty()
-                && params.invitedUserIds?.isNotEmpty() == true
-                && params.invitedUserIds.let { userIds ->
-            val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
-
-            userIds.all { userId ->
-                keys.map[userId].let { deviceMap ->
-                    if (deviceMap.isNullOrEmpty()) {
-                        // A user has no device, so do not enable encryption
-                        false
-                    } else {
-                        // Check that every user's device have at least one key
-                        deviceMap.values.all { !it.keys.isNullOrEmpty() }
-                    }
-                }
-            }
-        }
     }
 
     private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {
@@ -122,5 +93,22 @@ internal class DefaultCreateRoomTask @Inject constructor(
     private suspend fun setReadMarkers(roomId: String) {
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, forceReadReceipt = true, forceReadMarker = true)
         return readMarkersTask.execute(setReadMarkerParams)
+    }
+
+    /**
+     * Tells if the created room can be a direct chat one.
+     *
+     * @return true if it is a direct chat
+     */
+    private fun CreateRoomParams.isDirect(): Boolean {
+        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
+                && isDirect == true
+    }
+
+    /**
+     * @return the first invited user id
+     */
+    private fun CreateRoomParams.getFirstInvitedUserId(): String? {
+        return invitedUserIds.firstOrNull() ?: invite3pids.firstOrNull()?.value
     }
 }

@@ -7,6 +7,6 @@
         android:width="1.2dp"
         android:color="@color/accent_sc" />
 
-    <solid android:color="@color/black" />
+    <solid android:color="?riotx_background" />
 
 </shape>

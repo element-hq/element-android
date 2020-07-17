@@ -40,18 +40,21 @@ import im.vector.riotx.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
+    @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
+    // Used only for diff calculation
+    @EpoxyAttribute lateinit var lastEvent: String
+    // We use DoNotHash here as Spans are not implementing equals/hashcode
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
-    @EpoxyAttribute var typingString: CharSequence? = null
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
-    @EpoxyAttribute var itemLongClickListener: View.OnLongClickListener? = null
-    @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
     @EpoxyAttribute var showSelected: Boolean = false
 
     override fun bind(holder: Holder) {
@@ -64,8 +67,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.typingView.setTextOrHide(typingString)
-        holder.lastEventView.isInvisible = holder.typingView.isVisible
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -73,6 +74,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarDecorationImageView.isVisible = encryptionTrustLevel != null
         holder.roomAvatarDecorationImageView.setImageResource(encryptionTrustLevel.toImageRes())
         renderSelection(holder, showSelected)
+        holder.typingView.setTextOrHide(typingMessage)
+        holder.lastEventView.isInvisible = holder.typingView.isVisible
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.rootView.setOnClickListener(null)
+        holder.rootView.setOnLongClickListener(null)
+        super.unbind(holder)
     }
 
     private fun renderSelection(holder: Holder, isSelected: Boolean) {

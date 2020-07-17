@@ -21,14 +21,12 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.core.utils.toast
 import kotlinx.android.synthetic.main.fragment_bootstrap_save_key.*
@@ -48,17 +46,14 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val messageKey = getString(R.string.message_key)
-        val recoveryPassphrase = getString(R.string.recovery_passphrase)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_link_text_color)
-        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, messageKey, recoveryPassphrase)
-                .toSpannable()
-                .colorizeMatchingText(messageKey, color)
-                .colorizeMatchingText(recoveryPassphrase, color)
-
         recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
         recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
-        recoveryContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.GoToCompleted) }
+        recoveryContinue.clickableView.debouncedClicks {
+            // We do not display the final Fragment anymore
+            // TODO Do some cleanup
+            // sharedViewModel.handle(BootstrapActions.GoToCompleted)
+            sharedViewModel.handle(BootstrapActions.Completed)
+        }
     }
 
     private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->
@@ -66,7 +61,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TITLE, "riot-recovery-key.txt")
+        intent.putExtra(Intent.EXTRA_TITLE, "element-recovery-key.txt")
 
         try {
             sharedViewModel.handle(BootstrapActions.SaveReqQueryStarted)
@@ -83,7 +78,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
             if (resultCode == RESULT_OK && uri != null) {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        sharedViewModel.handle(BootstrapActions.SaveKeyToUri(context!!.contentResolver!!.openOutputStream(uri)!!))
+                        sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
                     } catch (failure: Throwable) {
                         sharedViewModel.handle(BootstrapActions.SaveReqFailed)
                     }

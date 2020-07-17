@@ -22,11 +22,9 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.epoxy.zeroItem
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.typing.TypingHelper
 import javax.inject.Inject
 
 class BreadcrumbsController @Inject constructor(
-        private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer
 ) : EpoxyController() {
 
@@ -59,12 +57,12 @@ class BreadcrumbsController @Inject constructor(
                 ?.forEach {
                     breadcrumbsItem {
                         id(it.roomId)
+                        hasTypingUsers(it.typingUsers.isNotEmpty())
                         avatarRenderer(avatarRenderer)
                         matrixItem(it.toMatrixItem())
                         unreadNotificationCount(it.notificationCount)
                         showHighlighted(it.highlightCount > 0)
                         hasUnreadMessage(it.hasUnreadMessages)
-                        hasTypingUsers(typingHelper.excludeCurrentUser(it.typingRoomMemberIds).isNotEmpty())
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
                                 DebouncedClickListener(View.OnClickListener { _ ->

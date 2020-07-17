@@ -39,7 +39,7 @@ private const val SIZE_20MB = 20 * 1024 * 1024
 private const val SIZE_50MB = 50 * 1024 * 1024
 
 @Singleton
-class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.DebugTree() {
+class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.Tree() {
 
     private val maxLogSizeByte: Int
     private val logRotationCount: Int

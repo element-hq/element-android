@@ -24,8 +24,5 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 @EpoxyModelClass(layout = R.layout.item_timeline_read_marker)
 abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>() {
 
-    override fun bind(holder: Holder) {
-    }
-
     class Holder : VectorEpoxyHolder()
 }

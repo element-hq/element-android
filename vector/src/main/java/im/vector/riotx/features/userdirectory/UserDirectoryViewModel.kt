@@ -28,6 +28,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.toggle
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
@@ -59,9 +60,9 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
                 is FragmentViewModelContext -> (viewModelContext.fragment() as KnownUsersFragment).userDirectoryViewModelFactory.create(state)
                 is ActivityViewModelContext -> {
                     when (viewModelContext.activity<FragmentActivity>()) {
-                        is CreateDirectRoomActivity -> viewModelContext.activity<CreateDirectRoomActivity>().userDirectoryViewModelFactory.create(state)
+                        is CreateDirectRoomActivity  -> viewModelContext.activity<CreateDirectRoomActivity>().userDirectoryViewModelFactory.create(state)
                         is InviteUsersToRoomActivity -> viewModelContext.activity<InviteUsersToRoomActivity>().userDirectoryViewModelFactory.create(state)
-                        else                        -> error("Wrong activity or fragment")
+                        else                         -> error("Wrong activity or fragment")
                     }
                 }
                 else                        -> error("Wrong activity or fragment")
@@ -79,21 +80,21 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
             is UserDirectoryAction.FilterKnownUsers      -> knownUsersFilter.accept(Option.just(action.value))
             is UserDirectoryAction.ClearFilterKnownUsers -> knownUsersFilter.accept(Option.empty())
             is UserDirectoryAction.SearchDirectoryUsers  -> directoryUsersSearch.accept(action.value)
-            is UserDirectoryAction.SelectUser            -> handleSelectUser(action)
-            is UserDirectoryAction.RemoveSelectedUser    -> handleRemoveSelectedUser(action)
-        }
+            is UserDirectoryAction.SelectPendingInvitee  -> handleSelectUser(action)
+            is UserDirectoryAction.RemovePendingInvitee  -> handleRemoveSelectedUser(action)
+        }.exhaustive
     }
 
-    private fun handleRemoveSelectedUser(action: UserDirectoryAction.RemoveSelectedUser) = withState { state ->
-        val selectedUsers = state.selectedUsers.minus(action.user)
-        setState { copy(selectedUsers = selectedUsers) }
+    private fun handleRemoveSelectedUser(action: UserDirectoryAction.RemovePendingInvitee) = withState { state ->
+        val selectedUsers = state.pendingInvitees.minus(action.pendingInvitee)
+        setState { copy(pendingInvitees = selectedUsers) }
     }
 
-    private fun handleSelectUser(action: UserDirectoryAction.SelectUser) = withState { state ->
+    private fun handleSelectUser(action: UserDirectoryAction.SelectPendingInvitee) = withState { state ->
         // Reset the filter asap
         directoryUsersSearch.accept("")
-        val selectedUsers = state.selectedUsers.toggle(action.user)
-        setState { copy(selectedUsers = selectedUsers) }
+        val selectedUsers = state.pendingInvitees.toggle(action.pendingInvitee)
+        setState { copy(pendingInvitees = selectedUsers) }
     }
 
     private fun observeDirectoryUsers() = withState { state ->

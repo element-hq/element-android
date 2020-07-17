@@ -36,6 +36,7 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
     @EpoxyAttribute var userClicked: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatarView)
         holder.displayNameView.text = matrixItem.getBestName()
         timestamp?.let {

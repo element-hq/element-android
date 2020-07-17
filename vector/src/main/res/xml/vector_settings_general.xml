@@ -14,7 +14,7 @@
 
         <im.vector.riotx.core.preference.VectorEditTextPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
-            android:summary="@string/settings_display_name"
+            android:persistent="false"
             android:title="@string/settings_display_name" />
 
         <im.vector.riotx.core.preference.VectorPreference
@@ -26,22 +26,22 @@
 
         <!-- Note: inputType does not work, it is set also in code, as well as iconTint -->
         <im.vector.riotx.core.preference.VectorEditTextPreference
-            android:icon="@drawable/ic_add_black"
+            android:icon="@drawable/ic_material_add"
             android:inputType="textEmailAddress"
             android:key="ADD_EMAIL_PREFERENCE_KEY"
             android:order="100"
             android:title="@string/settings_add_email_address"
-            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+            app:iconTint="@color/riotx_accent" />
 
         <!-- Phone will be added here -->
 
         <!-- Note: iconTint does not work, it is also done in code -->
         <im.vector.riotx.core.preference.VectorPreference
-            android:icon="@drawable/ic_add_black"
+            android:icon="@drawable/ic_material_add"
             android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
             android:order="200"
             android:title="@string/settings_add_phone_number"
-            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+            app:iconTint="@color/riotx_accent" />
 
         <im.vector.riotx.core.preference.VectorPreference
             android:order="1000"
@@ -65,6 +65,26 @@
             android:dialogTitle="@string/settings_select_country"
             android:key="SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
             android:title="@string/settings_contacts_phonebook_country" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_integrations_summary" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ALLOW_INTEGRATIONS_KEY"
+            android:persistent="false"
+            android:title="@string/settings_integration_allow" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dependency="SETTINGS_ALLOW_INTEGRATIONS_KEY"
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
+            android:persistent="false"
+            android:title="@string/settings_integration_manager" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
@@ -93,26 +113,6 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
-
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:focusable="false"
-            android:persistent="false"
-            android:summary="@string/settings_integrations_summary" />
-
-        <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_ALLOW_INTEGRATIONS_KEY"
-            android:persistent="false"
-            android:title="@string/settings_integration_allow" />
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:dependency="SETTINGS_ALLOW_INTEGRATIONS_KEY"
-            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
-            android:persistent="false"
-            android:title="@string/settings_integration_manager" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

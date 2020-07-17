@@ -54,6 +54,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
     private var isSignupMode = false
+
     // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
@@ -138,6 +139,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             loginServerIcon.isVisible = false
             loginTitle.text = getString(R.string.login_signin_matrix_id_title)
             loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
+            loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown            -> error("developer error")
@@ -155,8 +157,8 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                 }
                 ServerType.Modular   -> {
                     loginServerIcon.isVisible = true
-                    loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                    loginTitle.text = getString(resId, "Modular")
+                    loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
+                    loginTitle.text = getString(resId, "Element Matrix Services")
                     loginNotice.text = getString(R.string.login_server_modular_text)
                 }
                 ServerType.Other     -> {
@@ -164,7 +166,9 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                     loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                     loginNotice.text = getString(R.string.login_server_other_text)
                 }
+                ServerType.Unknown   -> Unit /* Should not happen */
             }
+            loginPasswordNotice.isVisible = false
         }
     }
 
@@ -217,10 +221,10 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
             passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye_black)
+            passwordReveal.setImageResource(R.drawable.ic_eye)
             passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }

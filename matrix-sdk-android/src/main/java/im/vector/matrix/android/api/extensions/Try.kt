@@ -16,10 +16,15 @@
 
 package im.vector.matrix.android.api.extensions
 
-inline fun <A> tryThis(operation: () -> A): A? {
+import timber.log.Timber
+
+inline fun <A> tryThis(message: String? = null, operation: () -> A): A? {
     return try {
         operation()
     } catch (any: Throwable) {
+        if (message != null) {
+            Timber.e(any, message)
+        }
         null
     }
 }

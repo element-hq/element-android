@@ -19,16 +19,34 @@ package im.vector.matrix.android.api.session.room.model.call
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This event is sent by the callee when they wish to answer the call.
+ */
 @JsonClass(generateAdapter = true)
 data class CallAnswerContent(
+        /**
+         * Required. The ID of the call this event relates to.
+         */
         @Json(name = "call_id") val callId: String,
-        @Json(name = "version") val version: Int,
-        @Json(name = "answer") val answer: Answer
+        /**
+         * Required. The session description object
+         */
+        @Json(name = "answer") val answer: Answer,
+        /**
+         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
+         */
+        @Json(name = "version") val version: Int = 0
 ) {
 
     @JsonClass(generateAdapter = true)
     data class Answer(
-            @Json(name = "type") val type: String,
+            /**
+             * Required. The type of session description. Must be 'answer'.
+             */
+            @Json(name = "type") val type: SdpType = SdpType.ANSWER,
+            /**
+             * Required. The SDP text of the session description.
+             */
             @Json(name = "sdp") val sdp: String
     )
 }

@@ -22,11 +22,21 @@ import im.vector.riotx.features.roomdirectory.JoinState
 data class RoomPreviewViewState(
         // The room id
         val roomId: String = "",
+        val roomAlias: String? = null,
+        /**
+         * The server name (might be null)
+         * Set null when the server is the current user's home server.
+         */
+        val homeServer: String? = null,
         // Current state of the room in preview
         val roomJoinState: JoinState = JoinState.NOT_JOINED,
         // Last error of join room request
         val lastError: Throwable? = null
 ) : MvRxState {
 
-    constructor(args: RoomPreviewData) : this(roomId = args.roomId)
+    constructor(args: RoomPreviewData) : this(
+            roomId = args.roomId,
+            roomAlias = args.roomAlias,
+            homeServer = args.homeServer
+    )
 }

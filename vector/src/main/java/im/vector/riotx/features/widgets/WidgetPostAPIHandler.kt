@@ -39,13 +39,12 @@ import java.util.ArrayList
 import java.util.HashMap
 
 class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       @Assisted private val navigationCallback: NavigationCallback,
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session) : WidgetPostAPIMediator.Handler {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(roomId: String, navigationCallback: NavigationCallback): WidgetPostAPIHandler
+        fun create(roomId: String): WidgetPostAPIHandler
     }
 
     interface NavigationCallback {
@@ -54,31 +53,31 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         fun openIntegrationManager(integId: String?, integType: String?)
     }
 
-    private val widgetPostAPIMediator = session.widgetService().getWidgetPostAPIMediator()
     private val room = session.getRoom(roomId)!!
+    var navigationCallback: NavigationCallback? = null
 
-    override fun handleWidgetRequest(eventData: JsonDict): Boolean {
+    override fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         return when (eventData["action"] as String?) {
             "integration_manager_open" -> handleIntegrationManagerOpenAction(eventData).run { true }
-            "bot_options"              -> getBotOptions(eventData).run { true }
-            "can_send_event"           -> canSendEvent(eventData).run { true }
+            "bot_options"              -> getBotOptions(mediator, eventData).run { true }
+            "can_send_event"           -> canSendEvent(mediator, eventData).run { true }
             "close_scalar"             -> handleCloseScalar().run { true }
-            "get_membership_count"     -> getMembershipCount(eventData).run { true }
-            "get_widgets"              -> getWidgets(eventData).run { true }
-            "invite"                   -> inviteUser(eventData).run { true }
-            "join_rules_state"         -> getJoinRules(eventData).run { true }
-            "membership_state"         -> getMembershipState(eventData).run { true }
-            "set_bot_options"          -> setBotOptions(eventData).run { true }
-            "set_bot_power"            -> setBotPower(eventData).run { true }
-            "set_plumbing_state"       -> setPlumbingState(eventData).run { true }
-            "set_widget"               -> setWidget(eventData).run { true }
-            "m.sticker"                -> pickStickerData(eventData).run { true }
+            "get_membership_count"     -> getMembershipCount(mediator, eventData).run { true }
+            "get_widgets"              -> getWidgets(mediator, eventData).run { true }
+            "invite"                   -> inviteUser(mediator, eventData).run { true }
+            "join_rules_state"         -> getJoinRules(mediator, eventData).run { true }
+            "membership_state"         -> getMembershipState(mediator, eventData).run { true }
+            "set_bot_options"          -> setBotOptions(mediator, eventData).run { true }
+            "set_bot_power"            -> setBotPower(mediator, eventData).run { true }
+            "set_plumbing_state"       -> setPlumbingState(mediator, eventData).run { true }
+            "set_widget"               -> setWidget(mediator, eventData).run { true }
+            "m.sticker"                -> pickStickerData(mediator, eventData).run { true }
             else                       -> false
         }
     }
 
     private fun handleCloseScalar() {
-        navigationCallback.close()
+        navigationCallback?.close()
     }
 
     private fun handleIntegrationManagerOpenAction(eventData: JsonDict) {
@@ -101,7 +100,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                     // Add "type_" as a prefix
                     integType?.let { integType = "type_$integType" }
                 }
-        navigationCallback.openIntegrationManager(integId, integType)
+        navigationCallback?.openIntegrationManager(integId, integType)
     }
 
     /**
@@ -109,8 +108,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun getBotOptions(eventData: JsonDict) {
-        if (checkRoomId(eventData) || checkUserId(eventData)) {
+    private fun getBotOptions(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData) || checkUserId(widgetPostAPIMediator, eventData)) {
             return
         }
         val userId = eventData["user_id"] as String
@@ -134,8 +133,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
     }
 
-    private fun canSendEvent(eventData: JsonDict) {
-        if (checkRoomId(eventData)) {
+    private fun canSendEvent(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
         Timber.d("Received request canSendEvent in room $roomId")
@@ -170,8 +169,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun getMembershipState(eventData: JsonDict) {
-        if (checkRoomId(eventData) || checkUserId(eventData)) {
+    private fun getMembershipState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData) || checkUserId(widgetPostAPIMediator, eventData)) {
             return
         }
         val userId = eventData["user_id"] as String
@@ -189,8 +188,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun getJoinRules(eventData: JsonDict) {
-        if (checkRoomId(eventData)) {
+    private fun getJoinRules(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
         Timber.d("Received request join rules  in room $roomId")
@@ -207,8 +206,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun getWidgets(eventData: JsonDict) {
-        if (checkRoomId(eventData)) {
+    private fun getWidgets(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
         Timber.d("Received request to get widget in room $roomId")
@@ -227,12 +226,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun setWidget(eventData: JsonDict) {
+    private fun setWidget(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
         val userWidget = eventData["userWidget"] as Boolean?
         if (userWidget == true) {
             Timber.d("Received request to set widget for user")
         } else {
-            if (checkRoomId(eventData)) {
+            if (checkRoomId(widgetPostAPIMediator, eventData)) {
                 return
             }
             Timber.d("Received request to set widget in room $roomId")
@@ -283,14 +282,14 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             session.updateAccountData(
                     type = UserAccountData.TYPE_WIDGETS,
                     content = addUserWidgetBody,
-                    callback = createWidgetAPICallback(eventData)
+                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
             )
         } else {
             session.widgetService().createRoomWidget(
                     roomId = roomId,
                     widgetId = widgetId,
                     content = widgetEventContent,
-                    callback = createWidgetAPICallback(eventData)
+                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
             )
         }
     }
@@ -300,8 +299,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun setPlumbingState(eventData: JsonDict) {
-        if (checkRoomId(eventData)) {
+    private fun setPlumbingState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
         val description = "Received request to set plumbing state to status " + eventData["status"] + " in room " + roomId + " requested"
@@ -315,7 +314,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                 eventType = EventType.PLUMBING,
                 stateKey = null,
                 body = params,
-                callback = createWidgetAPICallback(eventData)
+                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
         )
     }
 
@@ -325,8 +324,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      * @param eventData the modular data
      */
     @Suppress("UNCHECKED_CAST")
-    private fun setBotOptions(eventData: JsonDict) {
-        if (checkRoomId(eventData) || checkUserId(eventData)) {
+    private fun setBotOptions(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData) || checkUserId(widgetPostAPIMediator, eventData)) {
             return
         }
         val userId = eventData["user_id"] as String
@@ -338,7 +337,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                 eventType = EventType.BOT_OPTIONS,
                 stateKey = stateKey,
                 body = content,
-                callback = createWidgetAPICallback(eventData)
+                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
         )
     }
 
@@ -347,8 +346,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun setBotPower(eventData: JsonDict) {
-        if (checkRoomId(eventData) || checkUserId(eventData)) {
+    private fun setBotPower(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData) || checkUserId(widgetPostAPIMediator, eventData)) {
             return
         }
         val userId = eventData["user_id"] as String
@@ -369,8 +368,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun inviteUser(eventData: JsonDict) {
-        if (checkRoomId(eventData) || checkUserId(eventData)) {
+    private fun inviteUser(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData) || checkUserId(widgetPostAPIMediator, eventData)) {
             return
         }
         val userId = eventData["user_id"] as String
@@ -380,7 +379,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
-            room.invite(userId = userId, callback = createWidgetAPICallback(eventData))
+            room.invite(userId = userId, callback = createWidgetAPICallback(widgetPostAPIMediator, eventData))
         }
     }
 
@@ -389,8 +388,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @param eventData the modular data
      */
-    private fun getMembershipCount(eventData: JsonDict) {
-        if (checkRoomId(eventData)) {
+    private fun getMembershipCount(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
+        if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
         val numberOfJoinedMembers = room.getNumberOfJoinedMembers()
@@ -398,7 +397,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun pickStickerData(eventData: JsonDict) {
+    private fun pickStickerData(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
         Timber.d("Received request send sticker")
         val data = eventData["data"]
         if (data == null) {
@@ -411,7 +410,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             return
         }
         widgetPostAPIMediator.sendSuccess(eventData)
-        navigationCallback.closeWithResult(content)
+        navigationCallback?.closeWithResult(content)
     }
 
     /**
@@ -420,7 +419,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @return true in case of error
      */
-    private fun checkRoomId(eventData: JsonDict): Boolean {
+    private fun checkRoomId(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         val roomIdInEvent = eventData["room_id"] as String?
         // Check if param is present
         if (null == roomIdInEvent) {
@@ -443,7 +442,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      *
      * @return true in case of error
      */
-    private fun checkUserId(eventData: JsonDict): Boolean {
+    private fun checkUserId(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         val userIdInEvent = eventData["user_id"] as String?
         // Check if param is present
         if (null == userIdInEvent) {
@@ -454,7 +453,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         return false
     }
 
-    private fun createWidgetAPICallback(eventData: JsonDict): WidgetAPICallback {
+    private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
         return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
     }
 }

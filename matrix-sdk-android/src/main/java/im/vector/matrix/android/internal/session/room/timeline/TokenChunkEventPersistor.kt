@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -39,7 +40,8 @@ import im.vector.matrix.android.internal.database.query.findLastForwardChunkOfRo
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
@@ -48,7 +50,7 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     /**
      * <pre>
@@ -199,8 +201,11 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
 
+        val now = System.currentTimeMillis()
+
         for (stateEvent in stateEvents) {
-            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+            val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
+            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
             if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null) {
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
@@ -211,8 +216,9 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             if (event.eventId == null || event.senderId == null) {
                 continue
             }
+            val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                 val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                     event.prevContent
@@ -235,12 +241,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                 chunksToDelete.add(it)
             }
         }
-        val shouldUpdateSummary = chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS
         chunksToDelete.forEach {
             it.deleteOnCascade()
         }
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
+        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
+                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
-            val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
             val latestPreviewableEvent = TimelineEventEntity.latestEvent(
                     realm,
                     roomId,

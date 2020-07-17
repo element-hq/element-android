@@ -33,6 +33,7 @@ import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
 import timber.log.Timber
 import kotlin.math.abs
+import kotlin.math.min
 
 class RoomMessageTouchHelperCallback(private val context: Context,
                                      @DrawableRes actionIcon: Int,
@@ -92,7 +93,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
             setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
         val size = triggerDistance
-        if (Math.abs(viewHolder.itemView.translationX) < size || dX > this.dX /*going back*/) {
+        if (abs(viewHolder.itemView.translationX) < size || dX > this.dX /*going back*/) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             this.dX = dX
             startTracking = true
@@ -127,9 +128,9 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     private fun drawReplyButton(canvas: Canvas, itemView: View) {
         // Timber.v("drawReplyButton")
-        val translationX = Math.abs(itemView.translationX)
+        val translationX = abs(itemView.translationX)
         val newTime = System.currentTimeMillis()
-        val dt = Math.min(17, newTime - lastReplyButtonAnimationTime)
+        val dt = min(17, newTime - lastReplyButtonAnimationTime)
         lastReplyButtonAnimationTime = newTime
         val showing = translationX >= minShowDistance
         if (showing) {
@@ -163,10 +164,10 @@ class RoomMessageTouchHelperCallback(private val context: Context,
             } else {
                 1.2f - 0.2f * ((replyButtonProgress - 0.8f) / 0.2f)
             }
-            alpha = Math.min(255f, 255 * (replyButtonProgress / 0.8f)).toInt()
+            alpha = min(255f, 255 * (replyButtonProgress / 0.8f)).toInt()
         } else {
             scale = replyButtonProgress
-            alpha = Math.min(255f, 255 * replyButtonProgress).toInt()
+            alpha = min(255f, 255 * replyButtonProgress).toInt()
         }
 
         imageDrawable.alpha = alpha

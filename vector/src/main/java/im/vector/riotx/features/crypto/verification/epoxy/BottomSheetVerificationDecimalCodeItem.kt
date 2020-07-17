@@ -33,6 +33,7 @@ abstract class BottomSheetVerificationDecimalCodeItem : VectorEpoxyModel<BottomS
     var code: CharSequence = ""
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.code.text = code
     }
 

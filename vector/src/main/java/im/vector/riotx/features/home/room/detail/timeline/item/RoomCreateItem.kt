@@ -30,6 +30,7 @@ abstract class RoomCreateItem : VectorEpoxyModel<RoomCreateItem.Holder>() {
     @EpoxyAttribute lateinit var text: CharSequence
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.description.movementMethod = BetterLinkMovementMethod.getInstance()
         holder.description.text = text
     }

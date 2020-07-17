@@ -117,8 +117,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .observeOn(Schedulers.computation())
                 .map { it.asSequence() }
                 .subscribe { summaries ->
-                    val invites = summaries
-                            .filter { it.membership == Membership.INVITE }
+                    val invitesDm = summaries
+                            .filter { it.membership == Membership.INVITE && it.isDirect }
+                            .count()
+
+                    val invitesRoom = summaries
+                            .filter { it.membership == Membership.INVITE && it.isDirect.not() }
                             .count()
 
                     val peopleNotifications = summaries
@@ -139,12 +143,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
                     setState {
                         copy(
-                                notificationCountCatchup = peopleNotifications + roomsNotifications + invites,
+                                notificationCountCatchup = peopleNotifications + roomsNotifications + invitesDm + invitesRoom,
                                 notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
-                                notificationCountPeople = peopleNotifications,
-                                notificationHighlightPeople = peopleHasHighlight,
-                                notificationCountRooms = roomsNotifications,
-                                notificationHighlightRooms = roomsHasHighlight
+                                notificationCountPeople = peopleNotifications + invitesDm,
+                                notificationHighlightPeople = peopleHasHighlight || invitesDm > 0,
+                                notificationCountRooms = roomsNotifications + invitesRoom,
+                                notificationHighlightRooms = roomsHasHighlight || invitesRoom > 0
                         )
                     }
                 }

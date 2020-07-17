@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_passphrase"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_passphrase"
-            android:src="@drawable/ic_message_password" />
+            android:src="@drawable/ic_security_phrase_24dp" />
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase"
@@ -83,7 +83,7 @@
             android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
-            android:src="@drawable/ic_eye_black"
+            android:src="@drawable/ic_eye"
             android:tint="?colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ssss_passphrase_enter_til"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_recovery_key"
-            app:icon="@drawable/ic_message_key"
+            app:icon="@drawable/ic_security_key_24dp"
             tools:ignore="MissingConstraints" />
 
         <com.google.android.material.button.MaterialButton

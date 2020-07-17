@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/callControlsWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?riotx_bottom_sheet_background"
+    android:orientation="vertical">
+
+    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsSoundDevice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_select_sound_device"
+        app:leftIcon="@drawable/ic_call_speaker_default"
+        app:tint="?attr/riotx_text_primary"
+        tools:actionDescription="Speaker" />
+
+    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsSwitchCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_switch_camera"
+        app:leftIcon="@drawable/ic_video_flip"
+        app:tint="?attr/riotx_text_primary"
+        tools:actionDescription="Front" />
+
+    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsToggleSDHD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_switch_camera"
+        app:leftIcon="@drawable/ic_hd"
+        app:tint="?attr/riotx_text_primary"
+        tools:actionDescription="Front" />
+
+</LinearLayout>

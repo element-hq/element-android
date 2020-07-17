@@ -30,7 +30,7 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_review_terms.*
 import javax.inject.Inject
 
@@ -106,6 +106,6 @@ class ReviewTermsFragment @Inject constructor(
     }
 
     override fun review(term: Term) {
-        openUrlInExternalBrowser(requireContext(), term.url)
+        openUrlInChromeCustomTab(requireContext(), null, term.url)
     }
 }

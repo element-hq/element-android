@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
@@ -39,7 +40,7 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 }
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {

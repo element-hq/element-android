@@ -25,5 +25,4 @@ sealed class HomeActivitySharedAction : VectorSharedAction {
     object OpenDrawer : HomeActivitySharedAction()
     object CloseDrawer : HomeActivitySharedAction()
     object OpenGroup : HomeActivitySharedAction()
-    object PromptForSecurityBootstrap : HomeActivitySharedAction()
 }

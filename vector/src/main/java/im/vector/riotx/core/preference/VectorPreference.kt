@@ -87,7 +87,7 @@ open class VectorPreference : Preference {
             val title = itemView.findViewById<TextView>(android.R.id.title)
             val summary = itemView.findViewById<TextView>(android.R.id.summary)
             if (title != null) {
-                title.setSingleLine(false)
+                title.isSingleLine = false
                 title.setTypeface(null, mTypeface)
             }
 

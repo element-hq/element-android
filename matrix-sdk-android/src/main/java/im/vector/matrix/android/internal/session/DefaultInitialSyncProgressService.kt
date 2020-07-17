@@ -25,11 +25,11 @@ import javax.inject.Inject
 @SessionScope
 class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgressService {
 
-    private var status = MutableLiveData<InitialSyncProgressService.Status>()
+    private val status = MutableLiveData<InitialSyncProgressService.Status>()
 
     private var rootTask: TaskInfo? = null
 
-    override fun getInitialSyncProgressStatus(): LiveData<InitialSyncProgressService.Status?> {
+    override fun getInitialSyncProgressStatus(): LiveData<InitialSyncProgressService.Status> {
         return status
     }
 
@@ -63,13 +63,13 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
             parent?.setProgress(endedTask.offset + (endedTask.totalProgress * endedTask.parentWeight).toInt())
         }
         if (endedTask?.parent == null) {
-            status.postValue(null)
+            status.postValue(InitialSyncProgressService.Status.Idle)
         }
     }
 
     fun endAll() {
         rootTask = null
-        status.postValue(null)
+        status.postValue(InitialSyncProgressService.Status.Idle)
     }
 
     private inner class TaskInfo(@StringRes var nameRes: Int,
@@ -102,9 +102,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
                 it.setProgress(offset + parentProgress)
             } ?: run {
                 Timber.v("--- ${leaf().nameRes}: $currentProgress")
-                status.postValue(
-                        InitialSyncProgressService.Status(leaf().nameRes, currentProgress)
-                )
+                status.postValue(InitialSyncProgressService.Status.Progressing(leaf().nameRes, currentProgress))
             }
         }
     }

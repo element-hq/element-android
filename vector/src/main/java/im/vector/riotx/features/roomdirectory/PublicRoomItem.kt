@@ -57,6 +57,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     var joinListener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.rootView.setOnClickListener { globalListener?.invoke() }
 
         avatarRenderer.render(matrixItem, holder.avatarView)

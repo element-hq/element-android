@@ -8,7 +8,7 @@
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/item_form_min_height">
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/formSwitchTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,13 +30,13 @@
 
     <TextView
         android:id="@+id/formSwitchSummary"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/formSwitchDivider"
+        app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="@+id/formSwitchTitle"
         app:layout_constraintTop_toBottomOf="@+id/formSwitchTitle"
         tools:text="@string/create_room_public_description" />
@@ -46,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
-        android:layout_marginRight="19dp"
         app:layout_constraintBottom_toTopOf="@+id/formSwitchDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

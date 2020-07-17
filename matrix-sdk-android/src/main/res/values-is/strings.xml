@@ -24,7 +24,6 @@
 
     <string name="notice_avatar_changed_too">(einnig var skipt um auðkennismynd)</string>
     <string name="notice_crypto_unable_to_decrypt">** Mistókst að afkóða: %s **</string>
-    <string name="message_reply_to_prefix">Sem svar til</string>
 
     <string name="unable_to_send_message">Gat ekki sent skilaboð</string>
 

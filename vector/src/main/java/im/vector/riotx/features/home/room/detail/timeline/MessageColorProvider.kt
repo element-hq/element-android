@@ -20,12 +20,18 @@ import androidx.annotation.ColorInt
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class MessageColorProvider @Inject constructor(
         private val colorProvider: ColorProvider,
         private val vectorPreferences: VectorPreferences) {
+
+    @ColorInt
+    fun getMemberNameTextColor(userId: String): Int {
+        return colorProvider.getColor(getColorFromUserId(userId))
+    }
 
     @ColorInt
     fun getMessageTextColor(sendState: SendState): Int {

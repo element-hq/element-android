@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.common
 
+import im.vector.matrix.android.internal.session.TestInterceptor
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request
@@ -37,13 +38,19 @@ import javax.net.ssl.HttpsURLConnection
  *      AutoDiscovery().findClientConfig("matrix.org", <callback>)
  * </code>
  */
-class MockOkHttpInterceptor : Interceptor {
+class MockOkHttpInterceptor : TestInterceptor {
 
     private var rules: ArrayList<Rule> = ArrayList()
 
     fun addRule(rule: Rule) {
         rules.add(rule)
     }
+
+    fun clearRules() {
+        rules.clear()
+    }
+
+    override var sessionId: String? = null
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()

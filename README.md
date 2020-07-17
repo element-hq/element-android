@@ -11,8 +11,8 @@ RiotX is an Android Matrix Client currently in beta but in active development.
 
 It is a total rewrite of [Riot-Android](https://github.com/vector-im/riot-android) with a new user experience. RiotX will become the official replacement as soon as all features are implemented.
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=im.vector.riotx)
-[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.riotx)
+[<img src="resources/img/google-play-badge.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=im.vector.riotx)
+[<img src="resources/img/f-droid-badge.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.riotx)
 
 Nightly build: [![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f66c690f7788bc6aa80a7628e37f3.svg?branch=develop)](https://buildkite.com/matrix-dot-org/riotx-android/builds?branch=develop)
 

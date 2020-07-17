@@ -22,10 +22,8 @@ import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import io.realm.Realm
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,22 +43,22 @@ class CryptoStoreTest : InstrumentedTest {
         Realm.init(context())
     }
 
-    @Test
-    fun test_metadata_realm_ok() {
-        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore()
-
-        assertFalse(cryptoStore.hasData())
-
-        cryptoStore.open()
-
-        assertEquals("deviceId_sample", cryptoStore.getDeviceId())
-
-        assertTrue(cryptoStore.hasData())
-
-        // Cleanup
-        cryptoStore.close()
-        cryptoStore.deleteStore()
-    }
+//    @Test
+//    fun test_metadata_realm_ok() {
+//        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore()
+//
+//        assertFalse(cryptoStore.hasData())
+//
+//        cryptoStore.open()
+//
+//        assertEquals("deviceId_sample", cryptoStore.getDeviceId())
+//
+//        assertTrue(cryptoStore.hasData())
+//
+//        // Cleanup
+//        cryptoStore.close()
+//        cryptoStore.deleteStore()
+//    }
 
     @Test
     fun test_lastSessionUsed() {

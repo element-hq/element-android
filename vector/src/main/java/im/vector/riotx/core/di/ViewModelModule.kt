@@ -22,6 +22,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.core.platform.ConfigurationViewModel
+import im.vector.riotx.features.call.SharedActiveCallViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
@@ -35,7 +36,6 @@ import im.vector.riotx.features.reactions.EmojiChooserViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
-import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
 interface ViewModelModule {
@@ -49,11 +49,6 @@ interface ViewModelModule {
     /**
      *  Below are bindings for the androidx view models (which extend ViewModel). Will be converted to MvRx ViewModel in the future.
      */
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(SignOutViewModel::class)
-    fun bindSignOutViewModel(viewModel: SignOutViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -84,6 +79,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SharedActiveCallViewModel::class)
+    fun bindSharedActiveCallViewModel(viewModel: SharedActiveCallViewModel): ViewModel
 
     @Binds
     @IntoMap

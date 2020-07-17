@@ -84,7 +84,7 @@
     <string name="local_address_book_header">Agenda de endereços local</string>
     <string name="matrix_only_filter">Apenas contatos Matrix</string>
     <string name="no_conversation_placeholder">Não há conversas</string>
-    <string name="no_contact_access_placeholder">Você não autorizou o Riot a acessar seus contatos locais</string>
+    <string name="no_contact_access_placeholder">Você não autorizou o Element a acessar seus contatos locais</string>
     <string name="no_result_placeholder">Nenhum resultado</string>
 
     <!-- Rooms fragment -->
@@ -241,26 +241,26 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
+    <string name="permissions_rationale_msg_storage">Element necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
 
 Por favor, permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
-    <string name="permissions_rationale_msg_camera">Riot necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Por favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
+    <string name="permissions_rationale_msg_record_audio">Element necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
+    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
 
 Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.
+    <string name="permissions_rationale_msg_contacts">Element necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.
 
-Por favor, autorize o acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita sua permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.
+Por favor, autorize o acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Element.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element necessita sua permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.
 
-Você autoriza o Riot a acessar seus contatos?</string>
+Você autoriza o Element a acessar seus contatos?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Desculpe. A ação não foi realizada, por falta de permissão</string>
 
@@ -651,7 +651,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo. Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear. No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
 
-    <string name="e2e_enabling_on_app_update">Riot agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
+    <string name="e2e_enabling_on_app_update">Element agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contém dispositivos desconhecidos</string>
@@ -908,7 +908,7 @@ Quer adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key_sent">Pedido de chave enviado.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Riot em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Element em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
 
     <plurals name="format_time_s">
         <item quantity="one">%ds</item>
@@ -953,13 +953,13 @@ Quer adicionar alguns agora?</string>
     <string name="settings_deactivate_my_account">Desativar a minha conta</string>
 
     <string name="startup_notification_privacy_title">Privacidade das notificações</string>
-    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerenciar as suas notificações de forma segura e confidencial. Isso poderá impactar o uso da bateria.</string>
+    <string name="startup_notification_privacy_message">Element pode funcionar em segundo plano para gerenciar as suas notificações de forma segura e confidencial. Isso poderá impactar o uso da bateria.</string>
     <string name="startup_notification_privacy_button_grant">Conceder a permissão</string>
     <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
 
     <string name="settings_opt_in_of_analytics">Enviar dados de uso</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot coleta dados de uso anônimos para nos ajudar a melhorar o aplicativo.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilite o envio de dados de uso para nos ajudar a melhorar o Riot.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element coleta dados de uso anônimos para nos ajudar a melhorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilite o envio de dados de uso para nos ajudar a melhorar o Element.</string>
     <string name="settings_opt_in_of_analytics_ok">Sim, eu quero ajudar!</string>
 
     <string name="settings_without_flair">Você não faz parte de nenhuma comunidade atualmente.</string>
@@ -1037,7 +1037,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="auth_accept_policies">Por favor revise e aceite as políticas desse servidor doméstico:</string>
 
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Use o toque padrão da Riot para chamadas recebidas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Use o toque padrão da Element para chamadas recebidas</string>
     <string name="settings_call_ringtone_title">Toque de chamada recebida</string>
     <string name="settings_call_ringtone_dialog_title">Selecione o toque para chamadas:</string>
 
@@ -1068,12 +1068,12 @@ Por favor revise as configurações da conta.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para este dispositivo.</string>
     <string name="room_participants_action_kick">Desconectar</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Notificações não são permitidas para este dispositivo.
-Por favor revise as configurações do Riot.</string>
+Por favor revise as configurações do Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Revisão do Play Services</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK está disponível e atualizado.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services para entregar mensagens push, mas isto não parece está configurado corretamente:
+    <string name="settings_troubleshoot_test_play_services_failed">Element usa Google Play Services para entregar mensagens push, mas isto não parece está configurado corretamente:
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Consertar Play Services</string>
 
@@ -1100,12 +1100,12 @@ Tente reiniciar a aplicação.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Começar na inicialização</string>
     <string name="settings_troubleshoot_test_service_boot_success">Serviço irá iniciar quando o dispositivo for reiniciado.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">O serviço não irá começar quando o dispositivo for reiniciado, você não irá receber notificações até o Riot for aberto uma vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">O serviço não irá começar quando o dispositivo for reiniciado, você não irá receber notificações até o Element for aberto uma vez.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Habilitar Começar na inicialização</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Revisar restrições de segundo plano</string>
     <string name="settings_troubleshoot_test_battery_title">Otimização de bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">Riot não é afetado pela Otimização de Bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">Element não é afetado pela Otimização de Bateria.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Reinicialização Automática do Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desabilitar restrições</string>
 
@@ -1121,11 +1121,11 @@ Tente reiniciar a aplicação.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos da conta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui avatar e alterações no nome de exibição.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
-Na próxima tela, você será solicitado a permitir que o Riot funcione sempre em segundo plano, por favor aceite.</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desabilitadas para o Riot. este teste deve executar usando os dados móveis (sem WIFI).
+    <string name="startup_notification_fdroid_battery_optim_message">Element precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
+Na próxima tela, você será solicitado a permitir que o Element funcione sempre em segundo plano, por favor aceite.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desabilitadas para o Element. este teste deve executar usando os dados móveis (sem WIFI).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão habilitadas para o Riot.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão habilitadas para o Element.
 Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enquanto isto estiver em segundo plano, isto poderá afetar as notificações.
 %1$s</string>
     <string name="settings_send_markdown">Formatação Markdown</string>
@@ -1166,21 +1166,21 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Riot.im - Comunique-se do seu jeito</string>
+    <string name="store_title">Element - Comunique-se do seu jeito</string>
     <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
     <string name="passphrase_create_passphrase">Criar passphrase</string>
     <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
-    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Riot permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
+    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Element permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
 
 Obtenha uma conta matrix.org grátis, obtenha seu próprio servidor em https://modular.im ou use outro servidor Matrix.
 
-Por que escolher o Riot.im?
+Por que escolher o Element?
 
 • COMUNICAÇÃO COMPLETA: Construa salas em torno de suas equipes, seus amigos, sua comunidade - como quiser! Converse, compartilhe arquivos, adicione widgets e faça chamadas de voz e vídeo - tudo de graça.
 
-• INTEGRAÇÕES PODEROSAS: Use o Riot.im com as ferramentas que você conhece e ama. Com Riot.im você pode conversar com usuários e grupos em outros aplicativos de bate-papo.
+• INTEGRAÇÕES PODEROSAS: Use o Element com as ferramentas que você conhece e ama. Com Element você pode conversar com usuários e grupos em outros aplicativos de bate-papo.
 
 • PRIVADO E SEGURO: Mantenha suas conversas em segredo. A criptografia de ponta a ponta do estado da arte garante que a comunicação privada permaneça privada.
 
@@ -1190,7 +1190,7 @@ Por que escolher o Riot.im?
 
     <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
 
-    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Riot.im.
+    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Element.
 O changelog completo pode ser encontrado aqui: %1$s.
 Para garantir que você não perca nada, mantenha suas atualizações ativadas."</string>
     <string name="title_activity_keys_backup_setup">Backup da chave</string>
@@ -1226,16 +1226,16 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Verifique as configurações</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nEste erro está fora do controle do Riot e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
+\nEste erro está fora do controle do Element e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
     <string name="ignore">Ignorar</string>
 
     <string name="auth_login_sso">Entre com o logon único</string>
     <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
     <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nEste erro está fora de controle da Riot. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
+\nEste erro está fora de controle da Element. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
     <string name="notification_sync_init">Inicializando o serviço</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Riot. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Element. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
 
     <string name="settings_noisy_notifications_preferences">Configurar notificações ruidosas</string>

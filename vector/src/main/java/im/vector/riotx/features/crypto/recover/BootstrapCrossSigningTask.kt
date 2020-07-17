@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.util.awaitCallback
@@ -40,12 +41,14 @@ import im.vector.riotx.core.platform.ViewModelTask
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
+import java.lang.IllegalArgumentException
 import java.util.UUID
 import javax.inject.Inject
 
 sealed class BootstrapResult {
 
     data class Success(val keyInfo: SsssKeyCreationInfo) : BootstrapResult()
+    object SuccessCrossSigningOnly : BootstrapResult()
 
     abstract class Failure(val error: String?) : BootstrapResult()
 
@@ -58,7 +61,7 @@ sealed class BootstrapResult {
     class FailedToStorePrivateKeyInSSSS(failure: Throwable) : Failure(failure.localizedMessage)
     object MissingPrivateKey : Failure(null)
 
-    data class PasswordAuthFlowMissing(val sessionId: String, val userId: String) : Failure(null)
+    data class PasswordAuthFlowMissing(val sessionId: String) : Failure(null)
 }
 
 interface BootstrapProgressListener {
@@ -67,31 +70,48 @@ interface BootstrapProgressListener {
 
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
+        val initOnlyCrossSigning: Boolean = false,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null
 )
 
+// TODO Rename to CreateServerRecovery
 class BootstrapCrossSigningTask @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider
 ) : ViewModelTask<Params, BootstrapResult> {
 
     override suspend fun execute(params: Params): BootstrapResult {
-        params.progressListener?.onProgress(
-                WaitingViewData(
-                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
-                        isIndeterminate = true
-                )
-        )
         val crossSigningService = session.cryptoService().crossSigningService()
 
-        try {
-            awaitCallback<Unit> {
-                crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+        Timber.d("## BootstrapCrossSigningTask: initXSOnly:${params.initOnlyCrossSigning} Starting...")
+        // Ensure cross-signing is initialized. Due to migration it is maybe not always correctly initialized
+        if (!crossSigningService.isCrossSigningInitialized()) {
+            Timber.d("## BootstrapCrossSigningTask: Cross signing not enabled, so initialize")
+            params.progressListener?.onProgress(
+                    WaitingViewData(
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
+                            isIndeterminate = true
+                    )
+            )
+
+            try {
+                awaitCallback<Unit> {
+                    crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+                }
+                if (params.initOnlyCrossSigning) {
+                    return BootstrapResult.SuccessCrossSigningOnly
+                }
+            } catch (failure: Throwable) {
+                return handleInitializeXSigningError(failure)
             }
-        } catch (failure: Throwable) {
-            return handleInitializeXSigningError(failure)
+        } else {
+            Timber.d("## BootstrapCrossSigningTask: Cross signing already setup, go to 4S setup")
+            if (params.initOnlyCrossSigning) {
+                // not sure how this can happen??
+                return handleInitializeXSigningError(IllegalArgumentException("Cross signing already setup"))
+            }
         }
 
         val keyInfo: SsssKeyCreationInfo
@@ -103,6 +123,8 @@ class BootstrapCrossSigningTask @Inject constructor(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2),
                         isIndeterminate = true)
         )
+
+        Timber.d("## BootstrapCrossSigningTask: Creating 4S key with pass: ${params.passphrase != null}")
         try {
             keyInfo = awaitCallback {
                 params.passphrase?.let { passphrase ->
@@ -125,6 +147,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 }
             }
         } catch (failure: Failure) {
+            Timber.e("## BootstrapCrossSigningTask: Creating 4S - Failed to generate key <${failure.localizedMessage}>")
             return BootstrapResult.FailedToCreateSSSSKey(failure)
         }
 
@@ -133,19 +156,24 @@ class BootstrapCrossSigningTask @Inject constructor(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key),
                         isIndeterminate = true)
         )
+
+        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Set default key")
         try {
             awaitCallback<Unit> {
                 ssssService.setDefaultKey(keyInfo.keyId, it)
             }
         } catch (failure: Failure) {
             // Maybe we could just ignore this error?
+            Timber.e("## BootstrapCrossSigningTask: Creating 4S - Set default key error <${failure.localizedMessage}>")
             return BootstrapResult.FailedToSetDefaultSSSSKey(failure)
         }
 
+        Timber.d("## BootstrapCrossSigningTask: Creating 4S - gathering private keys")
         val xKeys = crossSigningService.getCrossSigningPrivateKeys()
         val mskPrivateKey = xKeys?.master ?: return BootstrapResult.MissingPrivateKey
         val sskPrivateKey = xKeys.selfSigned ?: return BootstrapResult.MissingPrivateKey
         val uskPrivateKey = xKeys.user ?: return BootstrapResult.MissingPrivateKey
+        Timber.d("## BootstrapCrossSigningTask: Creating 4S - gathering private keys success")
 
         try {
             params.progressListener?.onProgress(
@@ -154,6 +182,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             isIndeterminate = true
                     )
             )
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Storing MSK...")
             awaitCallback<Unit> {
                 ssssService.storeSecret(
                         MASTER_KEY_SSSS_NAME,
@@ -167,6 +196,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             isIndeterminate = true
                     )
             )
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Storing USK...")
             awaitCallback<Unit> {
                 ssssService.storeSecret(
                         USER_SIGNING_KEY_SSSS_NAME,
@@ -180,6 +210,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_ssk), isIndeterminate = true
                     )
             )
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Storing SSK...")
             awaitCallback<Unit> {
                 ssssService.storeSecret(
                         SELF_SIGNING_KEY_SSSS_NAME,
@@ -188,6 +219,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 )
             }
         } catch (failure: Failure) {
+            Timber.e("## BootstrapCrossSigningTask: Creating 4S - Failed to store keys <${failure.localizedMessage}>")
             // Maybe we could just ignore this error?
             return BootstrapResult.FailedToStorePrivateKeyInSSSS(failure)
         }
@@ -199,7 +231,14 @@ class BootstrapCrossSigningTask @Inject constructor(
                 )
         )
         try {
-            if (session.cryptoService().keysBackupService().keysBackupVersion == null) {
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Checking megolm backup")
+
+            // First ensure that in sync
+            val serverVersion = awaitCallback<KeysVersionResult?> {
+                session.cryptoService().keysBackupService().getCurrentVersion(it)
+            }
+            if (serverVersion == null) {
+                Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
                 val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
                     session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
                 }
@@ -207,6 +246,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                     session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
                 }
                 // Save it for gossiping
+                Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
                 session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
 
                 awaitCallback<Unit> {
@@ -218,11 +258,36 @@ class BootstrapCrossSigningTask @Inject constructor(
                         )
                     }
                 }
+            } else {
+                Timber.d("## BootstrapCrossSigningTask: Creating 4S - Existing megolm backup found")
+                // ensure we store existing backup secret if we have it!
+                val knownSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
+                if (knownSecret != null && knownSecret.version == serverVersion.version) {
+                    // check it matches
+                    val isValid = awaitCallback<Boolean> {
+                        session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownSecret.recoveryKey, it)
+                    }
+                    if (isValid) {
+                        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key valid and known")
+                        awaitCallback<Unit> {
+                            extractCurveKeyFromRecoveryKey(knownSecret.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                                ssssService.storeSecret(
+                                        KEYBACKUP_SECRET_SSSS_NAME,
+                                        secret,
+                                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it
+                                )
+                            }
+                        }
+                    } else {
+                        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key is unknown by this session")
+                    }
+                }
             }
         } catch (failure: Throwable) {
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
         }
 
+        Timber.d("## BootstrapCrossSigningTask: initXSOnly:${params.initOnlyCrossSigning} Finished")
         return BootstrapResult.Success(keyInfo)
     }
 
@@ -232,9 +297,11 @@ class BootstrapCrossSigningTask @Inject constructor(
         } else {
             val registrationFlowResponse = failure.toRegistrationFlowResponse()
             if (registrationFlowResponse != null) {
-                if (registrationFlowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } != true) {
+                return if (registrationFlowResponse.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }) {
+                    BootstrapResult.PasswordAuthFlowMissing(registrationFlowResponse.session ?: "")
+                } else {
                     // can't do this from here
-                    return BootstrapResult.UnsupportedAuthFlow()
+                    BootstrapResult.UnsupportedAuthFlow()
                 }
             }
         }

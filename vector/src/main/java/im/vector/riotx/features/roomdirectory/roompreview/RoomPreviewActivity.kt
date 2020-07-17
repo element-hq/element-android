@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.appcompat.widget.Toolbar
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
@@ -35,7 +36,8 @@ data class RoomPreviewData(
         val roomAlias: String?,
         val topic: String?,
         val worldReadable: Boolean,
-        val avatarUrl: String?
+        val avatarUrl: String?,
+        val homeServer: String?
 ) : Parcelable {
     val matrixItem: MatrixItem
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
@@ -46,7 +48,7 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
     companion object {
         private const val ARG = "ARG"
 
-        fun getIntent(context: Context, publicRoom: PublicRoom): Intent {
+        fun getIntent(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData): Intent {
             return Intent(context, RoomPreviewActivity::class.java).apply {
                 putExtra(ARG, RoomPreviewData(
                         roomId = publicRoom.roomId,
@@ -54,7 +56,8 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
                         roomAlias = publicRoom.getPrimaryAlias(),
                         topic = publicRoom.topic,
                         worldReadable = publicRoom.worldReadable,
-                        avatarUrl = publicRoom.avatarUrl
+                        avatarUrl = publicRoom.avatarUrl,
+                        homeServer = roomDirectoryData.homeServer
                 ))
             }
         }

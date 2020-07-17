@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -30,14 +31,7 @@ data class RoomListViewState(
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val roomFilter: String = "",
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
-        // List of roomIds that the user wants to join
-        val joiningRoomsIds: Set<String> = emptySet(),
-        // List of roomIds that the user wants to join, but an error occurred
-        val joiningErrorRoomsIds: Set<String> = emptySet(),
-        // List of roomIds that the user wants to join
-        val rejectingRoomsIds: Set<String> = emptySet(),
-        // List of roomIds that the user wants to reject, but an error occurred
-        val rejectingErrorRoomsIds: Set<String> = emptySet(),
+        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,

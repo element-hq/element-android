@@ -55,7 +55,10 @@ import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.dialogs.DialogLocker
+import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
@@ -159,12 +162,12 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         return this
     }
 
-    protected fun Disposable.disposeOnDestroy(): Disposable {
+    protected fun Disposable.disposeOnDestroy() {
         uiDisposables.add(this)
-        return this
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.i("onCreate Activity ${this.javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
         screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
         val timeForInjection = measureTimeMillis {
@@ -230,7 +233,30 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
                         activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
-        }
+            is GlobalError.CertificateError     ->
+                handleCertificateError(globalError)
+        }.exhaustive
+    }
+
+    private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
+        vectorComponent()
+                .unrecognizedCertificateDialog()
+                .show(this,
+                        certificateError.fingerprint,
+                        object : UnrecognizedCertificateDialog.Callback {
+                            override fun onAccept() {
+                                // TODO Support certificate error once logged
+                            }
+
+                            override fun onIgnore() {
+                                // TODO Support certificate error once logged
+                            }
+
+                            override fun onReject() {
+                                // TODO Support certificate error once logged
+                            }
+                        }
+                )
     }
 
     protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
@@ -252,6 +278,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onDestroy() {
         super.onDestroy()
+        Timber.i("onDestroy Activity ${this.javaClass.simpleName}")
         unBinder?.unbind()
         unBinder = null
 
@@ -279,6 +306,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onPause() {
         super.onPause()
+        Timber.i("onPause Activity ${this.javaClass.simpleName}")
 
         rageShake.stop()
 

@@ -84,15 +84,19 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             copy(asyncCreateRoomRequest = Loading())
         }
 
-        val createRoomParams = CreateRoomParams(
-                name = state.roomName.takeIf { it.isNotBlank() },
-                // Directory visibility
-                visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE,
-                // Public room
-                preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
-        )
-                // Encryption
-                .enableEncryptionWithAlgorithm(state.isEncrypted)
+        val createRoomParams = CreateRoomParams()
+                .apply {
+                    name = state.roomName.takeIf { it.isNotBlank() }
+                    // Directory visibility
+                    visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
+                    // Public room
+                    preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+
+                    // Encryption
+                    if (state.isEncrypted) {
+                        enableEncryption()
+                    }
+                }
 
         session.createRoom(createRoomParams, object : MatrixCallback<String> {
             override fun onSuccess(data: String) {

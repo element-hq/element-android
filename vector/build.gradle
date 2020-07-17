@@ -14,8 +14,9 @@ androidExtensions {
     experimental = true
 }
 
-ext.versionMajor = 0
-ext.versionMinor = 22
+// Note: 2 digits max for each value
+ext.versionMajor = 1
+ext.versionMinor = 0
 ext.versionPatch = 0
 ext.scVersion = 6
 
@@ -106,10 +107,14 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
     compileSdkVersion 29
+
+    // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
+    // Ref: https://issuetracker.google.com/issues/144111441
+    ndkVersion "21.3.6528147"
+
     defaultConfig {
         applicationId "de.spiritcroc.riotx"
-        // Set to API 19 because motionLayout is min API 18.
-        // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
+        // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
@@ -193,8 +198,14 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
+                obfuscate false
+                optimizeCode true
+                proguardFiles 'proguard-rules.pro'
+            }
         }
     }
 
@@ -226,6 +237,8 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
+
+        abortOnError true
     }
 
     compileOptions {
@@ -250,16 +263,16 @@ android {
 dependencies {
 
     def epoxy_version = '3.11.0'
-    def fragment_version = '1.2.0'
+    def fragment_version = '1.2.5'
     def arrow_version = "0.8.2"
     def coroutines_version = "1.3.2"
     def markwon_version = '4.1.2'
     def big_image_viewer_version = '1.6.2'
-    def glide_version = '4.10.0'
+    def glide_version = '4.11.0'
     def moshi_version = '1.8.0'
     def daggerVersion = '2.25.4'
     def autofill_version = "1.0.0"
-    def work_version = '2.3.3'
+    def work_version = '2.3.4'
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
 
@@ -267,18 +280,20 @@ dependencies {
     implementation project(":matrix-sdk-android-rx")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
+    implementation project(":attachment-viewer")
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha04"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    // Keep at 2.0.0-beta4 at the moment, as updating is breaking some UI
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
@@ -314,17 +329,17 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
 
     // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
     implementation 'me.gujun.android:span:1.7'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
@@ -356,6 +371,10 @@ dependencies {
     implementation "com.github.piasy:GlideImageLoader:$big_image_viewer_version"
     implementation "com.github.piasy:ProgressPieIndicator:$big_image_viewer_version"
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
+
+    // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.danikula:videocache:2.7.1'
@@ -373,7 +392,7 @@ dependencies {
     // gplay flavor only
     // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade
     // implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    gplayImplementation('com.google.firebase:firebase-messaging:20.0.0') {
+    gplayImplementation('com.google.firebase:firebase-messaging:20.2.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -382,9 +401,12 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji:emoji-appcompat:1.0.0"
+    implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+
+    // TODO meant for development purposes only
+    implementation 'org.webrtc:google-webrtc:1.0.+'
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

@@ -32,8 +32,8 @@ data class Fingerprint(
     }
 
     @Throws(CertificateException::class)
-    fun matchesCert(cert: X509Certificate): Boolean {
-        var o: Fingerprint? = when (hashType) {
+    internal fun matchesCert(cert: X509Certificate): Boolean {
+        val o: Fingerprint? = when (hashType) {
             HashType.SHA256 -> newSha256Fingerprint(cert)
             HashType.SHA1   -> newSha1Fingerprint(cert)
         }
@@ -57,7 +57,7 @@ data class Fingerprint(
         return result
     }
 
-    companion object {
+    internal companion object {
 
         @Throws(CertificateException::class)
         fun newSha256Fingerprint(cert: X509Certificate): Fingerprint {
@@ -76,8 +76,9 @@ data class Fingerprint(
         }
     }
 
+    @JsonClass(generateAdapter = false)
     enum class HashType {
         @Json(name = "sha-1") SHA1,
-        @Json(name = "sha-256")SHA256
+        @Json(name = "sha-256") SHA256
     }
 }

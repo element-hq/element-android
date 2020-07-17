@@ -17,8 +17,9 @@
 #
 
 echo "Configure RiotX Template..."
+if [ -z ${ANDROID_STUDIO+x} ]; then ANDROID_STUDIO="/Applications/Android Studio.app/Contents"; fi
 {
-ln -s $(pwd)/RiotXFeature /Applications/Android\ Studio.app/Contents/plugins/android/lib/templates/other
+ln -s $(pwd)/RiotXFeature "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other"
 } && {
   echo "Please restart Android Studio."
 }

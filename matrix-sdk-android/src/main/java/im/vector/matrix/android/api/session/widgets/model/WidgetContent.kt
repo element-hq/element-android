@@ -21,6 +21,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
 
+/**
+ * Ref: https://github.com/matrix-org/matrix-doc/issues/1236
+ */
 @JsonClass(generateAdapter = true)
 data class WidgetContent(
         @Json(name = "creatorUserId") val creatorUserId: String? = null,

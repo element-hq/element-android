@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.core.error.DefaultErrorFormatter
 import im.vector.riotx.core.error.ErrorFormatter
@@ -62,6 +63,12 @@ abstract class VectorModule {
         fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
             // TODO: handle session injection better
             return activeSessionHolder.getActiveSession()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesLegacySessionImporter(matrix: Matrix): LegacySessionImporter {
+            return matrix.legacySessionImporter()
         }
 
         @Provides

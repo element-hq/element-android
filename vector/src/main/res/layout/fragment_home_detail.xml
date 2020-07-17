@@ -28,7 +28,7 @@
                 android:contentDescription="@string/a11y_open_drawer"
                 tools:src="@tools:sample/avatars" />
 
-            <im.vector.riotx.core.platform.EllipsizingTextView
+            <TextView
                 android:id="@+id/groupToolbarTitleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,9 +59,19 @@
         android:layout_height="wrap_content"
         android:background="?riotx_keys_backup_banner_accent_color"
         android:minHeight="67dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+
+    <im.vector.riotx.core.ui.views.ActiveCallView
+        android:id="@+id/activeCallView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
+        tools:visibility="visible" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/roomListContainer"
@@ -69,7 +79,28 @@
         android:layout_height="0dp"
         android:background="?riotx_header_panel_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@+id/homeKeysBackupBanner" />
+        app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/activeCallPiPWrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activeCallView">
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/activeCallPiP"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -77,6 +108,7 @@
         android:layout_height="48dp"
         android:background="?riotx_background"
         app:itemIconSize="20dp"
+        app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

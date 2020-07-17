@@ -27,6 +27,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.annotation.RequiresApi
+import androidx.core.content.edit
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
@@ -152,9 +153,9 @@ object CompatUtil {
                                         .build())
                         key = generator.generateKey()
 
-                        sharedPreferences.edit()
-                                .putInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
-                                .apply()
+                        sharedPreferences.edit {
+                            putInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
+                        }
                     }
                 }
             } else {
@@ -188,10 +189,10 @@ object CompatUtil {
                     cipher.init(Cipher.WRAP_MODE, keyPair.public)
                     val wrappedAesKey = cipher.wrap(key)
 
-                    sharedPreferences.edit()
-                            .putString(AES_WRAPPED_PROTECTION_KEY_SHARED_PREFERENCE, Base64.encodeToString(wrappedAesKey, 0))
-                            .putInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
-                            .apply()
+                    sharedPreferences.edit {
+                        putString(AES_WRAPPED_PROTECTION_KEY_SHARED_PREFERENCE, Base64.encodeToString(wrappedAesKey, 0))
+                        putInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
+                    }
                 }
             }
 

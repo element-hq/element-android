@@ -26,13 +26,14 @@ import im.vector.matrix.android.internal.database.model.DraftEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.UserDraftsEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
-class DraftRepository @Inject constructor(private val monarchy: Monarchy) {
+class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     suspend fun saveDraft(roomId: String, userDraft: UserDraft) {
         monarchy.awaitTransaction {

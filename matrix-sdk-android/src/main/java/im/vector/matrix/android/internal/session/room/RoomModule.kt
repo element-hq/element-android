@@ -24,6 +24,8 @@ import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasTask
+import im.vector.matrix.android.internal.session.room.alias.DefaultAddRoomAliasTask
 import im.vector.matrix.android.internal.session.room.alias.DefaultGetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -42,8 +44,8 @@ import im.vector.matrix.android.internal.session.room.membership.joining.InviteT
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
-import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
-import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
+import im.vector.matrix.android.internal.session.room.membership.threepid.DefaultInviteThreePidTask
+import im.vector.matrix.android.internal.session.room.membership.threepid.InviteThreePidTask
 import im.vector.matrix.android.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
@@ -62,10 +64,10 @@ import im.vector.matrix.android.internal.session.room.tags.AddTagToRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DefaultAddTagToRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DefaultDeleteTagFromRoomTask
 import im.vector.matrix.android.internal.session.room.tags.DeleteTagFromRoomTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchNextTokenAndPaginateTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.FetchNextTokenAndPaginateTask
+import im.vector.matrix.android.internal.session.room.timeline.FetchTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
@@ -128,9 +130,6 @@ internal abstract class RoomModule {
     abstract fun bindFileService(service: DefaultFileService): FileService
 
     @Binds
-    abstract fun bindEventRelationsAggregationTask(task: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
-
-    @Binds
     abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
 
     @Binds
@@ -143,6 +142,9 @@ internal abstract class RoomModule {
     abstract fun bindInviteTask(task: DefaultInviteTask): InviteTask
 
     @Binds
+    abstract fun bindInviteThreePidTask(task: DefaultInviteThreePidTask): InviteThreePidTask
+
+    @Binds
     abstract fun bindJoinRoomTask(task: DefaultJoinRoomTask): JoinRoomTask
 
     @Binds
@@ -153,9 +155,6 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask
-
-    @Binds
-    abstract fun bindPruneEventTask(task: DefaultPruneEventTask): PruneEventTask
 
     @Binds
     abstract fun bindSetReadMarkersTask(task: DefaultSetReadMarkersTask): SetReadMarkersTask
@@ -182,13 +181,16 @@ internal abstract class RoomModule {
     abstract fun bindPaginationTask(task: DefaultPaginationTask): PaginationTask
 
     @Binds
-    abstract fun bindFetchNextTokenAndPaginateTask(task: DefaultFetchNextTokenAndPaginateTask): FetchNextTokenAndPaginateTask
+    abstract fun bindFetchNextTokenAndPaginateTask(task: DefaultFetchTokenAndPaginateTask): FetchTokenAndPaginateTask
 
     @Binds
     abstract fun bindFetchEditHistoryTask(task: DefaultFetchEditHistoryTask): FetchEditHistoryTask
 
     @Binds
     abstract fun bindGetRoomIdByAliasTask(task: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
+
+    @Binds
+    abstract fun bindAddRoomAliasTask(task: DefaultAddRoomAliasTask): AddRoomAliasTask
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask

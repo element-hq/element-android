@@ -73,6 +73,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var dimensionConverter: DimensionConverter? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.root.setOnClickListener { itemClickAction?.invoke() }
 
         val shield = TrustUtils.shieldForTrust(

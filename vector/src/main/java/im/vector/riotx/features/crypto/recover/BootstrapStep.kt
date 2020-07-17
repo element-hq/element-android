@@ -17,6 +17,14 @@
 package im.vector.riotx.features.crypto.recover
 
 /**
+ * TODO The schema is not up to date
+ *
+ *                        ┌───────────────────────────────────┐
+ *                        │  BootstrapStep.SetupSecureBackup  │
+ *                        └───────────────────────────────────┘
+ *                                          │
+ *                                          │
+ *                                          ▼
  *                             ┌─────────────────────────┐
  *                             │ User has signing keys?  │──────────── Account
  *                             └─────────────────────────┘            Creation ?
@@ -77,10 +85,16 @@ package im.vector.riotx.features.crypto.recover
  */
 
 sealed class BootstrapStep {
+    // This is the first step
+    object CheckingMigration : BootstrapStep()
+
+    // Use will be asked to choose between passphrase or recovery key, or to start process if a key backup exists
+    data class FirstForm(val keyBackUpExist: Boolean, val reset: Boolean = false) : BootstrapStep()
+
     data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
     data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
+
     data class AccountPassword(val isPasswordVisible: Boolean, val failure: String? = null) : BootstrapStep()
-    object CheckingMigration : BootstrapStep()
 
     abstract class GetBackupSecretForMigration : BootstrapStep()
     data class GetBackupSecretPassForMigration(val isPasswordVisible: Boolean, val useKey: Boolean) : GetBackupSecretForMigration()
@@ -89,4 +103,11 @@ sealed class BootstrapStep {
     object Initializing : BootstrapStep()
     data class SaveRecoveryKey(val isSaved: Boolean) : BootstrapStep()
     object DoneSuccess : BootstrapStep()
+}
+
+fun BootstrapStep.GetBackupSecretForMigration.useKey(): Boolean {
+    return when (this) {
+        is BootstrapStep.GetBackupSecretPassForMigration -> useKey
+        else                                             -> true
+    }
 }

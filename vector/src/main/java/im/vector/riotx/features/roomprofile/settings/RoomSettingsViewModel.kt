@@ -23,9 +23,15 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
+import io.reactivex.Completable
+import io.reactivex.Observable
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
@@ -49,41 +55,133 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observeRoomSummary()
+        observeState()
+    }
+
+    private fun observeState() {
+        selectSubscribe(
+                RoomSettingsViewState::newName,
+                RoomSettingsViewState::newCanonicalAlias,
+                RoomSettingsViewState::newTopic,
+                RoomSettingsViewState::newHistoryVisibility,
+                RoomSettingsViewState::roomSummary) { newName,
+                                                      newCanonicalAlias,
+                                                      newTopic,
+                                                      newHistoryVisibility,
+                                                      asyncSummary ->
+            val summary = asyncSummary()
+            setState {
+                copy(
+                        showSaveAction = summary?.name != newName
+                                || summary?.topic != newTopic
+                                || summary?.canonicalAlias != newCanonicalAlias?.takeIf { it.isNotEmpty() }
+                                || newHistoryVisibility != null
+                )
+            }
+        }
     }
 
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    copy(roomSummary = async)
+                    val roomSummary = async.invoke()
+                    copy(
+                            historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
+                            roomSummary = async,
+                            newName = roomSummary?.name,
+                            newTopic = roomSummary?.topic,
+                            newCanonicalAlias = roomSummary?.canonicalAlias
+                    )
                 }
+
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val permissions = RoomSettingsViewState.ActionPermissions(
+                            canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
+                            canChangeTopic =  powerLevelsHelper.isUserAllowedToSend(session.myUserId,  true, EventType.STATE_ROOM_TOPIC),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_CANONICAL_ALIAS),
+                            canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
+                            canEnableEncryption =  powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                    )
+                    setState { copy(actionPermissions = permissions) }
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
-            is RoomSettingsAction.EnableEncryption -> handleEnableEncryption()
+            is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
+            is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
+            is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
+            is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
+            is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
+            is RoomSettingsAction.Save                     -> saveSettings()
+        }.exhaustive
+    }
+
+    private fun saveSettings() = withState { state ->
+        postLoading(true)
+
+        val operationList = mutableListOf<Completable>()
+
+        val summary = state.roomSummary.invoke()
+
+        if (summary?.name != state.newName) {
+            operationList.add(room.rx().updateName(state.newName ?: ""))
         }
+        if (summary?.topic != state.newTopic) {
+            operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
+        }
+
+        if (state.newCanonicalAlias != null && summary?.canonicalAlias != state.newCanonicalAlias.takeIf { it.isNotEmpty() }) {
+            operationList.add(room.rx().addRoomAlias(state.newCanonicalAlias))
+            operationList.add(room.rx().updateCanonicalAlias(state.newCanonicalAlias))
+        }
+
+        if (state.newHistoryVisibility != null) {
+            operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility))
+        }
+
+        Observable
+                .fromIterable(operationList)
+                .concatMapCompletable { it }
+                .subscribe(
+                        {
+                            postLoading(false)
+                            setState { copy(newHistoryVisibility = null) }
+                            _viewEvents.post(RoomSettingsViewEvents.Success)
+                        },
+                        {
+                            postLoading(false)
+                            _viewEvents.post(RoomSettingsViewEvents.Failure(it))
+                        }
+                )
     }
 
     private fun handleEnableEncryption() {
-        setState {
-            copy(isLoading = true)
-        }
+        postLoading(true)
 
         room.enableEncryption(callback = object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(isLoading = false)
-                }
-
+                postLoading(false)
                 _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
             }
 
             override fun onSuccess(data: Unit) {
-                setState {
-                    copy(isLoading = false)
-                }
+                postLoading(false)
             }
         })
+    }
+
+    private fun postLoading(isLoading: Boolean) {
+        setState {
+            copy(isLoading = isLoading)
+        }
     }
 }

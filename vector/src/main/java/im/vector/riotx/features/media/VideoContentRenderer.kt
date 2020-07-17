@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.media
 
-import android.os.Parcelable
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -38,12 +37,13 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     @Parcelize
     data class Data(
-            val eventId: String,
-            val filename: String,
-            val url: String?,
-            val elementToDecrypt: ElementToDecrypt?,
+            override val eventId: String,
+            override val filename: String,
+            override val mimeType: String?,
+            override val url: String?,
+            override val elementToDecrypt: ElementToDecrypt?,
             val thumbnailMediaData: ImageContentRenderer.Data
-    ) : Parcelable
+    ) : AttachmentData
 
     fun render(data: Data,
                thumbnailView: ImageView,
@@ -64,14 +64,15 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession()
+                activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                FileService.DownloadMode.FOR_INTERNAL_USE,
-                                data.eventId,
-                                data.filename,
-                                data.url,
-                                data.elementToDecrypt,
-                                object : MatrixCallback<File> {
+                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                                id = data.eventId,
+                                fileName = data.filename,
+                                mimeType = data.mimeType,
+                                url = data.url,
+                                elementToDecrypt = data.elementToDecrypt,
+                                callback = object : MatrixCallback<File> {
                                     override fun onSuccess(data: File) {
                                         thumbnailView.isVisible = false
                                         loadingView.isVisible = false
@@ -102,14 +103,15 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession()
+                activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                FileService.DownloadMode.FOR_INTERNAL_USE,
-                                data.eventId,
-                                data.filename,
-                                data.url,
-                                null,
-                                object : MatrixCallback<File> {
+                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                                id = data.eventId,
+                                fileName = data.filename,
+                                mimeType = data.mimeType,
+                                url = data.url,
+                                elementToDecrypt = null,
+                                callback = object : MatrixCallback<File> {
                                     override fun onSuccess(data: File) {
                                         thumbnailView.isVisible = false
                                         loadingView.isVisible = false

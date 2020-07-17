@@ -40,6 +40,7 @@ abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Ho
     var onClickListener: ReactionClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.emojiText.text = emojiItem.emoji
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name

@@ -25,9 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -41,6 +38,7 @@ import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.ReadMarkerVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
@@ -60,6 +58,7 @@ import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+                                                  private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -75,8 +74,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
-        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
-        fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
+//        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
+//        fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
         fun onEditedDecorationClicked(informationData: MessageInformationData)
 
         // TODO move all callbacks to this?
@@ -89,8 +88,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface BaseCallback {
-        fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View)
-        fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean
+        fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View)
+        fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean
     }
 
     interface AvatarCallback {
@@ -227,6 +226,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         timelineMediaSizeProvider.recyclerView = null
         contentUploadStateTrackerBinder.clear()
+        contentDownloadStateTrackerBinder.clear()
         timeline?.removeListener(this)
         super.onDetachedFromRecyclerView(recyclerView)
     }
@@ -283,13 +283,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun getModels(): List<EpoxyModel<*>> {
         buildCacheItemsIfNeeded()
         return modelCache
-                .map {
-                    val eventModel = if (it == null || mergedHeaderItemFactory.isCollapsed(it.localId)) {
+                .map { cacheItemData ->
+                    val eventModel = if (cacheItemData == null || mergedHeaderItemFactory.isCollapsed(cacheItemData.localId)) {
                         null
                     } else {
-                        it.eventModel
+                        cacheItemData.eventModel
                     }
-                    listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
+                    listOf(eventModel,
+                            cacheItemData?.mergedHeaderModel,
+                            cacheItemData?.formattedDayModel?.takeIf { eventModel != null || cacheItemData.mergedHeaderModel != null }
+                    )
                 }
                 .flatten()
                 .filterNotNull()

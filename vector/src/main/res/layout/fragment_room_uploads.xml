@@ -8,6 +8,8 @@
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/VectorAppBarLayoutStyle"
+        android:id="@+id/roomUploadsAppBar"
+        android:transitionName="toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
@@ -46,7 +48,7 @@
                     tools:ignore="MissingConstraints"
                     tools:src="@drawable/ic_shield_trusted" />
 
-                <im.vector.riotx.core.platform.EllipsizingTextView
+                <TextView
                     android:id="@+id/roomUploadsToolbarTitleView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

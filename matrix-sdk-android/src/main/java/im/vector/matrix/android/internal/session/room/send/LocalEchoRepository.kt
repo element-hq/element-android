@@ -29,11 +29,14 @@ import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -42,19 +45,19 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,
+internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
                                                        private val timelineEventMapper: TimelineEventMapper) {
 
-    suspend fun createLocalEcho(event: Event) {
+    fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
         val senderId = event.senderId ?: throw IllegalStateException("You should have set a senderIf for your event")
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
         val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val eventEntity = event.toEntity(roomId, SendState.UNSENT)
+            val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = TimelineEventEntity.nextId(realm)
@@ -69,8 +72,12 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
-        monarchy.awaitTransaction { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
+        monarchy.writeAsync { realm ->
+            val eventInsertEntity = EventInsertEntity(event.eventId, event.type).apply {
+                this.insertType = EventInsertType.LOCAL_ECHO
+            }
+            realm.insert(eventInsertEntity)
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@writeAsync
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.update(realm, roomId)
         }

@@ -1,0 +1,11 @@
+<vector android:autoMirrored="true" android:height="40dp"
+    android:viewportHeight="40" android:viewportWidth="40"
+    android:width="40dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillAlpha="0.2" android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:pathData="M20,20m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"
+        android:strokeColor="#00000000" android:strokeWidth="1"/>
+    <path android:fillColor="#FFFFFF" android:fillType="nonZero"
+        android:pathData="M25.25,19.25L23.975,19.25C23.975,19.805 23.855,20.3225 23.6525,20.7875L24.575,21.71C24.995,20.975 25.25,20.1425 25.25,19.25L25.25,19.25ZM22.235,19.3775C22.235,19.3325 22.25,19.295 22.25,19.25L22.25,14.75C22.25,13.505 21.245,12.5 20,12.5C18.755,12.5 17.75,13.505 17.75,14.75L17.75,14.885L22.235,19.3775ZM14.2025,13.25L13.25,14.2025L17.7575,18.71L17.7575,19.25C17.7575,20.495 18.755,21.5 20,21.5C20.165,21.5 20.33,21.4775 20.4875,21.44L21.7325,22.685C21.2,22.9325 20.6075,23.075 20,23.075C17.93,23.075 16.025,21.5 16.025,19.25L14.75,19.25C14.75,21.8075 16.79,23.9225 19.25,24.29L19.25,26.75L20.75,26.75L20.75,24.29C21.4325,24.1925 22.0775,23.9525 22.655,23.615L25.7975,26.75L26.75,25.7975L14.2025,13.25Z"
+        android:strokeColor="#00000000" android:strokeWidth="1"/>
+</vector>

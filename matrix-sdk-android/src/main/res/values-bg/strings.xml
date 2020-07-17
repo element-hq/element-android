@@ -63,13 +63,6 @@
 
     <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
 
-    <string name="message_reply_to_prefix">В отговор на</string>
-
-    <string name="reply_to_an_image">изпрати снимка.</string>
-    <string name="reply_to_a_video">изпрати видео.</string>
-    <string name="reply_to_an_audio_file">изпрати аудио файл.</string>
-    <string name="reply_to_a_file">изпрати файл.</string>
-
     <string name="room_displayname_invite_from">Покана от %s</string>
     <string name="room_displayname_room_invite">Покана за стая</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>

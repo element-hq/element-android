@@ -202,7 +202,7 @@
 
     <style name="VectorSearchView" parent="Widget.AppCompat.SearchView">
         <item name="searchIcon">@drawable/ic_search</item>
-        <item name="closeIcon">@drawable/ic_x_green</item>
+        <item name="closeIcon">@drawable/ic_x_gray</item>
         <item name="iconifiedByDefault">false</item>
     </style>
 
@@ -378,6 +378,13 @@
         <item name="android:textColor">?riotx_text_primary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="FileProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/file_progress_bar</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">40dp</item>
     </style>
 
 </resources>

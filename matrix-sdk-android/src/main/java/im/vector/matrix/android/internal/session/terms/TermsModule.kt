@@ -21,7 +21,7 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.terms.TermsService
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.SessionScope
 import okhttp3.OkHttpClient
@@ -34,7 +34,7 @@ internal abstract class TermsModule {
         @Provides
         @JvmStatic
         @SessionScope
-        fun providesTermsAPI(@Unauthenticated unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
+        fun providesTermsAPI(@UnauthenticatedWithCertificate unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
                              retrofitFactory: RetrofitFactory): TermsAPI {
             val retrofit = retrofitFactory.create(unauthenticatedOkHttpClient, "https://foo.bar")
             return retrofit.create(TermsAPI::class.java)

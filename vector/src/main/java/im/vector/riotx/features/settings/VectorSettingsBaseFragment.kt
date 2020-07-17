@@ -83,8 +83,8 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
      * ========================================================================================== */
 
     protected fun notImplemented() {
-        // Snackbar cannot be display on PreferenceFragment
-        // Snackbar.make(view!!, R.string.not_implemented, Snackbar.LENGTH_SHORT)
+        // Snackbar cannot be display on PreferenceFragment. TODO It's maybe because the show() method is not used...
+        // Snackbar.make(requireView(), R.string.not_implemented, Snackbar.LENGTH_SHORT)
         activity?.toast(R.string.not_implemented)
     }
 

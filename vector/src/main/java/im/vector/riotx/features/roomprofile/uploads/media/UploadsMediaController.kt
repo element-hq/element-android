@@ -115,6 +115,7 @@ class UploadsMediaController @Inject constructor(
                 eventId = eventId,
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
+                mimeType = messageContent.mimeType,
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 height = messageContent.info?.height,
                 maxHeight = itemSize,
@@ -129,6 +130,7 @@ class UploadsMediaController @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 eventId = eventId,
                 filename = messageContent.body,
+                mimeType = messageContent.mimeType,
                 url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
@@ -140,6 +142,7 @@ class UploadsMediaController @Inject constructor(
         return VideoContentRenderer.Data(
                 eventId = eventId,
                 filename = messageContent.body,
+                mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 thumbnailMediaData = thumbnailData

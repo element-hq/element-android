@@ -35,7 +35,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
     @EpoxyAttribute
     var useBigFont: Boolean = false
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {

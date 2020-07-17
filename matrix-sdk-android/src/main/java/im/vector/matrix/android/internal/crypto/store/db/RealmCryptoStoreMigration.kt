@@ -26,44 +26,187 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.SharedSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntityFields
 import im.vector.matrix.android.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
 import javax.inject.Inject
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo as LegacyMXDeviceInfo
 
 internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
 
-    // Version 1L added Cross Signing info persistence
     companion object {
-        const val CRYPTO_STORE_SCHEMA_VERSION = 6L
+        // 0, 1, 2: legacy Riot-Android
+        // 3: migrate to RiotX schema
+        // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
+        const val CRYPTO_STORE_SCHEMA_VERSION = 11L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Crypto from $oldVersion to $newVersion")
 
-        if (oldVersion <= 0) migrateTo1(realm)
-        if (oldVersion <= 1) migrateTo2(realm)
-        if (oldVersion <= 2) migrateTo3(realm)
+        if (oldVersion <= 0) migrateTo1Legacy(realm)
+        if (oldVersion <= 1) migrateTo2Legacy(realm)
+        if (oldVersion <= 2) migrateTo3RiotX(realm)
         if (oldVersion <= 3) migrateTo4(realm)
         if (oldVersion <= 4) migrateTo5(realm)
         if (oldVersion <= 5) migrateTo6(realm)
+        if (oldVersion <= 6) migrateTo7(realm)
+        if (oldVersion <= 7) migrateTo8(realm)
+        if (oldVersion <= 8) migrateTo9(realm)
+        if (oldVersion <= 9) migrateTo10(realm)
+        if (oldVersion <= 10) migrateTo11(realm)
     }
 
-    private fun migrateTo1(realm: DynamicRealm) {
+    private fun migrateTo1Legacy(realm: DynamicRealm) {
         Timber.d("Step 0 -> 1")
+        Timber.d("Add field lastReceivedMessageTs (Long) and set the value to 0")
+
+        realm.schema.get("OlmSessionEntity")
+                ?.addField(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Long::class.java)
+                ?.transform {
+                    it.setLong(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, 0)
+                }
+    }
+
+    private fun migrateTo2Legacy(realm: DynamicRealm) {
+        Timber.d("Step 1 -> 2")
+        Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
+
+        realm.schema.get("IncomingRoomKeyRequestEntity")
+                ?.addField("requestBodyAlgorithm", String::class.java)
+                ?.addField("requestBodyRoomId", String::class.java)
+                ?.addField("requestBodySenderKey", String::class.java)
+                ?.addField("requestBodySessionId", String::class.java)
+                ?.transform { dynamicObject ->
+                    val requestBodyString = dynamicObject.getString("requestBodyString")
+                    try {
+                        // It was a map before
+                        val map: Map<String, String>? = deserializeFromRealm(requestBodyString)
+
+                        map?.let {
+                            dynamicObject.setString("requestBodyAlgorithm", it["algorithm"])
+                            dynamicObject.setString("requestBodyRoomId", it["room_id"])
+                            dynamicObject.setString("requestBodySenderKey", it["sender_key"])
+                            dynamicObject.setString("requestBodySessionId", it["session_id"])
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
+                ?.removeField("requestBodyString")
+
+        Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
+
+        realm.schema.get("OutgoingRoomKeyRequestEntity")
+                ?.addField("requestBodyAlgorithm", String::class.java)
+                ?.addField("requestBodyRoomId", String::class.java)
+                ?.addField("requestBodySenderKey", String::class.java)
+                ?.addField("requestBodySessionId", String::class.java)
+                ?.transform { dynamicObject ->
+                    val requestBodyString = dynamicObject.getString("requestBodyString")
+                    try {
+                        // It was a map before
+                        val map: Map<String, String>? = deserializeFromRealm(requestBodyString)
+
+                        map?.let {
+                            dynamicObject.setString("requestBodyAlgorithm", it["algorithm"])
+                            dynamicObject.setString("requestBodyRoomId", it["room_id"])
+                            dynamicObject.setString("requestBodySenderKey", it["sender_key"])
+                            dynamicObject.setString("requestBodySessionId", it["session_id"])
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
+                ?.removeField("requestBodyString")
+
+        Timber.d("Create KeysBackupDataEntity")
+
+        realm.schema.create("KeysBackupDataEntity")
+                .addField(KeysBackupDataEntityFields.PRIMARY_KEY, Integer::class.java)
+                .addPrimaryKey(KeysBackupDataEntityFields.PRIMARY_KEY)
+                .setRequired(KeysBackupDataEntityFields.PRIMARY_KEY, true)
+                .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_HASH, String::class.java)
+                .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_NUMBER_OF_KEYS, Integer::class.java)
+    }
+
+    private fun migrateTo3RiotX(realm: DynamicRealm) {
+        Timber.d("Step 2 -> 3")
+        Timber.d("Migrate to RiotX model")
+
+        realm.schema.get("CryptoRoomEntity")
+                ?.addField(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, Boolean::class.java)
+                ?.setRequired(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, false)
+
+        // Convert format of MXDeviceInfo, package has to be the same.
+        realm.schema.get("DeviceInfoEntity")
+                ?.transform { obj ->
+                    try {
+                        val oldSerializedData = obj.getString("deviceInfoData")
+                        deserializeFromRealm<LegacyMXDeviceInfo>(oldSerializedData)?.let { legacyMxDeviceInfo ->
+                            val newMxDeviceInfo = MXDeviceInfo(
+                                    deviceId = legacyMxDeviceInfo.deviceId,
+                                    userId = legacyMxDeviceInfo.userId,
+                                    algorithms = legacyMxDeviceInfo.algorithms,
+                                    keys = legacyMxDeviceInfo.keys,
+                                    signatures = legacyMxDeviceInfo.signatures,
+                                    unsigned = legacyMxDeviceInfo.unsigned,
+                                    verified = legacyMxDeviceInfo.mVerified
+                            )
+
+                            obj.setString("deviceInfoData", serializeForRealm(newMxDeviceInfo))
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
+
+        // Convert MXOlmInboundGroupSession2 to OlmInboundGroupSessionWrapper
+        realm.schema.get("OlmInboundGroupSessionEntity")
+                ?.transform { obj ->
+                    try {
+                        val oldSerializedData = obj.getString("olmInboundGroupSessionData")
+                        deserializeFromRealm<MXOlmInboundGroupSession2>(oldSerializedData)?.let { mxOlmInboundGroupSession2 ->
+                            val sessionKey = mxOlmInboundGroupSession2.mSession.sessionIdentifier()
+                            val newOlmInboundGroupSessionWrapper = OlmInboundGroupSessionWrapper(sessionKey, false)
+                                    .apply {
+                                        olmInboundGroupSession = mxOlmInboundGroupSession2.mSession
+                                        roomId = mxOlmInboundGroupSession2.mRoomId
+                                        senderKey = mxOlmInboundGroupSession2.mSenderKey
+                                        keysClaimed = mxOlmInboundGroupSession2.mKeysClaimed
+                                        forwardingCurve25519KeyChain = mxOlmInboundGroupSession2.mForwardingCurve25519KeyChain
+                                    }
+
+                            obj.setString("olmInboundGroupSessionData", serializeForRealm(newOlmInboundGroupSessionWrapper))
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error")
+                    }
+                }
+    }
+
+    // Version 4L added Cross Signing info persistence
+    private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Step 3 -> 4")
         Timber.d("Create KeyInfoEntity")
 
-        val trustLevelentityEntitySchema = realm.schema.create("TrustLevelEntity")
+        val trustLevelEntityEntitySchema = realm.schema.create("TrustLevelEntity")
                 .addField(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, Boolean::class.java)
                 .setNullable(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, true)
                 .addField(TrustLevelEntityFields.LOCALLY_VERIFIED, Boolean::class.java)
@@ -73,7 +216,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 .addField(KeyInfoEntityFields.PUBLIC_KEY_BASE64, String::class.java)
                 .addField(KeyInfoEntityFields.SIGNATURES, String::class.java)
                 .addRealmListField(KeyInfoEntityFields.USAGES.`$`, String::class.java)
-                .addRealmObjectField(KeyInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
+                .addRealmObjectField(KeyInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelEntityEntitySchema)
 
         Timber.d("Create CrossSigningInfoEntity")
 
@@ -112,7 +255,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 ?.addField(DeviceInfoEntityFields.UNSIGNED_MAP_JSON, String::class.java)
                 ?.addField(DeviceInfoEntityFields.IS_BLOCKED, Boolean::class.java)
                 ?.setNullable(DeviceInfoEntityFields.IS_BLOCKED, true)
-                ?.addRealmObjectField(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
+                ?.addRealmObjectField(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelEntityEntitySchema)
                 ?.transform { obj ->
 
                     try {
@@ -158,8 +301,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 ?.removeField("deviceInfoData")
     }
 
-    private fun migrateTo2(realm: DynamicRealm) {
-        Timber.d("Step 1 -> 2")
+    private fun migrateTo5(realm: DynamicRealm) {
+        Timber.d("Step 4 -> 5")
         realm.schema.remove("OutgoingRoomKeyRequestEntity")
         realm.schema.remove("IncomingRoomKeyRequestEntity")
 
@@ -199,16 +342,16 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 .addField(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
     }
 
-    private fun migrateTo3(realm: DynamicRealm) {
-        Timber.d("Step 2 -> 3")
+    private fun migrateTo6(realm: DynamicRealm) {
+        Timber.d("Step 5 -> 6")
         Timber.d("Updating CryptoMetadataEntity table")
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
     }
 
-    private fun migrateTo4(realm: DynamicRealm) {
-        Timber.d("Step 3 -> 4")
+    private fun migrateTo7(realm: DynamicRealm) {
+        Timber.d("Step 6 -> 7")
         Timber.d("Updating KeyInfoEntity table")
         val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
         try {
@@ -239,8 +382,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         }
     }
 
-    private fun migrateTo5(realm: DynamicRealm) {
-        Timber.d("Step 4 -> 5")
+    private fun migrateTo8(realm: DynamicRealm) {
+        Timber.d("Step 7 -> 8")
         realm.schema.create("MyDeviceLastSeenInfoEntity")
                 .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
                 .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
@@ -261,7 +404,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     }
 
     // Fixes duplicate devices in UserEntity#devices
-    private fun migrateTo6(realm: DynamicRealm) {
+    private fun migrateTo9(realm: DynamicRealm) {
+        Timber.d("Step 8 -> 9")
         val userEntities = realm.where("UserEntity").findAll()
         userEntities.forEach {
             try {
@@ -273,8 +417,41 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                     deviceList.addAll(distinct)
                 }
             } catch (failure: Throwable) {
-                Timber.w(failure, "Crypto Data base migration error for migrateTo6")
+                Timber.w(failure, "Crypto Data base migration error for migrateTo9")
             }
         }
+    }
+
+    // Version 10L added WithHeld Keys Info (MSC2399)
+    private fun migrateTo10(realm: DynamicRealm) {
+        Timber.d("Step 9 -> 10")
+        realm.schema.create("WithHeldSessionEntity")
+                .addField(WithHeldSessionEntityFields.ROOM_ID, String::class.java)
+                .addField(WithHeldSessionEntityFields.ALGORITHM, String::class.java)
+                .addField(WithHeldSessionEntityFields.SESSION_ID, String::class.java)
+                .addIndex(WithHeldSessionEntityFields.SESSION_ID)
+                .addField(WithHeldSessionEntityFields.SENDER_KEY, String::class.java)
+                .addIndex(WithHeldSessionEntityFields.SENDER_KEY)
+                .addField(WithHeldSessionEntityFields.CODE_STRING, String::class.java)
+                .addField(WithHeldSessionEntityFields.REASON, String::class.java)
+
+        realm.schema.create("SharedSessionEntity")
+                .addField(SharedSessionEntityFields.ROOM_ID, String::class.java)
+                .addField(SharedSessionEntityFields.ALGORITHM, String::class.java)
+                .addField(SharedSessionEntityFields.SESSION_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.SESSION_ID)
+                .addField(SharedSessionEntityFields.USER_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.USER_ID)
+                .addField(SharedSessionEntityFields.DEVICE_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.DEVICE_ID)
+                .addField(SharedSessionEntityFields.CHAIN_INDEX, Long::class.java)
+                .setNullable(SharedSessionEntityFields.CHAIN_INDEX, true)
+    }
+
+    // Version 11L added deviceKeysSentToServer boolean to CryptoMetadataEntity
+    private fun migrateTo11(realm: DynamicRealm) {
+        Timber.d("Step 10 -> 11")
+        realm.schema.get("CryptoMetadataEntity")
+                ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
     }
 }

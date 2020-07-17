@@ -21,12 +21,13 @@ import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.database.model.FilterEntityFields
 import im.vector.matrix.android.internal.database.query.get
 import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.where
 import javax.inject.Inject
 
-internal class DefaultFilterRepository @Inject constructor(private val monarchy: Monarchy) : FilterRepository {
+internal class DefaultFilterRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : FilterRepository {
 
     override suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->

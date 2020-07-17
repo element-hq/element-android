@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UnauthenticatedWithCertificate
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
@@ -45,9 +45,12 @@ internal abstract class IdentityModule {
         @Provides
         @SessionScope
         @AuthenticatedIdentity
-        fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
+        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                                  @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
+            return okHttpClient
+                    .newBuilder()
+                    .addAccessTokenInterceptor(accessTokenProvider)
+                    .build()
         }
 
         @JvmStatic
@@ -74,6 +77,9 @@ internal abstract class IdentityModule {
 
     @Binds
     abstract fun bindIdentityStore(store: RealmIdentityStore): IdentityStore
+
+    @Binds
+    abstract fun bindEnsureIdentityTokenTask(task: DefaultEnsureIdentityTokenTask): EnsureIdentityTokenTask
 
     @Binds
     abstract fun bindIdentityPingTask(task: DefaultIdentityPingTask): IdentityPingTask

@@ -16,11 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.call.DefaultRoomCallService
 import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.notification.DefaultRoomPushRuleService
@@ -30,6 +29,7 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReporting
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryDataSource
 import im.vector.matrix.android.internal.session.room.tags.DefaultTagsService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.typing.DefaultTypingService
@@ -42,15 +42,15 @@ internal interface RoomFactory {
 }
 
 @SessionScope
-internal class DefaultRoomFactory @Inject constructor(private val monarchy: Monarchy,
-                                                      private val roomSummaryMapper: RoomSummaryMapper,
-                                                      private val cryptoService: CryptoService,
+internal class DefaultRoomFactory @Inject constructor(private val cryptoService: CryptoService,
+                                                      private val roomSummaryDataSource: RoomSummaryDataSource,
                                                       private val timelineServiceFactory: DefaultTimelineService.Factory,
                                                       private val sendServiceFactory: DefaultSendService.Factory,
                                                       private val draftServiceFactory: DefaultDraftService.Factory,
                                                       private val stateServiceFactory: DefaultStateService.Factory,
                                                       private val uploadsServiceFactory: DefaultUploadsService.Factory,
                                                       private val reportingServiceFactory: DefaultReportingService.Factory,
+                                                      private val roomCallServiceFactory: DefaultRoomCallService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
                                                       private val tagsServiceFactory: DefaultTagsService.Factory,
@@ -64,14 +64,14 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
     override fun create(roomId: String): Room {
         return DefaultRoom(
                 roomId = roomId,
-                monarchy = monarchy,
-                roomSummaryMapper = roomSummaryMapper,
+                roomSummaryDataSource = roomSummaryDataSource,
                 timelineService = timelineServiceFactory.create(roomId),
                 sendService = sendServiceFactory.create(roomId),
                 draftService = draftServiceFactory.create(roomId),
                 stateService = stateServiceFactory.create(roomId),
                 uploadsService = uploadsServiceFactory.create(roomId),
                 reportingService = reportingServiceFactory.create(roomId),
+                roomCallService = roomCallServiceFactory.create(roomId),
                 readService = readServiceFactory.create(roomId),
                 typingService = typingServiceFactory.create(roomId),
                 tagsService = tagsServiceFactory.create(roomId),

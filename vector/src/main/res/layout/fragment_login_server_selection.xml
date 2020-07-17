@@ -43,6 +43,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerTitle" />
 
+            <!-- Use a CheckableConstraintLayout to keep the pressed state when retrieving login flow -->
             <im.vector.riotx.core.platform.CheckableConstraintLayout
                 android:id="@+id/loginServerChoiceMatrixOrg"
                 android:layout_width="match_parent"
@@ -63,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_matrix_org"
-                    android:tint="@color/white"
+                    android:tint="?riotx_text_primary"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceMatrixOrgText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -84,7 +85,7 @@
 
             </im.vector.riotx.core.platform.CheckableConstraintLayout>
 
-            <im.vector.riotx.core.platform.CheckableConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginServerChoiceModular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,8 +104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_logo_modular"
-                    android:tint="@color/white"
+                    android:src="@drawable/ic_logo_element_matrix_services"
+                    android:tint="?riotx_text_primary"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceModularText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -135,9 +136,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/loginServerChoiceModularText" />
 
-            </im.vector.riotx.core.platform.CheckableConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <im.vector.riotx.core.platform.CheckableConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginServerChoiceOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,45 +179,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
 
-            </im.vector.riotx.core.platform.CheckableConstraintLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginServerSubmit"
-                style="@style/Style.Vector.Login.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/login_continue"
-                android:transitionName="loginSubmitTransition"
-                app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdNotice"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
-
-            <TextView
-                android:id="@+id/loginServerIKnowMyIdNotice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="start"
-                android:text="@string/login_connect_using_matrix_id_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerSubmit" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginServerIKnowMyIdSubmit"
                 style="@style/Style.Vector.Login.Button.Text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
                 android:text="@string/login_connect_using_matrix_id_submit"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerIKnowMyIdNotice" />
+                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

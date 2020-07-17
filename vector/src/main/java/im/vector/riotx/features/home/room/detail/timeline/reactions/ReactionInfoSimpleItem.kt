@@ -40,6 +40,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
     var userClicked: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.emojiReactionView.text = reactionKey
         holder.displayNameView.text = authorDisplayName
         timeStamp?.let {

@@ -155,7 +155,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
         // Text size
-        textSizePreference.summary = getString(FontScale.getFontScaleValue(activity!!).nameResId)
+        textSizePreference.summary = getString(FontScale.getFontScaleValue(requireActivity()).nameResId)
 
         textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { displayTextSizeSelection(it) }

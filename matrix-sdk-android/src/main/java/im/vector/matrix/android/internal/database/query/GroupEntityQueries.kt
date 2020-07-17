@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.database.query
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.model.GroupEntityFields
+import im.vector.matrix.android.internal.query.process
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
@@ -28,10 +29,6 @@ internal fun GroupEntity.Companion.where(realm: Realm, groupId: String): RealmQu
             .equalTo(GroupEntityFields.GROUP_ID, groupId)
 }
 
-internal fun GroupEntity.Companion.where(realm: Realm, membership: Membership? = null): RealmQuery<GroupEntity> {
-    val query = realm.where<GroupEntity>()
-    if (membership != null) {
-        query.equalTo(GroupEntityFields.MEMBERSHIP_STR, membership.name)
-    }
-    return query
+internal fun GroupEntity.Companion.where(realm: Realm, memberships: List<Membership>): RealmQuery<GroupEntity> {
+    return realm.where<GroupEntity>().process(GroupEntityFields.MEMBERSHIP_STR, memberships)
 }

@@ -23,21 +23,21 @@ import androidx.fragment.app.FragmentTransaction
 import im.vector.riotx.core.platform.VectorBaseActivity
 
 fun VectorBaseActivity.addFragment(frameId: Int, fragment: Fragment) {
-    supportFragmentManager.commitTransactionNow { add(frameId, fragment) }
+    supportFragmentManager.commitTransaction { add(frameId, fragment) }
 }
 
 fun <T : Fragment> VectorBaseActivity.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    supportFragmentManager.commitTransactionNow {
+    supportFragmentManager.commitTransaction {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
 fun VectorBaseActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    supportFragmentManager.commitTransactionNow { replace(frameId, fragment, tag) }
+    supportFragmentManager.commitTransaction { replace(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> VectorBaseActivity.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    supportFragmentManager.commitTransactionNow {
+    supportFragmentManager.commitTransaction {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }

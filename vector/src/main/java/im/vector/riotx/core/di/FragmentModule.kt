@@ -23,6 +23,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
+import im.vector.riotx.features.contactsbook.ContactsBookFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -32,6 +33,7 @@ import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragmen
 import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
+import im.vector.riotx.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
@@ -470,6 +472,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(BootstrapSetupRecoveryKeyFragment::class)
+    fun bindBootstrapSetupRecoveryKeyFragment(fragment: BootstrapSetupRecoveryKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(BootstrapSaveRecoveryKeyFragment::class)
     fun bindBootstrapSaveRecoveryKeyFragment(fragment: BootstrapSaveRecoveryKeyFragment): Fragment
 
@@ -522,4 +529,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(WidgetFragment::class)
     fun bindWidgetFragment(fragment: WidgetFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ContactsBookFragment::class)
+    fun bindPhoneBookFragment(fragment: ContactsBookFragment): Fragment
 }

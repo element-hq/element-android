@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import io.realm.Realm
@@ -36,7 +37,7 @@ internal interface RoomGetter {
 
 @SessionScope
 internal class DefaultRoomGetter @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val roomFactory: RoomFactory
 ) : RoomGetter {
 

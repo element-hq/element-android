@@ -34,6 +34,7 @@ abstract class LoginErrorWithRetryItem : VectorEpoxyModel<LoginErrorWithRetryIte
     var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textView.text = text
         holder.buttonView.setOnClickListener { listener?.invoke() }
     }

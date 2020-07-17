@@ -18,10 +18,12 @@
 package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * Enum for [RoomJoinRulesContent] : https://matrix.org/docs/spec/client_server/r0.4.0#m-room-join-rules
  */
+@JsonClass(generateAdapter = false)
 enum class RoomJoinRules(val value: String) {
 
     @Json(name = "public")

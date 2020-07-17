@@ -27,6 +27,7 @@ internal data class RestKeyInfo(
          */
         @Json(name = "user_id")
         val userId: String,
+
         /**
          * Allowed uses for the key.
          * Must contain "master" for master keys, "self_signing" for self-signing keys, and "user_signing" for user-signing keys.

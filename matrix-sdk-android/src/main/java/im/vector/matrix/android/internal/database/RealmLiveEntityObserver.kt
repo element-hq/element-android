@@ -17,9 +17,10 @@
 package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.util.createBackgroundHandler
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
+import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.RealmResults
@@ -29,15 +30,10 @@ import kotlinx.coroutines.cancelChildren
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-internal interface LiveEntityObserver {
-    fun start()
-    fun dispose()
-    fun cancelProcess()
-    fun isStarted(): Boolean
-}
+internal interface LiveEntityObserver : SessionLifecycleObserver
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val realmConfiguration: RealmConfiguration)
-    : LiveEntityObserver, OrderedRealmCollectionChangeListener<RealmResults<T>> {
+    : LiveEntityObserver, RealmChangeListener<RealmResults<T>> {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
@@ -49,7 +45,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     private val backgroundRealm = AtomicReference<Realm>()
     private lateinit var results: AtomicReference<RealmResults<T>>
 
-    override fun start() {
+    override fun onStart() {
         if (isStarted.compareAndSet(false, true)) {
             BACKGROUND_HANDLER.post {
                 val realm = Realm.getInstance(realmConfiguration)
@@ -61,7 +57,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         }
     }
 
-    override fun dispose() {
+    override fun onStop() {
         if (isStarted.compareAndSet(true, false)) {
             BACKGROUND_HANDLER.post {
                 results.getAndSet(null).removeAllChangeListeners()
@@ -73,11 +69,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         }
     }
 
-    override fun cancelProcess() {
+    override fun onClearCache() {
         observerScope.coroutineContext.cancelChildren()
-    }
-
-    override fun isStarted(): Boolean {
-        return isStarted.get()
     }
 }

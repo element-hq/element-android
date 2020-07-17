@@ -17,21 +17,31 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.form.formEditTextItem
+import im.vector.riotx.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import javax.inject.Inject
 
-// TODO Add other feature here (waiting for design)
 class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
         fun onEnableEncryptionClicked()
+        fun onNameChanged(name: String)
+        fun onTopicChanged(topic: String)
+        fun onHistoryVisibilityClicked()
+        fun onAliasChanged(alias: String)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -45,10 +55,63 @@ class RoomSettingsController @Inject constructor(
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
 
+        val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
+        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
+
         buildProfileSection(
                 stringProvider.getString(R.string.settings)
         )
 
+        formEditTextItem {
+            id("name")
+            enabled(data.actionPermissions.canChangeName)
+            value(data.newName ?: roomSummary.displayName)
+            hint(stringProvider.getString(R.string.room_settings_name_hint))
+
+            onTextChange { text ->
+                callback?.onNameChanged(text)
+            }
+        }
+
+        formEditTextItem {
+            id("topic")
+            enabled(data.actionPermissions.canChangeTopic)
+            value(data.newTopic ?: roomSummary.topic)
+            hint(stringProvider.getString(R.string.room_settings_topic_hint))
+
+            onTextChange { text ->
+                callback?.onTopicChanged(text)
+            }
+        }
+
+        formEditTextItem {
+            id("alias")
+            enabled(data.actionPermissions.canChangeCanonicalAlias)
+            value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
+            hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
+
+            onTextChange { text ->
+                callback?.onAliasChanged(text)
+            }
+        }
+
+        buildProfileAction(
+                id = "historyReadability",
+                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
+                subtitle = newHistoryVisibility ?: historyVisibility,
+                dividerColor = dividerColor,
+                divider = false,
+                editable = data.actionPermissions.canChangeHistoryReadability,
+                action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
+        )
+
+        buildEncryptionAction(data.actionPermissions, roomSummary)
+    }
+
+    private fun buildEncryptionAction(actionPermissions: RoomSettingsViewState.ActionPermissions, roomSummary: RoomSummary) {
+        if (!actionPermissions.canEnableEncryption) {
+            return
+        }
         if (roomSummary.isEncrypted) {
             buildProfileAction(
                     id = "encryption",
@@ -68,5 +131,10 @@ class RoomSettingsController @Inject constructor(
                     action = { callback?.onEnableEncryptionClicked() }
             )
         }
+    }
+
+    private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
+        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
+        return roomHistoryVisibilityFormatter.format(historyVisibility)
     }
 }

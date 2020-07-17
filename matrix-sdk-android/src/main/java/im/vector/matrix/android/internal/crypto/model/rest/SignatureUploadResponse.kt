@@ -32,16 +32,15 @@ internal data class SignatureUploadResponse(
          * If a signature is not valid, the homeserver should set the corresponding entry in failures to a JSON object
          * with the errcode property set to M_INVALID_SIGNATURE.
          */
-        val failures: Map<String, Map<String, @JvmSuppressWildcards Any>>? = null
-
+        val failures: Map<String, Map<String, UploadResponseFailure>>? = null
 )
 
 @JsonClass(generateAdapter = true)
-data class UploadResponseFailure(
+internal data class UploadResponseFailure(
         @Json(name = "status")
         val status: Int,
 
-        @Json(name = "errCode")
+        @Json(name = "errcode")
         val errCode: String,
 
         @Json(name = "message")

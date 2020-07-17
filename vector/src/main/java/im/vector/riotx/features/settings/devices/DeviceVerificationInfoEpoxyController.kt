@@ -89,7 +89,7 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
                     description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
                 }
             } else {
-                // You need tomcomplete security
+                // You need to complete security
                 genericItem {
                     id("trust${cryptoDeviceInfo.deviceId}")
                     style(GenericItem.STYLE.BIG_TEXT)

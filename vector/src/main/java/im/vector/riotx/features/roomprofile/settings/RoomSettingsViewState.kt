@@ -19,14 +19,31 @@ package im.vector.riotx.features.roomprofile.settings
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 
 data class RoomSettingsViewState(
         val roomId: String,
+        val historyVisibilityEvent: Event? = null,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val isLoading: Boolean = false
+        val isLoading: Boolean = false,
+        val newName: String? = null,
+        val newTopic: String? = null,
+        val newHistoryVisibility: RoomHistoryVisibility? = null,
+        val newCanonicalAlias: String? = null,
+        val showSaveAction: Boolean = false,
+        val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+
+    data class ActionPermissions(
+            val canChangeName: Boolean = false,
+            val canChangeTopic: Boolean = false,
+            val canChangeCanonicalAlias: Boolean = false,
+            val canChangeHistoryReadability: Boolean = false,
+            val canEnableEncryption: Boolean = false
+    )
 }

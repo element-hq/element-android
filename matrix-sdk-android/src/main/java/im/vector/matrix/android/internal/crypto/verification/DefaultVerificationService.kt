@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
@@ -809,6 +810,8 @@ internal class DefaultVerificationService @Inject constructor(
                             ?.let { vt ->
                                 val otherDeviceId = vt.otherDeviceId
                                 if (!crossSigningService.canCrossSign()) {
+                                    outgoingGossipingRequestManager.sendSecretShareRequest(MASTER_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                            ?: "*")))
                                     outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
                                             ?: "*")))
                                     outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
@@ -821,7 +824,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun handleDoneReceived(senderId: String, doneReq: ValidVerificationDone) {
-        Timber.v("## SAS Done receieved $doneReq")
+        Timber.v("## SAS Done received $doneReq")
         val existing = getExistingTransaction(senderId, doneReq.transactionId)
         if (existing == null) {
             Timber.e("## SAS Received invalid Done request")
@@ -1231,7 +1234,7 @@ internal class DefaultVerificationService @Inject constructor(
         )
 
         // We can SCAN or SHOW QR codes only if cross-signing is enabled
-        val methodValues = if (crossSigningService.isCrossSigningVerified()) {
+        val methodValues = if (crossSigningService.isCrossSigningInitialized()) {
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
             val reciprocateMethod = methods

@@ -18,6 +18,10 @@ package im.vector.matrix.android.api.session.securestorage
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 
 /**
  * Some features may require clients to store encrypted data on the server so that it can be shared securely between clients.
@@ -111,7 +115,24 @@ interface SharedSecretStorageService {
      */
     fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>)
 
-    fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) : IntegrityResult
+    /**
+     * Return true if SSSS is configured
+     */
+    fun isRecoverySetup(): Boolean {
+        return checkShouldBeAbleToAccessSecrets(
+                secretNames = listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                keyId = null
+        ) is IntegrityResult.Success
+    }
+
+    fun isMegolmKeyInBackup(): Boolean {
+        return checkShouldBeAbleToAccessSecrets(
+                secretNames = listOf(KEYBACKUP_SECRET_SSSS_NAME),
+                keyId = null
+        ) is IntegrityResult.Success
+    }
+
+    fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?): IntegrityResult
 
     fun requestSecret(name: String, myOtherDeviceId: String)
 

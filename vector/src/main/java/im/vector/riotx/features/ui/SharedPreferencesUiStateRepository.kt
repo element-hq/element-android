@@ -19,12 +19,16 @@ package im.vector.riotx.features.ui
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import im.vector.riotx.features.home.RoomListDisplayMode
+import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 /**
  * This class is used to persist UI state across application restart
  */
-class SharedPreferencesUiStateRepository @Inject constructor(private val sharedPreferences: SharedPreferences) : UiStateRepository {
+class SharedPreferencesUiStateRepository @Inject constructor(
+        private val sharedPreferences: SharedPreferences,
+        private val vectorPreferences: VectorPreferences
+) : UiStateRepository {
 
     override fun reset() {
         sharedPreferences.edit {
@@ -36,7 +40,11 @@ class SharedPreferencesUiStateRepository @Inject constructor(private val sharedP
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
             VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
-            else                      -> RoomListDisplayMode.HOME
+            else                      -> if (vectorPreferences.labAddNotificationTab()) {
+                RoomListDisplayMode.NOTIFICATIONS
+            } else {
+                RoomListDisplayMode.PEOPLE
+            }
         }
     }
 

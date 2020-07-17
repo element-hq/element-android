@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
@@ -140,7 +141,7 @@ internal class DefaultCrossSigningService @Inject constructor(
      *   - Sign the keys and upload them
      *   - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures
      */
-    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>?) {
+    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning  initializeCrossSigning")
 
         val params = InitializeCrossSigningTask.Params(
@@ -150,7 +151,8 @@ internal class DefaultCrossSigningService @Inject constructor(
             this.callbackThread = TaskThread.CRYPTO
             this.callback = object : MatrixCallback<InitializeCrossSigningTask.Result> {
                 override fun onFailure(failure: Throwable) {
-                    callback?.onFailure(failure)
+                    Timber.e(failure, "Error in initializeCrossSigning()")
+                    callback.onFailure(failure)
                 }
 
                 override fun onSuccess(data: InitializeCrossSigningTask.Result) {
@@ -162,10 +164,37 @@ internal class DefaultCrossSigningService @Inject constructor(
                     userPkSigning = OlmPkSigning().apply { initWithSeed(data.userKeyPK.fromBase64()) }
                     selfSigningPkSigning = OlmPkSigning().apply { initWithSeed(data.selfSigningKeyPK.fromBase64()) }
 
-                    callback?.onSuccess(Unit)
+                    callback.onSuccess(Unit)
                 }
             }
         }.executeBy(taskExecutor)
+    }
+
+    override fun onSecretMSKGossip(mskPrivateKey: String) {
+        Timber.i("## CrossSigning - onSecretSSKGossip")
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return Unit.also {
+            Timber.e("## CrossSigning - onSecretMSKGossip() received secret but public key is not known")
+        }
+
+        mskPrivateKey.fromBase64()
+                .let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
+                            masterPkSigning?.releaseSigning()
+                            masterPkSigning = pkSigning
+                            Timber.i("## CrossSigning - Loading MSK success")
+                            cryptoStore.storeMSKPrivateKey(mskPrivateKey)
+                            return
+                        } else {
+                            Timber.e("## CrossSigning - onSecretMSKGossip() private key do not match public key")
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        Timber.e("## CrossSigning - onSecretMSKGossip() ${failure.localizedMessage}")
+                        pkSigning.releaseSigning()
+                    }
+                }
     }
 
     override fun onSecretSSKGossip(sskPrivateKey: String) {
@@ -477,6 +506,11 @@ internal class DefaultCrossSigningService @Inject constructor(
     override fun canCrossSign(): Boolean {
         return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
                 && cryptoStore.getCrossSigningPrivateKeys()?.user != null
+    }
+
+    override fun allPrivateKeysKnown(): Boolean {
+        return checkSelfTrust().isVerified()
+                && cryptoStore.getCrossSigningPrivateKeys()?.allKnown().orFalse()
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {

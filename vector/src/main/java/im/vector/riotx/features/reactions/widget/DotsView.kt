@@ -22,6 +22,8 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.Property
 import android.view.View
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * This view will draw dots floating around the center of it's view
@@ -84,16 +86,16 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
     private fun drawOuterDotsFrame(canvas: Canvas) {
         for (i in 0 until DOTS_COUNT) {
-            val cX = (centerX + currentRadius1 * Math.cos(i.toDouble() * OUTER_DOTS_POSITION_ANGLE.toDouble() * Math.PI / 180)).toFloat()
-            val cY = (centerY + currentRadius1 * Math.sin(i.toDouble() * OUTER_DOTS_POSITION_ANGLE.toDouble() * Math.PI / 180)).toFloat()
+            val cX = (centerX + currentRadius1 * cos(i.toDouble() * OUTER_DOTS_POSITION_ANGLE.toDouble() * Math.PI / 180)).toFloat()
+            val cY = (centerY + currentRadius1 * sin(i.toDouble() * OUTER_DOTS_POSITION_ANGLE.toDouble() * Math.PI / 180)).toFloat()
             canvas.drawCircle(cX, cY, currentDotSize1, circlePaints[i % circlePaints.size])
         }
     }
 
     private fun drawInnerDotsFrame(canvas: Canvas) {
         for (i in 0 until DOTS_COUNT) {
-            val cX = (centerX + currentRadius2 * Math.cos((i * OUTER_DOTS_POSITION_ANGLE - 10) * Math.PI / 180)).toFloat()
-            val cY = (centerY + currentRadius2 * Math.sin((i * OUTER_DOTS_POSITION_ANGLE - 10) * Math.PI / 180)).toFloat()
+            val cX = (centerX + currentRadius2 * cos((i * OUTER_DOTS_POSITION_ANGLE - 10) * Math.PI / 180)).toFloat()
+            val cY = (centerY + currentRadius2 * sin((i * OUTER_DOTS_POSITION_ANGLE - 10) * Math.PI / 180)).toFloat()
             canvas.drawCircle(cX, cY, currentDotSize2, circlePaints[(i + 1) % circlePaints.size])
         }
     }

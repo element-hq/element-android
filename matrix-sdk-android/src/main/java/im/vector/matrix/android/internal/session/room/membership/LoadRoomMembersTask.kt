@@ -21,13 +21,15 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
+import im.vector.matrix.android.internal.database.model.EventInsertType
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -46,7 +48,7 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
@@ -69,12 +71,13 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             // We ignore all the already known members
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                     ?: realm.createObject(roomId)
-
+            val now = System.currentTimeMillis()
             for (roomMemberEvent in response.roomMemberEvents) {
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
                     continue
                 }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+                val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

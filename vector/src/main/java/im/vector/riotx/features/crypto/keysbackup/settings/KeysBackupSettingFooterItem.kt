@@ -42,6 +42,7 @@ abstract class KeysBackupSettingFooterItem : VectorEpoxyModel<KeysBackupSettingF
     var clickOnButton2: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.button1.setTextOrHide(textButton1)
         holder.button1.setOnClickListener(clickOnButton1)
 

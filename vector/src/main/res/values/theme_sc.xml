@@ -33,6 +33,8 @@
 
         <item name="riotx_keys_backup_banner_accent_color">@color/background_floating_sc</item>
 
+        <item name="riotx_bottom_nav_icon_color">#ff808080</item>
+
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_sc</item>
 
@@ -51,6 +53,8 @@
         <item name="android:colorBackground">?riotx_background</item>
         <item name="colorOnBackground">?riotx_text_primary</item>
 
+        <item name="riotx_bottom_sheet_background">@color/background_dark_sc</item>
+
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/accent_sc</item>
         <item name="android:colorAccent">@color/accent_sc</item>
@@ -65,11 +69,11 @@
         <item name="android:actionMenuTextColor">?colorAccent</item>
 
         <!-- default background color -->
-        <item name="vctr_bottom_nav_background_color">@color/background_dark_sc</item>
-        <item name="vctr_bottom_nav_background_border_color">@color/background_black_sc</item>
+        <item name="riotx_bottom_nav_background_color">@color/background_dark_sc</item>
+        <item name="riotx_bottom_nav_background_border_color">@color/background_black_sc</item>
 
         <!-- waiting view background -->
-        <item name="vctr_waiting_background_color">#55555555</item>
+        <item name="riotx_waiting_background_color">#55555555</item>
 
 
         <!-- application bar text color -->
@@ -116,7 +120,7 @@
         <!--Header/Panel Text Secondary-->
         <item name="vctr_list_header_secondary_text_color">@color/text_color_secondary_sc</item>
 
-        <item name="vctr_list_bottom_sheet_divider_color">#80ffffff</item>
+        <item name="riotx_list_bottom_sheet_divider_color">#80ffffff</item>
         <item name="vctr_list_divider_color">@color/background_dark_sc</item>
 
         <item name="vctr_redacted_message_color">@color/text_color_disabled_sc</item>
@@ -233,6 +237,17 @@
 
 
     <style name="AppTheme.AttachmentsPreview.SC" parent="AppTheme.Base.SC"/>
+
+    <style name="AppTheme.Transparent.SC" parent="AppTheme.Base.SC">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--        <item name="android:windowIsFloating">true</item>-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 
 
     <!-- Default AppTheme with modified accent for usage where settings don't apply -->

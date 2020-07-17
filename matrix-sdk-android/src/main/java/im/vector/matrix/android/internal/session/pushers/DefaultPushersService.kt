@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -37,7 +38,7 @@ import javax.inject.Inject
 
 internal class DefaultPushersService @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
         private val removePusherTask: RemovePusherTask,

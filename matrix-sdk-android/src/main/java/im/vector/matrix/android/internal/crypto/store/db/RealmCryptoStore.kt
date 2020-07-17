@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -38,8 +39,10 @@ import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
@@ -66,10 +69,13 @@ import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.SharedSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.createPrimaryKey
+import im.vector.matrix.android.internal.crypto.store.db.query.create
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.get
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
@@ -174,7 +180,11 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun open() {
-        realmLocker = Realm.getInstance(realmConfiguration)
+        synchronized(this) {
+            if (realmLocker == null) {
+                realmLocker = Realm.getInstance(realmConfiguration)
+            }
+        }
     }
 
     override fun close() {
@@ -392,6 +402,14 @@ internal class RealmCryptoStore @Inject constructor(
                             null
                         }
                     }
+        }
+    }
+
+    override fun storeMSKPrivateKey(msk: String?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                xSignMasterPrivateKey = msk
+            }
         }
     }
 
@@ -824,6 +842,18 @@ internal class RealmCryptoStore @Inject constructor(
         } ?: false
     }
 
+    override fun setDeviceKeysUploaded(uploaded: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer = uploaded
+        }
+    }
+
+    override fun getDeviceKeysUploaded(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
+        } ?: false
+    }
+
     override fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>) {
         doRealmTransaction(realmConfiguration) {
             // Reset all
@@ -897,9 +927,9 @@ internal class RealmCryptoStore @Inject constructor(
             it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
         }.firstOrNull {
             it.requestBody?.algorithm == requestBody.algorithm
-            it.requestBody?.roomId == requestBody.roomId
-            it.requestBody?.senderKey == requestBody.senderKey
-            it.requestBody?.sessionId == requestBody.sessionId
+                    && it.requestBody?.roomId == requestBody.roomId
+                    && it.requestBody?.senderKey == requestBody.senderKey
+                    && it.requestBody?.sessionId == requestBody.sessionId
         }
     }
 
@@ -1266,7 +1296,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 deviceInfoEntity.trustLevelEntity = it
                             }
                         } else {
-                            locallyVerified?.let { trustEntity.locallyVerified = it  }
+                            locallyVerified?.let { trustEntity.locallyVerified = it }
                             trustEntity.crossSignedVerified = crossSignedVerified
                         }
                     }
@@ -1413,6 +1443,70 @@ internal class RealmCryptoStore @Inject constructor(
                     }
             )
             return existing
+        }
+    }
+
+    override fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent) {
+        val roomId = withHeldContent.roomId ?: return
+        val sessionId = withHeldContent.sessionId ?: return
+        if (withHeldContent.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) return
+        doRealmTransaction(realmConfiguration) { realm ->
+            WithHeldSessionEntity.getOrCreate(realm, roomId, sessionId)?.let {
+                it.code = withHeldContent.code
+                it.senderKey = withHeldContent.senderKey
+                it.reason = withHeldContent.reason
+            }
+        }
+    }
+
+    override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
+        return doWithRealm(realmConfiguration) { realm ->
+            WithHeldSessionEntity.get(realm, roomId, sessionId)?.let {
+                RoomKeyWithHeldContent(
+                        roomId = roomId,
+                        sessionId = sessionId,
+                        algorithm = it.algorithm,
+                        codeString = it.codeString,
+                        reason = it.reason,
+                        senderKey = it.senderKey
+                )
+            }
+        }
+    }
+
+    override fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            SharedSessionEntity.create(
+                    realm = realm,
+                    roomId = roomId,
+                    sessionId = sessionId,
+                    userId = userId,
+                    deviceId = deviceId,
+                    chainIndex = chainIndex
+            )
+        }
+    }
+
+    override fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+        return doWithRealm(realmConfiguration) { realm ->
+            SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
+                IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
+            } ?: IMXCryptoStore.SharedSessionResult(false, null)
+        }
+    }
+
+    override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
+        return doWithRealm(realmConfiguration) { realm ->
+            val result = MXUsersDevicesMap<Int>()
+            SharedSessionEntity.get(realm, roomId, sessionId)
+                    .groupBy { it.userId }
+                    .forEach { (userId, shared) ->
+                        shared.forEach {
+                            result.setObject(userId, it.deviceId, it.chainIndex)
+                        }
+                    }
+
+            result
         }
     }
 }

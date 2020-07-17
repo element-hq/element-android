@@ -17,10 +17,12 @@
 package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * Represents the membership of a user on a room
  */
+@JsonClass(generateAdapter = false)
 enum class Membership(val value: String) {
 
     NONE("none"),

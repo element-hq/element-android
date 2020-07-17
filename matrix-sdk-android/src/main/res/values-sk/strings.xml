@@ -62,13 +62,6 @@
 
     <string name="summary_user_sent_sticker">%1$s poslal nálepku.</string>
 
-    <string name="message_reply_to_prefix">Odpoveď na</string>
-
-    <string name="reply_to_an_image">odoslal obrázok.</string>
-    <string name="reply_to_a_video">odoslal video.</string>
-    <string name="reply_to_an_audio_file">odoslal zvukový súbor.</string>
-    <string name="reply_to_a_file">Odoslal súbor.</string>
-
     <string name="room_displayname_invite_from">Pozvanie od %s</string>
     <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
     <string name="room_displayname_two_members">%1$s a %2$s</string>

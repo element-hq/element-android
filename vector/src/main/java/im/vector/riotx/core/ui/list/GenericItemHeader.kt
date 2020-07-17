@@ -33,6 +33,7 @@ abstract class GenericItemHeader : VectorEpoxyModel<GenericItemHeader.Holder>() 
     var text: String? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.text.setTextOrHide(text)
     }
 

@@ -23,34 +23,24 @@ import io.realm.annotations.PrimaryKey
 
 internal fun DeviceInfoEntity.Companion.createPrimaryKey(userId: String, deviceId: String) = "$userId|$deviceId"
 
-// deviceInfoData contains serialized data
-internal open class DeviceInfoEntity(@PrimaryKey var primaryKey: String = "",
-                                     var deviceId: String? = null,
-                                     var identityKey: String? = null,
-                                     // var deviceInfoData: String? = null,
-                                     var userId: String? = null,
-                                     var isBlocked: Boolean? = null,
-                                     var algorithmListJson: String? = null,
-                                     var keysMapJson: String? = null,
-                                     var signatureMapJson: String? = null,
-                                     var unsignedMapJson: String? = null,
-                                     var trustLevelEntity: TrustLevelEntity? = null,
-                                     /**
-                                      * We use that to make distinction between old devices (there before mine)
-                                      * and new ones. Used for example to detect new unverified login
-                                      */
-                                     var firstTimeSeenLocalTs: Long? = null
+internal open class DeviceInfoEntity(
+        @PrimaryKey var primaryKey: String = "",
+        var deviceId: String? = null,
+        var identityKey: String? = null,
+        var userId: String? = null,
+        var isBlocked: Boolean? = null,
+        var algorithmListJson: String? = null,
+        var keysMapJson: String? = null,
+        var signatureMapJson: String? = null,
+        // Will contain the device name from unsigned data if present
+        var unsignedMapJson: String? = null,
+        var trustLevelEntity: TrustLevelEntity? = null,
+        /**
+         * We use that to make distinction between old devices (there before mine)
+         * and new ones. Used for example to detect new unverified login
+         */
+        var firstTimeSeenLocalTs: Long? = null
 ) : RealmObject() {
-
-//    // Deserialize data
-//    fun getDeviceInfo(): MXDeviceInfo? {
-//        return deserializeFromRealm(deviceInfoData)
-//    }
-//
-//    // Serialize data
-//    fun putDeviceInfo(deviceInfo: MXDeviceInfo?) {
-//        deviceInfoData = serializeForRealm(deviceInfo)
-//    }
 
     @LinkingObjects("devices")
     val users: RealmResults<UserEntity>? = null

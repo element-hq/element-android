@@ -21,6 +21,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.matrix.android.internal.auth.db.AuthRealmMigration
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
@@ -29,6 +30,7 @@ import im.vector.matrix.android.internal.auth.login.DefaultDirectLoginTask
 import im.vector.matrix.android.internal.auth.login.DirectLoginTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
+import im.vector.matrix.android.internal.legacy.DefaultLegacySessionImporter
 import im.vector.matrix.android.internal.wellknown.WellknownModule
 import io.realm.RealmConfiguration
 import java.io.File
@@ -60,6 +62,9 @@ internal abstract class AuthModule {
                     .build()
         }
     }
+
+    @Binds
+    abstract fun bindLegacySessionImporter(importer: DefaultLegacySessionImporter): LegacySessionImporter
 
     @Binds
     abstract fun bindSessionParamsStore(store: RealmSessionParamsStore): SessionParamsStore

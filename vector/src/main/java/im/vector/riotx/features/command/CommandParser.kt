@@ -17,6 +17,9 @@
 package im.vector.riotx.features.command
 
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.riotx.core.extensions.isEmail
+import im.vector.riotx.core.extensions.isMsisdn
 import timber.log.Timber
 
 object CommandParser {
@@ -139,15 +142,24 @@ object CommandParser {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
-                        if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.Invite(
-                                    userId,
-                                    textMessage.substring(Command.INVITE.length + userId.length)
-                                            .trim()
-                                            .takeIf { it.isNotBlank() }
-                            )
-                        } else {
-                            ParsedCommand.ErrorSyntax(Command.INVITE)
+                        when {
+                            MatrixPatterns.isUserId(userId) -> {
+                                ParsedCommand.Invite(
+                                        userId,
+                                        textMessage.substring(Command.INVITE.length + userId.length)
+                                                .trim()
+                                                .takeIf { it.isNotBlank() }
+                                )
+                            }
+                            userId.isEmail()                -> {
+                                ParsedCommand.Invite3Pid(ThreePid.Email(userId))
+                            }
+                            userId.isMsisdn()               -> {
+                                ParsedCommand.Invite3Pid(ThreePid.Msisdn(userId))
+                            }
+                            else                            -> {
+                                ParsedCommand.ErrorSyntax(Command.INVITE)
+                            }
                         }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
@@ -232,7 +244,7 @@ object CommandParser {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.SetUserPowerLevel(userId, 0)
+                            ParsedCommand.SetUserPowerLevel(userId, null)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                         }

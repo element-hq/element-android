@@ -41,6 +41,7 @@ abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuick
     var listener: Listener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.textViews.forEachIndexed { index, textView ->
             textView.typeface = fontProvider.typeface ?: Typeface.DEFAULT
             textView.text = texts[index]

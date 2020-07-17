@@ -31,9 +31,13 @@ interface MessageWithAttachmentContent : MessageContent {
      * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
      */
     val encryptedFileInfo: EncryptedFileInfo?
+
+    val mimeType: String?
 }
 
 /**
  * Get the url of the encrypted file or of the file
  */
 fun MessageWithAttachmentContent.getFileUrl() = encryptedFileInfo?.url ?: url
+
+fun MessageWithAttachmentContent.getFileName() = (this as? MessageFileContent)?.getFileName() ?: body

@@ -51,4 +51,7 @@ data class MessageVideoContent(
          * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageWithAttachmentContent
+) : MessageWithAttachmentContent {
+        override val mimeType: String?
+                get() = encryptedFileInfo?.mimetype ?: videoInfo?.mimeType
+}

@@ -24,9 +24,11 @@ import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.account.AccountService
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
+import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -42,8 +44,10 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
+import im.vector.matrix.android.api.session.typing.TypingUsersTracker
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import okhttp3.OkHttpClient
 
 /**
  * This interface defines interactions with a session.
@@ -57,7 +61,6 @@ interface Session :
         CacheService,
         SignOutService,
         FilterService,
-        FileService,
         TermsService,
         ProfileService,
         PushRuleService,
@@ -126,6 +129,12 @@ interface Session :
     fun getSyncStateLive(): LiveData<SyncState>
 
     /**
+     * This method returns the current sync state.
+     * @return the current [SyncState].
+     */
+    fun getSyncState(): SyncState
+
+    /**
      * This methods return true if an initial sync has been processed
      */
     fun hasAlreadySynced(): Boolean
@@ -144,6 +153,16 @@ interface Session :
      * Returns the ContentUploadProgressTracker associated with the session
      */
     fun contentUploadProgressTracker(): ContentUploadStateTracker
+
+    /**
+     * Returns the TypingUsersTracker associated with the session
+     */
+    fun typingUsersTracker(): TypingUsersTracker
+
+    /**
+     * Returns the ContentDownloadStateTracker associated with the session
+     */
+    fun contentDownloadProgressTracker(): ContentDownloadStateTracker
 
     /**
      * Returns the cryptoService associated with the session
@@ -166,6 +185,16 @@ interface Session :
     fun integrationManagerService(): IntegrationManagerService
 
     /**
+     * Returns the call signaling service associated with the session
+     */
+    fun callSignalingService(): CallSignalingService
+
+    /**
+     * Returns the file download service associated with the session
+     */
+    fun fileService(): FileService
+
+    /**
      * Add a listener to the session.
      * @param listener the listener to add.
      */
@@ -176,6 +205,13 @@ interface Session :
      * @param listener the listener to remove.
      */
     fun removeListener(listener: Listener)
+
+    /**
+     * Will return a OkHttpClient which will manage pinned certificates and Proxy if configured.
+     * It will not add any access-token to the request.
+     * So it is exposed to let the app be able to download image with Glide or any other libraries which accept an OkHttp client.
+     */
+    fun getOkHttpClient(): OkHttpClient
 
     /**
      * A global session listener to get notified for some events.

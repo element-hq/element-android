@@ -73,13 +73,6 @@
 
     <string name="summary_user_sent_sticker">%1$s sandte einen Sticker.</string>
 
-    <string name="message_reply_to_prefix">Als Antwort auf</string>
-
-    <string name="reply_to_an_image">hat ein Bild gesendet.</string>
-    <string name="reply_to_a_video">hat ein Video gesendet.</string>
-    <string name="reply_to_an_audio_file">hat eine Audio-Datei gesendet.</string>
-    <string name="reply_to_a_file">sandte eine Datei.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Einladung von %s</string>
     <string name="room_displayname_room_invite">Raumeinladung</string>

@@ -17,10 +17,8 @@
 package im.vector.matrix.android.internal.util
 
 import androidx.annotation.WorkerThread
-import okio.buffer
-import okio.sink
-import okio.source
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 
 /**
@@ -28,9 +26,7 @@ import java.io.InputStream
  */
 @WorkerThread
 fun writeToFile(inputStream: InputStream, outputFile: File) {
-    inputStream.source().buffer().use { input ->
-        outputFile.sink().buffer().use { output ->
-            output.writeAll(input)
-        }
+    FileOutputStream(outputFile).use {
+        inputStream.copyTo(it)
     }
 }

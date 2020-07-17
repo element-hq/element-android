@@ -73,13 +73,6 @@
 
     <string name="summary_user_sent_sticker">%1$s envió una pegatina.</string>
 
-    <string name="message_reply_to_prefix">En respuesta a</string>
-
-    <string name="reply_to_an_image">envió una imagen.</string>
-    <string name="reply_to_a_video">envió un vídeo.</string>
-    <string name="reply_to_an_audio_file">envió un archivo de audio.</string>
-    <string name="reply_to_a_file">envió un archivo.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invitación de %s</string>
     <string name="room_displayname_room_invite">Invitación a Sala</string>

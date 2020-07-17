@@ -4,33 +4,32 @@
     android:id="@+id/roomCategoryRootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_header_panel_background"
+    android:background="?riotx_background"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
-    android:paddingTop="@dimen/layout_vertical_margin"
+    android:paddingStart="8dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="12dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:foreground="?attr/selectableItemBackground"
     android:paddingRight="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="4dp">
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/roomCategoryTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:drawableStart="@drawable/ic_expand_more_white"
-        android:drawableLeft="@drawable/ic_expand_more_white"
+        tools:drawableEnd="@drawable/ic_expand_more_white"
         android:drawableTint="?riotx_text_secondary"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
+        android:textStyle="bold"
         tools:text="@string/room_participants_header_direct_chats" />
 
     <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView

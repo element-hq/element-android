@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
 import im.vector.matrix.android.internal.database.query.get
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -36,7 +37,7 @@ internal interface UpdateBreadcrumbsTask : Task<UpdateBreadcrumbsTask.Params, Un
 internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
         private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val monarchy: Monarchy
+        @SessionDatabase private val monarchy: Monarchy
 ) : UpdateBreadcrumbsTask {
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {

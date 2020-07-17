@@ -18,7 +18,6 @@
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
 import android.view.View
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
@@ -34,7 +33,7 @@ class MessageItemAttributesFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
-    fun create(messageContent: MessageContent?,
+    fun create(messageContent: Any?,
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(

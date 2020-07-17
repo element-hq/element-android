@@ -16,8 +16,10 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.net.Uri
 import androidx.annotation.StringRes
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.features.command.Command
 import java.io.File
@@ -33,6 +35,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
 
     data class ShowMessage(val message: String) : RoomDetailViewEvents()
+    data class ShowE2EErrorMessage(val withHeldCode: WithHeldCode?) : RoomDetailViewEvents()
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
 
@@ -43,8 +46,14 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     data class DownloadFileState(
-            val mimeType: String,
+            val mimeType: String?,
             val file: File?,
+            val throwable: Throwable?
+    ) : RoomDetailViewEvents()
+
+    data class OpenFile(
+            val mimeType: String?,
+            val uri: Uri?,
             val throwable: Throwable?
     ) : RoomDetailViewEvents()
 
@@ -52,7 +61,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object DisplayPromptForIntegrationManager: RoomDetailViewEvents()
 
+    object DisplayEnableIntegrationsWarning: RoomDetailViewEvents()
+
     data class OpenStickerPicker(val widget: Widget): RoomDetailViewEvents()
+
+    object OpenIntegrationManager: RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()

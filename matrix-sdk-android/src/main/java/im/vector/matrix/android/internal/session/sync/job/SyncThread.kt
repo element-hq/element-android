@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
+import im.vector.matrix.android.internal.session.typing.DefaultTypingUsersTracker
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createUIHandler
@@ -44,12 +45,13 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
+                                              private val typingUsersTracker: DefaultTypingUsersTracker,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver)
     : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
-    private var liveState = MutableLiveData<SyncState>()
+    private var liveState = MutableLiveData<SyncState>(state)
     private val lock = Object()
     private val syncScope = CoroutineScope(SupervisorJob())
     private val debouncer = Debouncer(createUIHandler())
@@ -95,6 +97,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         syncScope.coroutineContext.cancelChildren()
         lock.notify()
     }
+
+    fun currentState() = state
 
     fun liveState(): LiveData<SyncState> {
         return liveState
@@ -196,6 +200,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     private fun updateStateTo(newState: SyncState) {
         Timber.v("Update state from $state to $newState")
+        if (newState == state) {
+            return
+        }
         state = newState
         debouncer.debounce("post_state", Runnable {
             liveState.value = newState

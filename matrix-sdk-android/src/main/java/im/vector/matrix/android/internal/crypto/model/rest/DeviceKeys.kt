@@ -21,21 +21,35 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class DeviceKeys(
+        /**
+         * Required. The ID of the user the device belongs to. Must match the user ID used when logging in.
+         */
         @Json(name = "user_id")
-        val userId: String?,
+        val userId: String,
 
+        /**
+         * Required. The ID of the device these keys belong to. Must match the device ID used when logging in.
+         */
         @Json(name = "device_id")
-        val deviceId: String?,
+        val deviceId: String,
 
+        /**
+         * Required. The encryption algorithms supported by this device.
+         */
         @Json(name = "algorithms")
         val algorithms: List<String>?,
 
+        /**
+         * Required. Public identity keys. The names of the properties should be in the format <algorithm>:<device_id>.
+         * The keys themselves should be encoded as specified by the key algorithm.
+         */
         @Json(name = "keys")
         val keys: Map<String, String>?,
 
+        /**
+         * Required. Signatures for the device key object. A map from user ID, to a map from <algorithm>:<device_id> to the signature.
+         * The signature is calculated using the process described at https://matrix.org/docs/spec/appendices.html#signing-json.
+         */
         @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>?,
-
-        @Json(name = "usage")
-        val usage: List<String>? = null
+        val signatures: Map<String, Map<String, String>>?
 )

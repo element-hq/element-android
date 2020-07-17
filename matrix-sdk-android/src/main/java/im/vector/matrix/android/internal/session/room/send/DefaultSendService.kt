@@ -58,7 +58,8 @@ internal class DefaultSendService @AssistedInject constructor(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val cryptoService: CryptoService,
         private val taskExecutor: TaskExecutor,
-        private val localEchoRepository: LocalEchoRepository
+        private val localEchoRepository: LocalEchoRepository,
+        private val roomEventSender: RoomEventSender
 ) : SendService {
 
     @AssistedInject.Factory
@@ -109,20 +110,6 @@ internal class DefaultSendService @AssistedInject constructor(
         return localEchoEventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
-    }
-
-    private fun sendEvent(event: Event): Cancelable {
-        // Encrypted room handling
-        return if (cryptoService.isRoomEncrypted(roomId)) {
-            Timber.v("Send event in encrypted room")
-            val encryptWork = createEncryptEventWork(event, true)
-            // Note that event will be replaced by the result of the previous work
-            val sendWork = createSendEventWork(event, false)
-            timelineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, sendWork)
-        } else {
-            val sendWork = createSendEventWork(event, true)
-            timelineSendEventWorkCommon.postWork(roomId, sendWork)
-        }
     }
 
     override fun sendMedias(attachments: List<ContentAttachmentData>,
@@ -267,6 +254,10 @@ internal class DefaultSendService @AssistedInject constructor(
                 }
 
         return cancelableBag
+    }
+
+    private fun sendEvent(event: Event): Cancelable {
+        return roomEventSender.sendEvent(event)
     }
 
     private fun createLocalEcho(event: Event) {

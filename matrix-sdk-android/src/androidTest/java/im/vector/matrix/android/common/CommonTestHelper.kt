@@ -57,9 +57,10 @@ class CommonTestHelper(context: Context) {
 
     val matrix: Matrix
 
+    fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestNetworkModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
+
     init {
         Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
-
         matrix = Matrix.getInstance(context)
     }
 
@@ -116,6 +117,7 @@ class CommonTestHelper(context: Context) {
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
+        val timeline = room.createTimeline(null, TimelineSettings(10))
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
         val latch = CountDownLatch(1)
         val timelineListener = object : Timeline.Listener {
@@ -134,11 +136,12 @@ class CommonTestHelper(context: Context) {
 
                 if (newMessages.size == nbOfMessages) {
                     sentEvents.addAll(newMessages)
+                    // Remove listener now, if not at the next update sendEvents could change
+                    timeline.removeListener(this)
                     latch.countDown()
                 }
             }
         }
-        val timeline = room.createTimeline(null, TimelineSettings(10))
         timeline.start()
         timeline.addListener(timelineListener)
         for (i in 0 until nbOfMessages) {
@@ -146,11 +149,10 @@ class CommonTestHelper(context: Context) {
         }
         // Wait 3 second more per message
         await(latch, timeout = TestConstants.timeOutMillis + 3_000L * nbOfMessages)
-        timeline.removeListener(timelineListener)
         timeline.dispose()
 
         // Check that all events has been created
-        assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())
+        assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
 
         return sentEvents
     }

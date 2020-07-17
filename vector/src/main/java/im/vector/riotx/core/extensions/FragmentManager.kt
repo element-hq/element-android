@@ -17,9 +17,14 @@
 package im.vector.riotx.core.extensions
 
 import androidx.fragment.app.FragmentTransaction
+import im.vector.matrix.android.api.extensions.tryThis
 
 inline fun androidx.fragment.app.FragmentManager.commitTransactionNow(func: FragmentTransaction.() -> FragmentTransaction) {
-    beginTransaction().func().commitNow()
+    // Could throw and make the app crash
+    // e.g sharedActionViewModel.observe()
+    tryThis("Failed to commitTransactionNow") {
+        beginTransaction().func().commitNow()
+    }
 }
 
 inline fun androidx.fragment.app.FragmentManager.commitTransaction(func: FragmentTransaction.() -> FragmentTransaction) {

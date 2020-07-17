@@ -21,7 +21,8 @@ import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityF
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.SessionLifecycleObserver
+import im.vector.matrix.android.internal.session.room.summary.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.createBackgroundHandler
@@ -42,7 +43,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
-) {
+): SessionLifecycleObserver {
 
     companion object {
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")
@@ -53,7 +54,7 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     private val isStarted = AtomicBoolean()
 
-    fun start() {
+    override fun onStart() {
         if (isStarted.compareAndSet(false, true)) {
             eventBus.register(this)
             BACKGROUND_HANDLER.post {
@@ -62,7 +63,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         }
     }
 
-    fun stop() {
+    override fun onStop() {
         if (isStarted.compareAndSet(true, false)) {
             eventBus.unregister(this)
             BACKGROUND_HANDLER.post {

@@ -44,6 +44,7 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.let {
             it.checkbox.isChecked = checked
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)

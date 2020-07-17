@@ -49,6 +49,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute var favoriteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.avatar.onClick(settingsClickListener)
         holder.roomName.setTextOrHide(matrixItem.displayName)

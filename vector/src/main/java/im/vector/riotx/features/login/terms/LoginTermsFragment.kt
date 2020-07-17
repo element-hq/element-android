@@ -21,17 +21,17 @@ import android.os.Parcelable
 import android.view.View
 import butterknife.OnClick
 import com.airbnb.mvrx.args
+import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.toReducedUrl
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
 import im.vector.riotx.features.login.LoginViewState
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_terms.*
-import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 @Parcelize
@@ -95,7 +95,7 @@ class LoginTermsFragment @Inject constructor(
         localizedFlowDataLoginTerms.localizedUrl
                 ?.takeIf { it.isNotBlank() }
                 ?.let {
-                    openUrlInExternalBrowser(requireContext(), it)
+                    openUrlInChromeCustomTab(requireContext(), null, it)
                 }
     }
 

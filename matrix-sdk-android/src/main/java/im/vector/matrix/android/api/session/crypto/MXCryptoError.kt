@@ -59,7 +59,8 @@ sealed class MXCryptoError : Throwable() {
         MISSING_PROPERTY,
         OLM,
         UNKNOWN_DEVICES,
-        UNKNOWN_MESSAGE_INDEX
+        UNKNOWN_MESSAGE_INDEX,
+        KEYS_WITHHELD
     }
 
     companion object {

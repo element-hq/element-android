@@ -35,11 +35,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.fragment.app.Fragment
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.startNotificationChannelSettingsIntent
+import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.service.CallHeadsUpActionReceiver
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
@@ -202,7 +205,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
-        val i = Intent(context, HomeActivity::class.java)
+        val i = HomeActivity.newIntent(context)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
@@ -263,13 +266,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
      */
     @SuppressLint("NewApi")
     fun buildIncomingCallNotification(isVideo: Boolean,
-                                      roomName: String,
-                                      matrixId: String,
+                                      otherUserId: String,
+                                      roomId: String,
                                       callId: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(ensureTitleNotEmpty(roomName))
+                .setContentTitle(ensureTitleNotEmpty(otherUserId))
                 .apply {
                     if (isVideo) {
                         setContentText(stringProvider.getString(R.string.incoming_video_call))
@@ -280,28 +283,124 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setLights(accentColor, 500, 500)
+                .setOngoing(true)
 
         // Compat: Display the incoming call notification on the lock screen
-        builder.priority = NotificationCompat.PRIORITY_MAX
+        builder.priority = NotificationCompat.PRIORITY_HIGH
 
-        // clear the activity stack to home activity
-        val intent = Intent(context, HomeActivity::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        // TODO .putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId)
-        // TODO .putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId)
-
-        // Recreate the back stack
-        val stackBuilder = TaskStackBuilder.create(context)
-                .addParentStack(HomeActivity::class.java)
-                .addNextIntent(intent)
-
-        // android 4.3 issue
-        // use a generator for the private requestCode.
-        // When using 0, the intent is not created/launched when the user taps on the notification.
         //
-        val pendingIntent = stackBuilder.getPendingIntent(Random.nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT)
+        val requestId = Random.nextInt(1000)
+//        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        builder.setContentIntent(pendingIntent)
+        val contentIntent = VectorCallActivity.newIntent(
+                context = context,
+                callId = callId,
+                roomId = roomId,
+                otherUserId = otherUserId,
+                isIncomingCall = true,
+                isVideoCall = isVideo,
+                mode = VectorCallActivity.INCOMING_RINGING
+        ).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            data = Uri.parse("foobar://$callId")
+        }
+        val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
+
+        val answerCallPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntent(VectorCallActivity.newIntent(
+                        context = context,
+                        callId = callId,
+                        roomId = roomId,
+                        otherUserId = otherUserId,
+                        isIncomingCall = true,
+                        isVideoCall = isVideo,
+                        mode = VectorCallActivity.INCOMING_ACCEPT)
+                )
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
+        }
+        // val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
+        val rejectCallPendingIntent = PendingIntent.getBroadcast(
+                context,
+                requestId + 1,
+                rejectCallActionReceiver,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        R.drawable.ic_call,
+                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
+                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
+                        context.getString(R.string.call_notification_answer),
+                        answerCallPendingIntent
+                )
+        )
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        context.getString(R.string.call_notification_reject),
+                        rejectCallPendingIntent)
+        )
+
+        builder.setFullScreenIntent(contentPendingIntent, true)
+
+        return builder.build()
+    }
+
+    fun buildOutgoingRingingCallNotification(isVideo: Boolean,
+                                             otherUserId: String,
+                                             roomId: String,
+                                             callId: String): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+
+        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(ensureTitleNotEmpty(otherUserId))
+                .apply {
+                    setContentText(stringProvider.getString(R.string.call_ring))
+                }
+                .setSmallIcon(R.drawable.incoming_call_notification_transparent)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setLights(accentColor, 500, 500)
+                .setOngoing(true)
+
+        val requestId = Random.nextInt(1000)
+
+        val contentIntent = VectorCallActivity.newIntent(
+                context = context,
+                callId = callId,
+                roomId = roomId,
+                otherUserId = otherUserId,
+                isIncomingCall = true,
+                isVideoCall = isVideo,
+                mode = null).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            data = Uri.parse("foobar://$callId")
+        }
+        val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
+
+        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
+        }
+
+        val rejectCallPendingIntent = PendingIntent.getBroadcast(
+                context,
+                requestId + 1,
+                rejectCallActionReceiver,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        context.getString(R.string.call_notification_hangup),
+                        rejectCallPendingIntent)
+        )
+        builder.setContentIntent(contentPendingIntent)
 
         return builder.build()
     }
@@ -321,8 +420,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                                      roomName: String,
                                      roomId: String,
                                      matrixId: String,
-                                     callId: String): Notification {
-        val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
+                                     callId: String,
+                                     fromBg: Boolean = false): Notification {
+        val builder = NotificationCompat.Builder(context, if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(roomName))
                 .apply {
                     if (isVideo) {
@@ -334,31 +434,37 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
 
-        // Display the pending call notification on the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.priority = NotificationCompat.PRIORITY_MAX
+        if (fromBg) {
+            builder.priority = NotificationCompat.PRIORITY_LOW
+            builder.setOngoing(true)
         }
 
-        /* TODO
-        // Build the pending intent for when the notification is clicked
-        val roomIntent = Intent(context, VectorRoomActivity::class.java)
-                .putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
-                .putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId)
-                .putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId)
+        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+            data = Uri.parse("mxcall://end?$callId")
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
+        }
 
-        // Recreate the back stack
-        val stackBuilder = TaskStackBuilder.create(context)
-                .addParentStack(VectorRoomActivity::class.java)
-                .addNextIntent(roomIntent)
+        val rejectCallPendingIntent = PendingIntent.getBroadcast(
+                context,
+                System.currentTimeMillis().toInt(),
+                rejectCallActionReceiver,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
-        // android 4.3 issue
-        // use a generator for the private requestCode.
-        // When using 0, the intent is not created/launched when the user taps on the notification.
-        //
-        val pendingIntent = stackBuilder.getPendingIntent(Random().nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT)
+        builder.addAction(
+                NotificationCompat.Action(
+                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        context.getString(R.string.call_notification_hangup),
+                        rejectCallPendingIntent)
+        )
 
-        builder.setContentIntent(pendingIntent)
-        */
+        val contentPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                // TODO other userId
+                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, null))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+        builder.setContentIntent(contentPendingIntent)
 
         return builder.build()
     }
@@ -371,6 +477,26 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.call_ended))
                 .setSmallIcon(R.drawable.ic_material_call_end_grey)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
+                .build()
+    }
+
+    fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setGroup(stringProvider.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_download)
+                .setContentText(stringProvider.getString(R.string.downloaded_file, fileName))
+                .setAutoCancel(true)
+                .apply {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, mimeType)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    PendingIntent.getActivity(
+                            context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+                    ).let {
+                        setContentIntent(it)
+                    }
+                }
                 .build()
     }
 
@@ -525,7 +651,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             stringProvider.getString(R.string.join),
                             joinIntentPendingIntent)
 
-                    val contentIntent = Intent(context, HomeActivity::class.java)
+                    val contentIntent = HomeActivity.newIntent(context)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)
@@ -563,7 +689,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setColor(accentColor)
                 .setAutoCancel(true)
                 .apply {
-                    val contentIntent = Intent(context, HomeActivity::class.java)
+                    val contentIntent = HomeActivity.newIntent(context)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + simpleNotifiableEvent.eventId)
@@ -592,7 +718,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(roomIntentTap)
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
     }

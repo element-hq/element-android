@@ -25,10 +25,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_profile_action)
@@ -52,6 +54,12 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     var accessoryRes: Int = 0
 
     @EpoxyAttribute
+    var accessoryMatrixItem: MatrixItem? = null
+
+    @EpoxyAttribute
+    var avatarRenderer: AvatarRenderer? = null
+
+    @EpoxyAttribute
     var editable: Boolean = true
 
     @EpoxyAttribute
@@ -67,17 +75,22 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.view.isClickable = false
         }
         holder.title.text = title
-        val tintColor = if (destructive) {
+        val titleTintColor = if (destructive) {
             ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
         } else {
             ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
         }
-        holder.title.setTextColor(tintColor)
+        val iconTintColor = if (destructive) {
+            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        }
+        holder.title.setTextColor(titleTintColor)
         holder.subtitle.setTextOrHide(subtitle)
         if (iconRes != 0) {
             holder.icon.setImageResource(iconRes)
             if (tintIcon) {
-                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
+                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(iconTintColor))
             } else {
                 ImageViewCompat.setImageTintList(holder.icon, null)
             }
@@ -93,9 +106,16 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.secondaryAccessory.isVisible = false
         }
 
+        if (accessoryMatrixItem != null) {
+            avatarRenderer?.render(accessoryMatrixItem!!, holder.secondaryAccessory)
+            holder.secondaryAccessory.isVisible = true
+        } else {
+            holder.secondaryAccessory.isVisible = false
+        }
+
         if (editableRes != 0 && editable) {
             val tintColorSecondary = if (destructive) {
-                tintColor
+                titleTintColor
             } else {
                 ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
             }

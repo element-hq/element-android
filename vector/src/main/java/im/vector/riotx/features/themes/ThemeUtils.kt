@@ -256,6 +256,7 @@ object ThemeUtils {
      * @param resourceId the resource id in the light theme
      * @return the resource Id for the current theme
      */
+    // TODO Now that we are API 21, this is not necessary anymore
     fun getResourceId(c: Context, resourceId: Int): Int {
         val theme = getApplicationTheme(c)
 

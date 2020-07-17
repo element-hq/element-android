@@ -38,6 +38,7 @@ import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
@@ -56,7 +57,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UserAccountDataSyncHandler @Inject constructor(
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask) {

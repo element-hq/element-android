@@ -17,70 +17,81 @@
 package im.vector.riotx.features.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import com.google.android.material.badge.BadgeDrawable
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.ui.views.ActiveCallView
+import im.vector.riotx.core.ui.views.ActiveCallViewHolder
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.KeysBackupBanner
+import im.vector.riotx.features.call.SharedActiveCallViewModel
+import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
-import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
-import im.vector.riotx.features.workers.signout.SignOutViewModel
+import im.vector.riotx.features.themes.ThemeUtils
+import im.vector.riotx.features.workers.signout.BannerState
+import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.riotx.features.workers.signout.ServerBackupStatusViewState
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val INDEX_CATCHUP = 0
-private const val INDEX_PEOPLE = 1
-private const val INDEX_ROOMS = 2
+private const val INDEX_PEOPLE = 0
+private const val INDEX_ROOMS = 1
+private const val INDEX_CATCHUP = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
+        private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
-        private val alertManager: PopupAlertManager
-) : VectorBaseFragment(), KeysBackupBanner.Delegate {
-
-    private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
+        private val alertManager: PopupAlertManager,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val vectorPreferences: VectorPreferences
+) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
+    private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
 
     override fun getLayoutResId() = R.layout.fragment_home_detail
+
+    private val activeCallViewHolder = ActiveCallViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
+        setupActiveCallView()
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
             bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
-            bottomNavigationView.visibility = if (bottomNavigationView.selectedItemId != R.id.bottom_action_home) View.VISIBLE else View.GONE
+            bottomNavigationView.visibility = if (bottomNavigationView.selectedItemId != R.id.bottom_action_notification) View.VISIBLE else View.GONE
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
@@ -104,6 +115,32 @@ class HomeDetailFragment @Inject constructor(
                         // In this case we prompt to go to settings to review logins
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }
+                }
+            }
+        }
+
+        sharedCallActionViewModel
+                .activeCall
+                .observe(viewLifecycleOwner, Observer {
+                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
+                    invalidateOptionsMenu()
+                })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // update notification tab if needed
+        checkNotificationTabStatus()
+    }
+
+    private fun checkNotificationTabStatus() {
+        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
+        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
+            // As we hide it check if it's not the current item!
+            withState(viewModel) {
+                if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
+                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
                 }
             }
         }
@@ -174,35 +211,25 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupKeysBackupBanner() {
-        // Keys backup banner
-        // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
-
-        model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
-            when (keysBackupState) {
-                null                               ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
-                KeysBackupState.Disabled           ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false)
-                KeysBackupState.NotTrusted,
-                KeysBackupState.WrongBackUpVersion ->
-                    // In this case, getCurrentBackupVersion() should not return ""
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false)
-                KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp          ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
-                KeysBackupState.ReadyToBackUp      ->
-                    if (model.canRestoreKeys()) {
-                        homeKeysBackupBanner.render(KeysBackupBanner.State.Update(model.getCurrentBackupVersion()), false)
-                    } else {
-                        homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+        serverBackupStatusViewModel
+                .subscribe(this) {
+                    when (val banState = it.bannerState.invoke()) {
+                        is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        BannerState.BackingUp -> homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
+                        null,
+                        BannerState.Hidden    -> homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
-                else                               ->
-                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
-            }
-        })
-
+                }
         homeKeysBackupBanner.delegate = this
+    }
+
+    private fun setupActiveCallView() {
+        activeCallViewHolder.bind(
+                activeCallPiP,
+                activeCallView,
+                activeCallPiPWrap,
+                this
+        )
     }
 
     private fun setupToolbar() {
@@ -217,24 +244,27 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
+        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
-                else                      -> RoomListDisplayMode.HOME
+                else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
 
-        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
-        menuView.forEachIndexed { index, view ->
-            val itemView = view as BottomNavigationItemView
-            val badgeLayout = LayoutInflater.from(requireContext()).inflate(R.layout.vector_home_badge_unread_layout, menuView, false)
-            val unreadCounterBadgeView: UnreadCounterBadgeView = badgeLayout.findViewById(R.id.actionUnreadCounterBadgeView)
-            itemView.addView(badgeLayout)
-            unreadCounterBadgeViews.add(index, unreadCounterBadgeView)
-        }
+//        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
+
+//        bottomNavigationView.getOrCreateBadge()
+//        menuView.forEachIndexed { index, view ->
+//            val itemView = view as BottomNavigationItemView
+//            val badgeLayout = LayoutInflater.from(requireContext()).inflate(R.layout.vector_home_badge_unread_layout, menuView, false)
+//            val unreadCounterBadgeView: UnreadCounterBadgeView = badgeLayout.findViewById(R.id.actionUnreadCounterBadgeView)
+//            itemView.addView(badgeLayout)
+//            unreadCounterBadgeViews.add(index, unreadCounterBadgeView)
+//        }
     }
 
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
@@ -245,7 +275,7 @@ class HomeDetailFragment @Inject constructor(
     private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
-        childFragmentManager.commitTransactionNow {
+        childFragmentManager.commitTransaction {
             childFragmentManager.fragments
                     .filter { it != fragmentToShow }
                     .forEach {
@@ -274,15 +304,47 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         Timber.v(it.toString())
-        unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
-        unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
-        unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
+        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         syncStateView.render(it.syncState)
+    }
+
+    private fun BadgeDrawable.render(count: Int, highlight: Boolean) {
+        isVisible = count > 0
+        number = count
+        maxCharacterCount = 3
+        badgeTextColor = ContextCompat.getColor(requireContext(), R.color.white)
+        backgroundColor = if (highlight) {
+            ContextCompat.getColor(requireContext(), R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(requireContext(), R.attr.riotx_unread_room_badge)
+        }
     }
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
         RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-        else                       -> R.id.bottom_action_home
+        else                       -> R.id.bottom_action_notification
+    }
+
+    override fun onTapToReturnToCall() {
+        sharedCallActionViewModel.activeCall.value?.let { call ->
+            VectorCallActivity.newIntent(
+                    context = requireContext(),
+                    callId = call.callId,
+                    roomId = call.roomId,
+                    otherUserId = call.otherUserId,
+                    isIncomingCall = !call.isOutgoing,
+                    isVideoCall = call.isVideoCall,
+                    mode = null
+            ).let {
+                startActivity(it)
+            }
+        }
+    }
+
+    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
+        return serverBackupStatusViewModelFactory.create(initialState)
     }
 }

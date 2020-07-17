@@ -22,10 +22,11 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesSer
 import im.vector.matrix.android.internal.database.mapper.HomeServerCapabilitiesMapper
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.get
+import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.Realm
 import javax.inject.Inject
 
-internal class DefaultHomeServerCapabilitiesService @Inject constructor(private val monarchy: Monarchy) : HomeServerCapabilitiesService {
+internal class DefaultHomeServerCapabilitiesService @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : HomeServerCapabilitiesService {
 
     override fun getHomeServerCapabilities(): HomeServerCapabilities {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->

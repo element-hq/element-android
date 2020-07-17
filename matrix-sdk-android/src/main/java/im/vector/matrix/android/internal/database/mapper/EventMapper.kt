@@ -45,6 +45,11 @@ internal object EventMapper {
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         eventEntity.unsignedData = uds
+        eventEntity.decryptionResultJson = event.mxDecryptionResult?.let {
+            MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(it)
+        }
+        eventEntity.decryptionErrorReason = event.mCryptoErrorReason
+        eventEntity.decryptionErrorCode = event.mCryptoError?.name
         return eventEntity
     }
 
@@ -85,6 +90,7 @@ internal object EventMapper {
             it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
+            it.mCryptoErrorReason = eventEntity.decryptionErrorReason
         }
     }
 }
@@ -93,7 +99,7 @@ internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long? = null): EventEntity {
+internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
         this.ageLocalTs = ageLocalTs

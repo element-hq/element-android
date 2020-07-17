@@ -34,7 +34,8 @@ interface WidgetService {
     fun getWidgetURLFormatter(): WidgetURLFormatter
 
     /**
-     * Returns an instance of [WidgetPostAPIMediator].
+     * Returns a new instance of [WidgetPostAPIMediator].
+     * Be careful to call clearWebView method and setHandler to null to avoid memory leaks.
      * This is to be used for "admin" widgets so you can interact through JS.
      */
     fun getWidgetPostAPIMediator(): WidgetPostAPIMediator

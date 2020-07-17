@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0"
         tools:src="@tools:sample/avatars" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/bottom_sheet_message_preview_sender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
         tools:text="@tools:sample/full_names" />
 
-    <im.vector.riotx.core.platform.EllipsizingTextView
+    <TextView
         android:id="@+id/bottom_sheet_message_preview_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

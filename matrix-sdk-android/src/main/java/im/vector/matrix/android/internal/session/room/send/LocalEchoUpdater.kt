@@ -24,10 +24,11 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarchy) {
+internal class LocalEchoUpdater @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     fun updateSendState(eventId: String, sendState: SendState) {
         Timber.v("Update local state of $eventId to ${sendState.name}")

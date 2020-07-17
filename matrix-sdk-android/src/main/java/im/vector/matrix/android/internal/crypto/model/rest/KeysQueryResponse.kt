@@ -28,18 +28,20 @@ import com.squareup.moshi.JsonClass
  * The user_signing_keys property will only be included when a user requests their own keys.
  */
 @JsonClass(generateAdapter = true)
-internal data class     KeysQueryResponse(
+internal data class KeysQueryResponse(
         /**
-         * The device keys per devices per users.
-         * Map from userId to map from deviceId to MXDeviceInfo
-         * TODO Use MXUsersDevicesMap?
+         * Information on the queried devices. A map from user ID, to a map from device ID to device information.
+         * For each device, the information returned will be the same as uploaded via /keys/upload, with the addition of an unsigned property.
          */
         @Json(name = "device_keys")
-        val deviceKeys: Map<String, Map<String, RestDeviceInfo>>? = null,
+        val deviceKeys: Map<String, Map<String, DeviceKeysWithUnsigned>>? = null,
 
         /**
-         * The failures sorted by homeservers. TODO Bad comment ?
-         * TODO Use MXUsersDevicesMap?
+         * If any remote homeservers could not be reached, they are recorded here. The names of the
+         * properties are the names of the unreachable servers.
+         *
+         * If the homeserver could be reached, but the user or device was unknown, no failure is recorded.
+         * Instead, the corresponding user or device is missing from the device_keys result.
          */
         val failures: Map<String, Map<String, Any>>? = null,
 

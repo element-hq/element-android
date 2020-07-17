@@ -17,8 +17,8 @@ package im.vector.matrix.android.api.session.room.model
 
 data class EventAnnotationsSummary(
         var eventId: String,
-        var reactionsSummary: List<ReactionAggregatedSummary>,
-        var editSummary: EditAggregatedSummary?,
-        var pollResponseSummary: PollResponseAggregatedSummary?,
+        var reactionsSummary: List<ReactionAggregatedSummary> = emptyList(),
+        var editSummary: EditAggregatedSummary? = null,
+        var pollResponseSummary: PollResponseAggregatedSummary? = null,
         var referencesAggregatedSummary: ReferencesAggregatedSummary? = null
 )

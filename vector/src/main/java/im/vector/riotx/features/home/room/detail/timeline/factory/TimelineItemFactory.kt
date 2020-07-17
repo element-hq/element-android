@@ -48,7 +48,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_AVATAR,
                 EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STATE_ROOM_ALIASES,
                 EventType.STATE_ROOM_CANONICAL_ALIAS,
                 EventType.STATE_ROOM_JOIN_RULES,
@@ -80,20 +82,22 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_MAC          -> {
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.CALL_CANDIDATES               -> {
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
                         noticeItemFactory.create(event, highlight, callback)
-                    } else null
+                    } else {
+                        null
+                    }
                 }
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE         -> {
                     verificationConclusionItemFactory.create(event, highlight, callback)
                 }
 
-                // Unhandled event types (yet)
-                EventType.STATE_ROOM_THIRD_PARTY_INVITE -> defaultItemFactory.create(event, highlight, callback)
+                // Unhandled event types
                 else                                    -> {
                     // Should only happen when shouldShowHiddenEvents() settings is ON
                     Timber.v("Type ${event.root.getClearType()} not handled")

@@ -156,6 +156,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param left    the user ids list which left a room
      */
     fun handleDeviceListsChanges(changed: Collection<String>, left: Collection<String>) {
+        Timber.v("## CRYPTO: handleDeviceListsChanges changed:$changed / left:$left")
         var isUpdated = false
         val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
@@ -483,6 +484,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * This method must be called on getEncryptingThreadHandler() thread.
      */
     suspend fun refreshOutdatedDeviceLists() {
+        Timber.v("## CRYPTO | refreshOutdatedDeviceLists()")
         val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
         val users = deviceTrackingStatuses.keys.filterTo(mutableListOf()) { userId ->

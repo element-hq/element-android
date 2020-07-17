@@ -50,8 +50,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Imposíbel descifrar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do que envía non enviou as chaves desta mensaxe.</string>
 
-    <string name="message_reply_to_prefix">Respondéndolle a</string>
-
     <string name="could_not_redact">Non se puido redactar</string>
     <string name="unable_to_send_message">Non foi posíbel enviar a mensaxe</string>
 
@@ -63,11 +61,6 @@
     <string name="encrypted_message">Mensaxe cifrada</string>
 
     <string name="medium_phone_number">Número de teléfono</string>
-
-    <string name="reply_to_an_image">Responder a</string>
-    <string name="reply_to_a_video">enviar un vídeo.</string>
-    <string name="reply_to_an_audio_file">enviar un ficheiro de son.</string>
-    <string name="reply_to_a_file">enviar un ficheiro.</string>
 
     <string name="room_displayname_two_members">%1$s e %2$s</string>
 

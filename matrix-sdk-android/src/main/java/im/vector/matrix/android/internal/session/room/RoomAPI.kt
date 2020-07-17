@@ -18,18 +18,20 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.room.alias.AddRoomAliasBody
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
+import im.vector.matrix.android.internal.session.room.create.CreateRoomBody
+import im.vector.matrix.android.internal.session.room.create.CreateRoomResponse
+import im.vector.matrix.android.internal.session.room.create.JoinRoomResponse
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
+import im.vector.matrix.android.internal.session.room.membership.threepid.ThreePidInviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentBody
 import im.vector.matrix.android.internal.session.room.send.SendResponse
@@ -78,7 +80,7 @@ internal interface RoomAPI {
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "createRoom")
-    fun createRoom(@Body param: CreateRoomParams): Call<CreateRoomResponse>
+    fun createRoom(@Body param: CreateRoomBody): Call<CreateRoomResponse>
 
     /**
      * Get a list of messages starting from a reference.
@@ -168,6 +170,14 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
     fun invite(@Path("roomId") roomId: String, @Body body: InviteBody): Call<Unit>
+
+    /**
+     * Invite a user to a room, using a ThreePid
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#id101
+     * @param roomId Required. The room identifier (not alias) to which to invite the user.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
+    fun invite3pid(@Path("roomId") roomId: String, @Body body: ThreePidInviteBody): Call<Unit>
 
     /**
      * Send a generic state events
@@ -310,6 +320,14 @@ internal interface RoomAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
     fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
+
+    /**
+     * Add alias to the room.
+     * @param roomAlias the room alias.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
+    fun addRoomAlias(@Path("roomAlias") roomAlias: String,
+                     @Body body: AddRoomAliasBody): Call<Unit>
 
     /**
      * Inform that the user is starting to type or has stopped typing

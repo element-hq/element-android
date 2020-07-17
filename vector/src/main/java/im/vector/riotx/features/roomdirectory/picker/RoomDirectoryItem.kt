@@ -46,6 +46,7 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
     var globalListener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.rootView.setOnClickListener { globalListener?.invoke() }
 
         // Avatar

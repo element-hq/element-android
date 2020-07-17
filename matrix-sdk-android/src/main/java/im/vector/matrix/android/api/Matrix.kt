@@ -23,6 +23,7 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
@@ -41,6 +42,7 @@ import javax.inject.Inject
  */
 class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
 
+    @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
@@ -60,6 +62,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     fun authenticationService(): AuthenticationService {
         return authenticationService
+    }
+
+    fun legacySessionImporter(): LegacySessionImporter {
+        return legacySessionImporter
     }
 
     companion object {

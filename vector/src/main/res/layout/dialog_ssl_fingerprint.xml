@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="?dialogPreferredPadding"
+        android:paddingLeft="?dialogPreferredPadding"
+        android:paddingTop="12dp"
+        android:paddingEnd="?dialogPreferredPadding"
+        android:paddingRight="?dialogPreferredPadding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/ssl_cert_not_trust" />
+
+        <TextView
+            android:id="@+id/ssl_explanation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/ssl_cert_new_account_expl" />
+
+        <TextView
+            android:id="@+id/ssl_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            tools:text="Home Server URL: http://matrix.org" />
+
+        <TextView
+            android:id="@+id/ssl_fingerprint_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/ssl_fingerprint_hash" />
+
+        <TextView
+            android:id="@+id/ssl_fingerprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            tools:text="07 89 7A A0 30 82 99 95 E6 17 5D 1F 34 5D 8D 0C 67 82 63 1C 1F 57 20 75 42 91 F7 8B 28 03 54 A2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/ssl_only_accept" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

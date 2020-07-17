@@ -49,6 +49,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var userClicked: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.avatar.setOnClickListener { userClicked?.invoke() }
         holder.sender.setTextOrHide(matrixItem.displayName)

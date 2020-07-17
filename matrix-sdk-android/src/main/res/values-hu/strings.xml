@@ -62,13 +62,6 @@
 
     <string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>
 
-    <string name="message_reply_to_prefix">Válasz erre:</string>
-
-    <string name="reply_to_an_image">képet küldött.</string>
-    <string name="reply_to_a_video">videót küldött.</string>
-    <string name="reply_to_an_audio_file">hangfájlt küldött.</string>
-    <string name="reply_to_a_file">fájlt küldött.</string>
-
     <string name="room_displayname_invite_from">Meghívó tőle: %s</string>
     <string name="room_displayname_room_invite">Meghívó egy szobába</string>
     <string name="room_displayname_two_members">%1$s és %2$s</string>

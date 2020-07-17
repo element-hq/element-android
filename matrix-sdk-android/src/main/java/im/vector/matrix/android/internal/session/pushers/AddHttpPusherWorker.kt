@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.util.awaitTransaction
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
@@ -45,7 +46,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     ) : SessionWorkerParams
 
     @Inject lateinit var pushersAPI: PushersAPI
-    @Inject lateinit var monarchy: Monarchy
+    @Inject @SessionDatabase lateinit var monarchy: Monarchy
     @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {

@@ -35,4 +35,18 @@ data class PowerLevelsContent(
         @Json(name = "users") val users: MutableMap<String, Int> = HashMap(),
         @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
         @Json(name = "notifications") val notifications: Map<String, Any> = HashMap()
-)
+) {
+    /**
+     * Alter this content with a new power level for the specified user
+     *
+     * @param userId the userId to alter the power level of
+     * @param powerLevel the new power level, or null to set the default value.
+     */
+    fun setUserPowerLevel(userId: String, powerLevel: Int?) {
+        if (powerLevel == null || powerLevel == usersDefault) {
+            users.remove(userId)
+        } else {
+            users[userId] = powerLevel
+        }
+    }
+}

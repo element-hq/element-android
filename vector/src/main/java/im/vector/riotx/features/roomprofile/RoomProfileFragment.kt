@@ -17,15 +17,23 @@
 
 package im.vector.riotx.features.roomprofile
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.yalantis.ucrop.UCrop
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -36,7 +44,12 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -45,10 +58,15 @@ import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.riotx.features.media.BigImageViewerActivity
+import im.vector.riotx.features.media.createUCropWithDefaultSettings
+import im.vector.riotx.multipicker.MultiPicker
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @Parcelize
@@ -94,8 +112,8 @@ class RoomProfileFragment @Inject constructor(
             when (it) {
                 is RoomProfileViewEvents.Loading            -> showLoading(it.message)
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
-                is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
                 is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
+                RoomProfileViewEvents.OnChangeAvatarSuccess -> dismissLoadingDialog()
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -221,7 +239,89 @@ class RoomProfileFragment @Inject constructor(
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 
-    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
-        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
+        if (matrixItem.avatarUrl?.isNotEmpty() == true) {
+            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
+            startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
+        } else if (it.canChangeAvatar) {
+            showAvatarSelector()
+        }
+    }
+
+    private fun showAvatarSelector() {
+        AlertDialog.Builder(requireContext())
+                .setItems(arrayOf(
+                        getString(R.string.attachment_type_camera),
+                        getString(R.string.attachment_type_gallery)
+                )) { dialog, which ->
+                    dialog.cancel()
+                    onAvatarTypeSelected(isCamera = (which == 0))
+                }
+                .show()
+    }
+
+    private var avatarCameraUri: Uri? = null
+    private fun onAvatarTypeSelected(isCamera: Boolean) {
+        if (isCamera) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
+        } else {
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+        }
+    }
+
+    private fun onRoomAvatarSelected(image: MultiPickerImageType) {
+        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+                .apply { withAspectRatio(1f, 1f) }
+                .start(requireContext(), this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
+                    avatarCameraUri?.let { uri ->
+                        MultiPicker.get(MultiPicker.CAMERA)
+                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
+                                ?.let {
+                                    onRoomAvatarSelected(it)
+                                }
+                    }
+                }
+                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                    MultiPicker
+                            .get(MultiPicker.IMAGE)
+                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
+                            .firstOrNull()?.let {
+                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
+                                // onRoomAvatarSelected(it)
+                                onAvatarCropped(it.contentUri)
+                            }
+                }
+                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+                BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            when (requestCode) {
+                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
+            }
+        }
+    }
+
+    private fun onAvatarCropped(uri: Uri?) {
+        if (uri != null) {
+            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomAvatar(uri, getFilenameFromUri(context, uri)))
+        } else {
+            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -40,8 +40,6 @@
     <string name="notice_crypto_unable_to_decrypt">** Αδυναμία αποκρυπτογράφησης: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Η συσκευή του/της αποστολέα δεν μας έχει στείλει τα κλειδιά για αυτό το μήνυμα.</string>
 
-    <string name="message_reply_to_prefix">Προς απάντηση στο</string>
-
     <string name="unable_to_send_message">Αποτυχία αποστολής μηνύματος</string>
 
     <string name="message_failed_to_upload">Αποτυχία αναφόρτωσης εικόνας</string>
@@ -56,10 +54,6 @@
     <string name="notice_voip_finished">Η VoIP διάσκεψη έληξε</string>
 
     <string name="notice_room_join">Ο/Η %1$s εισήλθε στο δωμάτιο</string>
-    <string name="reply_to_an_image">έστειλε μία εικόνα.</string>
-    <string name="reply_to_a_video">έστειλε ένα βίντεο.</string>
-    <string name="reply_to_an_audio_file">έστειλε ένα αρχείο ήχου.</string>
-    <string name="reply_to_a_file">έστειλε ένα αρχείο.</string>
 
     <string name="room_displayname_invite_from">Πρόσκληση από %s</string>
     <string name="room_displayname_room_invite">Πρόσκληση στο δωμάτιο</string>

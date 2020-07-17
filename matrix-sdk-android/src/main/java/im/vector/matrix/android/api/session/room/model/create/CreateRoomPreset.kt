@@ -17,7 +17,9 @@
 package im.vector.matrix.android.api.session.room.model.create
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = false)
 enum class CreateRoomPreset {
     @Json(name = "private_chat")
     PRESET_PRIVATE_CHAT,

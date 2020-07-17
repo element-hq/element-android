@@ -37,3 +37,11 @@ internal fun String.ensureProtocol(): String {
         else                -> this
     }
 }
+
+internal fun String.ensureTrailingSlash(): String {
+    return when {
+        isEmpty()      -> this
+        !endsWith("/") -> "$this/"
+        else           -> this
+    }
+}

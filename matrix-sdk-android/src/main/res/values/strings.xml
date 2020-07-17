@@ -33,16 +33,20 @@
     <string name="notice_display_name_set_by_you">You set your display name to %1$s</string>
     <string name="notice_display_name_changed_from">%1$s changed their display name from %2$s to %3$s</string>
     <string name="notice_display_name_changed_from_by_you">You changed your display name from %1$s to %2$s</string>
-    <string name="notice_display_name_removed">%1$s removed their display name (%2$s)</string>
-    <string name="notice_display_name_removed_by_you">You removed your display name (%1$s)</string>
+    <string name="notice_display_name_removed">%1$s removed their display name (it was %2$s)</string>
+    <string name="notice_display_name_removed_by_you">You removed your display name (it was %1$s)</string>
     <string name="notice_room_topic_changed">%1$s changed the topic to: %2$s</string>
     <string name="notice_room_topic_changed_by_you">You changed the topic to: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s changed the room avatar</string>
+    <string name="notice_room_avatar_changed_by_you">You changed the room avatar</string>
     <string name="notice_room_name_changed">%1$s changed the room name to: %2$s</string>
     <string name="notice_room_name_changed_by_you">You changed the room name to: %1$s</string>
     <string name="notice_placed_video_call">%s placed a video call.</string>
     <string name="notice_placed_video_call_by_you">You placed a video call.</string>
     <string name="notice_placed_voice_call">%s placed a voice call.</string>
     <string name="notice_placed_voice_call_by_you">You placed a voice call.</string>
+    <string name="notice_call_candidates">%s sent data to setup the call.</string>
+    <string name="notice_call_candidates_by_you">You sent data to setup the call.</string>
     <string name="notice_answered_call">%s answered the call.</string>
     <string name="notice_answered_call_by_you">You answered the call.</string>
     <string name="notice_ended_call">%s ended the call.</string>
@@ -69,6 +73,8 @@
     <string name="notice_room_name_removed_by_you">You removed the room name</string>
     <string name="notice_room_topic_removed">%1$s removed the room topic</string>
     <string name="notice_room_topic_removed_by_you">You removed the room topic</string>
+    <string name="notice_room_avatar_removed">%1$s removed the room avatar</string>
+    <string name="notice_room_avatar_removed_by_you">You removed the room avatar</string>
     <string name="notice_event_redacted">Message removed</string>
     <string name="notice_event_redacted_by">Message removed by %1$s</string>
     <string name="notice_event_redacted_with_reason">Message removed [reason: %1$s]</string>
@@ -106,7 +112,6 @@
     <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
     <!-- Messages -->
-    <string name="message_reply_to_prefix">In reply to</string>
 
     <!-- Room Screen -->
     <string name="could_not_redact">Could not redact</string>
@@ -132,12 +137,6 @@
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
     <string name="medium_phone_number">Phone number</string>
-
-    <!-- Reply to -->
-    <string name="reply_to_an_image">sent an image.</string>
-    <string name="reply_to_a_video">sent a video.</string>
-    <string name="reply_to_an_audio_file">sent an audio file.</string>
-    <string name="reply_to_a_file">sent a file.</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -361,5 +360,9 @@
     <string name="notice_end_to_end_unknown_algorithm_by_you">You turned on end-to-end encryption (unrecognised algorithm %1$s).</string>
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
+
+    <string name="call_notification_answer">Accept</string>
+    <string name="call_notification_reject">Decline</string>
+    <string name="call_notification_hangup">Hang Up</string>
 
 </resources>

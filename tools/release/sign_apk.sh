@@ -18,7 +18,7 @@ PARAM_APK=$2
 
 # Other params
 BUILD_TOOLS_VERSION="29.0.3"
-MIN_SDK_VERSION=19
+MIN_SDK_VERSION=21
 
 echo "Signing APK with build-tools version ${BUILD_TOOLS_VERSION} for min SDK version ${MIN_SDK_VERSION}..."
 

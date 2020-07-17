@@ -78,10 +78,10 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
         holder.passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            holder.passwordReveal.setImageResource(R.drawable.ic_eye_closed_black)
+            holder.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
             holder.passwordReveal.contentDescription = stringProvider.getString(R.string.a11y_hide_password)
         } else {
-            holder.passwordReveal.setImageResource(R.drawable.ic_eye_black)
+            holder.passwordReveal.setImageResource(R.drawable.ic_eye)
             holder.passwordReveal.contentDescription = stringProvider.getString(R.string.a11y_show_password)
         }
     }

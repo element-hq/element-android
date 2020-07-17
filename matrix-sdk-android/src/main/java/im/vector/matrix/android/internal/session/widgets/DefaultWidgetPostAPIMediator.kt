@@ -78,7 +78,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
 
     private fun onWidgetMessage(eventData: JsonDict) {
         try {
-            if (handler?.handleWidgetRequest(eventData) == false) {
+            if (handler?.handleWidgetRequest(this, eventData) == false) {
                 sendError("", eventData)
             }
         } catch (e: Exception) {

@@ -17,14 +17,20 @@
 package im.vector.matrix.rx
 
 import androidx.paging.PagedList
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -36,9 +42,11 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.Function3
 
 class RxSession(private val session: Session) {
 
@@ -164,6 +172,42 @@ class RxSession(private val session: Session) {
                 .startWithCallable {
                     session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
                 }
+    }
+
+    fun liveRoomChangeMembershipState(): Observable<Map<String, ChangeMembershipState>> {
+        return session.getChangeMembershipsLive().asObservable()
+    }
+
+    fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {
+        return Observable.combineLatest<List<UserAccountData>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
+                liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
+                liveCrossSigningInfo(session.myUserId),
+                liveCrossSigningPrivateKeys(),
+                Function3 { _, crossSigningInfo, pInfo ->
+                    // first check if 4S is already setup
+                    val is4SSetup = session.sharedSecretStorageService.isRecoverySetup()
+                    val isCrossSigningEnabled = crossSigningInfo.getOrNull() != null
+                    val isCrossSigningTrusted = crossSigningInfo.getOrNull()?.isTrusted() == true
+                    val allPrivateKeysKnown = pInfo.getOrNull()?.allKnown().orFalse()
+
+                    val keysBackupService = session.cryptoService().keysBackupService()
+                    val currentBackupVersion = keysBackupService.currentBackupVersion
+                    val megolmBackupAvailable = currentBackupVersion != null
+                    val savedBackupKey = keysBackupService.getKeyBackupRecoveryKeyInfo()
+
+                    val megolmKeyKnown = savedBackupKey?.version == currentBackupVersion
+                    SecretsSynchronisationInfo(
+                            isBackupSetup = is4SSetup,
+                            isCrossSigningEnabled = isCrossSigningEnabled,
+                            isCrossSigningTrusted = isCrossSigningTrusted,
+                            allPrivateKeysKnown = allPrivateKeysKnown,
+                            megolmBackupAvailable = megolmBackupAvailable,
+                            megolmSecretKnown = megolmKeyKnown,
+                            isMegolmKeyIn4S = session.sharedSecretStorageService.isMegolmKeyInBackup()
+                    )
+                }
+        )
+                .distinctUntilChanged()
     }
 }
 

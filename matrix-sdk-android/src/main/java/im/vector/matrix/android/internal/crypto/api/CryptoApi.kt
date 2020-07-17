@@ -60,20 +60,10 @@ internal interface CryptoApi {
      * Upload device and/or one-time keys.
      * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
      *
-     * @param params the params.
+     * @param body the keys to be sent.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
     fun uploadKeys(@Body body: KeysUploadBody): Call<KeysUploadResponse>
-
-    /**
-     * Upload device and/or one-time keys.
-     * Doc: not documented
-     *
-     * @param deviceId the deviceId
-     * @param params   the params.
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload/{deviceId}")
-    fun uploadKeys(@Path("deviceId") deviceId: String, @Body body: KeysUploadBody): Call<KeysUploadResponse>
 
     /**
      * Download device keys.
