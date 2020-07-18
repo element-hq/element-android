@@ -16,7 +16,7 @@
         <item name="android:id">@id/loginLogo</item>
         <item name="android:layout_width">60dp</item>
         <item name="android:layout_height">60dp</item>
-        <item name="android:src">@drawable/element_logo_green</item>
+        <item name="android:src">@drawable/element_logo_sc</item>
         <item name="android:importantForAccessibility">no</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintStart_toStartOf">parent</item>

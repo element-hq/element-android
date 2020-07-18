@@ -23,20 +23,25 @@ dpi=96
 
 base_folder="$mydir/../vector/src/main/res/drawable"
 
-file="$mydir/riot_splash_0_green.svg"
+cp "$mydir/ic_launcher_sc.svg" "$mydir/riot_splash_sc.svg"
+file="$mydir/riot_splash_sc.svg"
 export_files
+rm "$mydir/riot_splash_sc.svg"
 
-cp "$mydir/ic_launcher.svg" "$mydir/riotx_logo.svg"
-file="$mydir/riotx_logo.svg"
+dpi=48
+cp "$mydir/ic_launcher_sc.svg" "$mydir/element_logo_sc.svg"
+file="$mydir/element_logo_sc.svg"
 export_files
-rm "$mydir/riotx_logo.svg"
+rm "$mydir/element_logo_sc.svg"
 
 
 base_folder="$mydir/../vector/src/main/res/mipmap"
 dpi=24 # 96/4
 
-file="$mydir/ic_launcher.svg"
+file="$mydir/ic_launcher_sc.svg"
 export_files
 
-file="$mydir/ic_launcher_round.svg"
+
+dpi=48 # 96/2
+file="$mydir/ic_launcher_foreground_sc.svg"
 export_files

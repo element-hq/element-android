@@ -22,7 +22,7 @@
                 android:id="@+id/loginSplashLogo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/element_logo_green"
+                android:src="@drawable/element_logo_sc"
                 android:transitionName="loginLogoTransition"
                 app:layout_constraintBottom_toTopOf="@+id/logoType"
                 app:layout_constraintEnd_toEndOf="parent"
