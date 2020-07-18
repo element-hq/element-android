@@ -110,6 +110,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 holder.bubbleMemberNameView.visibility = View.VISIBLE
                 holder.bubbleMemberNameView.setOnClickListener(_memberNameClickListener)
                 holder.bubbleMemberNameView.text = attributes.informationData.memberName
+                holder.bubbleMemberNameView.setTextColor(attributes.getMemberNameColor())
                 holder.bubbleMemberNameView.setOnLongClickListener(attributes.itemLongClickListener)
             } else {
                 holder.bubbleTimeView.visibility = View.GONE
