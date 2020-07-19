@@ -8,6 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
+ - Fix invisible toolbar (Status.im theme) (#1746)
  - Fix theme issue on Room directory screen (#1613)
  - Fix notification not dismissing when entering a room
 
