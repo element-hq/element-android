@@ -16,7 +16,7 @@ logo_replace_color() {
     local color_shell="$2"
     local color_shell_dark="$3"
     # shell color
-    sed -i "s|#199834|$color_shell|gi" "$file"
+    sed -i "s|#19931f|$color_shell|gi" "$file"
     sed -i "s|#044204|$color_shell_dark|gi" "$file"
 }
 
@@ -32,8 +32,8 @@ case "$package_add" in
     logo_alternative "#00ACC1" "#006064"
     ;;
 "b")
-    # orange
-    logo_alternative "#FB8C00" "#E65100"
+    # orange: 900 color recuded in value
+    logo_alternative "#FB8C00" "#7f2c00"
     ;;
 "c")
     # purple
