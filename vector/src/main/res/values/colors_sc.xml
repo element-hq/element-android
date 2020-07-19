@@ -3,6 +3,7 @@
 
     <color name="accent_sc">#8BC34A</color>
     <color name="accent_sc_alpha25">#3F8BC34A</color>
+    <color name="accent_sc_alpha12">#1E8BC34A</color>
     <color name="direct_chat_ring_color_sc">#689F38</color>
 
     <color name="avatar_fill_sc_1">@color/accent_sc</color>

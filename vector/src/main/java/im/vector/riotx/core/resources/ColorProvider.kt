@@ -29,9 +29,12 @@ class ColorProvider @Inject constructor(private val context: Context) {
 
     @ColorInt
     fun getColor(@ColorRes colorRes: Int): Int {
-        if (colorRes == R.color.riotx_accent)
-            return getColorFromAttribute(R.attr.colorAccent)
-        return ContextCompat.getColor(context, colorRes)
+        return when(colorRes) {
+            R.color.riotx_accent -> getColorFromAttribute(R.attr.colorAccent)
+            R.color.riotx_positive_accent -> getColorFromAttribute(R.attr.riotx_positive_accent)
+            R.color.riotx_positive_accent_alpha12 -> getColorFromAttribute(R.attr.riotx_positive_accent_alpha12)
+            else -> ContextCompat.getColor(context, colorRes)
+        }
     }
 
     /**

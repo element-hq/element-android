@@ -6,6 +6,9 @@
         <attr name="sc_message_bg_incoming" format="color" />
         <attr name="sc_message_bg_outgoing" format="color" />
 
+        <attr name="riotx_positive_accent" format="color" />
+        <attr name="riotx_positive_accent_alpha12" format="color" />
+
     </declare-styleable>
 
 </resources>

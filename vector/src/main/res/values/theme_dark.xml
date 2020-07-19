@@ -225,6 +225,8 @@
 
         <item name="sc_message_bg_incoming">#FF465561</item>
         <item name="sc_message_bg_outgoing">#ff343b47</item>
+        <item name="riotx_positive_accent">@color/riotx_positive_accent</item>
+        <item name="riotx_positive_accent_alpha12">@color/riotx_positive_accent_alpha12</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

@@ -37,7 +37,7 @@
         android:textColor="?riotx_text_primary"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
-        tools:textColor="@color/riotx_positive_accent"
+        tools:textColor="?riotx_positive_accent"
         tools:text="Value" />
 
 

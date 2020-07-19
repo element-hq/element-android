@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
-import im.vector.riotx.features.configuration.VectorConfiguration
 import timber.log.Timber
 
 /**
@@ -232,8 +231,16 @@ object ThemeUtils {
                 c.theme.resolveAttribute(colorAttribute, color, true)
                 color.data
             } catch (e: Exception) {
-                Timber.e(e, "Unable to get color")
-                ContextCompat.getColor(c, android.R.color.holo_red_dark)
+                when (colorAttribute) {
+                    android.R.attr.colorAccent           -> ContextCompat.getColor(c, R.color.riotx_accent)
+                    R.attr.colorAccent                   -> ContextCompat.getColor(c, R.color.riotx_accent)
+                    R.attr.riotx_positive_accent         -> ContextCompat.getColor(c, R.color.riotx_positive_accent)
+                    R.attr.riotx_positive_accent_alpha12 -> ContextCompat.getColor(c, R.color.riotx_positive_accent_alpha12)
+                    else                                 -> {
+                        Timber.e(e, "Unable to get color")
+                        ContextCompat.getColor(c, android.R.color.holo_red_dark)
+                    }
+                }
             }
         }
     }

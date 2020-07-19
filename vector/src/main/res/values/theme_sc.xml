@@ -208,6 +208,8 @@
 
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/background_sc</item>
+        <item name="riotx_positive_accent">@color/accent_sc</item>
+        <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark">

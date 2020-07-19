@@ -40,6 +40,7 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.PopupAlertManager
@@ -202,7 +203,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     matrixItem = userItem
-                    colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                    colorInt = ColorProvider(this@HomeActivity).getColor(R.color.riotx_positive_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                             action(it)
