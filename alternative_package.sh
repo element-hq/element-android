@@ -16,8 +16,8 @@ logo_replace_color() {
     local color_shell="$2"
     local color_shell_dark="$3"
     # shell color
-    sed -i "s|#19931f|$color_shell|gi" "$file"
-    sed -i "s|#044204|$color_shell_dark|gi" "$file"
+    sed -i "s|#8BC34A|$color_shell|gi" "$file"
+    sed -i "s|#33691E|$color_shell_dark|gi" "$file"
 }
 
 logo_alternative() {
