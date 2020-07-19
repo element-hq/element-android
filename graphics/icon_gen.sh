@@ -28,6 +28,9 @@ file="$mydir/riot_splash_sc.svg"
 export_files
 rm "$mydir/riot_splash_sc.svg"
 
+file="$mydir/materialdesignicons/ic_status_bar_sc.svg"
+export_files
+
 dpi=48
 cp "$mydir/ic_launcher_sc.svg" "$mydir/element_logo_sc.svg"
 file="$mydir/element_logo_sc.svg"
