@@ -43,6 +43,7 @@ object ThemeUtils {
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
     private const val THEME_STATUS_VALUE = "status"
+    private const val THEME_SC_LIGHT_VALUE = "sc_light"
     private const val THEME_SC_VALUE = "sc"
     private const val THEME_SC_DARK_VALUE = "sc_dark"
     private const val THEME_SC_COLORED_VALUE = "sc_colored"
@@ -78,6 +79,7 @@ object ThemeUtils {
     fun isLightTheme(context: Context): Boolean {
         return when (getApplicationTheme(context)) {
             THEME_LIGHT_VALUE,
+            THEME_SC_LIGHT_VALUE,
             THEME_STATUS_VALUE -> true
             else               -> false
         }
@@ -126,7 +128,11 @@ object ThemeUtils {
     fun isScTheme(context: Context?): Boolean {
         if (context != null) {
             mIsScTheme = when (getApplicationTheme(context)) {
-                THEME_SC_VALUE, THEME_SC_DARK_VALUE, THEME_SC_COLORED_VALUE, THEME_SC_DARK_COLORED_VALUE -> true
+                THEME_SC_LIGHT_VALUE,
+                THEME_SC_VALUE,
+                THEME_SC_DARK_VALUE,
+                THEME_SC_COLORED_VALUE,
+                THEME_SC_DARK_COLORED_VALUE -> true
                 else -> false
             }
         }
@@ -144,6 +150,7 @@ object ThemeUtils {
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
+            THEME_SC_LIGHT_VALUE -> context.setTheme(R.style.AppTheme_SC_Light)
             THEME_SC_VALUE     -> context.setTheme(R.style.AppTheme_SC)
             THEME_SC_DARK_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark)
             THEME_SC_COLORED_VALUE     -> context.setTheme(R.style.AppTheme_SC_Colored)
@@ -173,6 +180,7 @@ object ThemeUtils {
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
             THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
+            THEME_SC_LIGHT_VALUE     -> activity.setTheme(otherThemes.sc_light)
             THEME_SC_VALUE     -> activity.setTheme(otherThemes.sc)
             THEME_SC_DARK_VALUE     -> activity.setTheme(otherThemes.sc_dark)
             THEME_SC_COLORED_VALUE     -> activity.setTheme(otherThemes.sc_colored)

@@ -17,6 +17,10 @@
         <item name="android:windowLightNavigationBar">false</item>
     </style>
 
+    <style name="AppTheme.SC.Light.v27" parent="AppTheme.SC.Light.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
     <style name="AppTheme.SC" parent="AppTheme.SC.v27" />
 
     <style name="AppTheme.SC.Dark" parent="AppTheme.SC.Dark.v27" />
@@ -24,5 +28,7 @@
     <style name="AppTheme.SC.Colored" parent="AppTheme.SC.Colored.v27" />
 
     <style name="AppTheme.SC.Dark.Colored" parent="AppTheme.SC.Dark.Colored.v27" />
+
+    <style name="AppTheme.SC.Light" parent="AppTheme.SC.Light.v27" />
 
 </resources>

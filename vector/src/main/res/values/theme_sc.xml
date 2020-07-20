@@ -251,10 +251,4 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-
-    <!-- Default AppTheme with modified accent for usage where settings don't apply -->
-    <style name="AppTheme.SC.Light" parent="AppTheme.Light">
-        <item name="colorPrimary">@color/accent_sc</item>
-    </style>
-
 </resources>

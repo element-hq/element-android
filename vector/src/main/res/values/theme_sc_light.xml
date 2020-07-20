@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- SC THEME COLORS -->
+    <style name="AppTheme.Base.SC.Light" parent="AppTheme.Base.Light">
+        <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
+        <item name="colorPrimary">@color/accent_sc</item>
+        <item name="colorSecondary">@color/accent_sc</item>
+
+        <!-- Keep color accent for legacy widget-->
+        <item name="colorAccent">@color/accent_sc</item>
+
+        <item name="materialButtonStyle">@style/VectorButtonStyle.SC</item>
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight.SC</item>
+
+        <item name="vctr_tab_home">@color/accent_sc</item>
+
+        <item name="vctr_encrypting_message_text_color">@color/accent_sc</item>
+        <item name="vctr_highlighted_searched_message_text_color">@color/accent_sc</item>
+        <item name="vctr_unread_marker_line_color">@color/accent_sc</item>
+
+        <!-- tab bar colors -->
+        <item name="vctr_tab_bar_selected_background_color">@color/accent_sc</item>
+        <item name="vctr_tab_bar_unselected_background_color">@color/accent_sc</item>
+
+        <!-- icon colors -->
+        <item name="vctr_icon_tint_on_light_action_bar_color">@color/accent_sc</item>
+
+        <item name="vctr_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_sc_light
+        </item>
+        <item name="vctr_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_sc_light
+        </item>
+
+        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_sc</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
+        <item name="actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light.SC</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Light.SC</item>
+
+        <item name="sc_message_bg_incoming">#FFEEEEEE</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_alpha12</item>
+        <item name="riotx_positive_accent">@color/accent_sc</item>
+        <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light" parent="AppTheme.Base.SC.Light" />
+
+</resources>

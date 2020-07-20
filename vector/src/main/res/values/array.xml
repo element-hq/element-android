@@ -96,6 +96,7 @@
         <item>@string/dark_theme</item>
         <item>@string/black_them</item>
         <item>@string/status_theme</item>
+        <item>@string/sc_light_theme</item>
         <item>@string/sc_theme</item>
         <item>@string/sc_dark_theme</item>
         <item>@string/sc_colored_theme</item>
@@ -107,6 +108,7 @@
         <item>dark</item>
         <item>black</item>
         <item>status</item>
+        <item>sc_light</item>
         <item>sc</item>
         <item>sc_dark</item>
         <item>sc_colored</item>

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="settings_dark_theme">Night Theme</string>
+    <string name="sc_light_theme">SC Light</string>
     <string name="sc_theme">SC Black</string>
     <string name="sc_dark_theme">SC Dark</string>
     <string name="sc_colored_theme">SC Black, colored bubbles</string>

@@ -10,6 +10,11 @@
         <item name="colorSecondary">@color/accent_sc</item>
     </style>
 
+    <style name="VectorAlertDialogStyleLight.SC">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle.SC</item>
+        <item name="colorSecondary">@color/accent_sc</item>
+    </style>
+
     <style name="VectorAlertDialogButtonStyle.SC">
         <item name="android:textColor">?colorAccent</item>
     </style>
@@ -17,6 +22,11 @@
     <style name="Vector.TabView.SC" parent="Vector.TabView.Dark">
         <item name="android:background">@drawable/vector_tabbar_background_sc</item>
         <item name="background">@drawable/vector_tabbar_background_sc</item>
+    </style>
+
+    <style name="Vector.TabView.Light.SC" parent="Vector.TabView.Dark">
+        <item name="android:background">@drawable/vector_tabbar_background_sc_light</item>
+        <item name="background">@drawable/vector_tabbar_background_sc_light</item>
     </style>
 
     <!-- custom action bar -->
