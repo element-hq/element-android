@@ -38,7 +38,7 @@ open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLo
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
-            ServerType.Modular   -> {
+            ServerType.EMS       -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 loginSignupSigninServerIcon.isVisible = true
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)

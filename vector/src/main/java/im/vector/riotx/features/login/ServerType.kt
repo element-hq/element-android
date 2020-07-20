@@ -19,6 +19,6 @@ package im.vector.riotx.features.login
 enum class ServerType {
     Unknown,
     MatrixOrg,
-    Modular,
+    EMS,
     Other
 }

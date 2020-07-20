@@ -231,7 +231,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
     private fun onServerSelectionDone(loginViewEvents: LoginViewEvents.OnServerSelectionDone) {
         when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
-            ServerType.Modular,
+            ServerType.EMS,
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginServerUrlFormFragment::class.java,
                     option = commonOption)
