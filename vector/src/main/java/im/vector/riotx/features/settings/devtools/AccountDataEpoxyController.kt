@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.StringProvider

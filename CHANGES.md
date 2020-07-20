@@ -11,6 +11,10 @@ Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
  - Fix notification not dismissing when entering a room
  - Fix uploads don't work with Room v6 (#1558)
+ - Fix Requesting avatar thumbnails in Element uses wrong http "user-agent" string (#1725)
+ - Fix 404 on EMS (#1761)
+ - Fix Infinite loop at startup when migrating account from Riot (#1699)
+ - Fix Element crashes in loop after initial sync (#1709)
 
 Translations 🗣:
  -

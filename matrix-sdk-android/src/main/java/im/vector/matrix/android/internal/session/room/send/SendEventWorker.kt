@@ -44,7 +44,7 @@ internal class SendEventWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            //TODO remove after some time, it's used for compat
+            // TODO remove after some time, it's used for compat
             val event: Event? = null,
             val eventId: String? = null,
             val roomId: String? = null,

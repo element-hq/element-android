@@ -23,6 +23,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -38,8 +40,6 @@ import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.widgets.helper.WidgetFactory
 import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSequence
@@ -151,7 +151,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     private fun UserAccountDataEvent.mapToWidgets(widgetTypes: Set<String>? = null,
-                                                                                                                      excludedTypes: Set<String>? = null): List<Widget> {
+                                                  excludedTypes: Set<String>? = null): List<Widget> {
         return extractWidgetSequence(widgetFactory)
                 .filter {
                     val widgetType = it.widgetContent.type ?: return@filter false

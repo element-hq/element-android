@@ -21,7 +21,6 @@ import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
