@@ -40,8 +40,8 @@ case "$package_add" in
     logo_alternative "#5E35B1" "#311B92"
     ;;
 "d")
-    # red
-    logo_alternative "#E53935" "#B71C1C"
+    # red: 900 color reduced in value
+    logo_alternative "#E53935" "#4c0b0b"
     ;;
 esac
 
