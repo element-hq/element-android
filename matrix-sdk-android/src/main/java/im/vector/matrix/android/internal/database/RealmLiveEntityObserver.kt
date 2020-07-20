@@ -26,6 +26,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
@@ -39,7 +40,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
     }
 
-    protected val observerScope = CoroutineScope(SupervisorJob())
+    protected val observerScope = CoroutineScope(SupervisorJob() + BACKGROUND_HANDLER.asCoroutineDispatcher())
     protected abstract val query: Monarchy.Query<T>
     private val isStarted = AtomicBoolean(false)
     private val backgroundRealm = AtomicReference<Realm>()
