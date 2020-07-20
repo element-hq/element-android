@@ -13,7 +13,7 @@
             app:fragment="im.vector.riotx.features.settings.locale.LocalePickerFragment" />
 
         <im.vector.riotx.core.preference.VectorListPreference
-            android:defaultValue="sc_dark_colored"
+            android:defaultValue="sc_light"
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:key="APPLICATION_THEME_KEY"
@@ -22,7 +22,7 @@
             app:iconSpaceReserved="false" />
 
         <im.vector.riotx.core.preference.VectorListPreference
-            android:defaultValue="sc_dark_colored"
+            android:defaultValue="sc_dark"
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:key="APPLICATION_DARK_THEME_KEY"

@@ -104,7 +104,7 @@ object ThemeUtils {
      */
     fun getApplicationLightTheme(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE) ?: THEME_SC_DARK_COLORED_VALUE
+                .getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
     }
 
 
@@ -116,7 +116,7 @@ object ThemeUtils {
      */
     fun getApplicationDarkTheme(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE) ?: THEME_SC_DARK_COLORED_VALUE
+                .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
     }
 
     /**
