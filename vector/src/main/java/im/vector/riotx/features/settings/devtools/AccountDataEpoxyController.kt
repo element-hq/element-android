@@ -21,7 +21,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.StringProvider
@@ -35,7 +36,7 @@ class AccountDataEpoxyController @Inject constructor(
 ) : TypedEpoxyController<AccountDataViewState>() {
 
     interface InteractionListener {
-        fun didTap(data: UserAccountData)
+        fun didTap(data: UserAccountDataEvent)
     }
 
     var interactionListener: InteractionListener? = null

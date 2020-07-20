@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.database.mapper
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import javax.inject.Inject
 
 internal class AccountDataMapper @Inject constructor(moshi: Moshi) {

@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -64,7 +64,7 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         val body = IgnoredUsersContent.createWithUserIds(list)
 
         executeRequest<Unit>(eventBus) {
-            apiCall = accountDataApi.setAccountData(userId, UserAccountData.TYPE_IGNORED_USER_LIST, body)
+            apiCall = accountDataApi.setAccountData(userId, UserAccountDataTypes.TYPE_IGNORED_USER_LIST, body)
         }
 
         // Update the DB right now (do not wait for the sync to come back with updated data, for a faster UI update)
