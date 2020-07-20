@@ -13,6 +13,7 @@
     <string name="bubble_style_start">Same side</string>
     <string name="bubble_style_both">Both sides</string>
 
+    <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Overview</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
     <string name="all_list_rooms_empty_body">Chats will be displayed here</string>

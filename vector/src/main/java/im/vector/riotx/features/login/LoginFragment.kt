@@ -116,7 +116,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device_riotx)))
+            loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device_sc)))
         }
     }
 
