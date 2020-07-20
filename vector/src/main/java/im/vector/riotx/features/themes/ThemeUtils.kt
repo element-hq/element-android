@@ -147,6 +147,7 @@ object ThemeUtils {
     fun setApplicationTheme(context: Context, aLightTheme: String, aDarkTheme: String) {
         val aTheme = if (useDarkTheme(context)) aDarkTheme else aLightTheme
         when (aTheme) {
+            THEME_LIGHT_VALUE  -> context.setTheme(R.style.AppTheme_Light)
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
@@ -177,6 +178,7 @@ object ThemeUtils {
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
+            THEME_LIGHT_VALUE  -> activity.setTheme(otherThemes.light)
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
             THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)

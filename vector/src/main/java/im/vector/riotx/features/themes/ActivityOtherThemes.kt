@@ -21,9 +21,10 @@ import im.vector.riotx.R
 
 /**
  * Class to manage Activity other possible themes.
- * Note that style for light theme is default and is declared in the Android Manifest
+ * Note that style for light theme is no more default and is no more declared in the Android Manifest
  */
-sealed class ActivityOtherThemes(@StyleRes val dark: Int,
+sealed class ActivityOtherThemes(@StyleRes val light: Int,
+                                 @StyleRes val dark: Int,
                                  @StyleRes val black: Int,
                                  @StyleRes val status: Int,
                                  @StyleRes val sc_light: Int,
@@ -33,6 +34,7 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
                                  @StyleRes val sc_dark_colored: Int) {
 
     object Default : ActivityOtherThemes(
+            R.style.AppTheme_Light,
             R.style.AppTheme_Dark,
             R.style.AppTheme_Black,
             R.style.AppTheme_Status,
@@ -47,6 +49,7 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
+            R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview_SC,
             R.style.AppTheme_AttachmentsPreview_SC,
             R.style.AppTheme_AttachmentsPreview_SC,
@@ -55,6 +58,7 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
     )
 
     object VectorAttachmentsPreview : ActivityOtherThemes(
+            R.style.AppTheme_Transparent,
             R.style.AppTheme_Transparent,
             R.style.AppTheme_Transparent,
             R.style.AppTheme_Transparent,
