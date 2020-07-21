@@ -51,7 +51,7 @@ class DefaultErrorFormatter @Inject constructor(
                         stringProvider.getString(R.string.login_error_unknown_host)
                     is SSLPeerUnverifiedException ->
                         stringProvider.getString(R.string.login_error_ssl_peer_unverified)
-                    is SSLException ->
+                    is SSLException               ->
                         stringProvider.getString(R.string.login_error_ssl_other)
                     else                          ->
                         stringProvider.getString(R.string.error_no_network)
@@ -83,6 +83,9 @@ class DefaultErrorFormatter @Inject constructor(
                     }
                     throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
+                    }
+                    throwable.error.code == MatrixError.M_USER_DEACTIVATED   -> {
+                        stringProvider.getString(R.string.auth_invalid_login_deactivated_account)
                     }
                     else                                                     -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }

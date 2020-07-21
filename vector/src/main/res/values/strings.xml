@@ -2392,6 +2392,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
 
     <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
+    <string name="auth_invalid_login_deactivated_account">This account has been deactivated.</string>
 
     <string name="room_message_placeholder">Message…</string>
 
