@@ -14,7 +14,7 @@ Difference though (list not exhaustive):
 - Only API v2 is supported (see https://matrix.org/docs/spec/identity_service/latest)
 - Homeserver has to be up to date to support binding (Versions.isLoginAndRegistrationSupportedBySdk() has to return true)
 - The SDK managed the session and client secret when binding ThreePid. Those data are not exposed to the client.
-- The SDK supports incremental sendAttempt (this is not used by RiotX)
+- The SDK supports incremental sendAttempt (this is not used by Element)
 - The "Continue" button is now under the information, and not as the same place that the checkbox
 - The app can cancel a binding. Current data are erased from DB.
 - The API (IdentityService) is improved.
@@ -22,7 +22,7 @@ Difference though (list not exhaustive):
 
 Missing features (list not exhaustive):
 - Invite by 3Pid (will be in a dedicated PR)
-- Add email or phone to account (not P1, can be done on Riot-Web)
+- Add email or phone to account (not P1, can be done on Element-Web)
 - List email and phone of the account (could be done in a dedicated PR)
 - Search contact (not P1)
 - Logout from identity server when user sign out or deactivate his account.
@@ -55,7 +55,7 @@ The list can be found here: https://matrix.org/blog/2019/09/27/privacy-improveme
 
 - Default identity server URL, from Wellknown data is proposed to the user.
 - Identity server can be set
-- Identity server can be changed on another user's device, so when the change is detected (thanks to account data sync) RiotX should properly disconnect from a previous identity server (I think it was not the case in Riot-Android, where we keep the token forever)
+- Identity server can be changed on another user's device, so when the change is detected (thanks to account data sync) Element should properly disconnect from a previous identity server (I think it was not the case in Riot-Android, where we keep the token forever)
 - Registration to the identity server is managed with an openId token
 - Terms of service can be accepted when configuring the identity server.
 - Terms of service can be accepted after, if they change.
