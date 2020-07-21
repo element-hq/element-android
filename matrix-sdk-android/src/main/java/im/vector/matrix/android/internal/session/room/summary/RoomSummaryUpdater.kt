@@ -75,6 +75,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 EventType.STATE_ROOM_ENCRYPTION,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
+                EventType.REACTION,
                 EventType.STATE_ROOM_CREATE
         )
     }

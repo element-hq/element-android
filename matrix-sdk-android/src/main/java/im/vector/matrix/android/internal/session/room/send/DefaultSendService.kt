@@ -282,12 +282,6 @@ internal class DefaultSendService @AssistedInject constructor(
                 }
     }
 
-    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        return SendEventWorker.Params(sessionId, event)
-                .let { WorkerParamsFactory.toData(it) }
-                .let { timelineSendEventWorkCommon.createWork<SendEventWorker>(it, startChain) }
-    }
-
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
         return localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
                 .also { createLocalEcho(it) }

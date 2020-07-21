@@ -43,15 +43,15 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     private fun initTextViews() {
-        loginServerChoiceModularLearnMore.text = span {
+        loginServerChoiceEMSLearnMore.text = span {
             text = getString(R.string.login_server_modular_learn_more)
             textDecorationLine = "underline"
         }
     }
 
-    @OnClick(R.id.loginServerChoiceModularLearnMore)
+    @OnClick(R.id.loginServerChoiceEMSLearnMore)
     fun learnMore() {
-        openUrlInChromeCustomTab(requireActivity(), null, MODULAR_LINK)
+        openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
     }
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
@@ -59,9 +59,9 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
         loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
     }
 
-    @OnClick(R.id.loginServerChoiceModular)
-    fun selectModular() {
-        loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
+    @OnClick(R.id.loginServerChoiceEMS)
+    fun selectEMS() {
+        loginViewModel.handle(LoginAction.UpdateServerType(ServerType.EMS))
     }
 
     @OnClick(R.id.loginServerChoiceOther)
