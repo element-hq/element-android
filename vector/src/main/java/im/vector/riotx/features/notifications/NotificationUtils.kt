@@ -533,6 +533,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 // Number of new notifications for API <24 (M and below) devices.
                 .setSubText(stringProvider.getQuantityString(R.plurals.room_new_messages_notification, messageStyle.messages.size, messageStyle.messages.size))
 
+                // Number of new notifications for notification badge
+                .setNumber(messageStyle.messages.size)
+
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 // TODO Group should be current user display name
