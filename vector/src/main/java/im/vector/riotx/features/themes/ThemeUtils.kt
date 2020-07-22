@@ -279,6 +279,18 @@ object ThemeUtils {
 
         return when (theme) {
             THEME_LIGHT_VALUE -> resourceId
+            THEME_SC_LIGHT_VALUE -> {
+                return when (resourceId) {
+                    R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_light
+                    R.drawable.bg_unread_notification_light  -> R.drawable.bg_unread_notification_sc_light
+                    R.drawable.vector_label_background_light -> R.drawable.vector_label_background_light
+                    R.drawable.divider_horizontal_light      -> R.drawable.divider_horizontal_light
+                    else                                     -> {
+                        Timber.w("Warning, missing case for wanted drawable in sc_light theme")
+                        resourceId
+                    }
+                }
+            }
             THEME_DARK_VALUE  -> {
                 return when (resourceId) {
                     R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_dark
