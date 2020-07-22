@@ -82,7 +82,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             realm.insert(eventInsertEntity)
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@writeAsync
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
-            roomSummaryUpdater.update(realm, roomId)
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
 
@@ -96,6 +96,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                 } else {
                     sendingEventEntity.sendState = sendState
                 }
+                roomSummaryUpdater.update(realm, sendingEventEntity.roomId)
             }
         }
     }
@@ -115,6 +116,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         monarchy.awaitTransaction { realm ->
             TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
             EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
 
@@ -125,6 +127,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                     .forEach {
                         it.root?.sendState = SendState.UNSENT
                     }
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
 
@@ -134,6 +137,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             timelineEvents.forEach {
                 it.root?.sendState = sendState
             }
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
 
