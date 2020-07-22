@@ -18,7 +18,7 @@
     </style>
 
     <style name="AppTheme.SC.Light.v23" parent="AppTheme.SC.Light.v21">
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="AppTheme.SC" parent="AppTheme.SC.v23"/>
