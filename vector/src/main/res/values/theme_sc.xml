@@ -10,7 +10,7 @@
         <item name="riotx_base_text_icon_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_search_background_mobile">@color/background_dark_sc</item>
         <item name="riotx_header_panel_background">@color/background_black_sc</item>
-        <item name="riotx_header_panel_border_mobile">@color/background_dark_sc</item>
+        <item name="riotx_header_panel_border_mobile">#20ffffff</item>
         <item name="riotx_header_panel_text_primary">@color/text_color_primary_sc</item>
         <item name="riotx_header_panel_text_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_text_primary">@color/text_color_primary_sc</item>
@@ -210,9 +210,11 @@
         <item name="sc_message_bg_outgoing">@color/background_sc</item>
         <item name="riotx_positive_accent">@color/accent_sc</item>
         <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
+        <item name="riotx_toolbar_bg">?riotx_background</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark">
+        <item name="riotx_toolbar_bg">@color/background_sc</item>
         <item name="riotx_background">@color/background_dark_sc</item>
         <item name="riotx_header_panel_background">@color/background_sc</item>
     </style>

@@ -14,7 +14,7 @@
     </style>
 
     <style name="AppTheme.SC.Dark.v21" parent="AppTheme.Base.SC.Dark">
-        <item name="android:statusBarColor">@color/background_black_sc</item>
+        <item name="android:statusBarColor">@color/background_dark_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>
 
         <!-- enable window content transitions -->
@@ -38,7 +38,7 @@
     </style>
 
     <style name="AppTheme.SC.Dark.Colored.v21" parent="AppTheme.Base.SC.Dark.Colored">
-        <item name="android:statusBarColor">@color/background_black_sc</item>
+        <item name="android:statusBarColor">@color/background_dark_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>
 
         <!-- enable window content transitions -->

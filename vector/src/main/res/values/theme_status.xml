@@ -156,6 +156,7 @@
         <item name="sc_message_bg_outgoing">#FFE4E8ED</item>
         <item name="riotx_positive_accent">@color/riotx_positive_accent</item>
         <item name="riotx_positive_accent_alpha12">@color/riotx_positive_accent_alpha12</item>
+        <item name="riotx_toolbar_bg">?riotx_background</item>
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />

@@ -8,6 +8,7 @@
 
         <attr name="riotx_positive_accent" format="color" />
         <attr name="riotx_positive_accent_alpha12" format="color" />
+        <attr name="riotx_toolbar_bg" format="color" />
 
     </declare-styleable>
 
