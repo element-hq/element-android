@@ -5,7 +5,8 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
+ - Display warning when fail to send events in room list
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)

@@ -30,7 +30,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
