@@ -102,7 +102,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             }
         }
 
-        if (showHelp) {
+        if (showHelp && false) {
             buildLongClickHelp()
         }
     }
