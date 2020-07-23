@@ -73,14 +73,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
         get() = supportFragmentManager.findFragmentById(R.id.loginFragmentContainer)
 
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
-        // Find the loginLogo on the current Fragment, this should not return null
-        (topFragment?.view as? ViewGroup)
-                // Find findViewById does not work, I do not know why
-                // findViewById<View?>(R.id.loginLogo)
-                ?.children
-                ?.firstOrNull { it.id == R.id.loginLogo }
-                ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-        // TODO
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
@@ -145,7 +137,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
-                            findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // TODO Disabled because it provokes a flickering
