@@ -417,7 +417,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
             R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
             R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
-            R.id.open_matrix_apps    -> true
+            R.id.open_matrix_apps    -> session.integrationManagerService().isIntegrationEnabled()
             R.id.voice_call,
             R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
             R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
