@@ -96,7 +96,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                 } else {
                     sendingEventEntity.sendState = sendState
                 }
-                roomSummaryUpdater.update(realm, sendingEventEntity.roomId)
+                roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
             }
         }
     }
