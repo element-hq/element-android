@@ -55,7 +55,7 @@
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints"
-        android:src="@drawable/ic_warning_small"
+        android:src="@drawable/ic_warning_badge"
         />
 
     <ImageView
