@@ -353,11 +353,11 @@ class MessageItemFactory @Inject constructor(
             codeVisitor.visit(localFormattedBody)
             when (codeVisitor.codeKind) {
                 CodeVisitor.Kind.BLOCK  -> {
-                    val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
+                    val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody) ?: messageContent.formattedBody!!
                     buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
                 }
                 CodeVisitor.Kind.INLINE -> {
-                    val codeFormatted = htmlRenderer.get().render(localFormattedBody)
+                    val codeFormatted = htmlRenderer.get().render(localFormattedBody)?: messageContent.formattedBody!!
                     buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                 }
                 CodeVisitor.Kind.NONE   -> {

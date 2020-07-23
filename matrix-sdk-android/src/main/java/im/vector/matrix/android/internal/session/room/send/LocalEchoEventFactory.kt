@@ -178,7 +178,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 permalink,
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
-                body.takeFormatted(),
+                // Remove inner mx_reply tags if any
+                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )
         //
@@ -372,7 +373,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 permalink,
                 userLink,
                 userId,
-                body.takeFormatted(),
+                // Remove inner mx_reply tags if any
+                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
                 createTextContent(replyText, autoMarkdown).takeFormatted()
         )
         //
@@ -485,5 +487,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">In reply to</a> <a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
+        // This is used to replace inner mx-reply tags
+        val MX_REPLY_REGEX = "<mx-reply>.*</mx-reply>".toRegex()
     }
 }
