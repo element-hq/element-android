@@ -31,6 +31,8 @@ private const val CURRENT_DISCLAIMER_VALUE = 2
 private const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 
 fun showDisclaimerDialog(activity: Activity) {
+    // This is a RiotX/Element disclaimer
+    if (true) return
     val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
 
     if (sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE) {
