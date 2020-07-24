@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,16 +16,4 @@
 
 package im.vector.matrix.android.internal.session.sync.model.accountdata
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataIdentityServer(
-        @Json(name = "type") override val type: String = TYPE_IDENTITY_SERVER,
-        @Json(name = "content") val content: IdentityServerContent? = null
-) : UserAccountData()
-
-@JsonClass(generateAdapter = true)
-internal data class IdentityServerContent(
-        @Json(name = "base_url") val baseUrl: String? = null
-)
+typealias DirectMessagesContent = Map<String, List<String>>

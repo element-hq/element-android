@@ -35,7 +35,7 @@ import im.vector.matrix.android.common.TestMatrixCallback
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

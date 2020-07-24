@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model.accountdata
+package im.vector.matrix.android.api.session.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.session.integrationmanager.AllowedWidgetsContent
+import im.vector.matrix.android.api.session.events.model.Content
 
+/**
+ * This is a simplified Event with just a type and a content.
+ * Currently used types are defined in [UserAccountDataTypes].
+ */
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataAllowedWidgets(
-        @Json(name = "type") override val type: String = TYPE_ALLOWED_WIDGETS,
-        @Json(name = "content") val content: AllowedWidgetsContent
-) : UserAccountData()
+data class UserAccountDataEvent(
+        @Json(name = "type") val type: String,
+        @Json(name = "content") val content: Content
+)

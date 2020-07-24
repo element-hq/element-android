@@ -155,14 +155,17 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     /** Clear all known message events for this room */
     fun clearMessageEventOfRoom(roomId: String?) {
         Timber.v("clearMessageEventOfRoom $roomId")
-
         if (roomId != null) {
+            var shouldUpdate = false
             synchronized(eventList) {
-                eventList.removeAll { e ->
+                shouldUpdate = eventList.removeAll { e ->
                     e is NotifiableMessageEvent && e.roomId == roomId
                 }
             }
-            refreshNotificationDrawer()
+            if (shouldUpdate) {
+                notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                refreshNotificationDrawer()
+            }
         }
     }
 

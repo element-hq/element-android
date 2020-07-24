@@ -1599,7 +1599,6 @@ Why choose Element?
 
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
-    <!-- String for RiotX -->
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
 
@@ -1703,7 +1702,6 @@ Why choose Element?
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
 
-    <!-- String for Play Store, for RiotX -->
     <string name="store_riotx_title">Element - Next Generation Matrix Client</string>
     <string name="store_riotx_short_description">A faster and lighter client for Matrix using the latest Android frameworks</string>
     <string name="store_riotx_full_description">"Element is a new client for the Matrix protocol (Matrix.org): an open network for secure, decentralised communication. Element is a full rewrite of the Riot Android client, based on a full rewrite of the Matrix Android SDK.
@@ -2392,6 +2390,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
 
     <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
+    <string name="auth_invalid_login_deactivated_account">This account has been deactivated.</string>
 
     <string name="room_message_placeholder">Message…</string>
 
@@ -2417,7 +2416,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
     <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
-    <!-- To produce things like 'RiotX Android (IQDHUVJTTV)' -->
+    <!-- To produce things like 'Element Android (IQDHUVJTTV)' -->
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
 
     <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>

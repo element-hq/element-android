@@ -53,7 +53,8 @@ data class RoomSummary constructor(
         val typingUsers: List<SenderInfo>,
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
+        val hasFailedSending: Boolean = false
 ) {
 
     val isVersioned: Boolean

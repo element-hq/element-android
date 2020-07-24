@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResu
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventInsertEntity
+import im.vector.matrix.android.internal.database.model.EventInsertEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.EventInsertLiveProcessor
@@ -46,17 +47,25 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
         if (!results.isLoaded || results.isEmpty()) {
             return
         }
+        val idsToDeleteAfterProcess = ArrayList<String>()
+        val filteredEvents = ArrayList<EventInsertEntity>(results.size)
         Timber.v("EventInsertEntity updated with ${results.size} results in db")
-        val filteredEvents = results.mapNotNull {
+        results.forEach {
             if (shouldProcess(it)) {
-                results.realm.copyFromRealm(it)
-            } else {
-                null
+                // don't use copy from realm over there
+                val copiedEvent = EventInsertEntity(
+                        eventId = it.eventId,
+                        eventType = it.eventType
+                ).apply {
+                    insertType = it.insertType
+                }
+                filteredEvents.add(copiedEvent)
             }
+            idsToDeleteAfterProcess.add(it.eventId)
         }
-        Timber.v("There are ${filteredEvents.size} events to process")
         observerScope.launch {
             awaitTransaction(realmConfiguration) { realm ->
+                Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
                 filteredEvents.forEach { eventInsert ->
                     val eventId = eventInsert.eventId
                     val event = EventEntity.where(realm, eventId).findFirst()
@@ -72,7 +81,10 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                         it.process(realm, domainEvent)
                     }
                 }
-                realm.delete(EventInsertEntity::class.java)
+                realm.where(EventInsertEntity::class.java)
+                        .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
+                        .findAll()
+                        .deleteAllFromRealm()
             }
         }
     }

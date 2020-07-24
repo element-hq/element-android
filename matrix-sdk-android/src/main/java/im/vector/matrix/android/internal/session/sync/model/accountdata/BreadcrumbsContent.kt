@@ -18,10 +18,8 @@ package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataPushRules(
-        @Json(name = "type") override val type: String = TYPE_PUSH_RULES,
-        @Json(name = "content") val content: GetPushRulesResponse
-) : UserAccountData()
+internal data class BreadcrumbsContent(
+        @Json(name = "recent_rooms") val recentRoomIds: List<String> = emptyList()
+)

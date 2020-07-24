@@ -29,7 +29,7 @@ internal class UserAgentInterceptor @Inject constructor(private val userAgentHol
         userAgentHolder.userAgent
                 .takeIf { it.isNotBlank() }
                 ?.let {
-                    newRequestBuilder.addHeader(HttpHeaders.UserAgent, it)
+                    newRequestBuilder.header(HttpHeaders.UserAgent, it)
                 }
         request = newRequestBuilder.build()
         return chain.proceed(request)

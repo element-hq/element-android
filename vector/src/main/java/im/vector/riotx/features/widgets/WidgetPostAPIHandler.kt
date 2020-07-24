@@ -31,7 +31,7 @@ import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.util.JsonDict
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
@@ -280,7 +280,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                     )
             )
             session.updateAccountData(
-                    type = UserAccountData.TYPE_WIDGETS,
+                    type = UserAccountDataTypes.TYPE_WIDGETS,
                     content = addUserWidgetBody,
                     callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
             )

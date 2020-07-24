@@ -25,7 +25,7 @@ import im.vector.matrix.android.internal.database.mapper.AccountDataMapper
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
