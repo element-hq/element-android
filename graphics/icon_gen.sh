@@ -48,3 +48,7 @@ export_files
 dpi=48 # 96/2
 file="$mydir/ic_launcher_foreground_sc.svg"
 export_files
+
+
+inkscape "$mydir/feature_image.svg" --export-filename="$mydir/../fastlane/metadata/android/en-US/images/featureGraphic.png" -C --export-dpi=96
+inkscape "$mydir/store_icon.svg" --export-filename="$mydir/../fastlane/metadata/android/en-US/images/icon.png" -C --export-dpi=96
