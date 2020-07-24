@@ -54,7 +54,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
 
     @Inject lateinit var workManagerProvider: WorkManagerProvider
     @Inject lateinit var timelineSendEventWorkCommon: TimelineSendEventWorkCommon
-    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
+    @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override suspend fun doWork(): Result {
         Timber.v("Start dispatch sending multiple event work")
@@ -67,7 +67,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
 
         if (params.lastFailureMessage != null) {
             params.events.forEach { event ->
-                event.eventId?.let { localEchoUpdater.updateSendState(it, SendState.UNDELIVERED) }
+                event.eventId?.let { localEchoRepository.updateSendState(it, SendState.UNDELIVERED) }
             }
             // Transmit the error if needed?
             return Result.success(inputData)

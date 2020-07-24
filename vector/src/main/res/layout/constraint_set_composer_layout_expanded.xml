@@ -168,16 +168,11 @@
 
     <im.vector.riotx.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
+        style="@style/ComposerEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/room_message_placeholder_not_encrypted"
-        android:inputType="textCapSentences|textMultiLine"
-        android:minHeight="48dp"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
-        android:padding="8dp"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintStart_toEndOf="@id/composer_avatar_view"
