@@ -62,7 +62,8 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 encryptionEventTs = roomSummaryEntity.encryptionEventTs,
                 breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
                 roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,
-                inviterId = roomSummaryEntity.inviterId
+                inviterId = roomSummaryEntity.inviterId,
+                hasFailedSending = roomSummaryEntity.hasFailedSending
         )
     }
 }

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        android:drawableStart="@drawable/ic_warning_small"
+        android:drawableStart="@drawable/ic_warning_badge"
         android:drawablePadding="4dp"
         android:textColor="?riotx_text_secondary"
         android:textStyle="bold"
