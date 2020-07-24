@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
+ - Fix relative date time formatting (#822)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
