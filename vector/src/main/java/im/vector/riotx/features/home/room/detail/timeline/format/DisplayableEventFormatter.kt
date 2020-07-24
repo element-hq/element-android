@@ -19,11 +19,11 @@ package im.vector.riotx.features.home.room.detail.timeline.format
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
+import im.vector.matrix.android.api.session.room.timeline.isReply
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
@@ -79,13 +79,13 @@ class DisplayableEventFormatter @Inject constructor(
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
                         }
                         MessageType.MSGTYPE_TEXT                 -> {
-                            if (messageContent.isReply()) {
+                            return if (timelineEvent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
-                                return simpleFormat(senderName, timelineEvent.getTextEditableContent()
+                                simpleFormat(senderName, timelineEvent.getTextEditableContent()
                                         ?: messageContent.body, appendAuthor)
                             } else {
-                                return simpleFormat(senderName, messageContent.body, appendAuthor)
+                                simpleFormat(senderName, messageContent.body, appendAuthor)
                             }
                         }
                         else                                     -> {
