@@ -44,6 +44,92 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginServerTitle" />
 
             <!-- Use a CheckableConstraintLayout to keep the pressed state when retrieving login flow -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/loginServerIKnowMyIdSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:background="@drawable/bg_login_server_selector"
+                android:contentDescription="@string/login_a11y_connect_using_matrix_id_sc"
+                android:minHeight="80dp"
+                android:paddingStart="@dimen/layout_horizontal_margin"
+                android:paddingEnd="@dimen/layout_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginServerText">
+
+                <TextView
+                    android:id="@+id/loginServerIKnowMyIdSubmitTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/login_connect_using_matrix_id_title_sc"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdSubmitText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/loginServerIKnowMyIdSubmitText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="start"
+                    android:text="@string/login_connect_using_matrix_id_text_sc"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/loginServerIKnowMyIdSubmitTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/loginServerChoiceOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:background="@drawable/bg_login_server_selector"
+                android:contentDescription="@string/login_a11y_choose_other_sc"
+                android:minHeight="80dp"
+                android:paddingStart="@dimen/layout_horizontal_margin"
+                android:paddingEnd="@dimen/layout_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginServerIKnowMyIdSubmit">
+
+                <TextView
+                    android:id="@+id/loginServerChoiceOtherTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/login_server_other_title_sc"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/loginServerChoiceOtherText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="start"
+                    android:text="@string/login_server_other_text_sc"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <im.vector.riotx.core.platform.CheckableConstraintLayout
                 android:id="@+id/loginServerChoiceMatrixOrg"
                 android:layout_width="match_parent"
@@ -56,7 +142,7 @@
                 android:paddingEnd="@dimen/layout_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerText">
+                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther">
 
                 <ImageView
                     android:id="@+id/loginServerChoiceMatrixOrgIcon"
@@ -95,6 +181,7 @@
                 android:minHeight="80dp"
                 android:paddingStart="@dimen/layout_horizontal_margin"
                 android:paddingEnd="0dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrg">
@@ -138,49 +225,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/loginServerChoiceOther"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:background="@drawable/bg_login_server_selector"
-                android:contentDescription="@string/login_a11y_choose_other"
-                android:minHeight="80dp"
-                android:paddingStart="@dimen/layout_horizontal_margin"
-                android:paddingEnd="@dimen/layout_horizontal_margin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceModular">
-
-                <TextView
-                    android:id="@+id/loginServerChoiceOtherTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="@string/login_server_other_title"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
-                <TextView
-                    android:id="@+id/loginServerChoiceOtherText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="start"
-                    android:text="@string/login_server_other_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <!--
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginServerIKnowMyIdSubmit"
                 style="@style/Style.Vector.Login.Button.Text"
@@ -193,6 +238,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
+                -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
