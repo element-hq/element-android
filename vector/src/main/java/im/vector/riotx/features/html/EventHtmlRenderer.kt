@@ -44,7 +44,7 @@ class EventHtmlRenderer @Inject constructor(context: Context,
     fun render(text: String): CharSequence {
         return try {
             markwon.toMarkdown(text)
-        }catch (failure: Throwable){
+        } catch (failure: Throwable) {
             Timber.v("Fail to render $text to html")
             text
         }
@@ -53,7 +53,7 @@ class EventHtmlRenderer @Inject constructor(context: Context,
     fun render(node: Node): CharSequence? {
         return try {
             markwon.render(node)
-        }catch (failure: Throwable){
+        } catch (failure: Throwable) {
             Timber.v("Fail to render $node to html")
             return null
         }
