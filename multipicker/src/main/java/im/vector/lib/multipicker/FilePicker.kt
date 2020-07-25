@@ -20,12 +20,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.provider.OpenableColumns
-import im.vector.lib.multipicker.entity.MultiPickerFileType
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.utils.MultiPickerFileFactory
 
 /**
  * Implementation of selecting any type of files
  */
-class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(requestCode) {
+class FilePicker(override val requestCode: Int) : Picker<MultiPickerBaseType>(requestCode) {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
@@ -33,12 +34,12 @@ class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(re
      * or result code is not Activity.RESULT_OK
      * or user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerFileType> {
+    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerBaseType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()
         }
 
-        val fileList = mutableListOf<MultiPickerFileType>()
+        val fileList = mutableListOf<MultiPickerBaseType>()
 
         getSelectedUriList(data).forEach { selectedUri ->
             context.contentResolver.query(selectedUri, null, null, null, null)
@@ -50,10 +51,10 @@ class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(re
                             val size = cursor.getLong(sizeColumn)
 
                             fileList.add(
-                                    MultiPickerFileType(
+                                    MultiPickerFileFactory.getFileObject(
+                                            context,
                                             name,
                                             size,
-                                            context.contentResolver.getType(selectedUri),
                                             selectedUri
                                     )
                             )

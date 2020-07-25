@@ -20,6 +20,8 @@ import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.entity.MultiPickerFileType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
 
@@ -83,5 +85,23 @@ object MultiPickerFileFactory {
                 orientation,
                 duration
         )
+    }
+
+    fun getFileObject(context: Context, displayName: String?, size: Long, contentUri: Uri) : MultiPickerBaseType {
+        var mimeType = context.contentResolver.getType(contentUri)
+
+        return when {
+            mimeType?.startsWith("image/") == true -> getImageObject(context, displayName, size, mimeType, contentUri)
+            mimeType?.startsWith("video/") == true -> getVideoObject(context, displayName, size, mimeType, contentUri)
+            mimeType?.startsWith("audio/") == true -> getAudioObject(context, displayName, size, mimeType, contentUri)
+            else -> {
+                MultiPickerFileType(
+                        displayName,
+                        size,
+                        mimeType,
+                        contentUri
+                )
+            }
+        }
     }
 }
