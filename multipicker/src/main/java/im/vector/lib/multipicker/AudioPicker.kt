@@ -19,9 +19,9 @@ package im.vector.lib.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.utils.MultiPickerFileFactory
 
 /**
  * Audio file picker implementation
@@ -60,21 +60,14 @@ class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(
                 if (cursor.moveToNext()) {
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
-                    var duration = 0L
-
-                    context.contentResolver.openFileDescriptor(selectedUri, "r")?.use { pfd ->
-                        val mediaMetadataRetriever = MediaMetadataRetriever()
-                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
-                    }
 
                     audioList.add(
-                            MultiPickerAudioType(
+                            MultiPickerFileFactory.getAudioObject(
+                                    context,
                                     name,
                                     size,
                                     context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    duration
+                                    selectedUri
                             )
                     )
                 }

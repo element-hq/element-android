@@ -19,9 +19,9 @@ package im.vector.lib.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.utils.MultiPickerFileFactory
 
 /**
  * Video Picker implementation
@@ -60,30 +60,14 @@ class VideoPicker(override val requestCode: Int) : Picker<MultiPickerVideoType>(
                 if (cursor.moveToNext()) {
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
-                    var duration = 0L
-                    var width = 0
-                    var height = 0
-                    var orientation = 0
-
-                    context.contentResolver.openFileDescriptor(selectedUri, "r")?.use { pfd ->
-                        val mediaMetadataRetriever = MediaMetadataRetriever()
-                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
-                        width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH).toInt()
-                        height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT).toInt()
-                        orientation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION).toInt()
-                    }
 
                     videoList.add(
-                            MultiPickerVideoType(
+                            MultiPickerFileFactory.getVideoObject(
+                                    context,
                                     name,
                                     size,
                                     context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    width,
-                                    height,
-                                    orientation,
-                                    duration
+                                    selectedUri
                             )
                     )
                 }
