@@ -216,6 +216,7 @@
     <style name="AppTheme.Base.SC.Dark">
         <item name="riotx_toolbar_bg">@color/background_sc</item>
         <item name="riotx_background">@color/background_dark_sc</item>
+        <item name="riotx_base">@color/background_sc</item>
         <item name="riotx_header_panel_background">@color/background_sc</item>
     </style>
 
