@@ -116,14 +116,14 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                     callback.onContentAttachmentsReady(
                             MultiPicker.get(MultiPicker.FILE)
                                     .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
+                                    .map { toContentAttachmentData(it) }
                     )
                 }
                 MultiPicker.REQUEST_CODE_PICK_AUDIO   -> {
                     callback.onContentAttachmentsReady(
                             MultiPicker.get(MultiPicker.AUDIO)
                                     .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
+                                    .map { toContentAttachmentData(it) }
                     )
                 }
                 MultiPicker.REQUEST_CODE_PICK_CONTACT -> {
@@ -139,16 +139,16 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                     callback.onContentAttachmentsReady(
                             MultiPicker.get(MultiPicker.IMAGE)
                                     .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
+                                    .map { toContentAttachmentData(it) }
                     )
                 }
                 MultiPicker.REQUEST_CODE_TAKE_PHOTO   -> {
                     captureUri?.let { captureUri ->
                         MultiPicker.get(MultiPicker.CAMERA)
                                 .getTakenPhoto(context, requestCode, resultCode, captureUri)
-                                ?.let {
+                                ?.let { it ->
                                     callback.onContentAttachmentsReady(
-                                            listOf(it).map { it.toContentAttachmentData() }
+                                            listOf(it).map { photo_it -> toContentAttachmentData(photo_it) }
                                     )
                                 }
                     }
@@ -157,7 +157,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                     callback.onContentAttachmentsReady(
                             MultiPicker.get(MultiPicker.VIDEO)
                                     .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
+                                    .map { toContentAttachmentData(it) }
                     )
                 }
                 else                                  -> return false
@@ -177,25 +177,25 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         if (type.startsWith("image")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
+                        toContentAttachmentData(it)
                     }
             )
         } else if (type.startsWith("video")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
+                        toContentAttachmentData(it)
                     }
             )
         } else if (type.startsWith("audio")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
+                        toContentAttachmentData(it)
                     }
             )
         } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
+                        toContentAttachmentData(it)
                     }
             )
         } else {

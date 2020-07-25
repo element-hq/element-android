@@ -18,9 +18,45 @@ package im.vector.lib.multipicker.entity
 
 import android.net.Uri
 
-interface MultiPickerBaseType {
-    val displayName: String?
-    val size: Long
-    val mimeType: String?
-    val contentUri: Uri
+sealed class MultiPickerBaseType {
+    abstract val displayName: String?
+    abstract val size: Long
+    abstract val mimeType: String?
+    abstract val contentUri: Uri
 }
+
+data class MultiPickerAudioType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri,
+        val duration: Long
+) : MultiPickerBaseType()
+
+data class MultiPickerFileType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri
+) : MultiPickerBaseType()
+
+data class MultiPickerImageType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri,
+        val width: Int,
+        val height: Int,
+        val orientation: Int
+) : MultiPickerBaseType()
+
+data class MultiPickerVideoType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri,
+        val width: Int,
+        val height: Int,
+        val orientation: Int,
+        val duration: Long
+) : MultiPickerBaseType()

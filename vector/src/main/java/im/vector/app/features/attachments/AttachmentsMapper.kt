@@ -23,7 +23,6 @@ import im.vector.lib.multipicker.entity.MultiPickerFileType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import timber.log.Timber
 
 fun MultiPickerContactType.toContactAttachment(): ContactAttachment {
     return ContactAttachment(
@@ -34,62 +33,40 @@ fun MultiPickerContactType.toContactAttachment(): ContactAttachment {
     )
 }
 
-fun MultiPickerFileType.toContentAttachmentData(): ContentAttachmentData {
-    if (mimeType == null) Timber.w("No mimeType")
-    return ContentAttachmentData(
-            mimeType = mimeType,
-            type = mapType(),
-            size = size,
-            name = displayName,
-            queryUri = contentUri
+fun toContentAttachmentData(data : MultiPickerBaseType) = when (data) {
+    is MultiPickerAudioType -> ContentAttachmentData(
+            mimeType = data.mimeType,
+            type = ContentAttachmentData.Type.AUDIO,
+            size = data.size,
+            name = data.displayName,
+            duration = data.duration,
+            queryUri = data.contentUri
     )
-}
-
-fun MultiPickerAudioType.toContentAttachmentData(): ContentAttachmentData {
-    if (mimeType == null) Timber.w("No mimeType")
-    return ContentAttachmentData(
-            mimeType = mimeType,
-            type = mapType(),
-            size = size,
-            name = displayName,
-            duration = duration,
-            queryUri = contentUri
+    is MultiPickerFileType  -> ContentAttachmentData(
+            mimeType = data.mimeType,
+            type = ContentAttachmentData.Type.FILE,
+            size = data.size,
+            name = data.displayName,
+            queryUri = data.contentUri
     )
-}
-
-private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
-    return when {
-        mimeType?.startsWith("image/") == true -> ContentAttachmentData.Type.IMAGE
-        mimeType?.startsWith("video/") == true -> ContentAttachmentData.Type.VIDEO
-        mimeType?.startsWith("audio/") == true -> ContentAttachmentData.Type.AUDIO
-        else                                   -> ContentAttachmentData.Type.FILE
-    }
-}
-
-fun MultiPickerImageType.toContentAttachmentData(): ContentAttachmentData {
-    if (mimeType == null) Timber.w("No mimeType")
-    return ContentAttachmentData(
-            mimeType = mimeType,
-            type = mapType(),
-            name = displayName,
-            size = size,
-            height = height.toLong(),
-            width = width.toLong(),
-            exifOrientation = orientation,
-            queryUri = contentUri
+    is MultiPickerImageType -> ContentAttachmentData(
+            mimeType = data.mimeType,
+            type = ContentAttachmentData.Type.IMAGE,
+            name = data.displayName,
+            size = data.size,
+            height = data.height.toLong(),
+            width = data.width.toLong(),
+            exifOrientation = data.orientation,
+            queryUri = data.contentUri
     )
-}
-
-fun MultiPickerVideoType.toContentAttachmentData(): ContentAttachmentData {
-    if (mimeType == null) Timber.w("No mimeType")
-    return ContentAttachmentData(
-            mimeType = mimeType,
+    is MultiPickerVideoType -> ContentAttachmentData(
+            mimeType = data.mimeType,
             type = ContentAttachmentData.Type.VIDEO,
-            size = size,
-            height = height.toLong(),
-            width = width.toLong(),
-            duration = duration,
-            name = displayName,
-            queryUri = contentUri
+            size = data.size,
+            height = data.height.toLong(),
+            width = data.width.toLong(),
+            duration = data.duration,
+            name = data.displayName,
+            queryUri = data.contentUri
     )
 }
