@@ -2107,7 +2107,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_profile_section_security">Sicherheit</string>
     <string name="room_profile_section_security_learn_more">Mehr erfahren</string>
     <string name="room_profile_section_more">Mehr</string>
-    <string name="room_profile_section_more_settings">Raum Einstellungen</string>
+    <string name="room_profile_section_more_settings">Raum-Einstellungen</string>
     <string name="room_profile_section_more_notifications">Benachrichtigungen</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">Eine Person</item>

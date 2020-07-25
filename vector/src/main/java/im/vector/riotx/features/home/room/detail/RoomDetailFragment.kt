@@ -170,6 +170,7 @@ import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotx.features.roomprofile.members.RoomMemberListActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
@@ -573,6 +574,14 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.hangup_call         -> {
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
+                true
+            }
+            R.id.show_participants -> {
+                startActivity(RoomMemberListActivity.newIntent(requireContext(), roomDetailArgs.roomId))
+                true
+            }
+            R.id.show_room_info -> {
+                navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
                 true
             }
             else                     -> super.onOptionsItemSelected(item)

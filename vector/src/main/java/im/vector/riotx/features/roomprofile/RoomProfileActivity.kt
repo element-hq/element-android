@@ -37,7 +37,7 @@ import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
-class RoomProfileActivity :
+open class RoomProfileActivity :
         VectorBaseActivity(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory {
@@ -53,7 +53,7 @@ class RoomProfileActivity :
     }
 
     private lateinit var sharedActionViewModel: RoomProfileSharedActionViewModel
-    private lateinit var roomProfileArgs: RoomProfileArgs
+    protected lateinit var roomProfileArgs: RoomProfileArgs
 
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
@@ -75,7 +75,7 @@ class RoomProfileActivity :
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+            addInitialFragment()
         }
         sharedActionViewModel
                 .observe()
@@ -93,6 +93,10 @@ class RoomProfileActivity :
                 is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
             }
         }
+    }
+
+    open fun addInitialFragment() {
+        addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
     }
 
     private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {

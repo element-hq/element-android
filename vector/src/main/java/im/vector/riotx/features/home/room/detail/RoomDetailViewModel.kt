@@ -421,6 +421,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.voice_call,
             R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
             R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
+            R.id.show_room_info      -> true
+            R.id.show_participants   -> true
             else                     -> false
         }
     }

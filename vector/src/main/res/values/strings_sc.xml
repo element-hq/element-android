@@ -26,4 +26,7 @@
     <string name="login_server_other_title_sc">Custom server</string>
     <string name="login_server_other_text_sc">Enter server address to login or register</string>
 
+    <string name="show_room_info_sc">Room details</string>
+    <string name="show_participants_sc">Participants</string>
+
 </resources>

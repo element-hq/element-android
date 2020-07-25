@@ -26,4 +26,7 @@
     <string name="login_server_other_title_sc">Benutzerdefinierter Server</string>
     <string name="login_server_other_text_sc">Serveradresse angeben zum Anmelden oder Registrieren</string>
 
+    <string name="show_room_info_sc">Rauminfo</string>
+    <string name="show_participants_sc">Teilnehmer</string>
+
 </resources>

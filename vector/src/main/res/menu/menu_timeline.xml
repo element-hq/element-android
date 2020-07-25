@@ -58,4 +58,18 @@
         app:showAsAction="never"
         tools:visible="true" />
 
+    <item
+        android:id="@+id/show_participants"
+        android:title="@string/show_participants_sc"
+        android:visible="true"
+        app:showAsAction="never"
+        tools:visible="true" />
+
+    <item
+        android:id="@+id/show_room_info"
+        android:title="@string/show_room_info_sc"
+        android:visible="true"
+        app:showAsAction="never"
+        tools:visible="true" />
+
 </menu>
