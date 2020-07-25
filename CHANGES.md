@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix zero values for uploaded image dimmensions when uploaded as a File (#1628)
 
 Translations 🗣:
  -
