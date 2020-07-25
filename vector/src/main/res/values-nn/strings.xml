@@ -99,7 +99,7 @@
     <string name="user_directory_header">Brukarkatalog</string>
     <string name="matrix_only_filter">Berre Matrix-kontaktar</string>
     <string name="no_conversation_placeholder">Ingen samtalar</string>
-    <string name="no_contact_access_placeholder">Du gav ikkje Element tilgang til dei lokale kontaktane dine</string>
+    <string name="no_contact_access_placeholder">Du gav ikkje SchildiChat tilgang til dei lokale kontaktane dine</string>
     <string name="no_result_placeholder">Ingen treff</string>
 
     <string name="rooms_header">Rom</string>
@@ -232,7 +232,7 @@
     <string name="e2e_re_request_encryption_key_sent">Nøkkelførespurnaden er sendt.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Førespurnaden er send</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start Element på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start SchildiChat på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen</string>
 
     <string name="read_receipts_list">Les kvitteringsliste</string>
 
@@ -278,23 +278,23 @@
     <string name="media_picker_cannot_record_video">Kan ikkje spela inn video</string>
 
     <string name="permissions_rationale_popup_title">Info</string>
-    <string name="permissions_rationale_msg_storage">Element treng tilgang til bilete- og videobiblioteket for å senda og lagra vedlegg.
+    <string name="permissions_rationale_msg_storage">SchildiChat treng tilgang til bilete- og videobiblioteket for å senda og lagra vedlegg.
 \n 
 \nGje tilgang i sprettvindauget som kjem for å senda filer frå mobilen.</string>
-    <string name="permissions_rationale_msg_camera">Element treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVer venleg og gje tilgang på sprettvindauget som kjem for å starta samtalen."</string>
-    <string name="permissions_rationale_msg_record_audio">Element treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
     <string name="call_error_ice_failed">Mediaforbindelsen feila</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nGjer vel og gje tilgang på sprettvindauget som kjem for å utføra samtalen."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
 \n
 \nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.</string>
-    <string name="permissions_rationale_msg_contacts">Element treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. Viss du samtykker til å dele kontaktlista, ver venleg å tillat tilgang på sprettvindauget som kjem på neste skjermbilete.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer.
+    <string name="permissions_rationale_msg_contacts">SchildiChat treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. Viss du samtykker til å dele kontaktlista, ver venleg å tillat tilgang på sprettvindauget som kjem på neste skjermbilete.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer.
 \n
 \nSamtykker du til å dele adresseboka for dette føremålet \?</string>
 
@@ -553,14 +553,14 @@
     <string name="settings_deactivate_my_account">Deaktiver kontoen min</string>
 
     <string name="startup_notification_privacy_title">Varselpersonvern</string>
-    <string name="startup_notification_privacy_message">Element kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruk).</string>
+    <string name="startup_notification_privacy_message">SchildiChat kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruk).</string>
     <string name="startup_notification_privacy_button_grant">Gje tillating</string>
     <string name="startup_notification_privacy_button_other">vel noko anna</string>
 
     <string name="settings_analytics">Statistikk</string>
     <string name="settings_opt_in_of_analytics">Send statistikkdata</string>
-    <string name="settings_opt_in_of_analytics_summary">Element samlar anonym statistikk inn for å forbetra applikasjonen.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat samlar anonym statistikk inn for å forbetra applikasjonen.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra SchildiChat.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, eg vil hjelpa til!</string>
 
     <string name="settings_data_save_mode">Datasparingsmodus</string>
@@ -745,7 +745,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne verifikasjonsprosessen bli meir forbetra.</string>
     <string name="encryption_information_verify_key_match">Eg stadfestar at nøkklane er like</string>
 
-    <string name="e2e_enabling_on_app_update">Element støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
+    <string name="e2e_enabling_on_app_update">SchildiChat støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
 
     <string name="unknown_devices_alert_title">Rommet inneheld ukjende sesjonar</string>
     <string name="unknown_devices_alert_message">Rommet inneheld ukjende sesjonar som ikkje har blitt verifiserte. Det er med andre ord ingen garanti for at sesjonane høyrer til brukarane dei hevdar. Vi tilråder deg å gå gjennom verifikasjonsprosessen for kvar eining før du går vidare, men du kan sende meldingen på nytt utan å godkjenne viss du vil. 
@@ -962,7 +962,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
     <string name="settings_call_category">Oppringingar</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Element-ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard SchildiChat-ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
 
@@ -998,7 +998,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillingar.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Varslingar er aktivert for denne sesjonen.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Varslingar er deaktivert for denne sesjonen.
-\nSjekk Element-innstillingane.</string>
+\nSjekk SchildiChat-innstillingane.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Skru på</string>
 
     <string name="notification_sync_init">setter opp tenesta</string>
@@ -1046,7 +1046,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="invite_no_identity_server_error">Legg til ein identitetstenar i innstillingane for å utføre denne handlinga.</string>
     <string name="room_sliding_menu_version_x">Versjon %s</string>
     <string name="settings_add_3pid_confirm_password_title">Stadfest ditt passord</string>
-    <string name="settings_add_3pid_flow_not_supported">Denne handlinga kan ikkje utførast frå Element på mobil</string>
+    <string name="settings_add_3pid_flow_not_supported">Denne handlinga kan ikkje utførast frå SchildiChat på mobil</string>
     <string name="settings_add_3pid_authentication_needed">Authentisering er påkrevd</string>
 
 
@@ -1070,15 +1070,15 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_show_join_leave_messages">Vis bli-med/forlat hendelsar</string>
     <string name="settings_show_join_leave_messages_summary">Invitasjonar, utkastingar og utestengingar gjeld ikkje dette.</string>
     <string name="room_widget_open_in_browser">Opna i nettlesar</string>
-    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. Element let deg kommunisera på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon.
+    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. SchildiChat let deg kommunisera på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon.
 \n 
 \nOpprett ein gratis matrix.org-konto, sett opp eigen tenar på https://modular.im, eller ta i bruk ein annan Matrix-tenar. 
 \n 
-\nKvifor velje Element\?
+\nKvifor velje SchildiChat\?
 \n 
 \n• KOMPLETT KOMMUNIKASJON: Bygg rom rund teamet, venner, fellesskapet - du bestemmer! Send direktemeldingar, del filer, legg til tillegg, start talesamtalar og videokonferansar! Alt saman er tilgjengeleg utan kostnad.
 \n 
-\n• KRAFTIGE INTEGRASJONAR: Bruk Element saman med verktøya du nyttar frå før. Med Element kan du kommunisera med brukarar på andre plattformar.
+\n• KRAFTIGE INTEGRASJONAR: Bruk SchildiChat saman med verktøya du nyttar frå før. Med SchildiChat kan du kommunisera med brukarar på andre plattformar.
 \n 
 \n• PRIVAT OG SIKKER: Hald dine samtalar hemmelege. Industristandard ende-til-ende-kryptering sørgjer for at private samtalar forblir private. 
 \n 

@@ -74,7 +74,7 @@
     <string name="local_address_book_header">Gailuko helbide liburua</string>
     <string name="matrix_only_filter">Matrixeko kontaktuak besterik ez</string>
     <string name="no_conversation_placeholder">Elkarrizketarik ez</string>
-    <string name="no_contact_access_placeholder">Ez diozu baimena eman Element aplikazioari zure gailuko kontaktuak atzitzeko</string>
+    <string name="no_contact_access_placeholder">Ez diozu baimena eman SchildiChat aplikazioari zure gailuko kontaktuak atzitzeko</string>
     <string name="no_result_placeholder">Emaitzarik ez</string>
 
     <string name="rooms_header">Gelak</string>
@@ -218,15 +218,15 @@ E-mail helbide bat gehitu dezakezu zure profilaren ezarpenetan.</string>
     <string name="media_picker_cannot_record_video">Ezin izan da bideoa grabatu</string>
 
     <string name="permissions_rationale_popup_title">Informazioa</string>
-    <string name="permissions_rationale_msg_camera">Elementek zure kamera atzitzeko baimena behar du argazkiak eta bideoak atera ahal izateko.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChatek zure kamera atzitzeko baimena behar du argazkiak eta bideoak atera ahal izateko.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
-    <string name="permissions_rationale_msg_record_audio">Elementek zure mikrofonoa atzitzeko baimena behar du ahots deiak egin ahal izateko.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChatek zure mikrofonoa atzitzeko baimena behar du ahots deiak egin ahal izateko.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Elementek zure kamera eta mikrofonoa atzitzeko baimenak behar ditu bideo deiak egin ahal izateko.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChatek zure kamera eta mikrofonoa atzitzeko baimenak behar ditu bideo deiak egin ahal izateko.
 
 Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="permissions_action_not_performed_missing_permissions">Ez da ekintza burutu baimenak falta direlako</string>
@@ -247,11 +247,11 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="room_preview_invitation_format">%s erabiltzaileak gela honetara elkartzera gonbidatu zaitu</string>
     <string name="e2e_need_log_in_again">Berriro hasi behar duzu saioa muturretik muturrerako zifratzerako saio honentzako gakoak sortzeko eta gako publikoa zure hasiera zerbitzarira bidali. Hau behin bakarrik egin behar duzu. Barkatu eragozpenak.</string>
 
-    <string name="permissions_rationale_msg_storage">Elementek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
+    <string name="permissions_rationale_msg_storage">SchildiChatek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
 
 Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ahal izateko.</string>
-    <string name="permissions_rationale_msg_contacts">Element-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. Honetarako zure helbide-liburua partekatzea onartzen baduzu, sakatu onartu hurrengo laster-leihoan.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko.
+    <string name="permissions_rationale_msg_contacts">SchildiChat-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. Honetarako zure helbide-liburua partekatzea onartzen baduzu, sakatu onartu hurrengo laster-leihoan.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko.
 \n
 \nHonetarako zure helbide-liburua partekatzea onartzen duzu\?</string>
 
@@ -609,7 +609,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="encryption_information_verify_device_warning2">Bat badator, sakatu beheko egiaztatu botoia. Ez badator bat, beste inor saioa atzematen dago eta zerrenda beltzean sartu beharko zenuke. Etorkizunean egiaztaketa metodoa hobetuko da.</string>
     <string name="encryption_information_verify_key_match">Gakoak bat datozela egiaztatu dut</string>
 
-    <string name="e2e_enabling_on_app_update">Elementek orain muturretik muturrerako zifratzea onartzen du baina berriro hasi behar duzu saioa hau gaitzeko.
+    <string name="e2e_enabling_on_app_update">SchildiChatek orain muturretik muturrerako zifratzea onartzen du baina berriro hasi behar duzu saioa hau gaitzeko.
 
 Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
 
@@ -840,7 +840,7 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Jakinarazpenek <b>ez dute mezuaren edukia erakutsiko</b></string>
 
     <string name="startup_notification_privacy_title">Jakinarazpenen pribatutasuna</string>
-    <string name="startup_notification_privacy_message">Element bigarren planoan aritu daiteke zure jakinarazpenak modu seguru eta pribatuan kudeatzeko. Honek baterian eragina izan lezake.</string>
+    <string name="startup_notification_privacy_message">SchildiChat bigarren planoan aritu daiteke zure jakinarazpenak modu seguru eta pribatuan kudeatzeko. Honek baterian eragina izan lezake.</string>
     <string name="startup_notification_privacy_button_grant">Eman baimena</string>
     <string name="startup_notification_privacy_button_other">Aukeratu beste zerbait</string>
 
@@ -855,8 +855,8 @@ Baten bat gehitu orain?</string>
     <string name="settings_deactivate_my_account">Desaktibatu nire kontua</string>
 
     <string name="settings_opt_in_of_analytics">Bidali analitiketarako datuak</string>
-    <string name="settings_opt_in_of_analytics_summary">Elementek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Gaitu analitikak Element hobetzera laguntzeko.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChatek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Gaitu analitikak SchildiChat hobetzera laguntzeko.</string>
     <string name="settings_opt_in_of_analytics_ok">Bai, lagundu nahi dut!</string>
 
     <string name="widget_integration_missing_parameter">Behar den parametro bat falta da.</string>
@@ -884,7 +884,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Eskaria bidalita</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Abiatu Element beste mezua deszifratu dezakeen gailu batean, saio honetara gakoak bidali ditzan.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Abiatu SchildiChat beste mezua deszifratu dezakeen gailu batean, saio honetara gakoak bidali ditzan.</string>
 
     <string name="lock_screen_hint">Idatzi hemen…</string>
 
@@ -1007,7 +1007,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="call_anyway">Deitu hala ere</string>
     <string name="settings_call_category">Deiak</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Erabili Elementen lehenetsitako dei-doinua jasotako deientzat</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Erabili SchildiChaten lehenetsitako dei-doinua jasotako deientzat</string>
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
@@ -1061,12 +1061,12 @@ Egiaztatu zure kontuaren ezarpenak.</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">SAioaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Jakinarazpenak aktibatuta daude saio honentzat.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Jakinarazpenak ez daude aktibatuta saio honentzat. Egiaztatu Element ezarpenak.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Jakinarazpenak ez daude aktibatuta saio honentzat. Egiaztatu SchildiChat ezarpenak.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktibatu</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services egiaztaketa</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK eskuragarri eta egunean dago.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element-ek Google Play Services erabiltzen du baina antza ez dago ondo konfiguratuta:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat-ek Google Play Services erabiltzen du baina antza ez dago ondo konfiguratuta:
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Konpondu Play Services</string>
 
@@ -1093,19 +1093,19 @@ Berrabiarazi aplikazioa.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Hasi abioan</string>
     <string name="settings_troubleshoot_test_service_boot_success">Zerbitzua gailua berrabiaraztean hasiko da.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Zerbitzua ez da hasiko gailua berrabiaraztean, ez duzu jakinarazpenik jasoko Element behin ireki arte.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Zerbitzua ez da hasiko gailua berrabiaraztean, ez duzu jakinarazpenik jasoko SchildiChat behin ireki arte.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Gaitu abioan hastea</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Egiaztatu bigarren planoko murrizketak</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Bigarren planoko murrizketak desaktibatuta daude Element-entzat. Proba hau datu mugikorrekin egin behar da (Ez WiFi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Bigarren planoko murrizketak desaktibatuta daude SchildiChat-entzat. Proba hau datu mugikorrekin egin behar da (Ez WiFi).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Bigarren planoko murrizketak aktibatuta daude Element-entzat.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Bigarren planoko murrizketak aktibatuta daude SchildiChat-entzat.
 Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan dagoenean, eta honek jakinarazpenetan eragina izan dezake.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desaktibatu murrizketak</string>
 
     <string name="settings_troubleshoot_test_battery_title">Bateria optimizazioa</string>
-    <string name="settings_troubleshoot_test_battery_success">Bateria optimizazioak ez du eraginik Element-engan.</string>
+    <string name="settings_troubleshoot_test_battery_success">Bateria optimizazioak ez du eraginik SchildiChat-engan.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ezikusi optimizazioa</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Bigaren planoko konexioa</string>
@@ -1118,20 +1118,20 @@ Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan 
 
     <string name="no_valid_google_play_services_apk">Ez da baliozko Google Play Services APK-rik aurkitu. Jakinarazpenak agian ez dira ongi ibiliko.</string>
 
-    <string name="store_title">Element - Komunikatu, zure erara</string>
+    <string name="store_title">SchildiChat - Komunikatu, zure erara</string>
     <string name="store_short_description">Txat seguru eta unibertsala zure kontrolpean erabat.</string>
     <string name="settings_troubleshoot_test_battery_failed">Erabiltzaile batek gailu bat deskonektatuta eta erabili gabe uzten badu denbora batez, pantaila itzalita duela, gailua kuluxka moduan sartzen da. Honek aplikazioak sarera konektatzea eragozten du eta beraien lanak atzeratzen ditu, baita ohiko alarmak.</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element-ek bigarren planoko konexio arin bat behar du jakinarazpen fidagarriak izateko.
-Hurrengo pantailan Element-i bigarren planoan aritzeko baimena eskatuko zaizu, onartu ezazu mesedez.</string>
-    <string name="store_full_description">"Txaterako aplikazio bat, zure kontrolpean eta erabat malgua. Element-ek zuk nahi duzun eran komunikatzea ahalbidetzen dizu. [matrix] erabiltzeko egina, komunikaziorako estandar ireki eta deszentralizatua.
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat-ek bigarren planoko konexio arin bat behar du jakinarazpen fidagarriak izateko.
+Hurrengo pantailan SchildiChat-i bigarren planoan aritzeko baimena eskatuko zaizu, onartu ezazu mesedez.</string>
+    <string name="store_full_description">"Txaterako aplikazio bat, zure kontrolpean eta erabat malgua. SchildiChat-ek zuk nahi duzun eran komunikatzea ahalbidetzen dizu. [matrix] erabiltzeko egina, komunikaziorako estandar ireki eta deszentralizatua.
 \n
 \nEskuratu matrix.org kontu bat doan, ezarri zure zerbitzari propioa  https://modular.im bidez, edo erabili beste Matrix zerbitzari bat.
 \n
-\nZergatik erabili Element\?
+\nZergatik erabili SchildiChat\?
 \n
 \n* KOMUNIKAZIO OSOA: Sortu gelak zure lantalde, adiskide, edo komunitateentzat, zuk nahi bezalakoak! Txateatu, partekatu fitxategiak, gehitu trepetak eta egin ahots eta bideo deiak, den dena doan.
 \n
-\n* INTEGRAZIO AHALTSUAK: Erabili Element jada ezagutu eta maite dituzun tresnekin. Element erabiliz beste txat aplikazioetako erabiltzaileekin ere aritu zaitezke.
+\n* INTEGRAZIO AHALTSUAK: Erabili SchildiChat jada ezagutu eta maite dituzun tresnekin. SchildiChat erabiliz beste txat aplikazioetako erabiltzaileekin ere aritu zaitezke.
 \n
 \n* PRIBATUA ETA SEGURUA: Mantendu zure elkarrizketak sekretupean. Muturretik muturrerako zifratzeak pribatua den hori pribatu izaten jarraituko duela bermatzen du.
 \n
@@ -1141,7 +1141,7 @@ Hurrengo pantailan Element-i bigarren planoan aritzeko baimena eskatuko zaizu, o
 
     <string name="video_call_in_progress">Bide-deia abioan…</string>
 
-    <string name="store_whats_new">"Etengabe egiten dizkiogu hobekuntzak eta aldaketak Element aplikazioari.
+    <string name="store_whats_new">"Etengabe egiten dizkiogu hobekuntzak eta aldaketak SchildiChat aplikazioari.
 Aldaketen zerrenda osoa hemen aurkitu daiteke: %1$s.
 Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="title_activity_keys_backup_setup">Gakoen babes-kopia</string>
@@ -1173,7 +1173,7 @@ Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="passphrase_empty_error_message">Idatzi pasaesaldia</string>
     <string name="passphrase_passphrase_too_weak">Pasaesaldia ahulegia da</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Ezabatu pasaesaldia Element aplikazioak berreskuratze gako bat sortu dezan nahi baduzu.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ezabatu pasaesaldia SchildiChat aplikazioak berreskuratze gako bat sortu dezan nahi baduzu.</string>
     <string name="keys_backup_no_session_error">Ez dago Matrix saiorik eskuragarri</string>
 
     <string name="keys_backup_setup_step1_title">Ez galdu inoiz zifratutako mezuak</string>
@@ -1214,11 +1214,11 @@ Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Jakinarazpen batzuk desgaituta daude zure ezarpen pertsonaletan.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Hutsegitea arau pertsonalak kargatzean, saiatu berriro.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Errore hau Element-en kontroletik kanpo dago eta Google-en arabera, errore honek esan nahi du gailuko aplikazio gehiegik erabiltzen dutela FCM. Errore hau ezohiko aplikazio kopuru bat dagoenean gertatzen da, ez lioke erabiltzaile arrunt bati eragingo.</string>
+Errore hau SchildiChat-en kontroletik kanpo dago eta Google-en arabera, errore honek esan nahi du gailuko aplikazio gehiegik erabiltzen dutela FCM. Errore hau ezohiko aplikazio kopuru bat dagoenean gertatzen da, ez lioke erabiltzaile arrunt bati eragingo.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">"[%1$s]
-Errore hau Element-en kontroletik kanpo dago. Hainbat arrazoiengatik gerta daiteke eta geroago berriro saiatzen bazara agian badabil,  egiaztatu ere Google Play Service-ek ez duela datuen erabilera mugatua sistemaren ezarpenetan, edo zure gailuaren ordua ondo ezarrita dagoela, ROM pertsonalizatuekin gertatu daiteke ere."</string>
+Errore hau SchildiChat-en kontroletik kanpo dago. Hainbat arrazoiengatik gerta daiteke eta geroago berriro saiatzen bazara agian badabil,  egiaztatu ere Google Play Service-ek ez duela datuen erabilera mugatua sistemaren ezarpenetan, edo zure gailuaren ordua ondo ezarrita dagoela, ROM pertsonalizatuekin gertatu daiteke ere."</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Errore hau Element-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki kontuen kudeatzailea eta gehitu Google kontu bat.</string>
+Errore hau SchildiChat-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki kontuen kudeatzailea eta gehitu Google kontu bat.</string>
     <string name="keys_backup_setup_step1_description">Zifratutako geletako mezuak muturretik muturrera zifratuta daude. Hartzaileak/ek eta zuk eta ez beste inork irakurri ditzakezue mezuok.
 \n
 \nEgin zure gakoen babes-kopia segurua mezuak ez galtzeko.</string>
@@ -1352,7 +1352,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="autodiscover_invalid_response">Baliogabeko hasiera-zerbitzari deskubritze erantzuna</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automatikoki osatu zerbitzariaren aukerak</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">"Element-ek pertsonalizatutako zerbitzari konfigurazio bat antzeman du zure erabiltzaile id-arentzat \"%1$s\" domeinuan:
+    <string name="autodiscover_well_known_autofill_dialog_message">"SchildiChat-ek pertsonalizatutako zerbitzari konfigurazio bat antzeman du zure erabiltzaile id-arentzat \"%1$s\" domeinuan:
 \n%2$s"</string>
     <string name="autodiscover_well_known_autofill_confirm">Erabili konfigurazioa</string>
 
@@ -1484,7 +1484,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="group_all_communities">Komunitate guztiak</string>
 
     <string name="room_preview_no_preview">Gela hau ezin da aurreikusi</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Munduak irakurtzeko moduko gelaren aurrebista ez da oraindik onartzen Element bezeroan</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Munduak irakurtzeko moduko gelaren aurrebista ez da oraindik onartzen SchildiChat bezeroan</string>
 
     <string name="fab_menu_create_room">Gelak</string>
     <string name="fab_menu_create_chat">Mezu zuzenak</string>
@@ -1501,7 +1501,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
     <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
-    <string name="alpha_disclaimer_content_line_1">Element oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
+    <string name="alpha_disclaimer_content_line_1">SchildiChat oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
@@ -1542,15 +1542,15 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Erakutsi ezkutatutako gertaerak denbora lerroan</string>
 
-    <string name="store_riotx_title">Element - Hurrengo belaunaldiko Matrix bezeroa</string>
+    <string name="store_riotx_title">SchildiChat - Hurrengo belaunaldiko Matrix bezeroa</string>
     <string name="store_riotx_short_description">Matrix-erako bezero azkarrago eta arinago bat azken Android tresnak erabiliz eginak</string>
-    <string name="store_riotx_full_description">Element bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. Element Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
+    <string name="store_riotx_full_description">SchildiChat bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. SchildiChat Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
 \n 
-\nAbisua: hau beta bertsio bat da. Element garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
+\nAbisua: hau beta bertsio bat da. SchildiChat garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
 \n 
-\nElement bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Azal argia, iluna eta beltza
+\nSchildiChat bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Azal argia, iluna eta beltza
 \n 
-\nEz dira oraindik Element bezeroaren ezaugarri guztiak ezarri Element bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
+\nEz dira oraindik SchildiChat bezeroaren ezaugarri guztiak ezarri SchildiChat bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">aplikazio_pantaila_izena:</string>
     <string name="bottom_action_people_x">Mezu zuzenak</string>
@@ -1623,11 +1623,11 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="invite_no_identity_server_error">Gehitu identitate-zerbitzari bat zure ezarpenetan ekintza hau burutzeko.</string>
     <string name="settings_background_fdroid_sync_mode">Bigarren planoko sinkronizazio modua (Esperimentala)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Bateria erabilerarako optimizatua</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).
 \nZure gailuaren baliabideen egoeraren arabera, sistema eragileak sinkronizazioa atzeratu dezake.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Denbora errealerako optimizatua</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).
-\nHonek irrati eta bateriaren erabileran eragina izango du, eta Element gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).
+\nHonek irrati eta bateriaren erabileran eragina izango du, eta SchildiChat gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Ez sinkronizatu bigarren planoan</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Ez zaizu jasotako mezuei buruz jakinaraziko aplikazioa bigarren planoan dagoenean.</string>
     <string name="settings_background_sync_update_error">Huts egin du ezarpenak eguneratzean.</string>
@@ -1645,7 +1645,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="identity_server_not_defined">Ez duzu identitate zerbitzaririk erabiltzen</string>
     <string name="identity_server_not_defined_for_password_reset">Ez da identitate zerbitzaririk konfiguratu, zure pasahitza berrezartzeko beharrezkoa da.</string>
 
-    <string name="security_warning_identity_server">Element bertsio zaharrek segurtasun akats bat zuten eta zure identitate zerbitzariak (%1$s) zure kontua atzitu zezakeen. %2$s fidagarritzat jotzen baduzu hau ezikusi dezakezu, bestela maiatu saioa eta hasi berriro.
+    <string name="security_warning_identity_server">SchildiChat bertsio zaharrek segurtasun akats bat zuten eta zure identitate zerbitzariak (%1$s) zure kontua atzitu zezakeen. %2$s fidagarritzat jotzen baduzu hau ezikusi dezakezu, bestela maiatu saioa eta hasi berriro.
 \n
 \nXehetasun gehiago hemen:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
@@ -1746,14 +1746,14 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Element-ek zure E2E gakoak diskoan gordetzeko baimena behar du.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat-ek zure E2E gakoak diskoan gordetzeko baimena behar du.
 \n
 \nBaimendu sarbidea hurrengo laster-leihoan zure gakoak eskuz esportatu ahal izateko.</string>
 
     <string name="no_network_indicator">Ez dago sare konexiorik orain</string>
 
     <string name="settings_add_3pid_confirm_password_title">Berretsi zure pasahitza</string>
-    <string name="settings_add_3pid_flow_not_supported">Ezin duzu hau egin mugikorrerako Element erabiliz</string>
+    <string name="settings_add_3pid_flow_not_supported">Ezin duzu hau egin mugikorrerako SchildiChat erabiliz</string>
     <string name="settings_add_3pid_authentication_needed">Autentifikazioa behar da</string>
 
 
@@ -1836,8 +1836,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services helbidea</string>
     <string name="login_server_url_form_other_hint">Helbidea</string>
     <string name="login_server_url_form_modular_text">Ordainpeko ostatatzea elkarteentzat</string>
-    <string name="login_server_url_form_modular_notice">Sartu erabili nahi duzun Modular Element edo zerbitzariaren helbidea</string>
-    <string name="login_server_url_form_other_notice">Sartu konektatu nahi duzun zerbitzari edo Element-aren helbidea</string>
+    <string name="login_server_url_form_modular_notice">Sartu erabili nahi duzun Modular SchildiChat edo zerbitzariaren helbidea</string>
+    <string name="login_server_url_form_other_notice">Sartu konektatu nahi duzun zerbitzari edo SchildiChat-aren helbidea</string>
 
     <string name="login_sso_error_message">Errore bat gertatu da orria kargatzean: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikazioak ezin du hasiera-zerbitzari honetan saioa hasi. Hasiera-zerbitzariak honako saio mota onartzen du: %1$s.
@@ -1957,7 +1957,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \nHasi saioa berriro zure kontuaren datuak eta mezuak atzitzeko.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Zure mezu zifratuetara sarbidea galduko duzu ez baduzu saioa hasten zifratze gakoak berreskuratzeko.</string>
     <string name="soft_logout_clear_data_dialog_submit">Garbitu datuak</string>
-    <string name="soft_logout_sso_not_same_user_error">Oraingo saioa %1$s erabiltzailearena da eta %2$s erabiltzailearen kredentzialak eman dituzu. Element-k ez du hau onartzen.
+    <string name="soft_logout_sso_not_same_user_error">Oraingo saioa %1$s erabiltzailearena da eta %2$s erabiltzailearen kredentzialak eman dituzu. SchildiChat-k ez du hau onartzen.
 \nAurretik garbitu datuak, gero hasi saioa berriro beste kontu batekin.</string>
 
     <string name="permalink_malformed">Zure matrix.to esteka gaizki osatua dago</string>
@@ -1980,7 +1980,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="autocomplete_limited_results">Soilik lehen emaitzak erakusten, idatzi letra gehiago…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
     <string name="command_description_verify">Eskatu emandako erabiltzaile IDa egiaztatzea</string>
     <string name="command_description_shrug">"Jarri ¯\\_(ツ)_/¯  testu-soileko mezuaren aurretik"</string>
 
@@ -2070,9 +2070,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="room_member_jump_to_read_receipt">Saltatu irakurragirira</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">Element aplikazioak ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element aplikazioak ez ditu \'%1$s\' motako mezuak kudeatzen</string>
-    <string name="rendering_event_error_exception">Element aplikazioak arazo bat izan du \'%1$s\' id-a duen edukia erakusteko</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat aplikazioak ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat aplikazioak ez ditu \'%1$s\' motako mezuak kudeatzen</string>
+    <string name="rendering_event_error_exception">SchildiChat aplikazioak arazo bat izan du \'%1$s\' id-a duen edukia erakusteko</string>
 
     <string name="unignore">Utzi ezikusteari</string>
 
@@ -2202,7 +2202,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_mobile_device_riotx">SchildiChat Android</string>
 
     <string name="settings_key_requests">Gako eskaerak</string>
 
@@ -2344,11 +2344,11 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
-    <string name="use_other_session_content_description">Erabili azken Element bertsioa zure beste gailuetan, Element Web, Element Desktop, Element iOS, Element Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
+    <string name="use_other_session_content_description">Erabili azken SchildiChat/Element bertsioa zure beste gailuetan, Element Web, Element Desktop, Element iOS, SchildiChat Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
     <string name="riot_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="riot_ios_android">Element iOS
-\nElement Android plataformarako</string>
+\nSchildiChat Android plataformarako</string>
     <string name="or_other_mx_capabale_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
     <string name="use_latest_riot">Erabili azken Element bertsioa zure beste gailuetan:</string>
     <string name="command_description_discard_session">Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du</string>
@@ -2420,11 +2420,11 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="open_terms_of">Ireki %s zerbitzariko baldintzak</string>
     <string name="disconnect_identity_server_dialog_content">Deskonektatu %s identitate zerbitzaritik\?</string>
-    <string name="identity_server_error_outdated_identity_server">Identitate zerbitzaria zaharkituta dago. Element-k API V2 besterik ez du onartzen.</string>
+    <string name="identity_server_error_outdated_identity_server">Identitate zerbitzaria zaharkituta dago. SchildiChat-k API V2 besterik ez du onartzen.</string>
     <string name="identity_server_error_outdated_home_server">Ezin da eragiketa hau burutu. Hasiera-zerbitzaria zaharkituta dago.</string>
     <string name="identity_server_error_no_identity_server_configured">Konfiguratu identitate-zerbitzari bat aurretik.</string>
     <string name="identity_server_error_terms_not_signed">Onartu identitate-zerbitzariaren baldintzak aurretik zerbitzariaren ezarpenetan.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Zure pribatutasuna babesteko, Element-k erabiltzaileeen e-mail eta telefonoak hasheatuta bidaltzen ditu.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Zure pribatutasuna babesteko, SchildiChat-k erabiltzaileeen e-mail eta telefonoak hasheatuta bidaltzen ditu.</string>
     <string name="identity_server_error_binding_error">Asoziazioak huts egin du.</string>
     <string name="identity_server_error_no_current_binding_error">Ez dago asoziaziorik identifikatzaile honekin.</string>
 

@@ -152,7 +152,7 @@
     <string name="direct_chats_header">Interparoloj</string>
     <string name="local_address_book_header">Loka adresaro</string>
     <string name="no_conversation_placeholder">Neniuj interparoloj</string>
-    <string name="no_contact_access_placeholder">Vi ne permesis al Element aliron al viaj lokaj kontaktoj</string>
+    <string name="no_contact_access_placeholder">Vi ne permesis al SchildiChat aliron al viaj lokaj kontaktoj</string>
     <string name="no_result_placeholder">Neniuj rezultoj</string>
     <string name="people_no_identity_server">Neniu identiga servilo estas agordita.</string>
 
@@ -344,11 +344,11 @@
     <string name="settings_background_sync">Fona spegulado</string>
     <string name="settings_background_fdroid_sync_mode">Reĝimo de fona spegulado (eksperimenta)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimumigita por baterio</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
 \nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimumigita por tujeco</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element spegulos fone, ripete, je preciza tempo (agordebla).
-\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke Element aŭskultas okazojn.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat spegulos fone, ripete, je preciza tempo (agordebla).
+\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke SchildiChat aŭskultas okazojn.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Neniu fona spegulado</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Vi sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
     <string name="settings_background_sync_update_error">Malsukcesis ĝisdatigi agordojn.</string>
@@ -464,7 +464,7 @@
     <string name="e2e_re_request_encryption_key_sent">Peto de ŝlosilo sendiĝis.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Peto sendiĝis.</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Bonvolu ruli Elementon sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi al vi la ŝlosilojn al ĉi tiu salutaĵo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bonvolu ruli SchildiChaton sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi al vi la ŝlosilojn al ĉi tiu salutaĵo.</string>
 
     <string name="incoming_call">Envena voko</string>
     <string name="incoming_video_call">Envena vidvoko</string>
@@ -477,22 +477,22 @@
     <string name="media_picker_cannot_record_video">Ne povas filmi</string>
 
     <string name="permissions_rationale_popup_title">Informoj</string>
-    <string name="permissions_rationale_msg_storage">Element bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
+    <string name="permissions_rationale_msg_storage">SchildiChat bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por povi sendi dosierojn el via telefono.</string>
-    <string name="permissions_rationale_msg_camera">Element bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
-    <string name="permissions_rationale_msg_record_audio">Element bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element bezonsa premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat bezonsa premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.</string>
-    <string name="permissions_rationale_msg_contacts">Element povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
+    <string name="permissions_rationale_msg_contacts">SchildiChat povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
 \n
 \nĈu vi konsentas kunhavi vian adresaron por tiu celo\?</string>
 

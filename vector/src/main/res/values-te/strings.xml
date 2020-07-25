@@ -181,8 +181,8 @@
     <string name="media_picker_cannot_record_video">వీడియో రికార్డ్ చేయలేరు</string>
 
     <string name="permissions_rationale_popup_title">సమాచారం</string>
-    <string name="permissions_rationale_msg_camera">చిత్రాలను మరియు వీడియో కాల్లను తీయడానికి మీ కెమెరాను ప్రాప్తి చేయడానికి Elementకు అనుమతి అవసరం.</string>
-    <string name="permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి Elementకు అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_camera">చిత్రాలను మరియు వీడియో కాల్లను తీయడానికి మీ కెమెరాను ప్రాప్తి చేయడానికి SchildiChatకు అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి SchildiChatకు అనుమతి అవసరం.</string>
     <string name="permissions_action_not_performed_missing_permissions">క్షమించాలి… ఆమోదించని అనుమతుల కారణంగా చర్య చేయలేదు</string>
 
     <string name="media_slider_saved">దాయబడినది</string>
