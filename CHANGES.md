@@ -15,6 +15,7 @@ Bugfix 🐛:
  - Fix 404 on EMS (#1761)
  - Fix Infinite loop at startup when migrating account from Riot (#1699)
  - Fix Element crashes in loop after initial sync (#1709)
+ - Fix zero values for uploaded image dimmensions when uploaded as a File (#1628)
 
 Translations 🗣:
  -
