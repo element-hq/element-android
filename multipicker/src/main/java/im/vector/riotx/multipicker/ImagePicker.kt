@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.MediaStore
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.utils.ImageUtils
+import im.vector.riotx.multipicker.utils.MultiPickerFileFactory
 
 /**
  * Image Picker implementation
@@ -61,18 +61,13 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
 
-                    val bitmap = ImageUtils.getBitmap(context, selectedUri)
-                    val orientation = ImageUtils.getOrientation(context, selectedUri)
-
                     imageList.add(
-                            MultiPickerImageType(
+                            MultiPickerFileFactory.getImageObject(
+                                    context,
                                     name,
                                     size,
                                     context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    bitmap?.width ?: 0,
-                                    bitmap?.height ?: 0,
-                                    orientation
+                                    selectedUri
                             )
                     )
                 }

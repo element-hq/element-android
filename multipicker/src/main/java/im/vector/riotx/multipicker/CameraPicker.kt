@@ -24,7 +24,7 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.utils.ImageUtils
+import im.vector.riotx.multipicker.utils.MultiPickerFileFactory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -90,17 +90,12 @@ class CameraPicker(val requestCode: Int) {
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
 
-                    val bitmap = ImageUtils.getBitmap(context, photoUri)
-                    val orientation = ImageUtils.getOrientation(context, photoUri)
-
-                    return MultiPickerImageType(
+                    return MultiPickerFileFactory.getImageObject(
+                            context,
                             name,
                             size,
                             context.contentResolver.getType(photoUri),
-                            photoUri,
-                            bitmap?.width ?: 0,
-                            bitmap?.height ?: 0,
-                            orientation
+                            photoUri
                     )
                 }
             }
