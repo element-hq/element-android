@@ -70,6 +70,11 @@ class VectorSettingsActivity : VectorBaseActivity(),
                             VectorSettingsDevicesFragment::class.java,
                             null,
                             FRAGMENT_TAG)
+                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                -> {
+                    requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
+                    replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
+                }
+
                 else                                                 ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
@@ -140,6 +145,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY = 2
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS = 3
         const val EXTRA_DIRECT_ACCESS_GENERAL = 4
+        const val EXTRA_DIRECT_ACCESS_NOTIFICATIONS = 5
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

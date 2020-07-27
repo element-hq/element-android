@@ -167,6 +167,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
         private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
 
+        private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
+
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
@@ -283,6 +285,16 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun failFast(): Boolean {
         return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+    }
+
+    fun didAskUserToEnableSessionPush(): Boolean {
+        return defaultPrefs.getBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, false)
+    }
+
+    fun setDidAskUserToEnableSessionPush() {
+        defaultPrefs.edit {
+            putBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, true)
+        }
     }
 
     /**

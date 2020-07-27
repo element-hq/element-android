@@ -16,11 +16,8 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class HomeActivityViewEvents : VectorViewEvents {
-    data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem?) : HomeActivityViewEvents()
-    data class OnNewSession(val userItem: MatrixItem.UserItem?, val waitForIncomingRequest: Boolean = true) : HomeActivityViewEvents()
-    object PromptToEnableSessionPush : HomeActivityViewEvents()
+sealed class HomeActivityViewActions : VectorViewModelAction {
+    object PushPromptHasBeenReviewed : HomeActivityViewActions()
 }

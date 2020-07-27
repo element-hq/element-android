@@ -78,6 +78,7 @@
     <string name="active_call">Active call</string>
     <string name="play_video">Play</string>
     <string name="pause_video">Pause</string>
+    <string name="dismiss">Dismiss</string>
 
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
@@ -2568,4 +2569,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="member_banned_by">Banned by %1$s</string>
     <string name="failed_to_unban">Failed to UnBan user</string>
+
+    <string name="alert_push_are_disabled_title">Push notifications are disabled</string>
+    <string name="alert_push_are_disabled_description">Review your settings to enable push notifications</string>
 </resources>
