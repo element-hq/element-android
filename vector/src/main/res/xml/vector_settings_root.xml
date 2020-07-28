@@ -24,6 +24,7 @@
         app:fragment="im.vector.riotx.features.settings.VectorSettingsPreferencesFragment" />
 
     <im.vector.riotx.core.preference.VectorPreference
+        app:isPreferenceVisible="@bool/false_not_implemented"
         android:enabled="@bool/false_not_implemented"
         android:icon="@drawable/ic_settings_root_call"
         android:title="@string/preference_voice_and_video"

@@ -7,6 +7,8 @@ Features ✨:
 Improvements 🙌:
  - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
  - Display warning when fail to send events in room list
+ - Improve UI of edit role action in member profile
+ - Moderation | New screen to display list of banned users in room settings, with unban action
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
@@ -16,6 +18,11 @@ Bugfix 🐛:
  - Fix 404 on EMS (#1761)
  - Fix Infinite loop at startup when migrating account from Riot (#1699)
  - Fix Element crashes in loop after initial sync (#1709)
+ - Remove inner mx-reply tags before replying
+ - Fix timeline items not loading when there are only filtered events
+ - Fix "Voice & Video" grayed out in Settings (#1733)
+ - Fix Allow VOIP call in all rooms with 2 participants (even if not DM)
+ - Migration from old client does not enable notifications (#1723)
 
 Translations 🗣:
  -

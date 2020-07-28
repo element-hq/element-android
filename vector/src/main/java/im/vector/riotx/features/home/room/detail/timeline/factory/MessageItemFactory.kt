@@ -354,21 +354,37 @@ class MessageItemFactory @Inject constructor(
             when (codeVisitor.codeKind) {
                 CodeVisitor.Kind.BLOCK  -> {
                     val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
-                    buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
+                    if (codeFormattedBlock == null) {
+                        buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
+                    } else {
+                        buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
+                    }
                 }
                 CodeVisitor.Kind.INLINE -> {
                     val codeFormatted = htmlRenderer.get().render(localFormattedBody)
-                    buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
+                    if (codeFormatted == null) {
+                        buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
+                    } else {
+                        buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
+                    }
                 }
                 CodeVisitor.Kind.NONE   -> {
-                    val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
-                    val formattedBody = htmlRenderer.get().render(compressed)
-                    buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
+                    buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
                 }
             }
         } else {
             buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
         }
+    }
+
+    private fun buildFormattedTextItem(messageContent: MessageTextContent,
+                                       informationData: MessageInformationData,
+                                       highlight: Boolean,
+                                       callback: TimelineEventController.Callback?,
+                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
+        val formattedBody = htmlRenderer.get().render(compressed)
+        return buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
     }
 
     private fun buildMessageTextItem(body: CharSequence,

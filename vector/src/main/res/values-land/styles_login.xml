@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- We will improve this later
-    <style name="LoginLogo" parent="LoginLogoBase">
-        <item name="layout_constraintEnd_toStartOf">@id/loginFormContainer</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="layout_constraintHorizontal_chainStyle">packed</item>
-    </style>
-
-    <style name="LoginFormContainer" parent="LoginFormContainerBase">
-        <item name="layout_constraintWidth_percent">0.6</item>
-        <item name="layout_constraintStart_toEndOf">@id/loginLogo</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-    </style>
-    -->
-
 </resources>

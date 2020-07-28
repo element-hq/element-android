@@ -30,7 +30,6 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.AudioInfo
 import im.vector.matrix.android.api.session.room.model.message.FileInfo
 import im.vector.matrix.android.api.session.room.model.message.ImageInfo
@@ -50,13 +49,13 @@ import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_POLL
 import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
-import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.session.room.timeline.isReply
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
@@ -173,12 +172,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userLink = originalEvent.root.senderId?.let { PermalinkFactory.createPermalink(it) }
                 ?: ""
 
-        val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.root.getClearContent().toModel())
+        val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
-                body.takeFormatted(),
+                // Remove inner mx_reply tags if any
+                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )
         //
@@ -367,12 +367,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
 
-        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.root.getClearContent().toModel())
+        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
                 userId,
-                body.takeFormatted(),
+                // Remove inner mx_reply tags if any
+                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
                 createTextContent(replyText, autoMarkdown).takeFormatted()
         )
         //
@@ -412,10 +413,10 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     /**
      * Returns a TextContent used for the fallback event representation in a reply message.
-     * We also pass the original content, because in case of an edit of a reply the last content is not
+     * In case of an edit of a reply the last content is not
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
-    private fun bodyForReply(content: MessageContent?, originalContent: MessageContent?): TextContent {
+    private fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
@@ -424,7 +425,6 @@ internal class LocalEchoEventFactory @Inject constructor(
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
                 }
-                val isReply = content.isReply() || originalContent.isReply()
                 return if (isReply) {
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
                 } else {
@@ -485,5 +485,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">In reply to</a> <a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
+
+        // This is used to replace inner mx-reply tags
+        val MX_REPLY_REGEX = "<mx-reply>.*</mx-reply>".toRegex()
     }
 }

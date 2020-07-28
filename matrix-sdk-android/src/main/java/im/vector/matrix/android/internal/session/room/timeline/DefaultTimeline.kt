@@ -169,7 +169,7 @@ internal class DefaultTimeline(
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
-                filteredEvents.addChangeListener(eventsChangeListener)
+                nonFilteredEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.roomprofile.banned
 
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class HomeActivityViewEvents : VectorViewEvents {
-    data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem?) : HomeActivityViewEvents()
-    data class OnNewSession(val userItem: MatrixItem.UserItem?, val waitForIncomingRequest: Boolean = true) : HomeActivityViewEvents()
-    object PromptToEnableSessionPush : HomeActivityViewEvents()
+sealed class RoomBannedListMemberAction : VectorViewModelAction {
+    data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
+    data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
 }

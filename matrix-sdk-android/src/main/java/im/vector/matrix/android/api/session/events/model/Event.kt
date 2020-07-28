@@ -21,9 +21,11 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.di.MoshiProvider
 import org.json.JSONObject
 import timber.log.Timber
@@ -240,6 +242,18 @@ fun Event.isFileMessage(): Boolean {
     return getClearType() == EventType.MESSAGE
             && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
         MessageType.MSGTYPE_FILE -> true
-        else                      -> false
+        else                     -> false
     }
+}
+
+fun Event.getRelationContent(): RelationDefaultContent? {
+    return if (isEncrypted()) {
+        content.toModel<EncryptedEventContent>()?.relatesTo
+    } else {
+        content.toModel<MessageContent>()?.relatesTo
+    }
+}
+
+fun Event.isReply(): Boolean {
+    return getRelationContent()?.inReplyTo?.eventId != null
 }

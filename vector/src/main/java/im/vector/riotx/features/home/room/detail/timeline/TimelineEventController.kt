@@ -74,7 +74,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
-//        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
+
+        //        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
 //        fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
         fun onEditedDecorationClicked(informationData: MessageInformationData)
 
@@ -107,7 +108,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onUrlLongClicked(url: String): Boolean
     }
 
-    private var showingForwardLoader = false
     // Map eventId to adapter position
     private val adapterPositionMapping = HashMap<String, Int>()
     private val modelCache = arrayListOf<CacheItemData?>()
@@ -233,7 +233,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     override fun buildModels() {
         val timestamp = System.currentTimeMillis()
-        showingForwardLoader = LoadingItem_()
+
+        val showingForwardLoader = LoadingItem_()
                 .id("forward_loading_item_$timestamp")
                 .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
                 .addWhenLoading(Timeline.Direction.FORWARDS)
@@ -242,12 +243,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         add(timelineModels)
 
         // Avoid displaying two loaders if there is no elements between them
-        if (!showingForwardLoader || timelineModels.isNotEmpty()) {
-            LoadingItem_()
-                    .id("backward_loading_item_$timestamp")
-                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
-                    .addWhenLoading(Timeline.Direction.BACKWARDS)
-        }
+        val showBackwardsLoader = !showingForwardLoader || timelineModels.isNotEmpty()
+        // We can hide the loader but still add the item to controller so it can trigger backwards pagination
+        LoadingItem_()
+                .id("backward_loading_item_$timestamp")
+                .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
+                .showLoader(showBackwardsLoader)
+                .addWhenLoading(Timeline.Direction.BACKWARDS)
     }
 
 // Timeline.LISTENER ***************************************************************************
