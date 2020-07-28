@@ -20,11 +20,13 @@ package im.vector.riotx.features.roomprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 data class RoomProfileViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
+        val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
         val canChangeAvatar: Boolean = false
 ) : MvRxState {
 

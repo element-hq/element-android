@@ -41,6 +41,7 @@ class RoomProfileController @Inject constructor(
     interface Callback {
         fun onLearnMoreClicked()
         fun onMemberListClicked()
+        fun onBannedMemberListClicked()
         fun onNotificationsClicked()
         fun onUploadsClicked()
         fun onSettingsClicked()
@@ -92,6 +93,16 @@ class RoomProfileController @Inject constructor(
                 accessory = R.drawable.ic_shield_warning.takeIf { hasWarning } ?: 0,
                 action = { callback?.onMemberListClicked() }
         )
+
+        if (data.bannedMembership.invoke()?.isNotEmpty() == true) {
+            buildProfileAction(
+                    id = "banned_list",
+                    title = stringProvider.getString(R.string.room_settings_banned_users_title),
+                    dividerColor = dividerColor,
+                    icon = R.drawable.ic_settings_root_labs,
+                    action = { callback?.onBannedMemberListClicked() }
+            )
+        }
         buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),

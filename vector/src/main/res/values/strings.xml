@@ -992,6 +992,10 @@
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">1 banned user</item>
+        <item quantity="other">%d banned users</item>
+    </plurals>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
@@ -2561,4 +2565,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
+
+    <string name="member_banned_by">Banned by %1$s</string>
+    <string name="failed_to_unban">Failed to UnBan user</string>
 </resources>

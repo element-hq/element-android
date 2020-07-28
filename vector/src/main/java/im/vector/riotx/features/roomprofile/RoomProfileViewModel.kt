@@ -19,6 +19,7 @@ package im.vector.riotx.features.roomprofile
 
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -26,6 +27,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -61,7 +64,8 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        val rxRoom = room.rx()
+        rxRoom.liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)
@@ -74,6 +78,16 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
                         copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,  EventType.STATE_ROOM_AVATAR))
+                    }
+                }
+                .disposeOnClear()
+
+        rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
+                .subscribe {
+                    setState {
+                        copy(
+                                bannedMembership = Success(it)
+                        )
                     }
                 }
                 .disposeOnClear()
