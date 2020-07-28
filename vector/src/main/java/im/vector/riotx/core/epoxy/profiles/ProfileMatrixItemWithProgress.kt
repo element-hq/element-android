@@ -17,21 +17,23 @@
 
 package im.vector.riotx.core.epoxy.profiles
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 
-@EpoxyModelClass(layout = R.layout.item_profile_matrix_item)
-abstract class ProfileMatrixItem : BaseProfileMatrixItem<ProfileMatrixItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_profile_matrix_item_progress)
+abstract class ProfileMatrixItemWithProgress : BaseProfileMatrixItem<ProfileMatrixItemWithProgress.Holder>() {
 
-    open class Holder : VectorEpoxyHolder() {
-        val titleView by bind<TextView>(R.id.matrixItemTitle)
-        val subtitleView by bind<TextView>(R.id.matrixItemSubtitle)
-        val avatarImageView by bind<ImageView>(R.id.matrixItemAvatar)
-        val avatarDecorationImageView by bind<ImageView>(R.id.matrixItemAvatarDecoration)
-        val editableView by bind<View>(R.id.matrixItemEditable)
+    @EpoxyAttribute var inProgress: Boolean = true
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        holder.progress.isVisible = inProgress
+    }
+
+    class Holder : ProfileMatrixItem.Holder() {
+        val progress by bind<ProgressBar>(R.id.matrixItemProgress)
     }
 }
