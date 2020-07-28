@@ -125,11 +125,11 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
-    /*
-    * After migration from riot to element some users reported that their
-    * push setting for the session was set to off
-    * In order to mitigate this, we want to display a popup once to the user
-    * giving him the option to review this setting
+    /**
+     * After migration from riot to element some users reported that their
+     * push setting for the session was set to off
+     * In order to mitigate this, we want to display a popup once to the user
+     * giving him the option to review this setting
      */
     private fun checkSessionPushIsOn() {
         viewModelScope.launch(Dispatchers.IO) {
