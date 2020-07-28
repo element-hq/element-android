@@ -18,6 +18,7 @@ Bugfix 🐛:
  - Fix 404 on EMS (#1761)
  - Fix Infinite loop at startup when migrating account from Riot (#1699)
  - Fix Element crashes in loop after initial sync (#1709)
+ - Remove inner mx-reply tags before replying
  - Fix timeline items not loading when there are only filtered events
  - Fix "Voice & Video" grayed out in Settings (#1733)
  - Fix Allow VOIP call in all rooms with 2 participants (even if not DM)

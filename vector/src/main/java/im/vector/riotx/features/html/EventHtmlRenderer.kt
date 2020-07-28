@@ -25,6 +25,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.html.TagHandlerNoOp
 import org.commonmark.node.Node
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,11 +42,21 @@ class EventHtmlRenderer @Inject constructor(context: Context,
     }
 
     fun render(text: String): CharSequence {
-        return markwon.toMarkdown(text)
+        return try {
+            markwon.toMarkdown(text)
+        } catch (failure: Throwable) {
+            Timber.v("Fail to render $text to html")
+            text
+        }
     }
 
-    fun render(node: Node): CharSequence {
-        return markwon.render(node)
+    fun render(node: Node): CharSequence? {
+        return try {
+            markwon.render(node)
+        } catch (failure: Throwable) {
+            Timber.v("Fail to render $node to html")
+            return null
+        }
     }
 }
 
