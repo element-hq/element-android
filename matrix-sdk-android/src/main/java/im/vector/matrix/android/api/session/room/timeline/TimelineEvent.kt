@@ -20,15 +20,16 @@ import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.getRelationContent
+import im.vector.matrix.android.api.session.events.model.isReply
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
-import im.vector.matrix.android.api.session.room.model.message.isReply
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
-import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 
 /**
  * This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline.
@@ -89,10 +90,17 @@ data class TimelineEvent(
 fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
 
 /**
+ * Get the relation content if any
+ */
+fun TimelineEvent.getRelationContent(): RelationDefaultContent? {
+    return root.getRelationContent()
+}
+
+/**
  * Get the eventId which was edited by this event if any
  */
 fun TimelineEvent.getEditedEventId(): String? {
-    return root.getClearContent().toModel<MessageContent>()?.relatesTo?.takeIf { it.type == RelationType.REPLACE }?.eventId
+    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId
 }
 
 /**
@@ -121,11 +129,16 @@ fun TimelineEvent.getLastMessageBody(): String? {
     return null
 }
 
+/**
+ * Returns true if it's a reply
+ */
+fun TimelineEvent.isReply(): Boolean {
+    return root.isReply()
+}
+
 fun TimelineEvent.getTextEditableContent(): String? {
-    val originalContent = root.getClearContent().toModel<MessageContent>() ?: return null
-    val isReply = originalContent.isReply() || root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId != null
     val lastContent = getLastMessageContent()
-    return if (isReply) {
+    return if (isReply()) {
         return extractUsefulTextFromReply(lastContent?.body ?: "")
     } else {
         lastContent?.body ?: ""

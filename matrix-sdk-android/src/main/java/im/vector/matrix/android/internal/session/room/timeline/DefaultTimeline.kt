@@ -169,7 +169,7 @@ internal class DefaultTimeline(
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
-                filteredEvents.addChangeListener(eventsChangeListener)
+                nonFilteredEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
@@ -342,21 +342,18 @@ internal class DefaultTimeline(
 
     private fun updateLoadingStates(results: RealmResults<TimelineEventEntity>) {
         val lastCacheEvent = results.lastOrNull()
-        val lastBuiltEvent = builtEvents.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
-        val firstBuiltEvent = builtEvents.firstOrNull()
         val chunkEntity = getLiveChunk()
 
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
-                    hasMoreInCache = firstBuiltEvent != null && firstBuiltEvent.displayIndex < firstCacheEvent?.displayIndex ?: Int.MIN_VALUE,
+                    hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),
                     hasReachedEnd = chunkEntity?.isLastForward ?: false
             )
         }
-
         updateState(Timeline.Direction.BACKWARDS) {
             it.copy(
-                    hasMoreInCache = lastBuiltEvent == null || lastBuiltEvent.displayIndex > lastCacheEvent?.displayIndex ?: Int.MAX_VALUE,
+                    hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
                     hasReachedEnd = chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
             )
         }

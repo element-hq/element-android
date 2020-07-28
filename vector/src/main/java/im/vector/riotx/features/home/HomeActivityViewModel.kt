@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -23,24 +24,32 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.pushrules.RuleIds
 import im.vector.matrix.android.api.session.InitialSyncProgressService
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.rx.asObservable
 import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.ReAuthHelper
+import im.vector.riotx.features.settings.VectorPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
         @Assisted private val args: HomeActivityArgs,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val reAuthHelper: ReAuthHelper
-) : VectorViewModel<HomeActivityViewState, EmptyAction, HomeActivityViewEvents>(initialState) {
+        private val reAuthHelper: ReAuthHelper,
+        private val vectorPreferences: VectorPreferences
+) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -62,6 +71,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     init {
         observeInitialSync()
         mayBeInitializeCrossSigning()
+        checkSessionPushIsOn()
     }
 
     private fun observeInitialSync() {
@@ -112,6 +122,41 @@ class HomeActivityViewModel @AssistedInject constructor(
                     ),
                     callback = NoOpMatrixCallback()
             )
+        }
+    }
+
+    /**
+     * After migration from riot to element some users reported that their
+     * push setting for the session was set to off
+     * In order to mitigate this, we want to display a popup once to the user
+     * giving him the option to review this setting
+     */
+    private fun checkSessionPushIsOn() {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Don't do that if it's a login or a register (pass in memory)
+            if (reAuthHelper.data != null) return@launch
+            // Check if disabled for this device
+            if (!vectorPreferences.areNotificationEnabledForDevice()) {
+                // Check if set at account level
+                val mRuleMaster = activeSessionHolder.getSafeActiveSession()
+                        ?.getPushRules()
+                        ?.getAllRules()
+                        ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+                if (mRuleMaster?.enabled == false) {
+                    // So push are enabled at account level but not for this session
+                    // Let's check that there are some rooms?
+                    val knownRooms = activeSessionHolder.getSafeActiveSession()?.getRoomSummaries(roomSummaryQueryParams {
+                        memberships = Membership.activeMemberships()
+                    })?.size ?: 0
+
+                    // Prompt once to the user
+                    if (knownRooms > 1 && !vectorPreferences.didAskUserToEnableSessionPush()) {
+                        // delay a bit
+                        delay(1500)
+                        _viewEvents.post(HomeActivityViewEvents.PromptToEnableSessionPush)
+                    }
+                }
+            }
         }
     }
 
@@ -167,7 +212,11 @@ class HomeActivityViewModel @AssistedInject constructor(
         })
     }
 
-    override fun handle(action: EmptyAction) {
-        // NA
+    override fun handle(action: HomeActivityViewActions) {
+        when (action) {
+            HomeActivityViewActions.PushPromptHasBeenReviewed -> {
+                vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+        }.exhaustive
     }
 }

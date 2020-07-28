@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.crosssigning.SessionToCryptoRoomMembersUpdate
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
@@ -34,6 +35,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.isEventRead
@@ -75,6 +77,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 EventType.STATE_ROOM_ENCRYPTION,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
+                EventType.REACTION,
                 EventType.STATE_ROOM_CREATE
         )
     }
@@ -144,6 +147,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         } else if (roomSummaryEntity.membership != Membership.INVITE) {
             roomSummaryEntity.inviterId = null
         }
+        roomSummaryEntity.updateHasFailedSending()
 
         if (latestPreviewableEvent?.root?.type == EventType.ENCRYPTED && latestPreviewableEvent.root?.decryptionResultJson == null) {
             Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
@@ -164,6 +168,17 @@ internal class RoomSummaryUpdater @Inject constructor(
                 eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId))
             }
         }
+    }
+
+    private fun RoomSummaryEntity.updateHasFailedSending() {
+        hasFailedSending = TimelineEventEntity.findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES).isNotEmpty()
+    }
+
+    fun updateSendingInformation(realm: Realm, roomId: String) {
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
+        roomSummaryEntity.updateHasFailedSending()
+        roomSummaryEntity.latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
+                filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
     }
 
     fun updateShieldTrust(realm: Realm,

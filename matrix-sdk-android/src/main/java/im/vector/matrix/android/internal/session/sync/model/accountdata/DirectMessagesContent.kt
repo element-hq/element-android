@@ -16,12 +16,4 @@
 
 package im.vector.matrix.android.internal.session.sync.model.accountdata
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.util.JsonDict
-
-@JsonClass(generateAdapter = true)
-data class UserAccountDataEvent(
-        @Json(name = "type") override val type: String,
-        @Json(name = "content") val content: JsonDict
-) : UserAccountData()
+typealias DirectMessagesContent = Map<String, List<String>>

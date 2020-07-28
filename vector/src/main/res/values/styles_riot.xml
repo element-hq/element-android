@@ -385,4 +385,14 @@
         <item name="android:maxHeight">40dp</item>
     </style>
 
+    <style name="ComposerEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:maxLines">6</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?vctr_message_text_color</item>
+    </style>
+
 </resources>

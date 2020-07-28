@@ -73,7 +73,7 @@ data class LoginViewState(
             append(homeServerUrl?.trim { it == '/' })
             append(SSO_REDIRECT_PATH)
             // Set a redirect url we will intercept later
-            appendParamToUrl(SSO_REDIRECT_URL_PARAM, RIOTX_REDIRECT_URL)
+            appendParamToUrl(SSO_REDIRECT_URL_PARAM, VECTOR_REDIRECT_URL)
             deviceId?.takeIf { it.isNotBlank() }?.let {
                 // But https://github.com/matrix-org/synapse/issues/5755
                 appendParamToUrl("device_id", it)
@@ -83,6 +83,6 @@ data class LoginViewState(
 
     companion object {
         // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
-        private const val RIOTX_REDIRECT_URL = "riotx://riotx"
+        private const val VECTOR_REDIRECT_URL = "element://element"
     }
 }

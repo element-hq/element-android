@@ -42,10 +42,13 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.VectorSettingsActivity
+import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.riotx.features.workers.signout.ServerBackupStatusViewState
 import im.vector.riotx.push.fcm.FcmHelper
@@ -69,7 +72,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    @Inject lateinit var  serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
+    @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -134,6 +137,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -191,6 +195,42 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 it.navigator.requestSelfSessionVerification(it)
             }
         }
+    }
+
+    private fun handlePromptToEnablePush() {
+        popupAlertManager.postVectorAlert(
+                DefaultVectorAlert(
+                        uid = "enablePush",
+                        title = getString(R.string.alert_push_are_disabled_title),
+                        description = getString(R.string.alert_push_are_disabled_description),
+                        iconId = R.drawable.ic_room_actions_notifications_mutes,
+                        shouldBeDisplayedIn = {
+                            it is HomeActivity
+                        }
+                ).apply {
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.vctr_notice_secondary)
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            // action(it)
+                            homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
+                            it.navigator.openSettings(it, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_NOTIFICATIONS)
+                        }
+                    }
+                    dismissedAction = Runnable {
+                        homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
+                    }
+                    addButton(getString(R.string.dismiss), Runnable {
+                        homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
+                    }, true)
+                    addButton(getString(R.string.settings), Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            // action(it)
+                            homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
+                            it.navigator.openSettings(it, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_NOTIFICATIONS)
+                        }
+                    }, true)
+                }
+        )
     }
 
     private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {

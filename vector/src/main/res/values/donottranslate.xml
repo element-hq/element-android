@@ -10,6 +10,6 @@
     <string name="password_hint" translatable="false">********</string>
 
     <!-- Temporary string -->
-    <string name="not_implemented" translatable="false">Not implemented yet in RiotX</string>
+    <string name="not_implemented" translatable="false">Not implemented yet in Element</string>
 
 </resources>

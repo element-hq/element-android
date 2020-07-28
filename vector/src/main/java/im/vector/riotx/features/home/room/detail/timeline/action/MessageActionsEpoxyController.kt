@@ -69,7 +69,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 id("send_state")
                 showProgress(false)
                 text(stringProvider.getString(R.string.unable_to_send_message))
-                drawableStart(R.drawable.ic_warning_small)
+                drawableStart(R.drawable.ic_warning_badge)
             }
         }
 

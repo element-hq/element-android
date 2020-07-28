@@ -34,8 +34,8 @@ import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.session.SessionLifecycleObserver
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.session.widgets.helper.WidgetFactory
@@ -87,7 +87,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
+                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
                 .observeNotNull(lifecycleOwner) {
                     val allowedWidgetsContent = it.getOrNull()?.content?.toModel<AllowedWidgetsContent>()
                     if (allowedWidgetsContent != null) {
@@ -95,7 +95,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                     }
                 }
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.TYPE_INTEGRATION_PROVISIONING)
+                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING)
                 .observeNotNull(lifecycleOwner) {
                     val integrationProvisioningContent = it.getOrNull()?.content?.toModel<IntegrationProvisioningContent>()
                     if (integrationProvisioningContent != null) {
@@ -103,7 +103,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                     }
                 }
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.TYPE_WIDGETS)
+                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
                 .observeNotNull(lifecycleOwner) {
                     val integrationManagerContent = it.getOrNull()?.asIntegrationManagerWidgetContent()
                     val config = integrationManagerContent?.extractIntegrationManagerConfig()
@@ -132,7 +132,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
      * Returns false if the user as disabled integration manager feature
      */
     fun isIntegrationEnabled(): Boolean {
-        val integrationProvisioningData = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_INTEGRATION_PROVISIONING)
+        val integrationProvisioningData = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING)
         val integrationProvisioningContent = integrationProvisioningData?.content?.toModel<IntegrationProvisioningContent>()
         return integrationProvisioningContent?.enabled ?: false
     }
@@ -153,7 +153,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
     }
 
     fun setWidgetAllowed(stateEventId: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
             val allowedWidget = mapOf(stateEventId to allowed)
@@ -173,13 +173,13 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
     }
 
     fun isWidgetAllowed(stateEventId: String): Boolean {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         return currentContent?.widgets?.get(stateEventId) ?: false
     }
 
     fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
             val nativeAllowedWidgets = mapOf(widgetType to mapOf(domain to allowed))
@@ -203,7 +203,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
     }
 
     fun isNativeWidgetDomainAllowed(widgetType: String, domain: String?): Boolean {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         return currentContent?.native?.get(widgetType)?.get(domain) ?: false
     }

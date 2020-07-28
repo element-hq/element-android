@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.session.integrationmanager.IntegrationP
 import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -35,7 +35,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         fun getData(): Any
     }
 
-    data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY_SERVER,
+    data class IdentityParams(override val type: String = UserAccountDataTypes.TYPE_IDENTITY_SERVER,
                               private val identityContent: IdentityServerContent
     ) : Params {
 
@@ -44,7 +44,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class AcceptedTermsParams(override val type: String = UserAccountData.TYPE_ACCEPTED_TERMS,
+    data class AcceptedTermsParams(override val type: String = UserAccountDataTypes.TYPE_ACCEPTED_TERMS,
                                    private val acceptedTermsContent: AcceptedTermsContent
     ) : Params {
 
@@ -54,7 +54,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     }
 
     // TODO Use [UserAccountDataDirectMessages] class?
-    data class DirectChatParams(override val type: String = UserAccountData.TYPE_DIRECT_MESSAGES,
+    data class DirectChatParams(override val type: String = UserAccountDataTypes.TYPE_DIRECT_MESSAGES,
                                 private val directMessages: Map<String, List<String>>
     ) : Params {
 
@@ -63,7 +63,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class BreadcrumbsParams(override val type: String = UserAccountData.TYPE_BREADCRUMBS,
+    data class BreadcrumbsParams(override val type: String = UserAccountDataTypes.TYPE_BREADCRUMBS,
                                  private val breadcrumbsContent: BreadcrumbsContent
     ) : Params {
 
@@ -72,7 +72,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class AllowedWidgets(override val type: String = UserAccountData.TYPE_ALLOWED_WIDGETS,
+    data class AllowedWidgets(override val type: String = UserAccountDataTypes.TYPE_ALLOWED_WIDGETS,
                               private val allowedWidgetsContent: AllowedWidgetsContent) : Params {
 
         override fun getData(): Any {
@@ -80,7 +80,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class IntegrationProvisioning(override val type: String = UserAccountData.TYPE_INTEGRATION_PROVISIONING,
+    data class IntegrationProvisioning(override val type: String = UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING,
                                        private val integrationProvisioningContent: IntegrationProvisioningContent) : Params {
 
         override fun getData(): Any {

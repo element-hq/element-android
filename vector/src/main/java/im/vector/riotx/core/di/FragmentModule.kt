@@ -77,6 +77,7 @@ import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListFragment
 import im.vector.riotx.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
+import im.vector.riotx.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
@@ -534,4 +535,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ContactsBookFragment::class)
     fun bindPhoneBookFragment(fragment: ContactsBookFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomBannedMemberListFragment::class)
+    fun bindRoomBannedMemberListFragment(fragment: RoomBannedMemberListFragment): Fragment
 }

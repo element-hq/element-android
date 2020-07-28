@@ -30,9 +30,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.isReply
+import im.vector.matrix.android.api.session.events.model.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.platform.EmptyAction
@@ -113,7 +111,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                         }
 
                         if (event.eventId == it.eventId) {
-                            originalIsReply = it.getClearContent().toModel<MessageContent>().isReply()
+                            originalIsReply = it.isReply()
                         }
                     }
                 }

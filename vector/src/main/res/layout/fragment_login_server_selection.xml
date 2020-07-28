@@ -7,11 +7,6 @@
     android:background="?riotx_background">
 
     <!-- Missing attributes are in the style -->
-    <ImageView
-        style="@style/LoginLogo"
-        tools:ignore="ContentDescription,MissingConstraints,UnusedAttribute" />
-
-    <!-- Missing attributes are in the style -->
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
         tools:ignore="MissingConstraints">
@@ -86,7 +81,7 @@
             </im.vector.riotx.core.platform.CheckableConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/loginServerChoiceModular"
+                android:id="@+id/loginServerChoiceEMS"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -100,19 +95,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrg">
 
                 <ImageView
-                    android:id="@+id/loginServerChoiceModularIcon"
+                    android:id="@+id/loginServerChoiceEMSIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_element_matrix_services"
                     android:tint="?riotx_text_primary"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceModularText"
+                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceEMSText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/loginServerChoiceModularText"
+                    android:id="@+id/loginServerChoiceEMSText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -120,21 +115,21 @@
                     android:text="@string/login_server_modular_text"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/loginServerChoiceModularLearnMore"
+                    app:layout_constraintEnd_toStartOf="@+id/loginServerChoiceEMSLearnMore"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceModularIcon" />
+                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceEMSIcon" />
 
                 <TextView
-                    android:id="@+id/loginServerChoiceModularLearnMore"
+                    android:id="@+id/loginServerChoiceEMSLearnMore"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="@string/login_server_modular_learn_more"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     android:textColor="@color/riotx_accent"
-                    app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceModularText"
+                    app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEMSText"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/loginServerChoiceModularText" />
+                    app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEMSText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,7 +145,7 @@
                 android:paddingEnd="@dimen/layout_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceModular">
+                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceEMS">
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"

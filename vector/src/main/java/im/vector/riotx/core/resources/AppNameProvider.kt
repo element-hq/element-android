@@ -36,7 +36,7 @@ class AppNameProvider @Inject constructor(private val context: Context) {
             return appName
         } catch (e: Exception) {
             Timber.e(e, "## AppNameProvider() : failed")
-            return "RiotXAndroid"
+            return "ElementAndroid"
         }
     }
 }

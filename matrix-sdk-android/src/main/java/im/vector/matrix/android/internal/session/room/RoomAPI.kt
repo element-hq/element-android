@@ -130,6 +130,21 @@ internal interface RoomAPI {
     ): Call<SendResponse>
 
     /**
+     * Send an event to a room.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventType the event type
+     * @param content   the event content as string
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send/{eventType}/{txId}")
+    fun send(@Path("txId") txId: String,
+             @Path("roomId") roomId: String,
+             @Path("eventType") eventType: String,
+             @Body content: String?
+    ): Call<SendResponse>
+
+    /**
      * Get the context surrounding an event.
      *
      * @param roomId  the room id

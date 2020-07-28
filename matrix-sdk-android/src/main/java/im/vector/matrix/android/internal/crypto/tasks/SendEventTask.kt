@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
+import im.vector.matrix.android.internal.session.room.send.LocalEchoRepository
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -34,7 +34,7 @@ internal interface SendEventTask : Task<SendEventTask.Params, String> {
 }
 
 internal class DefaultSendEventTask @Inject constructor(
-        private val localEchoUpdater: LocalEchoUpdater,
+        private val localEchoRepository: LocalEchoRepository,
         private val encryptEventTask: DefaultEncryptEventTask,
         private val roomAPI: RoomAPI,
         private val eventBus: EventBus) : SendEventTask {
@@ -44,7 +44,7 @@ internal class DefaultSendEventTask @Inject constructor(
         val localId = event.eventId!!
 
         try {
-            localEchoUpdater.updateSendState(localId, SendState.SENDING)
+            localEchoRepository.updateSendState(localId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.send(
                         localId,
@@ -53,10 +53,10 @@ internal class DefaultSendEventTask @Inject constructor(
                         eventType = event.type
                 )
             }
-            localEchoUpdater.updateSendState(localId, SendState.SENT)
+            localEchoRepository.updateSendState(localId, SendState.SENT)
             return executeRequest.eventId
         } catch (e: Throwable) {
-            localEchoUpdater.updateSendState(localId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(localId, SendState.UNDELIVERED)
             throw e
         }
     }
