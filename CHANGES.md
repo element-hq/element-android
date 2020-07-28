@@ -22,6 +22,7 @@ Bugfix 🐛:
  - Fix timeline items not loading when there are only filtered events
  - Fix "Voice & Video" grayed out in Settings (#1733)
  - Fix Allow VOIP call in all rooms with 2 participants (even if not DM)
+ - Migration from old client does not enable notifications (#1723)
 
 Translations 🗣:
  -

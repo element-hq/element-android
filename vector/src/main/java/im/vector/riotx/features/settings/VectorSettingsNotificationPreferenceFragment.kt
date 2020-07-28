@@ -17,6 +17,7 @@
 package im.vector.riotx.features.settings
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
@@ -45,6 +46,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
+
+    private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
@@ -139,6 +142,24 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         activeSessionHolder.getSafeActiveSession()?.refreshPushers()
+
+        interactionListener?.requestedKeyToHighlight()?.let { key ->
+            interactionListener?.requestHighlightPreferenceKeyOnResume(null)
+            val preference = findPreference<VectorSwitchPreference>(key)
+            preference?.isHighlighted = true
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is VectorSettingsFragmentInteractionListener) {
+            interactionListener = context
+        }
+    }
+
+    override fun onDetach() {
+        interactionListener = null
+        super.onDetach()
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
