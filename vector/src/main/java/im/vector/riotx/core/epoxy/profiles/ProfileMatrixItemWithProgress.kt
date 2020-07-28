@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,32 +12,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.core.epoxy
+package im.vector.riotx.core.epoxy.profiles
 
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_loading)
-abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_profile_matrix_item_progress)
+abstract class ProfileMatrixItemWithProgress : BaseProfileMatrixItem<ProfileMatrixItemWithProgress.Holder>() {
 
-    @EpoxyAttribute var loadingText: String? = null
-    @EpoxyAttribute var showLoader: Boolean = true
+    @EpoxyAttribute var inProgress: Boolean = true
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.progressBar.isVisible = showLoader
-        holder.textView.setTextOrHide(loadingText)
+        holder.progress.isVisible = inProgress
     }
 
-    class Holder : VectorEpoxyHolder() {
-        val textView by bind<TextView>(R.id.loadingText)
-        val progressBar by bind<ProgressBar>(R.id.loadingProgress)
+    class Holder : ProfileMatrixItem.Holder() {
+        val progress by bind<ProgressBar>(R.id.matrixItemProgress)
     }
 }
