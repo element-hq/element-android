@@ -2499,6 +2499,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
     <string name="identity_server_set_alternative_submit">Submit</string>
     <string name="power_level_edit_title">Set role</string>
+    <string name="power_level_title">Role</string>
     <string name="a11y_open_chat">Open chat</string>
     <string name="a11y_mute_microphone">Mute the microphone</string>
     <string name="a11y_unmute_microphone">Unmute the microphone</string>
