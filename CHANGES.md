@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
  - Display warning when fail to send events in room list
+ - Improve UI of edit role action in member profile
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
@@ -17,6 +18,8 @@ Bugfix 🐛:
  - Fix Infinite loop at startup when migrating account from Riot (#1699)
  - Fix Element crashes in loop after initial sync (#1709)
  - Fix timeline items not loading when there are only filtered events
+ - Fix "Voice & Video" grayed out in Settings (#1733)
+ - Fix Allow VOIP call in all rooms with 2 participants (even if not DM)
 
 Translations 🗣:
  -
