@@ -1,8 +1,5 @@
-Changes in Element 1.0.1 (2020-XX-XX)
+Changes in Element 1.0.1 (2020-07-28)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
@@ -23,15 +20,6 @@ Bugfix 🐛:
  - Fix "Voice & Video" grayed out in Settings (#1733)
  - Fix Allow VOIP call in all rooms with 2 participants (even if not DM)
  - Migration from old client does not enable notifications (#1723)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
 
 Other changes:
  - i18n deactivated account error
