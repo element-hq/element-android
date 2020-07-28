@@ -22,8 +22,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
-import im.vector.riotx.core.epoxy.profiles.profileMatrixItem
-import im.vector.riotx.core.epoxy.profiles.profileMatrixItemProgress
+import im.vector.riotx.core.epoxy.profiles.profileMatrixItemWithProgress
 import im.vector.riotx.core.extensions.join
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
@@ -58,19 +57,21 @@ class RoomBannedMemberListController @Inject constructor(
 
         bannedList.join(
                 each = { _, roomMember ->
-                    if (data.onGoingModerationAction.contains(roomMember.userId)) {
-                        profileMatrixItemProgress {
-                            id(roomMember.userId)
-                            matrixItem(roomMember.toMatrixItem())
-                            avatarRenderer(avatarRenderer)
-                        }
-                    } else {
-                        profileMatrixItem {
-                            id(roomMember.userId)
-                            matrixItem(roomMember.toMatrixItem())
-                            avatarRenderer(avatarRenderer)
-                            clickListener { _ ->
-                                callback?.onUnbanClicked(roomMember)
+                    val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
+                    profileMatrixItemWithProgress {
+                        id(roomMember.userId)
+                        matrixItem(roomMember.toMatrixItem())
+                        avatarRenderer(avatarRenderer)
+                        apply {
+                            if (actionInProgress) {
+                                inProgress(true)
+                                editable(false)
+                            } else {
+                                inProgress(false)
+                                editable(true)
+                                clickListener { _ ->
+                                    callback?.onUnbanClicked(roomMember)
+                                }
                             }
                         }
                     }
