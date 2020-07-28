@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix 404 on EMS (#1761)
  - Fix Infinite loop at startup when migrating account from Riot (#1699)
  - Fix Element crashes in loop after initial sync (#1709)
+ - Fix timeline items not loading when there are only filtered events
 
 Translations 🗣:
  -
