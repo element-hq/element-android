@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomprofile
 
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -77,20 +76,17 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
-                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,  EventType.STATE_ROOM_AVATAR))
+                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR))
                     }
                 }
                 .disposeOnClear()
 
         rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
-                .subscribe {
-                    setState {
-                        copy(
-                                bannedMembership = Success(it)
-                        )
-                    }
+                .execute {
+                    copy(
+                            bannedMembership = it
+                    )
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) = when (action) {

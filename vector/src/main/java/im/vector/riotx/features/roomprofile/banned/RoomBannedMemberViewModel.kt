@@ -17,11 +17,8 @@
 package im.vector.riotx.features.roomprofile.banned
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -33,41 +30,16 @@ import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
-import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-data class RoomBannedMemberListViewState(
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val bannedMemberSummaries: Async<List<RoomMemberSummary>> = Uninitialized,
-        val onGoingModerationAction: List<String> = emptyList(),
-        val canUserBan: Boolean = false
-) : MvRxState {
-
-    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
-}
-
-sealed class RoomBannedListMemberAction : VectorViewModelAction {
-    data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-    data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-}
-
-sealed class RoomBannedViewEvents : VectorViewEvents {
-    data class ShowBannedInfo(val bannedByUserId: String, val banReason: String, val roomMemberSummary: RoomMemberSummary) : RoomBannedViewEvents()
-    data class ToastError(val info: String) : RoomBannedViewEvents()
-}
 
 class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
                                                                 private val stringProvider: StringProvider,
