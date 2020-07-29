@@ -42,7 +42,12 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
+        val migration: RealmSessionStoreMigration,
         context: Context) {
+
+    companion object {
+        const val SESSION_STORE_SCHEMA_VERSION = 1L
+    }
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
 
@@ -67,7 +72,8 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                     realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
                 .modules(SessionRealmModule())
-                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(SESSION_STORE_SCHEMA_VERSION)
+                .migration(migration)
                 .build()
 
         // Try creating a realm instance and if it succeeds we can clear the flag

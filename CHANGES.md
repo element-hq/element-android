@@ -1,3 +1,9 @@
+Changes in Element 1.0.2 (2020-07-29)
+===================================================
+
+Improvements 🙌:
+ - Added Session Database migration to avoid unneeded initial syncs
+
 Changes in Element 1.0.1 (2020-07-28)
 ===================================================
 
