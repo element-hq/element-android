@@ -294,7 +294,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
             rageShake.start()
         }
-
         DebugReceiver
                 .getIntentFilter(this)
                 .takeIf { BuildConfig.DEBUG }

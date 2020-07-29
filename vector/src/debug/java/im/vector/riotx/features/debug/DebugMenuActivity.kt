@@ -84,7 +84,7 @@ class DebugMenuActivity : VectorBaseActivity() {
 
     @OnClick(R.id.debug_open_pin_code)
     fun openPinCode() {
-        startActivity(PinActivity.newIntent(this))
+        //startActivity(PinActivity.newIntent(this))
     }
 
     @OnClick(R.id.debug_test_notification)

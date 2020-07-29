@@ -816,6 +816,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * The user enable protecting app access with pin code
      */
     fun useFlagPinCode(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
     }
 }

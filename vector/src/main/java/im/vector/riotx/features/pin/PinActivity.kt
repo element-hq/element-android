@@ -19,6 +19,7 @@ package im.vector.riotx.features.pin
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
+import com.airbnb.mvrx.MvRx
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -28,8 +29,13 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            return Intent(context, PinActivity::class.java)
+        const val PIN_REQUEST_CODE = 17890
+        const val PIN_RESULT_CODE_FORGOT = 17891
+
+        fun newIntent(context: Context, args: PinArgs): Intent {
+            return Intent(context, PinActivity::class.java).apply {
+                putExtra(MvRx.KEY_ARG, args)
+            }
         }
     }
 
@@ -37,7 +43,8 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, PinFragment::class.java)
+            val fragmentArgs: PinArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
+            addFragment(R.id.simpleFragmentContainer, PinFragment::class.java, fragmentArgs)
         }
     }
 

@@ -53,6 +53,8 @@ import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.VectorAttachmentViewerActivity
 import im.vector.riotx.features.pin.PinActivity
+import im.vector.riotx.features.pin.PinArgs
+import im.vector.riotx.features.pin.PinMode
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -251,7 +253,6 @@ class DefaultNavigator @Inject constructor(
                 }
     }
 
-
     override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
         val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
         fragment.startActivityForResult(intent, requestCode)
@@ -274,9 +275,9 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
-    override fun openPinCode(activity: Activity, requestCode: Int) {
-        val intent = PinActivity.newIntent(activity)
-        activity.startActivity(intent)
+    override fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int) {
+        val intent = PinActivity.newIntent(fragment.requireContext(), PinArgs(pinMode))
+        fragment.startActivityForResult(intent, requestCode)
     }
 
     override fun openMediaViewer(activity: Activity,

@@ -16,9 +16,8 @@
 
 package im.vector.riotx.features.pin
 
-import com.airbnb.mvrx.MvRxState
-
-data class PinViewState(val mode: PinMode) : MvRxState {
-
-    constructor(args: PinArgs) : this(mode = args.pinMode)
+enum class PinMode {
+    CREATE,
+    DELETE,
+    AUTH
 }
