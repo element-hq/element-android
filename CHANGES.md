@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Added Session Database migration to avoid unneeded initial syncs
 
 Bugfix 🐛:
  -
