@@ -31,6 +31,8 @@ import im.vector.riotx.core.error.DefaultErrorFormatter
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.DefaultNavigator
 import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.pin.PinCodeStore
+import im.vector.riotx.features.pin.SharedPrefPinCodeStore
 import im.vector.riotx.features.ui.SharedPreferencesUiStateRepository
 import im.vector.riotx.features.ui.UiStateRepository
 
@@ -86,4 +88,7 @@ abstract class VectorModule {
 
     @Binds
     abstract fun bindUiStateRepository(repository: SharedPreferencesUiStateRepository): UiStateRepository
+
+    @Binds
+    abstract fun bindPinCodeStore(store: SharedPrefPinCodeStore): PinCodeStore
 }

@@ -48,6 +48,7 @@ import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.pin.PinCodeStore
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
@@ -131,6 +132,8 @@ interface VectorComponent {
     fun vectorFileLogger(): VectorFileLogger
 
     fun uiStateRepository(): UiStateRepository
+
+    fun pinCodeStore(): PinCodeStore
 
     fun emojiDataSource(): EmojiDataSource
 
