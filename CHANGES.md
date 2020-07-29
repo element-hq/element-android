@@ -1,24 +1,8 @@
-Changes in Element 1.0.2 (2020-XX-XX)
+Changes in Element 1.0.2 (2020-07-29)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Added Session Database migration to avoid unneeded initial syncs
-
-Bugfix 🐛:
- -
-
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.1 (2020-07-28)
 ===================================================
