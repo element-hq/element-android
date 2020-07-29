@@ -56,15 +56,16 @@ import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.pin.PinActivity
 import im.vector.riotx.features.pin.PinCodeStore
+import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.pin.PinMode
 import im.vector.riotx.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
+        private val pinLocker: PinLocker,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
         private val navigator: Navigator
@@ -298,6 +299,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 }
             }
         } else if (requestCode == PinActivity.PIN_REQUEST_CODE) {
+            pinLocker.unlock()
             refreshPinCodeStatus()
         } else if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {

@@ -82,6 +82,8 @@ interface Navigator {
 
     fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int = PinActivity.PIN_REQUEST_CODE)
 
+    fun openPinCode(activity: Activity, pinMode: PinMode, requestCode: Int = PinActivity.PIN_REQUEST_CODE)
+
     fun openTerms(fragment: Fragment,
                   serviceType: TermsService.ServiceType,
                   baseUrl: String,

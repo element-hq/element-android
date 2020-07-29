@@ -25,7 +25,7 @@ import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 
-class PinActivity : VectorBaseActivity(), ToolbarConfigurable {
+class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
 
     companion object {
 

@@ -141,6 +141,7 @@ class PinFragment @Inject constructor(
 
             override fun onFingerprintSuccessful() {
                 Toast.makeText(requireContext(), "Pin successful", Toast.LENGTH_LONG).show()
+                vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
 
@@ -149,6 +150,7 @@ class PinFragment @Inject constructor(
 
             override fun onCodeInputSuccessful() {
                 Toast.makeText(requireContext(), "Pin successful", Toast.LENGTH_LONG).show()
+                vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
         })

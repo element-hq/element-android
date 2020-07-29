@@ -280,6 +280,11 @@ class DefaultNavigator @Inject constructor(
         fragment.startActivityForResult(intent, requestCode)
     }
 
+    override fun openPinCode(activity: Activity, pinMode: PinMode, requestCode: Int) {
+        val intent = PinActivity.newIntent(activity, PinArgs(pinMode))
+        activity.startActivityForResult(intent, requestCode)
+    }
+
     override fun openMediaViewer(activity: Activity,
                                  roomId: String,
                                  mediaData: AttachmentData,
