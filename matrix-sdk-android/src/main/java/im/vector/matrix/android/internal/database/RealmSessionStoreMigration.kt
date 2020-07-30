@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database
 
+import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
@@ -28,6 +29,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
 
         if (oldVersion <= 0) migrateTo1(realm)
+        if (oldVersion <= 1) migrateTo2(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -38,6 +40,15 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.addField(RoomSummaryEntityFields.HAS_FAILED_SENDING, Boolean::class.java)
                 ?.transform { obj ->
                     obj.setBoolean(RoomSummaryEntityFields.HAS_FAILED_SENDING, false)
+                }
+    }
+
+    private fun migrateTo2(realm: DynamicRealm) {
+        Timber.d("Step 1 -> 2")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, Boolean::class.java)
+                ?.transform { obj ->
+                    obj.setBoolean(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, true)
                 }
     }
 }
