@@ -46,7 +46,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         context: Context) {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 1L
+        const val SESSION_STORE_SCHEMA_VERSION = 2L
     }
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)

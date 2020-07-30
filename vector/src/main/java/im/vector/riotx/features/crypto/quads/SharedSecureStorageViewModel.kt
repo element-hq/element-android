@@ -282,8 +282,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SharedSecureStorageViewState): SharedSecureStorageViewModel? {
             val activity: SharedSecureStorageActivity = viewModelContext.activity()
-            val args: SharedSecureStorageActivity.Args? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
-            return args?.let { activity.viewModelFactory.create(state, it) }
+            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(MvRx.KEY_ARG) ?: error("Missing args")
+            return activity.viewModelFactory.create(state, args)
         }
     }
 }

@@ -106,6 +106,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/knownUsersFilter" />
 
+
+        <TextView
+            android:id="@+id/knownUsersE2EbyDefaultDisabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:drawablePadding="8dp"
+            android:text="@string/settings_hs_admin_e2e_disabled"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/knownUsersFilterDivider"
+            tools:visibility="visible" />
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addByMatrixId"
             style="@style/VectorButtonStyleText"
@@ -121,7 +136,7 @@
             app:iconPadding="13dp"
             app:iconTint="@color/riotx_accent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/knownUsersFilterDivider" />
+            app:layout_constraintTop_toBottomOf="@id/knownUsersE2EbyDefaultDisabled" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addFromPhoneBook"

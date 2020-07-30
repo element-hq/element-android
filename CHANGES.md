@@ -1,3 +1,12 @@
+Changes in Element 1.0.3 (2020-07-31)
+===================================================
+
+Features ✨:
+ - Support server admin option to disable E2EE for DMs / private rooms [users can still enable] (#1794)
+
+Bugfix 🐛:
+ - Crash reported on playstore for HomeActivity launch (151 reports)
+
 Changes in Element 1.0.2 (2020-07-29)
 ===================================================
 

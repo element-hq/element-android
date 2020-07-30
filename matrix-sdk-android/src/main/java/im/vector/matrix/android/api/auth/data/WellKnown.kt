@@ -53,5 +53,15 @@ data class WellKnown(
         val identityServer: WellKnownBaseConfig? = null,
 
         @Json(name = "m.integrations")
-        val integrations: JsonDict? = null
+        val integrations: JsonDict? = null,
+
+        @Json(name = "im.vector.riot.e2ee")
+        val e2eAdminSetting: E2EWellKnownConfig? = null
+
+)
+
+@JsonClass(generateAdapter = true)
+data class E2EWellKnownConfig(
+        @Json(name = "default")
+        val e2eDefault: Boolean = true
 )

@@ -209,7 +209,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
-                    ?: data.url
+                    ?: data.url.takeIf { it?.startsWith("content://") == true }
 
             GlideApp
                     .with(imageView)
