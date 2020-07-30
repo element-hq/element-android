@@ -62,7 +62,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
             val activity: HomeActivity = viewModelContext.activity()
             val args: HomeActivityArgs? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
-            return args?.let { activity.viewModelFactory.create(state, it) }
+            return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
         }
     }
 

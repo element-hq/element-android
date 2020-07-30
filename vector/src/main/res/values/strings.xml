@@ -2201,7 +2201,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled.\nKeys are not trusted</string>
     <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
 
-
+    <string name="settings_hs_admin_e2e_disabled">Your server admin has disabled end-to-end encryption by default in private rooms &amp; Direct Messages.</string>
     <string name="settings_active_sessions_list">Active Sessions</string>
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>

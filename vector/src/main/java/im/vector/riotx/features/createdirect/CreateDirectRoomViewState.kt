@@ -21,5 +21,6 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 
 data class CreateDirectRoomViewState(
-    val createAndInviteState: Async<String> = Uninitialized
+    val createAndInviteState: Async<String> = Uninitialized,
+    val hsAdminHasDisabledE2E: Boolean = false
 ) : MvRxState

@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <im.vector.riotx.core.preference.VectorPreference
+        android:icon="@drawable/ic_notification_privacy_warning"
+        android:key="SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
+        android:persistent="false"
+        tools:summary="@string/settings_hs_admin_e2e_disabled"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true">
+
+    </im.vector.riotx.core.preference.VectorPreference>
+
     <!-- ************ Cryptography section ************ -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
@@ -53,9 +63,9 @@
         android:title="@string/settings_secure_backup_section_title">
 
         <im.vector.riotx.core.preference.VectorPreference
+            android:icon="@drawable/ic_secure_backup"
             android:key="SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY"
             android:persistent="false"
-            android:icon="@drawable/ic_secure_backup"
             android:title="@string/settings_secure_backup_setup" />
 
         <im.vector.riotx.core.preference.VectorPreference
@@ -99,8 +109,7 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:title="@string/settings_other">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_other">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="false"

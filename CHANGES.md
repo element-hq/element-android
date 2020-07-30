@@ -3,12 +3,13 @@ Changes in Element 1.0.3 (2020-XX-XX)
 
 Features ✨:
  - Protect access to the app by a pin code (#1700)
+ - Support server admin option to disable E2EE for DMs / private rooms [users can still enable] (#1794)
 
 Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Crash reported on playstore for HomeActivity launch (151 reports)
 
 SDK API changes ⚠️:
  -
