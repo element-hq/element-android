@@ -2,7 +2,7 @@ Changes in Element 1.0.3 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Protect access to the app by a pin code (#1700)
 
 Improvements 🙌:
  -
