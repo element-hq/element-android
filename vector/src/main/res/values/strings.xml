@@ -994,7 +994,7 @@
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
     <plurals name="room_settings_banned_users_count">
-        <item quantity="one">1 banned user</item>
+        <item quantity="one">%d banned user</item>
         <item quantity="other">%d banned users</item>
     </plurals>
 
