@@ -28,7 +28,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val PERIOD_OF_GRACE_IN_MS = 0 * 60 * 1000L
+private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
 
 /**
  * This class is responsible for keeping the status of locking
