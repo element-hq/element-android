@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Crash reported on playstore for HomeActivity launch (151 reports)
 
 SDK API changes ⚠️:
  -
