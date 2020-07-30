@@ -35,7 +35,6 @@ import com.gabrielittner.threetenbp.LazyThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.legacy.LegacySessionImporter
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerVectorComponent
@@ -48,7 +47,6 @@ import im.vector.riotx.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
-import im.vector.riotx.features.pin.PinCodeStore
 import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler

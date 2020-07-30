@@ -8,7 +8,7 @@
     <style name="PinCodeKeyButtonStyle">
         <item name="android:textColor">?riotx_text_primary</item>
         <item name="android:textSize">18sp</item>
-        <item name="background">@drawable/touch_selector_pf</item>
+        <item name="android:background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeDotsViewStyle">
@@ -24,13 +24,13 @@
     <style name="PinCodeDeleteButtonStyle">
         <item name="android:src">@drawable/delete_lockscreen_pf</item>
         <item name="android:tint">?riotx_text_primary</item>
-        <item name="background">@drawable/touch_selector_pf</item>
+        <item name="background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeFingerprintButtonStyle">
         <item name="android:src">@drawable/fingerprint_lockscreen_pf</item>
         <item name="android:tint">?riotx_text_primary</item>
-        <item name="background">@drawable/touch_selector_pf</item>
+        <item name="background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeTitleStyle">

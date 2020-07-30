@@ -203,7 +203,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             }
         })
         pinLocker.getLiveState().observeNotNull(this) {
-            if(this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED){
+            if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
                 navigator.openPinCode(this, PinMode.AUTH)
             }
         }
@@ -304,9 +304,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             when (resultCode) {
                 Activity.RESULT_OK                 -> {
                     pinLocker.unlock()
-                }
-                PinActivity.PIN_RESULT_CODE_FORGOT -> {
-                    pinLocker.block()
                 }
                 else                               -> {
                     pinLocker.block()

@@ -36,7 +36,6 @@ import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.debug.sas.DebugSasEmojiActivity
-import im.vector.riotx.features.pin.PinActivity
 import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.debug.activity_debug_menu.*
 import timber.log.Timber
@@ -80,11 +79,6 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_show_sas_emoji)
     fun showSasEmoji() {
         startActivity(Intent(this, DebugSasEmojiActivity::class.java))
-    }
-
-    @OnClick(R.id.debug_open_pin_code)
-    fun openPinCode() {
-        //startActivity(PinActivity.newIntent(this))
     }
 
     @OnClick(R.id.debug_test_notification)

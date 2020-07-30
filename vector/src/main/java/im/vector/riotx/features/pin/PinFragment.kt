@@ -24,16 +24,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.beautycoder.pflockscreen.PFFLockScreenConfiguration
 import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -42,11 +41,9 @@ data class PinArgs(
 ) : Parcelable
 
 class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val viewModelFactory: PinViewModel.Factory
-) : VectorBaseFragment(), PinViewModel.Factory by viewModelFactory {
+        private val pinCodeStore: PinCodeStore
+) : VectorBaseFragment() {
 
-    private val viewModel: PinViewModel by fragmentViewModel()
     private val fragmentArgs: PinArgs by args()
 
     override fun getLayoutResId() = R.layout.fragment_pin
@@ -140,7 +137,6 @@ class PinFragment @Inject constructor(
             }
 
             override fun onFingerprintSuccessful() {
-                Toast.makeText(requireContext(), "Pin successful", Toast.LENGTH_LONG).show()
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
@@ -149,7 +145,6 @@ class PinFragment @Inject constructor(
             }
 
             override fun onCodeInputSuccessful() {
-                Toast.makeText(requireContext(), "Pin successful", Toast.LENGTH_LONG).show()
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
@@ -161,23 +156,14 @@ class PinFragment @Inject constructor(
         AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.auth_pin_reset_title))
                 .setMessage(getString(R.string.auth_pin_reset_content))
-                .setPositiveButton(getString(R.string.auth_pin_reset_title)) { _, _ ->
-                    lifecycleScope.launch {
-                        pinCodeStore.deleteEncodedPin()
-                        vectorBaseActivity.setResult(PinActivity.PIN_RESULT_CODE_FORGOT)
-                        vectorBaseActivity.finish()
-                    }
+                .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->
+                    launchResetPinFlow()
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Clear your view, unsubscribe...
-    }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        Timber.v("Invalidate $state")
+    private fun launchResetPinFlow() {
+        MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true))
     }
 }

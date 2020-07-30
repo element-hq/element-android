@@ -30,7 +30,6 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity 
     companion object {
 
         const val PIN_REQUEST_CODE = 17890
-        const val PIN_RESULT_CODE_FORGOT = 17891
 
         fun newIntent(context: Context, args: PinArgs): Intent {
             return Intent(context, PinActivity::class.java).apply {
