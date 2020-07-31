@@ -29,7 +29,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.pin.PinActivity
-import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -41,8 +40,7 @@ import javax.inject.Singleton
  * Alerts are stacked and will be displayed sequentially
  */
 @Singleton
-class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<AvatarRenderer>,
-                                            private val pinLocker: PinLocker) {
+class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<AvatarRenderer>) {
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
