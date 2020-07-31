@@ -44,13 +44,14 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
 import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
+import im.vector.riotx.features.pin.UnlockedActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
-open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
+open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
 

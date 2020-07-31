@@ -16,7 +16,9 @@
 
 package im.vector.riotx.core.platform
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
@@ -58,6 +60,7 @@ import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.observeNotNull
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
@@ -65,6 +68,10 @@ import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.consent.ConsentNotGivenHelper
 import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.pin.PinActivity
+import im.vector.riotx.features.pin.PinLocker
+import im.vector.riotx.features.pin.PinMode
+import im.vector.riotx.features.pin.UnlockedActivity
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -116,6 +123,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var configurationViewModel: ConfigurationViewModel
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
+    private lateinit var pinLocker: PinLocker
     lateinit var rageShake: RageShake
 
     lateinit var navigator: Navigator
@@ -181,6 +189,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = screenComponent.bugReporter()
+        pinLocker = screenComponent.pinLocker()
         // Shake detector
         rageShake = screenComponent.rageShake()
         navigator = screenComponent.navigator()
@@ -193,7 +202,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 finish()
             }
         })
-
+        pinLocker.getLiveState().observeNotNull(this) {
+            if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
+                navigator.openPinCode(this, PinMode.AUTH)
+            }
+        }
         sessionListener = vectorComponent.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
@@ -285,6 +298,21 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         uiDisposables.dispose()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PinActivity.PIN_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK                 -> {
+                    pinLocker.unlock()
+                }
+                else                               -> {
+                    pinLocker.block()
+                    moveTaskToBack(true)
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Activity ${this.javaClass.simpleName}")
@@ -294,7 +322,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
             rageShake.start()
         }
-
         DebugReceiver
                 .getIntentFilter(this)
                 .takeIf { BuildConfig.DEBUG }

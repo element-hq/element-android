@@ -2572,4 +2572,15 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="alert_push_are_disabled_title">Push notifications are disabled</string>
     <string name="alert_push_are_disabled_description">Review your settings to enable push notifications</string>
+    <string name="create_pin_title">Choose a PIN for security</string>
+    <string name="create_pin_confirm_title">Confirm PIN</string>
+    <string name="create_pin_confirm_failure">Failed to validate pin, please tap a new one.</string>
+    <string name="auth_pin_title">Enter your PIN</string>
+    <string name="auth_pin_forgot">Forgot PIN?</string>
+    <string name="auth_pin_reset_title">Reset pin</string>
+    <string name="auth_pin_new_pin_action">New pin</string>
+    <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="settings_security_pin_code_title">Enable PIN</string>
+    <string name="settings_security_pin_code_summary">If you want to reset your PIN, tap Forgot PIN to logout and reset.</string>
+    <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
 </resources>
