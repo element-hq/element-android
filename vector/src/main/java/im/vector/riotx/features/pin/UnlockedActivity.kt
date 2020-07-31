@@ -16,4 +16,7 @@
 
 package im.vector.riotx.features.pin
 
+/**
+ * Tag class for activities that should not be protected by PIN code.
+ */
 interface UnlockedActivity
