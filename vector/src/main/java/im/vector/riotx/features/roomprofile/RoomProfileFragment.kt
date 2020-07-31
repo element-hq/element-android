@@ -206,6 +206,10 @@ class RoomProfileFragment @Inject constructor(
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomMembers)
     }
 
+    override fun onBannedMemberListClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenBannedRoomMembers)
+    }
+
     override fun onSettingsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
     }

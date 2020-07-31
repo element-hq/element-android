@@ -53,7 +53,8 @@ data class RoomSummary constructor(
         val typingUsers: List<SenderInfo>,
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
+        val hasFailedSending: Boolean = false
 ) {
 
     val isVersioned: Boolean
@@ -66,7 +67,7 @@ data class RoomSummary constructor(
         get() = tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE }
 
     val canStartCall: Boolean
-        get() = isDirect && joinedMembersCount == 2
+        get() = joinedMembersCount == 2
 
     companion object {
         const val NOT_IN_BREADCRUMBS = -1

@@ -6,6 +6,8 @@
         android:id="@+id/action_add_custom_hs"
         android:icon="@drawable/ic_add_black"
         android:title="@string/action_open"
+        android:visible="@bool/false_not_implemented"
+        app:iconTint="?colorAccent"
         app:showAsAction="always" />
 
 </menu>

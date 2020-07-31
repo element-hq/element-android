@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model.accountdata
+package im.vector.riotx.features.roomprofile.banned
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.session.integrationmanager.AllowedWidgetsContent
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataAllowedWidgets(
-        @Json(name = "type") override val type: String = TYPE_ALLOWED_WIDGETS,
-        @Json(name = "content") val content: AllowedWidgetsContent
-) : UserAccountData()
+sealed class RoomBannedListMemberAction : VectorViewModelAction {
+    data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
+    data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
+}

@@ -21,8 +21,7 @@ import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -65,11 +64,10 @@ class AccountDataFragment @Inject constructor(
         epoxyController.interactionListener = null
     }
 
-    override fun didTap(data: UserAccountData) {
-        val fb = data as? UserAccountDataEvent ?: return
+    override fun didTap(data: UserAccountDataEvent) {
         val jsonString = MoshiProvider.providesMoshi()
                 .adapter(UserAccountDataEvent::class.java)
-                .toJson(fb)
+                .toJson(data)
         JSonViewerDialog.newInstance(
                 jsonString,
                 -1, // open All

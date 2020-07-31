@@ -93,9 +93,12 @@ internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Re
                                                                        roomId: String,
                                                                        sendStates: List<SendState>)
         : RealmResults<TimelineEventEntity> {
-    val sendStatesStr = sendStates.map { it.name }.toTypedArray()
-    return realm.where<TimelineEventEntity>()
-            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
+    return whereRoomId(realm, roomId)
+            .filterSendStates(sendStates)
             .findAll()
+}
+
+internal fun RealmQuery<TimelineEventEntity>.filterSendStates(sendStates: List<SendState>): RealmQuery<TimelineEventEntity> {
+    val sendStatesStr = sendStates.map { it.name }.toTypedArray()
+    return `in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
 }

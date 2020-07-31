@@ -20,6 +20,9 @@ package im.vector.riotx.features.settings
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +31,7 @@ import androidx.core.view.isVisible
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
@@ -55,6 +59,7 @@ import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
 import im.vector.riotx.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import me.gujun.android.span.span
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -96,6 +101,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
+    override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
+        return super.onCreateRecyclerView(inflater, parent, savedInstanceState).also {
+            // Insert animation are really annoying the first time the list is shown
+            // due to the way preference fragment is done, it's not trivial to disable it for first appearance only..
+            // And it's not that an issue that this list is not animated, it's pretty static
+            it.itemAnimator = null
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         // My device name may have been updated
@@ -109,6 +123,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 }.also {
                     disposables.add(it)
                 }
+
+        val e2eByDefault = session.getHomeServerCapabilities().adminE2EByDefault
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible = !e2eByDefault
     }
 
     private val secureBackupCategory by lazy {
@@ -219,6 +236,19 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(it,
                     ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_settings_icon_tint_color)
+        }
+
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
+            it.icon = ThemeUtils.tintDrawableWithColor(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
+                    ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+            )
+            it.summary = span {
+                text = getString(R.string.settings_hs_admin_e2e_disabled)
+                textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+            }
+
+            it.isVisible = session.getHomeServerCapabilities().adminE2EByDefault
         }
     }
 

@@ -19,12 +19,10 @@ package im.vector.riotx.features.login
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -73,14 +71,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
         get() = supportFragmentManager.findFragmentById(R.id.loginFragmentContainer)
 
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
-        // Find the loginLogo on the current Fragment, this should not return null
-        (topFragment?.view as? ViewGroup)
-                // Find findViewById does not work, I do not know why
-                // findViewById<View?>(R.id.loginLogo)
-                ?.children
-                ?.firstOrNull { it.id == R.id.loginLogo }
-                ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-        // TODO
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
@@ -145,7 +135,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
-                            findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // TODO Disabled because it provokes a flickering
@@ -231,7 +220,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
     private fun onServerSelectionDone(loginViewEvents: LoginViewEvents.OnServerSelectionDone) {
         when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
-            ServerType.Modular,
+            ServerType.EMS,
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginServerUrlFormFragment::class.java,
                     option = commonOption)

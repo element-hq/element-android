@@ -21,7 +21,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 
 interface AccountDataService {
     /**

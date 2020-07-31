@@ -46,7 +46,7 @@ import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.profile.BindThreePidsTask
 import im.vector.matrix.android.internal.session.profile.UnbindThreePidsTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -95,7 +95,7 @@ internal class DefaultIdentityService @Inject constructor(
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         // Observe the account data change
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.TYPE_IDENTITY_SERVER)
+                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_IDENTITY_SERVER)
                 .observeNotNull(lifecycleOwner) {
                     notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
                 }

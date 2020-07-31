@@ -8,26 +8,8 @@
         <item name="android:paddingEnd">36dp</item>
     </style>
 
-    <item name="loginLogo" type="id" />
     <item name="loginFormScrollView" type="id" />
     <item name="loginFormContainer" type="id" />
-
-    <style name="LoginLogoBase">
-        <item name="android:id">@id/loginLogo</item>
-        <item name="android:layout_width">60dp</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:src">@drawable/element_logo_sc</item>
-        <item name="android:importantForAccessibility">no</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
-    </style>
-
-    <style name="LoginLogo.v21" parent="LoginLogoBase" />
-
-    <style name="LoginLogo" parent="LoginLogo.v21">
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="android:layout_marginTop">48dp</item>
-    </style>
 
     <style name="LoginFormContainer">
         <item name="android:id">@id/loginFormContainer</item>
@@ -49,10 +31,10 @@
     </style>
 
     <style name="LoginFormScrollView" parent="LoginFormScrollViewBase">
-        <item name="layout_constraintTop_toBottomOf">@id/loginLogo</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginTop">72dp</item>
     </style>
 
     <style name="Style.Vector.Login.Button" parent="VectorButtonStyle.SC">

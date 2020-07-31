@@ -16,11 +16,14 @@
 
 package im.vector.matrix.android.internal.session.sync
 
+import com.squareup.moshi.Moshi
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.pushrules.RuleSetKey
+import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -37,16 +40,13 @@ import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFie
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataBreadcrumbs
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
+import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.DirectMessagesContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataSync
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
@@ -60,25 +60,18 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val directChatsHelper: DirectChatsHelper,
+        private val moshi: Moshi,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask) {
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
-        accountData?.list?.forEach {
+        accountData?.list?.forEach { event ->
             // Generic handling, just save in base
-            handleGenericAccountData(realm, it.type, it.content)
-
-            // Didn't want to break too much thing, so i re-serialize to jsonString before reparsing
-            // TODO would be better to have a mapper?
-            val toJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJson(it)
-            val model = toJson?.let { json ->
-                MoshiProvider.providesMoshi().adapter(UserAccountData::class.java).fromJson(json)
-            }
-            // Specific parsing
-            when (model) {
-                is UserAccountDataDirectMessages -> handleDirectChatRooms(realm, model)
-                is UserAccountDataPushRules      -> handlePushRules(realm, model)
-                is UserAccountDataIgnoredUsers   -> handleIgnoredUsers(realm, model)
-                is UserAccountDataBreadcrumbs    -> handleBreadcrumbs(realm, model)
+            handleGenericAccountData(realm, event.type, event.content)
+            when (event.type) {
+                UserAccountDataTypes.TYPE_DIRECT_MESSAGES   -> handleDirectChatRooms(realm, event)
+                UserAccountDataTypes.TYPE_PUSH_RULES        -> handlePushRules(realm, event)
+                UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
+                UserAccountDataTypes.TYPE_BREADCRUMBS       -> handleBreadcrumbs(realm, event)
             }
         }
     }
@@ -116,8 +109,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         }
     }
 
-    private fun handlePushRules(realm: Realm, userAccountDataPushRules: UserAccountDataPushRules) {
-        val pushRules = userAccountDataPushRules.content
+    private fun handlePushRules(realm: Realm, event: UserAccountDataEvent) {
+        val pushRules = event.content.toModel<GetPushRulesResponse>() ?: return
         realm.where(PushRulesEntity::class.java)
                 .findAll()
                 .deleteAllFromRealm()
@@ -158,13 +151,14 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         realm.insertOrUpdate(underrides)
     }
 
-    private fun handleDirectChatRooms(realm: Realm, directMessages: UserAccountDataDirectMessages) {
+    private fun handleDirectChatRooms(realm: Realm, event: UserAccountDataEvent) {
         val oldDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
         oldDirectRooms.forEach {
             it.isDirect = false
             it.directUserId = null
         }
-        directMessages.content.forEach {
+        val content = event.content.toModel<DirectMessagesContent>() ?: return
+        content.forEach {
             val userId = it.key
             it.value.forEach { roomId ->
                 val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
@@ -177,8 +171,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         }
     }
 
-    private fun handleIgnoredUsers(realm: Realm, userAccountDataIgnoredUsers: UserAccountDataIgnoredUsers) {
-        val userIds = userAccountDataIgnoredUsers.content.ignoredUsers.keys
+    private fun handleIgnoredUsers(realm: Realm, event: UserAccountDataEvent) {
+        val userIds = event.content.toModel<IgnoredUsersContent>()?.ignoredUsers?.keys ?: return
         realm.where(IgnoredUserEntity::class.java)
                 .findAll()
                 .deleteAllFromRealm()
@@ -187,8 +181,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         // TODO If not initial sync, we should execute a init sync
     }
 
-    private fun handleBreadcrumbs(realm: Realm, userAccountDataBreadcrumbs: UserAccountDataBreadcrumbs) {
-        val recentRoomIds = userAccountDataBreadcrumbs.content.recentRoomIds
+    private fun handleBreadcrumbs(realm: Realm, event: UserAccountDataEvent) {
+        val recentRoomIds = event.content.toModel<BreadcrumbsContent>()?.recentRoomIds ?: return
         val entity = BreadcrumbsEntity.getOrCreate(realm)
 
         // And save the new received list

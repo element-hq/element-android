@@ -28,6 +28,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
@@ -36,7 +37,6 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
@@ -97,7 +97,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
         keysBackupState.value = session.cryptoService().keysBackupService().state
 
-        Observable.combineLatest<List<UserAccountData>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
+        Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
                 session.rx().liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
                 session.rx().liveCrossSigningInfo(session.myUserId),
                 keyBackupPublishSubject,
