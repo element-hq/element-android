@@ -7,6 +7,11 @@
     android:background="?riotx_background">
 
     <!-- Missing attributes are in the style -->
+    <ImageView
+        style="@style/LoginLogo"
+        tools:ignore="ContentDescription,MissingConstraints,UnusedAttribute" />
+
+    <!-- Missing attributes are in the style -->
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
         tools:ignore="MissingConstraints">

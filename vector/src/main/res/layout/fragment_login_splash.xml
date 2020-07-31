@@ -33,14 +33,14 @@
             <ImageView
                 android:id="@+id/logoType"
                 android:layout_width="wrap_content"
-                android:layout_height="102dp"
-                android:src="@drawable/element_logotype_combined"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/element_logotype"
                 android:tint="?colorAccent"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintTop_toBottomOf="@id/loginSplashLogo" />
 
             <TextView
                 android:id="@+id/loginSplashTitle"
