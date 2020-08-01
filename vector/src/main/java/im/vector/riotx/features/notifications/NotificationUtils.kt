@@ -46,6 +46,7 @@ import im.vector.riotx.features.call.service.CallHeadsUpActionReceiver
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
+import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,6 +60,7 @@ import kotlin.random.Random
 @Singleton
 class NotificationUtils @Inject constructor(private val context: Context,
                                             private val stringProvider: StringProvider,
+                                            private val pinLocker: PinLocker,
                                             private val vectorPreferences: VectorPreferences) {
 
     companion object {

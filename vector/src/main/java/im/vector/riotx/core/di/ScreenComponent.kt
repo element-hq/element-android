@@ -54,6 +54,7 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.permalink.PermalinkHandlerActivity
+import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
@@ -101,6 +102,7 @@ interface ScreenComponent {
     fun bugReporter(): BugReporter
     fun rageShake(): RageShake
     fun navigator(): Navigator
+    fun pinLocker(): PinLocker
     fun errorFormatter(): ErrorFormatter
     fun uiStateRepository(): UiStateRepository
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog

@@ -109,6 +109,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
                 .showSelected(showSelected)
+                .hasFailedSending(roomSummary.hasFailedSending)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())

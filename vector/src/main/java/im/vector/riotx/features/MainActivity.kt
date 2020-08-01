@@ -35,6 +35,9 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.ShortcutsHandler
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.pin.PinCodeStore
+import im.vector.riotx.features.pin.PinLocker
+import im.vector.riotx.features.pin.UnlockedActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.signout.hard.SignedOutActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
@@ -61,7 +64,7 @@ data class MainActivityArgs(
  * This Activity, when started with argument, is also doing some cleanup when user disconnects,
  * clears cache, is logged out, or is soft logged out
  */
-class MainActivity : VectorBaseActivity() {
+class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
@@ -84,6 +87,8 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var uiStateRepository: UiStateRepository
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var pinLocker: PinLocker
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -181,6 +186,8 @@ class MainActivity : VectorBaseActivity() {
             if (clearPreferences) {
                 vectorPreferences.clearPreferences()
                 uiStateRepository.reset()
+                pinLocker.unlock()
+                pinCodeStore.deleteEncodedPin()
             }
             withContext(Dispatchers.IO) {
                 // On BG thread

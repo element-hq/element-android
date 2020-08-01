@@ -108,13 +108,15 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
                 homeServerCapabilitiesEntity.defaultIdentityServerUrl = getWellknownResult.identityServerUrl
-
+                homeServerCapabilitiesEntity.adminE2EByDefault = getWellknownResult.wellKnown.e2eAdminSetting?.e2eDefault ?: true
                 // We are also checking for integration manager configurations
                 val config = configExtractor.extract(getWellknownResult.wellKnown)
                 if (config != null) {
                     Timber.v("Extracted integration config : $config")
                     realm.insertOrUpdate(config)
                 }
+            } else {
+                homeServerCapabilitiesEntity.adminE2EByDefault = true
             }
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }

@@ -23,7 +23,7 @@
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_marginStart="2dp"
-        android:src="@drawable/ic_warning_small"
+        android:src="@drawable/ic_warning_badge"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@id/messageThumbnailView"
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
