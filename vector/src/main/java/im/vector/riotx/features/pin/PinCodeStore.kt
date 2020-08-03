@@ -77,6 +77,6 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
     }
 
     companion object {
-        const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
+        private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
     }
 }
