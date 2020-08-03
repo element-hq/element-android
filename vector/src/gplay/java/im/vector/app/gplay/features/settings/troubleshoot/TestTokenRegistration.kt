@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.gplay.features.settings.troubleshoot
+package im.vector.app.gplay.features.settings.troubleshoot
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import im.vector.matrix.android.api.session.pushers.PusherState
-import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.pushers.PushersManager
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
-import im.vector.riotx.push.fcm.FcmHelper
+import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.settings.troubleshoot.TroubleshootTest
+import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
 /**

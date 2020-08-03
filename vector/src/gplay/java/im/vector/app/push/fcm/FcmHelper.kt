@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.push.fcm
+package im.vector.app.push.fcm
 
 import android.app.Activity
 import android.content.Context
@@ -25,10 +25,10 @@ import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
-import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.pushers.PushersManager
-import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
 
 /**
