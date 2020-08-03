@@ -155,7 +155,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                     loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                     loginNotice.text = getString(R.string.login_server_matrix_org_text)
                 }
-                ServerType.Modular   -> {
+                ServerType.EMS       -> {
                     loginServerIcon.isVisible = true
                     loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                     loginTitle.text = getString(resId, "Element Matrix Services")

@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model.accountdata
+package im.vector.riotx.features.homeserver
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.airbnb.mvrx.MvRxState
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataIdentityServer(
-        @Json(name = "type") override val type: String = TYPE_IDENTITY_SERVER,
-        @Json(name = "content") val content: IdentityServerContent? = null
-) : UserAccountData()
-
-@JsonClass(generateAdapter = true)
-internal data class IdentityServerContent(
-        @Json(name = "base_url") val baseUrl: String? = null
-)
+data class HomeServerCapabilitiesViewState(
+        val capabilities: HomeServerCapabilities = HomeServerCapabilities()
+) : MvRxState

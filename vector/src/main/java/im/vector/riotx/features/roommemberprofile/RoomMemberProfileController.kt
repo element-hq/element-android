@@ -236,10 +236,12 @@ class RoomMemberProfileController @Inject constructor(
         if (canEditPowerLevel) {
             buildProfileAction(
                     id = "edit_power_level",
-                    editable = false,
-                    title = powerLevelsStr,
+                    editable = true,
+                    title = stringProvider.getString(R.string.power_level_title),
+                    subtitle = powerLevelsStr,
                     divider = canKick || canBan,
                     dividerColor = dividerColor,
+                    editableRes = R.drawable.ic_edit,
                     action = { callback?.onEditPowerLevel(userPowerLevel) }
             )
         }

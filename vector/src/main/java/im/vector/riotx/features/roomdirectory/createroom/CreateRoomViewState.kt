@@ -25,5 +25,6 @@ data class CreateRoomViewState(
         val isPublic: Boolean = false,
         val isInRoomDirectory: Boolean = false,
         val isEncrypted: Boolean = false,
+        val hsAdminHasDisabledE2E: Boolean = false,
         val asyncCreateRoomRequest: Async<String> = Uninitialized
 ) : MvRxState

@@ -25,7 +25,3 @@ interface MessageContent {
     val relatesTo: RelationDefaultContent?
     val newContent: Content?
 }
-
-fun MessageContent?.isReply(): Boolean {
-    return this?.relatesTo?.inReplyTo?.eventId != null
-}

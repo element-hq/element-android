@@ -72,6 +72,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_ALLOW_INTEGRATIONS_KEY = "SETTINGS_ALLOW_INTEGRATIONS_KEY"
         const val SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY = "SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+
+        const val SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT = "SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
 //        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
 
         // user
@@ -158,6 +160,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // Security
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
+        const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -166,6 +169,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val DID_MIGRATE_TO_NOTIFICATION_REWORK = "DID_MIGRATE_TO_NOTIFICATION_REWORK"
         private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
         private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
+
+        private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
@@ -283,6 +288,16 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun failFast(): Boolean {
         return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+    }
+
+    fun didAskUserToEnableSessionPush(): Boolean {
+        return defaultPrefs.getBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, false)
+    }
+
+    fun setDidAskUserToEnableSessionPush() {
+        defaultPrefs.edit {
+            putBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, true)
+        }
     }
 
     /**
@@ -797,5 +812,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useFlagSecure(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
+    }
+
+    /**
+     * The user enable protecting app access with pin code
+     */
+    fun useFlagPinCode(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
     }
 }

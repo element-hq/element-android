@@ -42,8 +42,7 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
@@ -179,7 +178,7 @@ class RxSession(private val session: Session) {
     }
 
     fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {
-        return Observable.combineLatest<List<UserAccountData>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
+        return Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
                 liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
                 liveCrossSigningInfo(session.myUserId),
                 liveCrossSigningPrivateKeys(),

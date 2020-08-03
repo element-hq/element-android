@@ -43,6 +43,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         fun create(initialState: CreateRoomViewState): CreateRoomViewModel
     }
 
+    init {
+        setState {
+            copy(
+                    isEncrypted = !this.isPublic && session.getHomeServerCapabilities().adminE2EByDefault,
+                    hsAdminHasDisabledE2E = !session.getHomeServerCapabilities().adminE2EByDefault
+            )
+        }
+    }
+
     companion object : MvRxViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
 
         @JvmStatic
@@ -69,7 +78,12 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
 
-    private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState { copy(isPublic = action.isPublic) }
+    private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
+        copy(
+                isPublic = action.isPublic,
+                isEncrypted = !action.isPublic && session.getHomeServerCapabilities().adminE2EByDefault
+        )
+    }
 
     private fun setIsInRoomDirectory(action: CreateRoomAction.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
 

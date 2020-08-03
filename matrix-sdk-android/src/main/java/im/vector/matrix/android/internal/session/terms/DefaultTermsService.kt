@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.session.identity.IdentityAuthAPI
 import im.vector.matrix.android.internal.session.identity.IdentityRegisterTask
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.api.session.accountdata.UserAccountDataTypes
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -109,7 +109,7 @@ internal class DefaultTermsService @Inject constructor(
     }
 
     private fun getAlreadyAcceptedTermUrlsFromAccountData(): Set<String> {
-        return accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ACCEPTED_TERMS)
+        return accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ACCEPTED_TERMS)
                 ?.content
                 ?.toModel<AcceptedTermsContent>()
                 ?.acceptedTerms

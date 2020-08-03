@@ -32,6 +32,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.room.RequireActiveMembershipViewEvents
 import im.vector.riotx.features.room.RequireActiveMembershipViewModel
 import im.vector.riotx.features.room.RequireActiveMembershipViewState
+import im.vector.riotx.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
@@ -81,9 +82,10 @@ class RoomProfileActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is RoomProfileSharedAction.OpenRoomMembers  -> openRoomMembers()
-                        is RoomProfileSharedAction.OpenRoomSettings -> openRoomSettings()
-                        is RoomProfileSharedAction.OpenRoomUploads  -> openRoomUploads()
+                        is RoomProfileSharedAction.OpenRoomMembers       -> openRoomMembers()
+                        is RoomProfileSharedAction.OpenRoomSettings      -> openRoomSettings()
+                        is RoomProfileSharedAction.OpenRoomUploads       -> openRoomUploads()
+                        is RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
                     }
                 }
                 .disposeOnDestroy()
@@ -112,6 +114,10 @@ class RoomProfileActivity :
 
     private fun openRoomMembers() {
         addFragmentToBackstack(R.id.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
+    }
+
+    private fun openBannedRoomMembers() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomBannedMemberListFragment::class.java, roomProfileArgs)
     }
 
     override fun configure(toolbar: Toolbar) {

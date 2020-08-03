@@ -123,15 +123,11 @@
 
     <im.vector.riotx.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
+        style="@style/ComposerEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:inputType="textCapSentences|textMultiLine"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
-        android:padding="8dp"
-        android:textColor="?vctr_message_text_color"
-        android:textSize="14sp"
         tools:hint="@string/room_message_placeholder_not_encrypted"
         tools:ignore="MissingConstraints" />
 

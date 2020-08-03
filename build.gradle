@@ -41,6 +41,8 @@ allprojects {
                 includeGroupByRegex 'com\\.github\\.BillCarsonFr'
                 // PhotoView
                 includeGroupByRegex 'com\\.github\\.chrisbanes'
+                // PFLockScreen-Android
+                includeGroupByRegex 'com\\.github\\.ganfra'
             }
         }
         maven {

@@ -22,8 +22,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -35,6 +37,7 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.homeserver.HomeServerCapabilitiesViewModel
 import kotlinx.android.synthetic.main.fragment_known_users.*
 import javax.inject.Inject
 
@@ -51,6 +54,8 @@ class KnownUsersFragment @Inject constructor(
     override fun getMenuRes() = args.menuResId
 
     private val viewModel: UserDirectoryViewModel by activityViewModel()
+    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
+
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,13 +63,17 @@ class KnownUsersFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
 
         knownUsersTitle.text = args.title
-
         vectorBaseActivity.setSupportActionBar(knownUsersToolbar)
         setupRecyclerView()
         setupFilterView()
         setupAddByMatrixIdView()
         setupAddFromPhoneBookView()
         setupCloseView()
+
+        homeServerCapabilitiesViewModel.subscribe {
+            knownUsersE2EbyDefaultDisabled.isVisible = !it.capabilities.adminE2EByDefault
+        }
+
         viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
             renderSelectedUsers(it)
         }

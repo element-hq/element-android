@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout.soft.epoxy
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.VectorEpoxyHolder
-import im.vector.riotx.core.epoxy.VectorEpoxyModel
-
-@EpoxyModelClass(layout = R.layout.item_login_header)
-abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
-    class Holder : VectorEpoxyHolder()
-}
+typealias DirectMessagesContent = Map<String, List<String>>

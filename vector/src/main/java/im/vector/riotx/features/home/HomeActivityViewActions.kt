@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model.accountdata
+package im.vector.riotx.features.home
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.session.integrationmanager.IntegrationProvisioningContent
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataIntegrationProvisioning(
-        @Json(name = "type") override val type: String = TYPE_INTEGRATION_PROVISIONING,
-        @Json(name = "content") val content: IntegrationProvisioningContent
-) : UserAccountData()
+sealed class HomeActivityViewActions : VectorViewModelAction {
+    object PushPromptHasBeenReviewed : HomeActivityViewActions()
+}

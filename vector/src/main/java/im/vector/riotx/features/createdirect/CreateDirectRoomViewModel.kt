@@ -63,7 +63,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                         }.exhaustive
                     }
                     setDirectMessage()
-                    enableEncryptionIfInvitedUsersSupportIt = true
+                    enableEncryptionIfInvitedUsersSupportIt = session.getHomeServerCapabilities().adminE2EByDefault
                 }
 
         session.rx()

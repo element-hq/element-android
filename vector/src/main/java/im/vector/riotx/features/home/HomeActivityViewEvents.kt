@@ -22,4 +22,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
 sealed class HomeActivityViewEvents : VectorViewEvents {
     data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem?) : HomeActivityViewEvents()
     data class OnNewSession(val userItem: MatrixItem.UserItem?, val waitForIncomingRequest: Boolean = true) : HomeActivityViewEvents()
+    object PromptToEnableSessionPush : HomeActivityViewEvents()
 }

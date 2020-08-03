@@ -128,6 +128,7 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
         if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
+            localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
             return sendEvent(localEcho.root)
         }
         return null
@@ -280,12 +281,6 @@ internal class DefaultSendService @AssistedInject constructor(
                             .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                             .build()
                 }
-    }
-
-    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        return SendEventWorker.Params(sessionId, event)
-                .let { WorkerParamsFactory.toData(it) }
-                .let { timelineSendEventWorkCommon.createWork<SendEventWorker>(it, startChain) }
     }
 
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {

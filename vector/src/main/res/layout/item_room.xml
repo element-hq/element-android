@@ -48,6 +48,17 @@
     </FrameLayout>
 
     <ImageView
+        android:id="@+id/roomAvatarFailSendingImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="30dp"
+        tools:ignore="MissingConstraints"
+        android:src="@drawable/ic_warning_badge"
+        />
+
+    <ImageView
         android:id="@+id/roomAvatarDecorationImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"

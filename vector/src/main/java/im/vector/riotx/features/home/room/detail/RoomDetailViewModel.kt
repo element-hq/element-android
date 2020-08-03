@@ -415,11 +415,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.clear_message_queue ->
                 // For now always disable when not in developer mode, worker cancellation is not working properly
                 timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
-            R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
-            R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+            R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps    -> true
             R.id.voice_call,
-            R.id.video_call          -> room.canStartCall() && webRtcPeerConnectionManager.currentCall == null
+            R.id.video_call          -> state.asyncRoomSummary()?.canStartCall == true  && webRtcPeerConnectionManager.currentCall == null
             R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
             else                     -> false
         }

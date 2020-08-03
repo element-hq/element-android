@@ -62,7 +62,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
     private fun setupUi(state: LoginViewState) {
         when (state.serverType) {
-            ServerType.Modular -> {
+            ServerType.EMS -> {
                 loginServerUrlFormIcon.isVisible = true
                 loginServerUrlFormTitle.text = getString(R.string.login_connect_to_modular)
                 loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
@@ -70,7 +70,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
-            else               -> {
+            else           -> {
                 loginServerUrlFormIcon.isVisible = false
                 loginServerUrlFormTitle.text = getString(R.string.login_server_other_title)
                 loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
@@ -83,7 +83,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
     @OnClick(R.id.loginServerUrlFormLearnMore)
     fun learnMore() {
-        openUrlInChromeCustomTab(requireActivity(), null, MODULAR_LINK)
+        openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
     }
 
     override fun resetViewModel() {
