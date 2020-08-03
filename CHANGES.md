@@ -8,6 +8,9 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
+ - Fix invisible toolbar (Status.im theme) (#1746)
+
+Translations 🗣:
  -
 
 SDK API changes ⚠️:
