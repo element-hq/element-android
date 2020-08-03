@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package im.vector.matrix.android.api.session.accountdata
 
 object UserAccountDataTypes {
-
     const val TYPE_IGNORED_USER_LIST = "m.ignored_user_list"
     const val TYPE_DIRECT_MESSAGES = "m.direct"
-    const val TYPE_BREADCRUMBS = "im.vector.setting.breadcrumbs" // Was previously "im.vector.riot.breadcrumb_rooms"
+    const val TYPE_BREADCRUMBS = "im.vector.setting.breadcrumbs"
     const val TYPE_PREVIEW_URLS = "org.matrix.preview_urls"
     const val TYPE_WIDGETS = "m.widgets"
     const val TYPE_PUSH_RULES = "m.push_rules"
