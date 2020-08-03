@@ -1,3 +1,9 @@
+Changes in Element 1.0.4 (2020-08-03)
+===================================================
+
+Bugfix 🐛:
+ - Fix Crash when opening invite to room user screen
+
 Changes in Element 1.0.3 (2020-07-31)
 ===================================================
 
