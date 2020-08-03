@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachmentviewer
+package im.vector.lib.attachmentviewer
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
+sealed class AttachmentEvents {
+    data class VideoEvent(val isPlaying: Boolean, val progress: Int, val duration: Int) : AttachmentEvents()
+}
 
-class AnimatedImageViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView) {
+interface AttachmentEventListener {
+    fun onEvent(event: AttachmentEvents)
+}
 
-    val touchImageView: ImageView = itemView.findViewById(R.id.imageView)
-    val imageLoaderProgress: ProgressBar = itemView.findViewById(R.id.imageLoaderProgress)
-
-    internal val target = DefaultImageLoaderTarget(this, this.touchImageView)
+sealed class AttachmentCommands {
+    object PauseVideo : AttachmentCommands()
+    object StartVideo : AttachmentCommands()
+    data class SeekTo(val percentProgress: Int) : AttachmentCommands()
 }

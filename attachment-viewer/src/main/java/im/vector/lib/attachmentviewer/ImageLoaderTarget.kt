@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.attachmentviewer
+package im.vector.lib.attachmentviewer
 
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable

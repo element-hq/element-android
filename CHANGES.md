@@ -21,6 +21,7 @@ Build 🧱:
 
 Other changes:
  - Hide Flair settings, this is not implemented yet.
+ - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
 
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================

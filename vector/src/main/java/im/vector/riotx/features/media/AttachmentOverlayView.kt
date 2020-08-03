@@ -25,9 +25,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
+import im.vector.lib.attachmentviewer.AttachmentEventListener
+import im.vector.lib.attachmentviewer.AttachmentEvents
 import im.vector.riotx.R
-import im.vector.riotx.attachmentviewer.AttachmentEventListener
-import im.vector.riotx.attachmentviewer.AttachmentEvents
 
 class AttachmentOverlayView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

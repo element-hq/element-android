@@ -22,12 +22,12 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
+import im.vector.lib.attachmentviewer.AttachmentInfo
+import im.vector.lib.attachmentviewer.AttachmentSourceProvider
+import im.vector.lib.attachmentviewer.ImageLoaderTarget
+import im.vector.lib.attachmentviewer.VideoLoaderTarget
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.file.FileService
-import im.vector.riotx.attachmentviewer.AttachmentInfo
-import im.vector.riotx.attachmentviewer.AttachmentSourceProvider
-import im.vector.riotx.attachmentviewer.ImageLoaderTarget
-import im.vector.riotx.attachmentviewer.VideoLoaderTarget
 import java.io.File
 
 abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRenderer, val fileService: FileService) : AttachmentSourceProvider {

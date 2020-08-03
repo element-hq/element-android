@@ -30,9 +30,9 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.transition.Transition
+import im.vector.lib.attachmentviewer.AttachmentCommands
+import im.vector.lib.attachmentviewer.AttachmentViewerActivity
 import im.vector.riotx.R
-import im.vector.riotx.attachmentviewer.AttachmentCommands
-import im.vector.riotx.attachmentviewer.AttachmentViewerActivity
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasVectorInjector
