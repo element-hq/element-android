@@ -165,7 +165,8 @@ internal interface RoomAPI {
      * @param eventId the event Id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/event/{eventId}")
-    fun getEvent(@Path("roomId") roomId: String, @Path("eventId") eventId: String): Call<Event>
+    fun getEvent(@Path("roomId") roomId: String,
+                 @Path("eventId") eventId: String): Call<Event>
 
     /**
      * Send read markers.
@@ -174,7 +175,8 @@ internal interface RoomAPI {
      * @param markers the read markers
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/read_markers")
-    fun sendReadMarker(@Path("roomId") roomId: String, @Body markers: Map<String, String>): Call<Unit>
+    fun sendReadMarker(@Path("roomId") roomId: String,
+                       @Body markers: Map<String, String>): Call<Unit>
 
     /**
      * Invite a user to the given room.
@@ -184,7 +186,8 @@ internal interface RoomAPI {
      * @param body   a object that just contains a user id
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
-    fun invite(@Path("roomId") roomId: String, @Body body: InviteBody): Call<Unit>
+    fun invite(@Path("roomId") roomId: String,
+               @Body body: InviteBody): Call<Unit>
 
     /**
      * Invite a user to a room, using a ThreePid
@@ -192,7 +195,8 @@ internal interface RoomAPI {
      * @param roomId Required. The room identifier (not alias) to which to invite the user.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
-    fun invite3pid(@Path("roomId") roomId: String, @Body body: ThreePidInviteBody): Call<Unit>
+    fun invite3pid(@Path("roomId") roomId: String,
+                   @Body body: ThreePidInviteBody): Call<Unit>
 
     /**
      * Send a generic state events
@@ -278,7 +282,8 @@ internal interface RoomAPI {
      * @param userIdAndReason the banned user object (userId and reason for ban)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/ban")
-    fun ban(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+    fun ban(@Path("roomId") roomId: String,
+            @Body userIdAndReason: UserIdAndReason): Call<Unit>
 
     /**
      * unban a user from the given room.
@@ -287,7 +292,8 @@ internal interface RoomAPI {
      * @param userIdAndReason the unbanned user object (userId and reason for unban)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/unban")
-    fun unban(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+    fun unban(@Path("roomId") roomId: String,
+              @Body userIdAndReason: UserIdAndReason): Call<Unit>
 
     /**
      * Kick a user from the given room.
@@ -296,7 +302,8 @@ internal interface RoomAPI {
      * @param userIdAndReason the kicked user object (userId and reason for kicking)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/kick")
-    fun kick(@Path("roomId") roomId: String, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+    fun kick(@Path("roomId") roomId: String,
+             @Body userIdAndReason: UserIdAndReason): Call<Unit>
 
     /**
      * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.
