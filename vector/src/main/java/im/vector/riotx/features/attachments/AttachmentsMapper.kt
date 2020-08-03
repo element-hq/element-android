@@ -16,13 +16,13 @@
 
 package im.vector.riotx.features.attachments
 
+import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.entity.MultiPickerContactType
+import im.vector.lib.multipicker.entity.MultiPickerFileType
+import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.multipicker.entity.MultiPickerVideoType
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.riotx.multipicker.entity.MultiPickerAudioType
-import im.vector.riotx.multipicker.entity.MultiPickerBaseType
-import im.vector.riotx.multipicker.entity.MultiPickerContactType
-import im.vector.riotx.multipicker.entity.MultiPickerFileType
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.entity.MultiPickerVideoType
 import timber.log.Timber
 
 fun MultiPickerContactType.toContactAttachment(): ContactAttachment {

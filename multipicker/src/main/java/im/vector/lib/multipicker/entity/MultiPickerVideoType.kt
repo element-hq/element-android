@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker.provider
+package im.vector.lib.multipicker.entity
 
-import androidx.core.content.FileProvider
+import android.net.Uri
 
-class MultiPickerFileProvider : FileProvider()
+data class MultiPickerVideoType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri,
+        val width: Int,
+        val height: Int,
+        val orientation: Int,
+        val duration: Long
+) : MultiPickerBaseType

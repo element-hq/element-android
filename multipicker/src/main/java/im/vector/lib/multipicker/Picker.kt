@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker
+package im.vector.lib.multipicker
 
 import android.app.Activity
 import android.content.Context

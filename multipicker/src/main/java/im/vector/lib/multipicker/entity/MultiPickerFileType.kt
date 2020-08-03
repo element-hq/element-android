@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker.entity
+package im.vector.lib.multipicker.entity
 
 import android.net.Uri
 
-data class MultiPickerAudioType(
+data class MultiPickerFileType(
         override val displayName: String?,
         override val size: Long,
         override val mimeType: String?,
-        override val contentUri: Uri,
-        val duration: Long
+        override val contentUri: Uri
 ) : MultiPickerBaseType

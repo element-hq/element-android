@@ -40,6 +40,8 @@ import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
+import im.vector.lib.multipicker.MultiPicker
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.failure.isInvalidPassword
@@ -66,8 +68,6 @@ import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.media.createUCropWithDefaultSettings
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
-import im.vector.riotx.multipicker.MultiPicker
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker.entity
+package im.vector.lib.multipicker.entity
 
 import android.net.Uri
 
-interface MultiPickerBaseType {
-    val displayName: String?
-    val size: Long
-    val mimeType: String?
-    val contentUri: Uri
-}
+data class MultiPickerImageType(
+        override val displayName: String?,
+        override val size: Long,
+        override val mimeType: String?,
+        override val contentUri: Uri,
+        val width: Int,
+        val height: Int,
+        val orientation: Int
+) : MultiPickerBaseType

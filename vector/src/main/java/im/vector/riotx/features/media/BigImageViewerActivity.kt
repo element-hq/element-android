@@ -27,6 +27,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import com.yalantis.ucrop.UCrop
+import im.vector.lib.multipicker.MultiPicker
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -37,8 +39,6 @@ import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
-import im.vector.riotx.multipicker.MultiPicker
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.activity_big_image_viewer.*
 import java.io.File
 import javax.inject.Inject

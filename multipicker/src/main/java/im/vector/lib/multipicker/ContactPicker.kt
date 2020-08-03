@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker
+package im.vector.lib.multipicker
 
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
-import im.vector.riotx.multipicker.entity.MultiPickerContactType
+import im.vector.lib.multipicker.entity.MultiPickerContactType
 
 /**
  * Contact Picker implementation

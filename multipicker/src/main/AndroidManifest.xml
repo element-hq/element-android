@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.riotx.multipicker">
+    package="im.vector.lib.multipicker">
 
     <application>
         <provider

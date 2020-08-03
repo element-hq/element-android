@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker
+package im.vector.lib.multipicker
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
-import im.vector.riotx.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.entity.MultiPickerVideoType
 
 /**
  * Video Picker implementation
