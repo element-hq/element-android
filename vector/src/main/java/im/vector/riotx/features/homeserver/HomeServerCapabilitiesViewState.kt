@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.homeserver
 
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 
-data class CreateDirectRoomViewState(
-    val createAndInviteState: Async<String> = Uninitialized
+data class HomeServerCapabilitiesViewState(
+        val capabilities: HomeServerCapabilities = HomeServerCapabilities()
 ) : MvRxState
