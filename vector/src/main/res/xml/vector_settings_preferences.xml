@@ -10,7 +10,7 @@
             android:key="SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_interface_language"
-            app:fragment="im.vector.riotx.features.settings.locale.LocalePickerFragment" />
+            app:fragment="im.vector.app.features.settings.locale.LocalePickerFragment" />
 
         <im.vector.app.core.preference.VectorListPreference
             android:defaultValue="light"

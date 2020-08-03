@@ -19,7 +19,7 @@ package im.vector.app.core.glide
 import com.bumptech.glide.load.Option
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 
-const val ElementToDecryptOptionKey = "im.vector.riotx.core.glide.ElementToDecrypt"
+const val ElementToDecryptOptionKey = "im.vector.app.core.glide.ElementToDecrypt"
 
 val ELEMENT_TO_DECRYPT = Option.memory(
         ElementToDecryptOptionKey, ElementToDecrypt("", "", ""))
