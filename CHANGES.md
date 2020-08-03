@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Hide Flair settings, this is not implemented yet.
 
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
