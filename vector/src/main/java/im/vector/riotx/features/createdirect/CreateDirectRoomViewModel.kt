@@ -38,14 +38,6 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 
-    init {
-        setState {
-            copy(
-                    hsAdminHasDisabledE2E = !session.getHomeServerCapabilities().adminE2EByDefault
-            )
-        }
-    }
-
     companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
 
         @JvmStatic
