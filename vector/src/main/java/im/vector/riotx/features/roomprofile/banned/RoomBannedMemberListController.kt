@@ -51,42 +51,46 @@ class RoomBannedMemberListController @Inject constructor(
     override fun buildModels(data: RoomBannedMemberListViewState?) {
         val bannedList = data?.bannedMemberSummaries?.invoke() ?: return
 
-        buildProfileSection(
-                stringProvider.getString(R.string.room_settings_banned_users_title)
-        )
+        val quantityString = stringProvider.getQuantityString(R.plurals.room_settings_banned_users_count, bannedList.size, bannedList.size)
 
-        bannedList.join(
-                each = { _, roomMember ->
-                    val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
-                    profileMatrixItemWithProgress {
-                        id(roomMember.userId)
-                        matrixItem(roomMember.toMatrixItem())
-                        avatarRenderer(avatarRenderer)
-                        apply {
-                            if (actionInProgress) {
-                                inProgress(true)
-                                editable(false)
-                            } else {
-                                inProgress(false)
-                                editable(true)
-                                clickListener { _ ->
-                                    callback?.onUnbanClicked(roomMember)
+        if (bannedList.isEmpty()) {
+            buildProfileSection(stringProvider.getString(R.string.room_settings_banned_users_title))
+
+            genericFooterItem {
+                id("footer")
+                text(quantityString)
+            }
+        } else {
+            buildProfileSection(quantityString)
+
+            bannedList.join(
+                    each = { _, roomMember ->
+                        val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
+                        profileMatrixItemWithProgress {
+                            id(roomMember.userId)
+                            matrixItem(roomMember.toMatrixItem())
+                            avatarRenderer(avatarRenderer)
+                            apply {
+                                if (actionInProgress) {
+                                    inProgress(true)
+                                    editable(false)
+                                } else {
+                                    inProgress(false)
+                                    editable(true)
+                                    clickListener { _ ->
+                                        callback?.onUnbanClicked(roomMember)
+                                    }
                                 }
                             }
                         }
+                    },
+                    between = { _, roomMemberBefore ->
+                        dividerItem {
+                            id("divider_${roomMemberBefore.userId}")
+                            color(dividerColor)
+                        }
                     }
-                },
-                between = { _, roomMemberBefore ->
-                    dividerItem {
-                        id("divider_${roomMemberBefore.userId}")
-                        color(dividerColor)
-                    }
-                }
-        )
-
-        genericFooterItem {
-            id("footer")
-            text(stringProvider.getQuantityString(R.plurals.room_settings_banned_users_count, bannedList.size, bannedList.size))
+            )
         }
     }
 }

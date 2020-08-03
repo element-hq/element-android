@@ -94,5 +94,6 @@ internal interface IdentityAPI {
      * - https://matrix.org/docs/spec/identity_service/latest#post-matrix-identity-v2-validate-email-submittoken
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/{medium}/submitToken")
-    fun submitToken(@Path("medium") medium: String, @Body body: IdentityRequestOwnershipParams): Call<SuccessResult>
+    fun submitToken(@Path("medium") medium: String,
+                    @Body body: IdentityRequestOwnershipParams): Call<SuccessResult>
 }

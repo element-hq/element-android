@@ -119,7 +119,9 @@ internal interface CryptoApi {
      * @param body          the body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "sendToDevice/{eventType}/{txnId}")
-    fun sendToDevice(@Path("eventType") eventType: String, @Path("txnId") transactionId: String, @Body body: SendToDeviceBody): Call<Unit>
+    fun sendToDevice(@Path("eventType") eventType: String,
+                     @Path("txnId") transactionId: String,
+                     @Body body: SendToDeviceBody): Call<Unit>
 
     /**
      * Delete a device.
@@ -129,7 +131,8 @@ internal interface CryptoApi {
      * @param params   the deletion parameters
      */
     @HTTP(path = NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{device_id}", method = "DELETE", hasBody = true)
-    fun deleteDevice(@Path("device_id") deviceId: String, @Body params: DeleteDeviceParams): Call<Unit>
+    fun deleteDevice(@Path("device_id") deviceId: String,
+                     @Body params: DeleteDeviceParams): Call<Unit>
 
     /**
      * Update the device information.
@@ -139,7 +142,8 @@ internal interface CryptoApi {
      * @param params   the params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{device_id}")
-    fun updateDeviceInfo(@Path("device_id") deviceId: String, @Body params: UpdateDeviceInfoBody): Call<Unit>
+    fun updateDeviceInfo(@Path("device_id") deviceId: String,
+                         @Body params: UpdateDeviceInfoBody): Call<Unit>
 
     /**
      * Get the update devices list from two sync token.
@@ -149,5 +153,6 @@ internal interface CryptoApi {
      * @param newToken the up-to token.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/changes")
-    fun getKeyChanges(@Query("from") oldToken: String, @Query("to") newToken: String): Call<KeyChangesResponse>
+    fun getKeyChanges(@Query("from") oldToken: String,
+                      @Query("to") newToken: String): Call<KeyChangesResponse>
 }

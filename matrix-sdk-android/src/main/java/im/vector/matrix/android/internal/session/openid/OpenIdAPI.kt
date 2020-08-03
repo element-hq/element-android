@@ -34,5 +34,6 @@ internal interface OpenIdAPI {
      * @param userId the user id
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/openid/request_token")
-    fun openIdToken(@Path("userId") userId: String, @Body body: JsonDict = emptyMap()): Call<RequestOpenIdTokenResponse>
+    fun openIdToken(@Path("userId") userId: String,
+                    @Body body: JsonDict = emptyMap()): Call<RequestOpenIdTokenResponse>
 }

@@ -47,13 +47,15 @@ internal interface ProfileAPI {
      * Change user display name
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/displayname")
-    fun setDisplayName(@Path("userId") userId: String, @Body body: SetDisplayNameBody): Call<Unit>
+    fun setDisplayName(@Path("userId") userId: String,
+                       @Body body: SetDisplayNameBody): Call<Unit>
 
     /**
      * Change user avatar url.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/avatar_url")
-    fun setAvatarUrl(@Path("userId") userId: String, @Body body: SetAvatarUrlBody): Call<Unit>
+    fun setAvatarUrl(@Path("userId") userId: String,
+                     @Body body: SetAvatarUrlBody): Call<Unit>
 
     /**
      * Bind a threePid
