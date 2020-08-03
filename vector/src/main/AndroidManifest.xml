@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector.riotx">
+    package="im.vector.app">
 
     <!-- Needed for VOIP call to detect and switch to headset-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -38,7 +38,7 @@
         android:required="false" />
 
     <application
-        android:name=".VectorApplication"
+        android:name="im.vector.app.VectorApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -54,13 +54,13 @@
             android:value="9.9" />
 
         <activity
-            android:name=".features.MainActivity"
+            android:name="im.vector.app.features.MainActivity"
             android:theme="@style/AppTheme.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
         <activity-alias
             android:name=".features.Alias"
-            android:targetActivity=".features.MainActivity">
+            android:targetActivity="im.vector.app.features.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,9 +68,9 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".features.home.HomeActivity" />
+        <activity android:name="im.vector.app.features.home.HomeActivity" />
         <activity
-            android:name=".features.login.LoginActivity"
+            android:name="im.vector.app.features.login.LoginActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
@@ -84,50 +84,50 @@
                 <data android:host="element" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.media.ImageMediaViewerActivity" />
+        <activity android:name="im.vector.app.features.media.ImageMediaViewerActivity" />
 
         <activity
-            android:name=".features.media.VectorAttachmentViewerActivity"
+            android:name="im.vector.app.features.media.VectorAttachmentViewerActivity"
             android:theme="@style/AppTheme.Transparent" />
 
-        <activity android:name=".features.media.BigImageViewerActivity" />
+        <activity android:name="im.vector.app.features.media.BigImageViewerActivity" />
         <activity
-            android:name=".features.rageshake.BugReportActivity"
+            android:name="im.vector.app.features.rageshake.BugReportActivity"
             android:label="@string/title_activity_bug_report" />
         <activity
-            android:name=".features.settings.VectorSettingsActivity"
+            android:name="im.vector.app.features.settings.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.media.VideoMediaViewerActivity" />
+        <activity android:name="im.vector.app.features.media.VideoMediaViewerActivity" />
         <activity
-            android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
+            android:name="im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />
         <activity
-            android:name=".features.crypto.keysbackup.setup.KeysBackupSetupActivity"
+            android:name="im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity"
             android:label="@string/title_activity_keys_backup_restore" />
         <activity
-            android:name=".features.crypto.keysbackup.settings.KeysBackupManageActivity"
+            android:name="im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
 
         <activity
-            android:name=".features.reactions.EmojiReactionPickerActivity"
+            android:name="im.vector.app.features.reactions.EmojiReactionPickerActivity"
             android:label="@string/title_activity_emoji_reaction_picker" />
-        <activity android:name=".features.roomdirectory.createroom.CreateRoomActivity" />
-        <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
-        <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
-        <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
+        <activity android:name="im.vector.app.features.roomdirectory.createroom.CreateRoomActivity" />
+        <activity android:name="im.vector.app.features.roomdirectory.RoomDirectoryActivity" />
+        <activity android:name="im.vector.app.features.roomdirectory.roompreview.RoomPreviewActivity" />
+        <activity android:name="im.vector.app.features.home.room.filtered.FilteredRoomsActivity" />
         <activity
-            android:name=".features.home.room.detail.RoomDetailActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:name="im.vector.app.features.home.room.detail.RoomDetailActivity"
+            android:parentActivityName="im.vector.app.features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.home.HomeActivity" />
+                android:value="im.vector.app.features.home.HomeActivity" />
         </activity>
-        <activity android:name=".features.debug.DebugMenuActivity" />
-        <activity android:name="im.vector.riotx.features.createdirect.CreateDirectRoomActivity" />
-        <activity android:name="im.vector.riotx.features.invite.InviteUsersToRoomActivity" />
-        <activity android:name=".features.webview.VectorWebViewActivity" />
-        <activity android:name=".features.link.LinkHandlerActivity">
+        <activity android:name="im.vector.app.features.debug.DebugMenuActivity" />
+        <activity android:name="im.vector.app.features.createdirect.CreateDirectRoomActivity" />
+        <activity android:name="im.vector.app.features.invite.InviteUsersToRoomActivity" />
+        <activity android:name="im.vector.app.features.webview.VectorWebViewActivity" />
+        <activity android:name="im.vector.app.features.link.LinkHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -142,11 +142,11 @@
         </activity>
 
         <activity
-            android:name=".features.share.IncomingShareActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:name="im.vector.app.features.share.IncomingShareActivity"
+            android:parentActivityName="im.vector.app.features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.home.HomeActivity" />
+                android:value="im.vector.app.features.home.HomeActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -164,13 +164,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.roomprofile.RoomProfileActivity" />
+        <activity android:name="im.vector.app.features.roomprofile.RoomProfileActivity" />
 
-        <activity android:name=".features.signout.hard.SignedOutActivity" />
+        <activity android:name="im.vector.app.features.signout.hard.SignedOutActivity" />
         <activity
-            android:name=".features.signout.soft.SoftLogoutActivity"
+            android:name="im.vector.app.features.signout.soft.SoftLogoutActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.permalink.PermalinkHandlerActivity">
+        <activity android:name="im.vector.app.features.permalink.PermalinkHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -184,33 +184,33 @@
         </activity>
 
         <activity
-            android:name=".features.roommemberprofile.RoomMemberProfileActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:name="im.vector.app.features.roommemberprofile.RoomMemberProfileActivity"
+            android:parentActivityName="im.vector.app.features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.home.HomeActivity" />
+                android:value="im.vector.app.features.home.HomeActivity" />
         </activity>
 
-        <activity android:name=".features.qrcode.QrCodeScannerActivity" />
+        <activity android:name="im.vector.app.features.qrcode.QrCodeScannerActivity" />
 
-        <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
+        <activity android:name="im.vector.app.features.crypto.quads.SharedSecureStorageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".features.attachments.preview.AttachmentsPreviewActivity"
+            android:name="im.vector.app.features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
-        <activity android:name=".features.call.VectorCallActivity" />
+        <activity android:name="im.vector.app.features.call.VectorCallActivity" />
 
-        <activity android:name=".features.terms.ReviewTermsActivity" />
-        <activity android:name=".features.widgets.WidgetActivity" />
-        <activity android:name=".features.pin.PinActivity" />
+        <activity android:name="im.vector.app.features.terms.ReviewTermsActivity" />
+        <activity android:name="im.vector.app.features.widgets.WidgetActivity" />
+        <activity android:name="im.vector.app.features.pin.PinActivity" />
 
         <!-- Services -->
 
         <service
-            android:name=".core.services.CallService"
+            android:name="im.vector.app.core.services.CallService"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -219,11 +219,11 @@
         </service>
 
         <service
-            android:name=".core.services.VectorSyncService"
+            android:name="im.vector.app.core.services.VectorSyncService"
             android:exported="false" />
 
         <service
-            android:name=".features.call.telecom.VectorConnectionService"
+            android:name="im.vector.app.features.call.telecom.VectorConnectionService"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
@@ -233,12 +233,12 @@
         <!-- Receivers -->
 
         <receiver
-            android:name=".features.call.service.CallHeadsUpActionReceiver"
+            android:name="im.vector.app.features.call.service.CallHeadsUpActionReceiver"
             android:exported="false" />
 
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver
-            android:name=".features.notifications.NotificationBroadcastReceiver"
+            android:name="im.vector.app.features.notifications.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
 

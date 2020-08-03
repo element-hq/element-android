@@ -3,43 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="APP_INFO_LINK_PREFERENCE_KEY"
         android:summary="@string/settings_app_info_link_summary"
         android:title="@string/settings_app_info_link_title" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_VERSION_PREFERENCE_KEY"
         android:title="@string/settings_version"
         tools:summary="1.2.3" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_SDK_VERSION_PREFERENCE_KEY"
         android:title="@string/settings_sdk_version"
         tools:summary="4.5.6" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
         android:title="@string/settings_olm_version"
         tools:summary="7.8.9" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"
         android:title="@string/settings_copyright" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
         android:title="@string/settings_app_term_conditions" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
         android:title="@string/settings_privacy_policy" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
         android:title="@string/settings_third_party_notices" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
         android:title="@string/settings_other_third_party_notices"
         app:isPreferenceVisible="@bool/isGplay" />

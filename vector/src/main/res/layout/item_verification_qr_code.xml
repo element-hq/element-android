@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-    <im.vector.riotx.core.ui.views.QrCodeImageView
+    <im.vector.app.core.ui.views.QrCodeImageView
         android:id="@+id/itemVerificationQrCodeImage"
         android:layout_width="200dp"
         android:layout_height="200dp"

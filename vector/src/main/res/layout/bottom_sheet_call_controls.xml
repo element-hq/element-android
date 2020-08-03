@@ -8,7 +8,7 @@
     android:background="?riotx_bottom_sheet_background"
     android:orientation="vertical">
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/callControlsSoundDevice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:tint="?attr/riotx_text_primary"
         tools:actionDescription="Speaker" />
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/callControlsSwitchCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         app:tint="?attr/riotx_text_primary"
         tools:actionDescription="Front" />
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/callControlsToggleSDHD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

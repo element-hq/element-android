@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<im.vector.riotx.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.app.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemGroupLayout"
@@ -61,4 +61,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-</im.vector.riotx.core.platform.CheckableConstraintLayout>
+</im.vector.app.core.platform.CheckableConstraintLayout>

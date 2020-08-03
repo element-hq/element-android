@@ -15,7 +15,7 @@
         tools:visibility="visible"
         android:background="@drawable/circle" />
 
-    <im.vector.riotx.features.reactions.EmojiDrawView
+    <im.vector.app.features.reactions.EmojiDrawView
         android:id="@+id/grid_item_emoji_text"
         android:layout_width="40dp"
         android:layout_height="40dp"

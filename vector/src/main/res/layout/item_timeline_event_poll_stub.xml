@@ -87,7 +87,7 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        <im.vector.app.features.home.room.detail.timeline.item.PollResultLineView
             android:id="@+id/pollResult1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -95,7 +95,7 @@
             tools:optionName="Create Github issue"
             tools:optionSelected="true" />
 
-        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        <im.vector.app.features.home.room.detail.timeline.item.PollResultLineView
             android:id="@+id/pollResult2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -104,7 +104,7 @@
             tools:optionName="Search Github"
             tools:optionSelected="false" />
 
-        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        <im.vector.app.features.home.room.detail.timeline.item.PollResultLineView
             android:id="@+id/pollResult3"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -112,7 +112,7 @@
             tools:optionName="Logout"
             tools:optionSelected="false" />
 
-        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        <im.vector.app.features.home.room.detail.timeline.item.PollResultLineView
             android:id="@+id/pollResult4"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -120,7 +120,7 @@
             tools:optionName="Option 4"
             tools:optionSelected="false" />
 
-        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        <im.vector.app.features.home.room.detail.timeline.item.PollResultLineView
             android:id="@+id/pollResult5"
             android:layout_width="match_parent"
             android:layout_height="40dp"
