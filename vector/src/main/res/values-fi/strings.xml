@@ -722,8 +722,6 @@
     <string name="option_take_photo">Ota kuva</string>
     <string name="option_take_video">Kaappaa video</string>
 
-    <string name="login_mobile_device">Mobiili</string>
-
     <string name="call">Puhelu</string>
     <string name="settings_notification_ringtone">Ilmoitusääni</string>
     <string name="settings_containing_my_display_name">Viesti sisältää näyttönimeni</string>
@@ -2182,7 +2180,7 @@ Haluatko lisätä paketteja?</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Avainpyynnöt</string>
 

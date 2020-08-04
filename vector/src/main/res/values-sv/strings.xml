@@ -272,7 +272,6 @@
     <string name="login_error_no_homeserver_found">Det här är inte en giltig Matrixserveradress</string>
     <string name="login_error_homeserver_not_found">Kan inte nå en hemserver på den här URLen, vänligen kolla den</string>
     <string name="login_error_ssl_handshake">Din enhet använder ett utdaterat TLS-protokoll, sårbart för anfall, så för din säkerhets skull så kommer du inte kunna ansluta</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Felaktigt användarnamn/lösenord</string>
     <string name="login_error_unknown_token">Den åtkomsttoken du specificerade kändes inte igen</string>

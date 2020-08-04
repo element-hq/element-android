@@ -185,7 +185,6 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="login_error_unable_register">Nie je možné sa registrovať</string>
     <string name="login_error_unable_register_mail_ownership">Nie je možné sa registrovať: Zlyhalo overenie emailovej adresy</string>
     <string name="login_error_invalid_home_server">Zadajte platnú adresu URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Neplatné používateľské meno/heslo</string>
     <string name="login_error_unknown_token">Prepáčte, tento domovský server používa neznámy spôsob prihlasovania</string>

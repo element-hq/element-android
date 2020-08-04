@@ -110,7 +110,6 @@
     <string name="auth_email_validation_message">برای ادامه‌ی ثبت‌نام، لطفاً ایمیل خود را بررسی کنید</string>
     <string name="auth_reset_password_next_step_button">من آدرس ایمیلم را تایید کرده‌ام</string>
     <string name="login_error_network_error">نمی‌توان وارد شد: خطای شبکه</string>
-    <string name="login_mobile_device">موبایل</string>
 
     <string name="login_error_forbidden">نام کاربری/گذرواژه نامعتبر است</string>
     <string name="login_error_user_in_use">این نام کاربری قبلا استفاده شده است</string>

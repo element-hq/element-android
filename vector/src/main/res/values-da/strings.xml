@@ -182,7 +182,6 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="login_error_unable_register">Kunne ikke registrere</string>
     <string name="login_error_unable_register_mail_ownership">Kunne ikke registrere : email ejerskabsfejl</string>
     <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Ugyldigt brugernavn/password</string>
     <string name="login_error_unknown_token">Adgangstokenen du skrev blev ikke godkendt</string>

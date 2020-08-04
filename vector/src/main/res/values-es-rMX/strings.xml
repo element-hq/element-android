@@ -681,8 +681,6 @@ Dispositivos desconocidos:</string>
 
     <string name="error_no_external_application_found">Lo sentimos, no se encontró una aplicación externa para completar esta acción.</string>
 
-    <string name="login_mobile_device">Móvil</string>
-
     <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
     <string name="groups_list">Lista de grupos</string>
 

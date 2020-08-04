@@ -715,8 +715,6 @@ Dispositivos desconhecidos:</string>
     <string name="dark_theme">Tema Escuro</string>
     <string name="black_them">Tema Preto</string>
 
-    <string name="login_mobile_device">Dispositivo Móvel</string>
-
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
 

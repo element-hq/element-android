@@ -217,7 +217,6 @@
     <string name="login_error_unable_register">Fekk ikkje til å registrere</string>
     <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å registrere: feil med e-posteigarskap</string>
     <string name="login_error_invalid_home_server">Skriv inn ein gyldig URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Brukarnamnet/passordet er ikkje gyldig</string>
     <string name="login_error_unknown_token">Den oppgjevne tilgangsnøkkelen vart ikkje kjent att</string>

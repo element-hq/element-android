@@ -718,8 +718,6 @@
     <string name="notification_sync_in_progress">Bezig met synchroniseren…</string>
     <string name="notification_listening_for_events">Luisteren voor evenementen</string>
 
-    <string name="login_mobile_device">Mobiel</string>
-
     <string name="settings_notification_ringtone">Meldingsgeluid</string>
     <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12-uursformaat weergeven</string>
 

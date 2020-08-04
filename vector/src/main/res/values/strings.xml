@@ -308,7 +308,6 @@
     <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
     <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
-    <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
@@ -2238,7 +2237,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
 

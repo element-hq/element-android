@@ -724,7 +724,6 @@
     <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
     <string name="widget_integration_room_not_visible">Комната %s невидима.</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
-    <string name="login_mobile_device">Мобильный</string>
 
     <string name="notification_sync_in_progress">Синхронизация…</string>
     <string name="notification_listening_for_events">Мониторинг событий</string>

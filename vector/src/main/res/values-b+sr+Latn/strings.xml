@@ -162,7 +162,6 @@
     <string name="auth_reset_password_message">Kako bi resetovali vašu lozinku, unesite adresu elektronske pošte povezanu sa vašim nalogom:</string>
     <string name="auth_reset_password_missing_email">Morate uneti adresu elektronske pošte povezane sa vašim nalogom.</string>
     <string name="auth_reset_password_missing_password">Morate uneti novu lozinku.</string>
-    <string name="login_mobile_device">Mobilni</string>
 
     <string name="login_error_limit_exceeded">Poslato je previše zahteva</string>
     <string name="login_error_user_in_use">Ovo korisničko ime je već korišćeno</string>

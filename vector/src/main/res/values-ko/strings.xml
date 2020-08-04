@@ -174,7 +174,6 @@
     <string name="auth_reset_password_success_message">비밀번호가 초기화되었습니다.
 \n
 \n모든 기기에서 로그아웃되고 알림도 가지 않을 거에요. 다시 알림을 받으려면, 각 기기에 다시 로그인하세요.</string>
-    <string name="login_mobile_device">모바일</string>
 
     <string name="notification_listening_for_events">이벤트 청취하기</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">키 백업이 진행 중입니다. 지금 로그아웃하면 암호화된 메시지에 접근할 수 없습니다.</string>

@@ -196,7 +196,6 @@
     <string name="login_error_unable_register">Збій реєстрації</string>
     <string name="login_error_unable_register_mail_ownership">Збій реєстрації: не вдалося перевірити email</string>
     <string name="login_error_invalid_home_server">Введіть дійсний URL</string>
-    <string name="login_mobile_device">Мобільний</string>
 
     <string name="login_error_forbidden">Неправильне ім\'я користувача або пароль</string>
     <string name="login_error_unknown_token">Вказаний токен доступу не розпізнано</string>

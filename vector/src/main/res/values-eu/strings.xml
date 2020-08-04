@@ -652,8 +652,6 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
     <string name="notification_sync_in_progress">Sinkronizatzen…</string>
     <string name="notification_listening_for_events">Entzun gertaerak</string>
 
-    <string name="login_mobile_device">Mugikorra</string>
-
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
     <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan</string>
 
@@ -2169,7 +2167,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Gako eskaerak</string>
 

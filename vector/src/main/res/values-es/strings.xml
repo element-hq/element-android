@@ -723,8 +723,6 @@ Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
     <string name="option_take_photo">Tomar foto</string>
     <string name="option_take_video">Tomar vídeo</string>
 
-    <string name="login_mobile_device">Móvil</string>
-
     <string name="call">Llamar</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>

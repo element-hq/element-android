@@ -727,8 +727,6 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="option_take_photo">Tirar foto</string>
     <string name="option_take_video">Gravar vídeo</string>
 
-    <string name="login_mobile_device">Celular</string>
-
     <string name="groups_list">Lista dos grupos</string>
 
     <string name="call">Chamada</string>

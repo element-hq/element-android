@@ -655,8 +655,6 @@
     <string name="dark_theme">深色主题</string>
     <string name="black_them">黑色主题</string>
 
-    <string name="login_mobile_device">移动设备</string>
-
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">使用12小时制显示时间戳</string>
 

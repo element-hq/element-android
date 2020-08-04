@@ -735,8 +735,6 @@
     <string name="notification_listening_for_events">Rilevazione eventi</string>
     <string name="title_activity_bug_report">Segnalazione errore</string>
 
-    <string name="login_mobile_device">Smartphone</string>
-
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
@@ -2223,7 +2221,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Le chiavi sono già aggiornate!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Richieste di chiavi</string>
 

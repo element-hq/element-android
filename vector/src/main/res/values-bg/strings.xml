@@ -263,7 +263,6 @@
     <string name="login_error_unable_register">Неуспешна регистрация</string>
     <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на собствеността на имейла</string>
     <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
-    <string name="login_mobile_device">Мобилно устройство</string>
 
     <string name="login_error_forbidden">Невалидно потребителско име/парола</string>
     <string name="login_error_unknown_token">Не е разпознат указаният тоукън за достъп</string>

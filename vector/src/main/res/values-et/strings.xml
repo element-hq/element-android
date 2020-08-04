@@ -273,7 +273,6 @@
     <string name="login_error_no_homeserver_found">See ei ole toimiv Matrix\'i serveri aadress</string>
     <string name="login_error_homeserver_not_found">Sellel aadressil ei leidu koduserverit, palun kontrolli aadressi õigsust</string>
     <string name="login_error_ssl_handshake">Sinu seade kasutab aegunud versiooni TLS-protokollist ning seal leiduvate turvanõrkuste tõttu ja sinu turvalisuse tagamiseks ühendust serveriga ei algatata</string>
-    <string name="login_mobile_device">Mobiiltelefon</string>
 
     <string name="login_error_forbidden">Vigane kasutajanimi või salasõna</string>
     <string name="login_error_bad_json">Vigane JSON</string>

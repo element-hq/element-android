@@ -209,7 +209,6 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
     <string name="login_error_unable_register">Reģistrācija neizdevās</string>
     <string name="login_error_unable_register_mail_ownership">Registrācija neizdevās: epasta verifikācijas kļūda</string>
     <string name="login_error_invalid_home_server">Ievadi korektu URL adresi</string>
-    <string name="login_mobile_device">Mobilais</string>
 
     <string name="login_error_forbidden">Nepareizs lietotājvārds / parole</string>
     <string name="login_error_unknown_token">Attiecīgais pieejas tokens netika atpazīts</string>

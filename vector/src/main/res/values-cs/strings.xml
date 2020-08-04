@@ -196,7 +196,6 @@
     <string name="login_error_unable_register">Nelze se registrovat</string>
     <string name="login_error_unable_register_mail_ownership">Nelze se registrovat: chyba ověření vlastnictví e-mailu</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Neplatný uživatelský jméno/heslo</string>
     <string name="login_error_bad_json">Poškozený JSON</string>
@@ -2160,7 +2159,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Klíče jsou již aktuální!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Požadavky na klíče</string>
 

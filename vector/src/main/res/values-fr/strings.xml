@@ -662,8 +662,6 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’ap
     <string name="notification_sync_in_progress">Synchronisation…</string>
     <string name="notification_listening_for_events">Écoute d’évènements</string>
 
-    <string name="login_mobile_device">Portable</string>
-
     <string name="settings_notification_ringtone">Son de notification</string>
     <string name="settings_12_24_timestamps">Afficher l’horodatage au format 12 heures</string>
 
@@ -2176,7 +2174,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Demandes de clé</string>
 

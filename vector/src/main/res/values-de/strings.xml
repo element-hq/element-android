@@ -722,8 +722,6 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="dark_theme">Dunkles Design</string>
     <string name="black_them">Schwarzes Design</string>
 
-    <string name="login_mobile_device">Mobilgerät</string>
-
     <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
 
@@ -2226,7 +2224,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Schlüsselanforderungen</string>
 

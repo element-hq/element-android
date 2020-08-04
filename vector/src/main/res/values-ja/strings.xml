@@ -499,7 +499,6 @@
     <string name="hs_url">接続先サーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
     <string name="auth_login">ログイン</string>
-    <string name="login_mobile_device">携帯端末</string>
 
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
     <string name="widget_integration_positive_power_level">権限の数値は正の整数で入力してください。</string>

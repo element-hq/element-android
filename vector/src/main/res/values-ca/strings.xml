@@ -211,7 +211,6 @@
     <string name="login_error_unable_register">No s\'ha pogut fer el registre</string>
     <string name="login_error_unable_register_mail_ownership">No s\'ha pogut fer el registre: s\'ha produït una errada en la propietat del correu electrònic</string>
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
-    <string name="login_mobile_device">Mòbil</string>
 
     <string name="login_error_forbidden">El nom d\'usuari/contrasenya és invàlid</string>
     <string name="login_error_unknown_token">No s\'ha reconegut el testimoni d\'accés</string>

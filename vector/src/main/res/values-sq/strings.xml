@@ -174,7 +174,6 @@
     <string name="login_error_registration_network_error">S’arrihet të regjistrohet: Gabim rrjeti</string>
     <string name="login_error_unable_register">S’arrihet të regjistrohet</string>
     <string name="login_error_invalid_home_server">Ju lutemi, jepni një URL të vlefshme</string>
-    <string name="login_mobile_device">Celular</string>
 
     <string name="login_error_forbidden">Emër përdoruesi/fjalëkalim i pavlefshëm</string>
     <string name="login_error_unknown_token">Token-i i hyrjeve i dhënë nuk u njoh</string>
@@ -2131,7 +2130,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Kërkesa Kyçi</string>
 

@@ -131,7 +131,6 @@
     <string name="auth_password_dont_match">Lykilorðin stemma ekki</string>
     <string name="auth_forgot_password">Gleymt lykilorð?</string>
     <string name="auth_username_in_use">Notandanafn er í notkun</string>
-    <string name="login_mobile_device">Farsími</string>
 
     <string name="login_error_bad_json">Gallað JSON</string>
     <plurals name="membership_changes">

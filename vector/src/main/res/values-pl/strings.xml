@@ -576,8 +576,6 @@ Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
     <string name="auth_identity_server">Serwer Tożsamości:</string>
     <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane. Zostałeś wylogowany ze wszystkich sesji i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
 
-    <string name="login_mobile_device">Numer telefonu</string>
-
     <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
     <string name="e2e_need_log_in_again">Należy się ponownie zalogować w celu wygenerowania kluczy szyfrowania end-to-end dla tej sesji i wysłania klucza publicznego do Twojego serwera domowego. Jest to jednorazowe działanie. Przepraszamy za trudności.</string>
@@ -2200,7 +2198,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="e2e_use_keybackup">Odblokuj historię zaszyfrowanych wiadomości</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="refresh">Odśwież</string>
 

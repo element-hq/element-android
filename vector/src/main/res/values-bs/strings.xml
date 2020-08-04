@@ -183,7 +183,6 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="login_error_unable_register">Nemoguća registracija</string>
     <string name="login_error_unable_register_mail_ownership">Nemoguća registracija : problem sa vlasništvom email adrese</string>
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
-    <string name="login_mobile_device">Mobitel</string>
 
     <string name="login_error_forbidden">Netačno korisničko ime/lozinka</string>
     <string name="login_error_unknown_token">Navedeni pristupni token nije prepoznat</string>

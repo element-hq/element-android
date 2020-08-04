@@ -269,7 +269,6 @@
     <string name="login_error_no_homeserver_found">Ovo nije ispravna adresa poslužitelja Matrixa</string>
     <string name="login_error_homeserver_not_found">Poslužitelj na ovom URL-u je nedostupan, provjerite ga</string>
     <string name="login_error_ssl_handshake">Vaš uređaj koristi zastario sigurnosni protokol TLS podložan napadima pa se nećete moći spojiti radi vlastite sigurnosti</string>
-    <string name="login_mobile_device">Mobitel</string>
 
     <string name="login_error_forbidden">Neispravno korisničko ime/lozinka</string>
     <string name="login_error_unknown_token">Navedena pristupna oznaka nije prepoznata</string>

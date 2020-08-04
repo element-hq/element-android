@@ -653,8 +653,6 @@ Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
     <string name="dark_theme">Sötét téma</string>
     <string name="black_them">Fekete téma</string>
 
-    <string name="login_mobile_device">Mobil</string>
-
     <string name="settings_notification_ringtone">Értesítés hangja</string>
     <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban</string>
 
@@ -2171,7 +2169,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="keys_backup_restore_success_title_already_up_to_date">A kulcsok már frissek!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Kulcs kérések</string>
 

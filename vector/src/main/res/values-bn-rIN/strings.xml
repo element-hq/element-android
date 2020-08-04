@@ -250,7 +250,6 @@
     <string name="login_error_invalid_home_server">একটি বৈধ URL প্রবেশ করুন</string>
     <string name="login_error_unknown_host">এই URL টি পৌঁছানোর যোগ্য নয়, দয়া করে এটি পরীক্ষা করুন</string>
     <string name="login_error_ssl_handshake">আপনার যন্ত্র একটি সেকেলে TLS নিরাপত্তা খসড়া চুক্তি,অরক্ষিত সংঘর্ষ করতে ,আপনার নিত্যাপাত্তার জন্য আপনি সম্পর্ক করতে পারবেন না</string>
-    <string name="login_mobile_device">মোবাইল</string>
 
     <string name="login_error_forbidden">অবৈধ ব্যাবহারকারির নাম/সংকেত শব্দ</string>
     <string name="login_error_unknown_token">প্রবেশকারী টোকেনটা চিনতে নির্দিষ্ট ছিলো না</string>

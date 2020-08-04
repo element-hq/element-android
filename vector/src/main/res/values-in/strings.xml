@@ -315,8 +315,6 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     <string name="go_on_with">lanjutkan dengan…</string>
     <string name="error_no_external_application_found">Maaf, tidak ada aplikasi eksternal yang mendukung apa yang ingin dilakukan.</string>
 
-    <string name="login_mobile_device">Perangkat Genggam</string>
-
     <string name="e2e_re_request_encryption_key"><u>Meminta ulang kunci enkripsi</u> dari perangkat Anda yang lain.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Permintaan kunci terkirim.</string>

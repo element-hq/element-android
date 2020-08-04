@@ -146,7 +146,6 @@
     <string name="login_error_unable_register">تعذّر التسجيل</string>
     <string name="login_error_unable_register_mail_ownership">تعذّر التسجيل: فشل في ملكية البريد</string>
     <string name="login_error_invalid_home_server">أدخِل مسارا صالحا</string>
-    <string name="login_mobile_device">المحمول</string>
 
     <string name="login_error_forbidden">اسم المستخدم/كلمة السر غير صالحة</string>
     <string name="login_error_not_json">لم يحتوي JSON صالح</string>

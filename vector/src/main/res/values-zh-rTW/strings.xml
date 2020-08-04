@@ -202,7 +202,6 @@
     <string name="login_error_unable_register">無法註冊</string>
     <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
     <string name="login_error_invalid_home_server">請輸入有效的網址</string>
-    <string name="login_mobile_device">行動</string>
 
     <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
     <string name="login_error_unknown_token">指定的存取權杖無法被認可</string>
@@ -2119,7 +2118,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">金鑰請求</string>
 
