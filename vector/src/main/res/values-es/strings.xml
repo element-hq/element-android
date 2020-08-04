@@ -1286,23 +1286,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
 
-    <string name="store_title">Element - Comunicate a tu manera</string>
-    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Element. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
-    <string name="store_short_description">Una app de chat universal completamente bajo tu control.</string>
-    <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Element deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
-\nConsigue tu cuenta de matrix.org gratis. Consigue tu servidor en https://modular.im o usa otro servidor de Matrix.
-\nPor qué escoger a Element\?
-\n
-\n• COMUNICACIÓN COMPLETA: Crea salas para tus equipos, tus amigos, vuestra comunidad - de la forma que quieras! Chatea, comparte archivos, añade widgets y haz llamadas de voz y video - Todo de forma gratuita.
-\n
-\n• POTENTES INTEGRACIONES: Usa Element con las herramientas que conoces y que mas te gustan. Con Element puedes hasta chatear con usuarios y grupos de otras apps de chat.
-\n
-\n• PRIVADA Y SEGURA: Mantén privadas tus conversaciones. La condición de encriptación de extremo a extremo asegura que las conversaciones privadas sigan siendo siempre privadas.
-\n
-\n• ABIERTO, NO CERRADO: Código abierto y construido en Matrix. Posee tus propios datos alojando tu propio servidor o selecciona uno en el que confíes.
-\n
-\n• ALLÁ DONDE ESTÉS: Mantente en contacto dondequiera que estés con el historial de mensajes totalmente sincronizado a través de todos tus dispositivos online en http://riot.im.</string>
-
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
 
@@ -1688,16 +1671,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="send_suggestion_failed">El envio de la sugerencia ha fallado (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostrar eventos ocultos en la línea de tiempo</string>
-
-    <string name="store_riotx_title">Element - Cliente Matrix de Futura Generación</string>
-    <string name="store_riotx_short_description">Un cliente para Matrix más rápido y ligero que usa los últimos frameworks de Android</string>
-    <string name="store_riotx_full_description">Element es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. Element es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
-\n
-\nDescargo de responsabilidad: Esta es una versión beta. Element está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
-\n
-\nElement soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
-\n
-\nNo todas las características de Element están implementadas en Element todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
 
     <string name="bottom_action_people_x">Mensajes Directos</string>
 

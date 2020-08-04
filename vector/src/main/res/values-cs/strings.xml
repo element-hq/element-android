@@ -1329,25 +1329,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
 
-    <string name="store_title">Element - Komunikujte, svým způsobem</string>
-    <string name="store_whats_new">Stále měníme a vylepšujeme Element. Úplný seznam změn je k nalezení zde: %1$s. Abyste zajistili, že nic nezmeškáte, ponechte aktualizace zapnuté.</string>
-    <string name="store_short_description">Univerzální zabezpečená chat aplikace zcela pod Vaší kontrolou.</string>
-    <string name="store_full_description">Chat aplikace pod Vaší kontrolou a zcela flexibilní. Element Vás nechá komunikovat způsobem, kterým chcete. Vytvořena pro [matrix] - standard otevřené, decentralizované komunikace.
-\n
-\nZaložte si bezplatný účet u matrix.org, založte si svůj server na https://modular.im nebo použijte jiný Matrix server.
-\n
-\nProč zvolit Element\?
-\n
-\n• KOMPLETNÍ KOMUNIKACE: Zakládejte místnosti pro své týmy, přátele, komunitu - jakkoli chcete! Chatujte, sdílejte soubory, přidávejte widgety, komunikujte hovorem či video hovorem - vše bezplatně.
-\n
-\n• HLUBOKÉ INTEGRACE: Používejte Element s nástroji, jež znáte a máte rádi. S Element můžete dokonce chatovat s uživateli a skupinami s jinými chat aplikacemi.
-\n
-\n• SOUKROMÁ A ZABEZBEČENÁ: Udržujte své konverzace tajné. Nejmodernější end-to-end šifrování zaručí, že soukromé konverzace soukromými zůstanou. 
-\n
-\n• OTEVŘENÁ, NE ZAVŘENÁ: Open source a postavená na Matrixu. Staňte se vlastníky svých dat tím, že si založíte vlastní server, nebo si zvolíte ten, jemuž důvěřujete.
-\n
-\n• KDEKOLI JSTE: Zůstaňte v kontaktu, ať už jste kdekoli, s plně synchronizovanou historií zpráv přes všechna svá zařízení nebo online u https://riot.im.</string>
-
     <string name="passphrase_create_passphrase">Založit heslo</string>
     <string name="passphrase_confirm_passphrase">Potvrdit heslo</string>
     <string name="passphrase_enter_passphrase">Zadat heslo</string>
@@ -1621,16 +1602,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="send_suggestion_failed">Odeslání návrhu selhalo (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Ukázat skryté události v časovém sledu</string>
-
-    <string name="store_riotx_title">Element - Klient Matrixu pro příští generaci</string>
-    <string name="store_riotx_short_description">Rychlejši a lehčí klient Matrixu s nejnovějšími konstrukcemi Androidu</string>
-    <string name="store_riotx_full_description">"Element je nový klient protokolu Matrix (Matrix.org): otevřená síť pro bezpečnou, decentralizovanou komunikaci. Element je úplný přepis klienta Riot Android založený na úplném přepisu Matrix Android SDK.
-\n
-\nProhlášení: Toto je beta verze. Element nyní prochází aktivním vývojem, obsahuje omezení a (doufáme, že ne moc) chyby. Veškerý feedback je vítán.
-\n
-\nElement podporuje: • Přihlášní do existujícího účtu  • Založení místnosti a vstup do veřejných místností  • Přijetí a odmítnutí pozvánek  • Seznam místností uživatelů  • Náhled podrobností místnosti  • Odesílání textových zpráv  • Odesílání příloh  • Čtení a psaní zpráv v zašifrovaných místnostech  • Krypto: záloha klíčů E2E, pokročilé ověření zařízení, požadavek na sdílení klíče a jeho uspokojení   • Push oznámení  • Světlý, tmavý a černý motiv
-\n
-\nJeště nejsou všechny funkce Elementu v Element implementovány. Hlavní chybějící funkce (přijdou brzy!): • Nastavení místnosti (seznam členů místnosti, atd.) • Hovory • Widgety • …"</string>
 
     <string name="bottom_action_people_x">Přímé zprávy</string>
 

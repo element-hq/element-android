@@ -507,14 +507,6 @@
     <string name="send_suggestion_sent">Tack, ditt förslag har skickats framgångsrikt</string>
     <string name="send_suggestion_failed">Förslaget misslyckades att skickas (%s)</string>
 
-    <string name="store_riotx_full_description">Element är en ny klient för Matrix-protokollet (Matrix.org): ett öppet nätverk för säker, decentraliserad kommunikation. Element är en komplett omskrivning av klienten Riot för Android, baserat på en komplett omskrivning av Matrix-SDK:t för Android.
-\n
-\nVarning: Detta är en betaversion. Element är för närvarande under aktiv utveckling och innehåller begränsningar och (vi hoppas inte alltför många) buggar. All feedback är välkommen!
-\n
-\nElement stöder: • Logga in med ett existerande konto • Skapa rum och gå med i publika rum • Acceptera och neka inbjudningar • Lista användares rum • Visa rumsdetaljer • Skicka textmeddelanden • Skicka bilagor • Läsa och skriva meddelanden i krypterade rum • Krypto: säkerhetskopiering av E2E-nycklar, avancerad enhetsverifiering, nyckeldelningsförfrågan och -svar • Pushnotiser • Ljust, mörkt eller svart tema
-\n
-\nInte alla funktioner i Element är implementerade i Element än. Huvudsakligen saknade (vilka kommer snart!) funktioner: • Rumsinställningar (lista rumsmedlemmar, o.s.v.) • Röstsamtal • Widgets • …</string>
-
     <string name="bottom_action_people_x">Direktmeddelanden</string>
 
     <string name="room_filtering_filter_hint">Filtrera konversationer…</string>
@@ -578,8 +570,6 @@
 
     <string name="settings_general_title">Allmänt</string>
     <string name="settings_preferences">Alternativ</string>
-    <string name="store_riotx_title">Element - Nästa generations Matrix-klient</string>
-    <string name="store_riotx_short_description">En snabbare och lättviktigare klient för Matrix som använder de senaste Android-ramverken</string>
     <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
 
     <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>

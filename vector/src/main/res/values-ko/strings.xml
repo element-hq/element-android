@@ -1169,25 +1169,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">올바른 Google Play 서비스 APK를 찾을 수 없습니다. 알림이 제대로 작동하지 않을 수 있습니다.</string>
 
-    <string name="store_title">Element - 대화하세요, 나만의 방식</string>
-    <string name="store_whats_new">우리는 항상 Element을 변경하고 개선하고 있습니다. 전체 변경 내역은 여기서 찾을 수 있습니다: %1$s. 놓치지 않도록 업데이트를 켜 놓아주세요.</string>
-    <string name="store_short_description">전적으로 여러분의 통제 하에 있는 범용 보안 대화 앱.</string>
-    <string name="store_full_description">여러분의 통제 하에 완전히 유연한 대화 앱. Element은 여러분이 원하는 방식으로 대화할 수 있도록 합니다. 개방형 분산 커뮤니티의 표준 - [matrix]를 위해 제작됨.
-\n 
-\n무료 matrix.org 계정을 만들고, https://modular.im 에서 자신만의 서버, 혹은 다른 Matrix 서버를 얻으세요. 
-\n 
-\n왜 Element을 선택해야 하나요\?
-\n 
-\n• 완전한 대화: 원하는 대로 팀이나 친구, 커뮤니티를 중심으로 방을 만드세요! 대화, 파일 공유, 위젯 추가와 음성 및 영상 통화 - 모두 무료입니다. 
-\n 
-\n• 강력한 통합: 여러분이 알고 사랑하는 도구와 함께 Element을 사용하세요. Element이라면 다른 대화 앱의 사용자와 그룹까지도 대화할 수 있습니다.
-\n 
-\n• 개인 및 보안: 대화를 비밀로 유지하세요. 최첨단 종단간 암호화로 비밀 대화를 은밀하게 유지해줍니다. 
-\n 
-\n• 오픈 소스: Matrix로 만들어진 오픈 소스입니다. 자신의 데이터를 자신의 서버에 소유하거나, 신뢰하는 서버에 맡기세요. 
-\n 
-\n• 어디에 있든: 모든 기기나 https://riot.im 에서 완전히 동기화된 메시지 기록으로 연락을 유지합니다.</string>
-
     <string name="passphrase_create_passphrase">암호 만들기</string>
     <string name="passphrase_confirm_passphrase">암호 확인</string>
     <string name="passphrase_enter_passphrase">암호 입력</string>
@@ -1478,16 +1459,6 @@
     <string name="send_suggestion_failed">제안을 보내는 데 실패함 (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">타임라인에서 숨겨진 이벤트 보이기</string>
-
-    <string name="store_riotx_title">Element - 차세대 Matrix 클라이언트</string>
-    <string name="store_riotx_short_description">최신 안드로이드 프레임워크를 사용해 더 빠르고 가벼운 Matrix를 위한 클라이언트</string>
-    <string name="store_riotx_full_description">Element는 Matrix 프로토콜 (Matrix.org)을 위한 새 클라이언트입니다: 안전한 분산 통신을 위한 개방형 네트워크. Element는 Matrix 안드로이드 SDK의 Element 안드로이드 클라이언트 전체 개정판을 기반으로 한 Riot 안드로이드 클라이언트의 전체 개정판입니다.
-\n 
-\n면책 조항: 이것은 베타 버전입니다. Element는 현재 개발 중이고 한계가 있으며 (많지 않으면 좋겠지만) 버그가 있습니다. 모든 피드백은 환영합니다!
-\n 
-\nElement 지원: • 존재하는 계정으로 로그인 • 방을 만들고 공공 방에 참가 • 초대를 수락하거나 거절 • 사용자 방 목록 • 방 세부 정보 보기 • 문자 메시지 보내기 • 첨부 파일 보내기 • 암호화된 방에서 메시지 읽고 쓰기 • 암호화: 종단간 암호화 키 백업, 고급 기기 확인, 키 공유 요청과 답장 • 푸시 알림 • 밝은 테마, 어두운 테마 그리고 검정 테마
-\n 
-\n아직 Element의 모든 기능이 Element에 구현되지 않았습니다. 주요 없는 (그리고 곧 나올!) 기능: • 방 설정 (방 구성원 목록 등) • 전화 • 위젯 • …</string>
 
     <string name="bottom_action_people_x">다이렉트 메시지</string>
 

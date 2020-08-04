@@ -1166,33 +1166,13 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Element - Comunique-se do seu jeito</string>
-    <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
     <string name="passphrase_create_passphrase">Criar passphrase</string>
     <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
-    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Element permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
-
-Obtenha uma conta matrix.org grátis, obtenha seu próprio servidor em https://modular.im ou use outro servidor Matrix.
-
-Por que escolher o Element?
-
-• COMUNICAÇÃO COMPLETA: Construa salas em torno de suas equipes, seus amigos, sua comunidade - como quiser! Converse, compartilhe arquivos, adicione widgets e faça chamadas de voz e vídeo - tudo de graça.
-
-• INTEGRAÇÕES PODEROSAS: Use o Element com as ferramentas que você conhece e ama. Com Element você pode conversar com usuários e grupos em outros aplicativos de bate-papo.
-
-• PRIVADO E SEGURO: Mantenha suas conversas em segredo. A criptografia de ponta a ponta do estado da arte garante que a comunicação privada permaneça privada.
-
-• ABERTO, NÃO FECHADO: Código aberto e construído sobre o Matrix. Possua seus próprios dados hospedando seu próprio servidor ou selecionando um que você confia.
-
-• EM TODOS OS LUGARES: Mantenha-se em contato onde quer que esteja com o histórico de mensagens totalmente sincronizado em todos os seus dispositivos e online em https://riot.im."</string>
 
     <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
 
-    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Element.
-O changelog completo pode ser encontrado aqui: %1$s.
-Para garantir que você não perca nada, mantenha suas atualizações ativadas."</string>
     <string name="title_activity_keys_backup_setup">Backup da chave</string>
     <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
 

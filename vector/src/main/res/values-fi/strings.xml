@@ -1227,11 +1227,6 @@ Haluatko lisätä paketteja?</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Kelvollista Google Play Services APK:ta ei löytynyt. Ilmoitukset eivät ehkä toimi oikein.</string>
 
-    <string name="store_title">Element - Kommunikoi, sinun tavallasi</string>
-    <string name="store_whats_new">"Olemme aina tekemässä muutoksia ja parannuksia Element:ään.
-Täydellisen muutoslokin löydät täältä: %1$s.
-Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä."</string>
-    <string name="store_short_description">Universaali ja turvallinen keskusteluohjelma kokonaan sinun hallinnassa.</string>
     <string name="passphrase_create_passphrase">Luo salalause</string>
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
     <string name="passphrase_empty_error_message">Syötä salalause</string>
@@ -1378,22 +1373,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
 
-    <string name="store_full_description">Keskustelusovellus, joka on sinun hallinnassasi ja erittäin joustava. Element antaa sinun viestiä juuri sillä tavalla kuin haluat. Taustalla [matrix] – avoimen ja hajautetun viestinnän standardi.
-\n
-\nHanki ilmainen matrix.org-tili, hanki oma palvelimesi osoitteesta https://modular.im tai käytä muuta Matrix-palvelinta. 
-\n
-\nMiksi valita Element\?
-\n
-\n• Kattavat mahdollisuudet viestintään: rakenna huoneita tiimeillesi, ystävillesi ja yhteisöllesi – juuri niin kuin haluat! Keskustele, jaa tiedostoja, lisää sovelmia ja soita ääni‐ ja videopuheluita – kaikki tämä ilmaiseksi.
-\n 
-\n• Tehokkaat integraatiot: Käytä Elementia tuntemiesi työkalujen kanssa. Element mahdollistaa keskustelut jopa eri keskusteluohjelmia käyttävien ihmisten ja ryhmien kanssa.
-\n
-\n• Yksityinen ja turvallinen: Pidä keskustelusi salaisina. Nykyaikainen osapuolten välinen salaus pitää huolen, että yksityiset keskustelut pysyvät yksityisinä. 
-\n
-\n• Avoin, ei suljettu: Avointa lähdekoodia ja rakennettu käyttämään Matrixia. Voit omistaa oman datasi ylläpitämällä omaa palvelintasi, tai käyttämällä palvelinta, johon luotat. 
-\n
-\n• Kaikkialla, missä olet: pysy yhteydessä missä ikinä oletkin, täysin synkronoidulla viestihistorialla kaikkien laitteidesi ja https://riot.im-verkkopalvelun välillä.</string>
-
     <string name="new_recovery_method_popup_description">Uusi avainvarmuuskopio löydetty.
 \n
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tiliisi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
@@ -1536,8 +1515,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_labs_show_hidden_events_in_timeline">Näytä piilotetut tapahtumat aikajanalla</string>
 
-    <string name="store_riotx_title">Element - seuraavan sukupolven Matrix-asiakasohjelma</string>
-    <string name="store_riotx_short_description">Nopeampi ja kevyempi Matrix-asiakasohjelma</string>
     <string name="bottom_action_people_x">Yksityisviestit</string>
 
     <string name="send_file_step_idle">Odotetaan…</string>
@@ -1785,14 +1762,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="push_gateway_item_format">Formaatti:</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Rekisteröi tunniste</string>
-
-    <string name="store_riotx_full_description">Element on uusi Matrix-protokollaa (Matrix.org) käyttävä ohjelma: avointa ja hajautettua keskustelua tukeva turvallinen verkko. Element on täysin uusittu versio Riot Android -ohjelmasta, joka perustuu Matrix Android SDK:n uudelleenkirjoitukseen.
-\n
-\nHuomaa: tämä on betaversio. Element on vielä kehitystyössä, ja siinä on rajoitteita ja (toivottavasti ei kuitenkaan monta) bugeja. Kaikki palaute on tervetullutta!
-\n
-\nElement tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
-\n
-\nKaikkia Elementin ominaisuuksia ei ole vielä toteutettu Element:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
 
     <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
     <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>

@@ -1084,29 +1084,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
 
-    <string name="store_title">Element - 以您的方式溝通</string>
-    <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
-    <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Element 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
-
-取得免費的 matrix.org 帳號，在 https://modular.im 取得您自己的伺服器，或是使用其他的 Matrix 伺服器。
-
-為什麼選擇 Element？
-
-• 完整的溝通：與您的團隊、朋友、社群一同建構聊天室，不管您喜歡什麼都可以！聊天、分享檔案、新增小工具與進行語音和視訊通話，全都是免費的。
-
-• 強大的整合：與您知道且所愛的工具一同使用 Element。使用 Element，您甚至可以與其他聊天應用程式的使用者與群組聊天。
-
-• 隱密且安全：讓您的對話保持隱密。最先進的端到端加密確保隱密的溝通會繼續保持隱密。
-
-• 開放，並不封閉：開放原始碼，建基於 Matrix。透過建構您自己的伺服器來擁有自己的資料，或選取您信任的。
-
-• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。"</string>
-
     <string name="video_call_in_progress">視訊通話進行中……</string>
 
-    <string name="store_whats_new">"我們會不斷為 Element 做出變更與改善。
-完整的變更紀錄可以在此找到：%1$s。
-為了確保您不會錯過任何事情，只要把更新打開就行了。"</string>
     <string name="title_activity_keys_backup_setup">金鑰備份</string>
     <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
@@ -1501,16 +1480,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="send_suggestion_failed">建議傳送失敗 (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">在時間軸中顯示隱藏的活動</string>
-
-    <string name="store_riotx_title">Element - 下一代的 Matrix 客戶端</string>
-    <string name="store_riotx_short_description">使用最新 Android 框架的 Matrix 較快且輕量的客戶端</string>
-    <string name="store_riotx_full_description">Element 是 Matrix 協定 (Matrix.org) 的新客戶端：安全、去中心化通訊的開放網路。Element 是 Riot Android 客戶端的完全重寫，以 Matrix Android SDK 的完全重寫為基礎。
-\n
-\n免責聲明：這是測試版。Element 目前仍在積極開發中，包含限制與（我們希望不多的）臭蟲。所有的回饋都很歡迎！
-\n
-\nElement 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
-\n
-\n不是所有 Element 的功能都已在 Element 中實作。主要缺少（會在稍後到來！）的功能 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
 
     <string name="bottom_action_people_x">直接訊息</string>
 

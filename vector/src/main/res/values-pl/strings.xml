@@ -1077,9 +1077,6 @@ Sprawdź ustawienia systemowe.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Powiadomienia są wyłączone dla twojego konta.
 Sprawdź ustawienia konta.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są włączone dla tej sesji. Proszę sprawdź ustawienia Element.</string>
-    <string name="store_whats_new">"Zawsze wprowadzamy zmiany i ulepszenia do Element.
-Pełną listę zmian można znaleźć tutaj: %1$s.
-Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktualizacje."</string>
     <string name="account_additional_info">Dodatkowe informacje: %s</string>
 
     <string name="account_phone_number_error">Wystąpił błąd podczas weryfikowania numeru telefonu.</string>
@@ -1516,24 +1513,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="no_valid_google_play_services_apk">Nie znaleziono prawidłowej aplikacji Usługi Google Play. Powiadomienia mogą nie działać prawidłowo.</string>
 
-    <string name="store_title">Element - Rozmawiaj, we własny sposób</string>
-    <string name="store_short_description">Bezpieczna aplikacja czatu całkowicie pod Twoją kontrolą.</string>
-    <string name="store_full_description">Aplikacja czatu, całkowicie pod twoją kontrolą i całkowicie dopasowująca się. Element pozwala na komunikowanie się w jakikolwiek sposób chcesz. Stworzony dla [Matrix] - standardu otwartej, zdecentralizowanej komunikacji.
-\n
-\nStwórz darmowe konto matrix.org, zdobądź swój własny serwer na https://modular.im, lub użyj innego serwera Matrix.
-\n
-\nDlaczego warto wybrać Element\?
-\n
-\n• KOMPLETNA KOMUNIKACJA: Stwórz pokoje dla twojego zespołu, przyjaciół, społeczności - tak, jak lubisz! Czatuj, udostępniaj pliki, dodawaj widżety i wykonuj połączenia głosowe lub wideo - wszystko za darmo.
-\n
-\n• SILNA INTEGRACJA: Używaj Element z narzędziami które znasz i kochasz. Z Element możesz pisać z użytkownikami i grupami na innych aplikacjach do czatu.
-\n
-\n• PRYWATNE I BEZPIECZNE: Utrzymuj twoje konwersacje w sekrecie. Nowoczesne szyfrowanie typu \"end-to-end\" zapewnia, że to co jest prywatne, pozostaje prywatne
-\n
-\n• OTWARTE, NIE ZAMKNIĘTE: Otwartoźródłowe i oparte o Matrix. Bądź w posiadaniu swoich danych posiadając swój własny serwer, lub wybierając taki, któremu ufasz.
-\n
-\n•GDZIEKOLWIEK JESTEŚ: Bądź w kontakcie gdziekolwiek jesteś wraz z w pełni synchronizowaną historią wiadomości na wszystkich twoich urządzeniach lub na https://riot.im.</string>
-
     <string name="passphrase_passphrase_too_weak">Hasło jest zbyt słabe</string>
 
     <string name="keys_backup_passphrase_not_empty_error_message">Proszę usunąć hasło, jeżeli chcesz aby Element wygenerował klucz odzyskiwania.</string>
@@ -1694,16 +1673,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="send_suggestion_failed">Wysłanie sugestii nie powiodło się (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Wyświetl ukryte wydarzenia na linii czasowej</string>
-
-    <string name="store_riotx_title">Element - Klient Matrix następnej generacji</string>
-    <string name="store_riotx_short_description">Szybszy i lżejszy klient Matrix używający najnowszych frameworków Androida</string>
-    <string name="store_riotx_full_description">Element jest nowym klientem dla protokołu Matrix (Matrix.org): otwarta sieć dla bezpiecznej, zdecentralizowej komunikacji. Element jest całkowicie przepisanym klientem Riot, opartym na nowym SDK Matrix dla systemu Android.
-\n
-\nUwaga: Jest to wersja beta. Element jest obecnie w fazie aktywnego rozwoju i posiada ograniczenia oraz (mamy nadzieje że niewiele) błędy. Wszystkie opinie są mile widziane!
-\n
-\nElement wspiera: • Logowanie do istniejącego konta • Tworzenie pokoi oraz dołączanie do pokoi publicznych • Akceptowanie i odrzucanie zaproszeń • Wyświetlanie listy pokoi użytkowników • Wyświetlanie informacji o pokoju • Wysyłanie wiadomości tekstowych • Wysyłanie załączników • Odczytywanie i pisanie wiadomości w zaszyfrowanych pokojach • Kryptografia: Kopię zapasową kluczy E2E, zaawansowaną weryfikację urządzeń, żądanie udostępniania kluczy i odpowiedzi na nie • Powiadomienia push • Jasne, Ciemne oraz Czarne motywy
-\n
-\nNie wszystkie funkcje Element są wdrożone w Element. Główne niedostępne (pojawią się już wkrótce!) funkcje: • Ustawienia pokoi (wyświetl listę członków pokoi) • Rozmowy • Widżety • …</string>
 
     <string name="edited_suffix">(edytowano)</string>
 

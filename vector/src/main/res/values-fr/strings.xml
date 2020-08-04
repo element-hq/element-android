@@ -1130,29 +1130,8 @@ Sur l’écran suivant on vous demandera d’autoriser Element à toujours fonct
 
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
 
-    <string name="store_title">Element - Communiquez, à votre façon</string>
-    <string name="store_short_description">Une application de discussion sécurisée universelle que vous contrôlez.</string>
-    <string name="store_full_description">"Une application de discussion, que vous contrôlez et entièrement flexible. Element vous laisse communiquer comme vous le souhaitez. Conçu pour [matrix], le standard pour les communications libres et décentralisées.
-
-Créez un compte matrix.org gratuit, gérez votre propre serveur sur https://modular.im ou utilisez un autre serveur Matrix.
-
-Pourquoi choisir Element ?
-
-• COMMUNICATION COMPLÈTE : Construisez des salons autours de vos équipes, de vos amis, de votre communauté comme vous le souhaitez ! Discutez, partagez des fichiers, ajoutez des widgets et passez des appels audio et vidéo gratuitement.
-
-• INTÉGRATIONS PUISSANTES : Utilisez Element avec les outils que vous connaissez déjà. Avec Element vous pouvez même discuter avec les utilisateurs et les groupes qui utilisent d’autres applications de discussion.
-
-• PRIVÉ ET SÉCURISÉ : Gardez vos conversations secrètes. Un chiffrement de bout en bout de pointe vous garanti que vos communications privées restent privées.
-
-• OUVERT, PAS FERMÉ : Open source, et construit autour de Matrix. Restez en possession de vos données en hébergeant votre propre serveur, ou choisissez celui auquel vous faites confiance.
-
-• PARTOUT OÙ VOUS ÊTES : Restez en contact où que vous soyez avec la synchronisation complète de l’historique de vos messages entre vos différents appareils et en ligne sur https://riot.im."</string>
-
     <string name="video_call_in_progress">Appel vidéo en cours…</string>
 
-    <string name="store_whats_new">"Nous sommes constamment en train de modifier et d’améliorer Element.
-Le journal des modifications peut être consulté ici : %1$s.
-Afin d’être sûr de ne rien manquer, continuez à installer les mises à jour."</string>
     <string name="title_activity_keys_backup_setup">Sauvegarde de clés</string>
     <string name="title_activity_keys_backup_restore">Utiliser la sauvegarde de clés</string>
     <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n’est pas terminée, veuillez patienter…</string>
@@ -1552,16 +1531,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans les discussions</string>
-
-    <string name="store_riotx_title">Element − Client Matrix nouvelle génération</string>
-    <string name="store_riotx_short_description">Un client pour Matrix plus rapide et plus léger utilisant les derniers frameworks Android</string>
-    <string name="store_riotx_full_description">Element est un nouveau client pour le protocole Matrix (Matrix.org) : un réseau ouvert pour des communications sécurisées et décentralisées. Element est une réécriture complète du client Android Riot, basée sur une réécriture complète du SDK Android de Matrix.
-\n
-\nMise en garde : Ceci est une version bêta. Element est actuellement en plein développement et a des limites et (peu, nous l’espérons) des anomalies. Tout commentaire est le bienvenu !
-\n
-\nElement prend en charge : • Se connecter à un compte existant • Créer de salons et rejoindre des salons publics • Accepter et refuser des invitations • Lister les salons des utilisateurs • Voir les informations des salons • Envoyer des messages texte • Envoyer des pièces jointes • Lire et écrire des messages dans les salons chiffrés • Chiffrement : sauvegarde des clés de chiffrement, vérification avancée des appareils, demande et réponse de partage de clé • Notifications • Thèmes clair, sombre et noir
-\n
-\nToutes les fonctionnalités de Element ne sont pas encore implémentées dans Element. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Réglages des salons (lister les membres du salon etc.) • Appels • Widgets • …</string>
 
     <string name="bottom_action_people_x">Messages directs</string>
 

@@ -1180,27 +1180,8 @@
 
     <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
 
-    <string name="store_title">Element - Comunica, a modo tuo</string>
-    <string name="store_short_description">Una App per chat universali, sicure ed interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Una App per chat flessibile e interamente sotto il tuo controllo. Element ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n 
-\nPuoi aprire un account matrix.org gratuito, creare il tuo server su https://modular.im o usare un altro server Matrix. 
-\n 
-\nPerché scegliere Element\?
-\n 
-\n• COMUNICAZIONE COMPLETA: crea stanze per discussione pubbliche o private per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai chiamate video o audio - tutto gratuito. 
-\n 
-\n• GRANDI INTEGRAZIONI: collega Element alle piattaforme che conosci ed ami. Con Element puoi addirittura chattare con utenti e gruppi che usano altre App di chat.
-\n 
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino sempre tali. 
-\n 
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Riprendi il possesso dei tuoi dati creando il tuo server Matrix personale, o scegliendone uno di cui ti fidi. 
-\n 
-\n• OVUNQUE TU SIA: stai sul pezzo ovunque tu sia grazie la cronologia dei messaggi sempre sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
-
     <string name="video_call_in_progress">Chiamata video in corso…</string>
 
-    <string name="store_whats_new">Element continua a crescere e migliorare. Il registro completo delle modifiche si può trovare qui: %1$s. Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
     <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
     <string name="keys_backup_is_not_finished_please_wait">Il Backup delle chiavi non è concluso, attendere prego…</string>
@@ -1596,16 +1577,6 @@
     <string name="send_suggestion_failed">L\'invio del suggerimento è fallito (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella Timeline</string>
-
-    <string name="store_riotx_title">Element - Client Matrix di nuova generazione</string>
-    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero che utilizza gli ultimi framework di Android</string>
-    <string name="store_riotx_full_description">Element è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. Element è stato completamente riscritto rispetto a Riot Android, ed è a sua volta basato su un SDK Android di Matrix totalmente riscritto.
-\n 
-\nDisclaimer: questa è una versione beta. Element è attualmente in uno sviluppo attivo e contiene ancora alcune limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti!
-\n 
-\nElement supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
-\n 
-\nNon tutte le funzioni di Element sono già implementate in Element. Principali funzioni mancanti (prossimamente!): • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
 
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>

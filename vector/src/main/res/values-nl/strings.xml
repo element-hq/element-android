@@ -1276,25 +1276,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Er is geen geldige APK van Google Play Services gevonden. Meldingen zullen mogelijk niet correct functioneren.</string>
 
-    <string name="store_title">Element - Communiceer op uw manier</string>
-    <string name="store_whats_new">We blijven Element voortdurend aanpassen en verbeteren. Het volledige wijzigingslogboek vindt u hier: %1$s. Om niets te missen, houdt u best uw updates ingeschakeld.</string>
-    <string name="store_short_description">Een universele en veilige chat-app, volledig onder uw controle.</string>
-    <string name="store_full_description">Een chat-app, onder uw controle en heel flexibel. Element laat u communiceren zoals u dat wilt. Gemaakt voor [matrix] - de standaard voor open, gedecentraliseerde communicatie.
-\n 
-\nMaak een gratis account aan op matrix.org, verkrijg uw eigen server op https://modular.im, of gebruik een andere Matrix-server. 
-\n 
-\nWaarom zou ik voor Element kiezen\?
-\n 
-\n• VOLLEDIGE COMMUNICATIE: maak gesprekken aan rond uw teams, uw vrienden, uw gemeenschap - hoe u maar wilt! Chat, deel bestanden, voeg widgets toe en maak stem- en video-oproepen - allemaal volledig gratis. 
-\n 
-\n• KRACHTIGE INTEGRATIE: gebruik Element met de hulpmiddelen waarmee u vertrouwd bent. Met Element kunt u zelfs chatten met gebruikers en groepen op andere chat-apps.
-\n 
-\n• PRIVÉ EN VEILIG: houd uw gesprekken geheim. Eind-tot-eind-versleuteling van de bovenste plank zorgt ervoor dat uw privécommunicatie ook privé blijft. 
-\n 
-\n• OPEN, NIET GESLOTEN: vrije software, gebouwd op Matrix. Wees baas over uw eigen gegevens door uw eigen server te gebruiken, of te kiezen voor een andere server die u vertrouwt. 
-\n 
-\n• WAAR U OOK BENT: houd contact waar u ook bent met volledig gesynchroniseerde berichtgeschiedenis op al uw apparaten, en online op https://riot.im.</string>
-
     <string name="passphrase_create_passphrase">Wachtwoord aanmaken</string>
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
     <string name="passphrase_empty_error_message">Voer een wachtwoord in</string>

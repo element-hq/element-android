@@ -1046,9 +1046,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nije pronađen valjajući APK Usluga za Google Play. Moguće je da obavijesti neće ispravno raditi.</string>
 
-    <string name="store_title">Element - Komunicirajte onako kako Vama odgovara</string>
-    <string name="store_whats_new">Stalno radimo na izmjenama i poboljšanjima Element-a. Cjelovit dnevnik izmjena je moguće pronaći u %1$s. Kako biste ostali informirani o novostima, imajte omogućeno ažuriranje.</string>
-    <string name="store_short_description">Univerzalna aplikacija za sigurno ćaskanje pod Vašom kontrolom.</string>
     <string name="passphrase_create_passphrase">Napravi fraza-lozinku</string>
     <string name="passphrase_confirm_passphrase">Potvrdi fraza-lozinku</string>
     <string name="passphrase_enter_passphrase">Unesite fraza-lozinku</string>

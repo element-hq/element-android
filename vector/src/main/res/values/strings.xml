@@ -1372,28 +1372,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
-    <!-- String for Play Store -->
-    <string name="store_title">Element - Communicate, your way</string>
-    <string name="store_whats_new">"We’re always making changes and improvements to Element.
-The complete changelog can be found here: %1$s.
-To make sure you don’t miss a thing, just keep your updates turned on."</string>
-    <string name="store_short_description">A universal secure chat app entirely under your control.</string>
-    <string name="store_full_description">"A chat app, under your control and entirely flexible. Element lets you communicate the way you want. Made for [matrix] - the standard for open, decentralised communication.
-
-Get a free matrix.org account, get your own server at https://modular.im, or use another Matrix server.
-
-Why choose Element?
-
-• COMPLETE COMMUNICATION: Build rooms around your teams, your friends, your community - however you like! Chat, share files, add widgets and make voice and video calls - all free of charge.
-
-• POWERFUL INTEGRATIONS: Use Element with the tools you know and love. With Element you can even chat with users and groups on other chat apps.
-
-• PRIVATE AND SECURE: Keep your conversations secret. State of the art end-to-end encryption ensures that private communication stays private.
-
-• OPEN, NOT CLOSED: Open source, and built on Matrix. Own your own data by hosting your own server, or selecting one you trust.
-
-• EVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and online at https://riot.im."</string>
-
     <!-- Passphrase -->
     <string name="passphrase_create_passphrase">Create passphrase</string>
     <string name="passphrase_confirm_passphrase">Confirm passphrase</string>
@@ -1706,31 +1684,6 @@ Why choose Element?
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
-
-    <string name="store_riotx_title">Element - Next Generation Matrix Client</string>
-    <string name="store_riotx_short_description">A faster and lighter client for Matrix using the latest Android frameworks</string>
-    <string name="store_riotx_full_description">"Element is a new client for the Matrix protocol (Matrix.org): an open network for secure, decentralised communication. Element is a full rewrite of the Riot Android client, based on a full rewrite of the Matrix Android SDK.
-
-Disclaimer: This is a beta version. Element is currently in active development and contains limitations and (we hope not too many) bugs. All feedback is welcome!
-
-Element supports:
-• Login to an existing account
-• Create room and join public rooms
-• Accept and reject invitations
-• List users rooms
-• View room details
-• Send text messages
-• Send attachment
-• Read and write messages in encrypted rooms
-• Crypto: E2E keys backup, advance device verification, key share request and answer
-• Push notification
-• Light, Dark and Black themes
-
-Not all features in Riot are implemented in Element yet. Main missing (and coming soon!) features:
-• Room settings (list room members, etc.)
-• Calls
-• Widgets
-• …"</string>
 
     <string name="bottom_action_people_x">Direct Messages</string>
 

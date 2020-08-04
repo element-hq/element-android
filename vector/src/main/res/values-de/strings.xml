@@ -1173,29 +1173,8 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Element - Kommuniziere auf deine Weise</string>
-    <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
-    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Element lässt dich auf die Art kommunizieren, wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
-\n
-\nHole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
-\n
-\nWarum solltest du Element wählen\?
-\n
-\n• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
-\n
-\n• MÄCHTIGE INTEGRATIONEN: Benutze Element mit den Werkzeugen die du kennst und liebst. Mit Element kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
-\n
-\n• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
-\n
-\n• OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
-\n
-\n• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist, wobei deine Nachrichtenhistorie zwischen all deinen Geräten und auch deinem Messenger im Browser synchronisiert wird. Schau dir dazu auch riot.im an.</string>
-
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
-    <string name="store_whats_new">"An Element werden ständig Änderungen und Verbesserungen durchgeführt.
-Das vollständige Änderungsprotokoll ist hier zu finden: %1$s.
-Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
@@ -1615,8 +1594,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
     <string name="send_suggestion_failed">Der Vorschlag konnte nicht gesendet werden (%s)</string>
 
-    <string name="store_riotx_title">Element - Matrix Client der nächsten Generation</string>
-    <string name="store_riotx_short_description">Ein schnellerer und leichterer Client für Matrix mit den neuesten Android-Frameworks</string>
     <string name="send_file_step_sending_thumbnail">Miniaturbild wird gesendet (%1$s / %2$s)</string>
     <string name="send_file_step_sending_file">Datei wird gesendet (%1$s / %2$s)</string>
 
@@ -1753,15 +1730,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="push_gateway_item_device_name">Sitzungsname:</string>
     <string name="push_gateway_item_format">Format:</string>
-
-    <string name="store_riotx_full_description">Element ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
-\nElement ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
-\n
-\nHinweis: Dies ist eine Beta-Version. Element wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
-\n
-\nElement unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
-\n
-\nNicht alle Features in Element sind bisher in Element implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
