@@ -11,7 +11,7 @@ Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
 
 Translations 🗣:
- -
+ - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
 
 SDK API changes ⚠️:
  -
