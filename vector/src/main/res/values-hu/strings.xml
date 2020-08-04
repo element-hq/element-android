@@ -2307,12 +2307,12 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_adding_media_file_to_gallery">A média fájlt nem sikerült hozzáadni a Galériához</string>
     <string name="change_password_summary">Új fiók jelszó beállítása…</string>
 
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement X for Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre</string>
-    <string name="use_latest_riot">A Element legújabb kliensét használd a többi eszközödön:</string>
+    <string name="use_latest_app">A Element legújabb kliensét használd a többi eszközödön:</string>
     <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
     <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
     <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>

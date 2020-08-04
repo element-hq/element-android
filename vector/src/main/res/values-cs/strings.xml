@@ -2323,12 +2323,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
 
     <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější Element, Element Web, Element Desktop, Element iOS, Element pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement pro Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="use_latest_riot">Použijte na svých zařízeních nejnovější Element:</string>
+    <string name="use_latest_app">Použijte na svých zařízeních nejnovější Element:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
     <string name="enter_secret_storage_passphrase_or_key">Použijte své %1$s nebo použijte svůj %2$s a pokračujte.</string>

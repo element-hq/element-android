@@ -2309,12 +2309,12 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <string name="use_other_session_content_description">Erabili azken Element bertsioa zure beste gailuetan, Element Web, Element Desktop, Element iOS, Element Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement Android plataformarako</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
-    <string name="use_latest_riot">Erabili azken Element bertsioa zure beste gailuetan:</string>
+    <string name="use_latest_app">Erabili azken Element bertsioa zure beste gailuetan:</string>
     <string name="command_description_discard_session">Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du</string>
     <string name="command_description_discard_session_not_handled">Zifratutako gelatan onartzen da soilik</string>
     <string name="enter_secret_storage_passphrase_or_key">Erabili zure %1$s edo %2$s jarraitzeko.</string>
