@@ -1526,8 +1526,6 @@ Haluatko lisätä paketteja?</string>
 
     <string name="edited_suffix">(muokattu)</string>
 
-    <string name="riotx_no_registration_notice_colored_part">Käytä vanhaa sovellusta</string>
-
 
     <string name="no_message_edits_found">Muokkauksia ei löytynyt</string>
 
@@ -1571,7 +1569,6 @@ Haluatko lisätä paketteja?</string>
 
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvauksessa</string>
     <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
-    <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
     <string name="disconnect">Katkaise yhteys</string>
     <string name="decline">Kieltäydy</string>
 

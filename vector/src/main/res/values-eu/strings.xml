@@ -1536,9 +1536,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="edited_suffix">(editatua)</string>
 
-    <string name="riotx_no_registration_notice">%1$s kontua sortzeko.</string>
-    <string name="riotx_no_registration_notice_colored_part">Erabili aplikazio zaharra</string>
-
 
     <string name="message_edits">Mezuen edizioak</string>
     <string name="no_message_edits_found">Ez da ediziorik aurkitu</string>

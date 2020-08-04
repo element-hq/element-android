@@ -1676,9 +1676,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="edited_suffix">(edytowano)</string>
 
-    <string name="riotx_no_registration_notice">%1$s aby utworzyć konto.</string>
-    <string name="riotx_no_registration_notice_colored_part">Użyj starszej aplikacji</string>
-
 
     <string name="message_edits">Edycje wiadomości</string>
     <string name="no_message_edits_found">Nie znaleziono edycji</string>

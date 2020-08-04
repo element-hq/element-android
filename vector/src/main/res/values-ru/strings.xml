@@ -1628,9 +1628,6 @@
 
     <string name="edited_suffix">(отредактированный)</string>
 
-    <string name="riotx_no_registration_notice">%1$s для создания учетной записи.</string>
-    <string name="riotx_no_registration_notice_colored_part">Используйте старое приложение</string>
-
 
     <string name="message_edits">Редактирование сообщений</string>
     <string name="no_message_edits_found">Редактирование не найдено</string>

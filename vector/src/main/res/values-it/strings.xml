@@ -1592,9 +1592,6 @@
 
     <string name="edited_suffix">(modificato)</string>
 
-    <string name="riotx_no_registration_notice">%1$s per creare un account.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usa la vecchia app</string>
-
 
     <string name="message_edits">Modifiche messaggio</string>
     <string name="no_message_edits_found">Nessuna modifica trovata</string>

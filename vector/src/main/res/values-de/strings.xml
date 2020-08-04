@@ -1600,9 +1600,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="downloading_file">Datei %1$s wird heruntergeladen …</string>
     <string name="downloaded_file">Die Datei %1$s wurde heruntergeladen!</string>
 
-    <string name="riotx_no_registration_notice">%1$s , um ein Konto zu erstellen.</string>
-    <string name="riotx_no_registration_notice_colored_part">Benutze die alte App</string>
-
 
     <string name="room_filtering_footer_title">Kannst du nicht finden, wonach du suchst\?</string>
     <string name="room_filtering_footer_create_new_room">Erstelle einen neuen Raum</string>

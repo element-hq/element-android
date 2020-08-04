@@ -1124,8 +1124,6 @@
 
     <string name="create_room_title">Nova soba</string>
     <string name="create_room_action_create">IZRADI</string>
-    <string name="riotx_no_registration_notice">%1$s kako biste otvorili račun.</string>
-    <string name="riotx_no_registration_notice_colored_part">Koristite staru aplikaciju</string>
 
 
     <string name="message_edits">Uređivanja poruka</string>

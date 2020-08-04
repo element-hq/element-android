@@ -1502,9 +1502,6 @@
 
     <string name="edited_suffix">(u përpunua)</string>
 
-    <string name="riotx_no_registration_notice">%1$s që të krijohet një llogari.</string>
-    <string name="riotx_no_registration_notice_colored_part">Përdor aplikacionin e dikurshëm</string>
-
 
     <string name="message_edits">Përpunime Mesazhi</string>
     <string name="no_message_edits_found">S’u gjetën përpunime</string>

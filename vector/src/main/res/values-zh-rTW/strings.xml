@@ -1494,9 +1494,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="edited_suffix">（已編輯）</string>
 
-    <string name="riotx_no_registration_notice">%1$s 以建立帳號。</string>
-    <string name="riotx_no_registration_notice_colored_part">使用舊的應用程式</string>
-
 
     <string name="message_edits">訊息編輯</string>
     <string name="no_message_edits_found">找不到編輯</string>

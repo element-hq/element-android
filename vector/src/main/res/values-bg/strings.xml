@@ -1533,9 +1533,6 @@
 
     <string name="edited_suffix">(редактирано)</string>
 
-    <string name="riotx_no_registration_notice">%1$s за да създадете профил.</string>
-    <string name="riotx_no_registration_notice_colored_part">Използвай старото приложение</string>
-
 
     <string name="message_edits">Редакции на съобщението</string>
     <string name="no_message_edits_found">Не са открити редакции</string>

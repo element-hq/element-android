@@ -1545,9 +1545,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="edited_suffix">(édité)</string>
 
-    <string name="riotx_no_registration_notice">%1$s pour créer un compte.</string>
-    <string name="riotx_no_registration_notice_colored_part">Utilisez l’ancienne application</string>
-
 
     <string name="message_edits">Éditions de message</string>
     <string name="no_message_edits_found">Aucune édition trouvée</string>

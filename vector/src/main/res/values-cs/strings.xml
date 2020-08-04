@@ -1616,9 +1616,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="edited_suffix">(upraveno)</string>
 
-    <string name="riotx_no_registration_notice">%1$s pro založení účtu.</string>
-    <string name="riotx_no_registration_notice_colored_part">Použít zastaralou aplikaci</string>
-
 
     <string name="message_edits">Úpravy zpráv</string>
     <string name="no_message_edits_found">Úpravy nenalezeny</string>

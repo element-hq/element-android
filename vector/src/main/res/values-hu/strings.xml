@@ -1539,9 +1539,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="edited_suffix">(szerkesztve)</string>
 
-    <string name="riotx_no_registration_notice">%1$s fiók készítéshez.</string>
-    <string name="riotx_no_registration_notice_colored_part">Használd a régi alkalmazást</string>
-
 
     <string name="message_edits">Üzenet szerkesztések</string>
     <string name="no_message_edits_found">Szerkesztések nem találhatók</string>

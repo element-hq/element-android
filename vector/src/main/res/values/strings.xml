@@ -1698,11 +1698,6 @@
 
     <string name="edited_suffix">"(edited)"</string>
 
-    <!-- param will be replaced by the value of riotx_no_registration_notice_colored_part -->
-    <string name="riotx_no_registration_notice">%1$s to create an account.</string>
-    <string name="riotx_no_registration_notice_colored_part">Use the old app</string>
-
-
     <string name="message_edits">Message Edits</string>
     <string name="no_message_edits_found">No edits found</string>
 

@@ -1473,9 +1473,6 @@
 
     <string name="edited_suffix">(편집됨)</string>
 
-    <string name="riotx_no_registration_notice">계정을 만들려면 %1$s하세요.</string>
-    <string name="riotx_no_registration_notice_colored_part">예전 앱을 사용</string>
-
 
     <string name="message_edits">메시지 편집</string>
     <string name="no_message_edits_found">수정 사항이 없음</string>
