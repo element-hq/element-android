@@ -96,7 +96,7 @@
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -830,13 +830,13 @@
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -844,7 +844,7 @@
         <item quantity="one">%d активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -854,45 +854,45 @@
         <item quantity="one">%d активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s комната найдена для %2$s</item>
         <item quantity="few">%1$s комнаты найдено для %2$s</item>
         <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
@@ -1027,20 +1027,20 @@
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="group_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1302,7 +1302,7 @@
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
         <item quantity="few">%d новых ключа были добавлены к этому устройству.</item>
         <item quantity="many">%d новых ключей были добавлены к этому устройству.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="keys_backup_restore_success_description_part1">
@@ -1354,7 +1354,7 @@
         <item quantity="one">Резервное копирование %d ключа…</item>
         <item quantity="few">Резервное копирование %d ключей…</item>
         <item quantity="many">Резервное копирование %d ключей…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_keys_all_backup_up">Все ключи сохранены</string>
@@ -1586,7 +1586,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Формат:</string>
 
-    <string name="preference_voice_and_video">Голос &amp; Видио</string>
+    <string name="preference_voice_and_video">Голос и видео</string>
     <string name="preference_root_help_about">Помощь и информация</string>
 
 
@@ -1666,7 +1666,7 @@
 \n
 \nКроме того, вы можете попробовать использовать публичный сервер по %2$s, но это будет не так надежно, и он предоставит ваш IP-адрес этому серверу. Вы также можете управлять этим в настройках.</string>
     <string name="call_failed_no_ice_use_alt">Попробуйте использовать %s</string>
-    <string name="call_failed_dont_ask_again">Не спрашивай меня больше</string>
+    <string name="call_failed_dont_ask_again">Больше не спрашивать</string>
 
     <string name="auth_add_email_message_2">Установите адрес электронной почты для восстановления учетной записи, и позже она может будет найдена участниками, которые вас знают.</string>
     <string name="auth_add_phone_message_2">Установите телефон, и позже его могут опционально обнаруживать люди, которые вас знают.</string>
@@ -2079,4 +2079,32 @@
 
     <string name="no_network_indicator">Нет подключения к сети</string>
 
-</resources>
+<string name="play_video">Воспроизвести</string>
+    <string name="pause_video">Приостановить</string>
+    <string name="action_copy">Копировать</string>
+    <string name="dialog_title_success">Выполнено</string>
+
+    <string name="bottom_action_notification">Уведомления</string>
+    <string name="call_failed_no_connection">Звонок не состоялся</string>
+    <string name="call_failed_no_connection_description">Не удалось установить соединение реального времени.
+\nПопросите администратора вашего сервера настроить сервер TURN, чтобы звонки работали надёжно.</string>
+
+    <string name="call_select_sound_device">Выберите звуковое устройство</string>
+    <string name="sound_device_phone">Телефон</string>
+    <string name="sound_device_speaker">Динамик</string>
+    <string name="sound_device_headset">Гарнитура</string>
+    <string name="sound_device_wireless_headset">Беспроводная гарнитура</string>
+    <string name="call_switch_camera">Переключить камеру</string>
+    <string name="call_camera_front">Передняя</string>
+    <string name="call_camera_back">Задняя</string>
+    <string name="call_format_turn_hd_off">Выключить HD</string>
+    <string name="call_format_turn_hd_on">Включить HD</string>
+
+    <string name="login_error_ssl_peer_unverified">Ошибка SSL: не удалось идентифицировать другого абонента.</string>
+    <string name="login_error_ssl_other">Ошибка SSL.</string>
+    <string name="active_call_with_duration">Активный звонок (%s)</string>
+    <string name="return_to_call">Вернуться к звонку</string>
+
+    <string name="room_participants_action_cancel_invite">Отменить приглашение</string>
+    <string name="room_participants_power_level_demote_warning_title">Снизить собственные полномочия\?</string>
+    </resources>
