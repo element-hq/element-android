@@ -687,7 +687,7 @@
     <string name="login_error_limit_exceeded">درخواست‌های بیش از حد ارسال شده</string>
     <string name="login_error_login_email_not_yet">هنوز روی پیوند ایمیل کلیک نشده</string>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">برای تماس‌های ورودی از آهنگ زنگ پیش‌فرض ریوت استفاده کن</string>
+    <string name="settings_call_ringtone_use_app_ringtone">برای تماس‌های ورودی از آهنگ زنگ پیش‌فرض ریوت استفاده کن</string>
     <string name="settings_call_ringtone_title">آهنگ زنگ تماس ورودی</string>
     <string name="settings_call_ringtone_dialog_title">انتخاب آهنگ زنگ برای تماس‌ها:</string>
 

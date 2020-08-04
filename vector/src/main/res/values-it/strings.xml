@@ -1088,7 +1088,7 @@
     <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
 
     <string name="settings_call_category">Chiamate</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
     <string name="settings_call_ringtone_title">Suoneria delle chiamate in arrivo</string>
     <string name="settings_call_ringtone_dialog_title">Scegli la suoneria per le chiamate:</string>
 

@@ -318,7 +318,7 @@
     <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Koristi zadan zvuk tona Elementa za dolazne pozive</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Koristi zadan zvuk tona Elementa za dolazne pozive</string>
     <string name="settings_call_ringtone_use_default_stun">Dozvoli rezervnog poslužitelja za pozivnog pomoćnika</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Koristit će se %s kao pomoćnik u slučaju da ga Vaš poslužitelj nema (Vaša IP adresa će biti podijeljena tijekom poziva)</string>
     <string name="settings_call_ringtone_title">Zvuk tona dolaznog poziva</string>

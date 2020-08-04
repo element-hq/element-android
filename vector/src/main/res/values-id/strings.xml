@@ -955,7 +955,7 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="auth_accept_policies">Mohon telaah dan terima kebijakan homeserver ini:</string>
 
     <string name="settings_call_category">Panggilan</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Gunakan nada dering semula Element untuk panggilan masuk</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gunakan nada dering semula Element untuk panggilan masuk</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
 

@@ -991,7 +991,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
 
     <string name="settings_call_category">通話設定画面</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">着信にElementの既定の着信音を使う</string>
+    <string name="settings_call_ringtone_use_app_ringtone">着信にElementの既定の着信音を使う</string>
     <string name="settings_call_ringtone_title">着信音</string>
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
 

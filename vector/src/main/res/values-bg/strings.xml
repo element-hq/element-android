@@ -1006,7 +1006,7 @@
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
 
     <string name="settings_call_category">Обаждания</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Използвай мелодията по подразбиране на Element за входящи повиквания</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Използвай мелодията по подразбиране на Element за входящи повиквания</string>
     <string name="settings_call_ringtone_title">Мелодия за входящо повикване</string>
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
 

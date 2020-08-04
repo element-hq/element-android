@@ -962,7 +962,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
     <string name="settings_call_category">Oppringingar</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Element-ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard Element-ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
 

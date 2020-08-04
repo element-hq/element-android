@@ -1037,7 +1037,7 @@ Voulez-vous en ajouter ?</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
 
     <string name="settings_call_category">Appels</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Utiliser la sonnerie par défaut de Element pour les appels entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Utiliser la sonnerie par défaut de Element pour les appels entrants</string>
     <string name="settings_call_ringtone_title">Sonnerie d’appel entrant</string>
     <string name="settings_call_ringtone_dialog_title">Sélectionner la sonnerie pour les appels :</string>
 

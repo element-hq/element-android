@@ -280,7 +280,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_info_room_topic">Téma místnosti</string>
 
     <string name="settings_call_category">Volání</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Použít původní vyzvánění Element pro příchozí hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění Element pro příchozí hovory</string>
     <string name="settings_call_ringtone_title">Vyzvánění příchozího hovoru</string>
     <string name="settings_call_ringtone_dialog_title">Vybrat vyzvánění pro hovory:</string>
 

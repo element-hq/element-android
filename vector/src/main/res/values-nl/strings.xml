@@ -1055,7 +1055,7 @@
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>
 
     <string name="settings_call_category">Oproepen</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
 

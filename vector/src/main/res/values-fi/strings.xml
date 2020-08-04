@@ -923,7 +923,7 @@ Haluatko lisätä paketteja?</string>
         <item quantity="other">%d jäsenyysmuutosta</item>
     </plurals>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
 

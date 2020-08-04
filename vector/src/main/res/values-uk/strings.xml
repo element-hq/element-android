@@ -1107,7 +1107,7 @@
     <string name="markdown_has_been_disabled">Markdown вимкнено.</string>
 
     <string name="settings_call_category">Виклики</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Використовувати стандартний рингтон Element для вхідних викликів</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Використовувати стандартний рингтон Element для вхідних викликів</string>
     <string name="settings_call_ringtone_title">Рингтон вхідного виклику</string>
     <string name="settings_call_ringtone_dialog_title">Оберіть рингтон для викликів:</string>
 

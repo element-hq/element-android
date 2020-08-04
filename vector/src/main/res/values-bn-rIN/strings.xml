@@ -298,7 +298,7 @@
     <string name="room_info_room_topic">ঘরএর বিষয়</string>
 
     <string name="settings_call_category">ডাকা</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">ব্যবহার করছেন অনুপস্থিত Element রিংটোন আগামী ডাক এর জন্য</string>
+    <string name="settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত Element রিংটোন আগামী ডাক এর জন্য</string>
     <string name="settings_call_ringtone_title">আসা কল এর রিংটোন</string>
     <string name="settings_call_ringtone_dialog_title">নির্বাচন করুন রিংটোন কল আর জন্য:</string>
 

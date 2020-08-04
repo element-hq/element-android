@@ -1105,7 +1105,7 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="auth_accept_policies">Por favor veja e aceite, apolice para este servidor</string>
 
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar toque padrão para chamadas recebidas</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar toque padrão para chamadas recebidas</string>
     <string name="settings_call_ringtone_title">Toque para chamadas recebidas</string>
     <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
 

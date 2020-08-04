@@ -983,7 +983,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="auth_accept_policies">请审阅并接受此主服务器的政策：</string>
 
     <string name="settings_call_category">通话</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">为来电使用 Element 的默认铃声</string>
+    <string name="settings_call_ringtone_use_app_ringtone">为来电使用 Element 的默认铃声</string>
     <string name="settings_call_ringtone_title">来电铃声</string>
     <string name="settings_call_ringtone_dialog_title">请选择来电铃声：</string>
 

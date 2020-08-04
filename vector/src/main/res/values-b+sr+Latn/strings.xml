@@ -184,7 +184,7 @@
     <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Koristi podrazumevani Element zvuk zvona za dolazeće pozive</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Koristi podrazumevani Element zvuk zvona za dolazeće pozive</string>
     <string name="settings_call_ringtone_title">Zvuk zvona dolazećeg poziva</string>
     <string name="settings_call_ringtone_dialog_title">Izaberite zvuk zvona za pozive:</string>
 

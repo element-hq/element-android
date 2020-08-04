@@ -1037,7 +1037,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="auth_accept_policies">Por favor revise e aceite as políticas desse servidor doméstico:</string>
 
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Use o toque padrão da Element para chamadas recebidas</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Use o toque padrão da Element para chamadas recebidas</string>
     <string name="settings_call_ringtone_title">Toque de chamada recebida</string>
     <string name="settings_call_ringtone_dialog_title">Selecione o toque para chamadas:</string>
 

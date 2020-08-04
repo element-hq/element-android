@@ -991,7 +991,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="x_plus">%d+</string>
 
     <string name="settings_call_category">通話</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">為來電使用預設的 Element 鈴聲</string>
+    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 Element 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
 

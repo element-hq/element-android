@@ -1046,7 +1046,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
 
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
 

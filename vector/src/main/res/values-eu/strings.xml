@@ -1007,7 +1007,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="call_anyway">Deitu hala ere</string>
     <string name="settings_call_category">Deiak</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Erabili Elementen lehenetsitako dei-doinua jasotako deientzat</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Erabili Elementen lehenetsitako dei-doinua jasotako deientzat</string>
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 

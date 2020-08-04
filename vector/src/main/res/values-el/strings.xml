@@ -178,7 +178,7 @@
     <string name="room_info_room_topic">Θέμα δωματίου</string>
 
     <string name="settings_call_category">Κλήσεις</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
     <string name="settings_call_ringtone_title">Ήχος εισερχομένων κλήσεων</string>
     <string name="settings_call_ringtone_dialog_title">Επιλέξτε ήχο κλήσης:</string>
 

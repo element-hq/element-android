@@ -1032,7 +1032,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="markdown_has_been_disabled">Markdown tiltva.</string>
 
     <string name="settings_call_category">Hívások</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
     <string name="settings_call_ringtone_title">Bejövő hívás csengőhangja</string>
     <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása hívásokhoz:</string>
 

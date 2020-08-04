@@ -326,7 +326,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="room_info_room_topic">Oda konusu</string>
 
     <string name="settings_call_category">Aramalar</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Gelen aramalar için varsayılan Element zil sesini kullan</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gelen aramalar için varsayılan Element zil sesini kullan</string>
     <string name="settings_call_ringtone_title">Gelen arama zil sesi</string>
     <string name="settings_call_ringtone_dialog_title">Aramalar için zil sesi seç:</string>
 

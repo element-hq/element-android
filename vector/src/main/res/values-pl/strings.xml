@@ -1029,7 +1029,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">Użyj domyślnego dzwonka Element dla przychodzących połączeń</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka Element dla przychodzących połączeń</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_kick">Wyrzuć</string>

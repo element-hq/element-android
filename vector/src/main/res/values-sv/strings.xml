@@ -320,7 +320,7 @@
     <string name="room_info_room_topic">Rumsämne</string>
 
     <string name="settings_call_category">Samtal</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>

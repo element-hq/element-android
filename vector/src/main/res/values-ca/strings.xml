@@ -1035,7 +1035,7 @@ En voleu afegir algun?</string>
     <string name="accept">Acceptar</string>
 
     <string name="settings_call_category">Trucada</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
     <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
 
