@@ -281,10 +281,6 @@
     <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
     <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
 
-    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för totalsträckskryptering för den här sessionen och skicka den publika nyckeln till hemservern. 
-\nDet här behövs bara en gång. 
-\nUrsäkta för besväret.</string>
-
     <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
@@ -495,10 +491,6 @@
     <string name="create_new_room">Skapa ett nytt rum</string>
     <string name="fab_menu_create_room">Rum</string>
     <string name="fab_menu_create_chat">Direktmeddelanden</string>
-
-    <string name="alpha_disclaimer_content_line_2_gplay">Den senaste funktionslistan finns alltid i %1$s, och om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-beskrivningen</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
 
     <string name="send_suggestion">Ge ett förslag</string>
     <string name="send_suggestion_content">Vänligen skriv ditt förslag nedan.</string>
@@ -712,9 +704,6 @@
     <string name="device_name_warning">En sessions publika namn är synligt för personer du pratar med</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner från den här sessionen.</string>
-    <string name="e2e_enabling_on_app_update">Element stöder nu totalsträckskryptering men du behöver logga in igen för att aktivera det.
-\n
-\nDu kan göra det nu eller senare från appinställningarna.</string>
 
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d avisering</item>
@@ -756,10 +745,6 @@
     <string name="sas_incoming_request_description">Verifiera den här sessionen för att markera den som pålitligt. Att lita på folks sessioner ger dig extra sinnesro när du skickar totalsträckskrypterade meddelanden.</string>
     <string name="sas_verified_successful_description">Säkra meddelanden mellan dig och den här användaren är totalsträckskrypterade och kommer inte att vara läsbara för tredje parter.</string>
     <string name="identity_server_not_defined">Du använder ingen identitetsserver</string>
-    <string name="security_warning_identity_server">Tidigare versioner av Element hade en säkerhetsbugg som kunde ge din identitetsserver (%1$s) tillgång till ditt konto. Om du litar på %2$s så kan du ignorera detta; annars bör du logga ut och logga in igen.
-\n
-\nLäs mer detaljer här:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="settings_sdk_version">Matrix-SDK-version</string>
     <string name="settings_security_and_privacy">Säkerhet och sekretess</string>

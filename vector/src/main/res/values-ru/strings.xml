@@ -196,7 +196,6 @@
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этой сессии и отправлять публичный ключ вашему серверу. Это необходимо только один раз; извините за неудобства.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Чтение списка вступивших</string>
@@ -648,10 +647,6 @@
     <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
     <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
-
-    <string name="e2e_enabling_on_app_update">Element теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
-
-Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
@@ -1571,12 +1566,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Произошла ошибка при получении информации о доверии</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Произошла ошибка при получении ключей резервного копирования данных</string>
 
-    <string name="alpha_disclaimer_title">Добро пожаловать в бету!</string>
-    <string name="alpha_disclaimer_content_line_1">Пока Element находится в ранней стадии разработки, некоторые функции могут отсутствовать и вы можете столкнуться с ошибками.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Последний список функций всегда находится в %1$s, и если вы найдете ошибку, пожалуйста, отправьте отчет в верхнее левое меню Home, и мы исправим их так быстро, как только сможем.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Описание магазина</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Если вы обнаружите ошибку, пожалуйста, отправьте сообщение в верхнее левое меню Home, и мы исправим ее так быстро, как только сможем.</string>
-
     <string name="import_e2e_keys_from_file">Импорт ключей e2e из файла \"%1$s\".</string>
 
     <string name="settings_sdk_version">Версия Matrix SDK</string>
@@ -1656,11 +1645,6 @@
     <string name="decline">Отклонить</string>
 
     <string name="widget_integration_review_terms">Для продолжения Вам необходимо принять Условия данного сервиса.</string>
-
-    <string name="security_warning_identity_server">В предыдущих версиях Element была ошибка безопасности, которая могла дать вашему серверу идентификации (%1$s) доступ к вашей учетной записи. Если вы доверяете %2$s, вы можете проигнорировать это; в противном случае, пожалуйста, выйдите из системы и войдите снова.
-\n
-\nПодробнее об этом читайте здесь:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="settings_push_rules_no_rules">Пуш-правила не определены</string>
     <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>

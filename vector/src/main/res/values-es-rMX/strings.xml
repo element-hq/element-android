@@ -191,9 +191,6 @@
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública a el servidor.
-Esto sólo ocurre una vez.
-Disculpe por la inconveniencia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -635,10 +632,6 @@ Disculpe por la inconveniencia.</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
-
-    <string name="e2e_enabling_on_app_update">Element ahora cuenta con cifrado de extremo-a-extremo pero necesitas reingresar tu cuenta para encenderlo.
-
-Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>

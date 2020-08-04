@@ -192,7 +192,6 @@
     <string name="login_error_login_email_not_yet">O link no email ainda não foi clicado</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Você precisa fazer login novamente para gerar as chaves de criptografia ponta-a-ponta para este dispositivo e submeter a chave pública para o seu servidor de base ("Home Server").\nVocê só terá que fazer isso uma única vez.\nPedimos desculpas pela inconveniência.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Ler lista de recipientes</string>
@@ -650,8 +649,6 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="encryption_information_verify_device_warning">Para confirmar que este dispositivo é confiável, entre em contato com o seu proprietário usando outros meios (por exemplo pessoalmente ou através de uma chamada telefônica) e pergunte a ele se a chave que ele está vendo na sua configuração de usuário para este dispositivo é igual à chave abaixo:</string>
     <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo. Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear. No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
-
-    <string name="e2e_enabling_on_app_update">Element agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contém dispositivos desconhecidos</string>

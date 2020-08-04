@@ -206,7 +206,6 @@
     <string name="login_error_login_email_not_yet">Ви не перейшли за посиланням в електронному листі</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам треба знов ся залогувати для створення E2E-ключів для цього пристрою та надсилання їх на сервер.\nЦе одноразова дія.\nВибачте за незручності.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Перегляд списку вступників</string>
@@ -676,8 +675,6 @@
 Якщо ні, хтось втрутився в цей пристрій, і Вам імовірно слід його заблокувати.
 У майбутньому цей процес верифікації стане більш складним.</string>
     <string name="encryption_information_verify_key_match">Я підтверджую, що ключі співпадають</string>
-
-    <string name="e2e_enabling_on_app_update">Тепер Element підтримує наскрізне шифрування, але вам треба залогуватися знову, щоб його увімкнути.\n\nМожете зробити це зараз або пізніше у налаштуваннях застосунку.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Кімната містить невідомі пристрої</string>

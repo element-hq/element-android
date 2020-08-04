@@ -201,7 +201,6 @@
     <string name="login_error_login_email_not_yet">Sähköpostiisi lähetetty linkki, jota ei ole vielä klikattu</string> <!-- ??? -->
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Sinun pitää kirjautua uudelleen, luodaksesi salausavaimet tälle laitteelle.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lukukuittaukset</string>
@@ -660,9 +659,6 @@
     <string name="encryption_information_verify_device_warning2">Jos avain täsmää, paina painiketta \"vahvista\". Jos avain ei täsmää, se tarkoittaa, että jokin tuntematon osapuoli lukee keskustelujanne. Tässä tapauksessa paina painiketta \"kiellä\". 
 \nTulevaisuudessa tämä varmennusprosessi tulee olemaan hienostuneempi.</string>
     <string name="encryption_information_verify_key_match">Vahvistan, että avaimet täsmäävät</string>
-
-    <string name="e2e_enabling_on_app_update">Element tukee päästä päähän -salausta. Kirjaudu sisään uudelleen ottaaksesi salaus käyttöön.
-\nVoit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia istuntoja</string>
@@ -1484,8 +1480,6 @@ Haluatko lisätä paketteja?</string>
 \nViimeksi nähty: %2$s
 \nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
 
-    <string name="alpha_disclaimer_title">Tervetuloa beetaan!</string>
-    <string name="alpha_disclaimer_content_line_1">Element on varhaisessa kehitysvaiheessa, mistä johtuen osa ominaisuuksista puuttuu ja saatat kohdata virheitä.</string>
     <string name="settings_sdk_version">Matrix SDK:n versio</string>
     <string name="settings_other_third_party_notices">Muut kolmansien osapuolten huomautukset</string>
     <string name="quick_reactions">Pikareaktiot</string>
@@ -1564,7 +1558,6 @@ Haluatko lisätä paketteja?</string>
     <string name="create_room_directory_title">Huoneluettelo</string>
     <string name="create_room_directory_description">Julkaise tämä huone huoneluettelossa</string>
 
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvauksessa</string>
     <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
     <string name="disconnect">Katkaise yhteys</string>
     <string name="decline">Kieltäydy</string>
@@ -1735,14 +1728,8 @@ Haluatko lisätä paketteja?</string>
 
     <string name="sas_error_m_unknown_method">Laitteet eivät pysty sopimaan avaimista, tiivisteestä, MAC:sta tai SAS-metodista</string>
     <string name="sas_error_m_mismatched_commitment">Tiivisteet eivät täsmänneet</string>
-    <string name="security_warning_identity_server">Vanhoissa Elementin versioissa oli tietoturvaongelma, joka saattoi antaa identiteettipalvelimelle(%1$s) pääsyn tunnukseesi. Jos luotat kohteeseen %2$s, voit jättää tämän huomiotta. Muussa tapauksessa, kirjaudu ulos ja kirjaudu uudelleen Elementiin.
-\n
-\nLue lisää:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="action_change">Muuta</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Viimeisin ominaisuuslista on aina %1$s. Jos löydät virheitä, lähetäthän virheraportin painikkeella, joka löytyy ylhäällä ja vasemmalla olevasta kotivalikosta, niin korjaamme vian niin nopeasti kuin pystymme.</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Jos löytät virheitä, lähetäthän virheraportin ylhäältä ja vasemmalta löytyvästä kotivalikosta, niin korjaamme ongelman niin nopeasti kuin vain pystymme.</string>
 
     <string name="import_e2e_keys_from_file">Tuo osapuolten välisen salauksen avaimet tiedostosta ”%1$s”.</string>
 

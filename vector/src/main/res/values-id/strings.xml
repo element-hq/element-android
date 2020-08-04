@@ -224,10 +224,6 @@ Anda telah dikeluarkan dari semua perangkat dan tidak lagi menerima pemberitahua
     <string name="login_error_limit_exceeded">Pengajuan yang dikirimkan terlalu banyak</string>
     <string name="login_error_login_email_not_yet">Tautan email masih belum diklik</string>
 
-    <string name="e2e_need_log_in_again">Anda perlu masuk kembali untuk menghasilkan kunci enkripsi ujung-ke-ujung untuk perangkat ini dan menyerahkan kunci umum ke server awal Anda.
-Proses ini hanya dilakukan sekali saja.
-Mohon maaf untuk ketidaknyamannya.</string>
-
     <string name="read_receipts_list">Baca Daftar Penerimaan</string>
 
     <string name="compression_options">"Kirim sebagai "</string>
@@ -713,9 +709,6 @@ Pembacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan
     <string name="encryption_information_verify_device_warning2">Apabila cocok, tekan tombol verifikasi berikut.
 Apabila tidak, seseorang sedang menyadap perangkat ini dan mungkin perlu diblokir.
 Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
-    <string name="e2e_enabling_on_app_update">Element sekarang mendukung enkripsi ujung-ke-ujung tapi Anda perlu masuk kembali untuk mengaktifkannya.
-
-Ini bisa Anda lakukan sekarang atau nani dari pengaturan aplikasi.</string>
 
     <string name="unknown_devices_alert_message">Ruang ini terisi oleh perangkat tak dikenal yang belum diverifikasi.
 Ini berarti tidak ada jaminan pengguna perangkat tersebut sesuai dengan klaim mereka.

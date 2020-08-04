@@ -221,9 +221,6 @@
     <string name="login_error_login_email_not_yet">L\'enllaç del correu electrònic que encara no heu fet clic</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al vostre servidor base.
-\nAixò només s\'ha de fer un cop.
-\nDisculpeu les molèsties.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
@@ -706,8 +703,6 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="encryption_information_verify_device_warning">Per tal de verificar que es pot confiar amb aquest dispositiu, contacteu amb el seu propietari per algun altre mitjà (per exemple en persona o trucant-lo) i pregunteu-li si la clau que veu a les seves preferències d\'usuari coincideix amb la clau següent:</string>
     <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
-
-    <string name="e2e_enabling_on_app_update">El Element ara permet l\'ús d\'encriptació d\'extrem a extrem però us heu de tronar a connectar per tal d\'activar-la.\n\nHo podeu fer ara o més tard des de les preferències de l\'aplicació.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala conté dispositius desconeguts</string>
@@ -1523,12 +1518,6 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
 
     <string name="keys_backup_unable_to_get_trust_info">Hi ha hagut un error rebent informació de confança</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Hi ha hagut un error rebent dades de la còpia de seguretat de les claus</string>
-
-    <string name="alpha_disclaimer_title">Benvinguts a la beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Element estigui en les primeres etapes de desenvolupament, faltaran algunes funcions i podríeu experimentar alguns errors.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">L\'última llista de característiques està sempre a %1$s, i si trobeu errors si us plau reporteu informe des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripció de la Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si trobeu errors si us plau envieu un informe d\'errors des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
 
     <string name="import_e2e_keys_from_file">Importar claus e2e des del fitxer \"%1$s\".</string>
 

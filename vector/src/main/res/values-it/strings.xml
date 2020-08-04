@@ -198,9 +198,6 @@
     <string name="login_error_login_email_not_yet">Il link nella mail non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questa sessione ed inviare la chiave pubblica all\'homeserver 
-\nQuesto inconveniente non capiterà più. 
-\nScusa per il disguido.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
@@ -671,10 +668,6 @@
     <string name="encryption_information_verify_device_warning">Conferma confrontando la seguente con le impostazioni utente della tua altra sessione:</string>
     <string name="encryption_information_verify_device_warning2">Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
-
-    <string name="e2e_enabling_on_app_update">Element supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
-\n
-\nPuoi farlo ora, o più tardi, dalle impostazioni dell\'applicazione.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La stanza contiene sessioni sconosciute</string>
@@ -1532,12 +1525,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati dal Backup delle chiavi</string>
 
-    <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Element si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">L\'elenco di funzioni più recenti è sempre nel %1$s, se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-
     <string name="import_e2e_keys_from_file">Importa le chiavi di crittografia dal file \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versione SDK Matrix</string>
@@ -1622,11 +1609,6 @@
     <string name="decline">Rifiuta</string>
 
     <string name="widget_integration_review_terms">Per continuare devi accettare i termini di servizio.</string>
-
-    <string name="security_warning_identity_server">Alcune precedenti versioni di Element contenevano un errore di sicurezza che permetteva al tuo Identity Server (%1$s) di accedere al tuo account. Se ti fidi di %2$s, puoi ignorare questo avviso; altrimenti disconnettiti e riaccedi di nuovo.
-\n 
-\nLeggi maggiori dettagli qui: 
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Termini di servizio</string>
     <string name="review_terms">Leggi i termini di servizio</string>

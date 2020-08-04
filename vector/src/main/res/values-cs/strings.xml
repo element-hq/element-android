@@ -246,10 +246,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="login_error_not_json">Neobsahuje platný JSON</string>
     <string name="login_error_login_email_not_yet">E-mailový odkaz, na který ještě nebylo klepnuto</string>
 
-    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč vašemu homeserveru.
-\nToto je nutné pouze jednou. 
-\nOmlouváme se za způsobené nepříjemnosti.</string>
-
     <string name="e2e_re_request_encryption_key">Znovu požádat o šifrovací klíče z vašich ostatních relací.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
@@ -1076,9 +1072,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="encryption_information_verify_device_warning">Potvrďte porovnáním následujícího s nastavením uživatele ve svých dalších relacích:</string>
     <string name="encryption_information_verify_device_warning2">Pokud se neshodují, zabezpečení Vaší komunikace může být ohroženo.</string>
-    <string name="e2e_enabling_on_app_update">Element nyní podporuje šifrování end-to-end, ale pro aktivaci se musíte se opět přihlásit.
-\n
-\nMůžete to provést nyní nebo později z aplikačních nastavení.</string>
 
     <string name="unknown_devices_alert_title">Místnost obsahuje neznámé relace</string>
     <string name="unknown_devices_alert_message">Tato místnost obsahuje neznámé relace, která nebyla ověřena.
@@ -1499,11 +1492,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
     <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
 
-    <string name="security_warning_identity_server">Předchozí verze Elementu měly bezpečnostní chybu, jež umožnila serveru pro identity (%1$s) přístup k Vašemu účtu. Pokud důvěřujete %2$s, můžete ignorovat; jinak se, prosím, odhlašte a znovu přihlašte.
-\n
-\nDetaily zde:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému homeserveru. Chcete se odhlásit\?</string>
 
     <string name="edit">Upravit</string>
@@ -1559,12 +1547,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="keys_backup_unable_to_get_trust_info">Při načítání důvěryhodnosti došlo k chybě</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Při načítání dat zálohy klíčů došlo k chybě</string>
-
-    <string name="alpha_disclaimer_title">Vítejte v betě!</string>
-    <string name="alpha_disclaimer_content_line_1">Protože Element je v raném vývoji, některé funkce mohou chybět a mohou se objevit i chyby.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Seznam nejnovějších funkcí je vždy na %1$s a pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Popis v Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
 
     <string name="settings_sdk_version">Verze Matrix SDK</string>
     <string name="settings_other_third_party_notices">Jiná oznámení třetích stran</string>

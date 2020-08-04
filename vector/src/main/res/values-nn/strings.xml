@@ -744,8 +744,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne verifikasjonsprosessen bli meir forbetra.</string>
     <string name="encryption_information_verify_key_match">Eg stadfestar at nøkklane er like</string>
 
-    <string name="e2e_enabling_on_app_update">Element støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
-
     <string name="unknown_devices_alert_title">Rommet inneheld ukjende sesjonar</string>
     <string name="unknown_devices_alert_message">Rommet inneheld ukjende sesjonar som ikkje har blitt verifiserte. Det er med andre ord ingen garanti for at sesjonane høyrer til brukarane dei hevdar. Vi tilråder deg å gå gjennom verifikasjonsprosessen for kvar eining før du går vidare, men du kan sende meldingen på nytt utan å godkjenne viss du vil. 
 \n
@@ -861,10 +859,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="reason_colon">Grunnlag: %1$s</string>
     <string name="rejoin">Vert med att</string>
     <string name="forget_room">Gløym rommet</string>
-
-    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-krypteringsnnøkklar til denne sesjonen og senda den offentlege nøkkelen (public key) til heimetenaren. 
-\nDette trengst berre éin gong. 
-\nBeklagar ulempa.</string>
 
     <string name="directory_server_native_rooms">Alle %s-rom på Matrix</string>
 

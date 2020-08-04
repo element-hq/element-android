@@ -578,7 +578,6 @@ Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
 
     <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
-    <string name="e2e_need_log_in_again">Należy się ponownie zalogować w celu wygenerowania kluczy szyfrowania end-to-end dla tej sesji i wysłania klucza publicznego do Twojego serwera domowego. Jest to jednorazowe działanie. Przepraszamy za trudności.</string>
 
     <string name="groups_list">Lista grup</string>
 
@@ -786,9 +785,6 @@ Uwaga: ten plik może zostać usunięty, jeśli aplikacja zostanie odinstalowana
     <string name="encryption_information_unverify">Usuń weryfikację</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
-    <string name="e2e_enabling_on_app_update">Element obsługuje już szyfrowanie end-to-end (E2E), ale musisz zalogować się ponownie, aby je włączyć.
-
-Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
 
     <string name="unknown_devices_alert_message">Ten pokój zawiera nieznane sesje, które nie zostały zweryfikowane. Oznacza to brak gwarancji, że sesje należą do użytkowników do których twierdzą, że należą. Przed kontynuowaniem, zalecamy wykonanie procesu weryfikacji każdego urządzenia, ale możesz ponownie wysłać wiadomość bez weryfikacji, jeśli wolisz. Nieznane sesje:</string>
 
@@ -1291,7 +1287,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="error_no_network">Brak sieci. Sprawdź swoje połączenie z Internetem.</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="room_preview_no_preview">Tego pokoju nie można podejrzeć</string>
-    <string name="alpha_disclaimer_title">Witaj w programie beta!</string>
     <string name="settings_security_and_privacy">Bezpieczeństwo i Prywatność</string>
     <string name="settings_expert">Ekspert</string>
     <string name="settings_push_rules_no_rules">Brak reguł push</string>
@@ -1631,10 +1626,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="sas_error_m_mismatched_sas">SAS nie zgadza się</string>
     <string name="sas_error_m_unexpected_message">Sesja otrzymała niespodziewaną wiadomość</string>
     <string name="sas_error_m_invalid_message">Otrzymano nieprawidłową wiadomość</string>
-    <string name="security_warning_identity_server">Poprzednie wersje Element posiadały błąd bezpieczeństwa, który umożliwiał Twojemu serwerowi tożsamości (%1$s) dostęp do Twojego konta. Jeżeli ufasz %2$s, możesz to zignorować; w przeciwnym wypadku wyloguj się i zaloguj ponownie.
-\n
-\nInformacje o szczegółach tutaj:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="room_list_empty">Dołącz do pokoju, aby rozpocząć korzystanie z aplikacji.</string>
     <string name="room_list_catchup_welcome_body">Zapoznaj się z nieprzeczytanymi wiadomościami tutaj</string>
@@ -1646,11 +1637,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
-
-    <string name="alpha_disclaimer_content_line_1">Jako że Element jest we wczesnej fazie rozwoju, niektóre funkcje mogą być niedostępne i możesz doświadczyć błędów.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Najnowsza lista funkcji jest zawsze na %1$s, i jeżeli znajdziesz błąd, proszę wyślij raport w lewym górnym menu poprzez \"Ekran domowy\", postaramy załatać się go tak szybko, jak tylko się da.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis w Sklepie Play</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Jeżeli znajdziesz błędy, proszę wyślij raport za pomocą menu w lewym górnym rogu \"Ekranu domowego\", postaramy się je naprawić tak szybko, jak tylko się da.</string>
 
     <string name="import_e2e_keys_from_file">Importowanie kluczy E2E z pliku \"%1$s\".</string>
 

@@ -505,17 +505,10 @@
     <string name="encryption_information_block">列入黑名单</string>
     <string name="encryption_information_unblock">移出黑名单</string>
 
-    <string name="e2e_enabling_on_app_update">Element 目前支持端对端加密，但是您需要重新登录以启用它。
-
-您可以现在重新登录，也可以之后再从应用程序设置中选择开启。</string>
-
     <string name="ok">确认</string>
     <string name="redact">移除</string>
     <string name="send_bug_report_alert_message">您似乎沮丧地摇了摇手机。您想打开问题反馈界面吗？</string>
     <string name="send_files_in">发送至</string>
-    <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端对端加密密钥，并将公钥提交给您的主服务器。
-这只会发生一次。
-请谅解由此造成的不便。</string>
     <string name="read_receipts_list">已读标签清单</string>
     <string name="compression_options">发送为</string>
     <string name="permissions_rationale_msg_contacts">Element 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
@@ -1411,7 +1404,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="create_room_action_create">创建</string>
     <string name="create_room_name_hint">聊天室名称</string>
     <string name="create_room_directory_title">聊天室目录</string>
-    <string name="alpha_disclaimer_title">欢迎使用 测试版！</string>
     <string name="settings_sdk_version">Matrix SDK 版本</string>
     <string name="quick_reactions">快捷响应</string>
 

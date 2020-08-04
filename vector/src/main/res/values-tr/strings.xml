@@ -287,10 +287,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="login_error_user_in_use">Kullanıcı adı zaten kullanımda</string>
     <string name="login_error_login_email_not_yet">Eposta bağlantısına hala tıklanmadı</string>
 
-    <string name="e2e_need_log_in_again">Bu oturuma özel uçtan uca şifreleme anahtarı oluşturup, herkese açık anahtarı anamakineye yüklemek için giriş yapmanız gerekli. 
-\nBu bir kereye mahsus. 
-\nRahatsızlık için üzgünüz.</string>
-
     <string name="e2e_re_request_encryption_key">Diğer oturumlardan <u>şifreleme anahtarlarını tekrar iste</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Anahtar isteği gönderildi.</string>
@@ -961,10 +957,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="encryption_information_verify_device_warning2">Eğer uyuşursa aşağıdaki doğrulama tuşuna basın. Eğer uyuşmaz ise biri bu oturum engelliyor demektir bu durumda sen o kişi karalisteye eklemelisin. Gelecekte doğrulama işlemi daha gelişmiş olacak.</string>
     <string name="encryption_information_verify_key_match">Anahtarın uyuştuğunu doğruluyorum</string>
 
-    <string name="e2e_enabling_on_app_update">Element artık uçtan-uca şifrelemeyi destekliyor ancak etkinleştirmen için tekrar giriş yapman gerekli.
-\n 
-\nBunu şimdi ya da sonra uygulama ayarlarından yapabilirsin.</string>
-
     <string name="unknown_devices_alert_title">Oda bilinmeyen oturum barındırıyor</string>
     <string name="unknown_devices_alert_message">Bu oda doğrulanmamış bilinmeyen oturum barındırıyor. 
 \nBu oturumların kullanıcıların sahip olduğu cihaz olduklarının garantisi yok. 
@@ -1462,11 +1454,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="identity_server_not_defined">Herhangi bir kimlik sunucusu kullanmıyorsunuz</string>
     <string name="identity_server_not_defined_for_password_reset">Hiçbir kimlik sunucusu yapılandırılmamış, bu şifrenizi değiştirebilmeniz için gerekli.</string>
 
-    <string name="security_warning_identity_server">Element\'in önceki sürümlerinde, kimlik sunucunuzun (%1$s) hesabınıza erişebilmesini sağlayan bir güvenlik hatası vardı. %2$s sunucusuna güveniyorsanız, bunu göz ardı edebilirsiniz; aksi takdirde lütfen çıkış yapın ve tekrar giriş yapın.
-\n
-\nDaha fazla ayrıntıya buradan bakabilirsiniz:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Başka bir anasunucuya bağlanmaya çalışıyorsunuz gibi görünüyor. Çıkış yapmak ister misiniz\?</string>
 
     <string name="edit">Düzenle</string>
@@ -1523,8 +1510,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="keys_backup_unable_to_get_trust_info">Güven bilgisi alınırken hata oluştu</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Anahtar yedek verileri alınırken hata oluştu</string>
 
-    <string name="alpha_disclaimer_title">Betaya hoşgeldiniz!</string>
-    <string name="alpha_disclaimer_content_line_1">Element geliştirme sürecindeyken bazı özellikler eksik olabilir ve hatalar ile karşılaşabilirsiniz.</string>
     <string name="login_error_no_homeserver_found">Bu geçerli bir Matrix sunucu adresi değil</string>
     <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
     <string name="settings_add_3pid_flow_not_supported">Bunu Element mobil ile yapamazsınız</string>

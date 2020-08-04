@@ -581,7 +581,6 @@
     <string name="fab_menu_create_chat">Direktemeldinger</string>
 
     <string name="create_room_name_hint">Rommets navn</string>
-    <string name="alpha_disclaimer_title">Velkommen til betaen!</string>
     <string name="push_gateway_item_url">URL:</string>
     <string name="bottom_action_people_x">Direktemeldinger</string>
 

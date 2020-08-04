@@ -194,9 +194,6 @@
     <string name="login_error_login_email_not_yet">Der Link in der E-Mail wurde noch nicht geöffnet</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Du musst dich erneut anmelden, um Ende-zu-Ende-Verschlüsselungsschlüssel für diese Sitzung zu generieren und den öffentlichen Schlüssel an deinen Heimserver zu senden.
-\nDies ist einmalig.
-\nEntschuldige die Unannehmlichkeiten.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lesebestätigungsliste</string>
@@ -649,10 +646,6 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzer!n und bestätige:</string>
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
-
-    <string name="e2e_enabling_on_app_update">Element unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
-
-Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Raum enthält unbekannte Sitzungen</string>
@@ -1532,9 +1525,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_unable_to_get_trust_info">Beim Abrufen der Vertrauensinformationen ist ein Fehler aufgetreten</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
 
-    <string name="alpha_disclaimer_title">Willkommen in der Beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Während sich Element in der frühen Entwicklung befindet, fehlen möglicherweise einige Funktionen und es können Fehler auftreten.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store Beschreibung</string>
     <string name="settings_sdk_version">Matrix SDK Version</string>
     <string name="settings_other_third_party_notices">Sonstige Hinweise Dritter</string>
     <string name="navigate_to_room_when_already_in_the_room">Du siehst diesen Raum bereits!</string>
@@ -1583,8 +1573,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
 \n%s</string>
     <string name="sas_error_m_unknown_method">Die Sitzung kann sich nicht auf eine Schlüsselvereinbarung, eine Hash-, eine MAC- oder eine SAS-Methode einigen</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Die neueste Feature-Liste befindet sich immer in %1$s. Wenn du Fehler findest, sende uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden den Fehler so schnell wie möglich beheben.</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Wenn du Fehler findest, sende uns bitte einen Bericht im Menü oben links von der \"Startseite\". Wir werden diese so schnell wie möglich beheben.</string>
 
     <string name="import_e2e_keys_from_file">E2E-Schlüssel aus der Datei \"%1$s\" importieren.</string>
 
@@ -1712,11 +1700,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_widget_webview_access_camera">Kamera benutzen</string>
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
-
-    <string name="security_warning_identity_server">Frühere Versionen von Element hatten ein Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
-\n
-\nWeitere Details gibt es hier (Englisch):
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
     <string name="settings_discovery_manage">Verwalte deine Erkennungseinstellungen.</string>

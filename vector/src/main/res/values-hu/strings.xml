@@ -181,8 +181,6 @@ Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
     <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem kattintottak</string>
 
-    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez a munkamenethez és beküldeni a nyilvános kulcsot a Matrix szervernek. Ez egy egyszeri dolog. Elnézést a kellemetlenségért.</string>
-
     <string name="read_receipts_list">Lista azokról akik elolvasták</string>
 
     <string name="compression_options">Küldés mint</string>
@@ -593,10 +591,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="encryption_information_verify_device_warning">Hogy ellenőrizni lehessen, hogy ez a munkamenet megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:</string>
     <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt a munkamenetet és érdemes lenne tiltólistára tenni. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
     <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
-
-    <string name="e2e_enabling_on_app_update">Mostantól a Element támogatja a végtől végig titkosítást de előtte újra be kell jelentkezned, hogy bekapcsold.
-
-Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
 
     <string name="unknown_devices_alert_title">Szoba ismeretlen munkameneteket tartalmaz</string>
     <string name="unknown_devices_alert_message">Ez a szoba ismeretlen munkameneteket tartalmaz.
@@ -1480,12 +1474,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="keys_backup_unable_to_get_trust_info">A megbízhatósági információ beszerzésekor hiba történt</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">A kulcs mentés adatainak beszerzésekor hiba történt</string>
 
-    <string name="alpha_disclaimer_title">Üdv a béta verzióban!</string>
-    <string name="alpha_disclaimer_content_line_1">Amíg a Element újdonsült fejlesztés, néhány funkció hiányozhat és találkozhatsz hibákkal.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">A legfrissebb funkciók listáját itt találod: %1$s, és ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play áruház leírás</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
-
     <string name="import_e2e_keys_from_file">Végponttól végpontig titkosítás kulcsainak betöltése ebből a fájlból: \"%1$s\".</string>
 
     <string name="settings_sdk_version">Matrix SDK Verzió</string>
@@ -1569,11 +1557,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="decline">Elutasítás</string>
 
     <string name="widget_integration_review_terms">A továbblépéshez el kell fogadnod a Felhasználási feltételeket.</string>
-
-    <string name="security_warning_identity_server">A Element előző verziója egy biztonsági hibát tartalmazott ami az Azonosítási Szervernek (%1$s) hozzáférést adott a fiókodhoz. Ha megbízol a %2$s szerverben, akkor ezt figyelmen kívül hagyhatod különben jelentkezz ki és újra vissza.
-\n
-\nTovábbi információ itt:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Felhasználási feltételek</string>
     <string name="review_terms">Feltételek átnézése</string>

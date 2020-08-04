@@ -196,9 +196,6 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="login_error_login_email_not_yet">El enlace del correo electrónico que aún no se ha seguido</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Tienes que volver a iniciar sesión para generar claves de cifrado de extremo a extremo para esta sesión y enviar la clave pública a tu servidor doméstico. 
-\nSolo deberás hacer esto una vez. 
-\nDisculpa por las molestia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -659,10 +656,6 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_verify_device_warning">Para verificar que esta sesión es confiable, por favor contacta a su dueño por algún otro medio (ej. cara a cara o por teléfono) y pregúntale si la clave que ve en sus Ajustes de Usuario para esta sesión coincide con la clave a continuación:</string>
     <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando esta sesión y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
-
-    <string name="e2e_enabling_on_app_update">Element ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
-
-Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala contiene sesiones desconocidas</string>
@@ -1528,7 +1521,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
     <string name="room_list_catchup_empty_title">!Estás al día!</string>
-    <string name="alpha_disclaimer_content_line_1">Mientras Element esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
     <string name="preference_voice_and_video">Voz &amp; Video</string>
@@ -1574,7 +1566,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
-    <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
@@ -1628,16 +1619,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="identity_server_not_defined">No estás usando ningún Servidor de Identidad</string>
     <string name="identity_server_not_defined_for_password_reset">No hay ningún Servidor de Identidad configurado, esto es requerido para restablecer tu contraseña.</string>
 
-    <string name="security_warning_identity_server">Las versiones anteriores de Element tenían un error de seguridad que podía dar a su Servidor de Identidad (%1$s) acceso a su cuenta. Si confías en %2$s, puedes ignorar esto; de lo contrario, por favor cierra la sesión y vuelve a entrar.
-\n
-\nLee más detalles aquí:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Parece que estás intentando conectarte a otro servidor doméstico. ¿Quieres cerrar sesión\?</string>
-
-    <string name="alpha_disclaimer_content_line_2_gplay">La última lista de características está siempre en %1$s, y si encuentras errores por favor envía un informe des del menú superior izquierdo de Inicio, y los arreglaremos tan rápido como podamos.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripción de Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si encuentras errores por favor envía un informe de errores des del menú superior izquierdo del menú de Inicio. Resolveremos el error tan rápido como podamos.</string>
 
     <string name="import_e2e_keys_from_file">Importar llaves E2E des del fichero \"%1$s\".</string>
 

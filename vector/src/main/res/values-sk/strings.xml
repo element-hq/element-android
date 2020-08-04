@@ -194,10 +194,6 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="login_error_user_in_use">Toto používateľské meno sa už používa</string>
     <string name="login_error_login_email_not_yet">Zatiaľ ste neklikli na odkaz zaslaný emailom</string>
 
-    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre túto reláciu a odošle zodpovedajúci verejný kľúč domovskému serveru.
-\nToto je potrebné urobiť len raz. 
-\nOspravedlňujeme sa za spôsobené ťažkosti.</string>
-
     <string name="read_receipts_list">Zoznam potvrdení o prečítaní</string>
 
     <string name="compression_options">Odoslať ako</string>
@@ -634,10 +630,6 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_information_verify_device_warning">Ak chcete overiť, či táto relácia je skutočne dôveryhodná, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má zobrazený v Nastaveniach, sa zhoduje s kľúčom zobrazeným nižšie:</string>
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
-
-    <string name="e2e_enabling_on_app_update">Element od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
-
-Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia.</string>
 
     <string name="unknown_devices_alert_title">V miestnosti sú neznáme relácie</string>
     <string name="unknown_devices_alert_message">V tejto miestnosti sa nachádzajú neznáme relácie, ktoré neboli overené.

@@ -467,10 +467,6 @@
     <string name="login_error_user_in_use">Ce nom d’utilisateur est déjà utilisé</string>
     <string name="login_error_login_email_not_yet">Vous n’avez pas encore cliqué sur le lien dans l’e-mail</string>
 
-    <string name="e2e_need_log_in_again">Vous devez vous identifier à nouveau pour générer des clés de chiffrement de bout en bout pour cette session et envoyer la clé publique à votre serveur d’accueil.
-\nCeci ne se produira qu’une fois.
-\nVeuillez nous excuser pour ce désagrément.</string>
-
     <string name="attachment_cancel_upload">Annuler l’envoi ?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$d min %2$d s</string>
@@ -605,10 +601,6 @@ Attention : ce fichier peut être supprimé si l’application est désinstallé
     <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre session :</string>
     <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
-
-    <string name="e2e_enabling_on_app_update">Element prend désormais en charge le chiffrement de bout en bout, mais vous devez vous reconnecter pour l’activer.
-
-Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’application.</string>
 
     <string name="unknown_devices_alert_title">Le salon contient des sessions inconnues</string>
     <string name="unknown_devices_alert_message">Ce salon contient des sessions inconnues, qui n’ont pas été vérifiées.
@@ -1486,12 +1478,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
 
-    <string name="alpha_disclaimer_title">Bienvenue à la bêta !</string>
-    <string name="alpha_disclaimer_content_line_1">Comme Element est au début de son développement, il se peut que certaines fonctionnalités soient manquantes et que vous rencontriez quelques anomalies.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">La dernière liste de fonctionnalités est toujours dans la %1$s, et si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">description du Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
-
     <string name="import_e2e_keys_from_file">Importer les clés de chiffrement depuis le fichier « %1$s ».</string>
 
     <string name="settings_sdk_version">Version du SDK de Matrix</string>
@@ -1575,11 +1561,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="decline">Refuser</string>
 
     <string name="widget_integration_review_terms">Pour continuer, vous devez accepter les conditions de ce service.</string>
-
-    <string name="security_warning_identity_server">Les versions précédentes de Element avaient un problème de sécurité qui pouvait permettre à votre serveur d’identité (%1$s) d’accéder à votre compte. Si vous faites confiance à %2$s, vous pouvez ignorer cela ; sinon déconnectez-vous et reconnectez-vous.
-\n
-\nVous trouverez plus de détails ici :
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Conditions de service</string>
     <string name="review_terms">Examiner les conditions</string>

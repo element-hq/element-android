@@ -264,10 +264,6 @@
     <string name="login_error_user_in_use">이 사용자 이름은 이미 사용 중입니다</string>
     <string name="login_error_login_email_not_yet">이메일 링크를 아직 클릭하지 않았습니다</string>
 
-    <string name="e2e_need_log_in_again">이 기기를 위한 종단간 암호화 키를 생성하고 공개 키를 홈서버에 제출하려면 다시 로그인해야 합니다.
-\n한 번이면 됩니다.
-\n불편을 드려 죄송합니다.</string>
-
     <string name="e2e_re_request_encryption_key">다른 기기에서 온 <u>다시 요청된 암호 키</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">키 요청을 보냈습니다.</string>
@@ -944,10 +940,6 @@
     <string name="encryption_information_verify_device_warning2">그것이 맞다면, 아래의 확인 버튼을 누르세요. 맞지 않다면, 다른 사람이 이 기기를 가로채고 있는 것이고 블랙리스트에 올려야 합니다. 앞으로 이 확인 절차는 더 정교해질 것입니다.</string>
     <string name="encryption_information_verify_key_match">키가 맞다는 것은 확인합니다</string>
 
-    <string name="e2e_enabling_on_app_update">Element은 이제 종단간 암호화를 지원하지만 활성화하려면 다시 로그인해야 합니다.
-\n
-\n지금 바로 하거나 나중에 애플리케이션 설정에서 할 수 있습니다.</string>
-
     <string name="unknown_devices_alert_title">알 수 없는 기기가 있는 방</string>
     <string name="unknown_devices_alert_message">이 방에는 확인되지 않은 알 수 없는 기기가 있습니다. 
 \n즉, 사용자에 속해 있다고 주장하는 기기라는 보장이 없습니다. 
@@ -1415,12 +1407,6 @@
     <string name="keys_backup_unable_to_get_trust_info">신뢰 정보를 얻는 과정에서 오류가 발생했습니다</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">키 백업 데이터를 얻는 과정에서 오류가 발생했습니다</string>
 
-    <string name="alpha_disclaimer_title">베타 버전에 온 것을 환영합니다!</string>
-    <string name="alpha_disclaimer_content_line_1">ElementX가 개발 중에 있기에, 일부 기능이 부족하고 버그가 나올 수 있습니다.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">최신 기능 목록은 항상 %1$s에 있고, 버그를 발견했다면 홈의 왼쪽 위 메뉴에서 신고해주세요, 그러면 가능한 한 빨리 고치겠습니다.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play 스토어 설명</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">버그를 발견했다면 홈의 왼쪽 위 메뉴에서 신고해주세요, 그러면 가능한 한 빨리 고치겠습니다.</string>
-
     <string name="import_e2e_keys_from_file">파일 \"%1$s\"에서 종단간 암호화 키 가져옴.</string>
 
     <string name="settings_sdk_version">Matrix SDK 버전</string>
@@ -1501,11 +1487,6 @@
     <string name="decline">끊기</string>
 
     <string name="widget_integration_review_terms">계속 하려면 이 서비스 약관에 동의해야 합니다.</string>
-
-    <string name="security_warning_identity_server">Element의 이전 버전은 보안 버그로 ID 서버 (%1$s)가 계정으로 접근할 수 있었습니다. %2$s을(를) 신뢰하면 이것을 무시하고, 그렇지 않다면 로그아웃한 후 다시 로그인하세요.
-\n
-\n자세한 설명은 여기서 읽으세요:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">서비스 약관</string>
     <string name="review_terms">조건 검토</string>

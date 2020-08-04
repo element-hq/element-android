@@ -773,10 +773,6 @@
     <string name="room_settings_addresses_e2e_encryption_warning">Aktivizo fshehtëzim 
 \n(kujdes: s’mund të çaktivizohet më!)</string>
 
-    <string name="e2e_enabling_on_app_update">Element tani mbulon fshehtëzim skaj-më-skaj, por lypset të ribëni hyrjen që ta aktivizoni.
-\n
-\nMund ta bëni tani ose më vonë, që prej rregullimeve të aplikacionit.</string>
-
     <string name="unknown_devices_alert_message">Kjo dhomë përmban sesione të panjohur që s’janë verifikuar.
 \nKjo do të thotë se nuk ka garanci se sesionet u përkasin përdoruesve që pretendojnë se u përkasin.
 \nPërpara se të vazhdoni, këshillojmë që të kaloni në proces verifikimi çdo sesion, por mund të ridërgoni mesazhin pa verifikuar gjë, nëse parapëlqeni kështu.
@@ -935,9 +931,6 @@
     <string name="resource_limit_soft_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="resource_limit_soft_mau"> Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="send_bug_report_logs_description">Që të mund të diagnostikohen probleme, regjistra prej këtij klienti do të dërgohen tok me këtë njoftim të metash. Ky njoftim të metash, përfshi regjistrat dhe foton e ekranit, nuk do të jenë të dukshëm publikisht. Nëse do të parapëlqenit të dërgohej vetëm teksti më sipër, ju lutemi, hiqjani shenjën kutizës:</string>
-    <string name="e2e_need_log_in_again">Që të prodhohen kyçe fshehtëzimi skaj-më-skaj për këtë sesion, lypset të ribëni hyrjen dhe të parashtroni kyçin publik te shërbyesi juaj Home.
-\nKjo duhet vetëm një herë.
-\nNa ndjeni për belanë.</string>
 
     <string name="ssl_cert_not_trust">Kjo mund të ishte shenjë se dikush po përgjon me dashakeqësi trafikun tuaj, ose se telefoni juaj nuk i beson dëshmisë së furnizuar nga shërbyesi i largët.</string>
     <string name="ssl_cert_new_account_expl">Nëse përgjegjësi i shërbyesit ka thënë se kjo është e pritshme, sigurohuni që shenjat e gishtave më poshtë përputhen me shenjat e gishtave të furnizuara prej tyre.</string>
@@ -1443,12 +1436,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
 
-    <string name="alpha_disclaimer_title">Mirë se vini në beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Teksa Element është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Lista e veçorive më të reja gjendet te %1$s, dhe nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Përshkrim në Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
-
     <string name="import_e2e_keys_from_file">Importo kyçe e2e prej kartelës \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versioni Matrix SDK</string>
@@ -1528,11 +1515,6 @@
     <string name="decline">Hidhe poshtw</string>
 
     <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
-
-    <string name="security_warning_identity_server">Versione të dikurshëm të Element-it përmbanin një të metë sigurie, e cila mund t’i lejonte Shërbyesit tuaj të Identiteteve (%1$s) hyrje në llogarinë tuaj. Nëse i besoni %2$s, mund ta shpërfillni këtë sinjalizim; përndryshe dilni nga llogaria dhe ribëni hyrjen.
-\n
-\nLexoni më tepër hollësi këtu:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Kushte Shërbimi</string>
     <string name="review_terms">Shqyrtoni Kushtet</string>

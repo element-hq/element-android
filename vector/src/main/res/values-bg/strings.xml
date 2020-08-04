@@ -272,10 +272,6 @@
     <string name="login_error_user_in_use">Това потребителско име е вече заето</string>
     <string name="login_error_login_email_not_yet">Все още не сте кликнали върху връзката в имейла</string>
 
-    <string name="e2e_need_log_in_again">Трябва да влезете обратно в профила си, за да се създадат ключове за шифроване от край до край за това устройство и да се изпрати публичния ключ към Home сървъра.
-Това е еднократно.
-Извинете за неудобството.</string>
-
     <string name="read_receipts_list">Списък с потвърждения за прочитане</string>
 
     <string name="groups_list">Списък с групи</string>
@@ -621,10 +617,6 @@
     <string name="encryption_information_verify_device_warning">За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който вижда в настройките на потребителя за това устройство, съвпада с ключа по-долу:</string>
     <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък. В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
-
-    <string name="e2e_enabling_on_app_update">Element поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
-
-Може да го направите сега или по-късно от настройките на приложението.</string>
 
     <string name="unknown_devices_alert_title">Стаята съдържа непознати устройства</string>
     <string name="unknown_devices_alert_message">Тази стая съдържа непознати устройства, който не са били потвърдени.
@@ -1475,11 +1467,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
-    <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
-    <string name="alpha_disclaimer_content_line_1">Докато Element е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описанието</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
-
     <string name="import_e2e_keys_from_file">Импортирай e2e ключове от файл \"%1$s\".</string>
 
     <string name="settings_sdk_version">Matrix SDK версия</string>
@@ -1493,7 +1480,6 @@
     <string name="settings_expert">Експертни</string>
     <string name="settings_push_rules">Правила за уведомление</string>
     <string name="settings_push_rules_no_rules">Не са дефинирани правила за уведомление</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Списъкът с последни функции винаги е в %1$s. Ако намерите бъг, изпратете доклад за грешка от менюто горе в ляво, и ще го поправим възможно най-скоро.</string>
     <string name="settings_other_third_party_notices">Други известия</string>
     <string name="settings_push_gateway_no_pushers">Не са регистрирани адреси за push уведомления</string>
 
@@ -1564,11 +1550,6 @@
     <string name="decline">Откажи</string>
 
     <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
-
-    <string name="security_warning_identity_server">Предишни версии на Element имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
-\n
-\nНаучете повече подробности тук:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Условия за ползване</string>
     <string name="review_terms">Прегледай условията</string>

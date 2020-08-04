@@ -196,9 +196,6 @@
     <string name="login_error_login_email_not_yet">Er is nog niet op de koppeling in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">U moet zich opnieuw aanmelden om de sleutels voor eind-tot-eind-versleuteling voor deze sessie te genereren, en om de publieke sleutel naar uw thuisserver te sturen. 
-\nDit is eenmalig. 
-\nExcuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Leesbevestigingslijst</string>
@@ -658,10 +655,6 @@
     <string name="encryption_information_verify_device_warning">Om te verifiëren dat deze sessie vertrouwd kan worden, contacteert u de eigenaar via een andere methode (bv. persoonlijk of via een telefoontje) en vraagt u hem/haar of de sleutel die hij/zij ziet in zijn/haar Gebruikersinstellingen van deze sessie overeenkomt met de sleutel hieronder:</string>
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, drukt u op de knop ‘Verifiëren’ hieronder. Als het niet overeenkomt, dan onderschept iemand anders deze sessie en zou u het beter blokkeren. In de toekomst zal dit verificatieproces verbeterd worden.</string>
     <string name="encryption_information_verify_key_match">Ik verifieer dat de sleutels overeenkomen</string>
-
-    <string name="e2e_enabling_on_app_update">Element ondersteunt nu eind-tot-eind-versleuteling, maar u moet zich opnieuw aanmelden om het in te schakelen.
-\n
-\nU kunt dit nu of later doen vanuit de app-instellingen.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Dit gesprek bevat onbekende sessies</string>
@@ -1573,11 +1566,6 @@
 
     <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
-
-    <string name="security_warning_identity_server">Vorige versies van Element hadden een veiligheidsfout die er voor kon zorgen dat je Identiteits Server (%1$s) toegang tot je account had. Indien je %2$s vertrouwt, dan kun je dit negeren; anders log je uit en weer in.
-\n
-\nLees meer details hier:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="error_user_already_logged_in">Het lijkt er op dat je probeert verbinding te maken met een andere thuisserver. Wil je uitloggen\?</string>
 

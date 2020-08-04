@@ -245,7 +245,6 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="room_jump_to_first_unread">Jauzi irakurri gabeko lehen mezura.</string>
 
     <string name="room_preview_invitation_format">%s erabiltzaileak gela honetara elkartzera gonbidatu zaitu</string>
-    <string name="e2e_need_log_in_again">Berriro hasi behar duzu saioa muturretik muturrerako zifratzerako saio honentzako gakoak sortzeko eta gako publikoa zure hasiera zerbitzarira bidali. Hau behin bakarrik egin behar duzu. Barkatu eragozpenak.</string>
 
     <string name="permissions_rationale_msg_storage">Elementek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
 
@@ -608,10 +607,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="encryption_information_verify_device_warning">Saio hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien saio honetarako erabiltzaile-ezarpenetan ikusten duen gakoa hemen beheko bera den:</string>
     <string name="encryption_information_verify_device_warning2">Bat badator, sakatu beheko egiaztatu botoia. Ez badator bat, beste inor saioa atzematen dago eta zerrenda beltzean sartu beharko zenuke. Etorkizunean egiaztaketa metodoa hobetuko da.</string>
     <string name="encryption_information_verify_key_match">Gakoak bat datozela egiaztatu dut</string>
-
-    <string name="e2e_enabling_on_app_update">Elementek orain muturretik muturrerako zifratzea onartzen du baina berriro hasi behar duzu saioa hau gaitzeko.
-
-Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
 
     <string name="unknown_devices_alert_title">Gelan saio ezezagunak daude</string>
     <string name="unknown_devices_alert_message">Gela honetan egiaztatu gabeko saio ezezagunak daude. 
@@ -1477,12 +1472,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
-    <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
-    <string name="alpha_disclaimer_content_line_1">Element oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
-
     <string name="import_e2e_keys_from_file">"Inportatu e2e gakoak \"%1$s\"  fitxategitik."</string>
 
     <string name="settings_sdk_version">Matrix SDK bertsioa</string>
@@ -1608,11 +1597,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="identity_server_not_defined">Ez duzu identitate zerbitzaririk erabiltzen</string>
     <string name="identity_server_not_defined_for_password_reset">Ez da identitate zerbitzaririk konfiguratu, zure pasahitza berrezartzeko beharrezkoa da.</string>
-
-    <string name="security_warning_identity_server">Element bertsio zaharrek segurtasun akats bat zuten eta zure identitate zerbitzariak (%1$s) zure kontua atzitu zezakeen. %2$s fidagarritzat jotzen baduzu hau ezikusi dezakezu, bestela maiatu saioa eta hasi berriro.
-\n
-\nXehetasun gehiago hemen:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="error_user_already_logged_in">Badirudi beste hasiera-zerbitzari batera konektatzen saiatzen ari zarela. Saioa amaitu nahi duzu\?</string>
 

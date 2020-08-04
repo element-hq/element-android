@@ -259,10 +259,6 @@
     <string name="login_error_user_in_use">এই ব্যাবহারকারী আগেও নাম ব্যবহার করে ছিল</string>
     <string name="login_error_login_email_not_yet">এই ইমেইল লিংক যেটা এখনো ক্লিক করা হয়নি</string>
 
-    <string name="e2e_need_log_in_again">আপনার প্রয়জনীয় পিছনে লগ করা সেশানের জন্য এনক্রিপশন চাবি উৎপন্ন করতে শেষ থেকে শেষে এবং জমা করা জনগণ এর চাবি আপনার ঘরের লোক এর কাছে। 
-\nএটাই হলো একবার। 
-\nক্ষমা করবেন এটাই হলো অসুবিধা।</string>
-
     <string name="e2e_re_request_encryption_key"><u>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</u>আপনার অন্য সেশানগুলি থেকে।</string>
 
     <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
@@ -659,9 +655,6 @@
     <string name="settings_theme">থিম</string>
 
     <string name="encryption_information_verify_device_warning">এই সেশানটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই সেশানটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
-    <string name="e2e_enabling_on_app_update">দাঙ্গা এখন শেষ-থেকে-শেষ এনক্রিপশন সমর্থন করে তবে এটি সক্ষম করতে আপনাকে আবার লগ ইন করতে হবে।
-\n
-\nআপনি এখন বা পরে এপ্লিকেশন সেটিংস থেকে এটি করতে পারেন।</string>
 
     <string name="font_size">অক্ষর এর আকার</string>
     <string name="you_added_a_new_device">আপনি একটি নতুন সেশান \'%s\' যোগ করেছেন, যা এনক্রিপশন কীগুলির জন্য অনুরোধ করছে।</string>
