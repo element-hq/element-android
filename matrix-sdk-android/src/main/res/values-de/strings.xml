@@ -204,7 +204,7 @@
     <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivierte Ende-zu-Ende-Verschlüsselung (unbekannter Algorithmus %2$s).</string>
 
-    <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung Ihres Schlüssels auf, jedoch unterstützt Ihr Client nicht die Schlüsselüberprüfung im Chat. Sie müssen die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
+    <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung deines Schlüssels auf, jedoch unterstützt dein Client nicht die Schlüsselüberprüfung im Chat. Du musst die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
 
 <string name="summary_you_sent_image">Du hast ein Bild gesendet.</string>
     <string name="summary_you_sent_sticker">Du hast einen Sticker gesendet.</string>
