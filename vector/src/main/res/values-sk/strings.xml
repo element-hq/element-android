@@ -1185,7 +1185,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="login_error_unknown_host">Na tejto adrese nie je dostupný žiadny obsah. Prosím, skontrolujte jej správnosť</string>
     <string name="login_error_ssl_handshake">Vaše zariadenie používa zastaralú verziu protokolu TLS, ktorá je náchylná na zraniteľnosti. Z dôvodu zachovania maximálnej bezpečnosti sa nebudete môcť pripojiť</string>
     <string name="settings_notification_advanced">Pokročilé nastavenia oznámení</string>
-    <string name="settings_notification_advanced_summary">Nastavenie dôležitosti oznámení pre udalosti, konfigurácia zvukových, vibračných a LED upozornení</string>
     <string name="settings_notification_by_event">Dôležitosť oznámení pre udalosti</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastné nastavenia.</string>

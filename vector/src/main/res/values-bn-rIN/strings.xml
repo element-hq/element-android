@@ -557,7 +557,6 @@
 
 
     <string name="settings_notification_advanced">উন্নত বিজ্ঞপ্তি সেটিংস</string>
-    <string name="settings_notification_advanced_summary">ইভেন্ট দ্বারা বিজ্ঞপ্তি সেট করুন, শব্দ, নেতৃত্বে, কম্পন কনফিগার করুন</string>
     <string name="settings_notification_by_event">ঘটনা দ্বারা বিজ্ঞপ্তির গুরুত্ব</string>
 
     <string name="settings_notification_privacy">বিজ্ঞপ্তির গোপনীয়তা</string>

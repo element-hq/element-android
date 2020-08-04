@@ -1138,7 +1138,6 @@ Sur l’écran suivant on vous demandera d’autoriser Element à toujours fonct
     <string name="done">Terminé</string>
 
     <string name="settings_notification_advanced">Paramètres de notification avancés</string>
-    <string name="settings_notification_advanced_summary">Régler l’importance des notifications par évènement, configurer le son, les led, les vibrations</string>
     <string name="settings_notification_by_event">Importance des notifications par évènement</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Paramètres personnalisés.</string>
@@ -2273,7 +2272,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_messages_in_e2e_group_chat">Messages chiffrés dans les discussions de groupe</string>
     <string name="settings_when_rooms_are_upgraded">Quand les salons sont mis à niveau</string>
     <string name="settings_troubleshoot_title">Résolution de problèmes</string>
-    <string name="settings_notification_advanced_summary_riotx">Définir l’importance des notifications par évènement</string>
+    <string name="settings_notification_advanced_summary">Définir l’importance des notifications par évènement</string>
 
     <string name="command_description_plain">Envoie un message en texte simple, sans l’interpréter comme du Markdown</string>
 

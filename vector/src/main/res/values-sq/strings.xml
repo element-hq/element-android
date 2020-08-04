@@ -1097,7 +1097,6 @@
     <string name="done">U bë</string>
 
     <string name="settings_notification_advanced">Rregullime të Mëtejshme Për Njoftimet</string>
-    <string name="settings_notification_advanced_summary">Caktoni rëndësi njoftimesh sipas aktesh, formësoni tinguj, dritëza led, dridhje</string>
     <string name="settings_notification_by_event">Rëndësi njoftimi sipas aktesh</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Rregullime Vetjake.</string>
@@ -2228,7 +2227,7 @@
     <string name="settings_messages_in_e2e_group_chat">Mesazhe të fshehtëzuar te biseda në grup</string>
     <string name="settings_when_rooms_are_upgraded">Kur dhomat përditësohen</string>
     <string name="settings_troubleshoot_title">Diagnostikoje</string>
-    <string name="settings_notification_advanced_summary_riotx">Caktoni rëndësi njoftimi sipas aktesh</string>
+    <string name="settings_notification_advanced_summary">Caktoni rëndësi njoftimi sipas aktesh</string>
 
     <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
 

@@ -1227,7 +1227,6 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
 
-    <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere Ton, LED, Vibration</string>
     <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
@@ -2292,7 +2291,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
     <string name="settings_messages_at_room">\@raum enthaltende Nachrichten</string>
     <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Nachrichten in Gruppenchats</string>
-    <string name="settings_notification_advanced_summary_riotx">Setze die Benachrichtigungswichtigkeit abhängig vom Ereignistyp</string>
+    <string name="settings_notification_advanced_summary">Setze die Benachrichtigungswichtigkeit abhängig vom Ereignistyp</string>
 
     <string name="command_description_plain">Sendet eine Nachricht als einfachen Text, ohne sie als Markdown zu interpretieren</string>
 

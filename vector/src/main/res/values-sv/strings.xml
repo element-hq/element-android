@@ -605,7 +605,6 @@
     <string name="settings_app_info_link_title">Appinfo</string>
     <string name="settings_app_info_link_summary">Visa info om appen i systeminställningarna.</string>
     <string name="settings_notification_advanced">Avancerade aviseringsinställningar</string>
-    <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet efter händelser, konfigurera ljud, LED, vibration</string>
     <string name="settings_notification_by_event">Aviseringsprioritet för händelser</string>
 
     <string name="settings_notification_privacy">Aviseringssekretess</string>
@@ -901,7 +900,7 @@
     <string name="encryption_not_enabled">Kryptering inte aktiverat</string>
     <string name="settings_notification_configuration">Aviseringskonfiguration</string>
     <string name="settings_messages_at_room">Meddelanden som innehåller @room</string>
-    <string name="settings_notification_advanced_summary_riotx">Sätt aviseringsprioritet för händelser</string>
+    <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet för händelser</string>
 
     <string name="media_file_added_to_gallery">Mediafiler tillagda till galleriet</string>
     <string name="error_adding_media_file_to_gallery">Kunde inte lägga till mediafilen till galleriet</string>

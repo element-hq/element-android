@@ -1217,7 +1217,6 @@
     <string name="done">Готово</string>
 
     <string name="settings_notification_advanced">Расширенные настройки уведомлений</string>
-    <string name="settings_notification_advanced_summary">Установка важности уведомления по событию, Настроить звук, светодиод, вибрацию</string>
     <string name="settings_notification_by_event">Значение уведомления по событию</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Пользовательские настройки.</string>

@@ -582,7 +582,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
 
     <string name="settings_notification_advanced">Rozšířená nestavení oznámení</string>
-    <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení na základě události, nastavení zvuku, LED, vibrací</string>
     <string name="settings_notification_by_event">Důležitost oznámení na základě události</string>
 
     <string name="notification_sync_init">Spouštím služby</string>
@@ -2258,7 +2257,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_messages_in_e2e_group_chat">Zašifrované zprávy ve skupinových chatech</string>
     <string name="settings_when_rooms_are_upgraded">Když dojde k upgradu místností</string>
     <string name="settings_troubleshoot_title">Řešit problémy</string>
-    <string name="settings_notification_advanced_summary_riotx">Nastavit důležitost oznámení podle události</string>
+    <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení podle události</string>
 
     <string name="command_description_plain">Odešle zprávu jako prostý text bez interpretace markdown</string>
 

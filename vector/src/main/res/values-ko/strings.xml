@@ -553,7 +553,6 @@
 
 
     <string name="settings_notification_advanced">고급 알림 설정</string>
-    <string name="settings_notification_advanced_summary">이벤트 별로 알림 중요도를 설정하고, 소리, LED, 진동을 설정하세요</string>
     <string name="settings_notification_by_event">이벤트 별 알림 중요도</string>
 
     <string name="settings_notification_privacy">알림 개인 정보</string>

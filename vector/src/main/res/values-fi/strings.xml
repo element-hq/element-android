@@ -983,7 +983,6 @@ Haluatko lisätä paketteja?</string>
         <item quantity="other">%1$s huonetta löydetty kohteelle %2$s</item>
     </plurals>
     <string name="settings_notification_advanced">Yksityiskohtaiset ilmoitusasetukset</string>
-    <string name="settings_notification_advanced_summary">Aseta ilmoituksien tärkeys kohteittain ja määritä hälytysäänet, ledin värit ja värinähälytykset</string>
     <string name="settings_notification_by_event">Ilmoituksen tärkeys kohteittain</string>
 
     <string name="settings_notification_privacy">Ilmoitusten yksityisyys</string>

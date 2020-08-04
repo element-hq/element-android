@@ -1194,7 +1194,6 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="action_sign_out_confirmation_simple">Você tem certeza que deseja sair da conta\?</string>
     <string name="settings_notification_advanced">Configurações Avançadas de Notificação</string>
-    <string name="settings_notification_advanced_summary">Definir a importância da notificação por evento, Configurar som, led, vibração</string>
     <string name="settings_notification_by_event">Importância da notificação por evento</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Configurações personalizadas.</string>

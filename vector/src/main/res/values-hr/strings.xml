@@ -594,7 +594,6 @@
 
 
     <string name="settings_notification_advanced">Napredne postavke obavijesti</string>
-    <string name="settings_notification_advanced_summary">Postavite važnost obavijesti po događajima, podesite zvuk, indikatorsku lampicu i vibriranje</string>
     <string name="settings_notification_by_event">Važnost obavijesti po događajima</string>
 
     <string name="settings_notification_privacy">Privatnost obavještavanja</string>

@@ -1119,7 +1119,6 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="done">Fet</string>
 
     <string name="settings_notification_advanced">Paràmetres avançats de notificacions</string>
-    <string name="settings_notification_advanced_summary">Estableix la importància de les notificacions per tipus d\'esdeveniment, configura el so, led i vibració</string>
     <string name="settings_notification_by_event">Importància de les notificacions per esdeveniment</string>
 
     <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>

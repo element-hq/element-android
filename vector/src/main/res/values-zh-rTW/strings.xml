@@ -1093,7 +1093,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="done">完成</string>
 
     <string name="settings_notification_advanced">進階通知設定</string>
-    <string name="settings_notification_advanced_summary">透過活動、音效、LED 與震動設定通知重要程度</string>
     <string name="settings_notification_by_event">活動通知重要程度</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">自訂設定。</string>
@@ -2217,7 +2216,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_messages_in_e2e_group_chat">群組聊天中的已加密訊息</string>
     <string name="settings_when_rooms_are_upgraded">當聊天室升級時</string>
     <string name="settings_troubleshoot_title">疑難排解</string>
-    <string name="settings_notification_advanced_summary_riotx">按事件設定通知重要性</string>
+    <string name="settings_notification_advanced_summary">按事件設定通知重要性</string>
 
     <string name="command_description_plain">傳送純文字訊息，不將它們解譯為 markdown</string>
 

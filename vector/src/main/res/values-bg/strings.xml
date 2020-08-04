@@ -1126,7 +1126,6 @@
     <string name="done">Готово</string>
 
     <string name="settings_notification_advanced">Разширени настройки за известия</string>
-    <string name="settings_notification_advanced_summary">Настройка на важност според тип събитие, настройка на звук, LED, вибрация</string>
     <string name="settings_notification_by_event">Важност на известията според типа събитие</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Собствени настройки.</string>

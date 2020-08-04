@@ -1206,7 +1206,6 @@
     <string name="auth_login_sso">Accedi con single sign-on</string>
     <string name="login_error_unknown_host">Questo URL è irraggiungibile. Per favore controllalo</string>
     <string name="login_error_ssl_handshake">"Il tuo dispositivo usa  un protocollo di sicurezza TLS obsoleto e vulnerabile agli attacchi. Per la tua sicurezza, ti viene impedito di connetterti"</string>
-    <string name="settings_notification_advanced_summary">Imposta i livelli di importanza delle notifiche in base al tipo. Configura i suoni, i led, e la vibrazione</string>
     <string name="settings_notification_by_event">Importanza delle notifiche in base al tipo</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Impostazioni personalizzate.</string>
@@ -2320,7 +2319,7 @@
     <string name="settings_messages_in_e2e_group_chat">Messaggi cifrati in chat di gruppo</string>
     <string name="settings_when_rooms_are_upgraded">Quando le stanze vengono aggiornate</string>
     <string name="settings_troubleshoot_title">Risoluzione problemi</string>
-    <string name="settings_notification_advanced_summary_riotx">Imposta l\'importanza della notifica per evento</string>
+    <string name="settings_notification_advanced_summary">Imposta l\'importanza della notifica per evento</string>
 
     <string name="command_description_plain">Invia un messaggio come testo semplice, senza interpretarlo come markdown</string>
 

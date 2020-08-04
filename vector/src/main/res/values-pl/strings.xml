@@ -1196,7 +1196,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_settings_status_ok">Kopia zapasowa klucza została prawidłowo skonfigurowana dla tej sesji.</string>
     <string name="notification_sync_init">Inicjalizacja usługi</string>
     <string name="auth_login_sso">Zaloguj się za pomocą logowania jednorazowego</string>
-    <string name="settings_notification_advanced_summary">Ustaw ważność powiadomienia za pomocą wydarzeń, skonfiguruj dźwięk, diodę LED, wibracje</string>
     <string name="settings_notification_by_event">Ważność powiadomień ze względu na wydarzenie</string>
 
     <string name="settings_notification_troubleshoot">Diagnostyka powiadomień</string>

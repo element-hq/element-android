@@ -1130,7 +1130,6 @@ Hurrengo pantailan Element-i bigarren planoan aritzeko baimena eskatuko zaizu, o
     <string name="done">Egina</string>
 
     <string name="settings_notification_advanced">Jakinarazpenen ezarpen aurreratuak</string>
-    <string name="settings_notification_advanced_summary">Ezarri jakinarazpenen garrantzia gertaerako, konfiguratu soinua, leda, bibrazioa</string>
     <string name="settings_notification_by_event">Jakinarazpenen garrantzia gertaerako</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Ezarpen pertsonalizatuak.</string>
@@ -2266,7 +2265,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_messages_in_e2e_group_chat">Zifratutako mezuak talde-txatetan</string>
     <string name="settings_when_rooms_are_upgraded">Gelak eguneratzean</string>
     <string name="settings_troubleshoot_title">Arazo-ehiza</string>
-    <string name="settings_notification_advanced_summary_riotx">Ezarri jakinarazpenen garrantzia gertaerako</string>
+    <string name="settings_notification_advanced_summary">Ezarri jakinarazpenen garrantzia gertaerako</string>
 
     <string name="command_description_plain">Mezua test arrunt gisa bidaltzen du, markdown den aztertu gabe</string>
 

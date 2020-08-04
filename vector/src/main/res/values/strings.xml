@@ -676,7 +676,6 @@
 
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
-    <string name="settings_notification_advanced_summary">Set notification importance by event, Configure sound, led, vibration</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
@@ -2337,7 +2336,7 @@
     <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
     <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_troubleshoot_title">Troubleshoot</string>
-    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
+    <string name="settings_notification_advanced_summary">Set notification importance by event</string>
 
     <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
 

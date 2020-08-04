@@ -1101,7 +1101,6 @@
     <string name="video_call_in_progress">Video-oproep gaande…</string>
 
     <string name="settings_notification_advanced">Geavanceerde meldingsinstellingen</string>
-    <string name="settings_notification_advanced_summary">Stel het belang van meldingen in op gebeurtenis, en configureer geluiden, LED’s en vibratie</string>
     <string name="settings_notification_by_event">Meldingsbelang op gebeurtenis</string>
 
     <string name="settings_notification_troubleshoot">Problemen met meldingen oplossen</string>

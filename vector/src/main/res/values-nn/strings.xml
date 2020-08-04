@@ -971,7 +971,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="reason_hint">Grunn</string>
 
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
-    <string name="settings_notification_advanced_summary">Sett prioritet for varslingar etter hending, still inn lyd, LED, vibrasjon</string>
     <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>
 
     <string name="settings_notification_troubleshoot">Løys problem med varslingar</string>

@@ -1135,7 +1135,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 
     <string name="action_sign_out_confirmation_simple">您确定要登出账号吗？</string>
     <string name="settings_notification_advanced">高级通知设置</string>
-    <string name="settings_notification_advanced_summary">根据事件的通知重要程度，设置声音，指示灯，震动通知</string>
     <string name="settings_notification_by_event">事件的通知重要程度</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">自定义设置。</string>

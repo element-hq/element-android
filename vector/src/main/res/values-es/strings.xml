@@ -1097,7 +1097,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_login_sso">Iniciar sesión con single-sign-on</string>
     <string name="login_error_ssl_handshake">Tu dispositivo usa una versión anticuada e insegura del protocolo de seguridad TLS. Por tu seguridad no puedes conectarte</string>
     <string name="settings_notification_advanced">Ajustes avanzados de notificaciones</string>
-    <string name="settings_notification_advanced_summary">Ajusta la importancia de las notificaciones por evento, configura el sonido, LED y vibración</string>
     <string name="settings_notification_by_event">Importancia de notificación por evento</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Ajustes de sistema.</string>

@@ -585,7 +585,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
 
 
     <string name="settings_notification_advanced">Gelişmiş Bildirim Ayarları</string>
-    <string name="settings_notification_advanced_summary">Bildirim önceliğini duruma göre ses, led ve titreşim olarak ayarla</string>
     <string name="settings_notification_by_event">Duruma göre bildirim önceliği</string>
 
     <string name="settings_notification_privacy">Bildirim gizliliği</string>

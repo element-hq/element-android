@@ -1051,7 +1051,6 @@ Aktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik 
 
     <string name="action_sign_out_confirmation_simple">Anda yakin ingin mencopot akun\?</string>
     <string name="settings_notification_advanced">Pengaturan Pemberitahuan Lanjutan</string>
-    <string name="settings_notification_advanced_summary">Setel urgensi pemberitahuan lewat kejadian, Kelola suara, LED, getaran</string>
     <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
