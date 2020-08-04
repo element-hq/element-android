@@ -893,7 +893,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="option_send_sticker">Sende Sticker</string>
     <string name="no_sticker_application_dialog_content">Sie haben aktuell keine Stickerpakete aktiviert. Möchten Sie welche hinzufügen\?</string>
 
-    <string name="settings_deactivate_account_section">Deaktiviere Account</string>
+    <string name="settings_deactivate_account_section">Account deaktivieren</string>
     <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
 
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
@@ -1428,7 +1428,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_incoming_request_title">Eingehende Verifizierungsanfrage</string>
     <string name="sas_incoming_verification_request_dialog">Du hast eine eingehende Verifizierungsanfrage erhalten.</string>
     <string name="sas_view_request_action">Anfrage ansehen</string>
-    <string name="sas_waiting_for_partner">Warte auf Bestätigung des Partners…</string>
+    <string name="sas_waiting_for_partner">Warte auf Bestätigung des/r anderen Nutzer*in…</string>
 
     <string name="sas_verified">Verifiziert!</string>
     <string name="sas_verified_successful">Du hast diese Sitzung erfolgreich verifiziert.</string>
@@ -1505,7 +1505,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="key_share_request">Schlüsselaustausch anfragen</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hättest du bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchtest du es durch das, was du gerade erstellt hast, ersetzen\?</string>
     <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun, oder ein anderes vertrautes Kommunikationsmedium zu nutzen.</string>
-    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partner!nnen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
+    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von anderen Nutzer*innen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
 
     <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass das folgende Emoji auf dem Bildschirm deines Gegenübers angezeigt wird</string>
@@ -1949,9 +1949,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="soft_logout_signin_submit">Anmelden</string>
     <string name="soft_logout_signin_password_hint">Passwort</string>
     <string name="soft_logout_clear_data_title">Persönliche Daten löschen</string>
-    <string name="soft_logout_clear_data_notice">Warnung: Persönliche Daten (einschließlich Verschlüsselungsschlüssel) werden weiterhin auf diesem Gerät gespeichert.
-\n
-\nDeaktiviere diese Option, wenn dieses Gerät nicht mehr verwenden wird oder sich bei einem anderen Konto angemeldet werden soll.</string>
+    <string name="soft_logout_clear_data_notice">Warnung: Persönliche Daten (einschließlich Verschlüsselungsschlüssel) werden weiterhin auf diesem Gerät gespeichert. 
+\n 
+\nDeaktiviere diese Option, wenn dieses Gerät nicht mehr verwendet wird oder sich bei einem anderen Konto angemeldet werden soll.</string>
     <string name="soft_logout_clear_data_submit">Alle Daten löschen</string>
 
     <string name="soft_logout_clear_data_dialog_title">Daten löschen</string>
@@ -2395,4 +2395,8 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
 
-</resources>
+<string name="pause_video">Pause</string>
+    <string name="action_copy">Kopieren</string>
+    <string name="bottom_action_notification">Benachrichtigungen</string>
+    <string name="call_failed_no_connection">Element-Anruf fehlgeschlagen</string>
+    </resources>
