@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<im.vector.riotx.core.preference.VectorPreferenceCategory-->
+    <!--<im.vector.app.core.preference.VectorPreferenceCategory-->
     <!--android:key="SETTINGS_LABS_PREFERENCE_KEY"-->
     <!--android:title="@string/room_settings_labs_pref_title">-->
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:focusable="false"
         android:key="labs_warning"
         android:summary="@string/room_settings_labs_warning_message" />
 
-    <!--<im.vector.riotx.core.preference.VectorSwitchPreference-->
+    <!--<im.vector.app.core.preference.VectorSwitchPreference-->
     <!--android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY"-->
     <!--android:title="@string/room_settings_labs_end_to_end" />-->
 
-    <!--<im.vector.riotx.core.preference.VectorPreference-->
+    <!--<im.vector.app.core.preference.VectorPreference-->
     <!--android:focusable="false"-->
     <!--android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"-->
     <!--android:title="@string/room_settings_labs_end_to_end_is_active" />-->
 
-    <!--<im.vector.riotx.core.preference.VectorSwitchPreference-->
+    <!--<im.vector.app.core.preference.VectorSwitchPreference-->
     <!--android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"-->
     <!--android:summary="@string/settings_data_save_mode_summary"-->
     <!--android:title="@string/settings_data_save_mode" />-->
 
-    <!--<im.vector.riotx.core.preference.VectorSwitchPreference-->
+    <!--<im.vector.app.core.preference.VectorSwitchPreference-->
     <!--android:defaultValue="true"-->
     <!--android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"-->
     <!--android:title="@string/settings_labs_create_conference_with_jitsi" />-->
 
-    <!--<im.vector.riotx.core.preference.VectorSwitchPreference-->
+    <!--<im.vector.app.core.preference.VectorSwitchPreference-->
     <!--android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"-->
     <!--android:summary="@string/settings_labs_enable_send_voice_summary"-->
     <!--android:title="@string/settings_labs_enable_send_voice" />-->
 
-    <im.vector.riotx.core.preference.VectorSwitchPreference
+    <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="true"
         android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
 
-    <im.vector.riotx.core.preference.VectorSwitchPreference
+    <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
         android:key="SETTINGS_LABS_MERGE_E2E_ERRORS"
         android:title="@string/labs_merge_e2e_in_timeline" />
 
 
-    <im.vector.riotx.core.preference.VectorSwitchPreference
+    <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
         android:key="SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
         android:title="@string/labs_show_unread_notifications_as_tab" />
-    <!--</im.vector.riotx.core.preference.VectorPreferenceCategory>-->
+    <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
 </androidx.preference.PreferenceScreen>

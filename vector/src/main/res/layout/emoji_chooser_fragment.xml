@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context="im.vector.riotx.features.reactions.EmojiChooserFragment"
+    tools:context=".features.reactions.EmojiChooserFragment"
     tools:itemCount="100"
     tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     tools:listitem="@layout/grid_item_emoji"

@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
+    <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
         android:title="@string/settings_user_settings">
 
-        <im.vector.riotx.core.preference.UserAvatarPreference
+        <im.vector.app.core.preference.UserAvatarPreference
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
             android:title="@string/settings_profile_picture" />
 
-        <im.vector.riotx.core.preference.VectorEditTextPreference
+        <im.vector.app.core.preference.VectorEditTextPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_display_name" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
             android:summary="@string/change_password_summary"
             android:title="@string/settings_password" />
@@ -25,7 +25,7 @@
         <!-- Email will be added here -->
 
         <!-- Note: inputType does not work, it is set also in code, as well as iconTint -->
-        <im.vector.riotx.core.preference.VectorEditTextPreference
+        <im.vector.app.core.preference.VectorEditTextPreference
             android:icon="@drawable/ic_material_add"
             android:inputType="textEmailAddress"
             android:key="ADD_EMAIL_PREFERENCE_KEY"
@@ -36,102 +36,102 @@
         <!-- Phone will be added here -->
 
         <!-- Note: iconTint does not work, it is also done in code -->
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:icon="@drawable/ic_material_add"
             android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
             android:order="200"
             android:title="@string/settings_add_phone_number"
             app:iconTint="@color/riotx_accent" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:order="1000"
             android:persistent="false"
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category"
-            app:fragment="im.vector.riotx.features.discovery.DiscoverySettingsFragment" />
+            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
+    <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
         android:title="@string/settings_contact"
         app:isPreferenceVisible="@bool/false_not_implemented">
 
-        <im.vector.riotx.core.preference.VectorSwitchPreference
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:key="CONTACT_BOOK_ACCESS_KEY"
             android:title="@string/settings_contacts_app_permission" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/settings_select_country"
             android:key="SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
             android:title="@string/settings_contacts_phonebook_country" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:focusable="false"
             android:persistent="false"
             android:summary="@string/settings_integrations_summary" />
 
-        <im.vector.riotx.core.preference.VectorSwitchPreference
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALLOW_INTEGRATIONS_KEY"
             android:persistent="false"
             android:title="@string/settings_integration_allow" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ALLOW_INTEGRATIONS_KEY"
             android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
             android:persistent="false"
             android:title="@string/settings_integration_manager" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
             android:title="@string/settings_logged_in"
             tools:summary="\@user:matrix.org" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
             tools:summary="https://homeserver.org" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:fragment="im.vector.riotx.features.discovery.DiscoverySettingsFragment"
+            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment"
             tools:summary="https://identity.server.url" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_media_cache" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/action_sign_out">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/action_sign_out">
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_SIGN_OUT_KEY"
             android:title="@string/action_sign_out" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_deactivate_account_section">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_deactivate_account_section">
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
             android:persistent="false"
             android:title="@string/settings_deactivate_my_account"
-            app:fragment="im.vector.riotx.features.settings.account.deactivation.DeactivateAccountFragment" />
+            app:fragment="im.vector.app.features.settings.account.deactivation.DeactivateAccountFragment" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

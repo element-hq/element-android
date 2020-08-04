@@ -6,5 +6,5 @@ echo "Standby ON"
 echo "adb shell dumpsys battery unplug"
 adb shell dumpsys battery unplug
 
-echo "adb shell am set-inactive im.vector.riotx true"
-adb shell am set-inactive im.vector.riotx true
+echo "adb shell am set-inactive im.vector.app true"
+adb shell am set-inactive im.vector.app true

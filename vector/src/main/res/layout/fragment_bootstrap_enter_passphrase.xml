@@ -41,7 +41,7 @@
 
         <!-- This is inside the TIL, if not the keyboard will hide it when in bottomsheet -->
 
-        <im.vector.riotx.core.ui.views.PasswordStrengthBar
+        <im.vector.app.core.ui.views.PasswordStrengthBar
             android:id="@+id/ssss_passphrase_security_progress"
             android:layout_width="match_parent"
             android:layout_height="4dp"

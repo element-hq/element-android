@@ -102,7 +102,7 @@
         tools:visibility="invisible" />
 
 
-    <im.vector.riotx.features.call.CallControlsView
+    <im.vector.app.features.call.CallControlsView
         android:id="@+id/callControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
