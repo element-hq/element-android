@@ -196,9 +196,6 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="login_error_login_email_not_yet">El enlace del correo electrónico que aún no se ha seguido</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Tienes que volver a iniciar sesión para generar claves de cifrado de extremo a extremo para esta sesión y enviar la clave pública a tu servidor doméstico. 
-\nSolo deberás hacer esto una vez. 
-\nDisculpa por las molestia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -660,10 +657,6 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando esta sesión y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Element ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
-
-Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala contiene sesiones desconocidas</string>
     <string name="unknown_devices_alert_message">Esta sala contiene sesiones desconocidas que no han sido verificados. Esto significa que no hay garantía de que las sesiones pertenezcan a los usuarios a los que dicen pertenecer. Recomendamos que pases por el proceso de verificación para cada sesión antes de continuar. Puedes reenviar el mensaje sin verificarlas si prefieres. Sesiones desconocidas:</string>
@@ -722,8 +715,6 @@ Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
 
     <string name="option_take_photo">Tomar foto</string>
     <string name="option_take_video">Tomar vídeo</string>
-
-    <string name="login_mobile_device">Móvil</string>
 
     <string name="call">Llamar</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
@@ -1064,7 +1055,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
@@ -1099,7 +1090,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_login_sso">Iniciar sesión con single-sign-on</string>
     <string name="login_error_ssl_handshake">Tu dispositivo usa una versión anticuada e insegura del protocolo de seguridad TLS. Por tu seguridad no puedes conectarte</string>
     <string name="settings_notification_advanced">Ajustes avanzados de notificaciones</string>
-    <string name="settings_notification_advanced_summary">Ajusta la importancia de las notificaciones por evento, configura el sonido, LED y vibración</string>
     <string name="settings_notification_by_event">Importancia de notificación por evento</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Ajustes de sistema.</string>
@@ -1285,23 +1275,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
-
-    <string name="store_title">Element - Comunicate a tu manera</string>
-    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Element. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
-    <string name="store_short_description">Una app de chat universal completamente bajo tu control.</string>
-    <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Element deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
-\nConsigue tu cuenta de matrix.org gratis. Consigue tu servidor en https://modular.im o usa otro servidor de Matrix.
-\nPor qué escoger a Element\?
-\n
-\n• COMUNICACIÓN COMPLETA: Crea salas para tus equipos, tus amigos, vuestra comunidad - de la forma que quieras! Chatea, comparte archivos, añade widgets y haz llamadas de voz y video - Todo de forma gratuita.
-\n
-\n• POTENTES INTEGRACIONES: Usa Element con las herramientas que conoces y que mas te gustan. Con Element puedes hasta chatear con usuarios y grupos de otras apps de chat.
-\n
-\n• PRIVADA Y SEGURA: Mantén privadas tus conversaciones. La condición de encriptación de extremo a extremo asegura que las conversaciones privadas sigan siendo siempre privadas.
-\n
-\n• ABIERTO, NO CERRADO: Código abierto y construido en Matrix. Posee tus propios datos alojando tu propio servidor o selecciona uno en el que confíes.
-\n
-\n• ALLÁ DONDE ESTÉS: Mantente en contacto dondequiera que estés con el historial de mensajes totalmente sincronizado a través de todos tus dispositivos online en http://riot.im.</string>
 
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
@@ -1548,7 +1521,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
     <string name="room_list_catchup_empty_title">!Estás al día!</string>
-    <string name="alpha_disclaimer_content_line_1">Mientras Element esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
     <string name="preference_voice_and_video">Voz &amp; Video</string>
@@ -1594,7 +1566,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
-    <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
@@ -1648,16 +1619,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="identity_server_not_defined">No estás usando ningún Servidor de Identidad</string>
     <string name="identity_server_not_defined_for_password_reset">No hay ningún Servidor de Identidad configurado, esto es requerido para restablecer tu contraseña.</string>
 
-    <string name="security_warning_identity_server">Las versiones anteriores de Element tenían un error de seguridad que podía dar a su Servidor de Identidad (%1$s) acceso a su cuenta. Si confías en %2$s, puedes ignorar esto; de lo contrario, por favor cierra la sesión y vuelve a entrar.
-\n
-\nLee más detalles aquí:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Parece que estás intentando conectarte a otro servidor doméstico. ¿Quieres cerrar sesión\?</string>
-
-    <string name="alpha_disclaimer_content_line_2_gplay">La última lista de características está siempre en %1$s, y si encuentras errores por favor envía un informe des del menú superior izquierdo de Inicio, y los arreglaremos tan rápido como podamos.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripción de Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si encuentras errores por favor envía un informe de errores des del menú superior izquierdo del menú de Inicio. Resolveremos el error tan rápido como podamos.</string>
 
     <string name="import_e2e_keys_from_file">Importar llaves E2E des del fichero \"%1$s\".</string>
 
@@ -1689,16 +1651,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostrar eventos ocultos en la línea de tiempo</string>
 
-    <string name="store_riotx_title">Element - Cliente Matrix de Futura Generación</string>
-    <string name="store_riotx_short_description">Un cliente para Matrix más rápido y ligero que usa los últimos frameworks de Android</string>
-    <string name="store_riotx_full_description">Element es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. Element es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
-\n
-\nDescargo de responsabilidad: Esta es una versión beta. Element está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
-\n
-\nElement soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
-\n
-\nNo todas las características de Element están implementadas en Element todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
-
     <string name="bottom_action_people_x">Mensajes Directos</string>
 
     <string name="send_file_step_idle">Esperando…</string>
@@ -1711,9 +1663,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="downloaded_file">¡El archivo %1$s ha sido descargado!</string>
 
     <string name="edited_suffix">(editado)</string>
-
-    <string name="riotx_no_registration_notice">%1$s para crear una cuenta.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usar la app antigua</string>
 
 
     <string name="message_edits">Modificación de mensajes</string>

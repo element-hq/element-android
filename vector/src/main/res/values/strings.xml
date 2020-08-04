@@ -308,7 +308,6 @@
     <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
     <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
-    <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
@@ -317,9 +316,6 @@
     <string name="login_error_limit_exceeded">Too many requests have been sent</string>
     <string name="login_error_user_in_use">This user name is already used</string>
     <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
-
-    <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this session and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
     <!-- request again e2e key -->
     <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
@@ -366,7 +362,7 @@
 
     <!-- Call settings screen -->
     <string name="settings_call_category">Calls</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Use default Element ringtone for incoming calls</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Use default Element ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
@@ -677,7 +673,6 @@
 
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
-    <string name="settings_notification_advanced_summary">Set notification importance by event, Configure sound, led, vibration</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
@@ -1099,8 +1094,6 @@
     <string name="encryption_information_verify_device_warning2">"If they don't match, the security of your communication may be compromised."</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
-    <string name="e2e_enabling_on_app_update">Element now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
-
     <!-- unknown sessions management -->
     <string name="unknown_devices_alert_title">Room contains unknown sessions</string>
     <string name="unknown_devices_alert_message">This room contains unknown sessions which have not been verified.\nThis means there is no guarantee that the sessions belong to the users they claim to.\nWe recommend you go through the verification process for each session before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown sessions:</string>
@@ -1372,28 +1365,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
-    <!-- String for Play Store -->
-    <string name="store_title">Element - Communicate, your way</string>
-    <string name="store_whats_new">"We’re always making changes and improvements to Element.
-The complete changelog can be found here: %1$s.
-To make sure you don’t miss a thing, just keep your updates turned on."</string>
-    <string name="store_short_description">A universal secure chat app entirely under your control.</string>
-    <string name="store_full_description">"A chat app, under your control and entirely flexible. Element lets you communicate the way you want. Made for [matrix] - the standard for open, decentralised communication.
-
-Get a free matrix.org account, get your own server at https://modular.im, or use another Matrix server.
-
-Why choose Element?
-
-• COMPLETE COMMUNICATION: Build rooms around your teams, your friends, your community - however you like! Chat, share files, add widgets and make voice and video calls - all free of charge.
-
-• POWERFUL INTEGRATIONS: Use Element with the tools you know and love. With Element you can even chat with users and groups on other chat apps.
-
-• PRIVATE AND SECURE: Keep your conversations secret. State of the art end-to-end encryption ensures that private communication stays private.
-
-• OPEN, NOT CLOSED: Open source, and built on Matrix. Own your own data by hosting your own server, or selecting one you trust.
-
-• EVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and online at https://riot.im."</string>
-
     <!-- Passphrase -->
     <string name="passphrase_create_passphrase">Create passphrase</string>
     <string name="passphrase_confirm_passphrase">Confirm passphrase</string>
@@ -1600,8 +1571,6 @@ Why choose Element?
     <string name="identity_server_not_defined">You are not using any Identity Server</string>
     <string name="identity_server_not_defined_for_password_reset">No identity server is configured, it is required to reset your password.</string>
 
-    <string name="security_warning_identity_server">"Previous versions of Element had a security bug which could give your Identity Server (%1$s) access to your account. If you trust %2$s, you can ignore this; otherwise please logout and login again.\n\nRead more details here:\nhttps://medium.com/@RiotChat/36b4792ea0d6"</string>
-
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
     <string name="edit">Edit</string>
@@ -1662,13 +1631,6 @@ Why choose Element?
     <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
 
-    <string name="alpha_disclaimer_title">Welcome to the beta!</string>
-    <string name="alpha_disclaimer_content_line_1">"While Element is in early development, some features may be missing and you may experience bugs."</string>
-    <!-- The parameter will be replaced by the value of string alpha_disclaimer_content_line_2_gplay_colored_part -->
-    <string name="alpha_disclaimer_content_line_2_gplay">"The latest feature list is always in the %1$s, and if you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">"Play Store description"</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">"If you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
-
     <string name="import_e2e_keys_from_file">"Import e2e keys from file \"%1$s\"."</string>
 
     <string name="settings_sdk_version">Matrix SDK Version</string>
@@ -1707,31 +1669,6 @@ Why choose Element?
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
 
-    <string name="store_riotx_title">Element - Next Generation Matrix Client</string>
-    <string name="store_riotx_short_description">A faster and lighter client for Matrix using the latest Android frameworks</string>
-    <string name="store_riotx_full_description">"Element is a new client for the Matrix protocol (Matrix.org): an open network for secure, decentralised communication. Element is a full rewrite of the Riot Android client, based on a full rewrite of the Matrix Android SDK.
-
-Disclaimer: This is a beta version. Element is currently in active development and contains limitations and (we hope not too many) bugs. All feedback is welcome!
-
-Element supports:
-• Login to an existing account
-• Create room and join public rooms
-• Accept and reject invitations
-• List users rooms
-• View room details
-• Send text messages
-• Send attachment
-• Read and write messages in encrypted rooms
-• Crypto: E2E keys backup, advance device verification, key share request and answer
-• Push notification
-• Light, Dark and Black themes
-
-Not all features in Riot are implemented in Element yet. Main missing (and coming soon!) features:
-• Room settings (list room members, etc.)
-• Calls
-• Widgets
-• …"</string>
-
     <string name="bottom_action_people_x">Direct Messages</string>
 
     <string name="send_file_step_idle">Waiting…</string>
@@ -1744,11 +1681,6 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="downloaded_file">File %1$s has been downloaded!</string>
 
     <string name="edited_suffix">"(edited)"</string>
-
-    <!-- param will be replaced by the value of riotx_no_registration_notice_colored_part -->
-    <string name="riotx_no_registration_notice">%1$s to create an account.</string>
-    <string name="riotx_no_registration_notice_colored_part">Use the old app</string>
-
 
     <string name="message_edits">Message Edits</string>
     <string name="no_message_edits_found">No edits found</string>
@@ -2290,7 +2222,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
 
@@ -2390,7 +2322,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
     <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_troubleshoot_title">Troubleshoot</string>
-    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
+    <string name="settings_notification_advanced_summary">Set notification importance by event</string>
 
     <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
 
@@ -2439,10 +2371,10 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="change_password_summary">Set a new account password…</string>
 
     <string name="use_other_session_content_description">Use the latest Element on your other devices, Element Web, Element Desktop, Element iOS, Element for Android, or another cross-signing capable Matrix client</string>
-    <string name="riot_desktop_web">Element Web\nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS\nElement for Android</string>
+    <string name="app_desktop_web">Element Web\nElement Desktop</string>
+    <string name="app_ios_android">Element iOS\nElement Android</string>
     <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
-    <string name="use_latest_riot">Use the latest Element on your other devices:</string>
+    <string name="use_latest_app">Use the latest Element on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
@@ -2456,7 +2388,7 @@ Not all features in Riot are implemented in Element yet. Main missing (and comin
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="review_logins">Review where you’re logged in</string>
     <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
-    <!-- Argument will be replaced by the other session name (e.g, Riot Desktop, mobile) -->
+    <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
     <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>

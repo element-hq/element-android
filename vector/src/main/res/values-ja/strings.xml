@@ -384,9 +384,6 @@
     <string name="login_error_login_email_not_yet">まだクリックされていないeメールのリンク</string>
 
     <string name="compression_options">以下の容量で画像を送信</string>
-    <string name="e2e_need_log_in_again">この端末のエンドツーエンド暗号鍵を生成し、接続先サーバに公開鍵を送信するには、再度ログインする必要があります。
-一度回線を切断します。
-ご不便おかけしてすみません。</string>
 
     <string name="room_info_room_topic">部屋の説明</string>
 
@@ -499,7 +496,6 @@
     <string name="hs_url">接続先サーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
     <string name="auth_login">ログイン</string>
-    <string name="login_mobile_device">携帯端末</string>
 
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
     <string name="widget_integration_positive_power_level">権限の数値は正の整数で入力してください。</string>
@@ -554,9 +550,6 @@ Elementアプリがあなたの電話帳へアクセスすることを許可し�
 不明なデバイス:</string>
 
     <string name="unknown_devices_alert_title">部屋に不明なデバイスが含まれています</string>
-    <string name="e2e_enabling_on_app_update">Elementはエンドツーエンドの暗号化をサポートするようになりましたが、有効にするには再度ログインする必要があります。
-
-アプリケーションの設定から今すぐまたは後で行うことができます。</string>
 
     <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
 
@@ -991,7 +984,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
 
     <string name="settings_call_category">通話設定画面</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">着信にElementの既定の着信音を使う</string>
+    <string name="settings_call_ringtone_use_app_ringtone">着信にElementの既定の着信音を使う</string>
     <string name="settings_call_ringtone_title">着信音</string>
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
 

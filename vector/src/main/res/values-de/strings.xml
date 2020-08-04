@@ -194,9 +194,6 @@
     <string name="login_error_login_email_not_yet">Der Link in der E-Mail wurde noch nicht geöffnet</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Du musst dich erneut anmelden, um Ende-zu-Ende-Verschlüsselungsschlüssel für diese Sitzung zu generieren und den öffentlichen Schlüssel an deinen Heimserver zu senden.
-\nDies ist einmalig.
-\nEntschuldige die Unannehmlichkeiten.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lesebestätigungsliste</string>
@@ -650,10 +647,6 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
 
-    <string name="e2e_enabling_on_app_update">Element unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
-
-Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Raum enthält unbekannte Sitzungen</string>
     <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Sitzungen, die noch nicht verifiziert wurden. Es gibt also keine Garantie, dass diese Sitzung wirklich der angegebenen Person gehören. Wir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen, bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst. Unbekannte Sitzungen:</string>
@@ -721,8 +714,6 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
     <string name="black_them">Schwarzes Design</string>
-
-    <string name="login_mobile_device">Mobilgerät</string>
 
     <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
@@ -1080,7 +1071,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und des Anzeigenamens.</string>
     <string name="settings_call_category">Anrufe</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Nutze den Standard-Klingelton von Element für eingehende Anrufe</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Nutze den Standard-Klingelton von Element für eingehende Anrufe</string>
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
 
@@ -1173,29 +1164,8 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Element - Kommuniziere auf deine Weise</string>
-    <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
-    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Element lässt dich auf die Art kommunizieren, wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
-\n
-\nHole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
-\n
-\nWarum solltest du Element wählen\?
-\n
-\n• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
-\n
-\n• MÄCHTIGE INTEGRATIONEN: Benutze Element mit den Werkzeugen die du kennst und liebst. Mit Element kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
-\n
-\n• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
-\n
-\n• OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
-\n
-\n• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist, wobei deine Nachrichtenhistorie zwischen all deinen Geräten und auch deinem Messenger im Browser synchronisiert wird. Schau dir dazu auch riot.im an.</string>
-
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
-    <string name="store_whats_new">"An Element werden ständig Änderungen und Verbesserungen durchgeführt.
-Das vollständige Änderungsprotokoll ist hier zu finden: %1$s.
-Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
@@ -1250,7 +1220,6 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
 
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
 
-    <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere Ton, LED, Vibration</string>
     <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
@@ -1556,9 +1525,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_unable_to_get_trust_info">Beim Abrufen der Vertrauensinformationen ist ein Fehler aufgetreten</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
 
-    <string name="alpha_disclaimer_title">Willkommen in der Beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Während sich Element in der frühen Entwicklung befindet, fehlen möglicherweise einige Funktionen und es können Fehler auftreten.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store Beschreibung</string>
     <string name="settings_sdk_version">Matrix SDK Version</string>
     <string name="settings_other_third_party_notices">Sonstige Hinweise Dritter</string>
     <string name="navigate_to_room_when_already_in_the_room">Du siehst diesen Raum bereits!</string>
@@ -1607,24 +1573,17 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
 \n%s</string>
     <string name="sas_error_m_unknown_method">Die Sitzung kann sich nicht auf eine Schlüsselvereinbarung, eine Hash-, eine MAC- oder eine SAS-Methode einigen</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Die neueste Feature-Liste befindet sich immer in %1$s. Wenn du Fehler findest, sende uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden den Fehler so schnell wie möglich beheben.</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Wenn du Fehler findest, sende uns bitte einen Bericht im Menü oben links von der \"Startseite\". Wir werden diese so schnell wie möglich beheben.</string>
 
     <string name="import_e2e_keys_from_file">E2E-Schlüssel aus der Datei \"%1$s\" importieren.</string>
 
     <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
     <string name="send_suggestion_failed">Der Vorschlag konnte nicht gesendet werden (%s)</string>
 
-    <string name="store_riotx_title">Element - Matrix Client der nächsten Generation</string>
-    <string name="store_riotx_short_description">Ein schnellerer und leichterer Client für Matrix mit den neuesten Android-Frameworks</string>
     <string name="send_file_step_sending_thumbnail">Miniaturbild wird gesendet (%1$s / %2$s)</string>
     <string name="send_file_step_sending_file">Datei wird gesendet (%1$s / %2$s)</string>
 
     <string name="downloading_file">Datei %1$s wird heruntergeladen …</string>
     <string name="downloaded_file">Die Datei %1$s wurde heruntergeladen!</string>
-
-    <string name="riotx_no_registration_notice">%1$s , um ein Konto zu erstellen.</string>
-    <string name="riotx_no_registration_notice_colored_part">Benutze die alte App</string>
 
 
     <string name="room_filtering_footer_title">Kannst du nicht finden, wonach du suchst\?</string>
@@ -1742,26 +1701,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
 
-    <string name="security_warning_identity_server">Frühere Versionen von Element hatten ein Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
-\n
-\nWeitere Details gibt es hier (Englisch):
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
     <string name="settings_discovery_manage">Verwalte deine Erkennungseinstellungen.</string>
     <string name="room_widget_revoke_access">Zugriff für mich zurückziehen</string>
 
     <string name="push_gateway_item_device_name">Sitzungsname:</string>
     <string name="push_gateway_item_format">Format:</string>
-
-    <string name="store_riotx_full_description">Element ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
-\nElement ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
-\n
-\nHinweis: Dies ist eine Beta-Version. Element wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
-\n
-\nElement unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
-\n
-\nNicht alle Features in Element sind bisher in Element implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
@@ -2261,7 +2206,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Schlüsselanforderungen</string>
 
@@ -2329,7 +2274,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
     <string name="settings_messages_at_room">\@raum enthaltende Nachrichten</string>
     <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Nachrichten in Gruppenchats</string>
-    <string name="settings_notification_advanced_summary_riotx">Setze die Benachrichtigungswichtigkeit abhängig vom Ereignistyp</string>
+    <string name="settings_notification_advanced_summary">Setze die Benachrichtigungswichtigkeit abhängig vom Ereignistyp</string>
 
     <string name="command_description_plain">Sendet eine Nachricht als einfachen Text, ohne sie als Markdown zu interpretieren</string>
 
@@ -2401,12 +2346,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
 
     <string name="use_other_session_content_description">Nutze die neueste Version von Element auf deinen anderen Geräten, Element Web, Element Desktop, Element iOS, Element für Android oder einen anderen cross-signing fähigen Matrix client</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement für Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
-    <string name="use_latest_riot">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
+    <string name="use_latest_app">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
     <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>

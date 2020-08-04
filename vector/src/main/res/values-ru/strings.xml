@@ -196,7 +196,6 @@
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этой сессии и отправлять публичный ключ вашему серверу. Это необходимо только один раз; извините за неудобства.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Чтение списка вступивших</string>
@@ -649,10 +648,6 @@
     <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
-    <string name="e2e_enabling_on_app_update">Element теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
-
-Вы можете сделать это сейчас или позже из настроек приложения.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
     <string name="unknown_devices_alert_message">Эта комната содержит неизвестные сессии, которые не были подтверждены. 
@@ -724,7 +719,6 @@
     <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
     <string name="widget_integration_room_not_visible">Комната %s невидима.</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
-    <string name="login_mobile_device">Мобильный</string>
 
     <string name="notification_sync_in_progress">Синхронизация…</string>
     <string name="notification_listening_for_events">Мониторинг событий</string>
@@ -1086,7 +1080,7 @@
     <string name="auth_accept_policies">Пожалуйста ознакомьтесь и подтвердите согласие с политикой этого сервера:</string>
 
     <string name="settings_call_category">Вызовы</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Использовать стандартную мелодию Element для входящих звонков</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Использовать стандартную мелодию Element для входящих звонков</string>
     <string name="settings_call_ringtone_title">Мелодия звонка</string>
     <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
 
@@ -1116,9 +1110,6 @@
     <string name="show_info_area_messages_and_errors">Для сообщений и ошибок</string>
     <string name="show_info_area_only_errors">Только для ошибок</string>
 
-    <string name="store_whats_new">"Мы постоянно изменяем и улучшаем Element.
-Полный список изменений можно найти здесь: %1$s.
-Чтобы ничего не пропустить просто держите обновления включенными."</string>
     <string name="accept">Принимаю</string>
 
     <string name="settings_troubleshoot_diagnostic">Результаты диагностики</string>
@@ -1211,24 +1202,7 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Не найден APK сервисов Google Play. Уведомления могут работать неправильно.</string>
 
-    <string name="store_title">Element — общайся по-своему</string>
-    <string name="store_short_description">Универсальное приложение для безопасного общения, полностью находящееся под вашим контролем.</string>
     <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, исключения и запреты.</string>
-    <string name="store_full_description">Приложение для чата, под вашим контролем и полностью гибкое. Element позволяет вам общаться так, как вы хотите. Сделано для [matrix] — стандарта для открытого децентрализованного общения.
-\n
-\nВы можете создать бесплатную учетную запись на matrix.org, завести собственный сервер по адресу https://modular.im или использовать другой сервер Matrix.
-\n
-\nПочему стоит выбрать Element\?
-\n
-\n• ПОЛНОЦЕННАЯ СВЯЗЬ: создавайте комнаты для команд, друзей, сообществ — как хотите! Общайтесь, обменивайтесь файлами, добавляйте виджеты и совершайте голосовые и видеозвонки — и всё это бесплатно.
-\n
-\n• МОЩНЫЕ ИНТЕГРАЦИИ: Используйте Element с инструментами, которые знаете и любите. С Element вы можете даже общаться с пользователями и группами других приложений.
-\n
-\n• ЧАСТНЫЕ И БЕЗОПАСНЫЕ: держите ваши разговоры в тайне. Современное сквозное шифрование гарантирует, что частное общение остается частным.
-\n
-\n• ОТКРЫТО, НЕ ЗАКРЫТО: Открытый исходный код, построено на Matrix. Владейте данными, используя собственный сервер или выбирайте тот, которому доверяете.
-\n
-\n• ГДЕ БЫ ВЫ НИ БЫЛИ: оставайтесь на связи где угодно, с полностью синхронизированной историей сообщений на всех ваших устройствах и в Интернете по адресу https://riot.im.</string>
 
     <string name="title_activity_keys_backup_setup">Резервное копирование ключей</string>
     <string name="title_activity_keys_backup_restore">Используйте резервную копию ключа</string>
@@ -1238,7 +1212,6 @@
     <string name="done">Готово</string>
 
     <string name="settings_notification_advanced">Расширенные настройки уведомлений</string>
-    <string name="settings_notification_advanced_summary">Установка важности уведомления по событию, Настроить звук, светодиод, вибрацию</string>
     <string name="settings_notification_by_event">Значение уведомления по событию</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Пользовательские настройки.</string>
@@ -1593,12 +1566,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Произошла ошибка при получении информации о доверии</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Произошла ошибка при получении ключей резервного копирования данных</string>
 
-    <string name="alpha_disclaimer_title">Добро пожаловать в бету!</string>
-    <string name="alpha_disclaimer_content_line_1">Пока Element находится в ранней стадии разработки, некоторые функции могут отсутствовать и вы можете столкнуться с ошибками.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Последний список функций всегда находится в %1$s, и если вы найдете ошибку, пожалуйста, отправьте отчет в верхнее левое меню Home, и мы исправим их так быстро, как только сможем.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Описание магазина</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Если вы обнаружите ошибку, пожалуйста, отправьте сообщение в верхнее левое меню Home, и мы исправим ее так быстро, как только сможем.</string>
-
     <string name="import_e2e_keys_from_file">Импорт ключей e2e из файла \"%1$s\".</string>
 
     <string name="settings_sdk_version">Версия Matrix SDK</string>
@@ -1633,16 +1600,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в ленте сообщений</string>
 
-    <string name="store_riotx_title">Element - Matrix клиент следующего поколения</string>
-    <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
-    <string name="store_riotx_full_description">Element - это новый клиент для протокола Matrix (Matrix.org): открытой сети для безопасного децентрализованного общения. Element - это переписанный с нуля клиент Riot для Android, основанный на полностью переписанном Matrix Android SDK.
-\n 
-\nПредупреждение: это бета-версия. В настоящее время Element находится в активной разработке и содержит ограничения и ошибки (надеемся, не слишком много). Мы будем рады любым отзывам!
-\n 
-\nElement поддерживает: • Вход в существующую учетную запись • Создание и вход в публичные комнаты • Принятие и отклонение приглашений • Просмотр списка комнат • Просмотр сведений о комнате • Отправку текстовых сообщений • Отправку файлов • Чтение и отправку сообщений в зашифрованных комнатах • Криптографию: резервное копирование ключей E2E, улучшенную проверку устройств, запрос и ответ на запрос ключей • Пуш-уведомления • Светлые, тёмные и черные темы
-\n 
-\nНе все функции Element пока реализованы в Element. Основные отсутствующие возможности (скоро появятся!): • Настройки комнаты (список участников и т.п.) • Звонки • Виджеты • …</string>
-
     <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в Element пока не поддерживается</string>
 
     <string name="bottom_action_people_x">Диалоги</string>
@@ -1657,9 +1614,6 @@
     <string name="downloaded_file">Файл %1$s был загружен!</string>
 
     <string name="edited_suffix">(отредактированный)</string>
-
-    <string name="riotx_no_registration_notice">%1$s для создания учетной записи.</string>
-    <string name="riotx_no_registration_notice_colored_part">Используйте старое приложение</string>
 
 
     <string name="message_edits">Редактирование сообщений</string>
@@ -1691,11 +1645,6 @@
     <string name="decline">Отклонить</string>
 
     <string name="widget_integration_review_terms">Для продолжения Вам необходимо принять Условия данного сервиса.</string>
-
-    <string name="security_warning_identity_server">В предыдущих версиях Element была ошибка безопасности, которая могла дать вашему серверу идентификации (%1$s) доступ к вашей учетной записи. Если вы доверяете %2$s, вы можете проигнорировать это; в противном случае, пожалуйста, выйдите из системы и войдите снова.
-\n
-\nПодробнее об этом читайте здесь:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="settings_push_rules_no_rules">Пуш-правила не определены</string>
     <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>

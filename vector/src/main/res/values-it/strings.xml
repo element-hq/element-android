@@ -198,9 +198,6 @@
     <string name="login_error_login_email_not_yet">Il link nella mail non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questa sessione ed inviare la chiave pubblica all\'homeserver 
-\nQuesto inconveniente non capiterà più. 
-\nScusa per il disguido.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
@@ -672,10 +669,6 @@
     <string name="encryption_information_verify_device_warning2">Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
 
-    <string name="e2e_enabling_on_app_update">Element supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
-\n
-\nPuoi farlo ora, o più tardi, dalle impostazioni dell\'applicazione.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La stanza contiene sessioni sconosciute</string>
     <string name="unknown_devices_alert_message">Questa stanza contiene sessioni sconosciute che non sono state verificate. 
@@ -734,8 +727,6 @@
     <string name="notification_noisy_notifications">Notifiche audio</string>
     <string name="notification_listening_for_events">Rilevazione eventi</string>
     <string name="title_activity_bug_report">Segnalazione errore</string>
-
-    <string name="login_mobile_device">Smartphone</string>
 
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
@@ -1088,7 +1079,7 @@
     <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
 
     <string name="settings_call_category">Chiamate</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
     <string name="settings_call_ringtone_title">Suoneria delle chiamate in arrivo</string>
     <string name="settings_call_ringtone_dialog_title">Scegli la suoneria per le chiamate:</string>
 
@@ -1180,27 +1171,8 @@
 
     <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
 
-    <string name="store_title">Element - Comunica, a modo tuo</string>
-    <string name="store_short_description">Una App per chat universali, sicure ed interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Una App per chat flessibile e interamente sotto il tuo controllo. Element ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n 
-\nPuoi aprire un account matrix.org gratuito, creare il tuo server su https://modular.im o usare un altro server Matrix. 
-\n 
-\nPerché scegliere Element\?
-\n 
-\n• COMUNICAZIONE COMPLETA: crea stanze per discussione pubbliche o private per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai chiamate video o audio - tutto gratuito. 
-\n 
-\n• GRANDI INTEGRAZIONI: collega Element alle piattaforme che conosci ed ami. Con Element puoi addirittura chattare con utenti e gruppi che usano altre App di chat.
-\n 
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino sempre tali. 
-\n 
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Riprendi il possesso dei tuoi dati creando il tuo server Matrix personale, o scegliendone uno di cui ti fidi. 
-\n 
-\n• OVUNQUE TU SIA: stai sul pezzo ovunque tu sia grazie la cronologia dei messaggi sempre sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
-
     <string name="video_call_in_progress">Chiamata video in corso…</string>
 
-    <string name="store_whats_new">Element continua a crescere e migliorare. Il registro completo delle modifiche si può trovare qui: %1$s. Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
     <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
     <string name="keys_backup_is_not_finished_please_wait">Il Backup delle chiavi non è concluso, attendere prego…</string>
@@ -1227,7 +1199,6 @@
     <string name="auth_login_sso">Accedi con single sign-on</string>
     <string name="login_error_unknown_host">Questo URL è irraggiungibile. Per favore controllalo</string>
     <string name="login_error_ssl_handshake">"Il tuo dispositivo usa  un protocollo di sicurezza TLS obsoleto e vulnerabile agli attacchi. Per la tua sicurezza, ti viene impedito di connetterti"</string>
-    <string name="settings_notification_advanced_summary">Imposta i livelli di importanza delle notifiche in base al tipo. Configura i suoni, i led, e la vibrazione</string>
     <string name="settings_notification_by_event">Importanza delle notifiche in base al tipo</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Impostazioni personalizzate.</string>
@@ -1554,12 +1525,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati dal Backup delle chiavi</string>
 
-    <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Element si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">L\'elenco di funzioni più recenti è sempre nel %1$s, se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-
     <string name="import_e2e_keys_from_file">Importa le chiavi di crittografia dal file \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versione SDK Matrix</string>
@@ -1597,16 +1562,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella Timeline</string>
 
-    <string name="store_riotx_title">Element - Client Matrix di nuova generazione</string>
-    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero che utilizza gli ultimi framework di Android</string>
-    <string name="store_riotx_full_description">Element è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. Element è stato completamente riscritto rispetto a Riot Android, ed è a sua volta basato su un SDK Android di Matrix totalmente riscritto.
-\n 
-\nDisclaimer: questa è una versione beta. Element è attualmente in uno sviluppo attivo e contiene ancora alcune limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti!
-\n 
-\nElement supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
-\n 
-\nNon tutte le funzioni di Element sono già implementate in Element. Principali funzioni mancanti (prossimamente!): • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
-
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
 
@@ -1620,9 +1575,6 @@
     <string name="downloaded_file">Il file %1$s è stato scaricato!</string>
 
     <string name="edited_suffix">(modificato)</string>
-
-    <string name="riotx_no_registration_notice">%1$s per creare un account.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usa la vecchia app</string>
 
 
     <string name="message_edits">Modifiche messaggio</string>
@@ -1657,11 +1609,6 @@
     <string name="decline">Rifiuta</string>
 
     <string name="widget_integration_review_terms">Per continuare devi accettare i termini di servizio.</string>
-
-    <string name="security_warning_identity_server">Alcune precedenti versioni di Element contenevano un errore di sicurezza che permetteva al tuo Identity Server (%1$s) di accedere al tuo account. Se ti fidi di %2$s, puoi ignorare questo avviso; altrimenti disconnettiti e riaccedi di nuovo.
-\n 
-\nLeggi maggiori dettagli qui: 
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Termini di servizio</string>
     <string name="review_terms">Leggi i termini di servizio</string>
@@ -2255,7 +2202,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Le chiavi sono già aggiornate!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Richieste di chiavi</string>
 
@@ -2354,7 +2301,7 @@
     <string name="settings_messages_in_e2e_group_chat">Messaggi cifrati in chat di gruppo</string>
     <string name="settings_when_rooms_are_upgraded">Quando le stanze vengono aggiornate</string>
     <string name="settings_troubleshoot_title">Risoluzione problemi</string>
-    <string name="settings_notification_advanced_summary_riotx">Imposta l\'importanza della notifica per evento</string>
+    <string name="settings_notification_advanced_summary">Imposta l\'importanza della notifica per evento</string>
 
     <string name="command_description_plain">Invia un messaggio come testo semplice, senza interpretarlo come markdown</string>
 
@@ -2395,12 +2342,12 @@
     <string name="change_password_summary">Imposta una nuova password dell\'account…</string>
 
     <string name="use_other_session_content_description">Usa l\'ultima versione di Element sui tuoi altri dispositivi, Element Web, Element Desktop, Element iOS, Element per Android o un altro client Matrix che supporti la firma incrociata</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement per Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">o un altro client Matrix che supporti la firma incrociata</string>
-    <string name="use_latest_riot">Usa l\'ultimo Element sui tuoi altri dispositivi:</string>
+    <string name="use_latest_app">Usa l\'ultimo Element sui tuoi altri dispositivi:</string>
     <string name="command_description_discard_session">Forza l\'attuale sessione di gruppo in uscita in una stanza cifrata ad essere scartata</string>
     <string name="command_description_discard_session_not_handled">Supportato solo nelle stanze cifrate</string>
     <string name="enter_secret_storage_passphrase_or_key">Usa la tua %1$s o la %2$s per continuare.</string>

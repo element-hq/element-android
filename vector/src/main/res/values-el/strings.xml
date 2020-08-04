@@ -148,7 +148,6 @@
     <string name="search">Αναζήτηση</string>
 
     <string name="option_send_files">Αποστολή αρχείων</string>
-    <string name="store_short_description">Καλωσορίσατε στο Element: έναν νέο κόσμο ελεύθερης επικοινωνίας!</string>
     <string name="x_plus">%d+</string>
     <string name="generic_label">%1$s :</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
@@ -179,7 +178,7 @@
     <string name="room_info_room_topic">Θέμα δωματίου</string>
 
     <string name="settings_call_category">Κλήσεις</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
     <string name="settings_call_ringtone_title">Ήχος εισερχομένων κλήσεων</string>
     <string name="settings_call_ringtone_dialog_title">Επιλέξτε ήχο κλήσης:</string>
 

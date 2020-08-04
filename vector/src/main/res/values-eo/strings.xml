@@ -455,10 +455,6 @@
     <string name="login_error_user_in_use">Ĉi tiu uzantonomo jam estas uzata</string>
     <string name="login_error_login_email_not_yet">La retpoŝt-ligilo, kiu ankoraŭ ne estas klakita</string>
 
-    <string name="e2e_need_log_in_again">"Vi  bezonas resaluti por generi tutvoje ĉifrajn ŝlosilojn por ĉi tiu salutaĵo kaj sendi la publikan ŝlosilon al via hejmservilo.
-\nĈi tio necesas nur unufoje.
-\nPardonu la maloportunon."</string>
-
     <string name="e2e_re_request_encryption_key">Repeti ĉifrajn ŝlosilojn de aliaj viaj salutaĵoj.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Peto de ŝlosilo sendiĝis.</string>

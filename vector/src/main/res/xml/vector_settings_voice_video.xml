@@ -7,7 +7,7 @@
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
-            android:title="@string/settings_call_ringtone_use_riot_ringtone" />
+            android:title="@string/settings_call_ringtone_use_app_ringtone" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"

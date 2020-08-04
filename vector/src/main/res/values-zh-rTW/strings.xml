@@ -202,7 +202,6 @@
     <string name="login_error_unable_register">無法註冊</string>
     <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
     <string name="login_error_invalid_home_server">請輸入有效的網址</string>
-    <string name="login_mobile_device">行動</string>
 
     <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
     <string name="login_error_unknown_token">指定的存取權杖無法被認可</string>
@@ -211,8 +210,6 @@
     <string name="login_error_limit_exceeded">傳送太多請求</string>
     <string name="login_error_user_in_use">此使用者名稱已被使用</string>
     <string name="login_error_login_email_not_yet">此電子郵件連結已經被點擊過</string>
-
-    <string name="e2e_need_log_in_again">你需要重新登入來產生此工作階段的端對端加密金鑰，及送出公開金鑰到家伺服器。 這會斷線一次。 抱歉造成困擾。</string>
 
     <string name="read_receipts_list">讀取接收者清單</string>
 
@@ -740,10 +737,6 @@
     <string name="encryption_information_verify_device_warning2">如果不符合的話，您的通訊安全可能正受到威脅。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
-    <string name="e2e_enabling_on_app_update">Element 目前支援端到端加密，但您需要重新登入以啟用。
-\n
-\n您可以現在重新登入或稍後在應用程式設定中進行。</string>
-
     <string name="unknown_devices_alert_title">聊天室包含未知工作階段</string>
     <string name="unknown_devices_alert_message">此聊天室包含未經驗證的工作階段。
 \n無法保證這些工作階段屬於他們聲稱的使用者。
@@ -991,7 +984,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="x_plus">%d+</string>
 
     <string name="settings_call_category">通話</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">為來電使用預設的 Element 鈴聲</string>
+    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 Element 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
 
@@ -1084,29 +1077,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
 
-    <string name="store_title">Element - 以您的方式溝通</string>
-    <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
-    <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Element 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
-
-取得免費的 matrix.org 帳號，在 https://modular.im 取得您自己的伺服器，或是使用其他的 Matrix 伺服器。
-
-為什麼選擇 Element？
-
-• 完整的溝通：與您的團隊、朋友、社群一同建構聊天室，不管您喜歡什麼都可以！聊天、分享檔案、新增小工具與進行語音和視訊通話，全都是免費的。
-
-• 強大的整合：與您知道且所愛的工具一同使用 Element。使用 Element，您甚至可以與其他聊天應用程式的使用者與群組聊天。
-
-• 隱密且安全：讓您的對話保持隱密。最先進的端到端加密確保隱密的溝通會繼續保持隱密。
-
-• 開放，並不封閉：開放原始碼，建基於 Matrix。透過建構您自己的伺服器來擁有自己的資料，或選取您信任的。
-
-• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。"</string>
-
     <string name="video_call_in_progress">視訊通話進行中……</string>
 
-    <string name="store_whats_new">"我們會不斷為 Element 做出變更與改善。
-完整的變更紀錄可以在此找到：%1$s。
-為了確保您不會錯過任何事情，只要把更新打開就行了。"</string>
     <string name="title_activity_keys_backup_setup">金鑰備份</string>
     <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
@@ -1115,7 +1087,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="done">完成</string>
 
     <string name="settings_notification_advanced">進階通知設定</string>
-    <string name="settings_notification_advanced_summary">透過活動、音效、LED 與震動設定通知重要程度</string>
     <string name="settings_notification_by_event">活動通知重要程度</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">自訂設定。</string>
@@ -1459,12 +1430,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_unable_to_get_trust_info">取得信任資訊時發生錯誤</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">取得金鑰備份資料時發生錯誤</string>
 
-    <string name="alpha_disclaimer_title">歡迎使用測試版！</string>
-    <string name="alpha_disclaimer_content_line_1">Element 還在早期開發階段，可能會缺少某些功能，您可能會遇到臭蟲。</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">最新的功能清單一直都會在 %1$s，如果您發現臭蟲，請在首頁左上角的選單中遞交回報，我們將會盡快修復。</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play 商店描述</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">如果您發現臭蟲，請在首頁左上角的選單中遞交回報，我們將會盡快修復。</string>
-
     <string name="import_e2e_keys_from_file">從檔案「%1$s」匯入 e2e 金鑰。</string>
 
     <string name="settings_sdk_version">Matrix SDK 版本</string>
@@ -1502,16 +1467,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_labs_show_hidden_events_in_timeline">在時間軸中顯示隱藏的活動</string>
 
-    <string name="store_riotx_title">Element - 下一代的 Matrix 客戶端</string>
-    <string name="store_riotx_short_description">使用最新 Android 框架的 Matrix 較快且輕量的客戶端</string>
-    <string name="store_riotx_full_description">Element 是 Matrix 協定 (Matrix.org) 的新客戶端：安全、去中心化通訊的開放網路。Element 是 Riot Android 客戶端的完全重寫，以 Matrix Android SDK 的完全重寫為基礎。
-\n
-\n免責聲明：這是測試版。Element 目前仍在積極開發中，包含限制與（我們希望不多的）臭蟲。所有的回饋都很歡迎！
-\n
-\nElement 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
-\n
-\n不是所有 Element 的功能都已在 Element 中實作。主要缺少（會在稍後到來！）的功能 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
-
     <string name="bottom_action_people_x">直接訊息</string>
 
     <string name="send_file_step_idle">正在等待……</string>
@@ -1524,9 +1479,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="downloaded_file">檔案 %1$s 已下載！</string>
 
     <string name="edited_suffix">（已編輯）</string>
-
-    <string name="riotx_no_registration_notice">%1$s 以建立帳號。</string>
-    <string name="riotx_no_registration_notice_colored_part">使用舊的應用程式</string>
 
 
     <string name="message_edits">訊息編輯</string>
@@ -1561,11 +1513,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="decline">婉拒</string>
 
     <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
-
-    <string name="security_warning_identity_server">先前版本的 Element 有一個安全性問題，讓您的身份識別伺服器 (%1$s) 存取您的帳號。如果您信任 %2$s，您可以忽略這個；否則請登出再登入。
-\n
-\n在此閱讀更多詳細資訊：
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">服務條款</string>
     <string name="review_terms">審閱條款</string>
@@ -2153,7 +2100,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">金鑰請求</string>
 
@@ -2252,7 +2199,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_messages_in_e2e_group_chat">群組聊天中的已加密訊息</string>
     <string name="settings_when_rooms_are_upgraded">當聊天室升級時</string>
     <string name="settings_troubleshoot_title">疑難排解</string>
-    <string name="settings_notification_advanced_summary_riotx">按事件設定通知重要性</string>
+    <string name="settings_notification_advanced_summary">按事件設定通知重要性</string>
 
     <string name="command_description_plain">傳送純文字訊息，不將它們解譯為 markdown</string>
 
@@ -2293,12 +2240,12 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="change_password_summary">設定新的帳號密碼……</string>
 
     <string name="use_other_session_content_description">在您的其他裝置上使用最新的 Element、Element Web、Element 桌面版、Element iOS、Element for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement 桌面版</string>
-    <string name="riot_ios_android">Element iOS
-\nElement for Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="use_latest_riot">在您的其他裝置上使用最新的 Element：</string>
+    <string name="use_latest_app">在您的其他裝置上使用最新的 Element：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
     <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 以繼續。</string>

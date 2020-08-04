@@ -191,9 +191,6 @@
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública a el servidor.
-Esto sólo ocurre una vez.
-Disculpe por la inconveniencia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -636,10 +633,6 @@ Disculpe por la inconveniencia.</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Element ahora cuenta con cifrado de extremo-a-extremo pero necesitas reingresar tu cuenta para encenderlo.
-
-Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
     <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no se han verificado.
@@ -680,8 +673,6 @@ Dispositivos desconocidos:</string>
     <string name="option_take_video">Grabar video</string>
 
     <string name="error_no_external_application_found">Lo sentimos, no se encontró una aplicación externa para completar esta acción.</string>
-
-    <string name="login_mobile_device">Móvil</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
     <string name="groups_list">Lista de grupos</string>
@@ -771,7 +762,7 @@ Dispositivos desconocidos:</string>
     <string name="title_activity_verify_device">Verificar dispositivo</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
