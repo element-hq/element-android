@@ -73,15 +73,9 @@
         <!-- list colors -->
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">#FF090A0C</item>
-        <!--Header/Panel Text Primary-->
-        <item name="vctr_tab_home">@color/primary_color_black</item>
-        <!--Header/Panel Text Secondary-->
-        <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
 
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_black</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_black</item>
-
-        <item name="vctr_redacted_message_color">@color/list_divider_color_black</item>
 
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
 
@@ -91,8 +85,6 @@
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
         <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>
         <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_black</item>
-
-        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
