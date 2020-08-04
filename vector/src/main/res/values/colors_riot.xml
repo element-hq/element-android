@@ -12,23 +12,6 @@
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
 
-    <!-- home activity tab bar color -->
-    <color name="tab_favourites">#BD79CC</color>
-    <color name="tab_favourites_secondary">#744C7F</color>
-    <color name="tab_people">#F8A15F</color>
-    <color name="tab_people_secondary">#D97051</color>
-    <color name="tab_rooms">@color/accent_color_light</color>
-    <color name="tab_rooms_secondary">#5EA584</color>
-    <color name="tab_groups">#a6d0e5</color>
-
-    <color name="tab_groups_secondary">#81bddb</color>
-
-    <!-- color of the direct chat avatar ring (it's 50% of color accent) -->
-    <color name="direct_chat_ring_color_light">#7F03b381</color>
-    <color name="direct_chat_ring_color_dark">#7F03b381</color>
-    <color name="direct_chat_ring_color_black">#7F03b381</color>
-    <color name="direct_chat_ring_color_status">#7F586C7B</color>
-
     <!-- theses colours are requested a background cannot be set by an ?attr on android < 5 -->
     <!-- dedicated drawables are created for each theme -->
     <!-- Default/Background-->
@@ -105,10 +88,6 @@
     <!-- Status/Text Secondary-->
     <color name="riot_secondary_text_color_status">#7F70808D</color>
     <color name="riot_tertiary_text_color_status">@color/riot_primary_text_color_status</color>
-
-    <!-- Quote Colors -->
-    <color name="quote_strip_color">#FFDDDDDD</color>
-    <color name="quote_background_color">@android:color/transparent</color>
 
     <!-- Notification view colors -->
     <color name="soft_resource_limit_exceeded">#2f9edb</color>

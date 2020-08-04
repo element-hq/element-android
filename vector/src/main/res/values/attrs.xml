@@ -8,9 +8,6 @@
         <attr name="vctr_toolbar_secondary_text_color" format="color" />
         <attr name="vctr_toolbar_link_text_color" format="color" />
 
-        <!-- application bar text hint color -->
-        <attr name="vctr_primary_hint_text_color" format="color" />
-
         <!-- default text colors -->
         <attr name="vctr_default_text_hint_color" format="color" />
 

@@ -33,9 +33,6 @@
         <item name="vctr_toolbar_secondary_text_color">@color/primary_color_dark_status</item>
         <item name="vctr_toolbar_link_text_color">@color/primary_color_dark_status</item>
 
-        <!-- application bar text hint color -->
-        <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
-
         <!-- default text colors -->
         <item name="vctr_default_text_hint_color">@color/default_text_hint_color_light</item>
 

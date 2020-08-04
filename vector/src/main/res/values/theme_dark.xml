@@ -83,9 +83,6 @@
         <item name="vctr_toolbar_secondary_text_color">@color/riot_secondary_text_color_dark</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
-        <!-- application bar text hint color -->
-        <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>
-
         <!-- default text colors -->
         <item name="vctr_default_text_hint_color">@color/default_text_hint_color_dark</item>
 

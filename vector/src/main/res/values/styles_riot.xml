@@ -15,11 +15,6 @@
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
-    <style name="VectorToolbarStyle.Group">
-        <item name="android:background">@color/tab_groups</item>
-        <item name="background">@color/tab_groups</item>
-    </style>
-
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
@@ -281,11 +276,6 @@
 
     <style name="Floating_Actions_Menu.Light">
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
-    </style>
-
-    <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
-        <item name="background">@drawable/vector_tabbar_background_group_light</item>
     </style>
 
     <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
