@@ -177,10 +177,10 @@
     <string name="encryption_information_session_id">会话 ID</string>
     <string name="encryption_information_decryption_error">解密错误</string>
 
-    <string name="encryption_information_sender_device_information">发送者的设备信息</string>
-    <string name="encryption_information_device_name">设备名称</string>
-    <string name="encryption_information_device_id">设备 ID</string>
-    <string name="encryption_information_device_key">设备密钥</string>
+    <string name="encryption_information_sender_device_information">发送者的会话信息</string>
+    <string name="encryption_information_device_name">公开名称</string>
+    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_key">会话密钥</string>
     <string name="encryption_information_verification">验证</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指纹</string>
 
@@ -363,24 +363,24 @@
 
     <string name="encryption_information_device_info">事件信息</string>
     <string name="encryption_information_user_id">用户 ID</string>
-    <string name="encryption_export_e2e_room_keys">导出聊天室端对端加密密钥</string>
-    <string name="encryption_export_room_keys">导出聊天室密钥</string>
+    <string name="encryption_export_e2e_room_keys">导出端到端房间密钥</string>
+    <string name="encryption_export_room_keys">导出房间密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
     <string name="passphrase_enter_passphrase">输入密码</string>
     <string name="passphrase_confirm_passphrase">确认密码</string>
-    <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
+    <string name="encryption_export_saved_as">端到端房间密钥已经被保存到“%s”。
+\n
+\n注意：如果应用被卸载，此文件可能将会被移除。</string>
 
-注意：如果本应用程式被卸载，此文件可能将会被移除。</string>
-
-    <string name="encryption_import_e2e_room_keys">导入聊天室端对端加密密钥</string>
-    <string name="encryption_import_room_keys">导入聊天室密钥</string>
+    <string name="encryption_import_e2e_room_keys">导入端到端房间密钥</string>
+    <string name="encryption_import_room_keys">导入房间密钥</string>
     <string name="encryption_import_room_keys_summary">从本地文件导入密钥</string>
     <string name="encryption_never_send_to_unverified_devices_title">仅向已验证的设备发送加密消息</string>
     <string name="encryption_never_send_to_unverified_devices_summary">使用本设备时，从不向未验证的设备发送加密消息。</string>
 
     <string name="encryption_information_not_verified">未验证</string>
-    <string name="encryption_information_unknown_device">未知设备</string>
+    <string name="encryption_information_unknown_device">未知会话</string>
     <string name="encryption_information_verify">验证</string>
     <string name="encryption_information_unverify">取消验证</string>
     <string name="encryption_information_verify_device">验证设备</string>
@@ -544,7 +544,7 @@
     <string name="room_settings_labs_pref_title">实验室</string>
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 已尝试在这个聊天室的时间线上加载一个特定的时间点，但无法找到它。</string>
-    <string name="encryption_information_name">名称</string>
+    <string name="encryption_information_name">公开名称</string>
     <string name="encryption_information_verify_device_warning">为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配：</string>
     <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 
 \n如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当将其拉入黑名单。
@@ -712,7 +712,7 @@
     <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
     <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
-    <string name="room_participants_ban_prompt_msg">您确定要在这个聊天中封禁这个用户吗？</string>
+    <string name="room_participants_ban_prompt_msg">封禁踢掉将从房间中踢掉他们并阻止他们再次加入。</string>
 
     <string name="room_settings_all_messages">全部消息</string>
     <string name="room_settings_mention_only">只限提及</string>
@@ -1032,7 +1032,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
 
     <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 Element 内置的相机界面。</string>
-    <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用程序来录制语音消息。</string>
+    <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用录制消息。</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">启用开机时启动</string>
@@ -1330,7 +1330,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 发送失败 - 请打开聊天室</string>
 
-    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备（Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
 
     <string name="title_activity_verify_device">验证会话</string>
 
@@ -1439,9 +1439,9 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
     <string name="resources_script">Latn</string>
 
-    <string name="call_failed_no_ice_description">请要求您的家庭服务器（%1$s）的管理员配置TURN服务器，以使通话可靠地工作。
+    <string name="call_failed_no_ice_description">请要求您的家庭服务器 (%1$s) 的管理员配置 TURN 服务器，以使通话可靠地工作。
 \n
-\n 或者，您可以尝试使用%2$s的公共服务器，但这将不那么可靠，并且它将与该服务器共享您的IP地址。 您也可以在“设置”中进行管理。</string>
+\n或者，您可以尝试使用 %2$s 的公共服务器，但这将不那么可靠，并且它将与该服务器共享您的 IP 地址。您也可以在“设置”中进行管理。</string>
     <string name="call_failed_no_ice_use_alt">尝试使用 %s</string>
     <string name="call_failed_dont_ask_again">不要再问我</string>
 
@@ -1452,4 +1452,257 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="login_error_no_homeserver_found">這不是有效的 Matrix 服务器位置</string>
     <string name="login_error_homeserver_not_found">无法在此 URL 找到家庭服务器，请检查</string>
     <string name="settings_call_ringtone_use_default_stun">允许后备呼叫协助服务器</string>
-</resources>
+<string name="play_video">播放</string>
+    <string name="pause_video">暂停</string>
+    <string name="dismiss">忽略</string>
+
+
+    <string name="action_copy">复制</string>
+    <string name="dialog_title_success">成功</string>
+
+    <string name="bottom_action_notification">通知</string>
+    <string name="call_failed_no_connection">Element 呼叫失败</string>
+    <string name="call_failed_no_connection_description">无法建立实时连接。
+\n请要求您的家庭服务器管理员配置 TURN 服务器以使通话可靠工作。</string>
+
+    <string name="call_select_sound_device">选择声音设备</string>
+    <string name="sound_device_phone">电话</string>
+    <string name="sound_device_speaker">扬声器</string>
+    <string name="sound_device_headset">耳机</string>
+    <string name="sound_device_wireless_headset">无线耳机</string>
+    <string name="call_switch_camera">切换相机</string>
+    <string name="call_camera_front">前</string>
+    <string name="call_camera_back">后</string>
+    <string name="call_format_turn_hd_off">关闭 HD</string>
+    <string name="call_format_turn_hd_on">打开 HD</string>
+
+    <string name="login_error_ssl_peer_unverified">SSL 错误：尚未验证对等端身份。</string>
+    <string name="login_error_ssl_other">SSL 错误。</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">当您的家庭服务器未提供时将使用 %s 作为辅助（在通话时将分享您的 IP 地址）</string>
+    <string name="active_call_with_duration">活动通话 (%s)</string>
+    <string name="return_to_call">返回通话</string>
+
+    <string name="invite_no_identity_server_error">在您的设置中添加身份服务器以执行此操作。</string>
+    <string name="room_participants_action_cancel_invite">取消邀请</string>
+    <string name="room_participants_power_level_demote_warning_title">降低您自己的级别？</string>
+    <string name="room_participants_power_level_demote_warning_prompt">您家无法撤销此操作因为您正在降低您的级别，如果您是房间中最后一个特权用户将无法恢复特权。</string>
+    <string name="room_participants_power_level_demote">降级</string>
+
+
+    <string name="room_participants_action_ignore_title">忽略用户</string>
+    <string name="room_participants_action_ignore_prompt_msg">忽略此用户将从您共享的房间移除他们的消息。
+\n
+\n您随时可以在通用设置中反转此操作。</string>
+    <string name="room_participants_action_unignore_title">取消忽略用户</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。</string>
+    <string name="room_participants_action_cancel_invite_title">取消邀请</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">您确定想要取消邀请此用户吗？</string>
+    <string name="room_participants_kick_title">踢掉用户</string>
+    <string name="room_participants_kick_reason">踢掉理由</string>
+    <string name="room_participants_kick_prompt_msg">踢掉用户将从此房间移除他们。
+\n
+\n为防止他们再次加入，您应当封禁他们。</string>
+    <string name="room_participants_ban_title">封禁用户</string>
+    <string name="room_participants_ban_reason">封禁理由</string>
+    <string name="room_participants_unban_title">取消封禁用户</string>
+    <string name="room_participants_unban_prompt_msg">取消封禁用户将允许他们再次加入房间。</string>
+
+    <string name="settings_add_3pid_confirm_password_title">确认您的密码</string>
+    <string name="settings_add_3pid_flow_not_supported">您无法在 Element 移动版中这么做</string>
+    <string name="settings_add_3pid_authentication_needed">需要身份认证</string>
+
+
+    <string name="settings_background_fdroid_sync_mode">后台同步模式（实验性）</string>
+    <string name="settings_background_fdroid_sync_mode_battery">电池优化</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element 将在后台以保留设备有限资源（电池）的方式同步。
+\n取决于您的设备资源状态，同步可能被操作系统推迟。</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">实时优化</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element 将在后台定期准时同步（可配置）。
+\n这将影响网络和电池的使用，将显示一个永久通知表明 Element 正在监听事件。</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">无后台同步</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">应用在后台时您不会收到消息通知。</string>
+    <string name="settings_background_sync_update_error">更新设置失败。</string>
+
+
+    <string name="settings_set_workmanager_delay">偏好同步间隔</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\n取决于资源（电量）或设备状态（睡眠）同步可能会延迟。</string>
+    <string name="settings_integrations">集成</string>
+    <string name="settings_integrations_summary">使用集成管理器管理机器人，桥接，部件和贴纸包。
+\n集成管理器接收配置数据，可以代表您修改部件，发送房间邀请及设置特权等级。</string>
+    <string name="settings_secure_backup_section_title">安全备份</string>
+    <string name="settings_secure_backup_manage">管理</string>
+    <string name="settings_secure_backup_setup">设置安全备份</string>
+    <string name="settings_secure_backup_reset">重置安全备份</string>
+    <string name="settings_secure_backup_enter_to_setup">在此设备上设置</string>
+    <string name="settings_secure_backup_section_info">通过在您的服务器上备份加密密钥保障加密消息和数据的访问权。</string>
+    <string name="reset_secure_backup_title">为您已有的备份生成新的安全密钥或设置新的安全短语。</string>
+    <string name="reset_secure_backup_warning">这将替换您的当前密钥或短语。</string>
+
+    <string name="settings_discovery_category">发现</string>
+    <string name="settings_discovery_manage">管理您的发现设置。</string>
+    <string name="settings_integration_allow">允许集成</string>
+    <string name="settings_integration_manager">集成管理器</string>
+
+    <string name="disabled_integration_dialog_title">集成已禁用</string>
+    <string name="disabled_integration_dialog_content">请在设置中启用“允许集成”。</string>
+
+    <plurals name="room_settings_banned_users_count">
+	<item quantity="other">%d 个封禁用户</item>
+</plurals>
+
+    <string name="encryption_information_device_name_with_warning">公开名称（对通信参与者可见）</string>
+    <string name="device_name_warning">会话的公开名称对通信的参与者可见</string>
+    <string name="encryption_exported_successfully">成功导出密钥</string>
+
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widget_view_action">查看</string>
+    <string name="active_widgets_title">活动小部件</string>
+
+
+    <string name="room_widget_activity_title">小部件</string>
+    <string name="room_widget_permission_title">载入小部件</string>
+    <string name="room_widget_permission_added_by">此小部件添加者：</string>
+    <string name="room_widget_permission_webview_shared_info_title">使用它会设置 cookie 并与 %s 分享数据：</string>
+    <string name="room_widget_permission_shared_info_title">使用它会与 %s 分享数据：</string>
+    <string name="room_widget_failed_to_load">无法载入小部件。
+\n%s</string>
+    <string name="room_widget_reload">重载小部件</string>
+    <string name="room_widget_open_in_browser">在浏览器中打开</string>
+    <string name="room_widget_revoke_access">撤消我的访问权限</string>
+
+    <string name="room_widget_permission_display_name">您的昵称</string>
+    <string name="room_widget_permission_avatar_url">您的头像 URL</string>
+    <string name="room_widget_permission_user_id">您的用户 ID</string>
+    <string name="room_widget_permission_theme">您的主题</string>
+    <string name="room_widget_permission_widget_id">小部件 ID</string>
+    <string name="room_widget_permission_room_id">房间 ID</string>
+
+
+    <string name="room_widget_resource_permission_title">小部件想使用以下资源：</string>
+    <string name="room_widget_resource_grant_permission">允许</string>
+    <string name="room_widget_resource_decline_permission">阻止全部</string>
+    <string name="room_widget_webview_access_camera">使用相机</string>
+    <string name="room_widget_webview_access_microphone">使用麦克风</string>
+    <string name="room_widget_webview_read_protected_media">读取受 DRM 保护的媒体</string>
+
+    <string name="integration_manager_not_configured">未配置集成管理器。</string>
+    <string name="widget_integration_review_terms">若要继续请接受服务条款。</string>
+
+    <string name="recovery_key_export_saved">恢复密钥已保存。</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">您的家庭服务器上已存在备份</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">您似乎已在另一个会话中设置密钥备份。您想要将其替换为正在创建的吗？</string>
+    <string name="secure_backup_banner_setup_line1">安全备份</string>
+    <string name="secure_backup_banner_setup_line2">保护加密信息及数据的访问权</string>
+
+    <string name="secure_backup_setup">设置安全备份</string>
+
+    <string name="invalid_or_expired_credentials">由于无效或过期的凭据您已登出。</string>
+
+    <string name="sas_incoming_request_description">验证会话已将其标记为可信。当使用端到端加密消息时信任参与者的会话将给您额外的内心平静。</string>
+    <string name="sas_incoming_request_description_2">验证会话将标记其为可信，同时将您的会话对对方标记为可信。</string>
+
+    <string name="sas_emoji_description">通过确认以下表情符号出现在对方的屏幕上来验证此会话</string>
+    <string name="sas_decimal_description">通过确认屏幕上对方显示以下数字来验证此会话</string>
+
+    <string name="sas_incoming_verification_request_dialog">您收到传入验证请求。</string>
+    <string name="sas_verified_successful_description">与此用户的安全消息端到端加密，无法被第三方读取。</string>
+    <string name="sas_cancelled_by_other">对方取消了验证。
+\n%s</string>
+    <string name="sas_cancelled_by_me">验证已取消。
+\n理由：%s</string>
+
+    <string name="sas_error_m_user">用户已取消验证</string>
+    <string name="sas_error_m_timeout">验证过程超时</string>
+    <string name="sas_error_m_unknown_transaction">会话不知此事务</string>
+    <string name="sas_error_m_unknown_method">会话无法就密钥协商，哈希值，MAC，或 SAS 方法达成共识</string>
+    <string name="sas_error_m_mismatched_commitment">哈希承诺不匹配</string>
+    <string name="sas_error_m_mismatched_sas">SAS 不匹配</string>
+    <string name="sas_error_m_unexpected_message">会话收到意外消息</string>
+    <string name="sas_error_m_invalid_message">收到一条无效消息</string>
+    <string name="sas_error_m_key_mismatch">密钥不匹配</string>
+    <string name="sas_error_m_user_error">用户不匹配</string>
+    <string name="identity_server_not_defined">您未使用身份服务器</string>
+    <string name="identity_server_not_defined_for_password_reset">未配置身份服务器，需要重置您的密码。</string>
+
+    <string name="error_user_already_logged_in">您似乎正在试图连接到另一个家庭服务器。您想要登出吗？</string>
+
+    <string name="room_list_empty">加入一个房间开始使用应用。</string>
+    <string name="room_list_catchup_empty_title">您已经跟上了！</string>
+    <string name="room_list_catchup_empty_body">您没有未读消息</string>
+    <string name="room_list_catchup_welcome_body">从这里跟上未读消息</string>
+    <string name="room_list_people_empty_body">您的私聊消息将在此处显示</string>
+    <string name="room_list_rooms_empty_body">您的房间将在此显示</string>
+
+    <string name="event_redacted">消息已删除</string>
+    <string name="settings_show_redacted">显示已移除消息</string>
+    <string name="settings_show_redacted_summary">对已移除消息显示占位符</string>
+    <string name="event_redacted_by_admin_reason">房间管理员主持的事件</string>
+    <string name="last_edited_info_message">最后由 %1$s 编辑于 %2$s</string>
+
+
+    <string name="malformed_message">格式错误事件，无法显示</string>
+    <string name="error_no_network">无网络。请检查您的网络连接。</string>
+    <string name="change_room_directory_network">更改网络</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Element 尚不支持公开房间预览</string>
+
+    <string name="fab_menu_create_chat">私聊消息</string>
+
+    <string name="create_room_title">新房间</string>
+    <string name="create_room_public_title">公开</string>
+    <string name="create_room_public_description">任何人都可以加入此房间</string>
+    <string name="create_room_directory_description">将此房间发布到房间目录</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">获取信任信息时发生错误</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">获取密钥备份数据时发生错误</string>
+
+    <string name="import_e2e_keys_from_file">从文件 \"%1$s\" 导入端到端密钥。</string>
+
+    <string name="settings_other_third_party_notices">其他第三方通知</string>
+    <string name="navigate_to_room_when_already_in_the_room">您已经在查看此房间！</string>
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">注册令牌</string>
+
+    <string name="send_suggestion">提出建议</string>
+    <string name="send_suggestion_content">请在下方写下您的建议。</string>
+    <string name="send_suggestion_report_placeholder">请在此描述您的建议</string>
+    <string name="send_suggestion_sent">谢谢，建议已成功发送</string>
+    <string name="send_suggestion_failed">建议发送失败 (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">在时间线上显示隐藏事件</string>
+
+    <string name="bottom_action_people_x">私聊消息</string>
+
+    <string name="send_file_step_idle">正在等待…</string>
+    <string name="send_file_step_encrypting_thumbnail">正在加密缩略图…</string>
+    <string name="send_file_step_sending_thumbnail">正在发送缩略图 (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">正在加密文件…</string>
+    <string name="send_file_step_sending_file">正在发送文件 (%1$s / %2$s)</string>
+
+    <string name="downloading_file">正在下载文件 %1$s…</string>
+    <string name="downloaded_file">"文件 %1$s  已下载！"</string>
+
+    <string name="message_edits">消息编辑</string>
+    <string name="no_message_edits_found">未找到编辑</string>
+
+    <string name="room_filtering_filter_hint">过滤对话…</string>
+    <string name="room_filtering_footer_title">找不到您要找的？</string>
+    <string name="room_filtering_footer_create_new_room">创建新房间</string>
+    <string name="room_filtering_footer_create_new_direct_message">发送新私聊消息</string>
+    <string name="room_filtering_footer_open_room_directory">查看房间目录</string>
+
+    <string name="room_directory_search_hint">名称或 ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">在时间线中启用滑动回复</string>
+    <string name="labs_merge_e2e_in_timeline">在时间线中合并解密失败消息</string>
+    <string name="labs_show_unread_notifications_as_tab">在主屏幕上添加未读通知选项卡。</string>
+
+    <string name="link_copied_to_clipboard">链接已复制到剪贴板</string>
+
+    <string name="add_by_matrix_id">通过 matrix ID 添加</string>
+    <string name="creating_direct_room">正在创建房间…</string>
+    <string name="direct_room_no_known_users">无结果，使用通过 matrix ID 添加在服务器上搜索。</string>
+    </resources>
