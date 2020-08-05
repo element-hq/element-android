@@ -279,4 +279,214 @@
     <string name="login_error_not_json">Ei sisaldanud korrektset JSON\'it</string>
     <string name="login_error_limit_exceeded">Liiga palju samaaegseid sisselogimispäringuid</string>
     <string name="login_error_user_in_use">See kasutajanimi on juba kasutusel</string>
+<string name="play_video">Esita</string>
+    <string name="pause_video">Peata</string>
+    <string name="dismiss">Loobu</string>
+
+
+    <string name="action_copy">Kopeeri</string>
+    <string name="dialog_title_success">Õnnestus</string>
+
+    <string name="bottom_action_notification">Teavitused</string>
+    <string name="call_failed_no_connection">Kõne ebaõnnestus</string>
+    <string name="call_failed_no_connection_description">Reaalajas ühenduse loomine ei õnnestunud.
+\nPalu oma koduserveri %@ haldajat, et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.</string>
+
+    <string name="call_select_sound_device">Vali heliseade</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Kõlar</string>
+    <string name="sound_device_headset">Kõrvaklapid</string>
+    <string name="sound_device_wireless_headset">Traadita kõrvaklapid</string>
+    <string name="call_switch_camera">Vaheta kaamerat</string>
+    <string name="call_camera_front">Esikaamera</string>
+    <string name="call_camera_back">Tagakaamera</string>
+    <string name="call_format_turn_hd_off">Lülita kõrglahutusega video välja</string>
+    <string name="call_format_turn_hd_on">Lülita kõrglahutusega video sisse</string>
+
+    <string name="auth_login_sso">Logi sisse ühekordse sisselogimise abil</string>
+    <string name="login_error_ssl_other">SSL-ühenduse viga.</string>
+    <string name="login_error_unknown_token">Sisestatud tunnusluba ei ole õige</string>
+    <string name="login_error_login_email_not_yet">E-posti teel saadetud linki pole veel klõpsitud</string>
+
+    <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Palun käivita Element mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
+
+    <string name="read_receipts_list">Lugemisteatiste loend</string>
+
+    <string name="groups_list">Gruppide loend</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 liikmelisuse muutus</item>
+	<item quantity="other">%d liikmelisuse muutust</item>
+</plurals>
+
+    <string name="compression_options">Saada pilt</string>
+    <string name="compression_opt_list_original">Algses suuruses</string>
+    <string name="compression_opt_list_large">Suurena</string>
+    <string name="compression_opt_list_medium">Keskmisena</string>
+    <string name="compression_opt_list_small">Väikesena</string>
+
+    <string name="attachment_cancel_download">Kas katkestame allalaadimise\?</string>
+    <string name="attachment_cancel_upload">Kas katkestame üleslaadimise\?</string>
+    <string name="attachment_remaining_time_seconds">%d sekundit</string>
+    <string name="attachment_remaining_time_minutes">%1$d min %2$d sek</string>
+
+    <string name="yesterday">Eile</string>
+    <string name="today">Täna</string>
+
+    <string name="room_info_room_name">Jututoa nimi</string>
+    <string name="room_info_room_topic">Jututoa teema</string>
+
+    <string name="settings_call_category">Kõned</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Kasuta saabuvate kõnede jaoks Element\'i vaikimisi helinat</string>
+    <string name="settings_call_ringtone_use_default_stun">Kasuta kõnehõlbustusserverit</string>
+    <string name="settings_call_ringtone_title">Saabuva kõne helin</string>
+    <string name="settings_call_ringtone_dialog_title">Vali helin kõnede jaoks:</string>
+
+    <string name="call">Kõne</string>
+    <string name="call_connected">Vastuvõetud kõne</string>
+    <string name="call_connecting">Kõne ühendus on loomisel…</string>
+    <string name="call_ended">Kõne lõppes</string>
+    <string name="call_ring">Helistan…</string>
+    <string name="incoming_call">Saabuv kõne</string>
+    <string name="incoming_video_call">Saabuv videokõne</string>
+    <string name="incoming_voice_call">Saabuv häälkõne</string>
+    <string name="call_in_progress">Kõne on pooleli…</string>
+    <string name="video_call_in_progress">Videokõne on pooleli…</string>
+    <string name="active_call_with_duration">Käsilolev kõne (%s)</string>
+    <string name="return_to_call">Pöördu tagasi kõne juurde</string>
+
+    <string name="call_error_user_not_responding">Teine osapool ei võtnud kõnet vastu.</string>
+    <string name="call_error_camera_init_failed">Kaamerat ei õnnestu kasutusele võtta</string>
+    <string name="call_error_answered_elsewhere">kõnele vastati muust seadmest</string>
+
+    <string name="media_picker_both_capture_title">Tee foto või video</string>
+    <string name="media_picker_cannot_record_video">Video salvestamine ei õnnestu</string>
+
+    <string name="permissions_rationale_popup_title">Lisateave õiguste kohta</string>
+    <string name="permissions_rationale_msg_storage">Element vajab õigusi sinu foto- ja videokataloogide lugemiseks ning manuste salvestamiseks.
+\n
+\nSelleks, et saaksid oma nutiseadmest faile saata palun anna järgmisel lehel vajalikud õigused.</string>
+    <string name="permissions_rationale_msg_camera">Fotode ja videote salvestamiseks ning videokõnede tegemiseks vajab Element õigusi kasutada sinu kaamerat.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
+    <string name="permissions_rationale_msg_record_audio">Kõnede tegemiseks vajab Element õigusi kasutada sinu mikrofoni.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
+\n
+\nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Vabandust. Kuna vastavaid õigusi ei olnud, siis toimingut ei saanud teha</string>
+
+    <string name="media_slider_saved">Salvestatud</string>
+    <string name="media_slider_saved_message">Kas salvestame allalaetud failide kausta\?</string>
+    <string name="yes">JAH</string>
+    <string name="no">EI</string>
+    <string name="_continue">Jätka</string>
+
+    <string name="remove">Eemalda</string>
+    <string name="join">Liitu</string>
+    <string name="preview">Eelvaade</string>
+    <string name="reject">Hülga</string>
+
+    <string name="room_sync_in_progress">Sünkroniseerin…</string>
+    <string name="room_jump_to_first_unread">Mine esimese lugemata sõnumi juurde.</string>
+
+    <string name="room_preview_invitation_format">Sa oled kutsutud siia jututuppa %s poolt</string>
+    <string name="room_preview_unlinked_email_warning">Kutse saadeti %s e-posti aadressile, aga see ei ole seotud antud kasutajakontoga.
+\nSa kas peaksid logima sisse teise kontoga või lisama selle e-posti aadressi oma kasutajakontole.</string>
+    <string name="room_preview_try_join_an_unknown_room">Sa proovid saada ligipääsu %s jututoale. Kas soovid keskustelus osalemiseks selle jututoaga liituda\?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">jututuba</string>
+    <string name="room_preview_room_interactions_disabled">See on jututoa eelvaade. Seega igasugune suhtlus ei ole võimalik.</string>
+    <string name="room_participants_header_direct_chats">Isiklikud sõnumid</string>
+    <string name="ssl_cert_not_trust">See võib tähendada, et keegi on suuteline pahatahtlikult sinu veebiliiklust pealtkuulama või sinu telefon ei usalda serveri kasutatavat sertifikaati.</string>
+    <string name="ssl_cert_new_account_expl">Kui serveri haldaja on sind teavitanud, et nii võib juhtuda, siis kontrolli, et sertifikaadi sõrmejälg vastab sellele, mille haldaja sulle on andnud.</string>
+    <string name="ssl_unexpected_existing_expl">Võrreldes selle sertifikaadiga, mida sinu nutiseade seni usaldas, on praegune sertifikaat muutunud. See on VÄGA EBATAVALINE. Me soovitame, et ÄRA NÕUSTU selle uue sertifikaadiga.</string>
+    <string name="ssl_expected_existing_expl">Senise usaldusväärse sertifikaadi asemel kasutab server nüüd mitteusaldusväärset sertifikaati. See võib tähendada et haldaja on seda serveris muutnud. Et võrrelda viimase kehtiva sertifikaadi sõrmejälge, palun võta haldajaga ühendust.</string>
+    <string name="ssl_only_accept">NÕUSTU sertifikaadiga vaid siis, kui serveri haldaja antud sõrmejälg klapib sellega, mida sa hetkel siin näed.</string>
+
+    <string name="room_details_title">Jututoa üksikasjad</string>
+    <string name="room_details_people">Inimesed</string>
+    <string name="room_details_files">Failid</string>
+    <string name="room_details_settings">Seadistused</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 valitud</item>
+	<item quantity="other">%d valitud</item>
+</plurals>
+    <string name="malformed_id">Vigane kasutajatunnus. Peaksid kasutama kas e-posti aadressi või õiget Matrix\'i kasutajatunnust vormingus \'@toreinimene:domeen.ee\'</string>
+    <string name="room_details_people_invited_group_name">KUTSUTUD</string>
+    <string name="room_details_people_present_group_name">LIITUNUD</string>
+
+    <string name="room_event_action_report_prompt_reason">Sellest sisust teatamise põhjus</string>
+    <string name="room_event_action_cancel_upload">Katkesta üleslaadimine</string>
+    <string name="room_event_action_cancel_download">Katkesta allalaadimine</string>
+
+    <string name="search_hint">Otsi</string>
+    <string name="search_members_hint">Filtreeri jututoa liikmeid</string>
+    <string name="search_no_results">Tulemusi pole</string>
+    <string name="tab_title_search_rooms">JUTUTOAD</string>
+    <string name="tab_title_search_messages">SÕNUMID</string>
+    <string name="tab_title_search_people">INIMESED</string>
+    <string name="tab_title_search_files">FAILID</string>
+
+    <string name="room_recents_join">LIITU</string>
+    <string name="room_recents_favourites">LEMMIKUD</string>
+    <string name="room_recents_conversations">JUTUTOAD</string>
+    <string name="room_recents_low_priority">VÄHETÄHTIS</string>
+    <string name="room_recents_invites">KUTSED</string>
+    <string name="room_recents_start_chat">Alusta vestlust</string>
+    <string name="room_recents_create_room">Loo jututuba</string>
+    <string name="room_recents_join_room">Liitu jututoaga</string>
+    <string name="room_recents_join_room_title">Liitu jututoaga</string>
+    <string name="room_recents_join_room_prompt">Sisesta jututoa tunnus, nimi või alias</string>
+
+    <string name="directory_search_results_title">Sirvi kataloogi</string>
+    <string name="room_settings_direct_chat">Otsevestlus</string>
+    <string name="active_widget_view_action">VAATA</string>
+    <string name="deactivate_account_delete_checkbox">Minu konto kustutamisel palun unusta minu saadetud sõnumid (Hoiatus: seetõttu näevad tulevased kasutajad poolikuid vestlusi)</string>
+    <string name="sas_view_request_action">Näita päringut</string>
+    <string name="message_view_reaction">Näita reageerimisi</string>
+    <string name="create_new_room">Loo uus jututuba</string>
+    <string name="send_suggestion">Tee ettepanek</string>
+    <string name="send_suggestion_content">Palun kirjuta oma ettepaneku järgnevale väljale.</string>
+    <string name="send_suggestion_report_placeholder">Kirjelda oma ettepanekut siin</string>
+    <string name="send_suggestion_sent">Tänud, ettepaneku saatmine õnnestus</string>
+    <string name="send_suggestion_failed">Ettepaneku saatmine ei õnnestunud (%s)</string>
+
+    <string name="room_filtering_filter_hint">Sõelu vestlustest…</string>
+    <string name="room_filtering_footer_title">Kas sa ei leia seda, mida otsisid\?</string>
+    <string name="room_filtering_footer_create_new_room">Loo uus jututuba</string>
+    <string name="room_filtering_footer_create_new_direct_message">Saada uus otsesõnum</string>
+    <string name="room_filtering_footer_open_room_directory">Vaata jututubade loendit</string>
+
+    <string name="direct_room_filter_hint">Sõelu kasutajanime või kasutajatunnuse alusel…</string>
+
+    <string name="message_view_edit_history">Näita muudatuste ajalugu</string>
+
+    <string name="a11y_create_direct_message">Algata uus otsevestlus</string>
+    <string name="a11y_create_room">Loo uus jututuba</string>
+    <string name="bug_report_error_too_short">Kirjeldus on liiga lühike</string>
+
+    <string name="notification_initial_sync">Teen andmete esmast sünkroonimist…</string>
+
+    <string name="settings_show_devices_list">Näita kõiki minu sessioone</string>
+    <string name="settings_advanced_settings">Lisaseadistused</string>
+    <string name="alert_push_are_disabled_description">Tõuketeavituste kasutuselevõtuks vaata üle seadistused</string>
+    <string name="create_pin_title">Turvaliseks ligipääsuks seadista PIN-kood</string>
+    <string name="create_pin_confirm_title">Korda PIN-koodi</string>
+    <string name="create_pin_confirm_failure">PIN-koodid ei klapi, palun loo uus PIN-kood.</string>
+    <string name="auth_pin_title">Sisesta oma PIN-kood</string>
+    <string name="auth_pin_forgot">Kas unustasid PIN-koodi\?</string>
+    <string name="auth_pin_reset_title">Lähtesta PIN-kood</string>
+    <string name="auth_pin_new_pin_action">Uus PIN-kood</string>
+    <string name="auth_pin_reset_content">PIN-koodi lähtestamiseks peaksid sa uuesti sisse looma ning seadistama uue PIN-koodi.</string>
+    <string name="settings_security_pin_code_title">Võta PIN-kood kasutusele</string>
+    <string name="settings_security_pin_code_summary">Kui sa soovid oma PIN-koodi lähtestada, siis klõpsi nuppu „Unustasin PIN-koodi“.</string>
+    <string name="auth_pin_confirm_to_disable_title">PIN-koodi kasutuselt eemaldamiseks korda PIN-koodi</string>
 </resources>
