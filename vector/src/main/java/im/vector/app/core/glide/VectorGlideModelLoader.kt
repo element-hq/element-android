@@ -84,10 +84,14 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
     override fun cancel() {
         if (stream != null) {
             try {
+                // This is often called on main thread, and this could be a network Stream..
+                // on close will throw android.os.NetworkOnMainThreadException, so we catch throwable
                 stream?.close() // interrupts decode if any
                 stream = null
-            } catch (ignore: IOException) {
+            } catch (ignore: Throwable) {
                 Timber.e(ignore)
+            } finally {
+                stream = null
             }
         }
     }
