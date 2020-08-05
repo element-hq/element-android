@@ -80,8 +80,6 @@
 
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
 
-        <item name="vctr_pill_receipt">@drawable/pill_receipt_black</item>
-
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
         <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>

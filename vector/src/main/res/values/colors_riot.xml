@@ -46,6 +46,7 @@
     <color name="accent_color_status">#FF586C7B</color>
 
     <!--Default/Line break mobile-->
+    <attr name="list_divider_color" format="color" />
     <color name="list_divider_color_light">#EEEFEF</color>
     <!--Dark/Line break mobile-->
     <color name="list_divider_color_dark">#FF61708B</color>

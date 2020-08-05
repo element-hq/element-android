@@ -122,11 +122,7 @@
         <item name="vctr_settings_icon_tint_color">@android:color/black</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@color/riotx_accent</item>
 
-        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
-        <!-- dedicated drawables are created for each theme -->
-        <item name="vctr_line_divider">@drawable/line_divider_light</item>
-
-        <item name="vctr_pill_receipt">@drawable/pill_receipt_light</item>
+        <item name="list_divider_color">@color/list_divider_color_light</item>
 
         <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
