@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_voice">Голос</string>
     <string name="ongoing_conference_call_video">Видео</string>
     <string name="cannot_start_call">Не удалось осуществить вызов, попробуйте позже</string>
-    <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
+    <string name="missing_permissions_warning">Из-за отсутствия разрешений некоторые функции могут быть недоступны…</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
     <string name="device_information">Информация о сессии</string>
@@ -415,7 +415,7 @@
     <string name="room_sliding_menu_version">Версия</string>
     <string name="room_sliding_menu_term_and_conditions">Правила и условия</string>
     <string name="room_sliding_menu_third_party_notices">Прочие уведомления</string>
-    <string name="room_sliding_menu_copyright">Copyright</string>
+    <string name="room_sliding_menu_copyright">Авторские права</string>
     <string name="room_sliding_menu_privacy_policy">Политика конфиденциальности</string>
 
     <!-- Vector Settings -->
@@ -450,7 +450,7 @@
     <string name="settings_olm_version">Версия OLM</string>
     <string name="settings_app_term_conditions">Правила и условия</string>
     <string name="settings_third_party_notices">Прочие уведомления</string>
-    <string name="settings_copyright">Copyright</string>
+    <string name="settings_copyright">Авторские права</string>
     <string name="settings_privacy_policy">Политика конфиденциальности</string>
     <string name="settings_clear_cache">Очистить весь кэш</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
@@ -462,7 +462,7 @@
     <string name="settings_other">Другое</string>
     <string name="settings_advanced">Дополнительно</string>
     <string name="settings_cryptography">Криптография</string>
-    <string name="settings_notifications_targets">Отправлять уведомления на</string>
+    <string name="settings_notifications_targets">Устройства для уведомлений</string>
     <string name="settings_contact">Локальные контакты</string>
     <string name="settings_contacts_app_permission">Доступ к контактам</string>
     <string name="settings_contacts_phonebook_country">Страна для контактов</string>
@@ -777,7 +777,7 @@
 
     <string name="groups_list">Список групп</string>
 
-    <string name="room_participants_ban_prompt_msg">Вы уверены, что хотите забанить этого пользователя в этом чате?</string>
+    <string name="room_participants_ban_prompt_msg">Блокирующий пользователь выгонит их из этой комнаты и не позволит им снова присоединиться.</string>
 
     <string name="room_settings_all_messages_noisy">Все сообщения (громко)</string>
     <string name="room_settings_all_messages">Все сообщения</string>
@@ -1377,9 +1377,9 @@
     <string name="keys_backup_banner_update_line2">Управление резервным копированием ключей</string>
 
     <string name="keys_backup_banner_update_line1">Новые ключи зашифрованных сообщений</string>
-    <string name="new_recovery_method_popup_description">Обнаружена новая резервная копия ключа безопасных сообщений.
-
-Если вы не настраивали новый метод восстановления, злоумышленник может пытаться получить доступ к вашей учетной записи. Измените пароль учетной записи и сразу же установите новый способ восстановления в настройках.</string>
+    <string name="new_recovery_method_popup_description">Обнаружена новая резервная копия ключа безопасных сообщений. 
+\n
+\nЕсли вы не настраивали новый метод восстановления, злоумышленник может пытаться получить доступ к вашей учетной записи. Измените пароль учетной записи и сразу же установите новый способ восстановления в настройках.</string>
     <string name="keys_backup_setup_step3_text_line1">Ваши ключи копируются.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Дополнительно) Настройка с ключом восстановления</string>
     <string name="settings_data_save_mode_summary">В режиме экономии траффика применяется специальный фильтр, поэтому обновление присутствия и уведомления о наборе отфильтровываются.</string>
@@ -1576,9 +1576,9 @@
 
     <string name="settings_general_title">Общее</string>
     <string name="settings_preferences">Параметры</string>
-    <string name="settings_security_and_privacy">Безопасность &amp; Конфиденциальность</string>
+    <string name="settings_security_and_privacy">Безопасность и конфиденциальность</string>
     <string name="settings_expert">Профессионал</string>
-    <string name="settings_push_rules">Пуш-Правила</string>
+    <string name="settings_push_rules">Правила push-уведомлений</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
@@ -1646,8 +1646,8 @@
 
     <string name="widget_integration_review_terms">Для продолжения Вам необходимо принять Условия данного сервиса.</string>
 
-    <string name="settings_push_rules_no_rules">Пуш-правила не определены</string>
-    <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>
+    <string name="settings_push_rules_no_rules">Правила push-уведомлений не определены</string>
+    <string name="settings_push_gateway_no_pushers">Нет зарегистрированных push-шлюзов</string>
 
     <string name="terms_of_service">Условия предоставления услуг</string>
     <string name="review_terms">Условия просмотра</string>
@@ -1805,7 +1805,7 @@
 
     <string name="timeline_unread_messages">Непрочитанные сообщения</string>
 
-    <string name="login_splash_title">Освободите своё общение</string>
+    <string name="login_splash_title">Это ваш разговор. Владейте им.</string>
     <string name="login_splash_text1">Общайтесь с людьми напрямую или в группах</string>
     <string name="login_splash_submit">Начать</string>
 
@@ -1827,7 +1827,7 @@
     <string name="login_server_url_form_modular_hint">Модульный адрес</string>
     <string name="login_server_url_form_other_hint">Адрес</string>
     <string name="login_server_url_form_modular_text">Премиум-хостинг для организаций</string>
-    <string name="login_server_url_form_modular_notice">Введите адрес Modular Element или сервера, который вы хотите использовать.</string>
+    <string name="login_server_url_form_modular_notice">Введите адрес Modular Element или сервера, который вы хотите использовать</string>
     <string name="login_sso_error_message">Произошла ошибка при загрузке страницы: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Приложение не может войти на этот сервер, так как он поддерживает следующие типы входа: %1$s.
 \nВы хотите войти с помощью веб-клиента\?</string>
@@ -2012,7 +2012,7 @@
     <string name="security_prompt_text">Проверьте себя и других для защиты ваших бесед</string>
 
     <string name="backup_recovery_passphrase">Парольная фраза для восстановления</string>
-    <string name="crosssigning_verify_session">Проверка входа</string>
+    <string name="crosssigning_verify_session">Подтвердите сеанс</string>
     <string name="confirm_your_identity">Подтвердите свою личность и получите доступ к зашифрованным сообщениям, подтвердив этот вход в другой сессии.</string>
     <string name="settings_category_timeline">Лента сообщений</string>
 
@@ -2107,4 +2107,265 @@
 
     <string name="room_participants_action_cancel_invite">Отменить приглашение</string>
     <string name="room_participants_power_level_demote_warning_title">Снизить собственные полномочия\?</string>
+    <string name="dismiss">Отклонить</string>
+
+
+    <string name="room_participants_power_level_demote_warning_prompt">Вы не сможете отменить это изменение, поскольку вы понижаете себя в должности, а если вы последний привилегированный пользователь в комнате, то восстановить привилегии будет невозможно.</string>
+    <string name="room_participants_power_level_demote">Понизить</string>
+
+
+    <string name="room_participants_action_ignore_title">Игнорировать пользователя</string>
+    <string name="room_participants_action_ignore_prompt_msg">Игнорирование этого пользователя приведет к удалению его сообщений из общих комнат.
+\n
+\nВы можете отменить это действие в любое время в общих настройках.</string>
+    <string name="room_participants_action_unignore_title">Перестать игнорировать пользователя</string>
+    <string name="room_participants_action_unignore_prompt_msg">Если вы перестаните игнорировать этого пользователя, то все его сообщения вновь будут отображаться.</string>
+    <string name="room_participants_action_cancel_invite_title">Отменить приглашение</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Вы уверены, что хотите отменить приглашение для этого пользователя\?</string>
+    <string name="room_participants_kick_title">Выгнать пользователя</string>
+    <string name="room_participants_kick_reason">Причина гонения</string>
+    <string name="room_participants_kick_prompt_msg">Выгнанный пользователь будет удалён из этой комнаты.
+\n
+\nЧтобы предотвратить его повторное присоединение, вы должны забанить его.</string>
+    <string name="room_participants_ban_title">Заблокировать пользователя</string>
+    <string name="room_participants_ban_reason">Причина блокировки</string>
+    <string name="room_participants_unban_title">Разблокировать пользователя</string>
+    <string name="room_participants_unban_prompt_msg">Разблокирование пользователя позволит ему снова присоединиться к комнате.</string>
+
+    <string name="settings_secure_backup_section_title">Безопасное резервное копирование</string>
+    <string name="settings_secure_backup_manage">Управление</string>
+    <string name="settings_secure_backup_setup">Настройка безопасного резервного копирования</string>
+    <string name="settings_secure_backup_reset">Сброс безопасного резервного копирования</string>
+    <string name="settings_secure_backup_enter_to_setup">Настроить на этом устройстве</string>
+    <string name="settings_secure_backup_section_info">Защитите себя от потери доступа к зашифрованным сообщениям и данным, создав резервные копии ключей шифрования на вашем сервере.</string>
+    <string name="reset_secure_backup_title">Создайте новый ключ безопасности или задайте новую защитную фразу для существующей резервной копии.</string>
+    <string name="reset_secure_backup_warning">Это заменит ваш текущий ключ или фразу.</string>
+
+    <string name="disabled_integration_dialog_title">Интеграции отключены</string>
+    <string name="disabled_integration_dialog_content">Включите «Управление интеграциями» в настройках, чтобы сделать это.</string>
+
+    <plurals name="room_settings_banned_users_count">
+	<item quantity="one">%d пользователь заблокирован</item>
+	<item quantity="few">%d пользователей заблокировано</item>
+	<item quantity="many">%d пользователей заблокировано</item>
+</plurals>
+
+    <string name="encryption_exported_successfully">Ключи успешно экспортированы</string>
+
+    <string name="active_widget_view_action">ОБЗОР</string>
+    <string name="active_widgets_title">Активные виджеты</string>
+
+
+    <string name="recovery_key_export_saved">Ключ восстановления был сохранён.</string>
+
+    <string name="secure_backup_banner_setup_line1">Безопасное резервное копирование</string>
+    <string name="secure_backup_banner_setup_line2">Защита от потери доступа к зашифрованным сообщениям и данным</string>
+
+    <string name="secure_backup_setup">Настроить безопасное резервное копирование</string>
+
+    <string name="labs_merge_e2e_in_timeline">Слиянию не удаётся расшифровать сообщение на временной шкале</string>
+    <string name="labs_show_unread_notifications_as_tab">Добавьте специальную вкладку для непрочитанных уведомлений на главном экране.</string>
+
+    <plurals name="fallback_users_read">
+	<item quantity="one">Прочитал 1 пользователь</item>
+	<item quantity="few">Прочитано %d пользователями</item>
+	<item quantity="many">Прочитано %d пользователями</item>
+</plurals>
+
+    <string name="room_list_quick_actions_favorite_add">Добавить в избранное</string>
+    <string name="room_list_quick_actions_favorite_remove">Убрать из избранного</string>
+    <string name="notice_member_no_changes">%1$s не внес никаких изменений</string>
+    <string name="notice_member_no_changes_by_you">Вы не внесли никаких изменений</string>
+    <string name="no_ignored_users">Вы не игнорируете никаких пользователей</string>
+
+    <string name="room_join_rules_public_by_you">Вы сделали комнату доступной для всех, у кого есть ссылка.</string>
+    <string name="room_join_rules_invite_by_you">Вы сделали комнату только по приглашению.</string>
+    <string name="login_splash_text2">Сохраняйте приватность ваших переписок с помощью шифрования</string>
+    <string name="login_splash_text3">Расширьте и персонализируйте свой опыт использования</string>
+    <string name="login_server_matrix_org_text">Присоединяйтесь к миллионам бесплатных на самом большом публичном сервере</string>
+    <string name="login_signin_to">Войти в %1$s</string>
+    <string name="login_server_url_form_other_notice">Введите адрес сервера или Element, к которому вы хотите подключиться</string>
+    <string name="login_server_url_form_common_notice">Введите адрес сервера, который вы хотите использовать</string>
+
+    <string name="login_reset_password_notice">На ваш почтовый ящик будет отправлено письмо с подтверждением установки нового пароля.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Я подтвердил свою электронную почту</string>
+
+    <string name="login_set_email_notice">Установите адрес электронной почты для восстановления вашей учетной записи. Позже вы можете дополнительно разрешить людям, которых вы знаете, обнаружить вас по электронной почте.</string>
+    <string name="login_validation_code_is_not_correct">Введенный код неверен. Пожалуйста, проверьте.</string>
+    <string name="login_connect_using_matrix_id_notice">Кроме того, если у вас уже есть учетная запись и вы знаете свой идентификатор Matrix и пароль, вы можете использовать этот метод:</string>
+    <string name="login_connect_using_matrix_id_submit">Войти с помощью Matrix ID</string>
+    <string name="login_signin_matrix_id_title">Войти с помощью Matrix ID</string>
+    <string name="login_signin_matrix_id_notice">Если вы создаете учетную запись на домашнем сервере, используйте свой матричный идентификатор (например, @user:domain.com) и пароль ниже.</string>
+    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_signin_matrix_id_password_notice">Если вы не знаете свой пароль, вернитесь, чтобы сбросить его.</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Это недопустимый идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Не удалось найти действительный домашний сервер. Пожалуйста, проверьте свой идентификатор</string>
+
+    <string name="notification_initial_sync">Первичная синхронизация…</string>
+
+    <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake_detection_threshold">Порог обнаружения</string>
+    <string name="settings_rageshake_detection_threshold_summary">Встряхните телефон, чтобы проверить порог обнаружения</string>
+    <string name="rageshake_detected">Тряска зафиксирована!</string>
+    <string name="autocomplete_limited_results">Показываем только первые результаты, наберите больше букв…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
+    <string name="settings_developer_mode_fail_fast_summary">Element может падать чаще, когда происходит непредвиденная ошибка</string>
+
+    <string name="command_description_verify">Запрос на проверку данного идентификатора пользователя</string>
+    <string name="command_description_shrug">Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения</string>
+
+    <string name="create_room_encryption_description">После включения шифрования оно не может быть отключено.</string>
+
+    <string name="login_error_threepid_denied">Ваш почтовый домен не имеет права регистрироваться на этом сервере</string>
+
+    <string name="verify_user_sas_emoji_help_text">Проверьте этого пользователя, подтвердив, что следующие уникальные смайлики появляются на его экране в том же порядке.</string>
+    <string name="verify_user_sas_emoji_security_tip">Для максимальной безопасности используйте другое надежное средство связи или сделайте это лично.</string>
+    <string name="verification_green_shield">Ищите зеленый щит, чтобы убедиться, что пользователь доверенный. Доверяйте всем пользователям в комнате, чтобы обеспечить безопасность комнаты.</string>
+
+    <string name="verification_conclusion_not_secure">Не безопасно</string>
+    <string name="verification_conclusion_compromised">Одно из следующих условий может быть скомпрометировано:
+\n
+\n-- Ваш домашний сервер
+\n-- Домашний сервер, к которому подключен пользователь, которого вы проверяете
+\n-- Ваше или подключение к интернету других пользователей
+\n-- Ваше или устройство других пользователей</string>
+
+    <string name="sent_a_video">Видео.</string>
+    <string name="sent_an_image">Изображение.</string>
+    <string name="sent_an_audio_file">Аудио</string>
+    <string name="sent_a_file">Файл</string>
+    <string name="send_a_sticker">Стикер</string>
+
+    <string name="verification_request_waiting">Ожидание…</string>
+    <string name="verification_request_other_cancelled">%s отменено</string>
+    <string name="verification_request_you_cancelled">Вы отменили</string>
+    <string name="verification_request_other_accepted">%s принято</string>
+    <string name="verification_request_you_accepted">Вы приняли</string>
+    <string name="verification_sent">Подтверждениие отправлено</string>
+    <string name="verification_request">Запрос на подтверждение</string>
+    <string name="verification_verify_device">Подтвердите этот сеанс</string>
+    <string name="verification_verify_device_manually">Подтверждение вручную</string>
+
+    <string name="you">Вы</string>
+
+    <string name="verification_scan_notice">Сканируйте код с помощью устройства другого пользователя, чтобы надежно проверить друг друга</string>
+    <string name="verification_scan_their_code">Сканировать их код</string>
+    <string name="verification_scan_emoji_title">Невозможно сканировать</string>
+    <string name="verification_scan_emoji_subtitle">Если вы не можете лично, сравните эмодзи в таком случае</string>
+
+    <string name="verification_no_scan_emoji_title">Подтвердить при помощи сравнения эмодзи</string>
+
+    <string name="verify_by_emoji_title">Подтверждение с помощью эмодзи</string>
+    <string name="verify_by_emoji_description">Если вы не можете отсканировать приведенный выше код, проверьте это, сравнив короткий уникальный набор эмодзи.</string>
+
+    <string name="a13n_qr_code_description">Изображение QR-кода</string>
+
+    <string name="verification_verify_user">Подтверждено %s</string>
+    <string name="verification_verified_user">Подтверждённых %s</string>
+    <string name="verification_request_waiting_for">Ожидание для %s…</string>
+    <string name="verification_request_alert_description">Для дополнительной безопасности проверьте %s, проверив одноразовый код на обоих ваших устройствах.
+\n
+\nДля максимальной безопасности сделайте это лично.</string>
+    <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.</string>
+    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.
+\n
+\nВаши сообщения защищены замками, и только у вас и получателя есть уникальные ключи, чтобы разблокировать их.</string>
+    <string name="room_profile_section_admin">Действия Администратора</string>
+    <string name="room_profile_leaving_room">Покинуть комнату…</string>
+
+    <string name="room_member_power_level_custom">Пользовательский</string>
+    <string name="room_member_power_level_invites">Приглашения</string>
+    <string name="room_member_power_level_admin_in">Администратор в %1$s</string>
+    <string name="room_member_power_level_moderator_in">Модератор в %1$s</string>
+    <string name="room_member_power_level_default_in">По умолчанию в %1$s</string>
+    <string name="room_member_power_level_custom_in">Пользовательский (%1$d) в %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Перейти к последнему прочтённому им сообщению</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">Element не обрабатывает события типа \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element не обрабатывает сообщения типа \'%1$s\'</string>
+    <string name="rendering_event_error_exception">Element столкнулся с проблемой при отображении содержимого события с идентификатором \'%1$s\'</string>
+
+    <string name="unignore">Перестать игнорировать</string>
+
+    <string name="verify_cannot_cross_sign">Этот сеанс не может поделиться этой проверкой с другими сеансами.
+\nПроверка будет сохранена локально и совместно использоваться в будущей версии приложения.</string>
+
+    <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
+    <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
+
+    <string name="settings_category_composer">Редактирование сообщений</string>
+
+    <string name="room_settings_enable_encryption">Включить сквозное шифрование</string>
+    <string name="room_settings_enable_encryption_warning">После включения шифрования оно не может быть отключено.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Активировать шифрование\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">После включения шифрование для комнаты не может быть отключено. Сообщения, отправленные в зашифрованном помещении, не могут быть замечены сервером, только участниками помещения. Включение шифрования может помешать правильной работе многих ботов и мостов.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Активировать шифрование</string>
+
+    <string name="verification_request_notice">Чтобы быть в безопасности, проверьте %s, проверив одноразовый код.</string>
+    <string name="verification_request_start_notice">Чтобы обезопасить себя, сделайте это лично или используйте другой способ общения.</string>
+
+    <string name="verification_emoji_notice">Сравните уникальные эмодзи, убедившись, что они появились в том же порядке.</string>
+    <string name="verification_code_notice">Сравните код с тем, который отображается на экране другого пользователя.</string>
+    <string name="verification_conclusion_ok_notice">Сообщения с этим пользователем полностью зашифрованы и не могут быть прочитаны третьими лицами.</string>
+    <string name="verification_conclusion_ok_self_notice">Ваш новый сеанс теперь проверен. Он имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут считать его надежным.</string>
+
+    <string name="encryption_information_cross_signing_state">Кросс-подпись</string>
+    <string name="encryption_information_dg_xsigning_complete">Кросс-подпись включена
+\nПриватные ключи хранятся на устройстве.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Кросс-подпись включена
+\nКлючи являются надёжными.
+\nПриватные ключи неизвестны</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Кросс-подпись включена.
+\nКлючи являются ненадёжными</string>
+    <string name="encryption_information_dg_xsigning_disabled">Кросс-подпись выключена</string>
+
+    <string name="settings_hs_admin_e2e_disabled">Администратор вашего сервера отключил сквозное шифрование по умолчанию в приватных комнатах и диалогах.</string>
+    <string name="settings_active_sessions_list">Активные сеансы</string>
+    <string name="settings_active_sessions_show_all">Показать все сеансы</string>
+    <string name="settings_active_sessions_manage">Управление сеансами</string>
+    <string name="settings_active_sessions_signout_device">Выйти из этого сеанса</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Нет доступного шифрования информации</string>
+
+    <plurals name="settings_active_sessions_count">
+	<item quantity="one">%d сеанс активен</item>
+	<item quantity="few">%d сеансов активно</item>
+	<item quantity="many">%d сеансов активно</item>
+</plurals>
+
+    <string name="crosssigning_verify_this_session">Проверьте этот сеанс</string>
+    <string name="verification_open_other_to_verify">Используйте существующий сеанс для проверки этого, предоставив ему доступ к зашифрованным сообщениям.</string>
+
+
+    <string name="settings_dev_tools">Инструменты для разработчиков</string>
+    <string name="settings_account_data">Данные учётной записи</string>
+    <string name="verification_use_passphrase">Если вы не можете получить доступ к существующему сеансу</string>
+
+    <string name="settings_key_requests">Запросы ключей</string>
+
+    <string name="verify_new_session_notice">Используйте этот сеанс для проверки вашего нового сеанса, предоставляя ему доступ к зашифрованным сообщениям.</string>
+    <string name="bootstrap_cross_signing_success">Ваши %2$s и %1$s установлены.
+\n
+\nДержите их в безопасности! Они понадобятся вам для разблокировки зашифрованных сообщений и защиты информации, если вы потеряете все свои активные сеансы.</string>
+
+    <string name="bootstrap_cancel_text">Если вы отмените сейчас, вы можете потерять зашифрованные сообщения и данные, если потеряете доступ к своим логинам.
+\n
+\nВы также можете настроить безопасное резервное копирование и управлять своими ключами в настройках.</string>
+
+    <string name="encryption_enabled_tile_description">Сообщения в этой комнате зашифрованы сквозным шифрованием. Посмотрите подробности и подтвердите пользователей в их профиле.</string>
+    <string name="settings_notification_configuration">Параметры уведомлений</string>
+    <string name="settings_messages_at_room">Сообщения, содержащие @room</string>
+    <string name="settings_troubleshoot_title">Отладка</string>
+    <string name="settings_notification_advanced_summary">Настройки важности уведомлений для событий</string>
+
+    <string name="use_other_session_content_description">Используйте последнюю версию Element на других ваших устройствах, веб-клиент Element, Element для ПК, Element для iOS, Element для Андроид или другой клиент Matrix, поддерживающий кросс-подпись</string>
+    <string name="use_latest_app">Используйте последнюю версию Element на других ваших устройствах:</string>
+    <string name="verify_this_session">Проверьте доступ нового сеанса к вашей учетной записи: %1$s</string>
+
+    <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
     </resources>
