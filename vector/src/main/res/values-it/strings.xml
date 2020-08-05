@@ -26,7 +26,7 @@
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Collegamento permanente</string>
     <string name="view_source">Vedi il codice sorgente</string>
     <string name="view_decrypted_source">Vedi il codice sorgente decifrato</string>
     <string name="delete">Elimina</string>
@@ -169,7 +169,7 @@
     <string name="auth_recaptcha_message">Questo Home Server vorrebbe assicurarsi che tu non sia un robot</string>
     <string name="auth_username_in_use">Nome utente già in uso</string>
     <string name="auth_home_server">Home Server:</string>
-    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_identity_server">Server identità:</string>
     <string name="auth_reset_password_next_step_button">Ho verificato il mio indirizzo email</string>
     <string name="auth_reset_password_message">Per reimpostare la password, inserisci l\'indirizzo email associato al tuo account:</string>
     <string name="auth_reset_password_missing_email">Va inserito l\'indirizzo email associato al tuo account.</string>
@@ -497,7 +497,7 @@
 
     <string name="settings_logged_in">Autenticato come</string>
     <string name="settings_home_server">Home Server</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_identity_server">Server identità</string>
 
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua</string>
@@ -764,7 +764,7 @@
         <item quantity="one">1 utente</item>
         <item quantity="other">%d utenti</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bannare questo utente\?</string>
+    <string name="room_participants_ban_prompt_msg">Bandire l\'utente lo espellerà dalla stanza e gli impedirà di rientrare.</string>
 
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nuovo messaggio</item>
@@ -1592,7 +1592,7 @@
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
 
-    <string name="settings_integration_manager">Integration Manager</string>
+    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
 
     <string name="integration_manager_not_configured">Non è stato configurato nessun Integration Manager.</string>
     <string name="add_by_matrix_id">Aggiungi per ID utente</string>
@@ -1723,7 +1723,7 @@
     <string name="attachment_type_camera">Fotocamera</string>
     <string name="attachment_type_audio">Audio</string>
     <string name="attachment_type_gallery">Galleria</string>
-    <string name="attachment_type_sticker">Sticker</string>
+    <string name="attachment_type_sticker">Adesivo</string>
     <string name="error_handling_incoming_share">Errore nella gestione dei dati condivisi</string>
 
     <string name="report_content_spam">È spam</string>
@@ -1811,7 +1811,7 @@
     <string name="room_join_rules_invite">%1$s ha reso la stanza solo ad invito.</string>
     <string name="timeline_unread_messages">Messaggi non letti</string>
 
-    <string name="login_splash_title">Libera le tue comunicazioni</string>
+    <string name="login_splash_title">È la tua conversazione. Tienitela.</string>
     <string name="login_splash_text1">Chatta con persone direttamente o in gruppi</string>
     <string name="login_splash_text2">Tieni private le conversazioni con la cifratura</string>
     <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
@@ -2406,7 +2406,7 @@
     <string name="login_connect_using_matrix_id_notice">In alternativa, se hai già un account e conosci il tuo identificativo e password di Matrix, puoi usare questo metodo:</string>
     <string name="login_connect_using_matrix_id_submit">Accedi con il mio identificativo di Matrix</string>
     <string name="login_signin_matrix_id_title">Accedi</string>
-    <string name="login_signin_matrix_id_notice">Inserisci il tuo identificativo e la password</string>
+    <string name="login_signin_matrix_id_notice">Se configuri un account in un homeserver, usa il tuo ID Matrix (es. @utente:dominio.com) e la password qua sotto.</string>
     <string name="login_signin_matrix_id_hint">Identificativo utente</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Non è un identificativo valido. Formato previsto: \'@utente:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Impossibile trovare un homeserver valido. Controlla il tuo identificativo</string>
@@ -2433,4 +2433,63 @@
     <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un server di identità</string>
     <string name="identity_server_set_alternative_submit">Invia</string>
 
-</resources>
+<string name="play_video">Riproduci</string>
+    <string name="pause_video">Pausa</string>
+    <string name="dismiss">Annulla</string>
+
+
+    <string name="action_copy">Copia</string>
+    <string name="dialog_title_success">Completato</string>
+
+    <string name="bottom_action_notification">Notifiche</string>
+    <string name="call_failed_no_connection">Telefonata di Element fallita</string>
+    <string name="call_failed_no_connection_description">Connessione in tempo reale fallita.
+\nChiedi all\'amministratore del tuo homeserver di configurare un server TURN per fare funzionare le chiamate.</string>
+
+    <string name="call_select_sound_device">Seleziona dispositivo audio</string>
+    <string name="sound_device_phone">Telefono</string>
+    <string name="sound_device_speaker">Altoparlante</string>
+    <string name="sound_device_headset">Cuffie</string>
+    <string name="sound_device_wireless_headset">Cuffie senza fili</string>
+    <string name="call_switch_camera">Cambia fotocamera</string>
+    <string name="call_camera_front">Frontale</string>
+    <string name="call_camera_back">Posteriore</string>
+    <string name="call_format_turn_hd_off">Disattiva l\'HD</string>
+    <string name="call_format_turn_hd_on">Attiva l\'HD</string>
+
+    <string name="login_error_ssl_peer_unverified">Errore SSL: l\'identità del peer non è stata verificata.</string>
+    <string name="login_error_ssl_other">Errore SSL.</string>
+    <string name="active_call_with_duration">Telefonata attiva (%s)</string>
+    <string name="return_to_call">Torna alla telefonata</string>
+
+    <string name="room_participants_action_cancel_invite">Annulla invito</string>
+    <string name="room_participants_power_level_demote_warning_title">Vuoi declassarti\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Non potrai annullare questa modifica dato che ti stai declassando, se sei l\'ultimo utente privilegiato nella stanza sarà impossibile ottenere di nuovo i privilegi.</string>
+    <string name="room_participants_power_level_demote">Declassa</string>
+
+
+    <string name="room_participants_action_ignore_title">Ignora utente</string>
+    <string name="room_participants_action_ignore_prompt_msg">Ignorando questo utente verranno rimossi i suoi messaggi dalle stanze che condividete.
+\n
+\nPuoi annullare questa azione in qualsiasi momento nelle impostazioni generali.</string>
+    <string name="room_participants_action_unignore_title">Non ignorare più</string>
+    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.</string>
+    <string name="room_participants_action_cancel_invite_title">Annulla invito</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
+    <string name="room_participants_kick_title">Butta fuori l\'utente</string>
+    <string name="room_participants_kick_reason">Motivo</string>
+    <string name="room_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questa stanza.
+\n
+\nPer evitare che possa rientrare, dovresti invece bandirlo.</string>
+    <string name="room_participants_ban_title">Bandisci l\'utente</string>
+    <string name="room_participants_ban_reason">Motivo del ban</string>
+    <string name="room_participants_unban_title">Togli il ban dell\'utente</string>
+    <string name="room_participants_unban_prompt_msg">Togliere il ban dell\'utente gli permetterà di rientrare nella stanza.</string>
+
+    <string name="settings_secure_backup_section_title">Backup Sicuro</string>
+    <string name="settings_secure_backup_manage">Gestisci</string>
+    <string name="settings_secure_backup_setup">Imposta il Backup Sicuro</string>
+    <string name="settings_secure_backup_reset">Reimposta il Backup Sicuro</string>
+    <string name="settings_secure_backup_enter_to_setup">Configura in questo dispositivo</string>
+    <string name="settings_secure_backup_section_info">Proteggiti contro la perdita dell\'accesso ai messaggi e dati cifrati facendo un backup delle chiavi crittografiche sul tuo server.</string>
+    </resources>
