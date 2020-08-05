@@ -103,7 +103,7 @@
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreiben Sie das Problem. Was haben Sie genau gemacht\? Was sollte passieren\? Was passierte tatsächlich\?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn Sie nur den oben eingegebenen Text senden möchten, bitte die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Sie scheinen Ihr Telefon frustriert zu schütteln. Möchten Sie das Fenster zum Senden eines Fehlerberichts öffnen\?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -1288,9 +1288,9 @@ Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf
     <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
-    <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen Ihre verschlüsselten Nachrichten verloren</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn Sie sich jetzt ausloggen, dann gehen Ihre verschlüsselten Nachrichten verloren.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte bei all Ihren Sitzungen aktiviert sein, um einen Verlust Ihrer verschlüsselten Nachrichten zu verhindern.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen deine verschlüsselten Nachrichten verloren</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn du dich jetzt ausloggst, gehen deine verschlüsselten Nachrichten verloren.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel…</string>
     <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
@@ -2026,7 +2026,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="you">Ich</string>
 
-    <string name="verification_scan_notice">Scanne den Code mit dem Gerät des Gegenüber, um sich gegenseitig zu überprüfen</string>
+    <string name="verification_scan_notice">Scanne den Code mit dem Gerät des Gegenüber für eine gegenseitige Überprüfung</string>
     <string name="verification_scan_their_code">Scanne ihren/seinen Code</string>
     <string name="verification_scan_emoji_title">Kann nicht scannen</string>
     <string name="verification_scan_emoji_subtitle">Wenn ihr nicht am selben Ort seid, vergleicht Emoji stattdessen</string>
@@ -2415,7 +2415,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sound_device_wireless_headset">Drahtloses Headset</string>
     <string name="call_switch_camera">Wechsle Kamera</string>
     <string name="call_camera_front">Frontkamera</string>
-    <string name="call_camera_back">Hauptkamera</string>
+    <string name="call_camera_back">Hintere Kamera</string>
     <string name="call_format_turn_hd_off">Deaktiviere HD-Qualität</string>
     <string name="call_format_turn_hd_on">Aktiviere HD-Qualität</string>
 
@@ -2451,7 +2451,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_secure_backup_setup">Backup einrichten</string>
     <string name="settings_secure_backup_reset">Backup zurücksetzen</string>
     <string name="settings_secure_backup_enter_to_setup">Auf diesem Gerät einrichten</string>
-    <string name="settings_secure_backup_section_info">Absicherung um den Zugriffsverlust auf verschlüsselten Nachrichten &amp; Daten zu verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
+    <string name="settings_secure_backup_section_info">Absicherung um den Zugriffsverlust auf verschlüsselte Nachrichten &amp; Daten zu verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
     <string name="reset_secure_backup_title">Generiere einen neuen Sicherheitsschlüssel oder setze eine neue Sicherheitspassphrase für dein existierendes Backup.</string>
     <string name="reset_secure_backup_warning">Dieses wird deinen aktuellen Schlüssel oder deine aktuelle Phrase ersetzen.</string>
 
@@ -2555,7 +2555,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_setup_secure_backup">Richte Backup ein</string>
 
     <string name="bottom_sheet_setup_secure_backup_title">Backup</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Absicherung gegen Zugriffsverlust zu verschlüsselten Nachrichten &amp; Daten durch Backup der Verschlüsselungsschlüssel auf deinem Server.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Absicherung um den Zugriffsverlust auf verschlüsselte Nachrichten &amp; Daten zu verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Benutze einen Sicherheitsschlüssel</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generiere einen Sicherheitsschlüssel, welcher z.B. in einem Passwortmanager oder in einem Tresor sicher aufbewahrt werden sollte.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Benutze Sicherheitsphrase</string>
