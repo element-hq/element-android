@@ -240,17 +240,18 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Element necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
-
-Por favor, permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
+    <string name="permissions_rationale_msg_storage">Element precisa de permissão para aceder à sua biblioteca de fotos e vídeos para enviar e gravar anexos.
+\n
+\n
+\nPor favor permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
     <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Por favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
     <string name="permissions_rationale_msg_record_audio">Element necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nPor favor autorize o acesso na próxima tela para poder fazer a chamada."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
 
 Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
@@ -564,7 +565,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_category_advanced_title">Avançado</string>
     <string name="room_settings_room_internal_id">ID interno desta sala</string>
     <string name="room_settings_addresses_pref_title">Endereços</string>
-    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="room_settings_labs_pref_title">Laboratórios</string>
     <string name="room_settings_labs_warning_message">Estas são funcionalidades experimentais que podem quebrar de forma inesperada. Use com cautela.</string>
     <string name="room_settings_labs_end_to_end">Criptografia ponta-a-ponta</string>
     <string name="room_settings_labs_end_to_end_is_active">Criptografia ponta-a-ponta está ativa</string>
@@ -727,7 +728,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="groups_list">Lista dos grupos</string>
 
     <string name="call">Chamada</string>
-    <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa desta conversa?</string>
+    <string name="room_participants_ban_prompt_msg">"Banindo usuário resultará na expulsão  desta sala impedindo-o da entrada novamente."</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
     <string name="room_settings_all_messages">Notificação para cada mensagem</string>
@@ -906,17 +907,17 @@ Quer adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Element em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
 
     <plurals name="format_time_s">
-        <item quantity="one">%ds</item>
-        <item quantity="other">%ds</item>
-    </plurals>
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dmin</item>
-        <item quantity="other">%dmin</item>
-    </plurals>
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="other">%dh</item>
-    </plurals>
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d dia</item>
         <item quantity="other">%d dias</item>
@@ -1261,4 +1262,394 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="call_switch_camera">Trocar a câmera</string>
     <string name="call_camera_front">Frontal</string>
     <string name="call_camera_back">Traseira</string>
+    <string name="call_format_turn_hd_off">Desligar HD</string>
+    <string name="call_format_turn_hd_on">Ligar HD</string>
+
+    <string name="auth_add_email_message_2">Defina um e-mail para recuperação de conta, opcionalmente pode ser utilizado para descobrir pessoas que você conhece.</string>
+    <string name="auth_add_phone_message_2">Defina um telefone, opcionalmente pode ser utilizado para descobrir pessoas que você conhece.</string>
+    <string name="auth_add_email_phone_message_2">Defina um e-mail para a recuperação da conta. Use depois e-mail ou telefone para ser opcionalmente descoberto por pessoas que você conhece.</string>
+    <string name="auth_add_email_and_phone_message_2">Defina um e-mail para a recuperação da conta. Use depois e-mail ou telefone para ser opcionalmente descoberto pelas pessoas que conhecem você.</string>
+    <string name="login_error_no_homeserver_found">Servidor Matrix inválido</string>
+    <string name="login_error_homeserver_not_found">Não é possível aceder o servidor neste URL, por favor verifique</string>
+    <string name="login_error_ssl_peer_unverified">Erro SSL: a identidade da pessoa não foi verificada.</string>
+    <string name="login_error_ssl_other">SSL Erro.</string>
+    <string name="settings_call_ringtone_use_default_stun">Permitir o servidor de assistência de chamadas</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Sera utilizada %s de assistência caso seu servidor não oferecer este serviço (o endereço de IP será compartilhada durante a chamada)</string>
+    <string name="active_call_with_duration">Chamada em andamento (%s)</string>
+    <string name="return_to_call">Retornar a ligação</string>
+
+    <string name="invite_no_identity_server_error">Adicionar uma identidade do servidor nas suas configurações para executar esta acção.</string>
+    <string name="room_participants_action_cancel_invite">Cancelar convite</string>
+    <string name="room_participants_power_level_demote_warning_title">Reduzir privilégios\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Você não poderá desfazer essa alteração, já que está reduzido seus privilégios. Se você for a última pessoa nesta sala, será impossível recuperar a permissão atual.</string>
+    <string name="room_participants_power_level_demote">Reduzir privilégio</string>
+
+
+    <string name="room_participants_action_ignore_title">Ignorar usuário</string>
+    <string name="room_participants_action_ignore_prompt_msg">Se ignorar este usuário, serão removidas as suas mensagens das salas de bate-papo que compartilhar.
+\n
+\n
+\nVocê pode reverter esta ação a qualquer momento nas configurações.</string>
+    <string name="room_participants_action_unignore_title">Mostrar todas as mensagens deste usuário</string>
+    <string name="room_participants_action_unignore_prompt_msg">Reconsiderar este usuário irá mostrar todas as mensagens dele novamente.</string>
+    <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Tem certeza que quer cancelar o convite para este usuário\?</string>
+    <string name="room_participants_kick_title">Expulsar usuário</string>
+    <string name="room_participants_kick_reason">Motivo da expulsão</string>
+    <string name="room_participants_kick_prompt_msg">Usuário expulsado será removido da sala de bate-papo
+\n
+\n
+\nPara impedir de entrar novamente, você deveria banir o usuário.</string>
+    <string name="room_participants_ban_title">Bloquear usuário</string>
+    <string name="room_participants_ban_reason">Motivo de bloqueio</string>
+    <string name="room_participants_unban_title">Desbloquear usuário</string>
+    <string name="room_participants_unban_prompt_msg">Desbloqueio de usuário vai permitir sua entrada na sala novamente.</string>
+
+    <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
+    <string name="settings_add_3pid_flow_not_supported">Não pode fazer isto pelo Element app</string>
+    <string name="settings_add_3pid_authentication_needed">Autenticação exigida</string>
+
+
+    <string name="settings_notification_privacy_no_background_sync">O aplicativo <b>não</b> precisa de se conectar ao servidor em segundo plano, isto deve reduzir a utilização da bateria</string>
+    <string name="settings_background_fdroid_sync_mode">Sincronização em segundo plano (Experimental)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element irá sincronizar em segundo plano para preservar os recursos limitados do dispositivo (bateria).
+\n
+\nDependendo de recursos do dispositivo, a sincronização pode ser adiada pelo sistema operacional.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimizado em tempo real</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element irá sincronizar periodicamente em segundo plano no tempo exato (configurável).
+\n
+\nIsso vai impactar o uso de rádio e bateria, haverá uma notificação permanente exibida informando que o Element está esperando eventos.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Sem sincronização em segundo plano</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Você não será notificado de mensagens recebidas quando o Element está em segundo plano.</string>
+    <string name="settings_background_sync_update_error">Não foi possível actualizar a configuração.</string>
+
+
+    <string name="settings_set_workmanager_delay">Intervalo de sincronização preferido</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\n
+\nA sincronização pode ser adiada dependendo dos recursos (bateria) ou estado do dispositivo (modo de suspensão).</string>
+    <string name="settings_integrations">Integrações</string>
+    <string name="settings_integrations_summary">Use o Gerenciador de Integrações para gerenciar bots, pontes, widgets e pacotes de figurinhas.↵
+\n
+\nO Gerenciador de Integrações recebe dados de configuração e pode modificar widgets, enviar convites para salas e definir níveis de privilégios em seu nome.</string>
+    <string name="settings_send_message_with_enter_summary">Botão enter do teclado irá enviar a mensagem em vez de adicionar uma quebra de linha</string>
+
+    <string name="settings_secure_backup_section_title">Backup Seguro</string>
+    <string name="settings_secure_backup_manage">Gerenciar</string>
+    <string name="settings_secure_backup_setup">Configurar Backup Seguro</string>
+    <string name="settings_secure_backup_reset">Restaurar Backup Seguro</string>
+    <string name="settings_secure_backup_enter_to_setup">Configurar neste dispositivo</string>
+    <string name="settings_secure_backup_section_info">Prevenir contra a perda de acesso a mensagens e dados encriptados, guardando as chaves de encriptação no seu servidor.</string>
+    <string name="reset_secure_backup_title">Gerar uma nova Chave de Segurança ou definir uma nova Frase de Segurança para o seu backup existente.</string>
+    <string name="reset_secure_backup_warning">Isto irá substituir a sua Chave ou Frase actual.</string>
+
+    <string name="settings_discovery_category">Encontrar</string>
+    <string name="settings_discovery_manage">Gerencie suas configurações de descoberta.</string>
+    <string name="settings_data_save_mode_summary">Armazenamento Seguro de Dados aplica um filtro específico para que as atualizações e as notificações presentes sejam filtradas.</string>
+
+    <string name="settings_integration_allow">Permitir integrações</string>
+    <string name="settings_integration_manager">Gerenciador de Integrações</string>
+
+    <string name="disabled_integration_dialog_title">As integrações estão desativadas</string>
+    <string name="disabled_integration_dialog_content">Ativar \'Gerenciar Integrações\' nas Configurações.</string>
+
+    <string name="settings_change_password_submit">Atualizar Senha</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">A senha não é válida</string>
+    <string name="passwords_do_not_match">As senhas não são iguais</string>
+
+    <string name="settings_media">Média</string>
+    <string name="settings_default_compression">Compressão predefinida</string>
+    <string name="compression_opt_list_choose">Escolher</string>
+    <string name="settings_default_media_source">Fonte da média predefinida</string>
+    <string name="media_source_choose">Escolher</string>
+    <string name="settings_play_shutter_sound">Tocar o som obturador</string>
+
+    <plurals name="room_settings_banned_users_count">
+	<item quantity="one">%d usuário bloqueado</item>
+	<item quantity="other">%d usuários bloqueados</item>
+</plurals>
+
+    <string name="encryption_information_device_name_with_warning">O nome público (visível para as pessoas com quem você se comunica)</string>
+    <string name="device_name_warning">O nome público de uma sessão é visível para as pessoas com quem você se comunica</string>
+    <string name="encryption_exported_successfully">Chaves exportadas com sucesso</string>
+
+    <string name="encryption_message_recovery">Recuperação de Mensagens Criptografados</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Gerenciar Backup das Chaves</string>
+
+    <string name="encryption_information_unknown_ip">IP desconhecido</string>
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 mensagem</item>
+	<item quantity="other">%1$s: %2$d mensagens</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d notificação</item>
+	<item quantity="other">%d notificações</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">Novo Evento</string>
+    <string name="notification_unknown_room_name">Sala</string>
+    <string name="notification_new_messages">Novas Mensagens</string>
+    <string name="notification_new_invitation">Novo Convite</string>
+    <string name="notification_sender_me">Eu</string>
+    <string name="notification_inline_reply_failed">** Não foi possível enviar - por favor abra a sala</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widget_view_action">VISTA</string>
+    <string name="active_widgets_title">Widgets Ativos</string>
+
+
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Carregar Widget</string>
+    <string name="room_widget_permission_added_by">Widget adicionado por:</string>
+    <string name="room_widget_permission_webview_shared_info_title">A sua utilização pode definir cookies e compartilhar dados com %s:</string>
+    <string name="room_widget_permission_shared_info_title">A sua utilização pode compartilhar dados com %s:</string>
+    <string name="room_widget_failed_to_load">Falha ao carregar widget.
+\n%s</string>
+    <string name="room_widget_reload">Recarregar widget</string>
+    <string name="room_widget_open_in_browser">Abrir no navegador</string>
+    <string name="room_widget_revoke_access">Revogar o acesso para mim</string>
+
+    <string name="room_widget_permission_display_name">Nome público</string>
+    <string name="room_widget_permission_avatar_url">A URL da sua foto de perfil</string>
+    <string name="room_widget_permission_user_id">Sua ID de usuário</string>
+    <string name="room_widget_permission_theme">Sua tema</string>
+    <string name="room_widget_permission_widget_id">ID do widget</string>
+    <string name="room_widget_permission_room_id">ID da Sala</string>
+
+
+    <string name="error_jitsi_not_supported_on_old_device">Desculpas, as chamadas de conferência com o Jitsi não são suportadas em dispositivos antigos (dispositivos abaixo de Android 5.0)</string>
+    <string name="room_widget_resource_permission_title">Este wigdet deseja utilizar os seguintes recursos:</string>
+    <string name="room_widget_resource_grant_permission">Permitir</string>
+    <string name="room_widget_resource_decline_permission">Bloquear Tudo</string>
+    <string name="room_widget_webview_access_camera">Usar a câmara</string>
+    <string name="room_widget_webview_access_microphone">Usar o microfone</string>
+    <string name="room_widget_webview_read_protected_media">Ler as mídias protegidos por DRM</string>
+
+    <string name="integration_manager_not_configured">Não está configurado Gerenciador de Integrações.</string>
+    <string name="widget_integration_review_terms">Para continuar você precisa aceitar os termos de serviço.</string>
+
+    <string name="you_added_a_new_device_with_info">Uma nova sessão está pedindo chaves de encriptação.nome da sessão: % 1$s
+\n
+\nVisto pela última vez: % 2$s
+\n
+\nSe não efectuou outra sessão, ignore esta mensagem.</string>
+    <string name="your_unverified_device_requesting_with_info">Uma nova sessão está pedindo chaves de encriptação.
+\n
+\nNome da sessão: % 1$s
+\n
+\nVisto pela última vez: % 2$s
+\n
+\nSe não efectuou outra sessão, ignore esta mensagem.</string>
+
+    <string name="start_verification_short_label">Verificar</string>
+    <string name="share_without_verifying_short_label">Compartilhar</string>
+    <string name="key_share_request">Pedido de compartilhamento das Chaves</string>
+    <string name="ignore_request_short_label">Ignorar</string>
+
+    <string name="notification_silent">Silencioso</string>
+    <string name="error_empty_field_enter_user_name">Digite o nome de usuário.</string>
+    <string name="passphrase_empty_error_message">Digite a sua frase secreta</string>
+    <string name="passphrase_passphrase_too_weak">Frase secreta é demasiado fraca</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Por favor, apague a frase secreta se quiser Element gerar uma chave de recuperação.</string>
+    <string name="keys_backup_no_session_error">Nenhuma sessão Matrix disponível</string>
+
+    <string name="keys_backup_setup_step1_title">Nunca perca mensagens criptografadas</string>
+    <string name="keys_backup_setup_step1_description">As mensagens em salas são protegidas com criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens. 
+\n
+\nFaça backup de suas chaves de segurança para evitar perdê-las.</string>
+    <string name="keys_backup_setup">Comece a usar o Backup de Chave</string>
+    <string name="keys_backup_setup_step1_advanced">(Avançado)</string>
+    <string name="keys_backup_setup_step1_manual_export">Exportar as chaves manualmente</string>
+
+    <string name="keys_backup_setup_step2_text_title">Proteja seu backup com uma frase secreta.</string>
+    <string name="keys_backup_setup_step2_text_description">Armazenaremos uma cópia criptografada de suas chaves em nosso servidor. Proteja seu backup com uma frase secreta para mantê-lo seguro. 
+\n
+\nPara segurança máxima, isso deve ser diferente da senha da sua conta.</string>
+    <string name="keys_backup_setup_step2_button_title">Criar frase secreta</string>
+    <string name="keys_backup_setup_creating_backup">Criar Backup</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Ou, proteja seu backup com uma Chave de Recuperação, salvando-a em algum lugar seguro.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avançado) Configurar com a Chave de Recuperação</string>
+    <string name="keys_backup_setup_step3_success_title">Parabéns !</string>
+    <string name="keys_backup_setup_step3_text_line1">Está sendo feito backup das suas chaves.</string>
+    <string name="keys_backup_setup_step3_text_line2">Sua chave de recuperação é uma rede de proteção - você pode usá-la para restaurar o acesso às suas mensagens criptografadas se você esquecer sua frase de recuperação.
+\n
+\nMantenha sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Mantenha sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
+    <string name="keys_backup_setup_step3_button_title">Feito</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Já fiz uma cópia</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Salvar Chave de Recuperação</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Compartilhar</string>
+    <string name="keys_backup_setup_step3_save_button_title">Salvar como um arquivo</string>
+    <string name="recovery_key_export_saved_as_warning">A chave de recuperação foi guardada para \"%s\".
+\n
+\nAtenção: este arquivo pode ser removido se o aplicativo for desinstalado.</string>
+    <string name="recovery_key_export_saved">A chave de recuperação foi guardada.</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Já existe uma cópia de segurança no servidor</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Parece que você já tem configuração backup da chave de outra sessão. Queres substituí-lo pela nova que estás criando \?</string>
+    <string name="keys_backup_setup_override_replace">Substituir</string>
+    <string name="keys_backup_setup_override_stop">Parar</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Faça uma cópia</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Compartilha sua chave de recuperação com…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Gerando Chave de Recuperação usando a frase secreta, este processo pode levar alguns segundos.</string>
+    <string name="recovery_key">Chave de recuperação</string>
+    <string name="unexpected_error">Erro inesperado</string>
+    <string name="keys_backup_setup_backup_started_title">A Cópia de Segurança foi iniciada</string>
+    <string name="keys_backup_setup_backup_started_message">As suas chaves de encriptação estão sendo copiadas em segundo plano para o seu servidor. O backup inicial pode demorar vários minutos.</string>
+
+
+    <string name="keys_backup_setup_skip_title">Você tem certeza\?</string>
+    <string name="keys_backup_setup_skip_msg">Você pode perder o acesso às suas mensagens se você sair do Element ou perder este dispositivo.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Obtendo versão do backup…</string>
+    <string name="keys_backup_restore_with_passphrase">Use sua frase secreta de recuperação para desbloquear seu histórico de mensagens seguras</string>
+    <string name="keys_backup_restore_use_recovery_key">use sua chave de recuperação</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Não sabe sua frase secreta de recuperação, você pode %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Use a sua Chave de Recuperação para desbloquear o seu histórico de mensagens encriptadas</string>
+    <string name="keys_backup_restore_key_enter_hint">Digite a chave de recuperação</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Recuperação de Mensagem</string>
+
+    <string name="keys_backup_restore_with_key_helper">Perdeu sua chave de recuperação\? Você pode configurar uma nova nas configurações.</string>
+    <string name="keys_backup_passphrase_error_decrypt">O backup não pôde ser descriptografado com essa frase secreta: verifique se você digitou a frase secreta de recuperação correta.</string>
+    <string name="network_error_please_check_and_retry">Erro de rede: verifique por favor a sua conexão e tente de novo.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Restaurando o backup:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Computação da chave de recuperação…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Baixando as chaves…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importando as chaves…</string>
+    <string name="keys_backup_unlock_button">Desbloquear Histórico</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Digite uma chave de recuperação</string>
+    <string name="keys_backup_recovery_code_error_decrypt">O backup não pôde ser descriptografado com essa chave de recuperação: verifique se você digitou a chave de recuperação correta.</string>
+
+    <string name="keys_backup_restore_success_title">Backup restaurado %s !</string>
+    <string name="keys_backup_restore_success_description">Restauradas %1$d chaves de sessão, e adicionadas %2$d chave(s) nova(s) que não eram conhecidas nesta sessão</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+	<item quantity="one">Restaurou o backup com %d da chave.</item>
+	<item quantity="other">Restaurou uma cópia de segurança com %d das chaves.</item>
+</plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+	<item quantity="one">%d nova chave foi adicionada a esta sessão.</item>
+	<item quantity="other">%d novas chaves foram adicionadas a esta sessão.</item>
+</plurals>
+
+    <string name="keys_backup_get_version_error">Não foi possível obter a versão mais recente das chaves de recuperação (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">A sessão criptografada não está activa</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Restaurar do backup</string>
+    <string name="keys_backup_settings_delete_backup_button">Excluir Backup</string>
+
+    <string name="keys_backup_settings_status_ok">A chave do backup foi configurada correctamente para esta sessão.</string>
+    <string name="keys_backup_settings_status_ko">A chave do backup não está activa nesta sessão.</string>
+    <string name="keys_backup_settings_status_not_setup">Não está sendo feito backup das suas chaves nesta sessão.</string>
+
+    <string name="keys_backup_settings_signature_from_unknown_device">O backup tem uma assinatura da sessão desconhecida com o ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">O backup tem uma assinatura válida desta sessão.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">O backup tem uma assinatura válida da sessão verificada %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">O backup tem uma assinatura válida da sessão não verificada %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">O backup tem uma assinatura não válida da sessão verificada %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">O backup tem uma assinatura não válida da sessão não verificada %s</string>
+    <string name="keys_backup_get_trust_error">Não foi possível obter a informação de confiança para o backup (%s).</string>
+
+    <string name="keys_backup_settings_untrusted_backup">Para usar o Backup de Chaves nesta sessão, restaure com a sua frase secreta ou chave de recuperação agora.</string>
+    <string name="keys_backup_settings_deleting_backup">Excluindo o backup…</string>
+    <string name="keys_backup_settings_delete_backup_error">Não foi possível excluir o backup (%s)</string>
+
+    <string name="keys_backup_settings_checking_backup_state">A verificando o estado de backup</string>
+    <string name="keys_backup_settings_delete_confirm_title">Excluir Backup</string>
+    <string name="keys_backup_settings_delete_confirm_message">Excluir as chaves de encriptação do servidor\? Você não será mais capaz de usar sua chave de recuperação para ler o histórico de mensagens criptografadas.</string>
+
+    <string name="new_recovery_method_popup_title">Novo Backup da Chave</string>
+    <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.
+\n
+\nSe você não definiu o novo método de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina um novo método de recuperação imediatamente nas Configurações.</string>
+    <string name="new_recovery_method_popup_was_me">Foi eu</string>
+
+    <string name="keys_backup_banner_setup_line1">Nunca perca mensagens criptografadas</string>
+    <string name="keys_backup_banner_setup_line2">Comece a usar o Backup da Chave</string>
+
+    <string name="secure_backup_banner_setup_line1">Backup Seguro</string>
+    <string name="secure_backup_banner_setup_line2">Proteja-se contra a perda de acesso a mensagens e dados criptografados</string>
+
+    <string name="keys_backup_banner_recover_line1">Nunca perca mensagens criptografadas</string>
+    <string name="keys_backup_banner_recover_line2">Use o backup da chave</string>
+
+    <string name="keys_backup_banner_update_line1">Novas chaves de mensagens seguras</string>
+    <string name="keys_backup_banner_update_line2">Gerenciar Backup das Chaves</string>
+
+    <string name="keys_backup_banner_in_progress">Fazendo backup das chaves. Isto pode demorar vários minutos.…</string>
+
+
+    <string name="secure_backup_setup">Configurar Backup Seguro</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">O backup de todas as chaves foi concluído</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="one">Fazendo o backup da chave %d …</item>
+	<item quantity="other">Fazendo o backup das chaves %d …</item>
+</plurals>
+
+    <string name="keys_backup_info_title_version">Versão</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmo</string>
+    <string name="autodiscover_invalid_response">Resposta de descoberta inválida no servidor local</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Completar Automaticamente as Opções do Servidor</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Element detectou uma configuração personalizada do servidor para o seu ID \"%1$s\":
+\n
+\n%2$s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Usar a Configuração</string>
+
+    <string name="invalid_or_expired_credentials">Você foi desligado devido as credenciais inválidas ou caducadas.</string>
+
+    <string name="sas_verify_title">Verificar comparando um texto curto.</string>
+    <string name="sas_security_advise">Para máxima segurança, recomendamos que você faça isso pessoalmente ou use outro meio de comunicação confiável.</string>
+    <string name="sas_verify_start_button_title">Iniciar a Verificação</string>
+    <string name="sas_incoming_request_title">Recebendo solicitação de verificação</string>
+    <string name="sas_incoming_request_description">Verifique esta sessão para torná-la confiável. Confiando nas sessões fornecerá segurança adicional ao usar mensagens encriptadas de ponta a ponta.</string>
+    <string name="sas_incoming_request_description_2">Verificando esta sessão irá marcá-la como confiável, e também a tornara como confiável para o parceiro.</string>
+
+    <string name="sas_emoji_description">Verifique esta sessão confirmando o emoji a seguir que será exibido na tela dele</string>
+    <string name="sas_decimal_description">Verifique esta sessão confirmando se o número a seguir aparece na tela dele</string>
+
+    <string name="sas_incoming_verification_request_dialog">Você recebeu um pedido de verificação.</string>
+    <string name="sas_view_request_action">Ver pedido</string>
+    <string name="sas_waiting_for_partner">Aguardando seu contato confirmar…</string>
+
+    <string name="sas_verified">Verificado!</string>
+    <string name="sas_verified_successful">Você verificou esta sessão com êxito.</string>
+    <string name="sas_verified_successful_description">As mensagens com este usuário são criptografadas de ponta a ponta e não podem ser lidas por terceiros.</string>
+    <string name="sas_got_it">Entendi</string>
+
+    <string name="sas_verifying_keys">Não aparece nada\? Nem todos os clientes suportam a verificação interativa. Usa a verificação tradicional.</string>
+    <string name="sas_legacy_verification_button_title">Use a verificação tradicional.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verificação da chave</string>
+    <string name="sas_cancelled_dialog_title">Pedido Cancelado</string>
+    <string name="sas_cancelled_by_other">Seu contato cancelou a verificação.
+\n
+\n%s</string>
+    <string name="sas_cancelled_by_me">A verificação foi cancelada.
+\n
+\nRazão: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verificação Interactiva da Sessão</string>
+    <string name="sas_incoming_request_notif_title">Solicitação de Verificação</string>
+    <string name="sas_incoming_request_notif_content">%s quer verificar a sessão</string>
+
+    <string name="sas_error_m_user">Contato cancelou a verificação</string>
+    <string name="sas_error_m_timeout">O tempo de verificação expirou</string>
+    <string name="sas_error_m_unknown_transaction">A sessão não sabe sobre essa transacção</string>
+    <string name="sas_error_m_unknown_method">A sessão não pode chegar a acordo sobre a chave, método hash, MAC, or SAS</string>
+    <string name="sas_error_m_mismatched_commitment">O compromisso de hash não coincidiu</string>
+    <string name="sas_error_m_mismatched_sas">O SAS não corresponde</string>
+    <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
+    <string name="sas_error_m_invalid_message">Foi recebida uma mensagem inválida</string>
+    <string name="sas_error_m_key_mismatch">Chave não corresponde</string>
+    <string name="sas_error_m_user_error">Contato não corresponde</string>
+    <string name="sas_error_unknown">Erro Desconhecido</string>
+
     </resources>
