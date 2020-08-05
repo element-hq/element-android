@@ -39,9 +39,6 @@
 
         <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_black</item>
 
-        <!-- Drawables -->
-        <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_black</item>
-
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
         <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->

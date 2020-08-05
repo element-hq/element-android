@@ -41,8 +41,6 @@
         <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
         <attr name="vctr_settings_icon_tint_color" format="color" />
 
-        <attr name="riotx_highlighted_message_background" format="reference" />
-
     </declare-styleable>
 
     <declare-styleable name="PollResultLineView">
