@@ -26,8 +26,7 @@
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_call"
         android:title="@string/preference_voice_and_video"
-        app:fragment="im.vector.app.features.settings.VectorSettingsVoiceVideoFragment"
-        app:isPreferenceVisible="@bool/false_not_implemented" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsVoiceVideoFragment" />
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_ignored_users"

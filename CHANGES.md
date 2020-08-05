@@ -5,7 +5,7 @@ Features ✨:
  - Protect access to the app by a pin code (#1700)
 
 Improvements 🙌:
- -
+ - Give user the possibility to prevent accidental call (#1869)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)

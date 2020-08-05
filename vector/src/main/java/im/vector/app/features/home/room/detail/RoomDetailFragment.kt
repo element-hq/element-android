@@ -591,6 +591,20 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun safeStartCall(isVideoCall: Boolean) {
+        if (vectorPreferences.preventAccidentalCall()) {
+            AlertDialog.Builder(requireActivity())
+                    .setMessage(if (isVideoCall) R.string.start_video_call_prompt_msg else R.string.start_voice_call_prompt_msg)
+                    .setPositiveButton(if (isVideoCall) R.string.start_video_call else R.string.start_voice_call) { _, _ ->
+                        safeStartCall2(isVideoCall)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        } else {
+            safeStartCall2(isVideoCall)
+        }
+    }
+
+    private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
         roomDetailViewModel.pendingAction = startCallAction
         if (isVideoCall) {
