@@ -85,13 +85,12 @@
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
 
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Status</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Status</item>
-
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
+
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_status</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_status</item>
 
         <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
@@ -100,10 +99,5 @@
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
-
-    <style name="Vector.TabView.Status" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_status</item>
-        <item name="background">@drawable/vector_tabbar_background_status</item>
-    </style>
 
 </resources>

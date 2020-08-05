@@ -147,12 +147,15 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Light</item>
+        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView</item>
 
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
+
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
 
         <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
@@ -179,10 +182,5 @@
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
-
-    <style name="Vector.TabView.Light" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_light</item>
-        <item name="background">@drawable/vector_tabbar_background_light</item>
-    </style>
 
 </resources>

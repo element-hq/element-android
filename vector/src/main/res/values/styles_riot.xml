@@ -371,4 +371,9 @@
         <item name="android:textColor">?vctr_message_text_color</item>
     </style>
 
+    <style name="Vector.TabView" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background</item>
+        <item name="background">@drawable/vector_tabbar_background</item>
+    </style>
+
 </resources>

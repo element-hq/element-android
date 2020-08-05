@@ -53,13 +53,15 @@
     <!--Black/Line break mobile-->
     <color name="list_divider_color_black">#FF22262E</color>
 
-    <color name="tab_bar_selected_background_color_light">@color/primary_color_light</color>
-    <color name="tab_bar_selected_background_color_dark">@color/primary_color_dark</color>
-    <color name="tab_bar_selected_background_color_status">@color/primary_color_status</color>
+    <attr name="tab_bar_selected_background_color" format="color" />
+    <color name="tab_bar_selected_background_color_light">@color/riotx_android_secondary_light</color>
+    <color name="tab_bar_selected_background_color_dark">@color/riotx_android_secondary_dark</color>
+    <color name="tab_bar_selected_background_color_status">@color/riotx_android_secondary_black</color>
 
-    <color name="tab_bar_unselected_background_color_light">@color/primary_color_light</color>
-    <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
-    <color name="tab_bar_unselected_background_color_status">@color/primary_color_status</color>
+    <attr name="tab_bar_unselected_background_color" format="color" />
+    <color name="tab_bar_unselected_background_color_light">@color/riotx_background_light</color>
+    <color name="tab_bar_unselected_background_color_dark">@color/riotx_background_dark</color>
+    <color name="tab_bar_unselected_background_color_status">@color/riotx_background_black</color>
 
     <!-- Hint Colors -->
     <color name="primary_hint_text_color_light">#FFFFFF</color>
