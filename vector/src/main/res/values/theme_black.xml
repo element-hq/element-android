@@ -80,6 +80,7 @@
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
         <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>
         <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_black</item>
+
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />

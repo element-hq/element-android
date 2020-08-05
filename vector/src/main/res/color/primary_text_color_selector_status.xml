@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/riot_primary_text_color_status" android:state_enabled="true" />
-    <item android:color="@color/riot_primary_text_color_disabled_status" android:state_enabled="false" />
-</selector>

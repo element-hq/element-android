@@ -94,6 +94,9 @@
         <item name="vctr_markdown_block_background_color">@android:color/black</item>
         <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
 
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="riot_primary_text_color_disabled">@color/riot_primary_text_color_disabled_dark</item>
+
         <!-- tab bar colors -->
         <item name="vctr_tab_bar_inverted_background_color">?colorPrimary</item>
 

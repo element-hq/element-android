@@ -94,6 +94,9 @@
         <item name="vctr_markdown_block_background_color">#FFEEEEEE</item>
         <item name="vctr_spoiler_background_color">#FF000000</item>
 
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="riot_primary_text_color_disabled">@color/riot_primary_text_color_disabled_light</item>
+
         <!-- tab bar colors -->
         <item name="vctr_tab_bar_inverted_background_color">#FFF2F2F2</item>
 

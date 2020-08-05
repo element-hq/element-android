@@ -71,6 +71,9 @@
     <color name="default_text_hint_color_dark">#CCDDDDDD</color>
 
     <!-- Text Colors -->
+    <attr name="riot_primary_text_color" format="color" />
+    <attr name="riot_primary_text_color_disabled" format="color" />
+
     <!--Default/Text Primary-->
     <color name="riot_primary_text_color_light">#FF2E2F32</color>
     <color name="riot_primary_text_color_disabled_light">#FF9E9E9E</color>
