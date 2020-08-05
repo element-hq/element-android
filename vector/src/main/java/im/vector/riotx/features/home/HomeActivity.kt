@@ -69,7 +69,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    @Inject lateinit var  serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
+    @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -225,6 +225,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         super.onDestroy()
     }
 
+    private var disclaimerShown = false
+
     override fun onResume() {
         super.onResume()
 
@@ -238,7 +240,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
         } else {
-            showDisclaimerDialog(this)
+            if (!disclaimerShown) {
+                disclaimerShown = true
+                showDisclaimerDialog(this)
+            }
         }
 
         // Force remote backup state update to update the banner if needed

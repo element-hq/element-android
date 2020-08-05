@@ -17,47 +17,19 @@
 package im.vector.riotx.features.disclaimer
 
 import android.app.Activity
-import androidx.preference.PreferenceManager
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.edit
-import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.utils.openPlayStore
 
-// Increase this value to show again the disclaimer dialog after an upgrade of the application
-private const val CURRENT_DISCLAIMER_VALUE = 1
-
-private const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
-
 fun showDisclaimerDialog(activity: Activity) {
-    val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
+    val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
 
-    if (sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE) {
-        sharedPrefs.edit {
-            putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
-        }
-
-        val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
-
-        val textView = (dialogLayout as ViewGroup).findViewById<TextView>(R.id.dialogDisclaimerContentLine2)
-        @Suppress("ConstantConditionIf")
-        if (BuildConfig.FLAVOR == "gplay") {
-            textView.setTextWithColoredPart(R.string.alpha_disclaimer_content_line_2_gplay, R.string.alpha_disclaimer_content_line_2_gplay_colored_part)
-
-            textView.setOnClickListener {
-                openPlayStore(activity)
+    AlertDialog.Builder(activity)
+            .setView(dialogLayout)
+            .setCancelable(false)
+            .setPositiveButton(R.string.the_beta_is_over_get_element) { _, _ ->
+                openPlayStore(activity, "im.vector.app")
             }
-        } else {
-            textView.setText(R.string.alpha_disclaimer_content_line_2_fdroid)
-        }
-
-        AlertDialog.Builder(activity)
-                .setView(dialogLayout)
-                .setCancelable(false)
-                .setPositiveButton(R.string._continue, null)
-                .show()
-    }
+            .setNegativeButton(R.string.later, null)
+            .show()
 }

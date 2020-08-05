@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- To be able to delete RiotX -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+
     <!-- Call feature -->
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <!-- Commented because Google PlayStore does not like we add permission if we are not requiring it. And it was added for future use -->
@@ -140,8 +143,10 @@
             </intent-filter>
         </activity>
 
+        <!-- Disable incoming share -->
         <activity
             android:name=".features.share.IncomingShareActivity"
+            android:enabled="false"
             android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

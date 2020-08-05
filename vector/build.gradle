@@ -16,8 +16,8 @@ androidExtensions {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 0
-ext.versionMinor = 91
-ext.versionPatch = 6
+ext.versionMinor = 23
+ext.versionPatch = 0
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -72,7 +72,7 @@ static def getGplayVersionSuffix() {
     if (gitBranchName() == "master") {
         return ""
     } else {
-        return "-dev"
+        return "" // "-dev"
     }
 }
 
@@ -112,7 +112,7 @@ android {
     ndkVersion "21.3.6528147"
 
     defaultConfig {
-        applicationId "im.vector.app"
+        applicationId "im.vector.riotx"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
@@ -183,7 +183,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Riot.imX dbg"
+            resValue "string", "app_name", "RiotX dbg"
 
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -192,7 +192,7 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "Riot.imX"
+            resValue "string", "app_name", "RiotX"
 
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"

@@ -1,27 +1,16 @@
-Changes in Riot.imX 0.91.6 (2020-XX-XX)
+Changes in RiotX 0.23.0 (2020-08-05)
 ===================================================
 
-Features ✨:
- -
+This is the very last version of RiotX, published on the PlayStore.
 
-Improvements 🙌:
- -
+This branch will never be merged on develop.
+
+Features ✨:
+ - Inform user that the app will not be updated anymore (#1727)
 
 Bugfix 🐛:
  - Video calls are shown as a voice ones in the timeline (#1676)
  - Fix regression: not able to create a room without IS configured (#1679)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in Riot.imX 0.91.5 (2020-07-11)
 ===================================================

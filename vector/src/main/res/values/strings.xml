@@ -2552,4 +2552,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
+
+    <string name="the_beta_is_over_title">The beta is over!</string>
+    <string name="the_beta_is_over_content">Thank you for your contribution to test RiotX.\n\nRiotX will not be updated anymore from the PlayStore, you should properly sign out and then uninstall it.\n\nPlease install the new application Element!</string>
+    <string name="the_beta_is_over_get_element">Get Element</string>
+    <string name="the_beta_is_over_uninstall">Uninstall RiotX</string>
+
+    <string name="the_beta_is_over_login_screen_content">RiotX is deprecated\n\nPlease install Element!</string>
 </resources>
