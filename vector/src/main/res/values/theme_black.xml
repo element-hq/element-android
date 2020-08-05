@@ -61,7 +61,6 @@
 
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
-        <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark</item>
 
         <item name="android:textColorLink">@color/riotx_links</item>
 
