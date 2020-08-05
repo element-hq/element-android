@@ -9,8 +9,8 @@
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configurações</string>
-    <string name="title_activity_member_details">Detalhes dos integrantes</string>
-    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_member_details">Detalhes dos membros</string>
+    <string name="title_activity_historical">Histórico</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -20,48 +20,48 @@
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Remover</string>
+    <string name="redact">Apagar</string>
     <string name="quote">Citar</string>
     <string name="share">Compartilhar</string>
     <string name="later">Depois</string>
     <string name="forward">Encaminhar</string>
-    <string name="permalink">Link permanente</string>
-    <string name="view_source">Ver fonte</string>
-    <string name="view_decrypted_source">View Decrypted Source</string>
-    <string name="delete">Remover</string>
+    <string name="permalink">Link</string>
+    <string name="view_source">Ver código-fonte</string>
+    <string name="view_decrypted_source">Ver código-fonte descriptografado</string>
+    <string name="delete">Excluir</string>
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
-    <string name="active_call">Chamada ativa</string>
-    <string name="ongoing_conference_call">Chamada de voz em andamento.
-\nParticipar como %1$s ou %2$s</string>
+    <string name="active_call">Chamada em andamento</string>
+    <string name="ongoing_conference_call">Chamada em grupo em andamento.↵
+\nEntre como %1$s ou %2$s</string>
     <string name="ongoing_conference_call_voice">Voz</string>
     <string name="ongoing_conference_call_video">Vídeo</string>
-    <string name="cannot_start_call">Não consigo iniciar a chamada, favor tentar mais tarde</string>
-    <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando…</string>
-    <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
-    <string name="missing_permissions_title_to_start_conf_call">Não consigo iniciar a chamada</string>
-    <string name="device_information">Informações do dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são permitidas em salas encriptografadas</string>
+    <string name="cannot_start_call">Não foi possível iniciar a chamada, tente mais tarde</string>
+    <string name="missing_permissions_warning">Devido à falta de permissões, alguns recursos podem estar faltando…</string>
+    <string name="missing_permissions_to_start_conf_call">Você precisa de permissão para convidar, para iniciar uma chamada em grupo nesta sala</string>
+    <string name="missing_permissions_title_to_start_conf_call">Não foi possível iniciar a chamada</string>
+    <string name="device_information">Informações da sessão</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Não há suporte para chamadas em grupo em salas criptografadas</string>
     <string name="send_anyway">Enviar mesmo assim</string>
     <string name="or">ou</string>
     <string name="invite">Convidar</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Sair da Conta</string>
+    <string name="action_sign_out">Sair</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
-    <string name="action_mark_all_as_read">Marcar como lido</string>
+    <string name="action_mark_all_as_read">Marcar tudo como lido</string>
     <string name="action_historical">Histórico</string>
     <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Fechar</string>
-    <string name="copied_to_clipboard">Copiado à área de transferência</string>
-    <string name="disable">Desabilitar</string>
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>
+    <string name="disable">Desativar</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmação</string>
-    <string name="dialog_title_warning">Alerta</string>
+    <string name="dialog_title_warning">Atenção</string>
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Início</string>
@@ -82,49 +82,49 @@
     <!-- People fragment -->
     <string name="direct_chats_header">Conversas</string>
     <string name="local_address_book_header">Agenda de endereços local</string>
-    <string name="matrix_only_filter">Apenas contatos Matrix</string>
-    <string name="no_conversation_placeholder">Não há conversas</string>
-    <string name="no_contact_access_placeholder">Você não autorizou o Element a acessar seus contatos locais</string>
+    <string name="matrix_only_filter">Apenas contatos na Matrix</string>
+    <string name="no_conversation_placeholder">Nenhuma conversa</string>
+    <string name="no_contact_access_placeholder">Você não permitiu que o Element acesse seus contatos locais</string>
     <string name="no_result_placeholder">Nenhum resultado</string>
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Lista de salas</string>
-    <string name="no_room_placeholder">Não há salas</string>
-    <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
+    <string name="no_room_placeholder">Nenhuma sala</string>
+    <string name="no_public_room_placeholder">Nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d usuária/o</item>
-        <item quantity="other">%d usuárias/os</item>
-    </plurals>
+	<item quantity="one">%d usuário</item>
+	<item quantity="other">%d usuários</item>
+</plurals>
 
-    <string name="send_bug_report_include_logs">Enviar logs</string>
-    <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
-    <string name="send_bug_report_include_screenshot">Enviar print de tela</string>
+    <string name="send_bug_report_include_logs">Enviar registros</string>
+    <string name="send_bug_report_include_crash_logs">Enviar registros da falha</string>
+    <string name="send_bug_report_include_screenshot">Enviar recorte de tela</string>
     <string name="send_bug_report">Relatar erro</string>
-    <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
+    <string name="send_bug_report_description">Por favor, descreva o erro. O que você fez\? O que você esperava ocorrer\? O que aconteceu\?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
-    <string name="send_bug_report_logs_description">Para diagnosticar problemas, logs deste cliente serão enviados junto a este relatório de erros (bugs). Este relatório de erros, incluindo os logs e prints da tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor desmarque:</string>
-    <string name="send_bug_report_alert_message">Você parece estar frustrado balançando o telefone. Você gostaria de abrir a tela de relato de erro?</string>
-    <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
-    <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar problemas, os registros deste cliente serão enviados juntos deste relatório de erros. Este relatório de erros, incluindo os registros e recortes de tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor, desmarque:</string>
+    <string name="send_bug_report_alert_message">Você parece estar agitando o telefone em frustração. Gostaria de enviar um relatório de erro\?</string>
+    <string name="send_bug_report_sent">O relatório de erro foi enviado com sucesso</string>
+    <string name="send_bug_report_failed">Falha ao enviar o relatório de erro (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
-    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente na última vez. Gostaria de abrir a tela de relatos de falhas?</string>
+    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente da última vez. Gostaria de abrir a tela de relatórios de erros\?</string>
 
     <string name="send_files_in">Enviar para</string>
-    <string name="read_receipt">Ler</string>
+    <string name="read_receipt">Leitura:</string>
 
     <string name="join_room">Entrar na sala</string>
     <string name="username">Nome de usuário</string>
     <string name="create_account">Criar conta</string>
     <string name="login">Entrar</string>
-    <string name="logout">Sair da Conta</string>
-    <string name="hs_url">URL do "Home Server"</string>
-    <string name="identity_url">URL do "Identity Server"</string>
+    <string name="logout">Sair</string>
+    <string name="hs_url">URL do servidor principal</string>
+    <string name="identity_url">URL do servidor de identidade</string>
     <string name="search">Pesquisar</string>
 
     <string name="start_new_chat">Iniciar nova conversa</string>
-    <string name="start_voice_call">Iniciar nova chamada de voz</string>
-    <string name="start_video_call">Iniciar nova chamada de vídeo</string>
+    <string name="start_voice_call">Iniciar chamada de voz</string>
+    <string name="start_video_call">Iniciar chamada de vídeo</string>
 
     <string name="option_send_files">Enviar arquivos</string>
     <string name="option_take_photo_video">Tirar foto ou fazer vídeo</string>
@@ -664,9 +664,9 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <!-- historical -->
     <string name="historical_placeholder">Pesquisar no histórico</string>
-    <string name="offline">Desconectada(o)</string>
+    <string name="offline">Desconectado</string>
 
-    <string name="user_directory_header">Lista de usuárias(os)</string>
+    <string name="user_directory_header">Lista de usuários</string>
     <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
     <string name="settings_start_on_boot">Iniciar na inicialização do celular</string>
     <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
@@ -698,28 +698,28 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="dark_theme">Tema escuro</string>
     <string name="black_them">Tema preto</string>
 
-    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_listening_for_events">Escutando eventos</string>
-    <string name="notification_noisy_notifications">Notificações ruidosas</string>
+    <string name="notification_noisy_notifications">Ativado com som</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 
-    <string name="title_activity_bug_report">Relatório de erros</string>
+    <string name="title_activity_bug_report">Relatório de erro</string>
     <string name="title_activity_group_details">Detalhes da comunidade</string>
 
     <string name="loading">Carregando…</string>
 
-    <string name="action_exit">Sair do App</string>
+    <string name="action_exit">Sair</string>
     <string name="bottom_action_groups">Comunidades</string>
 
     <string name="home_filter_placeholder_groups">Filtrar nomes de comunidades</string>
 
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
-    <string name="no_group_placeholder">Não há grupos</string>
+    <string name="no_group_placeholder">Nenhum grupo</string>
 
-    <string name="start_new_chat_prompt_msg">Você tem certeza que quer começar uma conversa com %s?</string>
-    <string name="start_voice_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de voz?</string>
-    <string name="start_video_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de vídeo?</string>
+    <string name="start_new_chat_prompt_msg">Tem certeza de que deseja iniciar uma nova conversa com %s\?</string>
+    <string name="start_voice_call_prompt_msg">Tem certeza de que deseja iniciar uma chamada de voz\?</string>
+    <string name="start_video_call_prompt_msg">Tem certeza de que deseja iniciar uma chamada de vídeo\?</string>
 
     <string name="option_take_photo">Tirar foto</string>
     <string name="option_take_video">Gravar vídeo</string>
@@ -872,22 +872,22 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="notice_avatar">Imagem de aviso</string>
     <string name="avatar">Imagem de perfil</string>
 
-    <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
+    <string name="send_bug_report_rage_shake">Agite rapidamente para relatar um erro</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
-    <string name="title_activity_choose_sticker">Enviar um sticker</string>
+    <string name="title_activity_choose_sticker">Enviar uma figurinha</string>
 
     <string name="dialog_title_third_party_licences">Licenças de terceiros</string>
 
     <string name="download">Baixar</string>
     <string name="speak">Falar</string>
-    <string name="clear">Apagar</string>
-    <string name="missing_permissions_error">Por falta de permissões, esta ação não é possível.</string>
+    <string name="clear">Limpar</string>
+    <string name="missing_permissions_error">Devido à falta de permissões, essa ação não é possível.</string>
     <string name="system_alerts_header">Alertas do sistema</string>
 
-    <string name="send_bug_report_description_in_english">Se possível, favor escrever a descrição em inglês.</string>
+    <string name="send_bug_report_description_in_english">Se possível, escreva a descrição em inglês, por favor.</string>
     <string name="option_send_voice">Enviar áudio</string>
 
     <string name="option_send_sticker">Enviar um sticker</string>
@@ -1171,25 +1171,25 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="title_activity_keys_backup_setup">Backup da chave</string>
     <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
 
-    <string name="keys_backup_is_not_finished_please_wait">Backup de chaves não está terminado, por favor aguarde …</string>
+    <string name="keys_backup_is_not_finished_please_wait">Backup de chaves não está concluído. Por favor, aguarde…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Você perderá suas mensagens criptografadas se sair agora</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em andamento. Se você sair agora, perderá o acesso às suas mensagens criptografadas.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">O Backup de chave seguro deve estar ativo em todos os seus dispositivos para evitar perder o acesso às suas mensagens criptografadas.</string>
-    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens criptografadas</string>
-    <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves …</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Não quero minhas mensagens criptografadas</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup das chaves…</string>
     <string name="keys_backup_activate">Use o backup de chave</string>
-    <string name="are_you_sure">Você tem certeza?</string>
-    <string name="backup">Realizar o Backup</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você perderá o acesso às suas mensagens criptografadas, a menos que faça o backup das suas chaves antes de sair.</string>
+    <string name="are_you_sure">Tem certeza\?</string>
+    <string name="backup">Fazer o backup</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você perderá o acesso às suas mensagens criptografadas, a menos que faça backup das suas chaves antes de sair.</string>
 
     <string name="keys_backup_info_title_signature">Assinatura</string>
 
-    <string name="stay">Permaneça</string>
+    <string name="stay">Ficar</string>
     <string name="skip">Pular</string>
-    <string name="done">Feito</string>
+    <string name="done">Pronto</string>
     <string name="abort">Abortar</string>
 
-    <string name="action_sign_out_confirmation_simple">Você tem certeza que deseja sair da conta\?</string>
+    <string name="action_sign_out_confirmation_simple">Tem certeza de que deseja sair\?</string>
     <string name="settings_notification_advanced">Configurações Avançadas de Notificação</string>
     <string name="settings_notification_by_event">Importância da notificação por evento</string>
 
@@ -1201,14 +1201,14 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nEste erro está fora do controle do Element e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
-    <string name="ignore">Ignorar</string>
+    <string name="ignore">Silenciar e esconder mensagens</string>
 
     <string name="auth_login_sso">Entre com o logon único</string>
     <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
     <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle da Element. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
-    <string name="notification_sync_init">Inicializando o serviço</string>
+    <string name="notification_sync_init">Iniciando o serviço</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Element. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
 
@@ -1228,10 +1228,37 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="revoke">Revogar</string>
     <string name="disconnect">Desconectar</string>
     <string name="review">Revisar</string>
-    <string name="decline">Negar</string>
+    <string name="decline">Recusar</string>
 
     <string name="action_mark_room_read">Marcar como lido</string>
-    <string name="people_no_identity_server">Nenhum servidor de identidade configurado.</string>
+    <string name="people_no_identity_server">Nenhum servidor de identidade está configurado.</string>
 
-    <string name="call_failed_no_ice_title">Ligação falhou devido ao servidor mal configurado</string>
-</resources>
+    <string name="call_failed_no_ice_title">A chamada falhou por conta de má configuração no servidor</string>
+<string name="play_video">Reproduzir</string>
+    <string name="pause_video">Pausar</string>
+    <string name="dismiss">Descartar</string>
+
+
+    <string name="action_copy">Copiar</string>
+    <string name="dialog_title_success">Pronto</string>
+
+    <string name="bottom_action_notification">Notificações</string>
+    <string name="call_failed_no_ice_description">Peça ao administrador do seu servidor principal (%1$s) que configure um servidor TURN para que as chamadas funcionem de maneira confiável.↵
+\n↵
+\nAlternativamente, você pode tentar usar o servidor público em %2$s. No entanto, ele não é tão confiável e compartilhará o seu IP com esse servidor. Você também pode configurar isso nas Configurações.</string>
+    <string name="call_failed_no_ice_use_alt">Tente usar %s</string>
+    <string name="call_failed_dont_ask_again">Não pergunte novamente</string>
+
+    <string name="call_failed_no_connection">A chamada falhou</string>
+    <string name="call_failed_no_connection_description">Falha ao estabelecer conexão em tempo real.↵
+\nPor favor, peça ao administrador do seu servidor para configurar um servidor TURN, de modo que as chamadas funcionem de maneira estável.</string>
+
+    <string name="call_select_sound_device">Selecione o dispositivo de som</string>
+    <string name="sound_device_phone">Telefone</string>
+    <string name="sound_device_speaker">Alto-falante</string>
+    <string name="sound_device_headset">Fone de ouvido</string>
+    <string name="sound_device_wireless_headset">Fone de ouvido sem fio</string>
+    <string name="call_switch_camera">Trocar a câmera</string>
+    <string name="call_camera_front">Frontal</string>
+    <string name="call_camera_back">Traseira</string>
+    </resources>
