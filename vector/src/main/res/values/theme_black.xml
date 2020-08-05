@@ -29,6 +29,7 @@
         <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_black</item>
         <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_black</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_black</item>
+        <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_black</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_black</item>
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_black</item>
         <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_black</item>

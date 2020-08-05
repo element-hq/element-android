@@ -4,10 +4,10 @@
 
     <corners android:radius="3dp" />
 
-    <solid android:color="@color/riotx_fab_label_bg_dark" />
+    <solid android:color="?riotx_fab_label_bg" />
 
     <stroke
         android:width="0.5dp"
-        android:color="@color/black" />
+        android:color="?riotx_fab_label_stroke" />
 
 </shape>

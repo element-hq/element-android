@@ -179,9 +179,8 @@ object ThemeUtils {
             THEME_LIGHT_VALUE -> resourceId
             THEME_DARK_VALUE  -> {
                 return when (resourceId) {
-                    R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_dark
-                    R.drawable.vector_label_background_light -> R.drawable.vector_label_background_dark
-                    else                                     -> {
+                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_dark
+                    else                                 -> {
                         Timber.w("Warning, missing case for wanted drawable in dark theme")
                         resourceId
                     }
@@ -189,9 +188,8 @@ object ThemeUtils {
             }
             THEME_BLACK_VALUE -> {
                 return when (resourceId) {
-                    R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_black
-                    R.drawable.vector_label_background_light -> R.drawable.vector_label_background_black
-                    else                                     -> {
+                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_black
+                    else                                 -> {
                         Timber.w("Warning, missing case for wanted drawable in black theme")
                         resourceId
                     }

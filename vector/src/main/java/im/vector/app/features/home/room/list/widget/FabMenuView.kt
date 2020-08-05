@@ -22,7 +22,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.motion_fab_menu_merge.view.*
 
 class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
@@ -36,12 +35,6 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-
-        // Tint label background
-        listOf(createRoomItemChatLabel, createRoomItemGroupLabel)
-                .forEach {
-                    it.setBackgroundResource(ThemeUtils.getResourceId(context, R.drawable.vector_label_background_light))
-                }
 
         listOf(createRoomItemChat, createRoomItemChatLabel)
                 .forEach {
