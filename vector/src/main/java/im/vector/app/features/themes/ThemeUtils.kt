@@ -165,44 +165,6 @@ object ThemeUtils {
     }
 
     /**
-     * Get the resource Id applied to the current theme
-     *
-     * @param c          the context
-     * @param resourceId the resource id in the light theme
-     * @return the resource Id for the current theme
-     */
-    // TODO Now that we are API 21, this is not necessary anymore
-    fun getResourceId(c: Context, resourceId: Int): Int {
-        val theme = getApplicationTheme(c)
-
-        return when (theme) {
-            THEME_LIGHT_VALUE -> resourceId
-            THEME_DARK_VALUE  -> {
-                return when (resourceId) {
-                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_dark
-                    else                                 -> {
-                        Timber.w("Warning, missing case for wanted drawable in dark theme")
-                        resourceId
-                    }
-                }
-            }
-            THEME_BLACK_VALUE -> {
-                return when (resourceId) {
-                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_black
-                    else                                 -> {
-                        Timber.w("Warning, missing case for wanted drawable in black theme")
-                        resourceId
-                    }
-                }
-            }
-            else              -> {
-                Timber.w("Warning, missing theme: $theme")
-                resourceId
-            }
-        }
-    }
-
-    /**
      * Update the menu icons colors
      *
      * @param menu  the menu
