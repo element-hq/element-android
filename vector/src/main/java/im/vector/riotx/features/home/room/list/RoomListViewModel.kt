@@ -30,6 +30,7 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.features.home.RoomListDisplayMode
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -217,6 +218,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         val favourites = ArrayList<RoomSummary>()
         val directChats = ArrayList<RoomSummary>(rooms.size)
         val groupRooms = ArrayList<RoomSummary>(rooms.size)
+        val normalPriority = ArrayList<RoomSummary>(rooms.size)
         val lowPriorities = ArrayList<RoomSummary>()
         val serverNotices = ArrayList<RoomSummary>()
 
@@ -229,15 +231,25 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                         tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
                         tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                        //room.isDirect                                 -> directChats.add(room)
-                        else                                          -> groupRooms.add(room)
+                        room.isDirect                                 -> {
+                                                                            directChats.add(room)
+                                                                            normalPriority.add(room)
+                                                                         }
+                        else                                          -> {
+                                                                            groupRooms.add(room)
+                                                                            normalPriority.add(room)
+                                                                         }
                     }
                 }
         return RoomSummaries().apply {
             put(RoomCategory.INVITE, invites)
             put(RoomCategory.FAVOURITE, favourites)
-            put(RoomCategory.DIRECT, directChats)
-            put(RoomCategory.GROUP, groupRooms)
+            if (displayMode == RoomListDisplayMode.ALL) {
+                put(RoomCategory.COMBINED, normalPriority)
+            } else {
+                put(RoomCategory.DIRECT, directChats)
+                put(RoomCategory.GROUP, groupRooms)
+            }
             put(RoomCategory.LOW_PRIORITY, lowPriorities)
             put(RoomCategory.SERVER_NOTICE, serverNotices)
         }

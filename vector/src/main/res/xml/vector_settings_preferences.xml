@@ -39,6 +39,12 @@
             android:title="@string/bubble_style"
             app:iconSpaceReserved="false" />
 
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SINGLE_OVERVIEW"
+            android:summary="@string/settings_single_overview_summary"
+            android:title="@string/settings_single_overview" />
+
         <im.vector.riotx.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"

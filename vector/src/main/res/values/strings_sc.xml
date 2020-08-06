@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="settings_single_overview">Combined chat overview</string>
+    <string name="settings_single_overview_summary">View both direct messages and rooms on one page</string>
+
     <string name="settings_dark_theme">Night Theme</string>
     <string name="sc_light_theme">SC Light</string>
     <string name="sc_theme">SC Black</string>

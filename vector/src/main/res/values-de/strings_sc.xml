@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="settings_single_overview">Vereinte Chat-Übersicht</string>
+    <string name="settings_single_overview_summary">Zeige sowohl Direktnachrichten als auch Gruppenchats in einer gemeinsamen Übersicht</string>
+
     <string name="settings_dark_theme">Nacht-Design</string>
     <string name="sc_light_theme">SC Hell</string>
     <string name="sc_theme">SC Schwarz</string>

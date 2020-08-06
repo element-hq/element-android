@@ -36,6 +36,7 @@ data class RoomListViewState(
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,
         val isGroupRoomsExpanded: Boolean = true,
+        val isCombinedRoomsExpanded: Boolean = true,
         val isLowPriorityRoomsExpanded: Boolean = true,
         val isServerNoticeRoomsExpanded: Boolean = true
 ) : MvRxState {
@@ -48,6 +49,7 @@ data class RoomListViewState(
             RoomCategory.FAVOURITE     -> isFavouriteRoomsExpanded
             RoomCategory.DIRECT        -> isDirectRoomsExpanded
             RoomCategory.GROUP         -> isGroupRoomsExpanded
+            RoomCategory.COMBINED      -> isCombinedRoomsExpanded
             RoomCategory.LOW_PRIORITY  -> isLowPriorityRoomsExpanded
             RoomCategory.SERVER_NOTICE -> isServerNoticeRoomsExpanded
         }
@@ -59,6 +61,7 @@ data class RoomListViewState(
             RoomCategory.FAVOURITE     -> copy(isFavouriteRoomsExpanded = !isFavouriteRoomsExpanded)
             RoomCategory.DIRECT        -> copy(isDirectRoomsExpanded = !isDirectRoomsExpanded)
             RoomCategory.GROUP         -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
+            RoomCategory.COMBINED      -> copy(isCombinedRoomsExpanded = !isCombinedRoomsExpanded)
             RoomCategory.LOW_PRIORITY  -> copy(isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded)
             RoomCategory.SERVER_NOTICE -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
         }
@@ -78,8 +81,8 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
     INVITE(R.string.invitations_header),
     FAVOURITE(R.string.bottom_action_favourites),
     DIRECT(R.string.bottom_action_people_x),
-    //GROUP(R.string.bottom_action_rooms),
-    GROUP(R.string.normal_priority_header),
+    GROUP(R.string.bottom_action_rooms),
+    COMBINED(R.string.normal_priority_header),
     LOW_PRIORITY(R.string.low_priority_header),
     SERVER_NOTICE(R.string.system_alerts_header)
 }

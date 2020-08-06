@@ -90,8 +90,12 @@ class HomeDetailFragment @Inject constructor(
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
-            //bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
-            bottomNavigationView.visibility = View.GONE
+            if (it.displayMode == RoomListDisplayMode.ALL) {
+                bottomNavigationView.visibility = View.GONE
+            } else {
+                bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+                bottomNavigationView.visibility = View.VISIBLE
+            }
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
@@ -131,6 +135,14 @@ class HomeDetailFragment @Inject constructor(
         super.onResume()
         // update notification tab if needed
         checkNotificationTabStatus()
+        // Recreate if single-mode overview status changed
+        withState(viewModel) {
+            if ((it.displayMode == RoomListDisplayMode.ALL) != vectorPreferences.singleOverview()) {
+                Timber.i("Restart due to single-overview setting change")
+                startActivity(activity?.intent)
+                activity?.finish()
+            }
+        }
     }
 
     private fun checkNotificationTabStatus() {
