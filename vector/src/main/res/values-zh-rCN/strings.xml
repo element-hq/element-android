@@ -54,8 +54,8 @@
     <string name="room_participants_offline">离线</string>
     <string name="room_menu_search">搜索</string>
     <string name="room_one_user_is_typing">%s 正在输入…</string>
-    <string name="title_activity_home">聊天</string>
-    <string name="title_activity_room">聊天室</string>
+    <string name="title_activity_home">消息</string>
+    <string name="title_activity_room">房间</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_member_details">成员信息</string>
 
@@ -1437,7 +1437,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="people_no_identity_server">没有设置身份服务器。</string>
 
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
-    <string name="resources_script">Latn</string>
+    <string name="resources_script">Hans</string>
 
     <string name="call_failed_no_ice_description">请要求您的家庭服务器 (%1$s) 的管理员配置 TURN 服务器，以使通话可靠地工作。
 \n
@@ -1808,8 +1808,177 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 \n
 \n如果您不希望再看到此用户的更多内容，您可以屏蔽他以隐藏他的信息</string>
     <string name="content_reported_as_inappropriate_title">报告为不合适的内容</string>
-    <string name="content_reported_as_inappropriate_content">此内容以报告为不合适。
+    <string name="content_reported_as_inappropriate_content">此内容已报告为不合适。
 \n
 \n如果您不希望再看到此用户的更多内容，您可以屏蔽他以隐藏他的信息</string>
 
+    <string name="permissions_rationale_msg_keys_backup_export">Element 需要权限在磁盘上保存您的端到端密钥。
+\n
+\n请在下个弹窗中允许访问以便手动导出密钥。</string>
+
+    <string name="no_network_indicator">目前没有网络连接</string>
+
+    <string name="message_ignore_user">屏蔽用户</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">全部消息（嘈杂）</string>
+    <string name="room_list_quick_actions_notifications_all">全部消息</string>
+    <string name="room_list_quick_actions_notifications_mentions">仅提到我的</string>
+    <string name="room_list_quick_actions_notifications_mute">静音</string>
+    <string name="room_list_quick_actions_settings">设置</string>
+    <string name="room_list_quick_actions_favorite_add">添加到收藏</string>
+    <string name="room_list_quick_actions_favorite_remove">从收藏中移除</string>
+    <string name="room_list_quick_actions_leave">离开房间</string>
+    <string name="notice_member_no_changes">%1$s 未做更改</string>
+    <string name="notice_member_no_changes_by_you">您未做更改</string>
+    <string name="no_ignored_users">您未忽略任何用户</string>
+
+    <string name="help_long_click_on_room_for_more_options">长按房间查看更多选项</string>
+
+
+    <string name="room_join_rules_public">%1$s 将房间设为对任何知道链接的用户公开。</string>
+    <string name="room_join_rules_public_by_you">您将房间设为对任何知道链接的用户公开。</string>
+    <string name="room_join_rules_invite">%1$s 将房间设为仅限邀请。</string>
+    <string name="room_join_rules_invite_by_you">您将房间设为仅限邀请。</string>
+    <string name="timeline_unread_messages">未读消息</string>
+
+    <string name="login_splash_title">这是你的对话。拥有它。</string>
+    <string name="login_splash_text1">与人们私聊或群聊</string>
+    <string name="login_splash_text2">通过加密保证对话私密</string>
+    <string name="login_splash_text3">扩展 &amp; 自定义您的体验</string>
+    <string name="login_splash_submit">开始吧</string>
+
+    <string name="login_server_title">选择服务器</string>
+    <string name="login_server_text">就像电子邮件，账户有一个家，尽管您可以与任何人聊天</string>
+    <string name="login_server_matrix_org_text">在最大的公共服务器上免费加入数百万用户</string>
+    <string name="login_server_modular_text">面向组织的高级托管</string>
+    <string name="login_server_modular_learn_more">了解更多</string>
+    <string name="login_server_other_title">其他</string>
+    <string name="login_server_other_text">自定义 &amp; 高级设置</string>
+
+    <string name="login_continue">继续</string>
+    <string name="login_connect_to">连接到 %1$s</string>
+    <string name="login_connect_to_modular">连接到 Element Matrix 服务</string>
+    <string name="login_connect_to_a_custom_server">连接到自定义服务器</string>
+    <string name="login_signin_to">登入 %1$s</string>
+    <string name="login_signup">注册</string>
+    <string name="login_signin">登入</string>
+    <string name="login_signin_sso">使用单点登录继续</string>
+
+    <string name="login_server_url_form_modular_hint">Element Matrix 服务地址</string>
+    <string name="login_server_url_form_other_hint">地址</string>
+    <string name="login_server_url_form_modular_text">面向组织的高级托管</string>
+    <string name="login_server_url_form_modular_notice">输入 Modular Element 或您想使用的服务器地址</string>
+    <string name="login_server_url_form_other_notice">输入您想要连接的服务器或 Element 的地址</string>
+    <string name="login_server_url_form_common_notice">输入您想使用的服务器的地址</string>
+
+    <string name="login_sso_error_message">载入页面时出错：%1$s (%2$d)</string>
+    <string name="login_mode_not_supported">应用无法登录到此家庭服务器。家庭服务器支持以下登录类型：%1$s。
+\n
+\n您想要通过网页客户端登录吗？</string>
+    <string name="login_registration_disabled">抱歉，此服务器不接受新账户。</string>
+    <string name="login_registration_not_supported">应用无法再次服务器上创建账户。
+\n
+\n您想要通过网页客户端注册吗？</string>
+
+    <string name="login_login_with_email_error">电子邮件未关联到任何账户。</string>
+
+    <string name="login_reset_password_on">在 %1$s 上重置密码</string>
+    <string name="login_reset_password_notice">验证邮件将发送到您的收件箱以确认设置您的新密码。</string>
+    <string name="login_reset_password_submit">下一个</string>
+    <string name="login_reset_password_email_hint">电子邮件</string>
+    <string name="login_reset_password_password_hint">新密码</string>
+
+    <string name="login_reset_password_warning_title">注意！</string>
+    <string name="login_reset_password_warning_content">更改您的密码将重置所有会话上的端到端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
+    <string name="login_reset_password_warning_submit">继续</string>
+
+    <string name="login_reset_password_error_not_found">电子邮件未链接到任何账户</string>
+
+    <string name="login_reset_password_mail_confirmation_title">检查您的收件箱</string>
+    <string name="login_reset_password_mail_confirmation_notice">验证电子邮件已发送到 %1$s。</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">点击链接以确认您的新密码。跟随包含的链接验证后，请点击下方。</string>
+    <string name="login_reset_password_mail_confirmation_submit">我已验证我的电子邮件地址</string>
+
+    <string name="login_reset_password_success_title">成功！</string>
+    <string name="login_reset_password_success_notice">您的密码已重置。</string>
+    <string name="login_reset_password_success_notice_2">您已登出全部会话，不会再接收到推送通知。若要重新启用通知，请在每个设备上再次登录。</string>
+    <string name="login_reset_password_success_submit">返回登录</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">注意</string>
+    <string name="login_reset_password_cancel_confirmation_content">您的密码尚未更改。
+\n
+\n是否中止密码更改过程？</string>
+
+    <string name="login_set_email_title">设置电子邮件地址</string>
+    <string name="login_set_email_notice">设置电子邮件用于恢复您的帐户。之后，您可以选择允许您认识的人通过电子邮件发现您。</string>
+    <string name="login_set_email_mandatory_hint">电子邮件</string>
+    <string name="login_set_email_optional_hint">电子邮件（可选）</string>
+    <string name="login_set_email_submit">下一个</string>
+
+    <string name="login_set_msisdn_title">设置电话号码</string>
+    <string name="login_set_msisdn_notice">设置电话号码，以选择允许您认识的人发现您。</string>
+    <string name="login_set_msisdn_notice2">请使用国际格式。</string>
+    <string name="login_set_msisdn_mandatory_hint">电话号码</string>
+    <string name="login_set_msisdn_optional_hint">电话号码（可选）</string>
+    <string name="login_set_msisdn_submit">下一个</string>
+
+    <string name="login_msisdn_confirm_title">确认电话号码</string>
+    <string name="login_msisdn_confirm_notice">我们向 %1$s 发送了验证码。在下方输入它以验证您的身份。</string>
+    <string name="login_msisdn_confirm_hint">输入验证码</string>
+    <string name="login_msisdn_confirm_send_again">重新发送</string>
+    <string name="login_msisdn_confirm_submit">下一个</string>
+
+    <string name="login_msisdn_error_not_international">国际电话号码必须以 ‘+’ 开头</string>
+    <string name="login_msisdn_error_other">电话号码似乎无效。请检查</string>
+
+    <string name="login_signup_to">在 %1$s 上注册</string>
+    <string name="login_signin_username_hint">用户名或电子邮件</string>
+    <string name="login_signup_username_hint">用户名</string>
+    <string name="login_signup_password_hint">密码</string>
+    <string name="login_signup_submit">下一个</string>
+    <string name="login_signup_error_user_in_use">用户名已占用</string>
+    <string name="login_signup_cancel_confirmation_title">注意</string>
+    <string name="login_signup_cancel_confirmation_content">您的帐户尚未创建。
+\n
+\n是否中止注册过程？</string>
+
+    <string name="login_a11y_choose_matrix_org">选择 matrix.org</string>
+    <string name="login_a11y_choose_modular">选择 Element Matrix Services</string>
+    <string name="login_a11y_choose_other">选择自定义家庭服务器</string>
+    <string name="login_a11y_captcha_container">请进行人机验证</string>
+    <string name="login_terms_title">接受条款以继续</string>
+
+    <string name="login_wait_for_email_title">请检查您的电子邮件</string>
+    <string name="login_wait_for_email_notice">我们向 %1$s 发送了电子邮件。
+\n请点击其中包含的链接继续账户创建。</string>
+    <string name="login_validation_code_is_not_correct">输入的验证码不正确。请检查。</string>
+    <string name="login_error_outdated_homeserver_title">过时的家庭服务器</string>
+    <string name="login_error_outdated_homeserver_content">此家庭服务器运行的版本过旧以至于无法连接。要求您的家庭服务器管理员升级。</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+	<item quantity="other">发送了太多请求。您可以在 %1$d 秒后重试…</item>
+</plurals>
+
+    <string name="login_connect_using_matrix_id_notice">或者，如果您已经拥有账户并知道您的 Matrix 标识符和密码，您可以使用这种方式：</string>
+    <string name="login_connect_using_matrix_id_submit">使用 Matrix ID 登录</string>
+    <string name="login_signin_matrix_id_title">使用 Matrix ID 登录</string>
+    <string name="login_signin_matrix_id_notice">如果您在家庭服务器上设置了账户，在下方使用您的 Matrix ID（例 @user:domain.com）和密码。</string>
+    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_signin_matrix_id_password_notice">如果您不知道您的密码，返回并重置。</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">这不是一个有效的用户标识符。期望的格式：\'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">无法找到有效的家庭服务器。请检查您的标识符</string>
+
+    <string name="signed_out_title">您已登出</string>
+    <string name="signed_out_notice">这可能由于多种原因：
+\n
+\n• 您已在其他会话中更改了您的密码。
+\n
+\n• 您已从其他会话删除了此会话。
+\n
+\n• 您的服务器管理员出于安全原因已取消您的访问权限。</string>
+    <string name="signed_out_submit">重新登入</string>
+
+    <string name="soft_logout_title">您已登出</string>
+    <string name="soft_logout_signin_title">登入</string>
+    <string name="soft_logout_signin_notice">您的家庭服务器 (%1$s) 管理员将您从您的账户 %2$s (%3$s) 登出。</string>
     </resources>
