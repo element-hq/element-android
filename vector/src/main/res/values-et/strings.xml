@@ -489,4 +489,211 @@
     <string name="settings_security_pin_code_title">Võta PIN-kood kasutusele</string>
     <string name="settings_security_pin_code_summary">Kui sa soovid oma PIN-koodi lähtestada, siis klõpsi nuppu „Unustasin PIN-koodi“.</string>
     <string name="auth_pin_confirm_to_disable_title">PIN-koodi kasutuselt eemaldamiseks korda PIN-koodi</string>
-</resources>
+<string name="room_settings_never_send_to_unverified_devices_title">Kasuta krüptimist vaid verifitseeritud sessioonides</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse selles jututoas.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Sellel jututoal puuduvad kohalikud aadressid</string>
+    <string name="room_settings_addresses_add_new_address">Uus aadress (näiteks #seltskond:matrix.org)</string>
+
+    <string name="room_settings_no_flair">Sellele jututoale ei ole jagatud ühtegi kogukonna rinnasilti</string>
+    <string name="room_settings_add_new_group">Uus kogukonna tunnus (näiteks +meieseltsing:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Vigane kogukonna tunnus</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ei ole korrektne kogukonna tunnus</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Vigane aliase vorming</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' ei ole lubatud aliase vorming</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Sel jututoal ei saa olema põhiaadressi.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Põhiaadressi hoiatus</string>
+
+    <string name="room_settings_set_main_address">Määra põhiaadressiks</string>
+    <string name="room_settings_unset_main_address">Eemalda põhiaadressiks määramine</string>
+    <string name="room_settings_copy_room_id">Kopeeri jututoa tunnus</string>
+    <string name="room_settings_copy_room_address">Kopeeri jututoa aadress</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Krüptimine on selles jututoas kasutusel.</string>
+    <string name="room_settings_addresses_e2e_disabled">Krüptimine ei ole selles jututoas kasutusel.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Võta krüptimine kasutusele 
+\n(hoiatus: seda ei saa hiljem enam välja lülitada!)</string>
+
+    <string name="directory_title">Kaust</string>
+    <string name="settings_theme">Teema</string>
+
+    <string name="font_size">Fontide suurus</string>
+    <string name="tiny">Pisike</string>
+    <string name="small">Väike</string>
+    <string name="normal">Tavaline</string>
+    <string name="large">Suur</string>
+    <string name="larger">Suurem</string>
+    <string name="largest">Veel suurem</string>
+    <string name="huge">Hiidsuur</string>
+
+    <string name="widget_no_power_to_manage">Sul on vaja õigusi, et selles jututoas hallata vidinaid</string>
+    <string name="widget_creation_failure">Vidina loomine ei õnnestunud</string>
+    <string name="settings_labs_create_conference_with_jitsi">Algata rühmakõnesid jitsi vahendusel</string>
+    <string name="widget_delete_message_confirmation">Kas oled kindel, et soovid siit jututoast selle vidina kustutada\?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">Kasutusel on üks vidin</item>
+	<item quantity="other">Kasutusel on %d vidinat</item>
+</plurals>
+    <string name="active_widgets_title">Kasutusel vidinad</string>
+
+
+    <string name="room_widget_activity_title">Vidin</string>
+    <string name="room_widget_permission_title">Lae vidin</string>
+    <string name="room_widget_permission_added_by">Selle vidina lisaja:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Vidina kasutamine võib tuua kaasa küpsiste salvestamise ja andmete jagamise serveriga %s:</string>
+    <string name="room_widget_permission_shared_info_title">Selle kasutamine võib tuua kaasa andmete jagamise serveriga %s:</string>
+    <string name="room_widget_failed_to_load">Vidina laadimine ei õnnestunud.
+\n%s</string>
+    <string name="room_widget_reload">Lae vidin uuesti</string>
+    <string name="room_widget_open_in_browser">Ava veebibrauseris</string>
+    <string name="room_widget_revoke_access">Eemalda minu ligipääsuõigused</string>
+
+    <string name="room_widget_permission_display_name">Sinu kuvatav nimi</string>
+    <string name="room_widget_permission_avatar_url">Sinu avatari aadress</string>
+    <string name="room_widget_permission_user_id">Sinu kasutajatunnus</string>
+    <string name="room_widget_permission_theme">Sinu teema</string>
+    <string name="room_widget_permission_widget_id">Vidina tunnus</string>
+    <string name="room_widget_permission_room_id">Jututoa tunnus</string>
+
+
+    <string name="has_been_banned">%2$s seadis sulle ligipääsukeelu %1$s jututuppa</string>
+    <string name="reason_colon">Põhjus: %1$s</string>
+    <string name="rejoin">Liitu uuesti</string>
+    <string name="forget_room">Unusta jututuba ära</string>
+
+    <string name="keys_backup_setup_step1_advanced">(Lisaseadistused)</string>
+    <string name="keys_backup_setup_step1_manual_export">Ekspordi võtmed käsitsi</string>
+
+    <string name="keys_backup_setup_step2_text_title">Krüpti oma varukoopia paroolifraasiga.</string>
+    <string name="keys_backup_setup_step2_text_description">Me salvestame krüptitud varukoopia sinu krüptovõtmetest meie serveris. Tagamaks, et keegi ei saa seda kasutada, krüpti varukoopia paroolifraasiga.
+\n
+\n Parima turvalisuse jaoks peaks paroolifraas olema erinev sinu konto salasõnast.</string>
+    <string name="keys_backup_setup_step2_button_title">Loo paroolifraas</string>
+    <string name="keys_backup_setup_creating_backup">Teen varukoopiat</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Või krüpti oma varukoopia taastevõtmega ning hoia taastevõtit turvalises kohas.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">Võta kasutusele taastevõti</string>
+    <string name="keys_backup_setup_step3_success_title">Õnnestus!</string>
+    <string name="keys_backup_setup_step3_text_line1">Sinu krüptovõtmeid parasjagu varundatakse.</string>
+    <string name="keys_backup_setup_step3_text_line2">Sinu taastevõti toimib turvavõrguna - juhul, kui sa unustad taastamiseks mõeldud paroolifraasi, siis sa saad seda kasutada taastamaks ligipääsu krüptitud sõnumitele.
+\nHoia taastevõtit turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Hoia oma taastevõtit väga turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis</string>
+    <string name="keys_backup_setup_step3_button_title">Valmis</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Ma olen juba teinud koopia</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Salvesta taastevõti</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Jaga</string>
+    <string name="keys_backup_setup_step3_save_button_title">Salvesta failina</string>
+    <string name="keys_backup_unlock_button">Võta ajalugu lukust lahti</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Palun sisesta taastevõti</string>
+    <string name="sas_emoji_description">Verifitseeri see sessioon tehes kindlaks et järgnev emoji kuvatakse partneri ekraanil</string>
+    <string name="sas_decimal_description">Verifitseeri see sessioon tehes kindlaks, et järgnevad numbrid kuvatakse partneri ekraanil</string>
+
+    <string name="sas_incoming_verification_request_dialog">Sa võtsid vastu saabuva verifitseerimispalve.</string>
+    <string name="sas_waiting_for_partner">Ootan teise osapoole kinnitust…</string>
+
+    <string name="sas_verified">Verifitseeritud!</string>
+    <string name="sas_verified_successful">Sa oled edukalt verifitseerinud selle sessiooni.</string>
+    <string name="sas_verified_successful_description">Turvalised sõnumid selle kasutajaga on läbivalt krüptitud ning kolmandad osapooled ei saa neid lugeda.</string>
+    <string name="sas_got_it">Selge lugu</string>
+
+    <string name="sas_verifying_keys">Mitte midagi huvitavat ei paista\? Kõik kliendid ei toeta veel interaktiivset verifitseerimist. Selle asemel kasuta vana kooli verifitseerimist.</string>
+    <string name="sas_legacy_verification_button_title">Kasuta vana kooli verifitseerimist.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Krüptovõtmete verifitseerimine</string>
+    <string name="sas_cancelled_dialog_title">Päring on tühistatud</string>
+    <string name="sas_cancelled_by_other">Teine osapool tühistas verifitseerimise.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Verifitseerimine on tühistatud.
+\nPõhjus %s</string>
+
+    <string name="sas_verification_request_notification_channel">Vastastikune sessioonide verifitseerimine</string>
+    <string name="sas_incoming_request_notif_title">Verifitseerimispäring</string>
+    <string name="sas_incoming_request_notif_content">%s soovib verifitseerida sinu sessiooni</string>
+
+    <string name="sas_error_m_user">Kasutaja tühistas verifitseerimise</string>
+    <string name="sas_error_m_timeout">Verifitseerimisprotsess aegus</string>
+    <string name="room_list_rooms_empty_body">Sinu jututoad kuvatakse siin</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reageerimised</string>
+    <string name="reactions_agree">Nõus</string>
+    <string name="reactions_like">Meeldib</string>
+    <string name="message_add_reaction">Lisa reaktsioon</string>
+    <string name="reactions">Reageerimised</string>
+
+    <string name="event_redacted">Sõnum on kustutatud</string>
+    <string name="settings_show_redacted">Näita kustutatud sõnumeid</string>
+    <string name="settings_show_redacted_summary">Näita kustutatud sõnumite asemel kohatäidet</string>
+    <string name="event_redacted_by_user_reason">Kasutaja kustutas sündmuse</string>
+    <string name="event_redacted_by_admin_reason">Jututoa haldur on sündmust modereerinud</string>
+    <string name="last_edited_info_message">Viimati muudetud 1$s poolt, muutmise aeg %2$s</string>
+
+
+    <string name="malformed_message">Vigaselt vormindatud sündmus ja kuvamine pole seetõttu võimalik</string>
+    <string name="error_no_network">Võrguühendus puudub. Palun kontrolli oma internetiühendust.</string>
+    <string name="action_change">Muuda</string>
+    <string name="change_room_directory_network">Vaheta võrku</string>
+    <string name="please_wait">Palun oota…</string>
+    <string name="group_all_communities">Kõik kogukonnad</string>
+
+    <string name="room_preview_no_preview">Sellel jututoal puudub eelvaade</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Element ei toeta veel kõigile nähtavate jututubade eelvaadet</string>
+
+    <string name="fab_menu_create_room">Jututoad</string>
+    <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
+
+    <string name="create_room_title">Uus jututuba</string>
+    <string name="create_room_action_create">LOO</string>
+    <string name="create_room_name_hint">Jututoa nimi</string>
+    <string name="create_room_public_title">Avalik</string>
+    <string name="create_room_public_description">Kõik võivad selle jututoaga liituda</string>
+    <string name="create_room_directory_title">Jututubade loend</string>
+    <string name="create_room_directory_description">Avalda see jututuba jututubade loendis</string>
+
+    <string name="send_attachment">Saada manus</string>
+
+    <string name="uploads_media_no_result">Selles jututoas pole meediafaile</string>
+    <string name="uploads_files_title">FAILID</string>
+    <string name="uploads_files_subtitle">Lisaja %1$s, lisamise aeg %2$s</string>
+    <string name="uploads_files_no_result">Selles jututoas pole faile</string>
+
+    <string name="report_content_spam">Tegemist on spämmiga</string>
+    <string name="report_content_inappropriate">See on ebasobilik</string>
+    <string name="report_content_custom">Kohandatud põhjus…</string>
+    <string name="report_content_custom_title">Teata kahtlasest sisust</string>
+    <string name="report_content_custom_hint">Sellest sisust teatamise põhjus</string>
+    <string name="report_content_custom_submit">SAADA TEADE</string>
+    <string name="login_reset_password_success_notice">Sinu salasõna on muudetud.</string>
+    <string name="login_reset_password_success_notice_2">Sa oled kõikidest sessioonidest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse kõikides oma seadmetes.</string>
+    <string name="login_reset_password_success_submit">Tagasi sisselogimise lehele</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Hoiatus</string>
+    <string name="verification_request_start_notice">"Turvalisuse mõttes on oluline, et teed seda nii, et kas olete  üheskoos või kasutate suhtluskanalit, mida mõlemad usaldate."</string>
+
+    <string name="verification_emoji_notice">Võrdle unikaalset emoji\'de kombinatsiooni ja vaata, et nad oleksid samas järjekorras.</string>
+    <string name="verification_code_notice">Võrdle koodi sellega, mida kuvatakse teise kasutaja ekraanil.</string>
+    <string name="verification_conclusion_ok_notice">Sõnumid selle kasutajaga on läbivalt krüptitud ning kolmandad osapooled ei saa neid lugeda.</string>
+    <string name="verification_conclusion_ok_self_notice">Sinu uus sessioon on nüüd verifitseeritud. Selles sessioonis saad lugeda oma krüptitud sõnumeid ja teiste kasutajate jaoks on ta usaldusväärne.</string>
+
+    <string name="encryption_information_cross_signing_state">Risttunnustamine</string>
+    <string name="encryption_information_dg_xsigning_complete">Risttunnustamine on kasutusel
+\nPrivaatvõtmed asuvad seadmes.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Risttunnustamine on kasutusel
+\nVõtmed on usaldusväärsed
+\nPrivaatvõtmed ei ole teada</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Risttunnustamine on kasutusel
+\nVõtmed ei ole usaldusväärsed</string>
+    <string name="encryption_information_dg_xsigning_disabled">Risttunnustamine ei ole kasutusel</string>
+
+    <string name="settings_hs_admin_e2e_disabled">Sinu serveri haldur on lülitanud läbiva krüptimise omavahelistes jututubades ja otsesõnumites välja.</string>
+    <string name="settings_active_sessions_list">Aktiivsed sessioonid</string>
+    <string name="settings_active_sessions_show_all">Näita kõiki sessioone</string>
+    <string name="settings_active_sessions_manage">Halda sessioone</string>
+    <string name="settings_active_sessions_signout_device">Logi sellest sessioonist välja</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Teave krüptograafia kohta puudub</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Kuna sina oled selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
+    <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. Element toetab aga vaid API versiooni 2.</string>
+    <string name="identity_server_error_outdated_home_server">See tegevus ei ole võimalik. Koduserveri versioon on liiga vana.</string>
+    </resources>
