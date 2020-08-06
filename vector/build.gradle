@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 22
+ext.versionMinor = 24
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -71,7 +71,7 @@ static def getGplayVersionSuffix() {
     if (gitBranchName() == "master") {
         return ""
     } else {
-        return "-dev"
+        return "" // "-dev"
     }
 }
 
@@ -225,6 +225,7 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
+        abortOnError false
     }
 
     compileOptions {

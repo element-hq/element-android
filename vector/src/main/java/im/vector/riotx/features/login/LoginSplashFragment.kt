@@ -16,8 +16,14 @@
 
 package im.vector.riotx.features.login
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import butterknife.OnClick
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.openPlayStore
+import im.vector.riotx.core.utils.toast
 import javax.inject.Inject
 
 /**
@@ -29,7 +35,19 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
 
     @OnClick(R.id.loginSplashSubmit)
     fun getStarted() {
-        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
+        openPlayStore(requireActivity(), "im.vector.app")
+    }
+
+    @OnClick(R.id.loginSplashUninstall)
+    fun uninstall() {
+        @Suppress("DEPRECATION")
+        val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
+        intent.data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        try {
+            startActivity(intent)
+        } catch (anfe: ActivityNotFoundException) {
+            requireActivity().toast(R.string.error_no_external_application_found)
+        }
     }
 
     override fun resetViewModel() {

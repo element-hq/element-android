@@ -2453,4 +2453,10 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_set_alternative_submit">Submit</string>
     <string name="power_level_edit_title">Set role</string>
 
+    <string name="the_beta_is_over_title">The beta is over!</string>
+    <string name="the_beta_is_over_content">Thank you for your contribution to test RiotX.\n\nRiotX will not be updated anymore from the PlayStore, you should properly sign out and then uninstall it.\n\nPlease install the new application Element!</string>
+    <string name="the_beta_is_over_get_element">Get Element</string>
+    <string name="the_beta_is_over_uninstall">Uninstall RiotX</string>
+
+    <string name="the_beta_is_over_login_screen_content">RiotX is deprecated\n\nPlease install Element!</string>
 </resources>

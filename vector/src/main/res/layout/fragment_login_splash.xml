@@ -35,101 +35,41 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:text="@string/login_splash_title"
+                android:gravity="center_horizontal"
+                android:text="@string/the_beta_is_over_login_screen_content"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
                 android:transitionName="loginTitleTransition"
-                app:layout_constraintBottom_toTopOf="@+id/loginSplashText1"
+                app:layout_constraintBottom_toTopOf="@+id/loginSplashSubmit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSplashLogo" />
 
-            <!-- TODO check relative dimension -->
-            <ImageView
-                android:id="@+id/loginSplashPicto1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_login_splash_message_circle"
-                android:tint="?vctr_notice_secondary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/loginSplashText1" />
-
-            <TextView
-                android:id="@+id/loginSplashText1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="32dp"
-                android:gravity="start"
-                android:text="@string/login_splash_text1"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                app:layout_constraintBottom_toTopOf="@+id/loginSplashText2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSplashTitle" />
-
-            <ImageView
-                android:id="@+id/loginSplashPicto2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_login_splash_lock"
-                android:tint="?vctr_notice_secondary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/loginSplashText2" />
-
-            <TextView
-                android:id="@+id/loginSplashText2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="@string/login_splash_text2"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                app:layout_constraintBottom_toTopOf="@id/loginSplashText3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSplashText1" />
-
-            <ImageView
-                android:id="@+id/loginSplashPicto3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_login_splash_sliders"
-                android:tint="?vctr_notice_secondary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/loginSplashText3" />
-
-            <TextView
-                android:id="@+id/loginSplashText3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="@string/login_splash_text3"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                app:layout_constraintBottom_toTopOf="@+id/loginSplashSubmit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSplashText2" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginSplashSubmit"
                 style="@style/Style.Vector.Login.Button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:text="@string/login_splash_submit"
+                android:text="@string/the_beta_is_over_get_element"
                 android:transitionName="loginSubmitTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSplashText3" />
+                app:layout_constraintTop_toBottomOf="@+id/loginSplashTitle" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginSplashUninstall"
+                style="@style/Style.Vector.Login.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/the_beta_is_over_uninstall"
+                android:transitionName="loginSubmitTransition"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginSplashSubmit" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
