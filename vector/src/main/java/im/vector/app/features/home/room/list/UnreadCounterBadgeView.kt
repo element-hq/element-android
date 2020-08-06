@@ -20,7 +20,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
 
 class UnreadCounterBadgeView : AppCompatTextView {
 
