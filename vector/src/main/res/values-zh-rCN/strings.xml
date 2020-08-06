@@ -1791,4 +1791,25 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="uploads_files_subtitle">%1$s 于 %2$s</string>
     <string name="uploads_files_no_result">此房间中无文件</string>
 
+    <string name="report_content_spam">垃圾信息</string>
+    <string name="report_content_inappropriate">不合适的内容</string>
+    <string name="report_content_custom">自定义报告……</string>
+    <string name="report_content_custom_title">报告此内容</string>
+    <string name="report_content_custom_hint">报告此内容的理由</string>
+    <string name="report_content_custom_submit">报告</string>
+    <string name="block_user">屏蔽用户</string>
+
+    <string name="content_reported_title">内容已报告</string>
+    <string name="content_reported_content">此内容已报告。
+\n
+\n如果您不希望再看到此用户的更多内容，您可以屏蔽他以隐藏他的信息</string>
+    <string name="content_reported_as_spam_title">报告为垃圾信息</string>
+    <string name="content_reported_as_spam_content">此内容已报告为垃圾信息。
+\n
+\n如果您不希望再看到此用户的更多内容，您可以屏蔽他以隐藏他的信息</string>
+    <string name="content_reported_as_inappropriate_title">报告为不合适的内容</string>
+    <string name="content_reported_as_inappropriate_content">此内容以报告为不合适。
+\n
+\n如果您不希望再看到此用户的更多内容，您可以屏蔽他以隐藏他的信息</string>
+
     </resources>
