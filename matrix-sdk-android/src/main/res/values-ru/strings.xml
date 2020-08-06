@@ -195,10 +195,10 @@
 
     <string name="notice_room_created">%1$s создал(а) комнату</string>
     <plurals name="notice_room_aliases_added">
-        <item quantity="one">%1$s добавил(а) адрес %2$s для комнаты.</item>
-        <item quantity="few">%1$s добавил(а) адреса %2$s для комнаты.</item>
-        <item quantity="many">%1$s добавил(а) адреса %2$s для комнаты.</item>
-    </plurals>
+	<item quantity="one">%1$s добавил(а) %2$s в качестве адреса для этой комнаты.</item>
+	<item quantity="few">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
+	<item quantity="many">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
+</plurals>
 
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s удалил(а) адрес %2$s для комнаты.</item>
