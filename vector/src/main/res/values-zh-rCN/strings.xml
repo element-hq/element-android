@@ -1705,4 +1705,90 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="add_by_matrix_id">通过 matrix ID 添加</string>
     <string name="creating_direct_room">正在创建房间…</string>
     <string name="direct_room_no_known_users">无结果，使用通过 matrix ID 添加在服务器上搜索。</string>
+    <string name="direct_room_start_search">开始输入以获得结果</string>
+    <string name="direct_room_filter_hint">按用户名或 ID 过滤…</string>
+
+    <string name="joining_room">正在加入房间…</string>
+
+    <string name="message_view_edit_history">查看编辑历史</string>
+
+    <string name="terms_of_service">服务条款</string>
+    <string name="review_terms">审核条款</string>
+    <string name="terms_description_for_identity_server">可被其他人发现</string>
+    <string name="terms_description_for_integration_manager">使用机器人，小部件和贴纸包</string>
+
+    <string name="read_at">已读于</string>
+
+
+    <string name="identity_server">身份服务器</string>
+    <string name="disconnect_identity_server">断开身份服务器</string>
+    <string name="add_identity_server">配置身份服务器</string>
+    <string name="change_identity_server">更改身份服务器</string>
+    <string name="settings_discovery_identity_server_info">您正在使用 %1$s 与您知道的现有联系人相互发现。</string>
+    <string name="settings_discovery_identity_server_info_none">您当前未使用身份服务器。若要与您知道的现有联系人相互发现，请在下方配置。</string>
+    <string name="settings_discovery_emails_title">可发现电子邮件地址</string>
+    <string name="settings_discovery_no_mails">发现选项将在您添加电子邮件后出现。</string>
+    <string name="settings_discovery_no_msisdn">发现选项将在您添加电话号码后出现。</string>
+    <string name="settings_discovery_disconnect_identity_server_info">与您的身份服务器断开意味着您将无法被其它用户发现并且无法通过电子邮件和电话邀请他人。</string>
+    <string name="settings_discovery_msisdn_title">可发现电话号码</string>
+    <string name="settings_discovery_confirm_mail">我们向 %s 给您发送了确认电子邮件，检查您的电子邮件并点击确认链接</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">我们向 %s 给您发送了确认电子邮件，请先检查您的电子邮件并点击确认链接</string>
+    <string name="settings_discovery_mail_pending">正在等待</string>
+
+    <string name="settings_discovery_enter_identity_server">输入身份服务器 URL</string>
+    <string name="settings_discovery_bad_identity_server">无法连接到身份服务器</string>
+    <string name="settings_discovery_please_enter_server">请输入身份服务器 url</string>
+    <string name="settings_discovery_no_terms_title">身份服务器无服务条款</string>
+    <string name="settings_discovery_no_terms">您选择的身份服务器无任何服务条款。仅在您信任服务所有者时继续</string>
+    <string name="settings_text_message_sent">已向 %s 发送文字消息。请输入它包含的验证码。</string>
+    <string name="settings_text_message_sent_wrong_code">验证码不正确。</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">您当前在身份服务器 %1$s 上分享电子邮件地址或电话号码。您需要重连接 %2$s 已停止分享。</string>
+    <string name="settings_agree_to_terms">同意身份服务器 (%s) 服务条款使您可以通过电子邮件地址或电话号码被发现。</string>
+
+    <string name="labs_allow_extended_logging">启用详细日志。</string>
+    <string name="labs_allow_extended_logging_summary">当您发送 RageShake 时详细日志将帮助开发者提供更多日志。即使启用，应用也不会记录消息内容或任何其他私有数据。</string>
+
+
+    <string name="error_terms_not_accepted">接收您的家庭服务器条款和条件后请重试。</string>
+
+    <string name="error_network_timeout">服务器似乎响应时间太长，这可能是由于连接不良或服务器错误引起的。 请稍后再试。</string>
+
+    <string name="send_attachment">发送附件</string>
+
+    <string name="a11y_open_drawer">打开导航菜单</string>
+    <string name="a11y_create_menu_open">打开创建房间菜单</string>
+    <string name="a11y_create_menu_close">关闭创建房间菜单…</string>
+    <string name="a11y_create_direct_message">创建新的私聊对话</string>
+    <string name="a11y_create_room">创建新房间</string>
+    <string name="a11y_close_keys_backup_banner">关闭密钥备份横幅</string>
+    <string name="a11y_show_password">显示密码</string>
+    <string name="a11y_hide_password">隐藏密码</string>
+    <string name="a11y_jump_to_bottom">跳到底部</string>
+
+    <string name="two_and_some_others_read">%1$s，%2$s 和 %3$d 其他人已读</string>
+    <string name="three_users_read">%1$s，%2$s 和 %3$s 已读</string>
+    <string name="two_users_read">%1$s 和 %2$s 已读</string>
+    <string name="one_user_read">%s 已读</string>
+    <plurals name="fallback_users_read">
+	<item quantity="other">%d 个用户已读</item>
+</plurals>
+
+    <string name="error_file_too_big">上传文件 \'%1$s\' (%2$s) 过大。限制为 %3$s。</string>
+
+    <string name="error_attachment">获取附件时出错。</string>
+    <string name="attachment_type_file">文件</string>
+    <string name="attachment_type_contact">联系人</string>
+    <string name="attachment_type_camera">相机</string>
+    <string name="attachment_type_audio">音频</string>
+    <string name="attachment_type_gallery">相册</string>
+    <string name="attachment_type_sticker">贴纸</string>
+    <string name="error_handling_incoming_share">无法处理共享数据</string>
+
+    <string name="uploads_media_title">媒体</string>
+    <string name="uploads_media_no_result">此房间中无媒体</string>
+    <string name="uploads_files_title">文件</string>
+    <string name="uploads_files_subtitle">%1$s 于 %2$s</string>
+    <string name="uploads_files_no_result">此房间中无文件</string>
+
     </resources>
