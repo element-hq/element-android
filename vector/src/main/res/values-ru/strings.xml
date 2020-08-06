@@ -244,7 +244,9 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Element Информация</string>
-    <string name="permissions_rationale_msg_storage">Element необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
+    <string name="permissions_rationale_msg_storage">Element нуждается в разрешении на доступ к вашей фото-и видеотеке для отправки и сохранения вложений.
+\n
+\nПожалуйста, разрешите доступ в следующем всплывающем окне, чтобы иметь возможность отправлять файлы с вашего устройства.</string>
     <string name="permissions_rationale_msg_camera">Element необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
     <string name="permissions_rationale_msg_record_audio">Element необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
@@ -1258,7 +1260,7 @@
     <string name="keys_backup_settings_delete_backup_error">Не удалось удалить резервную копию (%s)</string>
 
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Для Восстановления Сообщений в этой сессии, требуется пароль или ключ восстановления.</string>
+    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этом сеансе, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">"Резервная копия имеет  действительную подпись из неподтвержденной сессии %s"</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительно подпись из подтверждённой сессии %s.</string>
@@ -1389,7 +1391,7 @@
     <string name="keys_backup_setup_step2_text_description">Зашифрованная копия ключей будет храниться на вашем сервере. Для безопасности защитите её парольной фразой.
 \n
 \nДля максимальной безопасности парольная фраза должна отличаться от пароля вашей учётной записи.</string>
-    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете пароль. Храните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
+    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете вашу парольную фразу. Храните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортирование ключей…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Скачивание ключей…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление ключа восстановления…</string>
@@ -1989,7 +1991,7 @@
     <string name="a11y_qr_code_for_verification">QR-код</string>
 
     <string name="no_connectivity_to_the_server_indicator">Соединение с сервером потеряно</string>
-    <string name="verification_cannot_access_other_session">Используйте парольную фразу или ключ для восстановления</string>
+    <string name="verification_cannot_access_other_session">Используйте пароль восстановления или ключ</string>
     <string name="e2e_use_keybackup">Разблокировать историю зашифрованных сообщений</string>
 
     <string name="verify_cancelled_notice">Проверьте свои устройства в разделе Настройки.</string>
@@ -2021,8 +2023,8 @@
 
     <string name="bootstrap_crosssigning_print_it">Распечатайте его и храните в безопасном месте</string>
     <string name="bootstrap_skip_text">Установка парольной фразы для восстановления позволяет защитить и разблокировать зашифрованные сообщения и доверие.
-\n
-\nЕсли вы не хотите задавать пароль для сообщений, сгенерируйте вместо этого ключ сообщений.</string>
+\n 
+\nЕсли вы не хотите устанавливать пароль сообщения, создайте вместо него ключ сообщения.</string>
     <string name="bootstrap_skip_text_no_gen_key">Установка парольной фразы для восстановления позволяет защитить и разблокировать зашифрованные сообщения и доверие.</string>
 
 
@@ -2399,4 +2401,67 @@
     <string name="command_description_poll">Создать простой опрос</string>
     <string name="new_signin">Новый вход</string>
 
+    <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этому сеансу, сообщения, отправленные в него и из него, помечаются предупреждениями. Кроме того, вы можете проверить это вручную.</string>
+
+
+    <string name="initialize_cross_signing">Инициализировать кросс-подпись</string>
+    <string name="reset_cross_signing">Сбросить ключи</string>
+
+    <string name="qr_code_scanned_by_other_notice">Почти готово! Отображает ли %s такой же щит\?</string>
+    <string name="qr_code_scanned_by_other_yes">Да</string>
+    <string name="qr_code_scanned_by_other_no">Нет</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Активирован режим \"В самолёте\"</string>
+
+    <string name="enter_secret_storage_invalid">Невозможно найти пароли и/или ключи в хранилище</string>
+    <string name="enter_secret_storage_passphrase">Введите парольную фразу для секретного хранилища</string>
+    <string name="enter_secret_storage_passphrase_warning">Предупреждение:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Вы должны получать доступ к секретному хранилищу только с доверенного устройства</string>
+
+    <string name="share_confirm_room">Вы хотите отправить это вложение в %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="one">Отправить изображение с оригинальным размером</item>
+	<item quantity="few">Отправить изображения с оригинальным размером</item>
+	<item quantity="many">Отправить изображения с оригинальным размером</item>
+</plurals>
+
+    <string name="delete_event_dialog_title">Подтвердите удаление</string>
+    <string name="delete_event_dialog_content">Вы уверены, что хотите скрыть (удалить) это событие\? Обратите внимание, что если вы удалите название комнаты или измените тему, это может отменить изменение.</string>
+    <string name="delete_event_dialog_reason_checkbox">Указать причину</string>
+    <string name="delete_event_dialog_reason_hint">Причина редактирования</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Событие удалено пользователем, Причина: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Событие модерируется администратором комнаты, Причина: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Ключи восстановлены!</string>
+
+    <string name="login_default_session_public_name">Element для Android</string>
+
+    <string name="refresh">Обновить</string>
+
+    <string name="new_session">Обнаружена новая сессия. Это были вы\?</string>
+    <string name="new_session_review">Нажмите, чтобы просмотреть и проверить</string>
+    <string name="verify_new_session_was_not_me">Это был не я</string>
+    <string name="verify_new_session_compromized">Ваш аккаунт может оказаться под угрозой</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Если вы отмените, то не сможете читать зашифрованные сообщения на этом устройстве, а также другие пользователи не будут доверять ему</string>
+    <string name="verify_cancel_self_verification_from_trusted">Если вы отмените, то не сможете читать зашифрованные сообщения на своем новом устройстве, а также другие пользователи не будут доверять ему</string>
+    <string name="verify_cancel_other">Вы не сможете проверить %1$s (%2$s), если отмените сейчас. Начните все сначала в своем профиле пользователя.</string>
+
+    <string name="verify_not_me_self_verification">Могут пострадать следующие пункты:
+\n
+\n- Ваш пароль
+\n- Ваш домашний сервер
+\n- Это устройство или другое устройство
+\n- Интернет-соединение, которое использует любое устройство
+\n
+\nМы рекомендуем вам немедленно изменить свой пароль и ключ восстановления в настройках.</string>
+
+    <string name="verification_cancelled">Подтверждение отменено</string>
+
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Генерация ключа безопасности из парольной фразы</string>
+    <string name="bootstrap_progress_generating_ssss">Генерация ключа SSSS из парольной фразы</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Генерация ключа SSSS из парольной фразы (%s)</string>
+    <string name="bootstrap_migration_enter_backup_password">Введите пароль для резервного копирования ключа, чтобы продолжить работу.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Если вы не знаете ваш пароль для резервного копирования ключей, вы можете %s.</string>
     </resources>
