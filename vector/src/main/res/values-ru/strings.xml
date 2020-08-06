@@ -2336,7 +2336,7 @@
 	<item quantity="many">%d сеансов активно</item>
 </plurals>
 
-    <string name="crosssigning_verify_this_session">Проверьте этот сеанс</string>
+    <string name="crosssigning_verify_this_session">Верифицируйте этот сеанс</string>
     <string name="verification_open_other_to_verify">Используйте существующий сеанс для проверки этого, предоставив ему доступ к зашифрованным сообщениям.</string>
 
 
@@ -2368,4 +2368,35 @@
     <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
 
     <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
+    <string name="settings_active_sessions_verified_device_desc">Этот сеанс является доверенным для безопасного обмена сообщениями, потому что вы проверили его:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Проверьте этот сеанс, чтобы пометить его доверенным и предоставить ему доступ к зашифрованным сообщениям. Если вы не входили в этот сеанс, ваша учетная запись может быть скомпрометирована:</string>
+
+    <string name="crosssigning_other_user_not_trust">Другие пользователи могут не доверять ему</string>
+    <string name="complete_security">Завершите настройку безопасности</string>
+
+    <string name="verification_profile_verify">Верифицировать</string>
+    <string name="verification_profile_verified">Верифицировано</string>
+    <string name="verification_profile_warning">Внимание</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Ошибка получения списка сессий</string>
+    <string name="room_member_profile_sessions_section_title">Сессии</string>
+    <string name="trusted">Доверенные</string>
+    <string name="not_trusted">Недоверенные</string>
+
+    <string name="verification_profile_device_verified_because">Эта сессия является доверенной для безопасного обмена сообщениями, так как %1$s (%2$s) проверил(а) его:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) вошел(ла), используя новую сессию:</string>
+    <plurals name="poll_info">
+	<item quantity="one">%d голос</item>
+	<item quantity="few">%d голоса</item>
+	<item quantity="many">%d голосов</item>
+</plurals>
+    <plurals name="poll_info_final">
+	<item quantity="one">%d голос - финальные результаты</item>
+	<item quantity="few">%d голоса - финальные результаты</item>
+	<item quantity="many">%d голосов - финальные результаты</item>
+</plurals>
+    <string name="poll_item_selected_aria">Выберите вариант</string>
+    <string name="command_description_poll">Создать простой опрос</string>
+    <string name="new_signin">Новый вход</string>
+
     </resources>
