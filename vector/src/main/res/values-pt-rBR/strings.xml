@@ -2434,4 +2434,26 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="enter_backup_passphrase">Digite %s</string>
     <string name="backup_recovery_passphrase">Frase Secreta de Recuperação</string>
     <string name="bootstrap_progress_checking_backup">Verificando Chave de backup</string>
+    <string name="bootstrap_skip_text">Criando uma Frase Secreta de Recuperação permite proteger e desbloquear mensagens criptografadas e estabelecer confiança.
+\n
+\n
+\nSe você não quiser definir uma Senha de Mensagem, crie antes uma Chave de Mensagem.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Criar uma Frase Secreta de Recuperação permite proteger e desbloquear mensagens criptografadas e estabelecer confiança.</string>
+    <string name="bootstrap_cancel_text">Se você cancelar agora, poderá perder mensagens e dados criptografados para sempre se esquecer seus credenciais.
+\n
+\nTambém pode configurar o Backup Seguro e gerenciar suas chaves em Configurações.</string>
+
+    <string name="encryption_enabled_tile_description">As mensagens nesta sala são criptografadas de ponta a ponta. Saiba mais e verifique os usuários em seu perfil.</string>
+    <string name="encryption_unknown_algorithm_tile_description">A criptografia usada por esta sala não é suportada</string>
+
+    <string name="room_created_summary_item">%s criou e configurou a sala.</string>
+    <string name="room_created_summary_item_by_you">Você criou e configurou a sala.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Quase lá! Aguardando confirmação…</string>
+    <string name="error_failed_to_import_keys">Falha na importação de chaves</string>
+
+    <string name="settings_messages_at_room">Mensagens contendo @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Mensagens criptografadas em bate-papos individuais</string>
+    <string name="settings_messages_in_e2e_group_chat">Mensagens criptografadas em bate-papos de grupo</string>
     </resources>
