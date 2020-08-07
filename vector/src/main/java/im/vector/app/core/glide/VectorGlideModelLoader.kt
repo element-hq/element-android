@@ -33,6 +33,8 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
     : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
@@ -89,7 +91,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
                 stream?.close() // interrupts decode if any
                 stream = null
             } catch (ignore: Throwable) {
-                Timber.e(ignore)
+                Timber.e("Failed to close stream ${ignore.localizedMessage}")
             } finally {
                 stream = null
             }
@@ -103,26 +105,48 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
             callback.onDataReady(initialFile.inputStream())
             return
         }
-        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-        val url = contentUrlResolver.resolveFullSize(data.url)
-                ?: return
+//        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
-        val request = Request.Builder()
-                .url(url)
-                .build()
+        val fileService = activeSessionHolder.getSafeActiveSession()?.fileService() ?: return Unit.also {
+            callback.onLoadFailed(IllegalArgumentException("No File service"))
+        }
+        // Use the file vector service, will avoid flickering and redownload after upload
+        fileService.downloadFile(
+                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                mimeType = data.mimeType,
+                id = data.eventId,
+                url = data.url,
+                fileName = data.filename,
+                elementToDecrypt = data.elementToDecrypt,
+                callback = object: MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        callback.onDataReady(data.inputStream())
+                    }
 
-        val response = client.newCall(request).execute()
-        val inputStream = response.body?.byteStream()
-        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
-        if (!response.isSuccessful) {
-            callback.onLoadFailed(IOException("Unexpected code $response"))
-            return
-        }
-        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
-            Matrix.decryptStream(inputStream, data.elementToDecrypt)
-        } else {
-            inputStream
-        }
-        callback.onDataReady(stream)
+                    override fun onFailure(failure: Throwable) {
+                        callback.onLoadFailed(failure as? Exception ?: IOException(failure.localizedMessage))
+                    }
+                }
+        )
+//        val url = contentUrlResolver.resolveFullSize(data.url)
+//                ?: return
+//
+//        val request = Request.Builder()
+//                .url(url)
+//                .build()
+//
+//        val response = client.newCall(request).execute()
+//        val inputStream = response.body?.byteStream()
+//        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
+//        if (!response.isSuccessful) {
+//            callback.onLoadFailed(IOException("Unexpected code $response"))
+//            return
+//        }
+//        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
+//            Matrix.decryptStream(inputStream, data.elementToDecrypt)
+//        } else {
+//            inputStream
+//        }
+//        callback.onDataReady(stream)
     }
 }
