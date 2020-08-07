@@ -315,8 +315,8 @@ Você autoriza o Element a acessar seus contatos?</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_leave">Deixar esta sala</string>
     <string name="room_participants_action_remove">Remover desta sala</string>
-    <string name="room_participants_action_ban">Banir</string>
-    <string name="room_participants_action_unban">Revogar banimento</string>
+    <string name="room_participants_action_ban">Bloquear</string>
+    <string name="room_participants_action_unban">Desbloquear</string>
     <string name="room_participants_action_set_default_power_level">Redefinir como usuário normal</string>
     <string name="room_participants_action_set_moderator">Tornar moderador</string>
     <string name="room_participants_action_set_admin">Tornar admin</string>
@@ -563,7 +563,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualquer pessoa que saiba o link da sala, incluindo visitantes</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Usuários banidos</string>
+    <string name="room_settings_banned_users_title">Usuários bloqueados</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avançado</string>
@@ -732,7 +732,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="groups_list">Lista de salas</string>
 
     <string name="call">Chamada de voz</string>
-    <string name="room_participants_ban_prompt_msg">"Banindo usuário resultará na expulsão  desta sala impedindo-o da entrada novamente."</string>
+    <string name="room_participants_ban_prompt_msg">Bloquear o usuário resultará em sua remoção desta sala, impedindo-o de entrar nela novamente.</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
     <string name="room_settings_all_messages">Notificação para cada mensagem</string>
@@ -819,7 +819,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
 
     <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>
-    <string name="has_been_banned">Você foi banida/o da sala %1$s por %2$s</string>
+    <string name="has_been_banned">Você foi bloqueado da sala %1$s devido à %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
     <string name="forget_room">Esquecer a sala</string>
@@ -873,9 +873,9 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     </plurals>
 
     <!-- Widget Integration Manager -->
-    <string name="receipt_avatar">Imagem de recebimento</string>
-    <string name="notice_avatar">Imagem de aviso</string>
-    <string name="avatar">Imagem de perfil</string>
+    <string name="receipt_avatar">Foto de perfil para a confirmação de leitura</string>
+    <string name="notice_avatar">Foto de perfil para avisos</string>
+    <string name="avatar">Foto de perfil</string>
 
     <string name="send_bug_report_rage_shake">Agite rapidamente para relatar um erro</string>
 
@@ -972,8 +972,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="settings_labs_enable_send_voice">Enviar mensagens de voz</string>
 
     <string name="command_description_emote">Mostra a ação</string>
-    <string name="command_description_ban_user">Remove a(o) usuária(o) com a ID fornecida</string>
-    <string name="command_description_unban_user">Desfaz a remoção de um(a) usuário(a) com um dado ID</string>
+    <string name="command_description_ban_user">Bloqueia o usuário com a ID fornecida</string>
+    <string name="command_description_unban_user">Desbloqueia o usuário com a ID fornecida</string>
     <string name="command_description_op_user">Define o grau de poder de um(a) usuário(a)</string>
     <string name="command_description_deop_user">Retira o nível de operador(a) do(a) usuário(a) com o ID fornecido</string>
     <string name="command_description_invite_user">Convida a(o) usuária(o) com um dado ID para esta sala</string>
@@ -998,11 +998,11 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="dialog_user_consent_submit">Revisar agora</string>
 
     <string name="deactivate_account_title">Desativar conta</string>
-    <string name="deactivate_account_content">Sua conta se tornará permanentemente inutilizável. Você não poderá iniciar uma sessão, e ninguém conseguirá registrar o mesmo ID de usuária(o). Isso fará que sua conta abandone todas as salas das quais participa, e eliminará os dados de sua conta do seu servidor de identidade. <b>Esta ação é irreversível</b>.
-
-Desativar a sua conta <b>não implica que as mensagens que você enviou sejam apagadas</b>. Se você quer que apaguemos suas mensagens, favor marcar a opção abaixo.
-
-A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecermos as suas mensagens, isso significa que as mensagens que você enviou a nós não serão mais compartilhadas com novas(os) usuárias(os) ou por usuárias(os) não registradas(os), mas as(os) usuárias(os) registradas(os) que já tiveram acesso a estas mensagens conservarão a cópia das mesmas.</string>
+    <string name="deactivate_account_content">Isso tornará sua conta permanentemente inutilizável. Você não conseguirá efetuar login e ninguém poderá registrar novamente o mesmo ID de usuário. Isso fará com que sua conta saia de todas as salas das quais está participando e removerá os detalhes de sua conta do servidor de identidade. <b>Esta ação é irreversível</b>.↵
+\n↵
+\nDesativar sua conta <b>não faz com que, por padrão, suas mensagens enviadas sejam apagadas</b>. Se você deseja que suas mensagens também sejam apagadas, marque a opção abaixo.↵
+\n↵
+\nA visibilidade de mensagens na Matrix é semelhante a um e-mail. O fato de apagarmos suas mensagens significa que suas mensagens enviadas não serão compartilhadas com nenhum usuário novo ou ainda não registrado, mas os usuários registrados que já tiveram acesso a essas mensagens ainda terão acesso uma cópia delas.</string>
     <string name="deactivate_account_delete_checkbox">Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (Atenção: isso vai fazer com que futuras(os) usuárias(os) tenham uma visão incompleta das conversas)</string>
     <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
     <string name="deactivate_account_submit">Desativar conta</string>
@@ -1117,9 +1117,9 @@ Tente reiniciar a aplicação.</string>
     <string name="settings_show_read_receipts">Mostrar confirmações de leitura</string>
     <string name="settings_show_read_receipts_summary">Clique nas notificações de leitura para uma lista detalhada.</string>
     <string name="settings_show_join_leave_messages">Mostrar eventos de entrada e saída de sala</string>
-    <string name="settings_show_join_leave_messages_summary">Convites, chutes e proibições não são afetados.</string>
+    <string name="settings_show_join_leave_messages_summary">Convites, remoções e bloqueios não são afetados.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos da conta</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui avatar e alterações no nome de exibição.</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Mostrar alterações de foto de perfil e de nome e sobrenome.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
 Na próxima tela, você será solicitado a permitir que o Element funcione sempre em segundo plano, por favor aceite.</string>
@@ -1300,14 +1300,13 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="room_participants_action_cancel_invite_prompt_msg">Tem certeza que quer cancelar o convite para este usuário\?</string>
     <string name="room_participants_kick_title">Expulsar usuário</string>
     <string name="room_participants_kick_reason">Motivo da expulsão</string>
-    <string name="room_participants_kick_prompt_msg">Usuário expulsado será removido da sala de bate-papo
-\n
-\n
-\nPara impedir de entrar novamente, você deveria banir o usuário.</string>
+    <string name="room_participants_kick_prompt_msg">esta ação removerá o usuário desta sala.↵
+\n↵
+\nPara evitar que o usuário nunca mais entre novamente, você precisará bloqueá-lo.</string>
     <string name="room_participants_ban_title">Bloquear usuário</string>
-    <string name="room_participants_ban_reason">Motivo de bloqueio</string>
+    <string name="room_participants_ban_reason">Motivo do bloqueio</string>
     <string name="room_participants_unban_title">Desbloquear usuário</string>
-    <string name="room_participants_unban_prompt_msg">Desbloqueio de usuário vai permitir sua entrada na sala novamente.</string>
+    <string name="room_participants_unban_prompt_msg">Desbloquear o usuário permite que ele entre novamente na sala.</string>
 
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
     <string name="settings_add_3pid_flow_not_supported">Não pode fazer isto pelo Element app</string>
@@ -1416,7 +1415,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="room_widget_revoke_access">Revogar o acesso para mim</string>
 
     <string name="room_widget_permission_display_name">Nome público</string>
-    <string name="room_widget_permission_avatar_url">A URL da sua foto de perfil</string>
+    <string name="room_widget_permission_avatar_url">Link da sua foto de perfil</string>
     <string name="room_widget_permission_user_id">Sua ID de usuário</string>
     <string name="room_widget_permission_theme">Sua tema</string>
     <string name="room_widget_permission_widget_id">ID do widget</string>
@@ -1844,7 +1843,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="a11y_create_menu_close">Fecha o menu de criar a sala…</string>
     <string name="a11y_create_direct_message">Criar uma nova conversa direta</string>
     <string name="a11y_create_room">Criar uma sala nova</string>
-    <string name="a11y_close_keys_backup_banner">Fechar banner do backup das chaves</string>
+    <string name="a11y_close_keys_backup_banner">Fechar o aviso de backup das chaves</string>
     <string name="a11y_show_password">Mostrar senha</string>
     <string name="a11y_hide_password">Esconder senha</string>
     <string name="a11y_jump_to_bottom">Saltar para parte inferior</string>
