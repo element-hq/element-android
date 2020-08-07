@@ -151,7 +151,7 @@
     <string name="auth_invalid_password">Senha muita curta (mínimo de 6 caracteres)</string>
     <string name="auth_missing_password">Falta a senha</string>
     <string name="auth_invalid_email">Este não parece ser um endereço de e-mail válido</string>
-    <string name="auth_invalid_phone">Não parece ser um número de telefone válido</string>
+    <string name="auth_invalid_phone">Este não parece ser um número de telefone válido</string>
     <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
     <string name="auth_missing_email">Falta o endereço de e-mail</string>
     <string name="auth_missing_phone">Falta o número de telefone</string>
@@ -329,7 +329,8 @@ Você autoriza o Element a acessar seus contatos?</string>
     <string name="room_participants_invite_search_another_user">ID, Nome ou email</string>
     <string name="room_participants_action_mention">Menção</string>
     <string name="room_participants_action_devices_list">Mostrar lista de dispositivos</string>
-    <string name="room_participants_power_level_prompt">Você não poderá desfazer esta mudança, já que você está promovendo este usuário para ter o mesmo nível de permissões que você.\nTem certeza?</string>
+    <string name="room_participants_power_level_prompt">Você não poderá desfazer esta alteração, já que você está promovendo este usuário para ter o mesmo nível de permissões que você.
+\nTem certeza\?</string>
 
     <string name="room_participants_invite_prompt_msg">"Você tem certeza que quer convidar %s para esta conversa?"</string>
 
@@ -368,8 +369,8 @@ Você autoriza o Element a acessar seus contatos?</string>
     <string name="ssl_could_not_verify">Não consegui verificar a identidade do servidor remoto.</string>
     <string name="ssl_cert_not_trust">Isso pode significar que alguém está interceptando suas mensagens de forma maliciosa, ou então o seu celular não confia no certificado fornecido pelo servidor remoto.</string>
     <string name="ssl_cert_new_account_expl">Se o administrador do servidor disse que isso era esperado, verifique se a impressão digital abaixo é a mesma que a impressão digital que ele forneceu a você.</string>
-    <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu celular. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
-    <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável para um que não é confiável. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
+    <string name="ssl_unexpected_existing_expl">Você tinha um certificado confiável para o seu telefone, mas ele mudou. Isso é ALTAMENTE INCOMUM. É recomendável que você NÃO ACEITE este novo certificado.</string>
+    <string name="ssl_expected_existing_expl">O certificado foi alterado de um anteriormente confiável para um que não é confiável. O servidor pode ter renovado seu certificado. Entre em contato com o administrador do servidor para obter a impressão digital esperada.</string>
     <string name="ssl_only_accept">Apenas aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica a que está acima.</string>
 
     <!-- Room Details -->
@@ -506,7 +507,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="account_email_not_found_error">Este endereço de e-mail não foi encontrado.</string>
     <string name="account_phone_number_already_used_error">Este número de telefone já está em uso.</string>
 
-    <string name="settings_change_password">Mudar a senha</string>
+    <string name="settings_change_password">Alterar a senha</string>
     <string name="settings_old_password">Senha atual</string>
     <string name="settings_new_password">Senha nova</string>
     <string name="settings_confirm_password">Confirme a nova senha</string>
@@ -529,7 +530,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_phone_number_verification">Verificação do telefone</string>
     <string name="settings_phone_number_verification_instruction">"Nós enviamos um SMS com um código de ativação. Por favor, digite este código abaixo."</string>
     <string name="settings_phone_number_verification_error_empty_code">Digite o código de ativação</string>
-    <string name="settings_phone_number_verification_error">Erro ao validar seu número de telefone</string>
+    <string name="settings_phone_number_verification_error">Erro ao validar o seu número de telefone</string>
     <string name="settings_phone_number_code">Código</string>
 
     <!-- Room Settings -->
@@ -953,8 +954,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="settings_preview_media_before_sending">Pré-visualizar a mídia antes de enviá-la</string>
 
-    <string name="settings_deactivate_account_section">Desativar a conta</string>
-    <string name="settings_deactivate_my_account">Desativar a minha conta</string>
+    <string name="settings_deactivate_account_section">Desativar minha conta</string>
+    <string name="settings_deactivate_my_account">Desativar minha conta</string>
 
     <string name="startup_notification_privacy_title">Privacidade das notificações</string>
     <string name="startup_notification_privacy_message">Element pode funcionar em segundo plano para gerenciar as suas notificações de forma segura e confidencial. Isso poderá impactar o uso da bateria.</string>
@@ -985,7 +986,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="command_description_part_room">Deixa a sala</string>
     <string name="command_description_topic">Define o tópico da sala</string>
     <string name="command_description_kick_user">Expulsa a(o) usuária(o) com o ID fornecido</string>
-    <string name="command_description_nick">Altera o seu nome público de usuária(o)</string>
+    <string name="command_description_nick">Altera o seu nome e sobrenome</string>
     <string name="command_description_markdown">Ativar/Desativar o Markdown</string>
     <string name="command_description_clear_scalar_token">Reparar a gestão de aplicativos Matrix</string>
 
@@ -1573,8 +1574,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="keys_backup_settings_delete_confirm_message">Excluir as chaves de encriptação do servidor\? Você não será mais capaz de usar sua chave de recuperação para ler o histórico de mensagens criptografadas.</string>
 
     <string name="new_recovery_method_popup_title">Novo Backup da Chave</string>
-    <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.
-\n
+    <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.↵
+\n↵
 \nSe você não definiu o novo método de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina um novo método de recuperação imediatamente nas Configurações.</string>
     <string name="new_recovery_method_popup_was_me">Foi eu</string>
 
@@ -1700,7 +1701,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="create_new_room">Criar Nova Sala</string>
     <string name="error_no_network">Sem rede. Por favor, verifique sua conexão de Internet.</string>
     <string name="action_change">Alterar</string>
-    <string name="change_room_directory_network">Mudar de rede</string>
+    <string name="change_room_directory_network">Alterar a rede</string>
     <string name="please_wait">Por favor, aguarde…</string>
     <string name="group_all_communities">Todas as comunidades</string>
 
@@ -1998,10 +1999,9 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="login_reset_password_success_submit">Voltar para Entrar</string>
 
     <string name="login_reset_password_cancel_confirmation_title">Atenção</string>
-    <string name="login_reset_password_cancel_confirmation_content">Sua senha ainda não foi alterada.
-\n
-\n
-\nParar o processo da mudança de senha\?</string>
+    <string name="login_reset_password_cancel_confirmation_content">Sua senha ainda não foi alterada.↵
+\n↵
+\nInterromper a alteração de senha\?</string>
 
     <string name="login_set_email_title">Defina endereço de e-mail</string>
     <string name="login_set_email_notice">Defina um e-mail para recuperar sua conta. Mais tarde, você pode, opcionalmente, permitir que as pessoas que você conhece o descubram por seu e-mail.</string>
@@ -2068,13 +2068,13 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="seen_by">Visto por</string>
 
     <string name="signed_out_title">Você está desconectado</string>
-    <string name="signed_out_notice">Isso pode ser devido a vários motivos:
-\n
-\n• Você mudou sua senha em outra sessão.
-\n
-\n• Você eliminou esta sessão de outra sessão.
-\n
-\n• O administrador do seu servidor invalidou seu acesso por razões de segurança.</string>
+    <string name="signed_out_notice">Isso pode ser devido à vários motivos:↵
+\n↵
+\n• Você alterou sua senha em outra sessão.↵
+\n↵
+\n• Você excluiu esta sessão de outra sessão.↵
+\n↵
+\n• O administrador do seu servidor invalidou seu acesso por motivos de segurança.</string>
     <string name="signed_out_submit">Entrar novamente</string>
 
     <string name="soft_logout_title">Você está desconectado</string>
@@ -2246,19 +2246,15 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="verification_conclusion_ok_notice">As mensagens com este usuário são criptografadas de ponta a ponta e não podem ser lidas por terceiros.</string>
     <string name="verification_conclusion_ok_self_notice">Sua nova sessão agora está verificada. Ela tem acesso às suas mensagens criptografadas, e outros usuários a verão como confiável.</string>
 
-    <string name="encryption_information_cross_signing_state">Assinatura Cruzada</string>
-    <string name="encryption_information_dg_xsigning_complete">A Assinatura Cruzada está ativa
-\n
+    <string name="encryption_information_cross_signing_state">Autoverificação</string>
+    <string name="encryption_information_dg_xsigning_complete">A autoverificação está ativada↵
 \nChaves privadas estão no dispositivo.</string>
-    <string name="encryption_information_dg_xsigning_trusted">A Assinatura Cruzada está ativa
-\n
-\nAs chaves são confiáveis.
-\n
+    <string name="encryption_information_dg_xsigning_trusted">A autoverificação está ativada↵
+\nAs chaves são confiáveis.↵
 \nAs chaves privadas não são conhecidas</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Assinatura Cruzada está ativa.
-\n
+    <string name="encryption_information_dg_xsigning_not_trusted">A autoverificação está ativada.↵
 \nAs chaves não são confiáveis</string>
-    <string name="encryption_information_dg_xsigning_disabled">Assinatura Cruzada não está ativa</string>
+    <string name="encryption_information_dg_xsigning_disabled">A autoverificação não está ativada</string>
 
     <string name="settings_hs_admin_e2e_disabled">Administrador do servidor desabilitou a criptografia de ponta a ponta por padrão em salas privadas e Mensagens Diretas.</string>
     <string name="settings_active_sessions_list">Sessões ativas</string>
@@ -2297,7 +2293,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="verification_profile_device_untrust_info">Até que este usuário confie nesta sessão, as mensagens enviadas de e para ela são etiquetadas com avisos. Alternativamente, é possível verificar elas manualmente.</string>
 
 
-    <string name="initialize_cross_signing">Começa Assinatura Cruzada</string>
+    <string name="initialize_cross_signing">Ativar a autoverificação</string>
     <string name="reset_cross_signing">Reiniciar Chaves</string>
 
     <string name="a11y_qr_code_for_verification">Código QR</string>
@@ -2339,7 +2335,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 </plurals>
 
     <string name="delete_event_dialog_title">Confirmar a exclusão</string>
-    <string name="delete_event_dialog_content">Tem certeza que deseja excluir este evento\? Observe que, se você remover o nome da sala ou mudará a descrição dela, isso reverterá a alteração.</string>
+    <string name="delete_event_dialog_content">Tem certeza de que deseja apagar este evento\? Observe que, se você apagar a alteração do nome ou descrição de uma sala, isso reverterá a alteração.</string>
     <string name="delete_event_dialog_reason_checkbox">Incluir o motivo</string>
     <string name="delete_event_dialog_reason_hint">Motivo da edição</string>
 
@@ -2366,13 +2362,13 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="verify_cancel_self_verification_from_trusted">Se você cancelar, você não poderá ler mensagens criptografadas em seu novo dispositivo, e outros usuários não confiarão nele</string>
     <string name="verify_cancel_other">Você não vai conseguir verificar o %1$s (%2$s) se cancelar agora. Comece novamente em perfil dele.</string>
 
-    <string name="verify_not_me_self_verification">Um dos seguintes objetos pode estar comprometida:
-\n
-\n- Sua senha
-\n- Seu servidor doméstico
-\n- Este dispositivo, ou o outro dispositivo
-\n- A conexão à internet de qualquer um dos dispositivos que está usando
-\n
+    <string name="verify_not_me_self_verification">Um dos seguintes objetos pode estar comprometida:↵
+\n↵
+\n- Sua senha↵
+\n- Seu servidor doméstico↵
+\n- Este dispositivo, ou o outro dispositivo↵
+\n- A conexão à internet de qualquer um dos dispositivos que está usando↵
+\n↵
 \nRecomendamos que você altere sua senha e chave de recuperação em Configurações imediatamente.</string>
 
     <string name="verify_cancelled_notice">Verifique seus dispositivos em Configurações.</string>
@@ -2467,7 +2463,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="auth_invalid_login_deactivated_account">Esta conta foi desativada.</string>
 
     <string name="upgrade_security">Atualização de criptografia disponível</string>
-    <string name="setup_cross_signing">Ativar Assinatura Cruzada</string>
+    <string name="setup_cross_signing">Ativar a autoverificação</string>
     <string name="security_prompt_text">Verifica-se e os outros para manter seus bate-papos seguros</string>
 
     <string name="bootstrap_enter_recovery">Digite sua %s para continuar</string>
@@ -2495,12 +2491,12 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="error_saving_media_file">Não foi possível salvar o arquivo de mídia</string>
     <string name="change_password_summary">Definir uma nova senha da conta…</string>
 
-    <string name="use_other_session_content_description">Use o último Element em seus outros dispositivos: Element para Web, Element para Desktop, Element para iOS, Element para Android ou outro cliente Matrix capaz de fazer login cruzado</string>
+    <string name="use_other_session_content_description">Use o Element mais recente em seus outros dispositivos: Element para Web, Element para Desktop, Element para iOS, Element para Android, ou outro cliente Matrix capaz de fazer autoverificação</string>
     <string name="app_desktop_web">Element para Web
 \nElement para Desktop</string>
     <string name="app_ios_android">Element para iOS
 \nElement para Android</string>
-    <string name="or_other_mx_capabale_client">ou outro cliente do Matrix capaz de fazer login cruzado</string>
+    <string name="or_other_mx_capabale_client">ou outro cliente da Matrix capaz de fazer autoverificação</string>
     <string name="use_latest_app">Use o último Element em seus outros dispositivos:</string>
     <string name="command_description_discard_session">Força a atual sessão do grupo de saída numa sala criptografada a ser descartada</string>
     <string name="command_description_discard_session_not_handled">Só é suportado em salas criptografadas</string>
@@ -2606,7 +2602,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="notice_crypto_unable_to_decrypt_merged">Aguardando pelo histórico de criptografia</string>
 
     <string name="element_disclaimer_title">Riot tornou-se Element!</string>
-    <string name="element_disclaimer_content">Estamos entusiasmados em anunciar que mudamos de nome! Seu aplicativo está atualizado e você está conectado à sua conta.</string>
+    <string name="element_disclaimer_content">Estamos felizes em anunciar que mudamos de nome! Seu aplicativo está atualizado e você está conectado à sua conta.</string>
     <string name="element_disclaimer_negative_button">PERFEITO</string>
     <string name="element_disclaimer_positive_button">APRENDA MAIS</string>
 
