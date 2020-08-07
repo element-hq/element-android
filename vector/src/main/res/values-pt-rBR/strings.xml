@@ -224,8 +224,8 @@
     <string name="room_info_room_topic">Descrição da sala</string>
 
     <!-- call string -->
-    <string name="call_connected">Chamada atendida</string>
-    <string name="call_connecting">Iniciando a chamada…</string>
+    <string name="call_connected">Chamada aceita</string>
+    <string name="call_connecting">Chamando…</string>
     <string name="call_ended">Chamada encerrada</string>
     <string name="call_ring">Chamando…</string>
     <string name="incoming_call">Recebendo chamada de voz</string>
@@ -251,14 +251,18 @@
     <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
+\n↵
+\n↵
 \nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
     <string name="permissions_rationale_msg_record_audio">Element necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nPor favor autorize o acesso na próxima tela para poder fazer a chamada."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
-
-Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+\n↵
+\n↵
+\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para fazer chamadas de vídeo.↵
+\n↵
+\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
     <string name="permissions_rationale_msg_contacts">Element necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.
 
 Por favor, autorize o acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Element.</string>
@@ -760,7 +764,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="widget_no_power_to_manage">Você necessita ter permissões para poder gerenciar os widgets desta sala</string>
     <string name="widget_creation_failure">A criação do widget falhou</string>
-    <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
+    <string name="settings_labs_create_conference_with_jitsi">Crie chamadas em grupo com jitsi</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
 
     <!-- Widget Integration Manager -->
@@ -784,7 +788,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Atenção!</string>
-    <string name="conference_call_warning_message">Chamadas de conferência estão em desenvolvimento e portanto podem não ser confiáveis.</string>
+    <string name="conference_call_warning_message">Chamadas em grupo estão em desenvolvimento, portanto podem não ser estáveis.</string>
 
     <!-- slash commands -->
     <string name="command_error">Erro de comando</string>
@@ -1095,7 +1099,7 @@ Por favor revise as configurações do Element.</string>
 Tente reiniciar a aplicação.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
 
-    <string name="settings_troubleshoot_test_service_restart_success">Serviço foi finalizado e reiniciado automaticamente.</string>
+    <string name="settings_troubleshoot_test_service_restart_success">O serviço foi encerrado e reiniciado automaticamente.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Falha ao reiniciar Serviço</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Começar na inicialização</string>
@@ -1280,7 +1284,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_call_ringtone_use_default_stun">Permitir a assistência do servidor de chamadas reserva</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Permitir a assistência do servidor de chamadas reserva %s quando seu servidor não oferecer este serviço (seu endereço IP será transmitido quando você ligar)</string>
     <string name="active_call_with_duration">Chamada em andamento (%s)</string>
-    <string name="return_to_call">Retornar a ligação</string>
+    <string name="return_to_call">Retornar à chamada</string>
 
     <string name="invite_no_identity_server_error">Adicionar uma identidade do servidor nas suas configurações para executar esta acção.</string>
     <string name="room_participants_action_cancel_invite">Cancelar convite</string>
@@ -1320,9 +1324,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 \n
 \nDependendo de recursos do dispositivo, a sincronização pode ser adiada pelo sistema operacional.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizado em tempo real</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element irá sincronizar periodicamente em segundo plano no tempo exato (configurável).
-\n
-\nIsso vai impactar o uso de rádio e bateria, haverá uma notificação permanente exibida informando que o Element está esperando eventos.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">O Element sincronizará periodicamente em segundo plano, no momento estabelecido (configurável).↵
+\nIsso afetará o uso de dados e da bateria. Haverá uma notificação permanente informando que o Element está sincronizando.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sem sincronização em segundo plano</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Você não será notificado de mensagens recebidas quando o Element está em segundo plano.</string>
     <string name="settings_background_sync_update_error">Não foi possível actualizar a configuração.</string>
@@ -1422,7 +1425,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="room_widget_permission_room_id">ID da Sala</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Desculpas, as chamadas de conferência com o Jitsi não são suportadas em dispositivos antigos (dispositivos abaixo de Android 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Desculpe, as chamadas em grupo com o Jitsi não são suportadas em aparelhos antigos (com versões do Android anteriores a 5.0)</string>
     <string name="room_widget_resource_permission_title">Este wigdet deseja utilizar os seguintes recursos:</string>
     <string name="room_widget_resource_grant_permission">Permitir</string>
     <string name="room_widget_resource_decline_permission">Bloquear Tudo</string>
@@ -2214,9 +2217,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="unignore">Permita novamente</string>
 
-    <string name="verify_cannot_cross_sign">Esta sessão não pode compartilhar esta verificação com suas outras sessões.
-\n
-\nA verificação será salva localmente e será compartilhada com versão futura do aplicativo.</string>
+    <string name="verify_cannot_cross_sign">Esta sessão não pode compartilhar esta verificação com suas outras sessões.↵
+\nA verificação será salva localmente e será compartilhada em uma versão futura do aplicativo.</string>
 
     <string name="room_list_sharing_header_recent_rooms">Salas recentes</string>
     <string name="room_list_sharing_header_other_rooms">Outras salas</string>
@@ -2624,7 +2626,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="three_pid_revoke_invite_dialog_content">Revogar o convite para %1$s\?</string>
 
     <string name="member_banned_by">Bloqueado por %1$s</string>
-    <string name="failed_to_unban">Não foi possível desbloquear usuário</string>
+    <string name="failed_to_unban">Não foi possível desbloquear o usuário</string>
 
     <string name="alert_push_are_disabled_title">As notificações Push estão desativadas</string>
     <string name="alert_push_are_disabled_description">Revise suas configurações para permitir notificações Push</string>
