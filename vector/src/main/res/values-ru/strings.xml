@@ -1542,7 +1542,7 @@
 
     <string name="event_redacted_by_user_reason">Событие удалено пользователем</string>
     <string name="event_redacted_by_admin_reason">Мероприятие, модерируемое администратором помещения</string>
-    <string name="last_edited_info_message">Последний раз редактировалось %1$s на %2$s</string>
+    <string name="last_edited_info_message">Последнее изменение %1$s %2$s</string>
 
 
     <string name="malformed_message">Некорректное событие, не может быть отображено</string>
@@ -1615,11 +1615,11 @@
     <string name="downloading_file">Файл %1$s загружается…</string>
     <string name="downloaded_file">Файл %1$s был загружен!</string>
 
-    <string name="edited_suffix">(отредактированный)</string>
+    <string name="edited_suffix">(изменено)</string>
 
 
     <string name="message_edits">Редактирование сообщений</string>
-    <string name="no_message_edits_found">Редактирование не найдено</string>
+    <string name="no_message_edits_found">Изменения не найдены</string>
 
     <string name="room_filtering_filter_hint">Отфильтровывать разговоры…</string>
     <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
@@ -1641,7 +1641,7 @@
 
     <string name="joining_room">Присоединение к комнате…</string>
 
-    <string name="message_view_edit_history">Просмотреть историю изменений</string>
+    <string name="message_view_edit_history">История изменений</string>
 
     <string name="review">Обзор</string>
     <string name="decline">Отклонить</string>
@@ -2297,7 +2297,7 @@
     <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
     <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
 
-    <string name="settings_category_composer">Редактирование сообщений</string>
+    <string name="settings_category_composer">Редактор сообщений</string>
 
     <string name="room_settings_enable_encryption">Включить сквозное шифрование</string>
     <string name="room_settings_enable_encryption_warning">После включения шифрования оно не может быть отключено.</string>
@@ -2464,4 +2464,5 @@
     <string name="bootstrap_progress_generating_ssss_with_info">Генерация ключа SSSS из парольной фразы (%s)</string>
     <string name="bootstrap_migration_enter_backup_password">Введите пароль для резервного копирования ключа, чтобы продолжить работу.</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Если вы не знаете ваш пароль для резервного копирования ключей, вы можете %s.</string>
+    <string name="power_level_edit_title">Задать роль</string>
     </resources>
