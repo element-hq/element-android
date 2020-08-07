@@ -166,15 +166,17 @@
 \nNo entanto, você pode adicionar o endereço de e-mail ao seu perfil nas configurações.</string>
     <string name="auth_recaptcha_message">Este servidor local quer se certificar de que você não é um robô</string>
     <string name="auth_username_in_use">Nome de usuário indisponível</string>
-    <string name="auth_home_server">Servidor Principal (Home Server):</string>
-    <string name="auth_identity_server">Servidor de Identidade (Identity Server):</string>
-    <string name="auth_reset_password_next_step_button">Eu verifiquei meu endereço de e-mail</string>
-    <string name="auth_reset_password_message">Para redefinir sua senha, coloque o email ligado à sua conta:</string>
-    <string name="auth_reset_password_missing_email">O email ligado à sua conta tem que ser inserido.</string>
-    <string name="auth_reset_password_missing_password">Uma nova senha tem que ser inserida.</string>
-    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Quando você tiver clicado no link desta mensagem, clique abaixo.</string>
-    <string name="auth_reset_password_error_unauthorized">Falha ao verificar o email: verifique se você clicou no link no email</string>
-    <string name="auth_reset_password_success_message">Sua senha foi resetada.\n\nVocê foi desconectado de todos os aparelhos e não receberá mais notificações. Para reativar as notificações, entre novamente em cada um dos aparelhos.</string>
+    <string name="auth_home_server">Servidor principal:</string>
+    <string name="auth_identity_server">Servidor de identidade:</string>
+    <string name="auth_reset_password_next_step_button">Eu verifiquei o meu endereço de e-mail</string>
+    <string name="auth_reset_password_message">Para redefinir sua senha, digite o endereço de e-mail vinculado à sua conta:</string>
+    <string name="auth_reset_password_missing_email">O e-mail vinculado à sua conta precisa ser informado.</string>
+    <string name="auth_reset_password_missing_password">Uma nova senha precisa ser inserida.</string>
+    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Após clicar no link contido no e-mail, clique abaixo.</string>
+    <string name="auth_reset_password_error_unauthorized">Falha ao verificar o endereço de e-mail: certifique-se de clicar no link do e-mail</string>
+    <string name="auth_reset_password_success_message">Sua senha foi alterada.↵
+\n↵
+\nVocê foi desconectado de todas as sessões e não receberá mais notificações. Para reativar as notificações, faça login novamente em cada aparelho.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL tem que começar com http[s]://</string>
@@ -182,21 +184,21 @@
     <string name="login_error_unable_login">Não foi possível fazer login</string>
     <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
     <string name="login_error_unable_register">Não foi possível criar conta</string>
-    <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do email</string>
+    <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do e-mail</string>
     <string name="login_error_invalid_home_server">Por favor, digite uma URL válida</string>
 
     <string name="login_error_forbidden">Nome de usuário ou senha inválido</string>
     <string name="login_error_unknown_token">O token de acesso especificado não foi reconhecido</string>
     <string name="login_error_bad_json">JSON mal formatado</string>
-    <string name="login_error_not_json">Não continha JSON válido</string>
-    <string name="login_error_limit_exceeded">Foram enviadas solicitações demais</string>
-    <string name="login_error_user_in_use">Este nome de usuário já está sendo usado</string>
-    <string name="login_error_login_email_not_yet">O link no email ainda não foi clicado</string>
+    <string name="login_error_not_json">Não contem um JSON válido</string>
+    <string name="login_error_limit_exceeded">Muitas solicitações foram enviadas</string>
+    <string name="login_error_user_in_use">Este nome de usuário já está em uso</string>
+    <string name="login_error_login_email_not_yet">O link no e-mail ainda não foi clicado</string>
 
     <!-- crypto warnings -->
 
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Ler lista de recipientes</string>
+    <string name="read_receipts_list">Lista de confirmações de leitura</string>
 
     <!-- accounts list Screen -->
 
@@ -204,12 +206,12 @@
     <string name="compression_options">Enviar como </string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Grande</string>
-    <string name="compression_opt_list_medium">Média</string>
-    <string name="compression_opt_list_small">Pequena</string>
+    <string name="compression_opt_list_medium">Médio</string>
+    <string name="compression_opt_list_small">Pequeno</string>
 
     <!-- media upload / download messages -->
     <string name="attachment_cancel_download">Cancelar o download?</string>
-    <string name="attachment_cancel_upload">Cancelar o upload?</string>
+    <string name="attachment_cancel_upload">Cancelar o envio\?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
@@ -219,26 +221,26 @@
 
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Nome da sala</string>
-    <string name="room_info_room_topic">Tópico da sala</string>
+    <string name="room_info_room_topic">Descrição da sala</string>
 
     <!-- call string -->
-    <string name="call_connected">Chamada conectada</string>
-    <string name="call_connecting">Conectando chamada…</string>
-    <string name="call_ended">Chamada terminada</string>
+    <string name="call_connected">Chamada atendida</string>
+    <string name="call_connecting">Iniciando a chamada…</string>
+    <string name="call_ended">Chamada encerrada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_call">Recebendo chamada de voz</string>
     <string name="incoming_video_call">Recebendo chamada de vídeo</string>
     <string name="incoming_voice_call">Recebendo chamada de voz</string>
     <string name="call_in_progress">Chamada em andamento…</string>
 
-    <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
+    <string name="call_error_user_not_responding">A pessoa não atendeu a chamada.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
-    <string name="call_error_camera_init_failed">Não consigo inicializar a câmera</string>
-    <string name="call_error_answered_elsewhere">chamada respondida em outro lugar</string>
+    <string name="call_error_camera_init_failed">Não foi possível iniciar a câmera</string>
+    <string name="call_error_answered_elsewhere">chamada atendida em outro lugar</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_both_capture_title">Tomar uma foto ou um vídeo"</string>
-    <string name="media_picker_cannot_record_video">Não consigo gravar vídeo"</string>
+    <string name="media_picker_both_capture_title">Tirar uma foto ou gravar vídeo</string>
+    <string name="media_picker_cannot_record_video">Não é possível gravar vídeo</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
@@ -727,9 +729,9 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="option_take_photo">Tirar foto</string>
     <string name="option_take_video">Gravar vídeo</string>
 
-    <string name="groups_list">Lista dos grupos</string>
+    <string name="groups_list">Lista de salas</string>
 
-    <string name="call">Chamada</string>
+    <string name="call">Chamada de voz</string>
     <string name="room_participants_ban_prompt_msg">"Banindo usuário resultará na expulsão  desta sala impedindo-o da entrada novamente."</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
@@ -846,9 +848,9 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
         <item quantity="other">%1$s salas encontradas para %2$s</item>
     </plurals>
     <plurals name="membership_changes">
-        <item quantity="one">%d alteração de status de participação</item>
-        <item quantity="other">%s alterações de status de participação</item>
-    </plurals>
+	<item quantity="one">1 alteração na filiação</item>
+	<item quantity="other">%d alterações na filiação</item>
+</plurals>
 
     <string name="list_members">Lista de integrantes</string>
     <plurals name="notification_unread_notified_messages">
@@ -901,12 +903,12 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="go_on_with">continuar com…</string>
     <string name="error_no_external_application_found">Desculpe, nenhum aplicativo externo foi encontrado para concluir esta ação.</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Pedir novamente as chaves de criptografia</u> de seus outros dispositivos.</string>
+    <string name="e2e_re_request_encryption_key">Solicitar novamente as chaves de criptografia das suas outras sessões.<u>Pedir novamente as chaves de criptografia</u> de seus outros dispositivos.</string>
 
-    <string name="e2e_re_request_encryption_key_sent">Pedido de chave enviado.</string>
+    <string name="e2e_re_request_encryption_key_sent">Requisição de chave enviada.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Element em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Requisição enviada</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicie o Element em outro aparelho que possa descriptografar a mensagem, de modo que ele possa enviar as chaves para esta sessão.</string>
 
     <plurals name="format_time_s">
 	<item quantity="one">1s</item>
@@ -1032,12 +1034,12 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
 
     <string name="dialog_title_error">Erro</string>
 
-    <string name="auth_accept_policies">Por favor revise e aceite as políticas desse servidor doméstico:</string>
+    <string name="auth_accept_policies">Por favor, revise e aceite as políticas deste servidor local:</string>
 
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Use o toque padrão da Element para chamadas recebidas</string>
-    <string name="settings_call_ringtone_title">Toque de chamada recebida</string>
-    <string name="settings_call_ringtone_dialog_title">Selecione o toque para chamadas:</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Use o toque padrão do Element para chamadas recebidas</string>
+    <string name="settings_call_ringtone_title">Toque de chamadas recebidas</string>
+    <string name="settings_call_ringtone_dialog_title">Selecione o toque de chamadas:</string>
 
     <string name="reason_hint">Motivo</string>
 
@@ -1169,7 +1171,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
 
-    <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+    <string name="video_call_in_progress">Chamada de vídeo em andamento…</string>
 
     <string name="title_activity_keys_backup_setup">Backup da chave</string>
     <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
@@ -1208,7 +1210,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="auth_login_sso">Entre com o login único</string>
     <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
-    <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
+    <string name="login_error_ssl_handshake">Seu aparelho está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle da Element. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
     <string name="notification_sync_init">Iniciando o serviço</string>
@@ -1271,12 +1273,12 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="auth_add_phone_message_2">Defina um número de telefone. Posteriormente, você pode permitir que as pessoas encontrem você através dele.</string>
     <string name="auth_add_email_phone_message_2">Defina um e-mail para a recuperação da conta. Posteriormente, um endereço de e-mail ou número de telefone pode ser usado para ser encontrado por outras pessoas.</string>
     <string name="auth_add_email_and_phone_message_2">Defina um e-mail para recuperação da conta. Posteriormente, você pode permitir que as pessoas encontrem você através dele, ou através do número de telefone.</string>
-    <string name="login_error_no_homeserver_found">Servidor Matrix inválido</string>
-    <string name="login_error_homeserver_not_found">Não é possível aceder o servidor neste URL, por favor verifique</string>
+    <string name="login_error_no_homeserver_found">Este não é um endereço de servidor Matrix válido</string>
+    <string name="login_error_homeserver_not_found">Não foi possível acessar um servidor local neste URL, por favor verifique</string>
     <string name="login_error_ssl_peer_unverified">Erro SSL: a identidade da pessoa não foi verificada.</string>
-    <string name="login_error_ssl_other">SSL Erro.</string>
-    <string name="settings_call_ringtone_use_default_stun">Permitir o servidor de assistência de chamadas</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Sera utilizada %s de assistência caso seu servidor não oferecer este serviço (o endereço de IP será compartilhada durante a chamada)</string>
+    <string name="login_error_ssl_other">Erro SSL.</string>
+    <string name="settings_call_ringtone_use_default_stun">Permitir a assistência do servidor de chamadas reserva</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Permitir a assistência do servidor de chamadas reserva %s quando seu servidor não oferecer este serviço (seu endereço IP será transmitido quando você ligar)</string>
     <string name="active_call_with_duration">Chamada em andamento (%s)</string>
     <string name="return_to_call">Retornar a ligação</string>
 
@@ -2025,7 +2027,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="login_signup_username_hint">Nome de usuário</string>
     <string name="login_signup_password_hint">Senha</string>
     <string name="login_signup_submit">Próximo</string>
-    <string name="login_signup_error_user_in_use">Esse nome de usuário não é disponível</string>
+    <string name="login_signup_error_user_in_use">Esse nome de usuário está indisponível</string>
     <string name="login_signup_cancel_confirmation_title">Atenção</string>
     <string name="login_signup_cancel_confirmation_content">Sua conta ainda não foi criada.
 \n
