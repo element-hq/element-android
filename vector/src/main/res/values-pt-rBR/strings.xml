@@ -472,7 +472,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <string name="settings_user_settings">Configurações de usuário</string>
     <string name="settings_notifications">Notificações</string>
-    <string name="settings_ignored_users">Usuárias/os ignorados</string>
+    <string name="settings_ignored_users">Usuários ignorados</string>
     <string name="settings_other">Outros</string>
     <string name="settings_advanced">Avançado</string>
     <string name="settings_cryptography">Criptografia</string>
@@ -616,7 +616,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Chave de impressão digital ed25519 reivindicada</string>
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID de Sessão</string>
-    <string name="encryption_information_decryption_error">Erro de descriptografia</string>
+    <string name="encryption_information_decryption_error">Erro de decifração</string>
 
     <string name="encryption_information_sender_device_information">Informação sobre o dispositivo do remetente</string>
     <string name="encryption_information_device_name">Nome do dispositivo</string>
@@ -710,7 +710,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_listening_for_events">Escutando eventos</string>
-    <string name="notification_noisy_notifications">Ativado com som</string>
+    <string name="notification_noisy_notifications">Notificações com sonido</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 
     <string name="title_activity_bug_report">Relatar um erro</string>
@@ -739,7 +739,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="call">Chamada de voz</string>
     <string name="room_participants_ban_prompt_msg">Bloquear o usuário resultará em sua remoção desta sala, impedindo-o de entrar nela novamente.</string>
 
-    <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
+    <string name="room_settings_all_messages_noisy">Todas as mensagens (com sonido)</string>
     <string name="room_settings_all_messages">Notificação para cada mensagem</string>
     <string name="room_settings_mention_only">Apenas quando mencionado</string>
     <string name="room_settings_mute">Silenciar</string>
@@ -797,7 +797,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <!-- notification statuses -->
     <string name="notification_off">Desativado</string>
-    <string name="notification_noisy">Alto</string>
+    <string name="notification_noisy">Com sonido</string>
 
     <string name="encrypted_message">Mensagem criptografada</string>
 
@@ -1002,7 +1002,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="dialog_user_consent_content">Para continuar usando o Servidor de Base %1$s, você precisa revisar e aceitar os termos e condições de uso.</string>
     <string name="dialog_user_consent_submit">Revisar agora</string>
 
-    <string name="deactivate_account_title">Desativar conta</string>
+    <string name="deactivate_account_title">Desativar Conta</string>
     <string name="deactivate_account_content">Isso tornará sua conta permanentemente inutilizável. Você não conseguirá efetuar login e ninguém poderá registrar novamente o mesmo ID de usuário. Isso fará com que sua conta saia de todas as salas das quais está participando e removerá os detalhes de sua conta do servidor de identidade. <b>Esta ação é irreversível</b>.↵
 \n↵
 \nDesativar sua conta <b>não faz com que, por padrão, suas mensagens enviadas sejam apagadas</b>. Se você deseja que suas mensagens também sejam apagadas, marque a opção abaixo.↵
@@ -1010,7 +1010,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 \nA visibilidade de mensagens na Matrix é semelhante a um e-mail. O fato de apagarmos suas mensagens significa que suas mensagens enviadas não serão compartilhadas com nenhum usuário novo ou ainda não registrado, mas os usuários registrados que já tiveram acesso a essas mensagens ainda terão acesso uma cópia delas.</string>
     <string name="deactivate_account_delete_checkbox">Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (Atenção: isso vai fazer com que futuras(os) usuárias(os) tenham uma visão incompleta das conversas)</string>
     <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
-    <string name="deactivate_account_submit">Desativar conta</string>
+    <string name="deactivate_account_submit">Desativar Conta</string>
 
     <string name="error_empty_field_your_password">Por favor, digite sua senha.</string>
     <string name="room_tombstone_versioned_description">Esta sala foi substituída e não está mais ativa</string>
@@ -1223,7 +1223,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 \nEste erro está fora de controle do Element. Não há conta do Google no celular. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
 
-    <string name="settings_noisy_notifications_preferences">Configurar notificações ruidosas</string>
+    <string name="settings_noisy_notifications_preferences">Configure notificações com sonido</string>
     <string name="settings_call_notifications_preferences">Configurar notificações de chamada</string>
     <string name="settings_silent_notifications_preferences">Configurar notificações silenciosas</string>
     <string name="settings_system_preferences_summary">Escolha a cor do LED, vibração, som…</string>
@@ -1525,7 +1525,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="keys_backup_restore_with_key_helper">Perdeu sua chave de recuperação\? Você pode configurar uma nova nas configurações.</string>
     <string name="keys_backup_passphrase_error_decrypt">O backup não pôde ser descriptografado com essa frase secreta: verifique se você digitou a frase secreta de recuperação correta.</string>
-    <string name="network_error_please_check_and_retry">Erro de rede: verifique por favor a sua conexão e tente de novo.</string>
+    <string name="network_error_please_check_and_retry">Erro da rede: verifique por favor a sua conexão e tente de novo.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restaurando o backup:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Computação da chave de recuperação…</string>
