@@ -127,43 +127,45 @@
     <string name="start_video_call">Iniciar chamada de vídeo</string>
 
     <string name="option_send_files">Enviar arquivos</string>
-    <string name="option_take_photo_video">Tirar foto ou fazer vídeo</string>
+    <string name="option_take_photo_video">Tirar uma foto ou gravar vídeo</string>
 
     <!-- Authentication -->
     <string name="auth_login">Entrar</string>
     <string name="auth_register">Criar conta</string>
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Pular</string>
-    <string name="auth_send_reset_email">Enviar email para redefinir senha</string>
+    <string name="auth_send_reset_email">Enviar e-mail para redefinir senha</string>
     <string name="auth_return_to_login">Voltar à tela de login</string>
-    <string name="auth_user_id_placeholder">Email ou nome de usuário</string>
+    <string name="auth_user_id_placeholder">E-mail ou nome de usuário</string>
     <string name="auth_password_placeholder">Senha</string>
     <string name="auth_new_password_placeholder">Nova senha</string>
     <string name="auth_user_name_placeholder">Nome de usuário</string>
-    <string name="auth_email_placeholder">Endereço de email</string>
-    <string name="auth_opt_email_placeholder">Endereço de email (opcional)</string>
+    <string name="auth_email_placeholder">Endereço de e-mail</string>
+    <string name="auth_opt_email_placeholder">Endereço de e-mail (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de telefone</string>
     <string name="auth_opt_phone_number_placeholder">Número de telefone (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repita a senha</string>
     <string name="auth_repeat_new_password_placeholder">Confirme sua nova senha</string>
-    <string name="auth_invalid_login_param">Usuário ou senha incorreta</string>
-    <string name="auth_invalid_user_name">Nomes de usuário só podem conter letras, números, pontos, hífens e underscores</string>
-    <string name="auth_invalid_password">Senha muita curta (mín 6)</string>
+    <string name="auth_invalid_login_param">Nome de usuário e/ou senha incorretos</string>
+    <string name="auth_invalid_user_name">Nomes de usuário só podem conter letras, números, pontos, hifens e sublinhados</string>
+    <string name="auth_invalid_password">Senha muita curta (mínimo de 6 caracteres)</string>
     <string name="auth_missing_password">Falta a senha</string>
-    <string name="auth_invalid_email">Isto não parece um endereço de e-mail válido</string>
-    <string name="auth_invalid_phone">Isso não parece um número de telefone válido</string>
+    <string name="auth_invalid_email">Este não parece ser um endereço de e-mail válido</string>
+    <string name="auth_invalid_phone">Este não parece ser um número de telefone válido</string>
     <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
-    <string name="auth_missing_email">Falta endereço de email</string>
-    <string name="auth_missing_phone">Falta número de telefone</string>
-    <string name="auth_missing_email_or_phone">Falta endereço de email ou número de telefone</string>
+    <string name="auth_missing_email">Falta o endereço de e-mail</string>
+    <string name="auth_missing_phone">Falta o número de telefone</string>
+    <string name="auth_missing_email_or_phone">Falta o endereço de e-mail ou o número de telefone</string>
     <string name="auth_invalid_token">Token inválido</string>
-    <string name="auth_password_dont_match">As senhas não conferem</string>
+    <string name="auth_password_dont_match">As senhas não correspondem</string>
     <string name="auth_forgot_password">Esqueceu sua senha?</string>
-    <string name="auth_use_server_options">Use opções customizadas de servidor (avançado)</string>
-    <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar o cadastro</string>
-    <string name="auth_threepid_warning_message">O registro de nova conta com email e número de telefone não é permitido enquanto o API não é desenvolvido. Apenas o número de telefone será levado em consideração.\n\nVocê poderá depois adicionar um email para o seu perfil nas configurações.</string>
-    <string name="auth_recaptcha_message">Este servidor de base quer ter certeza que você não é um robô</string>
-    <string name="auth_username_in_use">Nome de usuário já existe</string>
+    <string name="auth_use_server_options">Use opções para servidor personalizado (avançado)</string>
+    <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar a inscrição</string>
+    <string name="auth_threepid_warning_message">Atualmente, registrar-se com e-mail e número de telefone ao mesmo tempo não é possível. Apenas o número de telefone será levado em consideração.↵
+\n↵
+\nNo entanto, você pode adicionar o endereço de e-mail ao seu perfil nas configurações.</string>
+    <string name="auth_recaptcha_message">Este servidor local quer se certificar de que você não é um robô</string>
+    <string name="auth_username_in_use">Nome de usuário indisponível</string>
     <string name="auth_home_server">Servidor Principal (Home Server):</string>
     <string name="auth_identity_server">Servidor de Identidade (Identity Server):</string>
     <string name="auth_reset_password_next_step_button">Eu verifiquei meu endereço de e-mail</string>
@@ -891,13 +893,13 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="send_bug_report_description_in_english">Se possível, escreva a descrição em inglês, por favor.</string>
     <string name="option_send_voice">Enviar áudio</string>
 
-    <string name="option_send_sticker">Enviar um sticker</string>
-    <string name="no_sticker_application_dialog_content">Você não tem nenhum pacote de stickers habilitado no momento.
-
-Quer adicionar alguns agora?</string>
+    <string name="option_send_sticker">Enviar uma figurinha</string>
+    <string name="no_sticker_application_dialog_content">No momento, você não tem nenhum pacote de figurinhas ativado.↵
+\n↵
+\nQuer adicionar alguns agora\?</string>
 
     <string name="go_on_with">continuar com…</string>
-    <string name="error_no_external_application_found">Desculpe, mas não encontrei nenhum aplicativo externo para completar esta ação.</string>
+    <string name="error_no_external_application_found">Desculpe, nenhum aplicativo externo foi encontrado para concluir esta ação.</string>
 
     <string name="e2e_re_request_encryption_key"><u>Pedir novamente as chaves de criptografia</u> de seus outros dispositivos.</string>
 
@@ -1204,7 +1206,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 \nEste erro está fora do controle do Element e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
     <string name="ignore">Silenciar e esconder mensagens</string>
 
-    <string name="auth_login_sso">Entre com o logon único</string>
+    <string name="auth_login_sso">Entre com o login único</string>
     <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
     <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -1262,13 +1264,13 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="call_switch_camera">Trocar a câmera</string>
     <string name="call_camera_front">Frontal</string>
     <string name="call_camera_back">Traseira</string>
-    <string name="call_format_turn_hd_off">Desligar HD</string>
-    <string name="call_format_turn_hd_on">Ligar HD</string>
+    <string name="call_format_turn_hd_off">Desativar vídeo de alta definição</string>
+    <string name="call_format_turn_hd_on">Ativar vídeo de alta definição</string>
 
-    <string name="auth_add_email_message_2">Defina um e-mail para recuperação de conta, opcionalmente pode ser utilizado para descobrir pessoas que você conhece.</string>
-    <string name="auth_add_phone_message_2">Defina um telefone, opcionalmente pode ser utilizado para descobrir pessoas que você conhece.</string>
-    <string name="auth_add_email_phone_message_2">Defina um e-mail para a recuperação da conta. Use depois e-mail ou telefone para ser opcionalmente descoberto por pessoas que você conhece.</string>
-    <string name="auth_add_email_and_phone_message_2">Defina um e-mail para a recuperação da conta. Use depois e-mail ou telefone para ser opcionalmente descoberto pelas pessoas que conhecem você.</string>
+    <string name="auth_add_email_message_2">Defina um e-mail para recuperação da conta. Posteriormente, você pode permitir que as pessoas encontrem você através dele.</string>
+    <string name="auth_add_phone_message_2">Defina um número de telefone. Posteriormente, você pode permitir que as pessoas encontrem você através dele.</string>
+    <string name="auth_add_email_phone_message_2">Defina um e-mail para a recuperação da conta. Posteriormente, um endereço de e-mail ou número de telefone pode ser usado para ser encontrado por outras pessoas.</string>
+    <string name="auth_add_email_and_phone_message_2">Defina um e-mail para recuperação da conta. Posteriormente, você pode permitir que as pessoas encontrem você através dele, ou através do número de telefone.</string>
     <string name="login_error_no_homeserver_found">Servidor Matrix inválido</string>
     <string name="login_error_homeserver_not_found">Não é possível aceder o servidor neste URL, por favor verifique</string>
     <string name="login_error_ssl_peer_unverified">Erro SSL: a identidade da pessoa não foi verificada.</string>
