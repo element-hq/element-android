@@ -100,12 +100,12 @@
     <string name="send_bug_report_include_logs">Enviar registros</string>
     <string name="send_bug_report_include_crash_logs">Enviar registros da falha</string>
     <string name="send_bug_report_include_screenshot">Enviar recorte de tela</string>
-    <string name="send_bug_report">Relatar erro</string>
+    <string name="send_bug_report">Relatar um erro</string>
     <string name="send_bug_report_description">Por favor, descreva o erro. O que você fez\? O que você esperava ocorrer\? O que aconteceu\?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
     <string name="send_bug_report_logs_description">Para diagnosticar problemas, os registros deste cliente serão enviados juntos deste relatório de erros. Este relatório de erros, incluindo os registros e recortes de tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor, desmarque:</string>
-    <string name="send_bug_report_alert_message">Você parece estar agitando o telefone em frustração. Gostaria de enviar um relatório de erro\?</string>
-    <string name="send_bug_report_sent">O relatório de erro foi enviado com sucesso</string>
+    <string name="send_bug_report_alert_message">Você parece estar agitando o celular rapidamente. Gostaria de enviar um relatório de erro\?</string>
+    <string name="send_bug_report_sent">O relatório de erro foi enviado com êxito</string>
     <string name="send_bug_report_failed">Falha ao enviar o relatório de erro (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
     <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente da última vez. Gostaria de abrir a tela de relatórios de erros\?</string>
@@ -151,7 +151,7 @@
     <string name="auth_invalid_password">Senha muita curta (mínimo de 6 caracteres)</string>
     <string name="auth_missing_password">Falta a senha</string>
     <string name="auth_invalid_email">Este não parece ser um endereço de e-mail válido</string>
-    <string name="auth_invalid_phone">Este não parece ser um número de telefone válido</string>
+    <string name="auth_invalid_phone">Não parece ser um número de telefone válido</string>
     <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
     <string name="auth_missing_email">Falta o endereço de e-mail</string>
     <string name="auth_missing_phone">Falta o número de telefone</string>
@@ -180,9 +180,9 @@
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL tem que começar com http[s]://</string>
-    <string name="login_error_network_error">Não foi possível fazer login: Erro de rede</string>
+    <string name="login_error_network_error">Não foi possível fazer login: Erro da rede</string>
     <string name="login_error_unable_login">Não foi possível fazer login</string>
-    <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
+    <string name="login_error_registration_network_error">Não foi possível criar conta: Erro da rede</string>
     <string name="login_error_unable_register">Não foi possível criar conta</string>
     <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do e-mail</string>
     <string name="login_error_invalid_home_server">Por favor, digite uma URL válida</string>
@@ -244,7 +244,7 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Element precisa de permissão para aceder à sua biblioteca de fotos e vídeos para enviar e gravar anexos.
+    <string name="permissions_rationale_msg_storage">Element precisa de permissão para acessar sua galeria de fotos e vídeos para enviar e salvar anexos.
 \n
 \n
 \nPor favor permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
@@ -366,10 +366,10 @@ Você autoriza o Element a acessar seus contatos?</string>
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
     <string name="ssl_could_not_verify">Não consegui verificar a identidade do servidor remoto.</string>
-    <string name="ssl_cert_not_trust">Isso pode significar que alguém está interceptando suas mensagens de forma maliciosa, ou então o seu telefone não confia no certificado fornecido pelo servidor remoto.</string>
+    <string name="ssl_cert_not_trust">Isso pode significar que alguém está interceptando suas mensagens de forma maliciosa, ou então o seu celular não confia no certificado fornecido pelo servidor remoto.</string>
     <string name="ssl_cert_new_account_expl">Se o administrador do servidor disse que isso era esperado, verifique se a impressão digital abaixo é a mesma que a impressão digital que ele forneceu a você.</string>
-    <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu telefone. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
-    <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável no seu telefone para um que não é considerado confiável pelo seu aparelho. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
+    <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu celular. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
+    <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável para um que não é confiável. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
     <string name="ssl_only_accept">Apenas aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica a que está acima.</string>
 
     <!-- Room Details -->
@@ -529,7 +529,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_phone_number_verification">Verificação do telefone</string>
     <string name="settings_phone_number_verification_instruction">"Nós enviamos um SMS com um código de ativação. Por favor, digite este código abaixo."</string>
     <string name="settings_phone_number_verification_error_empty_code">Digite o código de ativação</string>
-    <string name="settings_phone_number_verification_error">Erro ao validar o seu número de telefone</string>
+    <string name="settings_phone_number_verification_error">Erro ao validar seu número de telefone</string>
     <string name="settings_phone_number_code">Código</string>
 
     <!-- Room Settings -->
@@ -677,7 +677,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="user_directory_header">Lista de usuários</string>
     <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
-    <string name="settings_start_on_boot">Iniciar na inicialização do celular</string>
+    <string name="settings_start_on_boot">Comece na inicialização do celular</string>
     <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
 
@@ -712,7 +712,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="notification_noisy_notifications">Ativado com som</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 
-    <string name="title_activity_bug_report">Relatório de erro</string>
+    <string name="title_activity_bug_report">Relatar um erro</string>
     <string name="title_activity_group_details">Detalhes da comunidade</string>
 
     <string name="loading">Carregando…</string>
@@ -1218,7 +1218,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle da Element. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
     <string name="notification_sync_init">Iniciando o serviço</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Element. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nEste erro está fora de controle do Element. Não há conta do Google no celular. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
 
     <string name="settings_noisy_notifications_preferences">Configurar notificações ruidosas</string>
@@ -1263,7 +1264,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 \nPor favor, peça ao administrador do seu servidor para configurar um servidor TURN, de modo que as chamadas funcionem de maneira estável.</string>
 
     <string name="call_select_sound_device">Selecione o dispositivo de som</string>
-    <string name="sound_device_phone">Telefone</string>
+    <string name="sound_device_phone">Celular</string>
     <string name="sound_device_speaker">Alto-falante</string>
     <string name="sound_device_headset">Fone de ouvido</string>
     <string name="sound_device_wireless_headset">Fone de ouvido sem fio</string>
@@ -1279,8 +1280,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="auth_add_email_and_phone_message_2">Defina um e-mail para recuperação da conta. Posteriormente, você pode permitir que as pessoas encontrem você através dele, ou através do número de telefone.</string>
     <string name="login_error_no_homeserver_found">Este não é um endereço de servidor Matrix válido</string>
     <string name="login_error_homeserver_not_found">Não foi possível acessar um servidor local neste URL, por favor verifique</string>
-    <string name="login_error_ssl_peer_unverified">Erro SSL: a identidade da pessoa não foi verificada.</string>
-    <string name="login_error_ssl_other">Erro SSL.</string>
+    <string name="login_error_ssl_peer_unverified">Erro de SSL: a identidade da pessoa não foi verificada.</string>
+    <string name="login_error_ssl_other">Erro de SSL.</string>
     <string name="settings_call_ringtone_use_default_stun">Permitir a assistência do servidor de chamadas reserva</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Permitir a assistência do servidor de chamadas reserva %s quando seu servidor não oferecer este serviço (seu endereço IP será transmitido quando você ligar)</string>
     <string name="active_call_with_duration">Chamada em andamento (%s)</string>
@@ -1814,7 +1815,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_discovery_emails_title">Endereços de e-mail detectáveis</string>
     <string name="settings_discovery_no_mails">As opções de descoberta aparecerão uma vez que você tenha adicionado um e-mail.</string>
     <string name="settings_discovery_no_msisdn">As opções de descoberta aparecerão uma vez que você tenha adicionado um número de telefone.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Desconectar-se de seu servidor de identidade resultará em que você não poderá ser descoberto por outros usuários e não poderá convidar outros por e-mail ou telefone.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Desconectar-se de seu servidor de identidade resultará em que você não poderá ser descoberto por outros usuários e não poderá convidar outros por e-mail ou número de telefone.</string>
     <string name="settings_discovery_msisdn_title">Números de telefone detectáveis</string>
     <string name="settings_discovery_confirm_mail">Enviamos um e-mail de confirmação para %s, verifique seu e-mail e clique no link de confirmação</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Enviamos um e-mail de confirmação para %s, for favor primeiro verifique seu e-mail e clique no link de confirmação</string>
@@ -1832,7 +1833,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para que você possa ser descoberto por endereço de e-mail ou número de telefone.</string>
 
     <string name="labs_allow_extended_logging">Habilitar registros detalhados.</string>
-    <string name="labs_allow_extended_logging_summary">Os registros detalhados ajudarão aos desenvolvedores fornecendo mais registros quando utilizar método de sacudir telefone. Mesmo quando ativado, o aplicativo não registra o conteúdo da mensagem ou qualquer outro dado privado.</string>
+    <string name="labs_allow_extended_logging_summary">Os registros detalhados ajudarão aos desenvolvedores fornecendo mais registros quando utilizar método de Agitação. Mesmo quando ativado, o aplicativo não registra o conteúdo da mensagem ou qualquer outro dado privado.</string>
 
 
     <string name="error_terms_not_accepted">Por favor, tente novamente quando tiver aceitado os termos e condições de seu servidor.</string>
@@ -1917,7 +1918,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="notice_member_no_changes">%1$s não fez nenhuma alteração</string>
     <string name="notice_member_no_changes_by_you">Você não fez nenhuma alteração</string>
     <string name="command_description_spoiler">Envia esta mensagem como um spoiler</string>
-    <string name="spoiler">Spoiler</string>
+    <string name="spoiler">Estraga-Surpresa</string>
     <string name="reaction_search_type_hint">Digite palavras-chave para encontrar uma reação.</string>
 
     <string name="no_ignored_users">Você não está ignorando nenhum usuário</string>
@@ -2015,14 +2016,14 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="login_set_msisdn_optional_hint">Número de telefone (opcional)</string>
     <string name="login_set_msisdn_submit">Próximo</string>
 
-    <string name="login_msisdn_confirm_title">Confirma número de telefone</string>
+    <string name="login_msisdn_confirm_title">Confirme número de telefone</string>
     <string name="login_msisdn_confirm_notice">Acabamos de enviar um código para %1$s. Digite-o abaixo para verificar se é você.</string>
     <string name="login_msisdn_confirm_hint">Digite o código</string>
     <string name="login_msisdn_confirm_send_again">Enviar novamente</string>
     <string name="login_msisdn_confirm_submit">Próximo</string>
 
     <string name="login_msisdn_error_not_international">Os números de telefone internacionais devem começar com \'+\'</string>
-    <string name="login_msisdn_error_other">O número de telefone parece inválido. Verifica-o</string>
+    <string name="login_msisdn_error_other">O número de telefone parece inválido. Favor verificá-lo</string>
 
     <string name="login_signup_to">Registar em %1$s</string>
     <string name="login_signin_username_hint">Nome de usuário ou e-mail</string>
@@ -2108,9 +2109,9 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_advanced_settings">Configurações avançadas</string>
     <string name="settings_developer_mode">Modo desenvolvedor</string>
     <string name="settings_developer_mode_summary">O modo desenvolvedor ativa características ocultas e pode também tornar o aplicativo menos estável. Somente para desenvolvedores!</string>
-    <string name="settings_rageshake">Sacudir telefone</string>
+    <string name="settings_rageshake">Agitar Celular</string>
     <string name="settings_rageshake_detection_threshold">Detectar patamar</string>
-    <string name="settings_rageshake_detection_threshold_summary">Sacuda seu telefone para testar patamar detecção</string>
+    <string name="settings_rageshake_detection_threshold_summary">Agite seu telefone para testar o limiar de detecção</string>
     <string name="rageshake_detected">A sacudida detectada!</string>
     <string name="settings">Configurações</string>
     <string name="devices_current_device">Sessão atual</string>
@@ -2347,7 +2348,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
 
     <string name="keys_backup_restore_success_title_already_up_to_date">As chaves já estão atualizadas!</string>
 
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">Element para Android</string>
 
     <string name="settings_key_requests">A chave pede</string>
 
@@ -2609,7 +2610,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="element_disclaimer_negative_button">PERFEITO</string>
     <string name="element_disclaimer_positive_button">APRENDA MAIS</string>
 
-    <string name="element_login_splash_brand">element</string>
+    <string name="element_login_splash_brand">Element</string>
 
 
     <string name="save_recovery_key_chooser_hint">Salve chave de recuperação em</string>
