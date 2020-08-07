@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -282,6 +283,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
+            is RoomDetailAction.CancelSend                       -> handleCancel(action)
         }.exhaustive
     }
 
@@ -1051,9 +1053,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                 return
             }
             when {
-                it.root.isTextMessage()  -> room.resendTextMessage(it)
-                it.root.isImageMessage() -> room.resendMediaMessage(it)
-                else                     -> {
+                it.root.isTextMessage()       -> room.resendTextMessage(it)
+                it.root.isAttachmentMessage() -> room.resendMediaMessage(it)
+                else                          -> {
                     // TODO
                 }
             }
@@ -1069,6 +1071,18 @@ class RoomDetailViewModel @AssistedInject constructor(
                 return
             }
             room.deleteFailedEcho(it)
+        }
+    }
+
+    private fun handleCancel(action: RoomDetailAction.CancelSend) {
+        val targetEventId = action.eventId
+        room.getTimeLineEvent(targetEventId)?.let {
+            // State must be UNDELIVERED or Failed
+            if (!it.root.sendState.isSending()) {
+                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                return
+            }
+            room.cancelSend(action.eventId)
         }
     }
 
