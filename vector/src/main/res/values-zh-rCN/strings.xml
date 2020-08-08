@@ -160,7 +160,7 @@
     <string name="settings_advanced">高级</string>
     <string name="settings_cryptography">加密</string>
     <string name="settings_contact">本地联系人</string>
-    <string name="settings_devices_list">设备列表</string>
+    <string name="settings_devices_list">会话</string>
     <string name="devices_details_dialog_title">设备详情</string>
     <string name="devices_details_device_name">设备名称</string>
     <string name="devices_delete_pswd">密码：</string>
@@ -1981,4 +1981,323 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="soft_logout_title">您已登出</string>
     <string name="soft_logout_signin_title">登入</string>
     <string name="soft_logout_signin_notice">您的家庭服务器 (%1$s) 管理员将您从您的账户 %2$s (%3$s) 登出。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">登录以恢复仅存储在此设备上的加密密钥。 您需要使用它们在任何设备上阅读所有安全消息。</string>
+    <string name="soft_logout_signin_submit">登入</string>
+    <string name="soft_logout_signin_password_hint">密码</string>
+    <string name="soft_logout_clear_data_title">清除个人数据</string>
+    <string name="soft_logout_clear_data_notice">注意：您的个人数据（包括加密密钥）仍存储在此设备上。
+\n
+\n如果您不再使用此设备，或想登入另一个帐户，请清除它。</string>
+    <string name="soft_logout_clear_data_submit">清除全部数据</string>
+
+    <string name="soft_logout_clear_data_dialog_title">清除数据</string>
+    <string name="soft_logout_clear_data_dialog_content">是否清除当前存储在此设备上的全部数据？
+\n再次登入以访问您的帐户数据和消息。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以恢复加密密钥，否则您将无法访问安全消息。</string>
+    <string name="soft_logout_clear_data_dialog_submit">清除数据</string>
+    <string name="soft_logout_sso_not_same_user_error">当前会话用于用户 %1$s 而您提供了用户 %2$s 的凭证。Element 不支持此功能。
+\n请先清除数据，然后重新登入另一个账户。</string>
+
+    <string name="permalink_malformed">您的 matrix.to 链接更是不正确</string>
+    <string name="bug_report_error_too_short">描述太短</string>
+
+    <string name="notification_initial_sync">初始同步…</string>
+
+    <string name="settings_show_devices_list">查看我的全部会话</string>
+    <string name="settings_advanced_settings">高级设置</string>
+    <string name="settings_developer_mode">开发者模式</string>
+    <string name="settings_developer_mode_summary">开发者模式激活隐藏的功能，也可能使应用不稳定。仅供开发者使用！</string>
+    <string name="settings_rageshake">摇一摇</string>
+    <string name="settings_rageshake_detection_threshold">检测阈值</string>
+    <string name="settings_rageshake_detection_threshold_summary">摇动手机以测试检测阈值</string>
+    <string name="rageshake_detected">检测到摇动！</string>
+    <string name="settings">设置</string>
+    <string name="devices_current_device">当前会话</string>
+    <string name="devices_other_devices">其他会话</string>
+
+    <string name="autocomplete_limited_results">仅显示第一个结果，请输入更多字符…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">快速失败</string>
+    <string name="settings_developer_mode_fail_fast_summary">发生意外错误时，Element 可能更经常崩溃</string>
+
+    <string name="command_description_verify">请求验证给定 userID</string>
+    <string name="command_description_shrug">在明文消息前添加 ¯\\_(ツ)_/¯</string>
+
+    <string name="create_room_encryption_title">启用加密</string>
+    <string name="create_room_encryption_description">一旦启用，加密无法禁用。</string>
+
+    <string name="login_error_threepid_denied">您的电子邮件域无权注册此服务器</string>
+
+    <string name="verification_conclusion_warning">不可信登入</string>
+    <string name="verification_sas_match">匹配</string>
+    <string name="verification_sas_do_not_match">不匹配</string>
+    <string name="verify_user_sas_emoji_help_text">确认下方独特表情以相同顺序出现在他们的屏幕上，以验证此用户。</string>
+    <string name="verify_user_sas_emoji_security_tip">为了获得最高的安全性，请使用其他可信通信方式或亲自确认。</string>
+    <string name="verification_green_shield">寻找绿色盾牌以确保用户可信。信任房间中的所有用户以确保房间的安全。</string>
+
+    <string name="verification_conclusion_not_secure">不安全</string>
+    <string name="verification_conclusion_compromised">以下其中一项可能会受到威胁：
+\n
+\n - 您的家庭服务器
+\n - 您验证的用户连接到的家庭服务器
+\n - 您或其它用户的网络连接
+\n - 您或其他用户的设备</string>
+
+    <string name="sent_a_video">视频。</string>
+    <string name="sent_an_image">图片。</string>
+    <string name="sent_an_audio_file">音频</string>
+    <string name="sent_a_file">文件</string>
+    <string name="send_a_sticker">贴纸</string>
+
+    <string name="verification_request_waiting">正在等待…</string>
+    <string name="verification_request_other_cancelled">%s 已取消</string>
+    <string name="verification_request_you_cancelled">您已取消</string>
+    <string name="verification_request_other_accepted">%s 已接受</string>
+    <string name="verification_request_you_accepted">您已接受</string>
+    <string name="verification_sent">验证已发送</string>
+    <string name="verification_request">验证请求</string>
+    <string name="verification_verify_device">验证此会话</string>
+    <string name="verification_verify_device_manually">手动验证</string>
+
+    <string name="you">您</string>
+
+    <string name="verification_scan_notice">使用其他用户的设备扫描此码以安全地相互验证</string>
+    <string name="verification_scan_their_code">扫描他们的码</string>
+    <string name="verification_scan_emoji_title">无法扫描</string>
+    <string name="verification_scan_emoji_subtitle">如果您不在现场，请比较表情符号</string>
+
+    <string name="verification_no_scan_emoji_title">通过比较表情符号验证</string>
+
+    <string name="verify_by_emoji_title">通过表情验证</string>
+    <string name="verify_by_emoji_description">如果您无法扫描上方的码，通过比较简短独特的表情序列验证。</string>
+
+    <string name="a13n_qr_code_description">二维码图片</string>
+
+    <string name="verification_verify_user">验证 %s</string>
+    <string name="verification_verified_user">已验证 %s</string>
+    <string name="verification_request_waiting_for">正在等待 %s…</string>
+    <string name="verification_request_alert_description">为了提高安全性，请通过检查两个设备上的一次性代码来验证 ％s。
+\n
+\n为了获得最大的安全性，请亲自进行。</string>
+    <string name="room_profile_not_encrypted_subtitle">此房间的消息不是端到端加密。</string>
+    <string name="room_profile_encrypted_subtitle">该房间的消息端到端加密。
+\n
+\n您的消息使用锁进行保护，只有您和接收者才能使用唯一的密钥解锁。</string>
+    <string name="room_profile_section_security">安全</string>
+    <string name="room_profile_section_security_learn_more">了解更多</string>
+    <string name="room_profile_section_more">更多</string>
+    <string name="room_profile_section_admin">管理员操作</string>
+    <string name="room_profile_section_more_settings">房间设置</string>
+    <string name="room_profile_section_more_notifications">通知</string>
+    <plurals name="room_profile_section_more_member_list">
+	<item quantity="other">%1$d 人</item>
+</plurals>
+    <string name="room_profile_section_more_uploads">上传</string>
+    <string name="room_profile_section_more_leave">离开房间</string>
+    <string name="room_profile_leaving_room">正在离开房间…</string>
+
+    <string name="room_member_power_level_admins">管理员</string>
+    <string name="room_member_power_level_moderators">审查员</string>
+    <string name="room_member_power_level_custom">自定义</string>
+    <string name="room_member_power_level_invites">邀请</string>
+    <string name="room_member_power_level_users">用户</string>
+
+    <string name="room_member_power_level_admin_in">%1$s 管理员</string>
+    <string name="room_member_power_level_moderator_in">%1$s 审查员</string>
+    <string name="room_member_power_level_default_in">%1$s 默认权限</string>
+    <string name="room_member_power_level_custom_in">%2$s 自定义权限 (%1$d)</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">Element 无法处理 \'%1$s\' 类型事件</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element 无法处理 \'%1$s\' 类型消息</string>
+    <string name="rendering_event_error_exception">Element 在渲染 id 为 \'%1$s\' 的事件内容时遇到了一个问题</string>
+
+    <string name="unignore">取消忽略</string>
+
+    <string name="verify_cannot_cross_sign">该会话无法与您的其他会话共享此验证。
+\n验证将保存在本地，并在此应用的未来版本中共享。</string>
+
+    <string name="room_list_sharing_header_recent_rooms">最近使用的房间</string>
+    <string name="room_list_sharing_header_other_rooms">其他房间</string>
+
+    <string name="command_description_rainbow">发送彩虹色给定消息</string>
+    <string name="command_description_rainbow_emote">发送彩虹色给定表情</string>
+
+    <string name="settings_category_timeline">时间线</string>
+
+    <string name="settings_category_composer">消息编辑器</string>
+
+    <string name="room_settings_enable_encryption">启用端到端加密</string>
+    <string name="room_settings_enable_encryption_warning">一旦启用，加密无法禁用。</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">是否启用加密？</string>
+    <string name="room_settings_enable_encryption_dialog_content">启用后，将无法禁用房间加密。服务器无法看到加密房间中发送的消息，只有房间的参与者才能看到。启用加密可能会阻止许多机器人和桥接正常工作。</string>
+    <string name="room_settings_enable_encryption_dialog_submit">启用加密</string>
+
+    <string name="verification_request_notice">为保证安全，通过检查一次性代码验证 %s。</string>
+    <string name="verification_request_start_notice">为保证安全，亲自或使用其他通信方式验证。</string>
+
+    <string name="verification_emoji_notice">比较独特表情，确保它们以相同顺序出现。</string>
+    <string name="verification_code_notice">与其他用户设备上显示的代码比较。</string>
+    <string name="verification_conclusion_ok_notice">与此用户的消息端到端加密，无法被第三方读取。</string>
+    <string name="verification_conclusion_ok_self_notice">您的新会话已验证。它可以访问您的加密消息，其他用户会将其视为可信。</string>
+
+    <string name="encryption_information_cross_signing_state">交叉签名</string>
+    <string name="encryption_information_dg_xsigning_complete">交叉签名已启用
+\n设备上的私钥。</string>
+    <string name="encryption_information_dg_xsigning_trusted">交叉签名已启用
+\n密钥可信。
+\n私钥未知</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">交叉签名已启用。
+\n密钥不可信</string>
+    <string name="encryption_information_dg_xsigning_disabled">交叉签名未启用</string>
+
+    <string name="settings_hs_admin_e2e_disabled">您的服务器管理员已默认禁用私有房间和私聊消息端到端加密。</string>
+    <string name="settings_active_sessions_list">激活会话</string>
+    <string name="settings_active_sessions_show_all">显示全部会话</string>
+    <string name="settings_active_sessions_manage">管理会话</string>
+    <string name="settings_active_sessions_signout_device">登出此会话</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">加密信息不可用</string>
+
+    <string name="settings_active_sessions_verified_device_desc">此会话对安全消息可信因为您已验证它：</string>
+    <string name="settings_active_sessions_unverified_device_desc">验证此会话以将其标记为可信，并授予其访问加密消息的权限。如果您未登录此会话，则您的帐户可能已被盗：</string>
+
+    <plurals name="settings_active_sessions_count">
+	<item quantity="other">%d 个活动会话</item>
+</plurals>
+
+    <string name="crosssigning_verify_this_session">验证此登录</string>
+    <string name="crosssigning_other_user_not_trust">其他用户可能不信任它</string>
+    <string name="complete_security">完善安全</string>
+
+    <string name="verification_open_other_to_verify">使用现有会话来验证此会话，并授予其访问加密消息的权限。</string>
+
+
+    <string name="verification_profile_verify">验证</string>
+    <string name="verification_profile_verified">已验证</string>
+    <string name="verification_profile_warning">注意</string>
+
+    <string name="room_member_profile_failed_to_get_devices">无法获取会话</string>
+    <string name="room_member_profile_sessions_section_title">会话</string>
+    <string name="trusted">可信</string>
+    <string name="not_trusted">不可信</string>
+
+    <string name="verification_profile_device_verified_because">此会话对加密消息可信，%1$s (%2$s) 已验证它：</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) 使用新会话登入：</string>
+    <string name="verification_profile_device_untrust_info">在此用户信任此会话之前，发送到该会话和从该会话发送的消息均标有警告。或者，您可以手动进行验证。</string>
+
+
+    <string name="initialize_cross_signing">初始化交叉签名</string>
+    <string name="reset_cross_signing">重置密钥</string>
+
+    <string name="a11y_qr_code_for_verification">二维码</string>
+
+    <string name="qr_code_scanned_by_other_notice">快要完成了！%s 显示相同的盾牌了吗？</string>
+    <string name="qr_code_scanned_by_other_yes">使</string>
+    <string name="qr_code_scanned_by_other_no">否</string>
+
+    <string name="no_connectivity_to_the_server_indicator">到服务器的连接已丢失</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">飞行模式已打开</string>
+
+    <string name="settings_dev_tools">开发工具</string>
+    <string name="settings_account_data">账户数据</string>
+    <plurals name="poll_info">
+	<item quantity="other">%d 票</item>
+</plurals>
+    <plurals name="poll_info_final">
+	<item quantity="other">%d 票 - 最终结果</item>
+</plurals>
+    <string name="poll_item_selected_aria">已选选项</string>
+    <string name="command_description_poll">创建简单调查</string>
+    <string name="verification_cannot_access_other_session">使用恢复短语或密钥</string>
+    <string name="verification_use_passphrase">如果您无法访问已有会话</string>
+
+    <string name="new_signin">新登入</string>
+
+    <string name="enter_secret_storage_invalid">无法在存储中找到秘密</string>
+    <string name="enter_secret_storage_passphrase">输入秘密存储密码</string>
+    <string name="enter_secret_storage_passphrase_warning">注意：</string>
+    <string name="enter_secret_storage_passphrase_warning_text">您应仅在可信设备上访问秘密存储</string>
+
+    <string name="message_action_item_redact">移除…</string>
+    <string name="share_confirm_room">您想要发送此附件到 %1$s 吗？</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="other">发送原始尺寸图片</item>
+</plurals>
+
+    <string name="delete_event_dialog_title">确认移除</string>
+    <string name="delete_event_dialog_content">您确实想要移除（删除）此事件吗？注意如果您删除房间名或话题更改，可以撤销更改。</string>
+    <string name="delete_event_dialog_reason_checkbox">附加理由</string>
+    <string name="delete_event_dialog_reason_hint">编辑理由</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">事件被用户删除，理由：%1$s</string>
+    <string name="login_default_session_public_name">Element Android</string>
+
+    <string name="settings_key_requests">密钥请求</string>
+
+    <string name="e2e_use_keybackup">解锁加密消息历史</string>
+
+    <string name="refresh">刷新</string>
+
+    <string name="new_session">新登录。是您吗？</string>
+    <string name="new_session_review">轻按以审核和验证</string>
+    <string name="verify_new_session_notice">使用此会话验证新的会话，授权访问加密消息。</string>
+    <string name="verify_new_session_was_not_me">这不是我</string>
+    <string name="verify_new_session_compromized">您的账户可能已被盗用</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">如果您取消，您将无法在此设备上读取加密消息，其他用户不会信任它</string>
+    <string name="verify_cancel_self_verification_from_trusted">如果您取消，您将无法在新设备上读取加密消息，其他用户不会信任它</string>
+    <string name="verify_cancel_other">如果您现在取消将不会验证 %1$s (%2$s)。在他们的用户个人档案中重新开始。</string>
+
+    <string name="verify_not_me_self_verification">以下其中一项可能有风险：
+\n
+\n- 您的密码
+\n- 您的家庭服务器
+\n- 此设备或其它设备
+\n- 设备使用的网络连接
+\n
+\n我们推荐您在设置中立即更换您的密码和恢复密钥。</string>
+
+    <string name="verify_cancelled_notice">通过设置验证您的设备。</string>
+    <string name="verification_cancelled">验证已取消</string>
+
+    <string name="recovery_passphrase">恢复密码</string>
+    <string name="message_key">消息密钥</string>
+    <string name="account_password">账户密码</string>
+
+    <string name="set_recovery_passphrase">设置一个 %s</string>
+    <string name="generate_message_key">生成消息密钥</string>
+
+    <string name="confirm_recovery_passphrase">确认 %s</string>
+
+    <string name="enter_account_password">输入您的 %s 以继续。</string>
+
+    <string name="bootstrap_info_confirm_text">再次输入您的 %s 确认。</string>
+    <string name="bootstrap_dont_reuse_pwd">不要使用您的账户密码。</string>
+
+    <string name="bootstrap_info_text_2">输入只有你知道的安全短语，用于保护服务器上的秘密。</string>
+
+    <string name="bootstrap_loading_text">这可能会花费数秒，请耐心等待。</string>
+    <string name="bootstrap_loading_title">设置恢复。</string>
+    <string name="your_recovery_key">您的恢复密钥</string>
+    <string name="bootstrap_finish_title">完成了！</string>
+    <string name="keep_it_safe">保持安全</string>
+    <string name="finish">完成</string>
+
+    <string name="bootstrap_save_key_description">使用此 %1$s 作为安全网以防您忘记您的 %2$s。</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">发布创建的身份密钥</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">从密码生成安全密钥</string>
+    <string name="bootstrap_crosssigning_progress_default_key">正在定义 SSSS 默认密钥</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">正在同步主密钥</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">正在同步用户密钥</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">正在同步自签名密钥</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">正在设置密钥备份</string>
+
+
+    <string name="bootstrap_cross_signing_success">您的 %2$s 和 %1$s 已设置。
+\n
+\n请安全地保管它。如果您丢失了全部活动会话您将需要使用它们解锁加密消息和安全信息。</string>
+
+    <string name="bootstrap_crosssigning_print_it">将它打印出来并存放在安全的地方</string>
     </resources>
