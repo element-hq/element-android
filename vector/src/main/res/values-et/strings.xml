@@ -127,7 +127,7 @@
     <string name="home_filter_placeholder_groups">Filtreeri kogukondasid</string>
 
     <string name="invitations_header">Kutsed</string>
-    <string name="low_priority_header">Madal prioriteet</string>
+    <string name="low_priority_header">Vähetähtis</string>
     <string name="system_alerts_header">Süsteemi hoiatused</string>
 
     <string name="direct_chats_header">Vestlused</string>
@@ -696,4 +696,226 @@
     <string name="settings_active_sessions_verified_device_desc">Kuna sina oled selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
     <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. Element toetab aga vaid API versiooni 2.</string>
     <string name="identity_server_error_outdated_home_server">See tegevus ei ole võimalik. Koduserveri versioon on liiga vana.</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 jututuba</item>
+	<item quantity="other">%d jututuba</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">Otsingusõnaga %2$s leidsin %1$s jututoa</item>
+	<item quantity="other">Otsingusõnaga %2$s leidsin %1$s jututuba</item>
+</plurals>
+    <string name="directory_searching_title">Otsin kataaloogist…</string>
+
+    <string name="room_settings_all_messages_noisy">Kõik sõnumid (lärmakas)</string>
+    <string name="room_settings_all_messages">Kõik sõnumid</string>
+    <string name="room_settings_mention_only">Ainult mainimised</string>
+    <string name="room_settings_mute">Summuta</string>
+    <string name="room_settings_favourite">Lemmik</string>
+    <string name="room_settings_de_prioritize">Vähetähtis</string>
+    <string name="room_settings_leave_conversation">Lahku vestlusest</string>
+    <string name="room_settings_forget">Unusta</string>
+    <string name="room_settings_add_homescreen_shortcut">Lisa otsetee avalehele</string>
+
+    <string name="room_sliding_menu_messages">Sõnumid</string>
+    <string name="room_sliding_menu_settings">Seadistused</string>
+    <string name="room_sliding_menu_version">Versioon</string>
+    <string name="room_sliding_menu_version_x">Versioon %s</string>
+    <string name="room_sliding_menu_term_and_conditions">Kasutustingimused</string>
+    <string name="room_sliding_menu_third_party_notices">Kolmandate osapoolte litsentsid</string>
+    <string name="room_sliding_menu_copyright">Autoriõigused</string>
+    <string name="room_sliding_menu_privacy_policy">Privaatsuspoliitika</string>
+
+    <string name="settings_profile_picture">Profiilipilt</string>
+    <string name="settings_display_name">Kuvatav nimi</string>
+    <string name="settings_email_address">E-posti aadress</string>
+    <string name="settings_add_email_address">Lisa e-posti aadress</string>
+    <string name="settings_phone_number">Telefon</string>
+    <string name="settings_add_phone_number">Lisa telefoninumber</string>
+    <string name="settings_app_info_link_title">Rakenduse teave</string>
+    <string name="settings_app_info_link_summary">Näita rakenduse teavet süsteemi seadistustes.</string>
+    <string name="settings_add_3pid_confirm_password_title">Kinnitage oma salasõna</string>
+    <string name="settings_add_3pid_flow_not_supported">Seda tegevust ei saa teha Element\'i nutirakendusest</string>
+    <string name="settings_add_3pid_authentication_needed">Autentimine on nõutav</string>
+
+
+    <string name="settings_notification_advanced">Teavituste lisaseadistused</string>
+    <string name="settings_notification_by_event">Teavituse olulisus sündmuse alusel</string>
+
+    <string name="settings_notification_privacy">Teavituste privaatsus</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Süsteemiseadistused.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">Kasutajakonto seadistused.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Sinu kontol on teavitused kasutusel.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Sinu kontol ei ole teavitusi kasutusel.
+\nSeda saad muuta konto seadistuses.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Võta kasutusele</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Sessiooni seadistused.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Selles sessioonis on teavitused kasutusel.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Selles sessioonis ei ole teavitusi kasutusel.
+\nSeda saad muuta Element\'i seadistuses.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Võta kasutusele</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Kohandatud seadistused.</string>
+    <string name="settings_12_24_timestamps">Näita ajatempleid 12-tunnises vormingus</string>
+    <string name="settings_show_read_receipts">Näita lugemisteatiseid</string>
+    <string name="settings_phone_number_label">Telefoninumber</string>
+    <string name="settings_phone_number_error">Valitud maa jaoks on see vale telefoninumber</string>
+    <string name="settings_phone_number_verification">Telefoninumbri kontrollimine</string>
+    <string name="settings_phone_number_verification_instruction">Me oleme SMS\'iga saatnud aktiveerimiskoodi. Palun sisesta see kood siia.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Sisesta SMS\'iga saadetud aktiveerimiskood</string>
+    <string name="settings_phone_number_verification_error">Viga sinu telefoninumbri kontrollimisel</string>
+    <string name="settings_phone_number_code">Kood</string>
+    <string name="account_phone_number_error">Sinu telefoninumbri kontrollimisel tekkis viga.</string>
+    <string name="account_additional_info">Lisateave: %s</string>
+
+    <string name="settings_media">Meedia</string>
+    <string name="settings_default_compression">Vaikimisi pakkimine</string>
+    <string name="compression_opt_list_choose">Vali</string>
+    <string name="settings_default_media_source">Vaikimisi meediaallikas</string>
+    <string name="media_source_choose">Vali</string>
+    <string name="settings_play_shutter_sound">Tee katiku klõpsu</string>
+
+    <string name="settings_flair">Kogukonna rinnasilt</string>
+    <string name="settings_without_flair">Sa ei ole hetkel ainsamagi kogukonna liige.</string>
+
+    <string name="media_saving_period_3_days">3 päeva</string>
+    <string name="media_saving_period_1_week">1 nädal</string>
+    <string name="media_saving_period_1_month">1 kuu</string>
+    <string name="media_saving_period_forever">Igavesti</string>
+
+    <string name="room_settings_room_photo">Jututoa foto</string>
+    <string name="room_settings_room_name">Jututoa nimi</string>
+    <string name="room_settings_topic">Jututoa teema</string>
+    <string name="room_settings_room_tag">Jututoa silt</string>
+    <string name="room_settings_tag_pref_dialog_title">Sildistatud kui:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Lemmik</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Vähetähtis</string>
+    <string name="room_settings_tag_pref_entry_none">Ei midagi</string>
+
+    <string name="room_settings_category_access_visibility_title">Ligipääs ja nähtavus</string>
+    <string name="room_settings_directory_visibility">Näita seda jututuba jututubade kataloogis</string>
+    <string name="room_settings_room_notifications_title">Teavitused</string>
+    <string name="room_settings_room_access_rules_pref_title">Ligipääs jututuppa</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Jututoa ajaloo loetavus</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Kes võivad lugeda ajalugu\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Kes pääsevad ligi siia jututuppa\?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Kõik kasutajad</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Ainult liikmetele (alates selle seadistuse kasutuselevõtmisest)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Ainult liikmetele (alates nende kutsumise ajast)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Ainult liikmetele (alates liitumisest)</string>
+
+    <string name="room_settings_room_access_warning">Sellele jututoale viitamiseks peab tal olema aadress.</string>
+    <string name="room_settings_room_access_entry_only_invited">Vaid kutsutud kasutajad</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Kõik, kes teavad jututoa viidet, välja arvatud külalised</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Kõik, kes teavad jututoa viidet, kaasa arvatud külalised</string>
+
+    <string name="room_settings_banned_users_title">Suhtluskeelu saanud kasutajad</string>
+    <plurals name="room_settings_banned_users_count">
+	<item quantity="one">%d suhtluskeelu saanud kasutaja</item>
+	<item quantity="other">%d suhtluskeelu saanud kasutajat</item>
+</plurals>
+
+    <string name="room_settings_category_advanced_title">Lisaseadistused</string>
+    <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
+    <string name="room_settings_addresses_pref_title">Aadressid</string>
+    <string name="room_settings_labs_pref_title">Katsed</string>
+    <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
+    <string name="room_settings_labs_end_to_end">Läbiv krüptimine</string>
+    <string name="room_settings_labs_end_to_end_is_active">Läbiv krüptimine on kasutusel</string>
+    <string name="room_settings_labs_end_to_end_warnings">Läbiva krüptimise kasutuselevõtuks pead korraks välja logima.</string>
+    <string name="failed_to_load_timeline_position">%s üritas laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida.</string>
+
+    <string name="encryption_information_title">Läbiva krüptimise teave</string>
+
+    <string name="encryption_information_device_info">Sündmuse teave</string>
+    <string name="encryption_information_user_id">Kasutajatunnus</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 identiteedi võti</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Väidetav Ed25519 allkirja sõrmejälje võti</string>
+    <string name="encryption_information_algorithm">Algoritm</string>
+    <string name="encryption_information_session_id">Sessiooni tunnus</string>
+    <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
+
+    <string name="encryption_information_sender_device_information">Saatja sessiooni teave</string>
+    <string name="encryption_information_device_name">Avalik nimi</string>
+    <string name="encryption_information_device_name_with_warning">Avalik nimi (nähtav neile, kellega sa suhtled)</string>
+    <string name="device_name_warning">Sessiooni avalik nimi on nähtav neile, kellega sa suhtled</string>
+    <string name="encryption_information_name">Avalik nimi</string>
+    <string name="encryption_information_device_id">Seadme tunnus</string>
+    <string name="encryption_information_device_key">Sessiooni võti</string>
+    <string name="encryption_information_verification">Verifitseerimine</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 sõrmejälg</string>
+
+    <string name="encryption_export_e2e_room_keys">Ekspordi jututubade läbiva krüptimise võtmed</string>
+    <string name="encryption_export_room_keys">Ekspordi jututoa võtmed</string>
+    <string name="encryption_export_room_keys_summary">Ekspordi võtmed kohalikku faili</string>
+    <string name="encryption_export_export">Ekspordi</string>
+    <string name="room_join_rules_invite_by_you">Sina määrasid, et jututuppa pääseb vaid kutsega.</string>
+    <string name="timeline_unread_messages">Lugemata sõnumid</string>
+
+    <string name="login_splash_text2">Krüptimise abil hoiad vestlused privaatsena</string>
+    <string name="login_splash_text3">Laienda ja kohanda oma kasutuskogemust</string>
+    <string name="login_splash_submit">Alusta</string>
+
+    <string name="login_server_title">Vali server</string>
+    <string name="login_server_text">Nii nagu e-posti puhul, siis kasutajakonto asub ühes serveris, kuid saab suhelda kasutajatega üle ilma</string>
+    <string name="login_server_matrix_org_text">Liitu tasuta miljonite teistega suurimas tasuta Matrix\'i serveris</string>
+    <string name="login_server_modular_text">Tasuline Matrix\'i majutusteenus organisatsioonidele</string>
+    <string name="login_server_modular_learn_more">Lisateave</string>
+    <string name="login_server_other_title">Muud serverid</string>
+    <string name="login_server_other_text">Kohandatud seadistused</string>
+
+    <string name="login_continue">Jätka</string>
+    <string name="login_connect_to">Ühenda koduserveriga %1$s</string>
+    <string name="login_connect_to_modular">Ühenda teenusepakkujaga Element Matrix Services</string>
+    <string name="login_connect_to_a_custom_server">Ühenda kohandatud koduserveriga</string>
+    <string name="login_signin_to">Logi sisse koduserverisse %1$s</string>
+    <string name="login_signup">Registreeru</string>
+    <string name="login_signin">Logi sisse</string>
+    <string name="login_signin_sso">Jätka kasutades SSO\'d ehk ühekordset autentimist</string>
+
+    <string name="login_server_url_form_modular_hint">Element Matrix Services teenuse aadress</string>
+    <string name="login_server_url_form_other_hint">Aadress</string>
+    <string name="login_server_url_form_modular_text">Tasuline Matrix\'i majutusteenus organisatsioonidele</string>
+    <string name="login_server_url_form_modular_notice">Sisesta Modular Element teenuse või muu serveri aadress, mida sa soovid kasutada</string>
+    <string name="login_server_url_form_other_notice">Sisesta serveri või Element\'i aadress, mida sa soovid kasutada</string>
+    <string name="login_server_url_form_common_notice">Sisesta serveri aadress, mida sa soovid kasutada</string>
+
+    <string name="login_sso_error_message">Lehe laadimisel tekkis viga %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">See rakendus ei saa sisse logida antud koduserverisse. See koduserver toetab järgmisi sisselogimise tüüp(e): %1$s.
+\n
+\nKas sa soovid sisse logida kasutades veebibrauseri põhist klienti\?</string>
+    <string name="login_registration_disabled">Vabandust, aga siia serverisse ei saa luua uusi kasutajakontosid.</string>
+    <string name="login_registration_not_supported">See rakendus ei saa antud koduserveris uut kasutajakontot.
+\n
+\nKas sa soovid registreerida kasutades veebibrauseri põhist klienti\?</string>
+
+    <string name="login_login_with_email_error">See e-posti aadress ei ole seotud ühegi kasutajakontoga.</string>
+
+    <string name="login_reset_password_on">Loo uus salasõna koduserveris %1$s</string>
+    <string name="login_reset_password_notice">Kontrollimaks, et just sina sina ise sisestasid uue salasõna, siis saadame sulle kinnituskirja.</string>
+    <string name="login_reset_password_submit">Järgmine</string>
+    <string name="login_reset_password_email_hint">E-posti aadress</string>
+    <string name="login_reset_password_password_hint">Uus salasõna</string>
+
+    <string name="login_reset_password_warning_title">Hoiatus!</string>
+    <string name="login_reset_password_warning_content">Salasõna muutmine tühistab kõik läbiva krüptimise võtmed sinu kõikides sessioonides ning seega muutub kogu sinu vestluste ajalugu loetamatuks. Palun kindlasti kas sea üles võtmete varundamine või ekspordi mõnest muust sessioonist jututubade võtmed enne senise salasõna tühistamist.</string>
+    <string name="login_reset_password_warning_submit">Jätka</string>
+
+    <string name="login_reset_password_error_not_found">See e-posti aadress ei ole seotud ühegi kasutajakontoga</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Vaata oma saabuvate e-kirjade postkasti</string>
+    <string name="login_reset_password_mail_confirmation_notice">Verifitseerimise jaoks saatsime e-kirja aadressile %1$s.</string>
+    <string name="soft_logout_signin_submit">Logi sisse</string>
+    <string name="soft_logout_signin_password_hint">Salasõna</string>
+    <string name="soft_logout_clear_data_title">Kustuta privaatsed andmed</string>
+    <string name="soft_logout_clear_data_notice">Hoiatus: Sinu privaatsed andmed (sealhulgas krüptimisvõtmed) on jätkuvalt salvestatud selles seadmes.
+\n
+\nEemalda nad, kui oled lõpetanud selle seadme kasutamise või soovid sisse logida muu kasutajakontoga.</string>
+    <string name="soft_logout_clear_data_submit">Eemalda kõik andmed</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Eemalda andmed</string>
+    <string name="soft_logout_clear_data_dialog_content">Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?
+\nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.</string>
     </resources>
