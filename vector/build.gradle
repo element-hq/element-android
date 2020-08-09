@@ -71,7 +71,7 @@ static def gitBranchName() {
 
 // For Google Play build, build on any other branch than master will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    if (gitBranchName() == "master") {
+    if (gitBranchName() == "master" || true) {
         return ""
     } else {
         return "-dev"
