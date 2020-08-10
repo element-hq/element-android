@@ -88,7 +88,8 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.fileImageWrapper.setOnLongClickListener(attributes.itemLongClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
 
-        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState == SendState.SENDING || attributes.informationData.sendState == SendState.ENCRYPTING
+        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState == SendState.SENDING
+                || attributes.informationData.sendState == SendState.ENCRYPTING
     }
 
     override fun unbind(holder: Holder) {
