@@ -68,6 +68,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     override fun unbind(holder: Holder) {
         GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
+        imageContentRenderer.clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         holder.imageView.setOnClickListener(null)
         holder.imageView.setOnLongClickListener(null)

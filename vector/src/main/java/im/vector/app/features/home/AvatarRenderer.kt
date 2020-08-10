@@ -56,6 +56,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 DrawableImageViewTarget(imageView))
     }
 
+    fun clear(imageView: ImageView) {
+        // It can be called after recycler view is destroyed, just silently catch
+        tryThis {  GlideApp.with(imageView).clear(imageView) }
+    }
+
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
         render(imageView.context,

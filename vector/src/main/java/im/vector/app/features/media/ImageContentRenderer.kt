@@ -103,6 +103,15 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
+    fun clear(imageView: ImageView) {
+        // It can be called after recycler view is destroyed, just silently catch
+        // We'd better keep ref to requestManager, but we don't have it
+        tryThis {
+            GlideApp
+                    .with(imageView).clear(imageView)
+        }
+    }
+
     fun render(data: Data, contextView: View, target: CustomViewTarget<*, Drawable>) {
         val req = if (data.elementToDecrypt != null) {
             // Encrypted image

@@ -23,7 +23,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
@@ -113,9 +112,9 @@ class ReadReceiptsView @JvmOverloads constructor(
         }
     }
 
-    fun unbind() {
+    fun unbind(avatarRenderer: AvatarRenderer?) {
         receiptAvatars.forEach {
-            GlideApp.with(context.applicationContext).clear(it)
+            avatarRenderer?.clear(it)
         }
         isVisible = false
     }

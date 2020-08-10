@@ -82,6 +82,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     override fun unbind(holder: Holder) {
         holder.rootView.setOnClickListener(null)
         holder.rootView.setOnLongClickListener(null)
+        avatarRenderer.clear(holder.avatarImageView)
         super.unbind(holder)
     }
 
