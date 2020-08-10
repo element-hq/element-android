@@ -49,8 +49,12 @@ case "$package_add" in
     # red: 900 color reduced in value
     logo_alternative "#E53935" "#4c0b0b" "#FFCDD2"
     ;;
+"x")
+    logo_alternative "#ffffff" "#000000" "#eeeeee"
+    ;;
 esac
 
 build_gradle="$mydir/vector/build.gradle"
+src_dir="$mydir/vector/src"
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
-sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle"
+sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
