@@ -428,12 +428,12 @@
     <string name="call_error_answered_elsewhere">其他设备已接听</string>
 
     <string name="permissions_rationale_popup_title">信息</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-请在接下来弹出的窗口中授权允许访问。</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-请在接下来弹出的窗口中授权允许访问。</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\n请在接下来弹出的窗口中授权允许访问。"</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\n请在接下来弹出的窗口中授权允许访问。"</string>
     <string name="permissions_rationale_msg_camera_and_audio">为了进行视频通话，Element 需要访问您的相机和麦克风。
 
 请在接下来弹出的窗口中授权允许访问。</string>
@@ -2300,4 +2300,47 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 \n请安全地保管它。如果您丢失了全部活动会话您将需要使用它们解锁加密消息和安全信息。</string>
 
     <string name="bootstrap_crosssigning_print_it">将它打印出来并存放在安全的地方</string>
+    <string name="command_description_spoiler">发送爆雷信息</string>
+    <string name="spoiler">爆雷</string>
+    <string name="reaction_search_type_hint">输入关键字以查找表情。</string>
+
+    <string name="seen_by">已阅</string>
+
+    <string name="room_member_jump_to_read_receipt">跳至已读回执</string>
+
+    <string name="event_redacted_by_admin_reason_with_reason">事件被聊天室管理员调整，理由：%1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">密钥已是最新！</string>
+
+    <string name="bootstrap_info_text">保护与解锁已加密信息并信任%s。</string>
+    <string name="bootstrap_crosssigning_save_usb">保存到优盘或者备份盘</string>
+    <string name="bootstrap_crosssigning_save_cloud">拷贝到您个人云存储</string>
+
+    <string name="auth_flow_not_supported">您无法在移动设备上执行此操作</string>
+
+    <string name="bootstrap_skip_text">设置恢复密码让您能够保护和解锁加密信息并信任设备。
+\n
+\n如果您不希望设置文本密码，那么生成密钥亦可。</string>
+    <string name="bootstrap_skip_text_no_gen_key">设置恢复密码让您能够保护和解锁加密信息并信任设备。</string>
+    <string name="bootstrap_cancel_text">如果您现在取消，那么当您失去登录权限时也会丢失加密的信息和数据。
+\n
+\n您也可以通过设置菜单来建立保护备份以及管理您的密钥。</string>
+
+    <string name="encryption_enabled">加密开启</string>
+    <string name="encryption_enabled_tile_description">本聊天室信息已经端对端加密。验证成员时，请查看其个人档案以了解更多信息。</string>
+    <string name="encryption_not_enabled">加密未开启</string>
+    <string name="encryption_unknown_algorithm_tile_description">不支持本聊天室使用的加密方式</string>
+
+    <string name="room_created_summary_item">%s 创建并配置了聊天室。</string>
+    <string name="room_created_summary_item_by_you">您创建并配置了聊天室。</string>
+
+    <string name="qr_code_scanned_self_verif_notice">接近完成！另外的设备是否正显示相同的盾牌图标？</string>
+    <string name="qr_code_scanned_verif_waiting_notice">接近完成！等候确认……</string>
+    <string name="qr_code_scanned_verif_waiting">等候%s……</string>
+
+    <string name="error_failed_to_import_keys">导入密钥失败</string>
+
+    <string name="settings_notification_configuration">通知配置</string>
+    <string name="settings_messages_in_e2e_one_to_one">一对一聊天的加密信息</string>
+    <string name="settings_messages_in_e2e_group_chat">群聊的加密信息</string>
     </resources>
