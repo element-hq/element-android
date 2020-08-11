@@ -18,11 +18,12 @@ package im.vector.app.features.call.telecom
 
 import android.content.Context
 import android.telephony.TelephonyManager
+import androidx.core.content.getSystemService
 
 object TelecomUtils {
 
     fun isLineBusy(context: Context): Boolean {
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+        val telephonyManager = context.getSystemService<TelephonyManager>()
                 ?: return false
         return telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE
     }

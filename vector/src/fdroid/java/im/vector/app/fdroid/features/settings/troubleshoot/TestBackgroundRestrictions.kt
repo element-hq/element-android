@@ -15,9 +15,9 @@
  */
 package im.vector.app.fdroid.features.settings.troubleshoot
 
-import android.content.Context
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import androidx.core.net.ConnectivityManagerCompat
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -29,7 +29,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
     : TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 
     override fun perform() {
-        (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).apply {
+        context.getSystemService<ConnectivityManager>()!!.apply {
             // Checks if the device is on a metered network
             if (isActiveNetworkMetered) {
                 // Checks user’s Data Saver settings.

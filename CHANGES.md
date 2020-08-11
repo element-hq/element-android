@@ -20,6 +20,7 @@ Build 🧱:
  -
 
 Other changes:
+ - Use `Context#getSystemService` extension function provided by `core-ktx` (#1702)
  - Hide Flair settings, this is not implemented yet.
  - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
  - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`

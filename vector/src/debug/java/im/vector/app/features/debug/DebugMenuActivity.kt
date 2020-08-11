@@ -19,11 +19,11 @@ package im.vector.app.features.debug
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.content.getSystemService
 import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -83,7 +83,7 @@ class DebugMenuActivity : VectorBaseActivity() {
 
     @OnClick(R.id.debug_test_notification)
     fun testNotification() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = getSystemService<NotificationManager>()!!
 
         // Create channel first
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -95,7 +95,7 @@ class DebugMenuActivity : VectorBaseActivity() {
                     )
 
             channel.description = "Channel description"
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
 
             val channel2 =
                     NotificationChannel(
@@ -105,7 +105,7 @@ class DebugMenuActivity : VectorBaseActivity() {
                     )
 
             channel2.description = "Channel description 2"
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel2)
+            notificationManager.createNotificationChannel(channel2)
         }
 
         val builder = NotificationCompat.Builder(this, "CHAN")

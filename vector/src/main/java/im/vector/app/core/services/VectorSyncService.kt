@@ -21,6 +21,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.core.content.getSystemService
 import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.notifications.NotificationUtils
@@ -64,7 +65,7 @@ class VectorSyncService : SyncService() {
     }
 
     private fun removeForegroundNotification() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = getSystemService<NotificationManager>()!!
         notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
@@ -75,7 +76,7 @@ class VectorSyncService : SyncService() {
             PendingIntent.getService(this, 0, newIntent(this, sessionId), 0)
         }
         val firstMillis = System.currentTimeMillis() + delay
-        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmMgr = getSystemService<AlarmManager>()!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
         } else {

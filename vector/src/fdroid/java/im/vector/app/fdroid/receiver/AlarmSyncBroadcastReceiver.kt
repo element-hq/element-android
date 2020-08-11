@@ -26,6 +26,7 @@ import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.services.VectorSyncService
+import androidx.core.content.getSystemService
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import timber.log.Timber
 
@@ -42,7 +43,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         }
 
         // Acquire a lock to give enough time for the sync :/
-        (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+        context.getSystemService<PowerManager>()!!.run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {
                 acquire((10_000).toLong())
             }
@@ -74,7 +75,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val firstMillis = System.currentTimeMillis() + delay
-            val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmMgr = context.getSystemService<AlarmManager>()!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pIntent)
             } else {
@@ -86,7 +87,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             Timber.v("Cancel alarm")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmMgr = context.getSystemService<AlarmManager>()!!
             alarmMgr.cancel(pIntent)
         }
     }
