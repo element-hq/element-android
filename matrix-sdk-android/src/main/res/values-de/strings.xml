@@ -301,4 +301,6 @@
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
 
-</resources>
+<string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
+    <string name="notice_call_candidates_by_you">Du hast Daten geschickt, um eine Anruf zu starten.</string>
+    </resources>
