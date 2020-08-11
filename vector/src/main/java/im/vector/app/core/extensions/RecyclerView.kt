@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
 
 /**
  * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller
@@ -46,7 +45,7 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
     if (showDivider) {
         addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-                    ContextCompat.getDrawable(context, ThemeUtils.getResourceId(context, R.drawable.divider_horizontal_light))?.let {
+                    ContextCompat.getDrawable(context, R.drawable.divider_horizontal)?.let {
                         setDrawable(it)
                     }
                 }

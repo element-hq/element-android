@@ -5,5 +5,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="@color/riotx_unread_room_badge_black" />
+    <solid android:color="?riotx_unread_room_badge" />
 </shape>

@@ -115,7 +115,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?vctr_line_divider"
+        android:background="@drawable/line_divider"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </merge>

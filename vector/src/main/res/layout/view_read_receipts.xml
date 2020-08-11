@@ -10,7 +10,7 @@
         android:id="@+id/receiptMore"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:background="?vctr_pill_receipt"
+        android:background="@drawable/pill_receipt"
         android:gravity="center"
         android:importantForAccessibility="no"
         android:paddingStart="4dp"

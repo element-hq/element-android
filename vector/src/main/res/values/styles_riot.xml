@@ -15,11 +15,6 @@
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
-    <style name="VectorToolbarStyle.Group">
-        <item name="android:background">@color/tab_groups</item>
-        <item name="background">@color/tab_groups</item>
-    </style>
-
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
@@ -270,24 +265,6 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <!--style name="Floating_Action_Button">
-        <item name="fab_labelsPosition">left</item>
-    </style-->
-
-    <style name="Floating_Actions_Menu">
-        <item name="android:background">@drawable/vector_background_fab_label</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-
-    <style name="Floating_Actions_Menu.Light">
-        <item name="android:background">@drawable/vector_background_fab_label_light</item>
-    </style>
-
-    <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
-        <item name="background">@drawable/vector_tabbar_background_group_light</item>
-    </style>
-
     <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
     <style name="VectorLinearLayout">
         <item name="android:gravity">end</item>
@@ -340,8 +317,7 @@
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?riotx_fab_label_color</item>
-        <!-- Note bg will be updated in the code -->
-        <item name="android:background">@drawable/vector_label_background_light</item>
+        <item name="android:background">@drawable/vector_label_background</item>
     </style>
 
     <style name="BottomSheetItemTextMain">
@@ -393,6 +369,11 @@
         <item name="android:padding">8dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?vctr_message_text_color</item>
+    </style>
+
+    <style name="Vector.TabView" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background</item>
+        <item name="background">@drawable/vector_tabbar_background</item>
     </style>
 
 </resources>
