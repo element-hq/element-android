@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve Element
 title: ''
 labels: ''
 assignees: ''
@@ -26,7 +26,9 @@ If applicable, add screenshots to help explain your problem.
 **Smartphone (please complete the following information):**
  - Device: [e.g. Samsung S6]
  - OS: [e.g. Android 6.0]
- - App version and store [e.g. 1.0.0 - F-Droid]
 
 **Additional context**
+ - App version and store [e.g. 1.0.0 - F-Droid]
+ - Homeserver: [e.g. matrix.org]
+
 Add any other context about the problem here.
