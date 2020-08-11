@@ -612,7 +612,7 @@
     <string name="encryption_information_device_name">Публичное имя</string>
     <string name="encryption_information_name">Публичное имя</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Ключ сеанса</string>
+    <string name="encryption_information_device_key">Ключ сессии</string>
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
 
@@ -1260,7 +1260,7 @@
     <string name="keys_backup_settings_delete_backup_error">Не удалось удалить резервную копию (%s)</string>
 
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этом сеансе, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
+    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этой сессии, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">"Резервная копия имеет  действительную подпись из неподтвержденной сессии %s"</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительно подпись из подтверждённой сессии %s.</string>
@@ -1274,7 +1274,7 @@
     <string name="keys_backup_settings_delete_backup_button">Удалить резервную копию</string>
 
     <string name="keys_backup_settings_restore_backup_button">Восстановить из резервной копии</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">Сеанс шифрования не активирован</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Сессионное шифрование не активировано</string>
 
 
     <string name="keys_backup_recovery_code_empty_error_message">Пожалуйста, введите ключ восстановления</string>
@@ -1846,7 +1846,7 @@
     <string name="login_reset_password_password_hint">Новый пароль</string>
 
     <string name="login_reset_password_warning_title">Внимание!</string>
-    <string name="login_reset_password_warning_content">Смена пароля приведёт к сбросу всех сквозных ключей шифрования во всех ваших сеансах, что сделает зашифрованную историю разговоров нечитаемой. Настройте резервное копирование ключей или экспортируйте ключи от комнаты из другого сеанса, прежде чем сбрасывать пароль.</string>
+    <string name="login_reset_password_warning_content">Смена пароля приведёт к сбросу всех сквозных ключей шифрования во всех ваших сессиях, что сделает зашифрованную историю разговоров нечитаемой. Настройте резервное копирование ключей или экспортируйте ключи от комнаты из другой сессии, прежде чем сбрасывать пароль.</string>
     <string name="login_reset_password_warning_submit">Продолжить</string>
 
     <string name="login_reset_password_error_not_found">Данный email не связан ни с одним аккаунтом</string>
@@ -1856,7 +1856,7 @@
     <string name="login_reset_password_mail_confirmation_notice_2">Нажмите на ссылку, чтобы подтвердить свой новый пароль. Как только вы перейдете по ссылке, которую он содержит, нажмите ниже.</string>
     <string name="login_reset_password_success_title">Успешно!</string>
     <string name="login_reset_password_success_notice">Ваш пароль был сброшен.</string>
-    <string name="login_reset_password_success_notice_2">Вы вышли из всех сеансов и больше не будете получать push-уведомления. Чтобы возобновить уведомления, войдите снова на каждом устройстве.</string>
+    <string name="login_reset_password_success_notice_2">Вы вышли из всех сессий и больше не будете получать push-уведомления. Чтобы возобновить уведомления, войдите снова на каждом устройстве.</string>
     <string name="login_reset_password_success_submit">Назад, чтобы войти в систему</string>
 
     <string name="login_reset_password_cancel_confirmation_title">Предупреждение</string>
@@ -1947,13 +1947,13 @@
     <string name="permalink_malformed">Ваша ссылка на matrix.to неверна</string>
     <string name="bug_report_error_too_short">Описание слишком короткое</string>
 
-    <string name="settings_show_devices_list">Посмотреть все мои сеансы</string>
+    <string name="settings_show_devices_list">Посмотреть все мои сессии</string>
     <string name="settings_advanced_settings">Дополнительные настройки</string>
     <string name="settings_developer_mode">Режим разработчика</string>
     <string name="settings_developer_mode_summary">Режим разработчика активирует скрытые функции, а также может сделать приложение менее стабильным. Только для разработчиков!</string>
     <string name="settings">Настройки</string>
-    <string name="devices_current_device">Текущий сеанс</string>
-    <string name="devices_other_devices">Другие сеансы</string>
+    <string name="devices_current_device">Текущая сессия</string>
+    <string name="devices_other_devices">Другие сессии</string>
 
     <string name="create_room_encryption_title">Включено шифрование</string>
     <string name="verification_conclusion_warning">Недоверенный вход</string>
@@ -2014,7 +2014,7 @@
     <string name="security_prompt_text">Проверьте себя и других для защиты ваших бесед</string>
 
     <string name="backup_recovery_passphrase">Парольная фраза для восстановления</string>
-    <string name="crosssigning_verify_session">Подтвердите сеанс</string>
+    <string name="crosssigning_verify_session">Подтвердите вход</string>
     <string name="confirm_your_identity">Подтвердите свою личность и получите доступ к зашифрованным сообщениям, подтвердив этот вход в другой сессии.</string>
     <string name="settings_category_timeline">Лента сообщений</string>
 
@@ -2140,7 +2140,7 @@
     <string name="settings_secure_backup_reset">Сброс безопасного резервного копирования</string>
     <string name="settings_secure_backup_enter_to_setup">Настроить на этом устройстве</string>
     <string name="settings_secure_backup_section_info">Защитите себя от потери доступа к зашифрованным сообщениям и данным, создав резервные копии ключей шифрования на вашем сервере.</string>
-    <string name="reset_secure_backup_title">Создайте новый ключ безопасности или задайте новую защитную фразу для существующей резервной копии.</string>
+    <string name="reset_secure_backup_title">Создайте новый ключ безопасности или задайте новую секретную фразу для существующей резервной копии.</string>
     <string name="reset_secure_backup_warning">Это заменит ваш текущий ключ или фразу.</string>
 
     <string name="disabled_integration_dialog_title">Интеграции отключены</string>
@@ -2246,7 +2246,7 @@
     <string name="verification_request_you_accepted">Вы приняли</string>
     <string name="verification_sent">Подтверждениие отправлено</string>
     <string name="verification_request">Запрос на подтверждение</string>
-    <string name="verification_verify_device">Подтвердите этот сеанс</string>
+    <string name="verification_verify_device">Подтвердите эту сессию</string>
     <string name="verification_verify_device_manually">Подтверждение вручную</string>
 
     <string name="you">Вы</string>
@@ -2291,8 +2291,8 @@
 
     <string name="unignore">Перестать игнорировать</string>
 
-    <string name="verify_cannot_cross_sign">Этот сеанс не может поделиться этой проверкой с другими сеансами.
-\nПроверка будет сохранена локально и совместно использоваться в будущей версии приложения.</string>
+    <string name="verify_cannot_cross_sign">Эта сессия не может поделиться подтверждением с другими сессиями.
+\nПодтверждение будет сохранено локально и отправится в будущей версии приложения.</string>
 
     <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
     <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
@@ -2312,7 +2312,7 @@
     <string name="verification_emoji_notice">Сравните уникальные эмодзи, убедившись, что они появились в том же порядке.</string>
     <string name="verification_code_notice">Сравните код с тем, который отображается на экране другого пользователя.</string>
     <string name="verification_conclusion_ok_notice">Сообщения с этим пользователем полностью зашифрованы и не могут быть прочитаны третьими лицами.</string>
-    <string name="verification_conclusion_ok_self_notice">Ваш новый сеанс теперь проверен. Он имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут считать его надежным.</string>
+    <string name="verification_conclusion_ok_self_notice">Ваша новая сесия теперь подтверждена. Она имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут считать её надежной.</string>
 
     <string name="encryption_information_cross_signing_state">Кросс-подпись</string>
     <string name="encryption_information_dg_xsigning_complete">Кросс-подпись включена
@@ -2325,33 +2325,33 @@
     <string name="encryption_information_dg_xsigning_disabled">Кросс-подпись выключена</string>
 
     <string name="settings_hs_admin_e2e_disabled">Администратор вашего сервера отключил сквозное шифрование по умолчанию в приватных комнатах и диалогах.</string>
-    <string name="settings_active_sessions_list">Активные сеансы</string>
-    <string name="settings_active_sessions_show_all">Показать все сеансы</string>
-    <string name="settings_active_sessions_manage">Управление сеансами</string>
-    <string name="settings_active_sessions_signout_device">Выйти из этого сеанса</string>
+    <string name="settings_active_sessions_list">Активные сессии</string>
+    <string name="settings_active_sessions_show_all">Показать все сессии</string>
+    <string name="settings_active_sessions_manage">Управление сессиями</string>
+    <string name="settings_active_sessions_signout_device">Выйти из этой сессии</string>
 
     <string name="settings_failed_to_get_crypto_device_info">Нет доступного шифрования информации</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d сеанс активен</item>
-	<item quantity="few">%d сеансов активно</item>
-	<item quantity="many">%d сеансов активно</item>
+	<item quantity="one">%d сессия активна</item>
+	<item quantity="few">%d сессии активны</item>
+	<item quantity="many">%d сессий активно</item>
 </plurals>
 
-    <string name="crosssigning_verify_this_session">Верифицируйте этот сеанс</string>
-    <string name="verification_open_other_to_verify">Используйте существующий сеанс для проверки этого, предоставив ему доступ к зашифрованным сообщениям.</string>
+    <string name="crosssigning_verify_this_session">Подтвердите эту сессию</string>
+    <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
 
 
     <string name="settings_dev_tools">Инструменты для разработчиков</string>
     <string name="settings_account_data">Данные учётной записи</string>
-    <string name="verification_use_passphrase">Если вы не можете получить доступ к существующему сеансу</string>
+    <string name="verification_use_passphrase">Если вы не можете получить доступ к существующей сессии</string>
 
     <string name="settings_key_requests">Запросы ключей</string>
 
-    <string name="verify_new_session_notice">Используйте этот сеанс для проверки вашего нового сеанса, предоставляя ему доступ к зашифрованным сообщениям.</string>
+    <string name="verify_new_session_notice">Используйте эту сессию для подтверждения новой сессии, предоставляя ей доступ к зашифрованным сообщениям.</string>
     <string name="bootstrap_cross_signing_success">Ваши %2$s и %1$s установлены.
 \n
-\nДержите их в безопасности! Они понадобятся вам для разблокировки зашифрованных сообщений и защиты информации, если вы потеряете все свои активные сеансы.</string>
+\nДержите их в безопасности! Они понадобятся для разблокировки зашифрованных сообщений и защиты информации, если у вас не останется активных сессий.</string>
 
     <string name="bootstrap_cancel_text">Если вы отмените сейчас, вы можете потерять зашифрованные сообщения и данные, если потеряете доступ к своим логинам.
 \n
@@ -2365,13 +2365,13 @@
 
     <string name="use_other_session_content_description">Используйте последнюю версию Element на других ваших устройствах, веб-клиент Element, Element для ПК, Element для iOS, Element для Андроид или другой клиент Matrix, поддерживающий кросс-подпись</string>
     <string name="use_latest_app">Используйте последнюю версию Element на других ваших устройствах:</string>
-    <string name="verify_this_session">Проверьте доступ нового сеанса к вашей учетной записи: %1$s</string>
+    <string name="verify_this_session">Подтвердите новую сессию вашей учетной записи: %1$s</string>
 
     <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
 
     <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
-    <string name="settings_active_sessions_verified_device_desc">Этот сеанс является доверенным для безопасного обмена сообщениями, потому что вы проверили его:</string>
-    <string name="settings_active_sessions_unverified_device_desc">Проверьте этот сеанс, чтобы пометить его доверенным и предоставить ему доступ к зашифрованным сообщениям. Если вы не входили в этот сеанс, ваша учетная запись может быть скомпрометирована:</string>
+    <string name="settings_active_sessions_verified_device_desc">Эта сессия является доверенной для безопасного обмена сообщениями, потому что вы проверили её:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Подтвердите эту сессию, чтобы пометить её доверенной и предоставить ей доступ к зашифрованным сообщениям. Если вы не входили в эту сессю, ваша учетная запись может быть скомпрометирована:</string>
 
     <string name="crosssigning_other_user_not_trust">Другие пользователи могут не доверять ему</string>
     <string name="complete_security">Завершите настройку безопасности</string>
@@ -2401,7 +2401,7 @@
     <string name="command_description_poll">Создать простой опрос</string>
     <string name="new_signin">Новый вход</string>
 
-    <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этому сеансу, сообщения, отправленные в него и из него, помечаются предупреждениями. Кроме того, вы можете проверить это вручную.</string>
+    <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этой сессии, сообщения, отправленные в обе стороны, помечаются предупреждениями. Кроме того, вы можете подтвердить сессию вручную.</string>
 
 
     <string name="initialize_cross_signing">Инициализировать кросс-подпись</string>
@@ -2444,8 +2444,8 @@
     <string name="verify_new_session_was_not_me">Это был не я</string>
     <string name="verify_new_session_compromized">Ваш аккаунт может оказаться под угрозой</string>
 
-    <string name="verify_cancel_self_verification_from_untrusted">Если вы отмените, то не сможете читать зашифрованные сообщения на этом устройстве, а также другие пользователи не будут доверять ему</string>
-    <string name="verify_cancel_self_verification_from_trusted">Если вы отмените, то не сможете читать зашифрованные сообщения на своем новом устройстве, а также другие пользователи не будут доверять ему</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Если вы прервёте процедуру, то не сможете читать зашифрованные сообщения на этом устройстве, а другие пользователи не будут доверять ему</string>
+    <string name="verify_cancel_self_verification_from_trusted">Если вы прервёте процедуру, то не сможете читать зашифрованные сообщения на своем новом устройстве, а другие пользователи не будут доверять ему</string>
     <string name="verify_cancel_other">Если вы прервёте процедуру, пользователь %1$s (%2$s) не будет подтверждён. Начните заново в профиле этого пользователя.</string>
 
     <string name="verify_not_me_self_verification">Что-то из этого может быть скомпрометировано:
@@ -2467,22 +2467,22 @@
     <string name="power_level_edit_title">Задать роль</string>
     <string name="confirm_recovery_passphrase">Подтвердить %s</string>
 
-    <string name="bootstrap_info_confirm_text">Введите свой %s еще раз, чтобы подтвердить его.</string>
-    <string name="bootstrap_info_text_2">Введите защитную фразу, известную только вам, используемую для защиты ваших данных на вашем сервере.</string>
+    <string name="bootstrap_info_confirm_text">Введите свою %s еще раз для подтверждения.</string>
+    <string name="bootstrap_info_text_2">Введите секретную фразу, известную только вам, для защиты данных на вашем сервере.</string>
 
     <string name="bootstrap_loading_title">Настройка восстановления.</string>
     <string name="your_recovery_key">Ваш ключ восстановления</string>
-    <string name="bootstrap_finish_title">Вы отлично справились!</string>
+    <string name="bootstrap_finish_title">Готово!</string>
     <string name="keep_it_safe">Храните его в безопасности</string>
     <string name="finish">Завершить</string>
 
-    <string name="bootstrap_save_key_description">Используйте этот %1$s как подстраховку на случай, если вы забудете ваш %2$s.</string>
+    <string name="bootstrap_save_key_description">Используйте %1$s как подстраховку на случай, если вы забудете %2$s.</string>
 
-    <string name="bootstrap_crosssigning_progress_initializing">Публикация созданных идентификационных ключей</string>
+    <string name="bootstrap_crosssigning_progress_initializing">Публикация созданных ключей идентификации</string>
     <string name="bootstrap_crosssigning_progress_default_key">Определение ключа SSSS по умолчанию</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Синхронизация мастер-ключа</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Синхронизация ключа пользователя</string>
-    <string name="bootstrap_crosssigning_progress_save_ssk">Синхронизация личного ключа сеанса</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Синхронизация ключа самоподписи</string>
     <string name="bootstrap_crosssigning_progress_key_backup">Настройка резервного копирования ключей</string>
 
 
@@ -2519,9 +2519,9 @@
 
     <string name="bootstrap_progress_checking_backup">Проверка ключа резервного копирования</string>
     <string name="bootstrap_progress_checking_backup_with_info">Проверка ключа резервного копирования (%s)</string>
-    <string name="bootstrap_progress_compute_curve_key">Получение ключа кривой</string>
+    <string name="bootstrap_progress_compute_curve_key">Получение кривой ключа</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Генерация ключа SSSS из ключа восстановления</string>
-    <string name="bootstrap_progress_storing_in_sss">Хранение информации резервной копии ключа в SSSS</string>
+    <string name="bootstrap_progress_storing_in_sss">Сохранение резервной копии ключа в SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
 
     <string name="bootstrap_migration_use_recovery_key">используйте ваш ключ восстановления ключа резервной копии</string>
@@ -2546,18 +2546,18 @@
     <string name="failed_to_access_secure_storage">Не удалось получить доступ к защищенному хранилищу данных</string>
 
     <string name="unencrypted">Не зашифровано</string>
-    <string name="encrypted_unverified">Зашифровано неподтверждённым сеансом</string>
+    <string name="encrypted_unverified">Зашифровано неподтверждённой сессией</string>
     <string name="review_logins">Проверьте, где вы вошли</string>
-    <string name="verify_other_sessions">Подтвердите все свои сеансы, чтобы убедиться, что ваша учетная запись и сообщения в безопасности</string>
+    <string name="verify_other_sessions">Подтвердите все свои сессии, чтобы убедиться в безопасности вашей учетной записи и сообщений</string>
     <string name="cross_signing_verify_by_text">Ручная проверка с помощью текста</string>
     <string name="mark_as_verified">Пометить как надежный</string>
 
-    <string name="external_link_confirmation_title">Безопасность этой ссылки</string>
+    <string name="external_link_confirmation_title">Перепроверьте эту ссылку</string>
     <string name="external_link_confirmation_message">Ссылка %1$s перенаправит вас на другой сайт: %2$s.
 \n
 \nВы уверены, что хотите продолжить\?</string>
 
-    <string name="create_room_dm_failure">Мы не смогли создать эту беседу. Пожалуйста, проверьте пользователей, которых вы хотите пригласить, и повторите попытку.</string>
+    <string name="create_room_dm_failure">Мы не смогли создать эту беседу. Пожалуйста, проверьте пользователей, которых вы приглашаете, и попробуйте ещё раз.</string>
 
     <string name="add_members_to_room">Добавить участников</string>
     <string name="invite_users_to_room_action_invite">ПРИГЛАСИТЬ</string>
@@ -2566,9 +2566,9 @@
     <string name="invitation_sent_to_one_user">Приглашение для %1$s отправлено</string>
     <string name="invitations_sent_to_two_users">Приглашения для %1$s и %2$s отправлены</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Приглашения отправлены для %1$s и еще одному(ой)</item>
-	<item quantity="few">Приглашения отправлены для %1$s и еще %2$d</item>
-	<item quantity="many">Приглашения отправлены для %1$s и еще %2$d</item>
+	<item quantity="one">Приглашения отправлены %1$s и еще одному пользователю</item>
+	<item quantity="few">Приглашения отправлены %1$s и еще %2$d пользователям</item>
+	<item quantity="many">Приглашения отправлены %1$s и еще %2$d пользователям</item>
 </plurals>
     <string name="invite_users_to_room_failure">Мы не могли пригласить этих пользователей. Пожалуйста, проверьте пользователей, которых вы хотите пригласить, и повторите попытку.</string>
 
@@ -2582,8 +2582,8 @@
     <string name="identity_server_error_outdated_home_server">Эта операция невозможна. Домашний сервер устарел.</string>
     <string name="identity_server_error_no_identity_server_configured">Пожалуйста, настройте сначала сервер идентификации.</string>
     <string name="identity_server_error_terms_not_signed">Пожалуйста, примите сначала условия сервера идентификации в настройках.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Для вашей приватности, Element поддерживает только отправку хэшированной электронной почты и номера телефона пользователя.</string>
-    <string name="identity_server_error_binding_error">Взаимосвязь не удалась</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Для вашей приватности, Element поддерживает отправку адреса электронной почты и номера телефона только в хэшированном виде.</string>
+    <string name="identity_server_error_binding_error">Привязка не удалась.</string>
     <string name="identity_server_error_no_current_binding_error">Текущая взаимосвязь с этим идентификатором отсутствует.</string>
 
     <string name="identity_server_set_default_notice">Ваш домашний сервер (%1$s) предлагает использовать %2$s для вашего сервера идентификации</string>
@@ -2602,16 +2602,16 @@
     <string name="bottom_sheet_setup_secure_backup_submit">Настроить</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Используйте ключ безопасности</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Создайте ключ безопасности для хранения в надежном месте, например в менеджере паролей или сейфе.</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Используйте защитную фразу</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Использовать секретную фразу</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Введите секретную фразу, известную только вам, и создайте ключ для резервного копирования.</string>
 
     <string name="bottom_sheet_save_your_recovery_key_title">Сохраните свой ключ безопасности</string>
     <string name="bottom_sheet_save_your_recovery_key_content">Храните ключ безопасности в надежном месте, например в менеджере паролей или сейфе.</string>
 
-    <string name="set_a_security_phrase_title">Задайте защитную фразу</string>
-    <string name="set_a_security_phrase_notice">Введите защитную фразу, известную только вам, используемую для защиты данных на вашем сервере.</string>
-    <string name="set_a_security_phrase_hint">Защитная фраза</string>
-    <string name="set_a_security_phrase_again_notice">Для подтверждения введите вашу защитную фразу ещё раз.</string>
+    <string name="set_a_security_phrase_title">Задайте секретную фразу</string>
+    <string name="set_a_security_phrase_notice">Введите секретную фразу, известную только вам, для защиты данных на вашем сервере.</string>
+    <string name="set_a_security_phrase_hint">Секретная фраза</string>
+    <string name="set_a_security_phrase_again_notice">Для подтверждения введите вашу секретную фразу ещё раз.</string>
 
     <string name="save_your_security_key_title">Сохраните ваш ключ безопасности</string>
     <string name="save_your_security_key_notice">Храните ключ безопасности в надежном месте, например в менеджере паролей или сейфе.</string>
@@ -2621,11 +2621,11 @@
     <string name="room_settings_save_success">Вы успешно изменили настройки комнаты</string>
 
     <string name="notice_crypto_unable_to_decrypt_final">У вас нет доступа к этому сообщению</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly">Ожидание расшифровки этого сообщения может занять некоторое время</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Расшифровка этого сообщения может занять некоторое время</string>
     <string name="crypto_utd">Не удалось расшифровать</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Из-за сквозного шифрования вам, возможно, придется ждать прибытие чьего-либо сообщения, потому что ключи шифрования не были отправлены вам должным образом.</string>
     <string name="crypto_error_withheld_blacklisted">Вы не можете получить доступ к этому сообщению, потому что вы были заблокированы отправителем</string>
-    <string name="crypto_error_withheld_unverified">Вы не можете получить доступ к этому сообщению, так как отправитель не доверяет вашему сеансу</string>
+    <string name="crypto_error_withheld_unverified">Нет доступа к этому сообщению, так как отправитель не доверяет вашей сессии</string>
     <string name="crypto_error_withheld_generic">Вы не можете получить доступ к этому сообщению, потому что отправитель намеренно не отправил ключи</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Ожидание истории шифрования</string>
 
@@ -2664,6 +2664,6 @@
     <string name="auth_pin_new_pin_action">Новый PIN-код</string>
     <string name="auth_pin_reset_content">Чтобы сбросить свой PIN-код, вам нужно будет повторно войти в аккаунт и создать новый PIN-код.</string>
     <string name="settings_security_pin_code_title">Включить PIN-код</string>
-    <string name="settings_security_pin_code_summary">Если вы хотите сбросить свой PIN-код, нажмите Забыл(а) PIN-код, чтобы выйти из сеанса и сбросить его.</string>
+    <string name="settings_security_pin_code_summary">Для сброса PIN-кода нажмите Забыл(а) PIN-код, чтобы выйти из сессии и сбросить его.</string>
     <string name="auth_pin_confirm_to_disable_title">Подтвердите PIN-код, чтобы отключить PIN-код</string>
 </resources>
