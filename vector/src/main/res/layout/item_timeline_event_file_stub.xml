@@ -43,15 +43,15 @@
     <TextView
         android:id="@+id/messageFilenameView"
         android:layout_width="wrap_content"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constrainedWidth="true"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="32dp"
         android:autoLink="none"
         android:gravity="center_vertical"
         android:minHeight="@dimen/chat_avatar_size"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/messageFileImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="A filename here" />
@@ -62,9 +62,9 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintStart_toEndOf="@id/messageFilenameView"
-        app:layout_constraintTop_toTopOf="@id/messageFilenameView" />
+        app:layout_constraintTop_toTopOf="@id/messageFilenameView"
+        tools:visibility="visible" />
 
 
     <androidx.constraintlayout.widget.Barrier

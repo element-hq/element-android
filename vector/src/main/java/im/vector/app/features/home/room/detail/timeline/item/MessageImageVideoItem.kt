@@ -63,7 +63,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
 
-        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState == SendState.SENDING || attributes.informationData.sendState == SendState.ENCRYPTING
+        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState.isInProgress()
     }
 
     override fun unbind(holder: Holder) {
