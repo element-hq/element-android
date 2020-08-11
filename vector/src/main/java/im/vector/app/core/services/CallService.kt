@@ -172,7 +172,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         // turn the screen on for 3 seconds
 //            if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
 //                try {
-//                    val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+//                    val pm = getSystemService<PowerManager>()!!
 //                    val wl = pm.newWakeLock(
 //                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
 //                            CallService::class.java.simpleName)

@@ -442,7 +442,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         /*
                         TODO
                         if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
-                            val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
+                            val pm = VectorApp.getInstance().getSystemService<PowerManager>()!!
                             val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                                     NotificationDrawerManager::class.java.name)
                             wl.acquire(3000)
