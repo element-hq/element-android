@@ -18,6 +18,7 @@
     </style>
 
     <style name="AppTheme.SC.Light.v23" parent="AppTheme.SC.Light.v21">
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_light</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
