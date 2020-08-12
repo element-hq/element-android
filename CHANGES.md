@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Give user the possibility to prevent accidental call (#1869)
+ - Ensure users do not accidentally ignore other users (#1890)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
