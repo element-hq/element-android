@@ -113,7 +113,7 @@ class DevicesViewModel @AssistedInject constructor(
                             }
                 }
         )
-                .distinct()
+                .distinctUntilChanged()
                 .execute { async ->
                     copy(
                             devices = async
@@ -137,12 +137,14 @@ class DevicesViewModel @AssistedInject constructor(
 //                }
 
         session.rx().liveUserCryptoDevices(session.myUserId)
-                .distinct()
-                .throttleLast(5_000, TimeUnit.MILLISECONDS)
+                .map { it.size }
+                .distinctUntilChanged()
+                .throttleFirst(5_000, TimeUnit.MILLISECONDS)
                 .subscribe {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
 
 //        session.rx().liveUserCryptoDevices(session.myUserId)
 //                .execute {
