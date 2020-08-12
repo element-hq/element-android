@@ -16,9 +16,6 @@
 package im.vector.app.features.settings.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem
@@ -28,12 +25,14 @@ import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
-class DeviceVerificationInfoBottomSheetController @Inject constructor(private val stringProvider: StringProvider,
-                                                                      private val colorProvider: ColorProvider,
-                                                                      private val session: Session)
+class DeviceVerificationInfoBottomSheetController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider)
     : TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
