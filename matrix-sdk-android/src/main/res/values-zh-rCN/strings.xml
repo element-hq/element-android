@@ -5,8 +5,8 @@
     <string name="notice_room_invite_no_invitee">%s 的邀请</string>
     <string name="notice_room_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_room_invite_you">%1$s 邀请了您</string>
-    <string name="notice_room_join">%1$s 加入了房间</string>
-    <string name="notice_room_leave">%1$s 离开了房间</string>
+    <string name="notice_room_join">%1$s 加入了聊天室</string>
+    <string name="notice_room_leave">%1$s 离开了聊天室</string>
     <string name="notice_room_reject">%1$s 拒绝了邀请</string>
     <string name="notice_room_kick">%1$s 移除了 %2$s</string>
     <string name="notice_room_unban">%1$s 解封了 %2$s</string>
@@ -198,15 +198,15 @@
 
     <string name="key_verification_request_fallback_message">%s 正在请求验证您的密钥，但您的客户端不支援聊天中密钥验证。 您将必须使用旧版的密钥验证来验证金钥。</string>
 
-    <string name="notice_room_created">%1$s 创建了这个房间</string>
+    <string name="notice_room_created">%1$s 创建了这个聊天室</string>
 <string name="summary_you_sent_image">您发送了一张图片。</string>
     <string name="summary_you_sent_sticker">您发送了一张贴纸。</string>
 
     <string name="notice_room_invite_no_invitee_by_you">您的邀请</string>
-    <string name="notice_room_created_by_you">您创建了这个房间</string>
+    <string name="notice_room_created_by_you">您创建了这个聊天室</string>
     <string name="notice_room_invite_by_you">您邀请了 %1$s</string>
-    <string name="notice_room_join_by_you">您加入了房间</string>
-    <string name="notice_room_leave_by_you">您离开了房间</string>
+    <string name="notice_room_join_by_you">您加入了聊天室</string>
+    <string name="notice_room_leave_by_you">您离开了聊天室</string>
     <string name="notice_room_reject_by_you">您拒绝了邀请</string>
     <string name="notice_room_kick_by_you">您移除了 %1$s</string>
     <string name="notice_room_unban_by_you">您解封了 %1$s</string>
