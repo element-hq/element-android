@@ -31,9 +31,9 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationA
 import timber.log.Timber
 import javax.inject.Inject
 
-class DeviceVerificationInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                                private val colorProvider: ColorProvider,
-                                                                private val session: Session)
+class DeviceVerificationInfoBottomSheetController @Inject constructor(private val stringProvider: StringProvider,
+                                                                      private val colorProvider: ColorProvider,
+                                                                      private val session: Session)
     : TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null

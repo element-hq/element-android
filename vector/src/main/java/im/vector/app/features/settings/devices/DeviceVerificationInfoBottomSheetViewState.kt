@@ -19,8 +19,8 @@ package im.vector.app.features.settings.devices
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 
 data class DeviceVerificationInfoBottomSheetViewState(
         val cryptoDeviceInfo: Async<CryptoDeviceInfo?> = Uninitialized,
