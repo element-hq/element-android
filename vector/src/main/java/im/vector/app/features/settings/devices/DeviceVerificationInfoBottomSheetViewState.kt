@@ -27,5 +27,6 @@ data class DeviceVerificationInfoBottomSheetViewState(
         val deviceInfo: Async<DeviceInfo> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false,
-        val isMine: Boolean = false
+        val isMine: Boolean = false,
+        val hasOtherSessions: Boolean = false
 ) : MvRxState

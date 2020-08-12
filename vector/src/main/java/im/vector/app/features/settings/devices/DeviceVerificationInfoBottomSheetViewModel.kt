@@ -65,6 +65,14 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
+        session.rx().liveUserCryptoDevices(session.myUserId)
+                .map { it.size }
+                .execute {
+                    copy(
+                            hasOtherSessions = it.invoke() ?: 0 > 1
+                    )
+                }
+
         setState {
             copy(deviceInfo = Loading())
         }
