@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Give user the possibility to prevent accidental call (#1869)
+ - Display device information (name, id and key) in Cryptography setting screen (#1784)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)

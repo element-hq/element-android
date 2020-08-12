@@ -34,12 +34,6 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
-import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -50,6 +44,7 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.features.crypto.keys.KeysExporter
@@ -65,6 +60,13 @@ import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
@@ -83,6 +85,18 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
+    }
+
+    private val cryptoInfoDeviceNamePreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY")!!
+    }
+
+    private val cryptoInfoDeviceIdPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY")!!
+    }
+
+    private val cryptoInfoDeviceKeyPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY")!!
     }
 
     private val mCrossSigningStatePreference by lazy {
@@ -488,58 +502,48 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     /**
      * Build the cryptography preference section.
-     *
-     * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
-//        val userId = session.myUserId
-//        val deviceId = session.sessionParams.deviceId
 
-        // device name
-//        if (null != aMyDeviceInfo) {
-//            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
-//
-//            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-//                // TODO device can be rename only from the device list screen for the moment
-//                // displayDeviceRenameDialog(aMyDeviceInfo)
-//                true
-//            }
-//
-//            cryptoInfoDeviceNamePreference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-//                override fun onPreferenceLongClick(preference: Preference): Boolean {
-//                    activity?.let { copyToClipboard(it, aMyDeviceInfo.displayName!!) }
-//                    return true
-//                }
-//            }
-//        }
-//
-//        // crypto section: device ID
-//        if (!deviceId.isNullOrEmpty()) {
-//            cryptoInfoDeviceIdPreference.summary = deviceId
-//
-//            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
-//                activity?.let { copyToClipboard(it, deviceId) }
-//                true
-//            }
-//        }
-//
-//        // crypto section: device key (fingerprint)
-//        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
-//            val deviceInfo = session.getDeviceInfo(userId, deviceId)
-//
-//            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
-//                cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
-//
-//                cryptoInfoTextPreference.setOnPreferenceClickListener {
-//                    deviceInfo.fingerprint()?.let {
-//                        copyToClipboard(requireActivity(), it)
-//                    }
-//                    true
-//                }
-//            }
-//        }
+        val userId = session.myUserId
+        val deviceId = session.sessionParams.deviceId
+
+        val aMyDeviceInfo = devices.find { it.deviceId == deviceId }
+
+        // crypto section: device name
+        if (aMyDeviceInfo != null) {
+            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
+
+            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                copyToClipboard(requireActivity(), aMyDeviceInfo.displayName ?: "")
+                true
+            }
+        }
+
+        // crypto section: device ID
+        if (!deviceId.isNullOrEmpty()) {
+            cryptoInfoDeviceIdPreference.summary = deviceId
+
+            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
+                copyToClipboard(requireActivity(), deviceId)
+                true
+            }
+        }
+
+        // crypto section: device key (fingerprint)
+        val deviceInfo = session.cryptoService().getDeviceInfo(userId, deviceId)
+
+        val fingerprint = deviceInfo?.fingerprint()
+        if (fingerprint?.isNotEmpty() == true) {
+            cryptoInfoDeviceKeyPreference.summary = deviceInfo.getFingerprintHumanReadable()
+
+            cryptoInfoDeviceKeyPreference.setOnPreferenceClickListener {
+                copyToClipboard(requireActivity(), fingerprint)
+                true
+            }
+        }
 
         sendToUnverifiedDevicesPref.isChecked = session.cryptoService().getGlobalBlacklistUnverifiedDevices()
 

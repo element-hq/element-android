@@ -1054,7 +1054,7 @@
     <string name="encryption_information_device_name_with_warning">Public name (visible to people you communicate with)</string>
     <string name="device_name_warning">"A session's public name is visible to people you communicate with"</string>
     <string name="encryption_information_name">Public name</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Session ID</string>
     <string name="encryption_information_device_key">Session key</string>
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
