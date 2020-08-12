@@ -77,12 +77,20 @@ class LoginCaptchaFragment @Inject constructor(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
+                if (!isAdded) {
+                    return
+                }
+
                 // Show loader
                 loginCaptchaProgress.isVisible = true
             }
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
+
+                if (!isAdded) {
+                    return
+                }
 
                 // Hide loader
                 loginCaptchaProgress.isVisible = false
