@@ -362,6 +362,8 @@
 
     <!-- Call settings screen -->
     <string name="settings_call_category">Calls</string>
+    <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
     <string name="settings_call_ringtone_use_app_ringtone">Use default Element ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
