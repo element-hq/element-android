@@ -104,6 +104,14 @@
         app:layout_constraintTop_toBottomOf="@id/syncStateView"
         tools:visibility="visible" />
 
+    <im.vector.app.core.ui.views.ActiveConferenceView
+        android:id="@+id/activeConferenceView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/activeCallView"
+        tools:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -112,7 +120,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeCallView"
+        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <FrameLayout
@@ -123,15 +131,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activeCallView">
 
-        <im.vector.app.features.home.room.detail.widget.RoomWidgetsBannerView
-            android:id="@+id/roomWidgetsBannerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
+<!--        <im.vector.app.features.home.room.detail.widget.RoomWidgetsBannerView-->
+<!--            android:id="@+id/roomWidgetsBannerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:visibility="gone"-->
+<!--            tools:visibility="visible" />-->
 
         <im.vector.app.core.ui.views.JumpToReadMarkerView
             android:id="@+id/jumpToReadMarkerView"

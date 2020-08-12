@@ -57,7 +57,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
             holder.button.icon = null
         }
 
-        itemClickAction?.let { holder.view.setOnClickListener(it) }
+        itemClickAction?.let { holder.button.setOnClickListener(it) }
     }
 
     class Holder : VectorEpoxyHolder() {

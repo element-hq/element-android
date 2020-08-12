@@ -80,4 +80,5 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     object SelectStickerAttachment : RoomDetailAction()
     object OpenIntegrationManager: RoomDetailAction()
+    object ManageIntegrations: RoomDetailAction()
 }

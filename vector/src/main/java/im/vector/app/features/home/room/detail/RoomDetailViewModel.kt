@@ -269,6 +269,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
+            is RoomDetailAction.ManageIntegrations                  -> handleManageIntegrations()
         }.exhaustive
     }
 
@@ -303,6 +304,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
             }
             _viewEvents.post(viewEvent)
+        }
+    }
+
+    private fun handleManageIntegrations() = withState { state ->
+        if (state.activeRoomWidgets().isNullOrEmpty()) {
+            // Directly open integration manager screen
+            handleOpenIntegrationManager()
+        } else {
+            // Display bottomsheet with widget list
+            _viewEvents.post(RoomDetailViewEvents.OpenActiveWidgetBottomSheet)
         }
     }
 

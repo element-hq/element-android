@@ -202,6 +202,9 @@
             android:name="im.vector.app.features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
         <activity android:name="im.vector.app.features.call.VectorCallActivity" />
+        <activity
+            android:name="im.vector.app.features.call.conference.VectorJitsiActivity"
+            android:configChanges="orientation|screenSize" />
 
         <activity android:name="im.vector.app.features.terms.ReviewTermsActivity" />
         <activity android:name="im.vector.app.features.widgets.WidgetActivity" />

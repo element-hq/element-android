@@ -29,8 +29,11 @@ import android.text.Spannable
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -77,6 +80,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
@@ -110,6 +114,7 @@ import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.util.toImageRes
@@ -129,7 +134,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
-import im.vector.app.features.home.room.detail.widget.RoomWidgetsBannerView
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.html.EventHtmlRenderer
@@ -183,6 +187,7 @@ import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import timber.log.Timber
 import java.io.File
 import java.net.URL
@@ -217,7 +222,7 @@ class RoomDetailFragment @Inject constructor(
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
-        RoomWidgetsBannerView.Callback,
+//        RoomWidgetsBannerView.Callback,
         ActiveCallView.Callback {
 
     companion object {
@@ -292,7 +297,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToReadMarkerView()
         setupActiveCallView()
         setupJumpToBottomView()
-        setupWidgetsBannerView()
+        setupConfBannerView()
 
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -350,6 +355,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
                 is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
+                RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
             }.exhaustive
         }
     }
@@ -363,8 +369,16 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
-    private fun setupWidgetsBannerView() {
-        roomWidgetsBannerView.callback = this
+    private fun setupConfBannerView() {
+        activeConferenceView.callback = object : ActiveConferenceView.Callback {
+            override fun onTapJoinAudio(jitsiWidget: Widget) {
+                navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to false))
+            }
+
+            override fun onTapJoinVideo(jitsiWidget: Widget) {
+                navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to true))
+            }
+        }
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
@@ -529,9 +543,39 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.findItem(R.id.open_matrix_apps).let { menuItem ->
+            menuItem.actionView.setOnClickListener {
+                onOptionsItemSelected(menuItem)
+            }
+        }
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.forEach {
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
+        }
+        withState(roomDetailViewModel) { state ->
+            val findItem = menu.findItem(R.id.open_matrix_apps)
+            val widgetsCount = state.activeRoomWidgets.invoke()?.size
+            if (widgetsCount ?: 0 > 0) {
+                val actionView = findItem.actionView
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .setColorFilter(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = true
+                actionView.findViewById<TextView>(R.id.cart_badge).text = "$widgetsCount"
+                findItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            } else {
+                // icon should be default color no badge
+                val actionView = findItem.actionView
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.riotx_text_secondary))
+                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
+                findItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            }
         }
     }
 
@@ -549,7 +593,7 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                roomDetailViewModel.handle(RoomDetailAction.OpenIntegrationManager)
+                roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
             R.id.voice_call,
@@ -873,7 +917,19 @@ class RoomDetailFragment @Inject constructor(
         renderToolbar(summary, state.typingMessage)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            roomWidgetsBannerView.render(state.activeRoomWidgets())
+            // We only display banner for 'live' widgets
+            val activeConf = // for now only jitsi?
+                    state.activeRoomWidgets()?.firstOrNull {
+                        // for now only jitsi?
+                        it.type == WidgetType.Jitsi
+                    }
+
+            if (activeConf == null) {
+                activeConferenceView.isVisible = false
+            } else {
+                activeConferenceView.isVisible = true
+                activeConferenceView.jitsiWidget = activeConf
+            }
             jumpToBottomView.count = summary.notificationCount
             jumpToBottomView.drawBadge = summary.hasUnreadMessages
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
@@ -1662,7 +1718,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.SendMessage(formattedContact, false))
     }
 
-    override fun onViewWidgetsClicked() {
+    private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
     }

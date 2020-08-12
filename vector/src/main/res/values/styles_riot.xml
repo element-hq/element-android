@@ -331,6 +331,17 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="BottomSheetItemTextSecondary">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">?riotx_text_secondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="BottomSheetItemTime">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

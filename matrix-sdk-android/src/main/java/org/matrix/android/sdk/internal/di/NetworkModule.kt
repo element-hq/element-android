@@ -77,7 +77,11 @@ internal object NetworkModule {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
-                .addNetworkInterceptor(stethoInterceptor)
+                .apply {
+                    if (BuildConfig.DEBUG) {
+                        addNetworkInterceptor(stethoInterceptor)
+                    }
+                }
                 .addInterceptor(timeoutInterceptor)
                 .addInterceptor(userAgentInterceptor)
                 .addInterceptor(httpLoggingInterceptor)

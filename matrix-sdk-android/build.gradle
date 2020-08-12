@@ -132,8 +132,13 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.8.1"))
+    implementation 'com.squareup.okhttp3:okhttp'
+    implementation 'com.squareup.okhttp3:logging-interceptor'
+    implementation("com.squareup.okhttp3:okhttp-urlconnection")
+
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
@@ -175,7 +180,9 @@ dependencies {
 
     // Web RTC
     // TODO meant for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
-    implementation 'org.webrtc:google-webrtc:1.0.+'
+    // implementation 'org.webrtc:google-webrtc:1.0.+'
+    // WebRTC
+    implementation('com.facebook.react:react-native-webrtc:1.69.2-jitsi-2062090@aar')
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'

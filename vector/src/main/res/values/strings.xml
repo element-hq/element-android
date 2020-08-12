@@ -1210,6 +1210,8 @@
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="integration_manager_not_configured">No integration manager configured.</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
+    <string name="room_manage_integrations">Manage Integrations</string>
+    <string name="room_no_active_widgets">No active widgets</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>

@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.navigation.Navigator
@@ -74,6 +75,11 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
 
     override fun didSelectWidget(widget: Widget) = withState(roomDetailViewModel) {
         navigator.openRoomWidget(requireContext(), it.roomId, widget)
+        dismiss()
+    }
+
+    override fun didSelectManageWidgets() {
+        roomDetailViewModel.handle(RoomDetailAction.OpenIntegrationManager)
         dismiss()
     }
 

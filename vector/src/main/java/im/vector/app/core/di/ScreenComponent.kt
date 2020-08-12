@@ -27,6 +27,7 @@ import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.call.CallControlsBottomSheet
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
@@ -140,6 +141,7 @@ interface ScreenComponent {
     fun inject(activity: WidgetActivity)
     fun inject(activity: VectorCallActivity)
     fun inject(activity: VectorAttachmentViewerActivity)
+    fun inject(activity: VectorJitsiActivity)
 
     /* ==========================================================================================
      * BottomSheets

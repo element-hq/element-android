@@ -66,6 +66,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class OpenStickerPicker(val widget: Widget): RoomDetailViewEvents()
 
     object OpenIntegrationManager: RoomDetailViewEvents()
+    object OpenActiveWidgetBottomSheet: RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()
