@@ -81,7 +81,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
             copy(deviceInfo = Loading())
         }
 
-        session.rx().liveMyDeviceInfo()
+        session.rx().liveMyDevicesInfo()
                 .map { devices ->
                     devices.firstOrNull { it.deviceId == deviceId } ?: DeviceInfo(deviceId = deviceId)
                 }

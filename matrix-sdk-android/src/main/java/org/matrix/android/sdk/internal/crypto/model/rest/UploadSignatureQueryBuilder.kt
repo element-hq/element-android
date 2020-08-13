@@ -39,11 +39,8 @@ internal data class UploadSignatureQueryBuilder(
     fun build(): Map<String, Map<String, @JvmSuppressWildcards Any>> {
         val map = HashMap<String, HashMap<String, Any>>()
 
-        val usersList = (
-                deviceInfoList.map { it.userId }
-                        + signingKeyInfoList
-                        .map { it.userId }
-                ).distinct()
+        val usersList = (deviceInfoList.map { it.userId } + signingKeyInfoList.map { it.userId })
+                .distinct()
 
         usersList.forEach { userID ->
             val userMap = HashMap<String, Any>()

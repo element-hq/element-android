@@ -61,7 +61,7 @@ class ShortcutsHandler @Inject constructor(
 
         return homeRoomListStore
                 .observe()
-                .distinct()
+                .distinctUntilChanged()
                 .observeOn(Schedulers.computation())
                 .subscribe { rooms ->
                     val shortcuts = rooms

@@ -37,10 +37,10 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
 
     init {
         Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
-                session.rx().liveMyDeviceInfo(),
+                session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningInfo(session.myUserId),
-                BiFunction { myDeviceInfo, mxCrossSigningInfo ->
-                    (myDeviceInfo to mxCrossSigningInfo)
+                BiFunction { myDevicesInfo, mxCrossSigningInfo ->
+                    myDevicesInfo to mxCrossSigningInfo
                 }
         )
                 .execute { data ->
