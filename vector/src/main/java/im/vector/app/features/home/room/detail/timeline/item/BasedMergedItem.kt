@@ -23,7 +23,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() {
 

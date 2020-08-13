@@ -26,24 +26,24 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
-import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
-import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
-import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
-import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
-import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.Function4
 import io.reactivex.subjects.PublishSubject
+import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
 data class ServerBackupStatusViewState(

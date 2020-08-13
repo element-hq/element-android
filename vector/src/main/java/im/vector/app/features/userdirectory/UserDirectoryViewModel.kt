@@ -25,9 +25,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -35,6 +33,8 @@ import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
 private typealias KnowUsersFilter = String

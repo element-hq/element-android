@@ -21,7 +21,7 @@ import androidx.core.content.edit
 import com.beautycoder.pflockscreen.security.PFResult
 import com.beautycoder.pflockscreen.security.PFSecurityManager
 import com.beautycoder.pflockscreen.security.callbacks.PFPinCodeHelperCallback
-import im.vector.matrix.android.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orFalse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -21,7 +21,7 @@ import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.user.model.User
+import org.matrix.android.sdk.api.session.user.model.User
 
 data class UserDirectoryViewState(
         val excludedUserIds: Set<String>? = null,

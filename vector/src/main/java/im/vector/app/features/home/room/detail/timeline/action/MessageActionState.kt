@@ -21,7 +21,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.canReact
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

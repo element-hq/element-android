@@ -28,14 +28,14 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.identity.IdentityServiceError
-import im.vector.matrix.android.api.session.identity.IdentityServiceListener
-import im.vector.matrix.android.api.session.identity.SharedState
-import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.internal.util.awaitCallback
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
+import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
+import org.matrix.android.sdk.api.session.identity.SharedState
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.internal.util.awaitCallback
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.rx.rx
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,

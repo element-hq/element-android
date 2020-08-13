@@ -48,8 +48,8 @@ import im.vector.app.features.userdirectory.UserDirectoryFragment
 import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import kotlinx.android.synthetic.main.activity.*
 import java.net.HttpURLConnection
 import javax.inject.Inject

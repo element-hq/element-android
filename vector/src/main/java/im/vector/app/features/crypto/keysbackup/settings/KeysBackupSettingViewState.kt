@@ -19,9 +19,9 @@ package im.vector.app.features.crypto.keysbackup.settings
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 
 data class KeysBackupSettingViewState(val keysBackupVersionTrust: Async<KeysBackupVersionTrust> = Uninitialized,
                                       val keysBackupState: KeysBackupState? = null,

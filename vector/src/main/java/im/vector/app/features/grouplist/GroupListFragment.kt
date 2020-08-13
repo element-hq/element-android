@@ -31,7 +31,7 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
-import im.vector.matrix.android.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 

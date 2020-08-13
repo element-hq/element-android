@@ -16,7 +16,7 @@
 
 package im.vector.app.features.login
 
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import timber.log.Timber
 import javax.inject.Inject
 

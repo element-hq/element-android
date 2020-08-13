@@ -28,9 +28,9 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,

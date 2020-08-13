@@ -35,8 +35,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.matrix.android.api.session.crypto.verification.VerificationService
-import im.vector.matrix.android.internal.session.room.VerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.internal.session.room.VerificationState
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
 abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestItem.Holder>() {

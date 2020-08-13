@@ -79,7 +79,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
-import im.vector.matrix.android.api.failure.GlobalError
+import org.matrix.android.sdk.api.failure.GlobalError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

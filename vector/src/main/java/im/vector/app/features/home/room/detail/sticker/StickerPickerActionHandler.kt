@@ -17,8 +17,8 @@
 package im.vector.app.features.home.room.detail.sticker
 
 import im.vector.app.features.home.room.detail.RoomDetailViewEvents
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -45,7 +45,7 @@ import im.vector.app.features.userdirectory.UserDirectoryFragment
 import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
-import im.vector.matrix.android.api.failure.Failure
+import org.matrix.android.sdk.api.failure.Failure
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import java.net.HttpURLConnection

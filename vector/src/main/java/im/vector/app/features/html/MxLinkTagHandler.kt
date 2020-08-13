@@ -21,10 +21,10 @@ import android.text.style.URLSpan
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.permalinks.PermalinkData
-import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.permalinks.PermalinkData
+import org.matrix.android.sdk.api.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.html.HtmlTag

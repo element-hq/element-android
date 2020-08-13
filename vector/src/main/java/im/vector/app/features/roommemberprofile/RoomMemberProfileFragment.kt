@@ -44,8 +44,8 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import im.vector.matrix.android.api.session.room.powerlevels.Role
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*

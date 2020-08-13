@@ -27,7 +27,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
-import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 

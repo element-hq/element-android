@@ -18,10 +18,10 @@ package im.vector.app.core.error
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.api.failure.isInvalidPassword
-import im.vector.matrix.android.api.session.identity.IdentityServiceError
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException

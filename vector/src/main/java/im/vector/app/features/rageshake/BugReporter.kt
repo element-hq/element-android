@@ -38,7 +38,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-import im.vector.matrix.android.api.Matrix
+import org.matrix.android.sdk.api.Matrix
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient

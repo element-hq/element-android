@@ -21,7 +21,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector

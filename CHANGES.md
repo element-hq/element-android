@@ -16,7 +16,8 @@ Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
 
 SDK API changes ⚠️:
- -
+ - Rename package `im.vector.matrix.android` to `org.matrix.android.sdk`
+ - Rename package `im.vector.matrix.rx` to `org.matrix.android.sdk.rx`
 
 Build 🧱:
  -

@@ -20,8 +20,8 @@ import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith

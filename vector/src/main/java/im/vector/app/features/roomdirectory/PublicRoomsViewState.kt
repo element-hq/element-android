@@ -19,9 +19,9 @@ package im.vector.app.features.roomdirectory
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 
 data class PublicRoomsViewState(
         // The current filter

@@ -26,18 +26,18 @@ import com.airbnb.mvrx.appendAt
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsFilter
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
-import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
-import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 private const val PUBLIC_ROOMS_LIMIT = 20

@@ -22,8 +22,8 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 /**

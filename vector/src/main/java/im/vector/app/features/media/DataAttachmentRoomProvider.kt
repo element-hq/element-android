@@ -22,10 +22,10 @@ import androidx.core.view.isVisible
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.isVideoMessage
-import im.vector.matrix.android.api.session.file.FileService
-import im.vector.matrix.android.api.session.room.Room
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.events.model.isVideoMessage
+import org.matrix.android.sdk.api.session.file.FileService
+import org.matrix.android.sdk.api.session.room.Room
 import java.io.File
 
 class DataAttachmentRoomProvider(

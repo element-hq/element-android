@@ -21,7 +21,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import com.nulabinc.zxcvbn.Strength
 import im.vector.app.core.platform.WaitingViewData
-import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
+import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 
 data class BootstrapViewState(
         val step: BootstrapStep = BootstrapStep.CheckingMigration,

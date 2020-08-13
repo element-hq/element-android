@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.banned
 
-import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RoomBannedListMemberAction : VectorViewModelAction {

@@ -32,10 +32,10 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.MatrixConfiguration
-import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector

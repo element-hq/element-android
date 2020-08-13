@@ -27,8 +27,8 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import me.gujun.android.span.span
 import timber.log.Timber
 import java.io.File

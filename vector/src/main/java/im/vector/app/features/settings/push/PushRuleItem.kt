@@ -26,8 +26,8 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import im.vector.matrix.android.api.pushrules.getActions
-import im.vector.matrix.android.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.pushrules.getActions
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.features.notifications.toNotificationAction

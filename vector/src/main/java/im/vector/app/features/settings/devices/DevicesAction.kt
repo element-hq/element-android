@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices
 
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class DevicesAction : VectorViewModelAction {

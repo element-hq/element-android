@@ -19,8 +19,8 @@ package im.vector.app.features.home.room.list.actions
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 data class RoomListQuickActionsState(
         val roomId: String,

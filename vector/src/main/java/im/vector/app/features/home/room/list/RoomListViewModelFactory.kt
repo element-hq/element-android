@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.list
 
 import im.vector.app.features.home.HomeRoomListDataSource
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 import javax.inject.Provider
 

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.share
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class IncomingShareAction : VectorViewModelAction {

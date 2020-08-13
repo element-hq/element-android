@@ -24,7 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
-import im.vector.matrix.android.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 @EpoxyModelClass(layout = R.layout.item_room_widget)
 abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {

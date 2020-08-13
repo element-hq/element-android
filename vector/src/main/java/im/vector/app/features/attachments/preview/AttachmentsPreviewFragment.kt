@@ -49,8 +49,8 @@ import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.attachSnapHelperWithListener
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.media.createUCropWithDefaultSettings
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
 import timber.log.Timber

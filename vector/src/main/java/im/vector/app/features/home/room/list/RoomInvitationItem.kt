@@ -28,8 +28,8 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.invite.InviteButtonStateBinder
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_room_invitation)
 abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>() {

@@ -16,7 +16,7 @@
 package im.vector.app.features.notifications
 
 import androidx.core.app.NotificationCompat
-import im.vector.matrix.android.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.EventType
 
 data class NotifiableMessageEvent(
         override val eventId: String,

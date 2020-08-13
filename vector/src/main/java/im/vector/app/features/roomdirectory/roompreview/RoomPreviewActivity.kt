@@ -24,9 +24,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

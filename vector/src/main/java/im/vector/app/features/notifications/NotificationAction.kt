@@ -15,7 +15,7 @@
  */
 package im.vector.app.features.notifications
 
-import im.vector.matrix.android.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.Action
 
 data class NotificationAction(
         val shouldNotify: Boolean,

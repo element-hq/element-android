@@ -28,7 +28,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.matrix.android.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryThis
 import timber.log.Timber
 import javax.inject.Inject
 

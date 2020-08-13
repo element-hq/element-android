@@ -20,8 +20,8 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.command.Command
-import im.vector.matrix.android.api.session.widgets.model.Widget
-import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import java.io.File
 
 /**

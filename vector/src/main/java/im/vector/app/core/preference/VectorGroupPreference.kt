@@ -27,8 +27,8 @@ import android.widget.LinearLayout
 import androidx.preference.PreferenceViewHolder
 import androidx.preference.SwitchPreference
 import im.vector.app.R
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.group.Group
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.group.Group
 
 class VectorGroupPreference : SwitchPreference {
 

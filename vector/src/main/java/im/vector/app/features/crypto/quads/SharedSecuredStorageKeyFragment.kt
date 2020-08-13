@@ -27,7 +27,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import im.vector.matrix.android.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryThis
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
 import java.util.concurrent.TimeUnit

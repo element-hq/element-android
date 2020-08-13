@@ -31,10 +31,10 @@ import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
-import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.legacy.LegacySessionImporter
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.session.Session
 
 @Module
 abstract class VectorModule {

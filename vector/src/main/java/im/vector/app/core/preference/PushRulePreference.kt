@@ -23,9 +23,9 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
-import im.vector.matrix.android.api.pushrules.RuleSetKey
-import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.pushrules.RuleSetKey
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 
 class PushRulePreference : VectorPreference {
 

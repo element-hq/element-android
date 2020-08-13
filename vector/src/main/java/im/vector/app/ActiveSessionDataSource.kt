@@ -18,7 +18,7 @@
 package im.vector.app
 
 import arrow.core.Option
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.utils.BehaviorDataSource
 import javax.inject.Inject
 import javax.inject.Singleton

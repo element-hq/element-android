@@ -27,7 +27,7 @@ import androidx.core.content.ContextCompat
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.services.VectorSyncService
 import androidx.core.content.getSystemService
-import im.vector.matrix.android.internal.session.sync.job.SyncService
+import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {

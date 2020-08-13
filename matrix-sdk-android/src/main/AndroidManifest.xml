@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.matrix.android">
+    package="org.matrix.android.sdk">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -13,7 +13,7 @@
          read access permission
         -->
         <provider
-            android:name="im.vector.matrix.android.api.session.file.MatrixSDKFileProvider"
+            android:name=".api.session.file.MatrixSDKFileProvider"
             android:authorities="${applicationId}.mx-sdk.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -18,8 +18,8 @@ package im.vector.app.features.discovery
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.identity.SharedState
-import im.vector.matrix.android.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.identity.SharedState
+import org.matrix.android.sdk.api.session.identity.ThreePid
 
 data class PidInfo(
         // Retrieved from the homeserver

@@ -34,8 +34,8 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.utils.getColorFromUserId
-import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 /**

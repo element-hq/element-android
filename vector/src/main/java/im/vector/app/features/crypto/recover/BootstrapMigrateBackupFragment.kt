@@ -37,8 +37,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import im.vector.matrix.android.api.extensions.tryThis
-import im.vector.matrix.android.internal.crypto.keysbackup.util.isValidRecoveryKey
+import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
 import kotlinx.android.synthetic.main.fragment_bootstrap_migrate_backup.*

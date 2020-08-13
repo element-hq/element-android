@@ -20,8 +20,8 @@ import android.app.Activity
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
-import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 
 object ManuallyVerifyDialog {
 

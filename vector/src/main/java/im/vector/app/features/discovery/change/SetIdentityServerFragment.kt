@@ -35,7 +35,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.discovery.DiscoverySharedViewModel
 import im.vector.app.features.terms.ReviewTermsActivity
-import im.vector.matrix.android.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.terms.TermsService
 import kotlinx.android.synthetic.main.fragment_set_identity_server.*
 import javax.inject.Inject
 

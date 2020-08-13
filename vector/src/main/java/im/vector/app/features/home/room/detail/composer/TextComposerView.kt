@@ -34,7 +34,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.app.R
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 
 /**

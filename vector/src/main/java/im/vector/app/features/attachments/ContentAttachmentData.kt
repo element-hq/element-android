@@ -16,7 +16,7 @@
 
 package im.vector.app.features.attachments
 
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
 fun ContentAttachmentData.isPreviewable(): Boolean {
     return type == ContentAttachmentData.Type.IMAGE || type == ContentAttachmentData.Type.VIDEO

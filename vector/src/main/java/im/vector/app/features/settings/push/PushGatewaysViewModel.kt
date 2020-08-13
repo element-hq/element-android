@@ -24,9 +24,9 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.pushers.Pusher
-import im.vector.matrix.rx.RxSession
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.pushers.Pusher
+import org.matrix.android.sdk.rx.RxSession
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel

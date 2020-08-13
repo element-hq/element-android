@@ -22,7 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import timber.log.Timber
 import java.util.HashMap
 import java.util.HashSet
