@@ -32,11 +32,11 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en curso.
-\nUnirse con %1$s o %2$s</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en curso. 
+\nUnirse como %1$s o %2$s</string>
     <string name="ongoing_conference_call_voice">Voz</string>
     <string name="ongoing_conference_call_video">Vídeo</string>
-    <string name="cannot_start_call">No se puede iniciar la llamada, por favor inténtalo de nuevo más tarde</string>
+    <string name="cannot_start_call">No se puedo iniciar la llamada, por favor inténtelo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
@@ -168,7 +168,7 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_username_in_use">Nombre de usuario en uso</string>
     <string name="auth_home_server">Servidor Doméstico:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
-    <string name="auth_reset_password_next_step_button">He verificado mi dirección de correo electrónico</string>
+    <string name="auth_reset_password_next_step_button">He verificado mi correo electrónico</string>
     <string name="auth_reset_password_message">Para restablecer tu contraseña, ingresa la dirección de correo electrónico vinculada a tu cuenta:</string>
     <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_missing_password">Debes ingresar una nueva contraseña.</string>
@@ -321,7 +321,7 @@ Quizás quieras iniciar sesión con otra cuenta, o añadir este correo electrón
     <string name="room_participants_action_set_moderator">Convertir a moderador</string>
     <string name="room_participants_action_set_admin">Convertir a administrador</string>
     <string name="room_participants_action_ignore">Ocultar todos los mensajes de este usuario</string>
-    <string name="room_participants_action_unignore">Mostrar todos los mensajes de este usuario</string>
+    <string name="room_participants_action_unignore">Mostrar todos los mensajes del usuario</string>
     <string name="room_participants_invite_search_another_user">ID de Usuario, Nombre o correo electrónico</string>
     <string name="room_participants_action_mention">Mencionar</string>
     <string name="room_participants_action_devices_list">Mostrar Lista de Sesiones</string>
@@ -1850,4 +1850,74 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_reset_password_on">Reiniciar contraseña en %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">¡Las claves ya están al día!</string>
 
+<string name="play_video">Reproducir</string>
+    <string name="pause_video">Pausar</string>
+    <string name="dismiss">Descartar</string>
+
+
+    <string name="action_copy">Copiar</string>
+    <string name="dialog_title_success">Correcto</string>
+
+    <string name="bottom_action_notification">Notificaciones</string>
+    <string name="call_failed_no_connection">Element Fallo la Llamada</string>
+    <string name="call_failed_no_connection_description">Fallo al intentar establecer conexion.
+\nTURN Server fallo. Por favor, contacte con el administrador de su Servidor y notifique el fallo.</string>
+
+    <string name="call_select_sound_device">Seleccionar Dispositivo de Sonido</string>
+    <string name="sound_device_phone">Telefono</string>
+    <string name="sound_device_speaker">Altavoz</string>
+    <string name="sound_device_headset">Auricular</string>
+    <string name="sound_device_wireless_headset">Auriculares inalámbricos</string>
+    <string name="call_switch_camera">Cambiar camara</string>
+    <string name="call_camera_front">Frontal</string>
+    <string name="call_camera_back">Tracera</string>
+    <string name="call_format_turn_hd_off">Apagar HD</string>
+    <string name="call_format_turn_hd_on">Activar HD</string>
+
+    <string name="login_error_ssl_peer_unverified">Error SSl: la identidad del par no a sido verificada.</string>
+    <string name="login_error_ssl_other">Error SSL.</string>
+    <string name="settings_call_ringtone_use_default_stun">Permitir servidor de asistencia de llamadas</string>
+    <string name="active_call_with_duration">Llamada activa (%s)</string>
+    <string name="return_to_call">Regresar a la llamada</string>
+
+    <string name="room_participants_action_cancel_invite">Cancelar invitación</string>
+    <string name="room_participants_action_ignore_title">Ignorar Usuario</string>
+    <string name="room_participants_action_cancel_invite_title">Cancelar Invitacion</string>
+    <string name="error_empty_field_choose_user_name">Por favor, elija un nombre de usuario.</string>
+    <string name="error_empty_field_choose_password">Por favor, elija una contraseña.</string>
+    <string name="external_link_confirmation_title">Verifica este enlace</string>
+    <string name="external_link_confirmation_message">Este link %1$s loredirecciona a otro sitio %2$s. .
+\nEsta seguro de continuar\?</string>
+
+    <string name="add_members_to_room">Adicionar miembros</string>
+    <string name="invite_users_to_room_action_invite">INVITAR</string>
+    <string name="inviting_users_to_room">Invitando usuarios…</string>
+    <string name="invite_users_to_room_title">Invitar Usuarios</string>
+    <string name="invitation_sent_to_one_user">Invitación enviada a %1$s</string>
+    <string name="invitations_sent_to_two_users">Invitación enviada a %1$s y %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+	<item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
+	<item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
+</plurals>
+    <string name="invite_users_to_room_failure">No se pudo invitar el usuario. Por favor, intente nuevamente.</string>
+
+    <string name="choose_locale_current_locale_title">Idioma actual</string>
+    <string name="choose_locale_other_locales_title">Otros idiomas disponibles</string>
+    <string name="choose_locale_loading_locales">Cargando lenguajes disponibles</string>
+
+    <string name="open_terms_of">Leer los terminos de %s</string>
+    <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad\?</string>
+    <string name="identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. Element solo soporta API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Operacion no posible. Servidor desactualizado.</string>
+    <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>
+    <string name="element_disclaimer_title">Riot ahora es Element!</string>
+    <string name="element_disclaimer_negative_button">Entendido</string>
+    <string name="element_disclaimer_positive_button">Aprender Mas</string>
+
+    <string name="element_login_splash_brand">Element</string>
+
+
+    <string name="search_in_my_contacts">Buscar en mis contactos</string>
+    <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
+    <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>
 </resources>
