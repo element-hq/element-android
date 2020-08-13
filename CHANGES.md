@@ -22,7 +22,7 @@ SDK API changes ⚠️:
  - Rename package `im.vector.matrix.rx` to `org.matrix.android.sdk.rx`
 
 Build 🧱:
- -
+ - Fix RtlHardcoded issues (use `Start` and `End` instead of `Left` and `Right` layout attributes)
 
 Other changes:
  - Use `Context#getSystemService` extension function provided by `core-ktx` (#1702)

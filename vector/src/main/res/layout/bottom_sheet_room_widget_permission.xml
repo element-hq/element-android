@@ -51,7 +51,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -99,7 +98,6 @@
             android:id="@+id/widgetPermissionDecline"
             style="@style/VectorButtonStyleDestructive"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
-            android:layout_marginRight="@dimen/layout_vertical_margin"
             android:text="@string/decline"
             android:textAllCaps="true" />
 
@@ -107,7 +105,6 @@
             android:id="@+id/widgetPermissionContinue"
             style="@style/VectorButtonStylePositive"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
-            android:layout_marginRight="@dimen/layout_vertical_margin"
             android:minWidth="160dp"
             android:text="@string/_continue"
             android:textAllCaps="true" />

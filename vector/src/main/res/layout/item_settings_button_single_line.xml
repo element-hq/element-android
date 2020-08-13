@@ -23,7 +23,6 @@
         app:layout_constraintEnd_toStartOf="@+id/settings_item_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:drawableLeft="@drawable/ic_notification_privacy_warning"
         tools:drawableStart="@drawable/ic_notification_privacy_warning"
         tools:drawableTint="@color/vector_error_color"
         tools:text="foo@bar.test" />

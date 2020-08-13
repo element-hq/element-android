@@ -14,21 +14,21 @@
             layout="@layout/vector_message_merge_avatar_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/itemMergedExpandTextView"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/itemMergedExpandTextView" />
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:paddingLeft="8dp"
-            android:paddingTop="4dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="4dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
             android:textColor="?attr/colorAccent"
             android:textSize="14sp"
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="4dp"
-        android:background="?attr/riotx_header_panel_background"/>
+        android:background="?attr/riotx_header_panel_background" />
 
 
     <TextView
