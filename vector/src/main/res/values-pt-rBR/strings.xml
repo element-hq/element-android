@@ -250,8 +250,6 @@
     <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\n↵
-\n↵
 \nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
     <string name="permissions_rationale_msg_record_audio">Element necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
@@ -2627,4 +2625,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_security_pin_code_title">Ativar o PIN</string>
     <string name="settings_security_pin_code_summary">Se você quiser redefinir seu PIN, toque no Esqueci o PIN para sair e redefinir-lo.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
-</resources>
+<string name="settings_call_show_confirmation_dialog_title">Prevenir chamadas acidentais</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
+    </resources>
