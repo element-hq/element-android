@@ -93,8 +93,7 @@
     <plurals name="public_room_nb_users">
         <item quantity="one">1 používateľ</item>
         <item quantity="few">%d používatelia</item>
-        <item quantity="many">%d používateľov</item>
-        <item quantity="other" />
+        <item quantity="other">%d používateľov</item>
     </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
@@ -776,8 +775,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <plurals name="membership_changes">
         <item quantity="one">1 zmena stavu</item>
         <item quantity="few">%d zmeny stavu</item>
-        <item quantity="many">%d zmien stavu</item>
-        <item quantity="other" />
+        <item quantity="other">%d zmien stavu</item>
     </plurals>
 
     <string name="list_members">Zobraziť členov</string>
@@ -786,45 +784,38 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <plurals name="room_header_active_members_count">
         <item quantity="one">1 aktívny člen</item>
         <item quantity="few">%d aktívni členovia</item>
-        <item quantity="many">%d aktívnych členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktívnych členov</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
-        <item quantity="many">%d členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d členov</item>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová správa</item>
         <item quantity="few">%d nové správy</item>
-        <item quantity="many">%d nových správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d nových správ</item>
     </plurals>
 
     <plurals name="directory_search_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
-        <item quantity="many">%d miestností</item>
-        <item quantity="other" />
+        <item quantity="other">%d miestností</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
         <item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
-        <item quantity="many">Nájdených %1$s miestností pre %2$s</item>
-        <item quantity="other" />
+        <item quantity="other">Nájdených %1$s miestností pre %2$s</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
-        <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d neprečítaných správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
-        <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d neprečítaných správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 miestnosť</item>
@@ -836,8 +827,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <plurals name="active_widgets">
         <item quantity="one">1 aktívny widget</item>
         <item quantity="few">%d aktívne widgety</item>
-        <item quantity="many">%d aktívnych widgetov</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktívnych widgetov</item>
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -948,8 +938,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <plurals name="room_details_selected">
         <item quantity="one">1 vybratý</item>
         <item quantity="few">%d vybratí</item>
-        <item quantity="many">%d vybratých</item>
-        <item quantity="other" />
+        <item quantity="other">%d vybratých</item>
     </plurals>
     <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
 
@@ -973,15 +962,13 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <plurals name="group_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
-        <item quantity="many">%d členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d členov</item>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
-        <item quantity="many">%d miestností</item>
-        <item quantity="other" />
+        <item quantity="other">%d miestností</item>
     </plurals>
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>

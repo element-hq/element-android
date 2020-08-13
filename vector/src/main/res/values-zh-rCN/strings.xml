@@ -1452,7 +1452,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="login_error_no_homeserver_found">這不是有效的 Matrix 服务器位置</string>
     <string name="login_error_homeserver_not_found">无法在此 URL 找到家庭服务器，请检查</string>
     <string name="settings_call_ringtone_use_default_stun">允许后备呼叫协助服务器</string>
-<string name="play_video">播放</string>
+    <string name="play_video">播放</string>
     <string name="pause_video">暂停</string>
     <string name="dismiss">忽略</string>
 
@@ -1548,8 +1548,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="disabled_integration_dialog_content">请在设置中启用“允许集成”。</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="other">%d 个封禁用户</item>
-</plurals>
+        <item quantity="other">%d 个封禁用户</item>
+    </plurals>
 
     <string name="encryption_information_device_name_with_warning">公开名称（对通信参与者可见）</string>
     <string name="device_name_warning">会话的公开名称对通信的参与者可见</string>
@@ -1771,8 +1771,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="two_users_read">%1$s 和 %2$s 已读</string>
     <string name="one_user_read">%s 已读</string>
     <plurals name="fallback_users_read">
-	<item quantity="other">%d 个用户已读</item>
-</plurals>
+        <item quantity="other">%d 个用户已读</item>
+    </plurals>
 
     <string name="error_file_too_big">上传文件 \'%1$s\' (%2$s) 过大。限制为 %3$s。</string>
 
@@ -1956,8 +1956,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="login_error_outdated_homeserver_content">此家庭服务器运行的版本过旧以至于无法连接。要求您的家庭服务器管理员升级。</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="other">发送了太多请求。您可以在 %1$d 秒后重试…</item>
-</plurals>
+        <item quantity="other">发送了太多请求。您可以在 %1$d 秒后重试…</item>
+    </plurals>
 
     <string name="login_connect_using_matrix_id_notice">或者，如果您已经拥有账户并知道您的 Matrix 标识符和密码，您可以使用这种方式：</string>
     <string name="login_connect_using_matrix_id_submit">使用 Matrix ID 登录</string>
@@ -2076,7 +2076,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="verification_verify_user">验证 %s</string>
     <string name="verification_verified_user">已验证 %s</string>
     <string name="verification_request_waiting_for">正在等待 %s…</string>
-    <string name="verification_request_alert_description">为了提高安全性，请通过检查两个设备上的一次性代码来验证 ％s。
+    <string name="verification_request_alert_description">为了提高安全性，请通过检查两个设备上的一次性代码来验证 %s。
 \n
 \n为了获得最大的安全性，请亲自进行。</string>
     <string name="room_profile_not_encrypted_subtitle">此聊天室的消息不是端到端加密。</string>
@@ -2090,8 +2090,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="room_profile_section_more_settings">聊天室设置</string>
     <string name="room_profile_section_more_notifications">通知</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="other">%1$d 人</item>
-</plurals>
+        <item quantity="other">%1$d 人</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">上传</string>
     <string name="room_profile_section_more_leave">离开聊天室</string>
     <string name="room_profile_leaving_room">正在离开聊天室…</string>
@@ -2163,8 +2163,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_active_sessions_unverified_device_desc">验证此会话以将其标记为可信，并授予其访问加密消息的权限。如果您未登录此会话，则您的帐户可能已被盗：</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="other">%d 个活动会话</item>
-</plurals>
+        <item quantity="other">%d 个活动会话</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">验证此登录</string>
     <string name="crosssigning_other_user_not_trust">其他用户可能不信任它</string>
@@ -2202,11 +2202,11 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_dev_tools">开发工具</string>
     <string name="settings_account_data">账户数据</string>
     <plurals name="poll_info">
-	<item quantity="other">%d 票</item>
-</plurals>
+        <item quantity="other">%d 票</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="other">%d 票 - 最终结果</item>
-</plurals>
+        <item quantity="other">%d 票 - 最终结果</item>
+    </plurals>
     <string name="poll_item_selected_aria">已选选项</string>
     <string name="command_description_poll">创建简单调查</string>
     <string name="verification_cannot_access_other_session">使用恢复短语或密钥</string>
@@ -2222,8 +2222,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="message_action_item_redact">移除…</string>
     <string name="share_confirm_room">您想要发送此附件到 %1$s 吗？</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="other">发送原始尺寸图片</item>
-</plurals>
+        <item quantity="other">发送原始尺寸图片</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">确认移除</string>
     <string name="delete_event_dialog_content">您确实想要移除（删除）此事件吗？注意如果您删除聊天室名或话题更改，可以撤销更改。</string>
@@ -2432,8 +2432,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="invitation_sent_to_one_user">邀请已发送到 %1$s</string>
     <string name="invitations_sent_to_two_users">邀请已发送到 %1$s 和 %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="other">邀请已发送到 %1$s 和 %2$s 等</item>
-</plurals>
+        <item quantity="other">邀请已发送到 %1$s 和 %2$s 等</item>
+    </plurals>
     <string name="invite_users_to_room_failure">我们无法邀请用户，请检查您想要邀请的用户并重试。</string>
 
     <string name="choose_locale_current_locale_title">当前语言</string>

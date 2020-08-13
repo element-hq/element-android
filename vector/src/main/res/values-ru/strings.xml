@@ -96,7 +96,7 @@
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -832,13 +832,13 @@
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -846,7 +846,7 @@
         <item quantity="one">%d активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -856,45 +856,45 @@
         <item quantity="one">%d активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s комната найдена для %2$s</item>
         <item quantity="few">%1$s комнаты найдено для %2$s</item>
         <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
@@ -1029,20 +1029,20 @@
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="group_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1304,7 +1304,7 @@
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
         <item quantity="few">%d новых ключа были добавлены к этому устройству.</item>
         <item quantity="many">%d новых ключей были добавлены к этому устройству.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="keys_backup_restore_success_description_part1">
@@ -1356,7 +1356,7 @@
         <item quantity="one">Резервное копирование %d ключа…</item>
         <item quantity="few">Резервное копирование %d ключей…</item>
         <item quantity="many">Резервное копирование %d ключей…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_keys_all_backup_up">Все ключи сохранены</string>
@@ -2081,7 +2081,7 @@
 
     <string name="no_network_indicator">Нет подключения к сети</string>
 
-<string name="play_video">Воспроизвести</string>
+    <string name="play_video">Воспроизвести</string>
     <string name="pause_video">Приостановить</string>
     <string name="action_copy">Копировать</string>
     <string name="dialog_title_success">Выполнено</string>
@@ -2147,10 +2147,10 @@
     <string name="disabled_integration_dialog_content">Включите «Управление интеграциями» в настройках, чтобы сделать это.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d пользователь заблокирован</item>
-	<item quantity="few">%d пользователей заблокировано</item>
-	<item quantity="many">%d пользователей заблокировано</item>
-</plurals>
+        <item quantity="one">%d пользователь заблокирован</item>
+        <item quantity="few">%d пользователей заблокировано</item>
+        <item quantity="many">%d пользователей заблокировано</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Ключи успешно экспортированы</string>
 
@@ -2169,10 +2169,10 @@
     <string name="labs_show_unread_notifications_as_tab">Добавьте специальную вкладку для непрочитанных уведомлений на главном экране.</string>
 
     <plurals name="fallback_users_read">
-	<item quantity="one">Прочитал 1 пользователь</item>
-	<item quantity="few">Прочитано %d пользователями</item>
-	<item quantity="many">Прочитано %d пользователями</item>
-</plurals>
+        <item quantity="one">Прочитал 1 пользователь</item>
+        <item quantity="few">Прочитано %d пользователями</item>
+        <item quantity="many">Прочитано %d пользователями</item>
+    </plurals>
 
     <string name="room_list_quick_actions_favorite_add">Добавить в избранное</string>
     <string name="room_list_quick_actions_favorite_remove">Убрать из избранного</string>
@@ -2333,10 +2333,10 @@
     <string name="settings_failed_to_get_crypto_device_info">Нет доступного шифрования информации</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d сессия активна</item>
-	<item quantity="few">%d сессии активны</item>
-	<item quantity="many">%d сессий активно</item>
-</plurals>
+        <item quantity="one">%d сессия активна</item>
+        <item quantity="few">%d сессии активны</item>
+        <item quantity="many">%d сессий активно</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Подтвердите эту сессию</string>
     <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
@@ -2388,15 +2388,15 @@
     <string name="verification_profile_device_verified_because">Эта сессия является доверенной для безопасного обмена сообщениями, так как %1$s (%2$s) проверил(а) его:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) вошел(ла), используя новую сессию:</string>
     <plurals name="poll_info">
-	<item quantity="one">%d голос</item>
-	<item quantity="few">%d голоса</item>
-	<item quantity="many">%d голосов</item>
-</plurals>
+        <item quantity="one">%d голос</item>
+        <item quantity="few">%d голоса</item>
+        <item quantity="many">%d голосов</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d голос - финальные результаты</item>
-	<item quantity="few">%d голоса - финальные результаты</item>
-	<item quantity="many">%d голосов - финальные результаты</item>
-</plurals>
+        <item quantity="one">%d голос - финальные результаты</item>
+        <item quantity="few">%d голоса - финальные результаты</item>
+        <item quantity="many">%d голосов - финальные результаты</item>
+    </plurals>
     <string name="poll_item_selected_aria">Выберите вариант</string>
     <string name="command_description_poll">Создать простой опрос</string>
     <string name="new_signin">Новый вход</string>
@@ -2420,10 +2420,10 @@
 
     <string name="share_confirm_room">Вы хотите отправить это вложение в %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Отправить изображение в оригинальном размере</item>
-	<item quantity="few">Отправить изображения в оригинальном размере</item>
-	<item quantity="many">Отправить изображения в оригинальном размере</item>
-</plurals>
+        <item quantity="one">Отправить изображение в оригинальном размере</item>
+        <item quantity="few">Отправить изображения в оригинальном размере</item>
+        <item quantity="many">Отправить изображения в оригинальном размере</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Подтвердите удаление</string>
     <string name="delete_event_dialog_content">Вы уверены, что хотите скрыть (удалить) это событие\? Обратите внимание, что если вы удалите название комнаты или измените тему, это может отменить изменение.</string>
@@ -2566,10 +2566,10 @@
     <string name="invitation_sent_to_one_user">Приглашение для %1$s отправлено</string>
     <string name="invitations_sent_to_two_users">Приглашения для %1$s и %2$s отправлены</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Приглашения отправлены %1$s и еще одному пользователю</item>
-	<item quantity="few">Приглашения отправлены %1$s и еще %2$d пользователям</item>
-	<item quantity="many">Приглашения отправлены %1$s и еще %2$d пользователям</item>
-</plurals>
+        <item quantity="one">Приглашения отправлены %1$s и еще одному пользователю</item>
+        <item quantity="few">Приглашения отправлены %1$s и еще %2$d пользователям</item>
+        <item quantity="many">Приглашения отправлены %1$s и еще %2$d пользователям</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Мы не могли пригласить этих пользователей. Пожалуйста, проверьте пользователей, которых вы хотите пригласить, и повторите попытку.</string>
 
     <string name="choose_locale_current_locale_title">Текущий язык</string>

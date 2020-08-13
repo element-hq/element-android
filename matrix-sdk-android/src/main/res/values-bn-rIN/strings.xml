@@ -21,7 +21,7 @@
     <string name="notice_room_name_changed">%1$s রুম এর নাম এতে পরিবর্তন করেছে: %2$s</string>
     <string name="notice_placed_video_call">%s একটি ভিডিও কল স্থাপন করেছিল।</string>
     <string name="notice_placed_voice_call">%s একটি ভয়েস কল দিয়েছে।</string>
-<string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_you_sent_image">আপনি একটি ছবি প্রেরণ করেছেন।</string>
     <string name="summary_you_sent_sticker">আপনি একটি স্তিকার পাঠিয়েছেন।</string>
 
@@ -130,9 +130,9 @@
     <string name="room_displayname_two_members">%1$s এবং %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s এবং অন্য ১ জন</item>
-	<item quantity="other">%1$s এবং অন্যান্য %2$d জন</item>
-</plurals>
+        <item quantity="one">%1$s এবং অন্য ১ জন</item>
+        <item quantity="other">%1$s এবং অন্যান্য %2$d জন</item>
+    </plurals>
 
     <string name="room_displayname_empty_room">খালি কক্ষ</string>
 
@@ -249,24 +249,24 @@
     <string name="notice_room_withdraw_with_reason_by_you">আপনি %1$s এর আমন্ত্রণ প্রত্যাহার করেছেন। কারণ: %2$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s যুক্ত করেছে।</item>
-	<item quantity="other">%1$s এই ঘরের ঠিকানাগুলি হিসাবে %2$s যুক্ত করেছে।</item>
-</plurals>
+        <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s যুক্ত করেছে।</item>
+        <item quantity="other">%1$s এই ঘরের ঠিকানাগুলি হিসাবে %2$s যুক্ত করেছে।</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">আপনি এই কক্ষের জন্য ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
-	<item quantity="other">আপনি এই কক্ষের ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
-</plurals>
+        <item quantity="one">আপনি এই কক্ষের জন্য ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
+        <item quantity="other">আপনি এই কক্ষের ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s সরানো হয়েছে।</item>
-	<item quantity="other">%1$s %3$s কে এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</item>
-</plurals>
+        <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s সরানো হয়েছে।</item>
+        <item quantity="other">%1$s %3$s কে এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">আপনি এই ঘরের ঠিকানা হিসাবে %1$s সরিয়েছেন।</item>
-	<item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %2$s গুলি সরিয়েছেন।</item>
-</plurals>
+        <item quantity="one">আপনি এই ঘরের ঠিকানা হিসাবে %1$s সরিয়েছেন।</item>
+        <item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %2$s গুলি সরিয়েছেন।</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s %2$s যোগ করেছে এবং %3$s গুলি এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</string>
     <string name="notice_room_aliases_added_and_removed_by_you">আপনি %1$s যোগ করেছেন এবং %2$s কে এই ঘরের ঠিকানা হিসাবে সরিয়ে দিয়েছেন।</string>

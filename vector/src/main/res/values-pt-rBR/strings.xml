@@ -93,9 +93,9 @@
     <string name="no_room_placeholder">Nenhuma sala</string>
     <string name="no_public_room_placeholder">Nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">%d usuário</item>
-	<item quantity="other">%d usuários</item>
-</plurals>
+        <item quantity="one">%d usuário</item>
+        <item quantity="other">%d usuários</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar registros</string>
     <string name="send_bug_report_include_crash_logs">Enviar registros da falha</string>
@@ -855,9 +855,9 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
         <item quantity="other">%1$s salas encontradas para %2$s</item>
     </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">1 alteração na filiação</item>
-	<item quantity="other">%d alterações na filiação</item>
-</plurals>
+        <item quantity="one">1 alteração na filiação</item>
+        <item quantity="other">%d alterações na filiação</item>
+    </plurals>
 
     <string name="list_members">Lista de integrantes</string>
     <plurals name="notification_unread_notified_messages">
@@ -918,17 +918,17 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicie o Element em outro aparelho que possa descriptografar a mensagem, de modo que ele possa enviar as chaves para esta sessão.</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d dia</item>
         <item quantity="other">%d dias</item>
@@ -1246,7 +1246,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="people_no_identity_server">Nenhum servidor de identidade está configurado.</string>
 
     <string name="call_failed_no_ice_title">A chamada falhou por conta de má configuração no servidor</string>
-<string name="play_video">Reproduzir</string>
+    <string name="play_video">Reproduzir</string>
     <string name="pause_video">Pausar</string>
     <string name="dismiss">Descartar</string>
 
@@ -1372,9 +1372,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_play_shutter_sound">Tocar o som da câmera</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d usuário banido</item>
-	<item quantity="other">%d usuários banidos</item>
-</plurals>
+        <item quantity="one">%d usuário banido</item>
+        <item quantity="other">%d usuários banidos</item>
+    </plurals>
 
     <string name="encryption_information_device_name_with_warning">O nome público (visível para as pessoas com quem você se comunica)</string>
     <string name="device_name_warning">O nome público de uma sessão é visível para as pessoas com quem você se comunica</string>
@@ -1385,13 +1385,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="encryption_information_unknown_ip">IP desconhecido</string>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 mensagem</item>
-	<item quantity="other">%1$s: %2$d mensagens</item>
-</plurals>
+        <item quantity="one">%1$s: 1 mensagem</item>
+        <item quantity="other">%1$s: %2$d mensagens</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d notificação</item>
-	<item quantity="other">%d notificações</item>
-</plurals>
+        <item quantity="one">%d notificação</item>
+        <item quantity="other">%d notificações</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Novo Evento</string>
     <string name="notification_unknown_room_name">Sala</string>
@@ -1531,13 +1531,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_restore_success_title">Backup restaurado %s !</string>
     <string name="keys_backup_restore_success_description">Restauradas %1$d chaves de sessão, e adicionadas %2$d chave(s) nova(s) que não eram conhecidas nesta sessão</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Restaurou um backup com chave %d.</item>
-	<item quantity="other">Restaurou um backup com chaves %d.</item>
-</plurals>
+        <item quantity="one">Restaurou um backup com chave %d.</item>
+        <item quantity="other">Restaurou um backup com chaves %d.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d nova chave foi adicionada a esta sessão.</item>
-	<item quantity="other">%d novas chaves foram adicionadas a esta sessão.</item>
-</plurals>
+        <item quantity="one">%d nova chave foi adicionada a esta sessão.</item>
+        <item quantity="other">%d novas chaves foram adicionadas a esta sessão.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Não foi possível obter a versão mais recente das chaves de recuperação (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">A sessão criptografada não está activa</string>
@@ -1591,9 +1591,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="keys_backup_info_keys_all_backup_up">O backup de todas as chaves foi concluído</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Fazendo o backup da chave %d …</item>
-	<item quantity="other">Fazendo o backup das chaves %d …</item>
-</plurals>
+        <item quantity="one">Fazendo o backup da chave %d …</item>
+        <item quantity="other">Fazendo o backup das chaves %d …</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versão</string>
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
@@ -1851,9 +1851,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="two_users_read">%1$s e %2$s lê</string>
     <string name="one_user_read">%s lê</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 usuário leu</item>
-	<item quantity="other">%d usuários leram</item>
-</plurals>
+        <item quantity="one">1 usuário leu</item>
+        <item quantity="other">%d usuários leram</item>
+    </plurals>
 
     <string name="error_file_too_big">O arquivo \'%1$s\' (%2$s) é muito grande para ser carregado. O limite é de %3$s.</string>
 
@@ -2044,9 +2044,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_error_outdated_homeserver_content">Este servidor tem uma versão muito antiga que não é compatível com nosso servidor. Peça ao administrador para fazer atualização.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Recebemos demasiado pedidos. Você pode tentar novamente em %1$d segundo…</item>
-	<item quantity="other">Recebemos demasiado pedidos. Você pode tentar novamente em %1$d segundos…</item>
-</plurals>
+        <item quantity="one">Recebemos demasiado pedidos. Você pode tentar novamente em %1$d segundo…</item>
+        <item quantity="other">Recebemos demasiado pedidos. Você pode tentar novamente em %1$d segundos…</item>
+    </plurals>
 
     <string name="login_connect_using_matrix_id_notice">Alternativamente, se você já tem uma conta e conhece seu identificador do Matrix e a senha, você pode usar este método:</string>
     <string name="login_connect_using_matrix_id_submit">Entre com ID do Matrix</string>
@@ -2182,9 +2182,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_profile_section_more_settings">Configurações da sala</string>
     <string name="room_profile_section_more_notifications">Notificações</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Uma pessoa</item>
-	<item quantity="other">%1$d pessoas</item>
-</plurals>
+        <item quantity="one">Uma pessoa</item>
+        <item quantity="other">%1$d pessoas</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Subidas</string>
     <string name="room_profile_section_more_leave">Deixar a sala</string>
     <string name="room_profile_leaving_room">Deixando a sala…</string>
@@ -2258,9 +2258,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_active_sessions_unverified_device_desc">Verifique esta sessão para marcá-la como confiável e conceder-a acesso a mensagens criptografadas. Se você não entrou nesta sessão, sua conta pode estar comprometida:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d sessão ativa</item>
-	<item quantity="other">%d sessões ativas</item>
-</plurals>
+        <item quantity="one">%d sessão ativa</item>
+        <item quantity="other">%d sessões ativas</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Verificar este acesso</string>
     <string name="crosssigning_other_user_not_trust">Outros usuários podem não confiar nela</string>
@@ -2298,13 +2298,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_dev_tools">Ferramentas do Desenvolvedor</string>
     <string name="settings_account_data">Dados da Conta</string>
     <plurals name="poll_info">
-	<item quantity="one">%d voto</item>
-	<item quantity="other">%d votos</item>
-</plurals>
+        <item quantity="one">%d voto</item>
+        <item quantity="other">%d votos</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d voto - Resultados finais</item>
-	<item quantity="other">%d votos - Resultados finais</item>
-</plurals>
+        <item quantity="one">%d voto - Resultados finais</item>
+        <item quantity="other">%d votos - Resultados finais</item>
+    </plurals>
     <string name="poll_item_selected_aria">Opção Selecionada</string>
     <string name="command_description_poll">Cria uma pesquisa simples</string>
     <string name="verification_cannot_access_other_session">Use a Chave ou a Frase Secreta de Recuperação</string>
@@ -2320,9 +2320,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="message_action_item_redact">Excluír…</string>
     <string name="share_confirm_room">Deseja enviar este anexo para %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Enviar imagem do tamanho original</item>
-	<item quantity="other">Enviar imagens do tamanho original</item>
-</plurals>
+        <item quantity="one">Enviar imagem do tamanho original</item>
+        <item quantity="other">Enviar imagens do tamanho original</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Confirmar a exclusão</string>
     <string name="delete_event_dialog_content">Tem certeza de que deseja apagar este evento\? Observe que, se você apagar a alteração do nome ou descrição de uma sala, isso reverterá a alteração.</string>
@@ -2524,9 +2524,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="invitation_sent_to_one_user">Convite enviado para %1$s</string>
     <string name="invitations_sent_to_two_users">Convites enviados para %1$s e %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Convites enviados para %1$s e mais um</item>
-	<item quantity="other">Convites enviados para %1$s e %2$s e mais</item>
-</plurals>
+        <item quantity="one">Convites enviados para %1$s e mais um</item>
+        <item quantity="other">Convites enviados para %1$s e %2$s e mais</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Não podíamos convidar os usuários. Por favor, verifique os usuários que você deseja convidar e tente novamente.</string>
 
     <string name="choose_locale_current_locale_title">Idioma atual</string>

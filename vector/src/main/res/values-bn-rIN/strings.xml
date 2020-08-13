@@ -480,7 +480,7 @@
     <string name="room_details_settings">সেটিংস</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -1246,7 +1246,7 @@
     <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
     <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
 
-<string name="resources_script">Beng</string>
+    <string name="resources_script">Beng</string>
 
     <string name="play_video">চালু</string>
     <string name="pause_video">থামাও</string>
@@ -1314,9 +1314,9 @@
     <string name="disabled_integration_dialog_content">এটি করতে সেটিংসে \'একীকরণের অনুমতি দিন\' সক্ষম করুন।</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d নিষিদ্ধ ব্যবহারকারী</item>
-	<item quantity="other">%d নিষিদ্ধ ব্যবহারকারী</item>
-</plurals>
+        <item quantity="one">%d নিষিদ্ধ ব্যবহারকারী</item>
+        <item quantity="other">%d নিষিদ্ধ ব্যবহারকারী</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">কীগুলি সফলভাবে উত্পাদন হয়েছিল</string>
 
@@ -1408,4 +1408,4 @@
     <string name="keys_backup_restore_is_getting_backup_version">ব্যাকআপ সংস্করণ আনছে…</string>
     <string name="keys_backup_restore_with_passphrase">আপনার এনক্রিপ্ট করা বার্তাগুলির ইতিহাস আনলক করতে আপনার পুনরুদ্ধার পাসফ্রেজটি ব্যবহার করুন</string>
     <string name="keys_backup_restore_use_recovery_key">আপনার পুনরুদ্ধার কী ব্যবহার করুন</string>
-    </resources>
+</resources>

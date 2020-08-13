@@ -1062,7 +1062,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定</string>
     <string name="settings_troubleshoot_test_service_boot_title">起動時の実行</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">バックグラウンド制限の確認</string>
-<string name="stay">とどまる</string>
+    <string name="stay">とどまる</string>
     <string name="edit">編集</string>
     <string name="reply">返信</string>
 
@@ -1125,8 +1125,8 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_profile_section_more_settings">部屋の設定</string>
     <string name="room_profile_section_more_notifications">通知</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="other">%1$d 人の参加者</item>
-</plurals>
+        <item quantity="other">%1$d 人の参加者</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">アップロード</string>
     <string name="room_profile_section_more_leave">部屋を退室</string>
     <string name="room_profile_leaving_room">部屋から退室中…</string>
@@ -1163,8 +1163,8 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_active_sessions_signout_device">このセッションからログアウト</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="other">%d 件の有効なセッション</item>
-</plurals>
+        <item quantity="other">%d 件の有効なセッション</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">このログインを検証</string>
     <string name="a11y_qr_code_for_verification">QR コード</string>
@@ -1183,4 +1183,4 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="encryption_enabled_tile_description">この部屋内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効化されていません</string>
     <string name="settings_notification_configuration">通知設定</string>
-    </resources>
+</resources>

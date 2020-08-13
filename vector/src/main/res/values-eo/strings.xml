@@ -597,9 +597,9 @@
 
     <string name="settings_troubleshoot_test_account_settings_title">Agordoj de konto.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Sciigoj estas ŝaltitaj por via konto.</string>
-<string name="play_video">Ludi</string>
+    <string name="play_video">Ludi</string>
     <string name="pause_video">Paûzi</string>
     <string name="dismiss">Eksigi</string>
 
 
-    </resources>
+</resources>

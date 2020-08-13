@@ -81,12 +81,12 @@
     <string name="room_displayname_empty_room">Sala vazia</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s e 1 outro</item>
-	<item quantity="other">%1$s e %2$d outros</item>
-</plurals>
+        <item quantity="one">%1$s e 1 outro</item>
+        <item quantity="other">%1$s e %2$d outros</item>
+    </plurals>
 
 
-<string name="summary_you_sent_image">Você enviou uma foto.</string>
+    <string name="summary_you_sent_image">Você enviou uma foto.</string>
     <string name="summary_you_sent_sticker">Você enviou uma figurinha.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Seu convite</string>
@@ -263,24 +263,24 @@
     <string name="notice_room_withdraw_with_reason_by_you">Você desfez o convite de %1$s. Motivo: %2$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s adicionou %2$s como um endereço desta sala.</item>
-	<item quantity="other">%1$s adicionou %2$s como endereços desta sala.</item>
-</plurals>
+        <item quantity="one">%1$s adicionou %2$s como um endereço desta sala.</item>
+        <item quantity="other">%1$s adicionou %2$s como endereços desta sala.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Você adicionou %1$s como um endereço desta sala.</item>
-	<item quantity="other">Você adicionou %1$s como endereços desta sala.</item>
-</plurals>
+        <item quantity="one">Você adicionou %1$s como um endereço desta sala.</item>
+        <item quantity="other">Você adicionou %1$s como endereços desta sala.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s removeu %2$s como um endereço desta sala.</item>
-	<item quantity="other">%1$s removeu %3$s como endereços desta sala.</item>
-</plurals>
+        <item quantity="one">%1$s removeu %2$s como um endereço desta sala.</item>
+        <item quantity="other">%1$s removeu %3$s como endereços desta sala.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Você removeu %1$s como um endereço desta sala.</item>
-	<item quantity="other">Você removeu %2$s como endereços desta sala.</item>
-</plurals>
+        <item quantity="one">Você removeu %1$s como um endereço desta sala.</item>
+        <item quantity="other">Você removeu %2$s como endereços desta sala.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s adicionou %2$s e removeu %3$s como endereços desta sala.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Você adicionou %1$s e removeu %2$s como endereços desta sala.</string>

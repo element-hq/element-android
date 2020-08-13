@@ -1850,7 +1850,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_reset_password_on">Reiniciar contraseña en %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">¡Las claves ya están al día!</string>
 
-<string name="play_video">Reproducir</string>
+    <string name="play_video">Reproducir</string>
     <string name="pause_video">Pausar</string>
     <string name="dismiss">Descartar</string>
 
@@ -1896,9 +1896,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="invitation_sent_to_one_user">Invitación enviada a %1$s</string>
     <string name="invitations_sent_to_two_users">Invitación enviada a %1$s y %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
-	<item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
-</plurals>
+        <item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
+        <item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
+    </plurals>
     <string name="invite_users_to_room_failure">No se pudo invitar el usuario. Por favor, intente nuevamente.</string>
 
     <string name="choose_locale_current_locale_title">Idioma actual</string>
@@ -1906,7 +1906,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="choose_locale_loading_locales">Cargando lenguajes disponibles</string>
 
     <string name="open_terms_of">Leer los terminos de %s</string>
-    <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad\?</string>
+    <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad %s\?</string>
     <string name="identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. Element solo soporta API V2.</string>
     <string name="identity_server_error_outdated_home_server">Operacion no posible. Servidor desactualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>

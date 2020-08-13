@@ -279,7 +279,7 @@
     <string name="login_error_not_json">Ei sisaldanud korrektset JSON\'it</string>
     <string name="login_error_limit_exceeded">Liiga palju samaaegseid sisselogimispäringuid</string>
     <string name="login_error_user_in_use">See kasutajanimi on juba kasutusel</string>
-<string name="play_video">Esita</string>
+    <string name="play_video">Esita</string>
     <string name="pause_video">Peata</string>
     <string name="dismiss">Loobu</string>
 
@@ -320,9 +320,9 @@
     <string name="groups_list">Gruppide loend</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 liikmelisuse muutus</item>
-	<item quantity="other">%d liikmelisuse muutust</item>
-</plurals>
+        <item quantity="one">1 liikmelisuse muutus</item>
+        <item quantity="other">%d liikmelisuse muutust</item>
+    </plurals>
 
     <string name="compression_options">Saada pilt</string>
     <string name="compression_opt_list_original">Algses suuruses</string>
@@ -416,9 +416,9 @@
     <string name="room_details_files">Failid</string>
     <string name="room_details_settings">Seadistused</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 valitud</item>
-	<item quantity="other">%d valitud</item>
-</plurals>
+        <item quantity="one">1 valitud</item>
+        <item quantity="other">%d valitud</item>
+    </plurals>
     <string name="malformed_id">Vigane kasutajatunnus. Peaksid kasutama kas e-posti aadressi või õiget Matrix\'i kasutajatunnust vormingus \'@toreinimene:domeen.ee\'</string>
     <string name="room_details_people_invited_group_name">KUTSUTUD</string>
     <string name="room_details_people_present_group_name">LIITUNUD</string>
@@ -489,7 +489,7 @@
     <string name="settings_security_pin_code_title">Võta PIN-kood kasutusele</string>
     <string name="settings_security_pin_code_summary">Kui sa soovid oma PIN-koodi lähtestada, siis klõpsi nuppu „Unustasin PIN-koodi“.</string>
     <string name="auth_pin_confirm_to_disable_title">PIN-koodi kasutuselt eemaldamiseks korda PIN-koodi</string>
-<string name="room_settings_never_send_to_unverified_devices_title">Kasuta krüptimist vaid verifitseeritud sessioonides</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Kasuta krüptimist vaid verifitseeritud sessioonides</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse selles jututoas.</string>
 
     <string name="room_settings_addresses_no_local_addresses">Sellel jututoal puuduvad kohalikud aadressid</string>
@@ -533,9 +533,9 @@
     <string name="settings_labs_create_conference_with_jitsi">Algata rühmakõnesid jitsi vahendusel</string>
     <string name="widget_delete_message_confirmation">Kas oled kindel, et soovid siit jututoast selle vidina kustutada\?</string>
     <plurals name="active_widgets">
-	<item quantity="one">Kasutusel on üks vidin</item>
-	<item quantity="other">Kasutusel on %d vidinat</item>
-</plurals>
+        <item quantity="one">Kasutusel on üks vidin</item>
+        <item quantity="other">Kasutusel on %d vidinat</item>
+    </plurals>
     <string name="active_widgets_title">Kasutusel vidinad</string>
 
 
@@ -626,7 +626,7 @@
     <string name="settings_show_redacted_summary">Näita kustutatud sõnumite asemel kohatäidet</string>
     <string name="event_redacted_by_user_reason">Kasutaja kustutas sündmuse</string>
     <string name="event_redacted_by_admin_reason">Jututoa haldur on sündmust modereerinud</string>
-    <string name="last_edited_info_message">Viimati muudetud 1$s poolt, muutmise aeg %2$s</string>
+    <string name="last_edited_info_message">Viimati muudetud %1$s poolt, muutmise aeg %2$s</string>
 
 
     <string name="malformed_message">Vigaselt vormindatud sündmus ja kuvamine pole seetõttu võimalik</string>
@@ -697,13 +697,13 @@
     <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. Element toetab aga vaid API versiooni 2.</string>
     <string name="identity_server_error_outdated_home_server">See tegevus ei ole võimalik. Koduserveri versioon on liiga vana.</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 jututuba</item>
-	<item quantity="other">%d jututuba</item>
-</plurals>
+        <item quantity="one">1 jututuba</item>
+        <item quantity="other">%d jututuba</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">Otsingusõnaga %2$s leidsin %1$s jututoa</item>
-	<item quantity="other">Otsingusõnaga %2$s leidsin %1$s jututuba</item>
-</plurals>
+        <item quantity="one">Otsingusõnaga %2$s leidsin %1$s jututoa</item>
+        <item quantity="other">Otsingusõnaga %2$s leidsin %1$s jututuba</item>
+    </plurals>
     <string name="directory_searching_title">Otsin kataaloogist…</string>
 
     <string name="room_settings_all_messages_noisy">Kõik sõnumid (lärmakas)</string>
@@ -813,9 +813,9 @@
 
     <string name="room_settings_banned_users_title">Suhtluskeelu saanud kasutajad</string>
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d suhtluskeelu saanud kasutaja</item>
-	<item quantity="other">%d suhtluskeelu saanud kasutajat</item>
-</plurals>
+        <item quantity="one">%d suhtluskeelu saanud kasutaja</item>
+        <item quantity="other">%d suhtluskeelu saanud kasutajat</item>
+    </plurals>
 
     <string name="room_settings_category_advanced_title">Lisaseadistused</string>
     <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
@@ -918,4 +918,4 @@
     <string name="soft_logout_clear_data_dialog_title">Eemalda andmed</string>
     <string name="soft_logout_clear_data_dialog_content">Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?
 \nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.</string>
-    </resources>
+</resources>
