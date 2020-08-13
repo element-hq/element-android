@@ -1801,7 +1801,7 @@
     <string name="report_content_custom_title">"Report this content"</string>
     <string name="report_content_custom_hint">"Reason for reporting this content"</string>
     <string name="report_content_custom_submit">"REPORT"</string>
-    <string name="block_user">"BLOCK USER"</string>
+    <string name="block_user">"IGNORE USER"</string>
 
     <string name="content_reported_title">"Content reported"</string>
     <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
@@ -1814,7 +1814,7 @@
 
     <string name="no_network_indicator">There is no network connection right now</string>
 
-    <string name="message_ignore_user">Block user</string>
+    <string name="message_ignore_user">Ignore user</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>

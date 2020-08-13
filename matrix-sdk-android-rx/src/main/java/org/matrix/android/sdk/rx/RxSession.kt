@@ -71,7 +71,7 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveMyDeviceInfo(): Observable<List<DeviceInfo>> {
+    fun liveMyDevicesInfo(): Observable<List<DeviceInfo>> {
         return session.cryptoService().getLiveMyDevicesInfo().asObservable()
                 .startWithCallable {
                     session.cryptoService().getMyDevicesInfo()

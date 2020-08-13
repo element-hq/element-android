@@ -7,11 +7,13 @@ Features ✨:
 Improvements 🙌:
  - Give user the possibility to prevent accidental call (#1869)
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
+ - Ensure users do not accidentally ignore other users (#1890)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
+ - Fix refreshing of sessions list when another session is logged out
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them

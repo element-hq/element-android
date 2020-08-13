@@ -66,7 +66,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
                 .disposeOnDestroyView()
 
         bootstrapAccountPasswordEditText.textChanges()
-                .distinct()
+                .distinctUntilChanged()
                 .subscribe {
                     if (!it.isNullOrBlank()) {
                         bootstrapAccountPasswordTil.error = null
