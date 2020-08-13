@@ -2398,7 +2398,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
 
-<string name="pause_video">Pause</string>
+    <string name="pause_video">Pause</string>
     <string name="action_copy">Kopieren</string>
     <string name="bottom_action_notification">Benachrichtigungen</string>
     <string name="call_failed_no_connection">Element-Anruf fehlgeschlagen</string>
@@ -2462,9 +2462,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="disabled_integration_dialog_content">Aktiviere \'Erlaube Integrationen\' in den Einstellungen um dies zu machen.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d gebannter Benutzer</item>
-	<item quantity="other">%d gebannte Benutzer</item>
-</plurals>
+        <item quantity="one">%d gebannter Benutzer</item>
+        <item quantity="other">%d gebannte Benutzer</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Schlüssel erfolgreich exportiert</string>
 
@@ -2625,5 +2625,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
-<string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
-    </resources>
+    <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
+</resources>

@@ -206,7 +206,7 @@
 
     <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung deines Schlüssels auf, jedoch unterstützt dein Client nicht die Schlüsselüberprüfung im Chat. Du musst die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
 
-<string name="summary_you_sent_image">Du hast ein Bild gesendet.</string>
+    <string name="summary_you_sent_image">Du hast ein Bild gesendet.</string>
     <string name="summary_you_sent_sticker">Du hast einen Sticker gesendet.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Deine Einladung</string>
@@ -277,14 +277,14 @@
     <string name="notice_room_withdraw_with_reason_by_you">Du hast die Einladung von %1$s abgelehnt. Grund: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Du hast die Raumaddresse %1$s hinzugefügt.</item>
-	<item quantity="other">Du hast die Raumaddressen %1$s hinzugefügt.</item>
-</plurals>
+        <item quantity="one">Du hast die Raumaddresse %1$s hinzugefügt.</item>
+        <item quantity="other">Du hast die Raumaddressen %1$s hinzugefügt.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Du hast die Raumaddresse %1$s vom Raum entfernt.</item>
-	<item quantity="other">Du hast die Raumaddressen %1$s vom Raum entfernt.</item>
-</plurals>
+        <item quantity="one">Du hast die Raumaddresse %1$s vom Raum entfernt.</item>
+        <item quantity="other">Du hast die Raumaddressen %1$s vom Raum entfernt.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">Du hast den Raumaddressen %1$s hinzugefügt und %2$s entfernt.</string>
 
@@ -301,6 +301,6 @@
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
 
-<string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
+    <string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
     <string name="notice_call_candidates_by_you">Du hast Daten geschickt, um eine Anruf zu starten.</string>
-    </resources>
+</resources>

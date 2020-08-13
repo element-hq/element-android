@@ -60,9 +60,9 @@
     <string name="no_conversation_placeholder">گفتگوای نیست</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">۱ کاربر</item>
-	<item quantity="other">%d کاربر</item>
-</plurals>
+        <item quantity="one">۱ کاربر</item>
+        <item quantity="other">%d کاربر</item>
+    </plurals>
 
     <string name="groups_invite_header">دعوت</string>
     <string name="no_group_placeholder">هیچ گروهی وجود ندارد</string>
@@ -243,21 +243,21 @@
     <string name="room_title_one_member">۱ عضو</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">۱ ثانیه</item>
-	<item quantity="other">%d ثانیه</item>
-</plurals>
+        <item quantity="one">۱ ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">۱ دقیقه</item>
-	<item quantity="other">%d دقیقه</item>
-</plurals>
+        <item quantity="one">۱ دقیقه</item>
+        <item quantity="other">%d دقیقه</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">۱ ساعت</item>
-	<item quantity="other">%d ساعت</item>
-</plurals>
+        <item quantity="one">۱ ساعت</item>
+        <item quantity="other">%d ساعت</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">۱ روز</item>
-	<item quantity="other">%d روز</item>
-</plurals>
+        <item quantity="one">۱ روز</item>
+        <item quantity="other">%d روز</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">ترک اتاق</string>
     <string name="room_participants_leave_prompt_msg">آیا از ترک این اتاق اطمینان دارید؟</string>
@@ -490,9 +490,9 @@
     </plurals>
 
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">۱ آگاهی</item>
-	<item quantity="other">%d آگاهی</item>
-</plurals>
+        <item quantity="one">۱ آگاهی</item>
+        <item quantity="other">%d آگاهی</item>
+    </plurals>
 
     <string name="room_widget_permission_theme">زمینه‌تان</string>
     <string name="room_add_matrix_apps">افزودن کاره‌های ماتریس</string>
@@ -645,9 +645,9 @@
     <string name="settings_active_sessions_show_all">نمایش تمامی نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">۱ نشست فعّال</item>
-	<item quantity="other">%d نشست فعّال</item>
-</plurals>
+        <item quantity="one">۱ نشست فعّال</item>
+        <item quantity="other">%d نشست فعّال</item>
+    </plurals>
 
     <string name="room_member_profile_failed_to_get_devices">شکست در گرفتن نشست‌ها</string>
     <string name="room_member_profile_sessions_section_title">نشست‌ها</string>
@@ -747,10 +747,10 @@
     <string name="settings">تنظیمات</string>
     <string name="account_password">گذرواژه حساب</string>
 
-<string name="play_video">پخش</string>
+    <string name="play_video">پخش</string>
     <string name="pause_video">توقف</string>
     <string name="action_copy">رونوشت</string>
     <string name="dialog_title_success">موفقیت</string>
 
     <string name="bottom_action_notification">اعلان‌ها</string>
-    </resources>
+</resources>

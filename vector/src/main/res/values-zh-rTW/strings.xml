@@ -2330,7 +2330,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="identity_server_set_alternative_notice_no_default">輸入身份識別伺服器 URL</string>
     <string name="identity_server_set_alternative_submit">遞交</string>
 
-<string name="play_video">播放</string>
+    <string name="play_video">播放</string>
     <string name="pause_video">暫停</string>
     <string name="dismiss">忽略</string>
 
@@ -2396,8 +2396,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="disabled_integration_dialog_content">在設定中啟用「允許整合」以執行此動作。</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="other">%d 封鎖了使用者</item>
-</plurals>
+        <item quantity="other">%d 封鎖了使用者</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">金鑰已成功匯出</string>
 

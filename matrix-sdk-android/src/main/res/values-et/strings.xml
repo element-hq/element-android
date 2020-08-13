@@ -199,7 +199,7 @@
     <string name="key_verification_request_fallback_message">%s soovib verifitseerida sinu võtmeid, kuid sinu kasutatav klient ei oska vestluse-sisest verifitseerimist teha. Sa pead kasutama traditsioonilist verifitseerimislahendust.</string>
 
     <string name="notice_room_created">Kasutaja %1$s lõi jututoa</string>
-<string name="summary_you_sent_image">Sina saatsid pildi.</string>
+    <string name="summary_you_sent_image">Sina saatsid pildi.</string>
     <string name="summary_you_sent_sticker">Sina saatsid kleepsu.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Sinu kutse</string>
@@ -275,14 +275,14 @@
     <string name="notice_room_withdraw_with_reason_by_you">Sina võtsid tagasi kasutaja %1$s kutse. Põhjus: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Sina lisasid %1$s selle jututoa aadressiks.</item>
-	<item quantity="other">Sina lisasid %1$s selle jututoa aadressideks.</item>
-</plurals>
+        <item quantity="one">Sina lisasid %1$s selle jututoa aadressiks.</item>
+        <item quantity="other">Sina lisasid %1$s selle jututoa aadressideks.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Sina eemaldasid %1$s, kui selle jututoa aadressi.</item>
-	<item quantity="other">Sina eemaldasid %1$s selle jututoa aadresside hulgast.</item>
-</plurals>
+        <item quantity="one">Sina eemaldasid %1$s, kui selle jututoa aadressi.</item>
+        <item quantity="other">Sina eemaldasid %1$s selle jututoa aadresside hulgast.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">Sina lisasid %1$s selle jututoa aadressiks ning eemaldasid %2$s aadresside hulgast.</string>
 

@@ -2433,7 +2433,7 @@
     <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un server di identità</string>
     <string name="identity_server_set_alternative_submit">Invia</string>
 
-<string name="play_video">Riproduci</string>
+    <string name="play_video">Riproduci</string>
     <string name="pause_video">Pausa</string>
     <string name="dismiss">Annulla</string>
 
@@ -2499,9 +2499,9 @@
     <string name="disabled_integration_dialog_content">Attiva \'Permetti integrazioni\' nelle impostazioni per continuare.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d utente bandito</item>
-	<item quantity="other">%d utenti banditi</item>
-</plurals>
+        <item quantity="one">%d utente bandito</item>
+        <item quantity="other">%d utenti banditi</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Chiavi esportate correttamente</string>
 
