@@ -54,7 +54,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
     }
 
-
     private fun migrateTo3(realm: DynamicRealm) {
         Timber.d("Step 1 -> 2")
         realm.schema.get("HomeServerCapabilitiesEntity")

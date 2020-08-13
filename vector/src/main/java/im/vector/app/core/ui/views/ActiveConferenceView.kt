@@ -86,7 +86,6 @@ class ActiveConferenceView @JvmOverloads constructor(
         findViewById<TextView>(R.id.deleteWidgetButton).setOnClickListener {
             jitsiWidget?.let { callback?.onDelete(it) }
         }
-
     }
 
     fun render(state: RoomDetailViewState) {

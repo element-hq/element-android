@@ -35,4 +35,3 @@ class JitsiWidgetProperties(private val uriString: String, val stringProvider: S
                 ?: mapOf()
     }
 }
-

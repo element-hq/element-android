@@ -226,7 +226,7 @@ class RoomDetailFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
 //        RoomWidgetsBannerView.Callback,
-        ActiveCallView.Callback{
+        ActiveCallView.Callback {
 
     companion object {
 
@@ -698,7 +698,6 @@ class RoomDetailFragment @Inject constructor(
                         // A conference is already in progress!
                         showDialogWithMessage(getString(R.string.conference_call_in_progress))
                     } else {
-
                         AlertDialog.Builder(requireContext())
                                 .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)
                                 .setMessage(R.string.audio_video_meeting_description)
