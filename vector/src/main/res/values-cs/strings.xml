@@ -253,8 +253,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="membership_changes">
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
-        <item quantity="many">%d změn členství</item>
-        <item quantity="other" />
+        <item quantity="other">%d změn členství</item>
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -341,14 +340,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
-        <item quantity="many">%d aktivních členů</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktivních členů</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
-        <item quantity="many">%d členů</item>
-        <item quantity="other" />
+        <item quantity="other">%d členů</item>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
@@ -439,8 +436,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
-        <item quantity="many">%d nových zpráv</item>
-        <item quantity="other" />
+        <item quantity="other">%d nových zpráv</item>
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -456,8 +452,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_details_selected">
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
-        <item quantity="many">%d vybráno</item>
-        <item quantity="other" />
+        <item quantity="other">%d vybráno</item>
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
