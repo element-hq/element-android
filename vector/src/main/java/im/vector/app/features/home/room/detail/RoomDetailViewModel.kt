@@ -281,6 +281,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
+            is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
         }.exhaustive
     }
 
@@ -408,6 +409,25 @@ class RoomDetailViewModel @AssistedInject constructor(
             } finally {
                 _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
             }
+        }
+    }
+
+    private fun handleCheckWidgetAllowed(action: RoomDetailAction.EnsureNativeWidgetAllowed) {
+        val widget = action.widget
+        val domain = action.widget.widgetContent.data["domain"] as? String ?: ""
+        val isAllowed = if (widget.type == WidgetType.Jitsi) {
+            widget.senderInfo?.userId == session.myUserId
+                    || session.integrationManagerService().isNativeWidgetDomainAllowed(
+                    action.widget.type.preferred,
+                    domain
+            )
+        } else false
+
+        if (isAllowed) {
+            _viewEvents.post(action.grantedEvents)
+        } else {
+            // we need to request permission
+            _viewEvents.post(RoomDetailViewEvents.RequestNativeWidgetPermission(widget, domain, action.grantedEvents))
         }
     }
 

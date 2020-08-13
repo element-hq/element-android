@@ -35,6 +35,8 @@ import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
+import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
+import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 import kotlinx.android.synthetic.main.activity_room_detail.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -42,7 +44,8 @@ import javax.inject.Inject
 class RoomDetailActivity :
         VectorBaseActivity(),
         ToolbarConfigurable,
-        RequireActiveMembershipViewModel.Factory {
+        RequireActiveMembershipViewModel.Factory,
+        RoomWidgetPermissionViewModel.Factory {
 
     override fun getLayoutRes() = R.layout.activity_room_detail
 
@@ -55,6 +58,12 @@ class RoomDetailActivity :
     override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
         // Due to shortcut, we cannot use MvRx args. Pass the first roomId here
         return requireActiveMembershipViewModelFactory.create(initialState.copy(roomId = currentRoomId ?: ""))
+    }
+
+    @Inject
+    lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
+    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
+        return permissionsViewModelFactory.create(initialState)
     }
 
     override fun injectWith(injector: ScreenComponent) {

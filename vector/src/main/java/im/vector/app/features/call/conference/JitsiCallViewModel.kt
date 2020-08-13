@@ -26,6 +26,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.WebRtcPeerConnectionManager
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -43,7 +44,8 @@ class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
         @Assisted val args: VectorJitsiActivity.Args,
         val session: Session,
-        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        val stringProvider: StringProvider
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -71,7 +73,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                     if (jitsiWidget != null) {
                         val uri = Uri.parse(jitsiWidget.computedUrl)
                         val confId = uri.getQueryParameter("confId")
-                        val ppt = jitsiWidget.computedUrl?.let { JitsiWidgetProperties(it) }
+                        val ppt = jitsiWidget.computedUrl?.let { JitsiWidgetProperties(it, stringProvider) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),

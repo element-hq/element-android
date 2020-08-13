@@ -151,6 +151,9 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
+import im.vector.app.features.widgets.WidgetArgs
+import im.vector.app.features.widgets.WidgetKind
+import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.session.Session
@@ -223,7 +226,7 @@ class RoomDetailFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
 //        RoomWidgetsBannerView.Callback,
-        ActiveCallView.Callback {
+        ActiveCallView.Callback{
 
     companion object {
 
@@ -360,7 +363,32 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
                 RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
+                is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
             }.exhaustive
+        }
+    }
+
+    private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
+        val tag = RoomWidgetPermissionBottomSheet::class.java.name
+        val dFrag = childFragmentManager
+                .findFragmentByTag(tag) as? RoomWidgetPermissionBottomSheet
+        if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
+            return
+        } else {
+            RoomWidgetPermissionBottomSheet
+                    .newInstance(WidgetArgs(
+                            baseUrl = it.domain,
+                            kind = WidgetKind.ROOM,
+                            roomId = roomDetailArgs.roomId,
+                            widgetId = it.widget.widgetId
+                    )).apply {
+                        directListener = { granted ->
+                            if (granted) {
+                                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(it.widget, it.grantedEvents))
+                            }
+                        }
+                    }
+                    .show(childFragmentManager, tag)
         }
     }
 
@@ -376,11 +404,18 @@ class RoomDetailFragment @Inject constructor(
     private fun setupConfBannerView() {
         activeConferenceView.callback = object : ActiveConferenceView.Callback {
             override fun onTapJoinAudio(jitsiWidget: Widget) {
-                joinJitsiRoom(jitsiWidget, false)
+                // need to check if allowed first
+                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                        jitsiWidget,
+                        RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, false))
+                )
             }
 
             override fun onTapJoinVideo(jitsiWidget: Widget) {
-                joinJitsiRoom(jitsiWidget, true)
+                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                        jitsiWidget,
+                        RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+                )
             }
 
             override fun onDelete(jitsiWidget: Widget) {
