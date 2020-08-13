@@ -1491,7 +1491,7 @@ class RoomDetailFragment @Inject constructor(
                 promptReasonToReportContent(action)
             }
             is EventSharedAction.IgnoreUser                 -> {
-                roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
+                action.senderId?.let { askConfirmationToIgnoreUser(it) }
             }
             is EventSharedAction.OnUrlClicked               -> {
                 onUrlClicked(action.url, action.title)
@@ -1507,10 +1507,19 @@ class RoomDetailFragment @Inject constructor(
                     startActivity(KeysBackupRestoreActivity.intent(it))
                 }
             }
-            else                                            -> {
-                Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
-            }
         }
+    }
+
+    private fun askConfirmationToIgnoreUser(senderId: String) {
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.room_participants_action_ignore_title)
+                .setMessage(R.string.room_participants_action_ignore_prompt_msg)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.room_participants_action_ignore) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(senderId))
+                }
+                .show()
+                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     /**

@@ -18,14 +18,14 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
+import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IgnoredUsersContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Params, Unit> {
@@ -51,7 +51,7 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
                 { it.userId }
         ).toMutableSet()
 
-        val original = ignoredUserIds.toList()
+        val original = ignoredUserIds.toSet()
 
         ignoredUserIds.removeAll { it in params.userIdsToUnIgnore }
         ignoredUserIds.addAll(params.userIdsToIgnore)
