@@ -100,7 +100,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
 
         Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, List<DeviceDetectionInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDeviceInfo(),
+                session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
                 Function3 { cryptoList, infoList, pInfo ->
                     //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")

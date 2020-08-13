@@ -103,7 +103,7 @@ class DevicesViewModel @AssistedInject constructor(
 
         Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDeviceInfo(),
+                session.rx().liveMyDevicesInfo(),
                 BiFunction { cryptoList, infoList ->
                     infoList
                             .sortedByDescending { it.lastSeenTs }
