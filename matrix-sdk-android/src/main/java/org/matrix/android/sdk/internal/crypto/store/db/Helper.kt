@@ -23,7 +23,6 @@ import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 
@@ -98,7 +97,7 @@ fun <T> deserializeFromRealm(string: String?): T? {
 
     val bais = ByteArrayInputStream(decodedB64)
     val gzis = GZIPInputStream(bais)
-    val ois = ObjectInputStream(gzis)
+    val ois = SafeObjectInputStream(gzis)
     return ois.use {
         it.readObject() as T
     }
