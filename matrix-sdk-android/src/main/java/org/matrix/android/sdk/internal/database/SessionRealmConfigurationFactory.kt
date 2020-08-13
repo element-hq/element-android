@@ -47,7 +47,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         context: Context) {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 2L
+        const val SESSION_STORE_SCHEMA_VERSION = 3L
     }
 
     // Keep legacy preferences name for compatibility reason

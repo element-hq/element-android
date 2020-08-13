@@ -20,7 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
@@ -82,8 +84,13 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
         when (viewState.widget) {
             is Fail    -> finish()
             is Success -> {
-//                val widget = viewState.widget.invoke()
+                findViewById<View>(R.id.jitsi_progress_layout).isVisible = false
+                jitsiMeetView?.isVisible = true
                 configureJitsiView(viewState)
+            }
+            else       -> {
+                jitsiMeetView?.isVisible = false
+                findViewById<View>(R.id.jitsi_progress_layout).isVisible = true
             }
         }
     }

@@ -31,6 +31,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
+        if (oldVersion <= 2) migrateTo3(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -51,5 +52,12 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.transform { obj ->
                     obj.setBoolean(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, true)
                 }
+    }
+
+
+    private fun migrateTo3(realm: DynamicRealm) {
+        Timber.d("Step 1 -> 2")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.PREFERRED_JITSI_DOMAIN, String::class.java)
     }
 }

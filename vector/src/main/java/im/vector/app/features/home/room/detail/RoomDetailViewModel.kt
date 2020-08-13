@@ -43,6 +43,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -91,8 +92,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -188,8 +193,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
                     setState {
-                        copy(canSendMessage = canSendMessage)
+                        copy(
+                                canSendMessage = canSendMessage,
+                                isAllowedToManageWidgets = isAllowedToManageWidgets
+                        )
                     }
                 }
                 .disposeOnClear()
@@ -269,7 +278,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
-            is RoomDetailAction.ManageIntegrations                  -> handleManageIntegrations()
+            is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
+            is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
+            is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
         }.exhaustive
     }
 
@@ -314,6 +325,89 @@ class RoomDetailViewModel @AssistedInject constructor(
         } else {
             // Display bottomsheet with widget list
             _viewEvents.post(RoomDetailViewEvents.OpenActiveWidgetBottomSheet)
+        }
+    }
+
+    private fun handleAddJitsiConference(action: RoomDetailAction.AddJitsiWidget) {
+        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+        viewModelScope.launch(Dispatchers.IO) {
+            // Build data for a jitsi widget
+
+            // Build data for a jitsi widget
+            val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
+
+            // Create a random enough jitsi conference id
+            // Note: the jitsi server automatically creates conference when the conference
+            // id does not exist yet
+
+            // Create a random enough jitsi conference id
+            // Note: the jitsi server automatically creates conference when the conference
+            // id does not exist yet
+            var widgetSessionId = UUID.randomUUID().toString()
+
+            if (widgetSessionId.length > 8) {
+                widgetSessionId = widgetSessionId.substring(0, 7)
+            }
+            val roomId: String = room.roomId
+            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
+
+            //DO NOT COMMIT
+            val jitsiDomain = session.getHomeServerCapabilities().preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
+
+            // We use the default element wrapper for this widget
+            // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
+            val url = "https://app.element.io/jitsi.html?" +
+                    "confId=$confId#conferenceDomain=\$domain&conferenceId=\$conferenceId&isAudioOnly=${action.video}" +
+                    "&displayName=\$matrix_display_name&avatarUrl=\$matrix_avatar_url&userId=\$matrix_user_id"
+
+            val widgetEventContent = mapOf(
+                    "url" to url,
+                    "type" to WidgetType.Jitsi.legacy,
+                    "data" to mapOf(
+                            "conferenceId" to confId,
+                            "domain" to jitsiDomain,
+                            "isAudioOnly" to !action.video
+                    ),
+                    "creatorUserId" to session.myUserId,
+                    "id" to widgetId,
+                    "name" to "jitsi"
+            )
+
+            try {
+                val widget = awaitCallback<Widget> {
+                    session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent, it)
+                }
+                _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.video))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
+            } finally {
+                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+            }
+
+        }
+    }
+
+    private fun handleDeleteWidget(widgetId: String) {
+        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                awaitCallback<Unit> { session.widgetService().destroyRoomWidget(room.roomId, widgetId, it) }
+                // local echo
+                setState {
+                    copy(
+                            activeRoomWidgets = when (activeRoomWidgets) {
+                                is Success -> {
+                                    Success(activeRoomWidgets.invoke().filter { it.widgetId != widgetId })
+                                }
+                                else       -> activeRoomWidgets
+                            }
+                    )
+                }
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_remove_widget)))
+            } finally {
+                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+            }
         }
     }
 
@@ -430,7 +524,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps    -> true
             R.id.voice_call,
-            R.id.video_call          -> state.asyncRoomSummary()?.canStartCall == true  && webRtcPeerConnectionManager.currentCall == null
+            R.id.video_call          -> true // always show for discoverability
             R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
             else                     -> false
         }

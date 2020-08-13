@@ -38,7 +38,9 @@ data class HomeServerCapabilities(
          * Option to allow homeserver admins to set the default E2EE behaviour back to disabled for DMs / private rooms
          * (as it was before) for various environments where this is desired.
          */
-        val adminE2EByDefault: Boolean = true
+        val adminE2EByDefault: Boolean = true,
+
+        val preferredJitsiDomain: String? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L

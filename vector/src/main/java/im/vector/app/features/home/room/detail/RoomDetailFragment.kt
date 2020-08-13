@@ -356,6 +356,10 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
                 is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
                 RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
+                is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
+                is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
+                RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
+                RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
             }.exhaustive
         }
     }
@@ -372,13 +376,21 @@ class RoomDetailFragment @Inject constructor(
     private fun setupConfBannerView() {
         activeConferenceView.callback = object : ActiveConferenceView.Callback {
             override fun onTapJoinAudio(jitsiWidget: Widget) {
-                navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to false))
+                joinJitsiRoom(jitsiWidget, false)
             }
 
             override fun onTapJoinVideo(jitsiWidget: Widget) {
-                navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to true))
+                joinJitsiRoom(jitsiWidget, true)
+            }
+
+            override fun onDelete(jitsiWidget: Widget) {
+                roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidget.widgetId))
             }
         }
+    }
+
+    private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
+        navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
@@ -598,28 +610,73 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.voice_call,
             R.id.video_call          -> {
-                val activeCall = sharedCallActionViewModel.activeCall.value
-                val isVideoCall = item.itemId == R.id.video_call
-                if (activeCall != null) {
-                    // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (activeCall.roomId == roomDetailArgs.roomId) {
-                        onTapToReturnToCall()
-                    }
-//                        else {
-                    // TODO might not work well, and should prompt
-//                            webRtcPeerConnectionManager.endCall()
-//                            safeStartCall(it, isVideoCall)
-//                        }
-                } else {
-                    safeStartCall(isVideoCall)
-                }
-                true
+                handleCallRequest(item)
             }
             R.id.hangup_call         -> {
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun handleCallRequest(item: MenuItem): Boolean = withState(roomDetailViewModel) { state ->
+        val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState true
+        val isVideoCall = item.itemId == R.id.video_call
+        return@withState when (roomSummary.joinedMembersCount) {
+            1    -> {
+                val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
+                if (pendingInvite) {
+                    // wait for other to join
+                    showDialogWithMessage(getString(R.string.cannot_call_yourself_with_invite))
+                } else {
+                    // You cannot place a call with yourself.
+                    showDialogWithMessage(getString(R.string.cannot_call_yourself))
+                }
+                true
+            }
+            2    -> {
+                val activeCall = sharedCallActionViewModel.activeCall.value
+                if (activeCall != null) {
+                    // resume existing if same room, if not prompt to kill and then restart new call?
+                    if (activeCall.roomId == roomDetailArgs.roomId) {
+                        onTapToReturnToCall()
+                    }
+                    //                        else {
+                    // TODO might not work well, and should prompt
+                    //                            webRtcPeerConnectionManager.endCall()
+                    //                            safeStartCall(it, isVideoCall)
+                    //                        }
+                } else {
+                    safeStartCall(isVideoCall)
+                }
+                true
+            }
+            else -> {
+                // it's jitsi call
+                // can you add widgets??
+                if (!state.isAllowedToManageWidgets) {
+                    // You do not have permission to start a conference call in this room
+                    showDialogWithMessage(getString(R.string.no_permissions_to_start_conf_call))
+                } else {
+                    if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
+                        // A conference is already in progress!
+                        showDialogWithMessage(getString(R.string.conference_call_in_progress))
+                    } else {
+
+                        AlertDialog.Builder(requireContext())
+                                .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)
+                                .setMessage(R.string.audio_video_meeting_description)
+                                .setPositiveButton(getString(R.string.create)) { _, _ ->
+                                    // create the widget, then navigate to it..
+                                    roomDetailViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
+                                }
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show()
+                    }
+                }
+                true
+            }
         }
     }
 
@@ -915,21 +972,9 @@ class RoomDetailFragment @Inject constructor(
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
+        activeConferenceView.render(state)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            // We only display banner for 'live' widgets
-            val activeConf = // for now only jitsi?
-                    state.activeRoomWidgets()?.firstOrNull {
-                        // for now only jitsi?
-                        it.type == WidgetType.Jitsi
-                    }
-
-            if (activeConf == null) {
-                activeConferenceView.isVisible = false
-            } else {
-                activeConferenceView.isVisible = true
-                activeConferenceView.jitsiWidget = activeConf
-            }
             jumpToBottomView.count = summary.notificationCount
             jumpToBottomView.drawBadge = summary.hasUnreadMessages
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
@@ -1167,7 +1212,7 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
@@ -1639,7 +1684,18 @@ class RoomDetailFragment @Inject constructor(
         Snackbar.make(requireView(), message, duration).show()
     }
 
-    // VectorInviteView.Callback
+    private fun showDialogWithMessage(message: String) {
+        AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.ok), null)
+                .show()
+    }
+
+//    private fun joinCurrentJitsiCall(withVideo: Boolean) {
+//
+//    }
+
+// VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
@@ -1651,7 +1707,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
-    // JumpToReadMarkerView.Callback
+// JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
         jumpToReadMarkerView.isVisible = false
@@ -1667,7 +1723,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
     }
 
-    // AttachmentTypeSelectorView.Callback
+// AttachmentTypeSelectorView.Callback
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
         if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
@@ -1688,7 +1744,7 @@ class RoomDetailFragment @Inject constructor(
         }.exhaustive
     }
 
-    // AttachmentsHelper.Callback
+// AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         if (roomDetailViewModel.preventAttachmentPreview) {

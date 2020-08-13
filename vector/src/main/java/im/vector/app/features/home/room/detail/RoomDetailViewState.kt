@@ -66,7 +66,8 @@ data class RoomDetailViewState(
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true,
         val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
-        val canSendMessage: Boolean = true
+        val canSendMessage: Boolean = true,
+        val isAllowedToManageWidgets: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

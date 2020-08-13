@@ -110,6 +110,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
                 homeServerCapabilitiesEntity.defaultIdentityServerUrl = getWellknownResult.identityServerUrl
                 homeServerCapabilitiesEntity.adminE2EByDefault = getWellknownResult.wellKnown.e2eAdminSetting?.e2eDefault ?: true
+                homeServerCapabilitiesEntity.preferredJitsiDomain = getWellknownResult.wellKnown.jitsiServer?.preferredDomain
                 // We are also checking for integration manager configurations
                 val config = configExtractor.extract(getWellknownResult.wellKnown)
                 if (config != null) {

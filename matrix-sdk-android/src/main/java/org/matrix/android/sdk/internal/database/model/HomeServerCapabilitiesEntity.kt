@@ -26,7 +26,8 @@ internal open class HomeServerCapabilitiesEntity(
         var lastVersionIdentityServerSupported: Boolean = false,
         var defaultIdentityServerUrl: String? = null,
         var adminE2EByDefault: Boolean = true,
-        var lastUpdatedTimestamp: Long = 0L
+        var lastUpdatedTimestamp: Long = 0L,
+        var preferredJitsiDomain: String? = null
 ) : RealmObject() {
 
     companion object

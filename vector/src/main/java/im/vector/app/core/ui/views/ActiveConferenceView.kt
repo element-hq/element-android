@@ -24,10 +24,14 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.tappableMatchingText
+import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
 class ActiveConferenceView @JvmOverloads constructor(
         context: Context,
@@ -38,6 +42,7 @@ class ActiveConferenceView @JvmOverloads constructor(
     interface Callback {
         fun onTapJoinAudio(jitsiWidget: Widget)
         fun onTapJoinVideo(jitsiWidget: Widget)
+        fun onDelete(jitsiWidget: Widget)
     }
 
     var callback: Callback? = null
@@ -76,6 +81,34 @@ class ActiveConferenceView @JvmOverloads constructor(
         findViewById<TextView>(R.id.activeConferenceInfo).apply {
             text = styledText
             movementMethod = LinkMovementMethod.getInstance()
+        }
+
+        findViewById<TextView>(R.id.deleteWidgetButton).setOnClickListener {
+            jitsiWidget?.let { callback?.onDelete(it) }
+        }
+
+    }
+
+    fun render(state: RoomDetailViewState) {
+        val summary = state.asyncRoomSummary()
+        if (summary?.membership == Membership.JOIN) {
+            // We only display banner for 'live' widgets
+            val activeConf = // for now only jitsi?
+                    state.activeRoomWidgets()?.firstOrNull {
+                        // for now only jitsi?
+                        it.type == WidgetType.Jitsi
+                    }
+
+            if (activeConf == null) {
+                isVisible = false
+            } else {
+                isVisible = true
+                jitsiWidget = activeConf
+            }
+            // if sent by me or if i can moderate?
+            findViewById<TextView>(R.id.deleteWidgetButton).isVisible = state.isAllowedToManageWidgets
+        } else {
+            isVisible = false
         }
     }
 }

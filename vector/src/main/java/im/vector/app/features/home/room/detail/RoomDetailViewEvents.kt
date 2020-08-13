@@ -35,9 +35,15 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
 
     data class ShowMessage(val message: String) : RoomDetailViewEvents()
+    data class ShowInfoOkDialog(val message: String) : RoomDetailViewEvents()
     data class ShowE2EErrorMessage(val withHeldCode: WithHeldCode?) : RoomDetailViewEvents()
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
+    data class JoinJitsiConference(val widget: Widget, val withVideo: Boolean) : RoomDetailViewEvents()
+
+    object ShowWaitingView: RoomDetailViewEvents()
+    object HideWaitingView: RoomDetailViewEvents()
+
 
     data class FileTooBigError(
             val filename: String,

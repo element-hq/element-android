@@ -31,7 +31,8 @@ internal object HomeServerCapabilitiesMapper {
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                adminE2EByDefault = entity.adminE2EByDefault
+                adminE2EByDefault = entity.adminE2EByDefault,
+                preferredJitsiDomain = entity.preferredJitsiDomain
         )
     }
 }
