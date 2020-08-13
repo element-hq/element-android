@@ -626,7 +626,7 @@
     <string name="settings_show_redacted_summary">Näita kustutatud sõnumite asemel kohatäidet</string>
     <string name="event_redacted_by_user_reason">Kasutaja kustutas sündmuse</string>
     <string name="event_redacted_by_admin_reason">Jututoa haldur on sündmust modereerinud</string>
-    <string name="last_edited_info_message">Viimati muudetud 1$s poolt, muutmise aeg %2$s</string>
+    <string name="last_edited_info_message">Viimati muudetud %1$s poolt, muutmise aeg %2$s</string>
 
 
     <string name="malformed_message">Vigaselt vormindatud sündmus ja kuvamine pole seetõttu võimalik</string>

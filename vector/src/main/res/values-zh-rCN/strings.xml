@@ -2076,7 +2076,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="verification_verify_user">验证 %s</string>
     <string name="verification_verified_user">已验证 %s</string>
     <string name="verification_request_waiting_for">正在等待 %s…</string>
-    <string name="verification_request_alert_description">为了提高安全性，请通过检查两个设备上的一次性代码来验证 ％s。
+    <string name="verification_request_alert_description">为了提高安全性，请通过检查两个设备上的一次性代码来验证 %s。
 \n
 \n为了获得最大的安全性，请亲自进行。</string>
     <string name="room_profile_not_encrypted_subtitle">此聊天室的消息不是端到端加密。</string>
