@@ -20,14 +20,14 @@ import im.vector.app.EmojiCompatWrapper
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
-import im.vector.matrix.android.api.session.room.timeline.isReply
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
+import org.matrix.android.sdk.api.session.room.timeline.isReply
 import me.gujun.android.span.span
 import javax.inject.Inject
 

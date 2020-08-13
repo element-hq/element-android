@@ -20,7 +20,7 @@ import android.app.Activity
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 
 interface VectorAlert {

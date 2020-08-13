@@ -25,9 +25,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
                                                                private val session: Session)

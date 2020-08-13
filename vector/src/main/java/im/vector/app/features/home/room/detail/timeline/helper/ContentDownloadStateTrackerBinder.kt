@@ -25,7 +25,7 @@ import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
-import im.vector.matrix.android.api.session.file.ContentDownloadStateTracker
+import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import javax.inject.Inject
 
 @ScreenScope

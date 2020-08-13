@@ -25,9 +25,9 @@ import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 
 open class UserAvatarPreference : Preference {
 

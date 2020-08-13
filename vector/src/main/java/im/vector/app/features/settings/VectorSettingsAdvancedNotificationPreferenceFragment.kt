@@ -16,9 +16,9 @@
 package im.vector.app.features.settings
 
 import androidx.preference.Preference
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 import im.vector.app.R
 import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference

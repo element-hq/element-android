@@ -23,7 +23,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getMimeTypeFromUri

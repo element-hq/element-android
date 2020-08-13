@@ -40,7 +40,7 @@ import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
-import im.vector.matrix.android.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryThis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

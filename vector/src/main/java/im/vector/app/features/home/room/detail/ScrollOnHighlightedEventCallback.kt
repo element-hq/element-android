@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.matrix.android.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 

@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.terms.TermsService
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup

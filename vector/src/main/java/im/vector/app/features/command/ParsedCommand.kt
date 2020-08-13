@@ -16,7 +16,7 @@
 
 package im.vector.app.features.command
 
-import im.vector.matrix.android.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.identity.ThreePid
 
 /**
  * Represent a parsed command

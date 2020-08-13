@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_autocomplete_matrix_item)
 abstract class AutocompleteMatrixItem : VectorEpoxyModel<AutocompleteMatrixItem.Holder>() {

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.uploads
 
-import im.vector.matrix.android.api.session.room.uploads.UploadEvent
+import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RoomUploadsAction : VectorViewModelAction {

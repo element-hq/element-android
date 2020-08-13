@@ -55,9 +55,9 @@ import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.session.SessionListener
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
-import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])

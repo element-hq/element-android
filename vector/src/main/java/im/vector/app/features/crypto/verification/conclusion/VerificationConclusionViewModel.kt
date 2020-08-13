@@ -21,8 +21,8 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.session.crypto.verification.CancelCode
-import im.vector.matrix.android.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 
 data class VerificationConclusionViewState(
         val conclusionState: ConclusionState = ConclusionState.CANCELLED,

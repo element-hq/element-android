@@ -16,7 +16,7 @@
 
 package im.vector.app.features.widgets
 
-import im.vector.matrix.android.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.events.model.Content
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class WidgetViewEvents : VectorViewEvents {

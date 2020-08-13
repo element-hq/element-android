@@ -167,7 +167,7 @@ Formatter\.formatShortFileSize===1
 enum class===76
 
 ### Do not import temporary legacy classes
-import im.vector.matrix.android.internal.legacy.riot===3
+import org.matrix.android.sdk.internal.legacy.riot===3
 import org.matrix.androidsdk.crypto.data===2
 
 ### Use `Context#getSystemService` extension function provided by `core-ktx`

@@ -25,13 +25,13 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.JoinState
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.query.QueryStringValue
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,

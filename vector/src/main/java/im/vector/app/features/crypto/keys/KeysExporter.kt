@@ -18,10 +18,10 @@ package im.vector.app.features.crypto.keys
 
 import android.content.Context
 import android.net.Uri
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.extensions.foldToCallback
-import im.vector.matrix.android.internal.util.awaitCallback
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.extensions.foldToCallback
+import org.matrix.android.sdk.internal.util.awaitCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

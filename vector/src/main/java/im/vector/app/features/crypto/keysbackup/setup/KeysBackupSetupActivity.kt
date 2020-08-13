@@ -30,7 +30,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.crypto.keys.KeysExporter
-import im.vector.matrix.android.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCallback
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 

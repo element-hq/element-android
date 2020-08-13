@@ -18,7 +18,7 @@
 package im.vector.app.features.attachments.preview
 
 import com.airbnb.mvrx.MvRxState
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
 data class AttachmentsPreviewViewState(
         val attachments: List<ContentAttachmentData>,

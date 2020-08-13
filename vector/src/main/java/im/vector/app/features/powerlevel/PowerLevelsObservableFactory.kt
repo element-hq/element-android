@@ -16,14 +16,14 @@
 
 package im.vector.app.features.powerlevel
 
-import im.vector.matrix.android.api.query.QueryStringValue
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
-import im.vector.matrix.rx.mapOptional
-import im.vector.matrix.rx.rx
-import im.vector.matrix.rx.unwrap
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.rx.mapOptional
+import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 

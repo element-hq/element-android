@@ -26,7 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,

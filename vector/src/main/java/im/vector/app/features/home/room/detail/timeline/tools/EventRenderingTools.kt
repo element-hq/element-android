@@ -26,8 +26,8 @@ import im.vector.app.core.utils.EvenBetterLinkMovementMethod
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.html.PillImageSpan
-import im.vector.matrix.android.api.permalinks.MatrixLinkify
-import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
+import org.matrix.android.sdk.api.permalinks.MatrixLinkify
+import org.matrix.android.sdk.api.permalinks.MatrixPermalinkSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

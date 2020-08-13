@@ -29,10 +29,10 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.getFileUrl
-import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.trackItemsVisibilityChange

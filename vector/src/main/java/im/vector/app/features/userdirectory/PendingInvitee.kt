@@ -16,8 +16,8 @@
 
 package im.vector.app.features.userdirectory
 
-import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.api.session.user.model.User
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.user.model.User
 
 sealed class PendingInvitee {
     data class UserPendingInvitee(val user: User) : PendingInvitee()

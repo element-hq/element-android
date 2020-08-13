@@ -29,7 +29,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import timber.log.Timber

@@ -27,18 +27,18 @@ import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
-import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
-import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.android.internal.session.room.VerificationState
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
+import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.session.room.VerificationState
 import javax.inject.Inject
 
 /**

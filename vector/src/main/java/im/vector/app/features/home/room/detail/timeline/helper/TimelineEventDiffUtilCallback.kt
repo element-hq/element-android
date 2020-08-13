@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import androidx.recyclerview.widget.DiffUtil
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 class TimelineEventDiffUtilCallback(private val oldList: List<TimelineEvent>,
                                     private val newList: List<TimelineEvent>) : DiffUtil.Callback() {

@@ -26,9 +26,9 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
+import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel

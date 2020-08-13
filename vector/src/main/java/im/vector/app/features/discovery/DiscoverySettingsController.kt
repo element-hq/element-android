@@ -32,9 +32,9 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.identity.SharedState
-import im.vector.matrix.android.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.identity.SharedState
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection

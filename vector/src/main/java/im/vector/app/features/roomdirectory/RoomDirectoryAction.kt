@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 
 sealed class RoomDirectoryAction : VectorViewModelAction {
     data class SetRoomDirectoryData(val roomDirectoryData: RoomDirectoryData) : RoomDirectoryAction()

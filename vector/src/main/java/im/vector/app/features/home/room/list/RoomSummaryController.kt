@@ -25,9 +25,9 @@ import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,

@@ -27,7 +27,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
  * A message preview for bottom sheet.

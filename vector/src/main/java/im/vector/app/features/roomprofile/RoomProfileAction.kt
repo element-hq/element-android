@@ -18,7 +18,7 @@
 package im.vector.app.features.roomprofile
 
 import android.net.Uri
-import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RoomProfileAction: VectorViewModelAction {

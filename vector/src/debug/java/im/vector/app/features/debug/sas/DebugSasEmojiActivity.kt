@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.matrix.android.api.crypto.getAllVerificationEmojis
+import org.matrix.android.sdk.api.crypto.getAllVerificationEmojis
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 
 class DebugSasEmojiActivity : AppCompatActivity() {

@@ -24,10 +24,10 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
-import im.vector.matrix.android.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(

@@ -24,7 +24,7 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
-import im.vector.matrix.android.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxCall
 import timber.log.Timber
 import java.util.concurrent.Executors
 

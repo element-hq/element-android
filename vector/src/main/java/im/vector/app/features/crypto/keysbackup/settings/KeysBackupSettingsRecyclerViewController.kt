@@ -29,9 +29,9 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import java.util.UUID
 import javax.inject.Inject
 

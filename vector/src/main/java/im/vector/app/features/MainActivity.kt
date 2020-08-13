@@ -22,8 +22,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.GlobalError
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.failure.GlobalError
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent

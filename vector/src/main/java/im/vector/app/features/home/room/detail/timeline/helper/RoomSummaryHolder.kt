@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.di.ScreenScope
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 /*

@@ -17,12 +17,12 @@
 package im.vector.app.features.home.room.detail
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
-import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
-import im.vector.matrix.android.api.session.room.timeline.Timeline
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()

@@ -25,9 +25,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.Event
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder

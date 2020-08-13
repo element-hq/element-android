@@ -42,11 +42,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.failure.isInvalidPassword
-import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
-import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword

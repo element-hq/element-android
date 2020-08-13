@@ -27,7 +27,7 @@ import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import me.gujun.android.span.span
 import javax.inject.Inject
 

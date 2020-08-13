@@ -18,8 +18,8 @@ package im.vector.app.core.preference
 
 import android.content.Context
 import android.util.AttributeSet
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.Room
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.Room
 
 /**
  * Specialized class to target a Room avatar preference.

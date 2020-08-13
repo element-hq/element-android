@@ -18,9 +18,9 @@ package im.vector.app.features.roomdirectory.picker
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringArrayProvider
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
-import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import javax.inject.Inject
 
 class RoomDirectoryListCreator @Inject constructor(private val stringArrayProvider: StringArrayProvider,

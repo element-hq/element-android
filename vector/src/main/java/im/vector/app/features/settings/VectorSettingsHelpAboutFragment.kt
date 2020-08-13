@@ -20,7 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.preference.Preference
-import im.vector.matrix.android.api.Matrix
+import org.matrix.android.sdk.api.Matrix
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.copyToClipboard

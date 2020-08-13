@@ -17,7 +17,7 @@
 package im.vector.app.core.glide
 
 import com.bumptech.glide.load.Option
-import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 
 const val ElementToDecryptOptionKey = "im.vector.app.core.glide.ElementToDecrypt"
 

@@ -33,8 +33,8 @@ import im.vector.app.features.userdirectory.UserDirectoryAction
 import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
-import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.api.session.user.model.User
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.user.model.User
 import kotlinx.android.synthetic.main.fragment_contacts_book.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

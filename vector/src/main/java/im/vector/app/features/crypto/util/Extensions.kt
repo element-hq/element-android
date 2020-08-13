@@ -19,7 +19,7 @@ package im.vector.app.features.crypto.util
 import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 @DrawableRes
 fun RoomEncryptionTrustLevel?.toImageRes(): Int {

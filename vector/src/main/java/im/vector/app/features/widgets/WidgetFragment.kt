@@ -35,7 +35,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.terms.TermsService
 import im.vector.app.R
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment

@@ -28,11 +28,11 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session

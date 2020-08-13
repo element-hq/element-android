@@ -33,7 +33,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
-import im.vector.matrix.android.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_captcha.*
 import timber.log.Timber

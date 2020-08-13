@@ -17,7 +17,7 @@
 package im.vector.app.features.settings.crosssigning
 
 import com.airbnb.mvrx.MvRxState
-import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 
 data class CrossSigningSettingsViewState(
         val crossSigningInfo: MXCrossSigningInfo? = null,

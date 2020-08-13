@@ -23,13 +23,13 @@ import com.nulabinc.zxcvbn.Strength
 import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.LiveEvent
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.listeners.ProgressListener
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import timber.log.Timber
 import javax.inject.Inject
 

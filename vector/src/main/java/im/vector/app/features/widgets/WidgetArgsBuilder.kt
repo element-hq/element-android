@@ -16,7 +16,7 @@
 
 package im.vector.app.features.widgets
 
-import im.vector.matrix.android.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import im.vector.app.core.di.ActiveSessionHolder
 import javax.inject.Inject
 

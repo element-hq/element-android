@@ -33,8 +33,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {

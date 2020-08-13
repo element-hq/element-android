@@ -15,8 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import im.vector.matrix.android.api.pushrules.RuleIds
-import im.vector.matrix.android.api.pushrules.getActions
+import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.pushrules.getActions
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider

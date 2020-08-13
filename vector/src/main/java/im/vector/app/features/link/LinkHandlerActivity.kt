@@ -26,7 +26,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
-import im.vector.matrix.android.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCallback
 import timber.log.Timber
 import javax.inject.Inject
 

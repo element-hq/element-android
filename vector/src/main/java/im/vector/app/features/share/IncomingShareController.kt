@@ -18,7 +18,7 @@ package im.vector.app.features.share
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Incomplete
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem

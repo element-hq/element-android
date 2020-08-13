@@ -19,9 +19,9 @@ package im.vector.app.features.roomprofile.settings
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.features.roomprofile.RoomProfileArgs
 
 data class RoomSettingsViewState(

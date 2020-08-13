@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.breadcrumbs
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class BreadcrumbsViewState(
         val asyncBreadcrumbs: Async<List<RoomSummary>> = Uninitialized

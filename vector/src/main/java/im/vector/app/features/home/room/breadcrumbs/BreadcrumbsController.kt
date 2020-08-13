@@ -21,7 +21,7 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.zeroItem
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class BreadcrumbsController @Inject constructor(

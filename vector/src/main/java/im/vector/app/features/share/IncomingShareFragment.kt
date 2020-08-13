@@ -28,8 +28,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup

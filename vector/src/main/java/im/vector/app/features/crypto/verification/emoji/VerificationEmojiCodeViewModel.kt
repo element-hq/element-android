@@ -31,14 +31,14 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
-import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationService
-import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 
 data class VerificationEmojiCodeViewState(
         val transactionId: String?,

@@ -26,13 +26,13 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
-import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session

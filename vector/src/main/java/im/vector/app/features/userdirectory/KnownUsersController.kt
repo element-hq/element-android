@@ -21,9 +21,9 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.EmptyItem_
 import im.vector.app.core.epoxy.loadingItem

@@ -22,7 +22,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.app.core.resources.VersionCodeProvider
 import im.vector.app.features.version.VersionProvider
-import im.vector.matrix.android.api.Matrix
+import org.matrix.android.sdk.api.Matrix
 import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter

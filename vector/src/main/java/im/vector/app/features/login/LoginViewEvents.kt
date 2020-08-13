@@ -18,7 +18,7 @@
 package im.vector.app.features.login
 
 import im.vector.app.core.platform.VectorViewEvents
-import im.vector.matrix.android.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.FlowResult
 
 /**
  * Transient events for Login

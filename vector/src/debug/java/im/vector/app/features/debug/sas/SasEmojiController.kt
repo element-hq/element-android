@@ -17,7 +17,7 @@
 package im.vector.app.features.debug.sas
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 
 data class SasState(
         val emojiList: List<EmojiRepresentation>

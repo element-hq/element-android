@@ -36,7 +36,7 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.toast
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
-import im.vector.matrix.android.internal.crypto.verification.qrcode.toQrCodeData
+import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 import kotlinx.android.synthetic.debug.activity_debug_menu.*
 import timber.log.Timber
 import javax.inject.Inject

@@ -21,9 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.app.core.services.VectorSyncService
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.api.session.sync.FilterService
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
 fun Session.configureAndStart(context: Context) {

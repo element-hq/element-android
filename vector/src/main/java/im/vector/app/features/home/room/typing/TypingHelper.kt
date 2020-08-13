@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.typing
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import javax.inject.Inject
 
 class TypingHelper @Inject constructor(private val stringProvider: StringProvider) {

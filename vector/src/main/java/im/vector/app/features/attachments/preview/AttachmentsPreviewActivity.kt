@@ -25,7 +25,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.themes.ActivityOtherThemes
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
 class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 

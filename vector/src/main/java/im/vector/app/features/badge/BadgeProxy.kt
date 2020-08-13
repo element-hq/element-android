@@ -20,7 +20,7 @@ package im.vector.app.features.badge
 
 import android.content.Context
 import android.os.Build
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import me.leolin.shortcutbadger.ShortcutBadger
 
 /**

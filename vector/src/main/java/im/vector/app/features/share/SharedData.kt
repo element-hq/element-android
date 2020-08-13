@@ -17,7 +17,7 @@
 package im.vector.app.features.share
 
 import android.os.Parcelable
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import kotlinx.android.parcel.Parcelize
 
 sealed class SharedData: Parcelable {

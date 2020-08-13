@@ -18,7 +18,7 @@ package im.vector.app.features.grouplist
 
 import arrow.core.Option
 import im.vector.app.core.utils.BehaviorDataSource
-import im.vector.matrix.android.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import javax.inject.Inject
 import javax.inject.Singleton
 

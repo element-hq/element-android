@@ -23,10 +23,10 @@ import androidx.core.app.RemoteInput
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.read.ReadService
+import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.read.ReadService
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject

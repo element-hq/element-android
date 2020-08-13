@@ -17,7 +17,7 @@
 package im.vector.app.features.home
 
 import com.airbnb.mvrx.MvRxState
-import im.vector.matrix.android.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.InitialSyncProgressService
 
 data class HomeActivityViewState(
         val initialSyncProgressServiceStatus: InitialSyncProgressService.Status = InitialSyncProgressService.Status.Idle

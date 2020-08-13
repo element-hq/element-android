@@ -24,7 +24,7 @@ import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs

@@ -20,16 +20,16 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
-import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
-import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import org.matrix.android.sdk.rx.rx
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
                                                                 private val session: Session)
