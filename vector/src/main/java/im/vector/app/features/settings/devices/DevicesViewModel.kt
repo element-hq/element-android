@@ -139,7 +139,7 @@ class DevicesViewModel @AssistedInject constructor(
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .distinctUntilChanged()
-                .throttleFirst(5_000, TimeUnit.MILLISECONDS)
+                .throttleLast(5_000, TimeUnit.MILLISECONDS)
                 .subscribe {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
