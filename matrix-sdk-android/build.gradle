@@ -179,10 +179,10 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
     // Web RTC
-    // TODO meant for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
+    // org.webrtc:google-webrtc is for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    // WebRTC
-    implementation('com.facebook.react:react-native-webrtc:1.69.2-jitsi-2062090@aar')
+    // Use the same WebRTC library than the one used by Jitsi library
+    implementation('com.facebook.react:react-native-webrtc:1.84.0-jitsi-5112273@aar')
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'

@@ -405,11 +405,10 @@ dependencies {
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 
-    // TODO meant for development purposes only
-//    implementation 'org.webrtc:google-webrtc:1.0.+'
     // WebRTC
-//    implementation('com.facebook.react:react-native-webrtc:1.69.2-jitsi-2062090@aar')
-    implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2') { transitive = true }
+    // org.webrtc:google-webrtc is for development purposes only
+    // implementation 'org.webrtc:google-webrtc:1.0.+'
+    implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
