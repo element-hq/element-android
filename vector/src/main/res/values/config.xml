@@ -5,8 +5,8 @@
 
     <!-- server urls -->
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
-    <string name="piwik_server_url" translatable="false">https://piwik.nonexistent.spiritcroc.de</string>
-    <string name="bug_report_url" translatable="false">https://nonexistent.spiritcroc.de/bugreports/submit</string>
+    <string name="piwik_server_url" translatable="false">https://piwik.nonexistent.localhost</string>
+    <string name="bug_report_url" translatable="false">https://nonexistent.localhost/bugreports/submit</string>
 
     <!--
         Pusher config for the application
