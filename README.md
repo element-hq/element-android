@@ -1,4 +1,4 @@
-# SchildiChat Android
+# SchildiChat for Android
 
 SchildiChat is an Android Matrix Client based on [Element](https://github.com/vector-im/riotX-android).
 
