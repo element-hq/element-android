@@ -20,7 +20,6 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -31,6 +30,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.themes.ThemeUtils
@@ -69,7 +69,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         if (isFavorite) {
             holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_green_24dp)
-            tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            tintColor = ColorProvider(holder.view.context).getColor(R.color.riotx_accent)
         } else {
             holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_24dp)

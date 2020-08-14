@@ -48,6 +48,8 @@
         <item name="riotx_positive_accent">@color/accent_sc</item>
         <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
         <item name="riotx_toolbar_bg">?riotx_background</item>
+
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light</item>
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->

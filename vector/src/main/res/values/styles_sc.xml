@@ -42,6 +42,15 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/text_color_tertiary_sc</item>
         <item name="android:textColorLink">@color/riotx_links</item>
+        <!-- Accent color -->
+        <item name="android:colorAccent">@color/accent_sc</item>
+        <item name="colorAccent">@color/accent_sc</item>
+    </style>
+
+    <style name="Vector.BottomSheet.SC.Light" parent="Vector.BottomSheet.Light">
+        <!-- Accent color -->
+        <item name="android:colorAccent">@color/accent_sc</item>
+        <item name="colorAccent">@color/accent_sc</item>
     </style>
 
     <style name="VectorButtonStyleOutlined.SC">
