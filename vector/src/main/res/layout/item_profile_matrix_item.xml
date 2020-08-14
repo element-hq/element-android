@@ -9,9 +9,9 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="64dp"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingRight="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
     <ImageView
@@ -46,12 +46,12 @@
         android:maxLines="1"
         android:textColor="?riotx_text_primary"
         android:textSize="16sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemEditable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
         tools:text="@sample/matrix.json/data/displayName" />
 
@@ -66,12 +66,12 @@
         android:maxLines="1"
         android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemEditable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
-        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
         tools:text="@sample/matrix.json/data/mxid" />
 

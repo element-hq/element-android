@@ -64,7 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:textColor="?riotx_text_secondary"
             tools:text="@string/keys_backup_info_keys_all_backup_up" />
 

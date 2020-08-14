@@ -11,10 +11,8 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="86dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -84,7 +82,7 @@
         app:layout_constraintEnd_toStartOf="@+id/inviteAcceptView"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inviteLabelView"/>
+        app:layout_constraintTop_toBottomOf="@id/inviteLabelView" />
 
     <Space
         android:layout_width="match_parent"
