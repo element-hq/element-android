@@ -918,4 +918,131 @@
     <string name="soft_logout_clear_data_dialog_title">Eemalda andmed</string>
     <string name="soft_logout_clear_data_dialog_content">Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?
 \nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.</string>
-</resources>
+<string name="login_error_ssl_peer_unverified">SSL\'i viga: teise osapoole identiteeti ei õnnestu kontrollida.</string>
+    <string name="settings_call_show_confirmation_dialog_title">Väldi juhuslikke kõnesid</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Enne kõne algatamist küsi kinnitust</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Kasuta %s kõnehõlbustusserverina siis, kui sinu koduserveris ei ole see funktsionaalsus seadistatud (kõne ajal jagatakse temaga nii sinu avalikku, kui privaatvõrgu IP-aadressi)</string>
+    <string name="call_error_ice_failed">Meedia ühendamine ei õnnestunud</string>
+    <string name="list_members">Osalejate loend</string>
+    <string name="open_chat_header">Ava päis</string>
+    <string name="invite_no_identity_server_error">Selle tegevuse jaoks palun lisa seadistustes isikutuvastusserver.</string>
+    <string name="room_creation_title">Uus vestlus</string>
+    <string name="room_creation_add_member">Lisa osaleja</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 aktiivne osaleja</item>
+	<item quantity="other">%d aktiivset osalejat</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 osaleja</item>
+	<item quantity="other">%d osalejat</item>
+</plurals>
+    <string name="room_title_one_member">1 osaleja</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1 sekund</item>
+	<item quantity="other">%d sekundit</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1 minut</item>
+	<item quantity="other">%d minutit</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1 tund</item>
+	<item quantity="other">%d tundi</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 päev</item>
+	<item quantity="other">%d päeva</item>
+</plurals>
+
+    <string name="room_participants_leave_prompt_title">Lahku jututoast</string>
+    <string name="room_participants_leave_prompt_msg">Kas oled kindel, et soovid lahkuda jututoast\?</string>
+    <string name="room_participants_remove_prompt_msg">Kas sa oled kindel, et soovid eemaldada %s sellest vestlusest\?</string>
+    <string name="room_participants_create">Loo</string>
+
+    <string name="room_participants_online">Võrgus</string>
+    <string name="room_participants_offline">Võrgust väljas</string>
+    <string name="room_participants_idle">Jõude</string>
+    <string name="room_participants_now">Nüüd %1$s</string>
+    <string name="room_participants_ago">Oli %1$s %2$s tagasi</string>
+
+    <string name="room_participants_header_admin_tools">HALDUSTARVIKUD</string>
+    <string name="room_participants_header_call">KÕNED</string>
+    <string name="room_participants_header_devices">SESSIOONID</string>
+
+    <string name="room_participants_action_invite">Kutsu</string>
+    <string name="room_participants_action_cancel_invite">Tühista kutse</string>
+    <string name="room_participants_action_leave">Lahku sellest jututoast</string>
+    <string name="room_participants_action_remove">Eemalda sellest jututoast</string>
+    <string name="room_participants_action_ban">Keela ligipääs</string>
+    <string name="room_participants_action_unban">Taasta ligipääs</string>
+    <string name="room_participants_action_kick">Müksa välja</string>
+    <string name="room_participants_action_set_default_power_level">Muuda tavakasutajaks</string>
+    <string name="room_participants_action_set_moderator">Määra moderaatoriks</string>
+    <string name="room_participants_action_set_admin">Määra peakasutajaks</string>
+    <string name="room_participants_invite_search_another_user">Kasutajatunnus, nimi või e-posti aadress</string>
+    <string name="room_participants_action_mention">Maini</string>
+    <string name="room_participants_action_devices_list">Näita sessioonide loendit</string>
+    <string name="recovery_key_export_saved_as_warning">Taastevõti on salvestatud kausta \'%s\'.
+\n
+\nHoiatus: rakenduse eemaldamisel ka see fail ilmselt kustutatakse.</string>
+    <string name="recovery_key_export_saved">Taastevõti on salvestatud.</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Varukoopia on juba olemas sinu koduserveris</string>
+    <string name="keys_backup_setup_override_replace">Asenda</string>
+    <string name="keys_backup_setup_override_stop">Peata</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Palun tee koopia</string>
+    <string name="settings_discovery_mail_pending">Ootel</string>
+
+    <string name="settings_discovery_enter_identity_server">Sisesta uue isikutuvastusserveri aadress</string>
+    <string name="settings_discovery_bad_identity_server">Ei saanud ühendust isikutuvastusserveriga</string>
+    <string name="settings_discovery_please_enter_server">Palun sisesta isikutuvastusserveri aadress</string>
+    <string name="settings_discovery_no_terms_title">Isikutuvastusserveril puuduvad kasutustingimused</string>
+    <string name="settings_discovery_no_terms">Sinu valitud isikutuvastusserveril pole kasutustingimusi. Jätka vaid siis, kui sa usaldad serveri omanikku ja haldajat</string>
+    <string name="settings_text_message_sent">Saatsime tekstisõnumi numbrile %s. Palun sisesta seal kuvatud kontrollkood.</string>
+    <string name="settings_text_message_sent_wrong_code">Kontrollkood ei ole õige.</string>
+
+    <string name="room_list_sharing_header_other_rooms">Muud jututoad</string>
+
+    <string name="command_description_rainbow">Saadab selle sõnumi vikerkaarevärvilisena</string>
+    <string name="command_description_rainbow_emote">Saadab antud emote vikerkaarevärvides</string>
+
+    <string name="settings_category_timeline">Ajajoon</string>
+
+    <string name="settings_category_composer">Sõnumite kirjutamine</string>
+
+    <string name="room_settings_enable_encryption">Võta läbiv krüptimine kasutusele</string>
+    <string name="room_settings_enable_encryption_warning">"Kui krüptimine on  juba kasutusele võetud, siis ei saa seda enam eemaldada."</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Kas võtame krüptimise kasutusele\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Kui kord juba kasutusele võetud, siis krüptimist enam hiljem ära lõpetada ei saa. Krüptitud sõnumeid ei saa lugeda ei vaheapealses veebiliikluses ega serveris ja vaid jututoa liikmed saavad neid lugeda. Krüptimise kasutusele võtmine võib takistada nii robotite kui sõnumisildade tööd.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Võta jututoas krüptimine kasutusele</string>
+
+    <string name="verification_request_notice">Lisaturvalisus mõttes verifitseeri %s võrreldes selleks üheks korraks loodud koodi mõlemas seadmes.</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifitseeri see sessioon selleks, et teda võiks lugeda usaldusväärseks ja saaks ligipääsu krüptitud sõnumitele. Kui sina pole sellesse sessiooni sisse loginud, siis sinu kasutajakonto võib olla sattunud võõraste kontrolli alla:</string>
+
+    <plurals name="settings_active_sessions_count">
+	<item quantity="one">%d aktiivne sessioon</item>
+	<item quantity="other">%d aktiivset sessiooni</item>
+</plurals>
+
+    <string name="crosssigning_verify_this_session">Verifitseeri see sisselogimissessioon</string>
+    <string name="crosssigning_other_user_not_trust">Teised kasutajad ei pruugi seda usaldada</string>
+    <string name="complete_security">Vormista turvaseadistused lõpuni</string>
+
+    <string name="verification_open_other_to_verify">Kasuta olemasolevat sessiooni selle sessiooni verifitseerimiseks, andes sellega ligipääsu krüptitud sõnumitele.</string>
+
+
+    <string name="verification_profile_verify">Verifitseeri</string>
+    <string name="verification_profile_verified">Verifitseeritud</string>
+    <string name="verification_profile_warning">Hoiatus</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Sessionide loendi laadimine ei õnnestunud</string>
+    <string name="room_member_profile_sessions_section_title">Sessioonid</string>
+    <string name="trusted">Usaldusväärne</string>
+    <string name="not_trusted">Ei ole usaldusväärne</string>
+
+    <string name="verification_profile_device_verified_because">Kuna %1$s (%2$s) on selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) logis sisse uues sessioonis:</string>
+    </resources>
