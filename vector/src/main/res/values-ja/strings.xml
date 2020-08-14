@@ -506,9 +506,9 @@
     <string name="permissions_rationale_msg_storage">Elementは添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
 
 あなたの携帯端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-通話をするには、次のポップアップでアクセスできるように設定してください。</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\n通話をするには、次のポップアップでアクセスできるように設定してください。"</string>
     <string name="permissions_rationale_msg_record_audio">Elementアプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
@@ -1183,4 +1183,12 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="encryption_enabled_tile_description">この部屋内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効化されていません</string>
     <string name="settings_notification_configuration">通知設定</string>
-</resources>
+<string name="disconnect">切断</string>
+    <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
+    <string name="action_mark_room_read">既読にする</string>
+    <string name="action_copy">コピー</string>
+    <string name="dialog_title_success">成功</string>
+
+    <string name="bottom_action_notification">通知</string>
+    <string name="call_failed_no_ice_title">サーバーの設定ミスにより通話に失敗しました</string>
+    </resources>
