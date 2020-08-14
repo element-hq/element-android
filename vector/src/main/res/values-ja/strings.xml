@@ -1191,4 +1191,14 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 
     <string name="bottom_action_notification">通知</string>
     <string name="call_failed_no_ice_title">サーバーの設定ミスにより通話に失敗しました</string>
+    <string name="revoke">破棄</string>
+    <string name="play_video">再生</string>
+    <string name="pause_video">一時停止</string>
+    <string name="dismiss">消去</string>
+
+
+    <string name="skip">スキップ</string>
+    <string name="done">完了</string>
+    <string name="ignore">無視</string>
+    <string name="review">レビュー</string>
     </resources>
