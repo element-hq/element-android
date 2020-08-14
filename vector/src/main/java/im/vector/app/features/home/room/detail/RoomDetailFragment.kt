@@ -384,7 +384,11 @@ class RoomDetailFragment @Inject constructor(
             ).apply {
                 directListener = { granted ->
                     if (granted) {
-                        roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(it.widget, it.grantedEvents))
+                        roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                                widget = it.widget,
+                                userJustAccepted = true,
+                                grantedEvents = it.grantedEvents
+                        ))
                     }
                 }
             }
@@ -406,15 +410,17 @@ class RoomDetailFragment @Inject constructor(
             override fun onTapJoinAudio(jitsiWidget: Widget) {
                 // need to check if allowed first
                 roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
-                        jitsiWidget,
-                        RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, false))
+                        widget = jitsiWidget,
+                        userJustAccepted = false,
+                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, false))
                 )
             }
 
             override fun onTapJoinVideo(jitsiWidget: Widget) {
                 roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
-                        jitsiWidget,
-                        RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+                        widget = jitsiWidget,
+                        userJustAccepted = false,
+                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
                 )
             }
 

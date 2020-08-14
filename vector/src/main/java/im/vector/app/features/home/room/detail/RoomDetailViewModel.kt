@@ -45,6 +45,15 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.NoOpMatrixCallback
@@ -77,24 +86,15 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
+import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
-import org.matrix.android.sdk.api.session.widgets.model.Widget
-import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -412,7 +412,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleCheckWidgetAllowed(action: RoomDetailAction.EnsureNativeWidgetAllowed) {
         val widget = action.widget
         val domain = action.widget.widgetContent.data["domain"] as? String ?: ""
-        val isAllowed = if (widget.type == WidgetType.Jitsi) {
+        val isAllowed = action.userJustAccepted || if (widget.type == WidgetType.Jitsi) {
             widget.senderInfo?.userId == session.myUserId
                     || session.integrationManagerService().isNativeWidgetDomainAllowed(
                     action.widget.type.preferred,
