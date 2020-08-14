@@ -1870,7 +1870,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nKérlek kattints a benne lévő linkre a fiók készítés folytatásához.</string>
     <string name="login_validation_code_is_not_correct">A beírt kód helytelen. Kérlek ellenőrizd.</string>
     <string name="login_error_outdated_homeserver_title">Elavult matrix szerver</string>
-    <string name="login_error_outdated_homeserver_content">Ez a matrix szerver túl elavult a csatlakozáshoz. Kérd meg a matrix szerver adminisztrátorát a frissítésre.</string>
+    <string name="login_error_outdated_homeserver_content">Ez a Matrix szerver túl régi verziójú, így nem lehet csatlakozni hozzá. Kérd meg a Matrix szerver adminisztrátorát, hogy frissítse.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…</item>
@@ -1991,9 +1991,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nA legnagyobb biztonság érdekében ezt tedd meg személyesen.</string>
     <string name="room_profile_not_encrypted_subtitle">Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.</string>
-    <string name="room_profile_encrypted_subtitle">A szobában az üzenetek végponttól végpontig titkosítva vannak.
-\n
-\nAz üzeneteidet lakattal vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.</string>
+    <string name="room_profile_encrypted_subtitle">A szobában az üzenetek végponttól végpontig titkosítva vannak. 
+\n 
+\nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.</string>
     <string name="room_profile_section_security">Biztonság</string>
     <string name="room_profile_section_security_learn_more">Tudj meg többet</string>
     <string name="room_profile_section_more">További</string>
@@ -2382,4 +2382,41 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_set_default_submit">%1$s használata</string>
     <string name="identity_server_set_alternative_notice">Vagy beírhatsz más azonosítási szerver URL-t</string>
     <string name="identity_server_set_alternative_notice_no_default">Add meg az azonosítási szerver URL-jét</string>
-</resources>
+<string name="pause_video">Szünet</string>
+    <string name="action_copy">Másol</string>
+    <string name="dialog_title_success">Siker</string>
+
+    <string name="bottom_action_notification">Értesítések</string>
+    <string name="call_select_sound_device">Hangeszköz kiválasztása</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Hangszóró</string>
+    <string name="sound_device_headset">Headset</string>
+    <string name="sound_device_wireless_headset">Vezeték nélküli headset</string>
+    <string name="call_switch_camera">Kamera váltás</string>
+    <string name="call_camera_front">Első</string>
+    <string name="call_camera_back">Hátsó</string>
+    <string name="call_format_turn_hd_off">HD kikapcsolása</string>
+    <string name="call_format_turn_hd_on">HD bekapcsolása</string>
+
+    <string name="login_error_ssl_other">SSL hiba.</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Hívás indítása előtt kérjen megerősítést</string>
+    <string name="active_call_with_duration">Aktív hívás (%s)</string>
+    <string name="return_to_call">Visszatérés a híváshoz</string>
+
+    <string name="room_participants_action_ignore_title">Felhasználó figyelmen kívül hagyása</string>
+    <string name="room_participants_kick_title">Felhasználó kirúgása</string>
+    <string name="room_participants_kick_reason">Kirúgás oka</string>
+    <string name="room_participants_ban_title">Felhasználó kitiltása a szobából</string>
+    <string name="room_participants_ban_reason">Kitiltás oka</string>
+    <string name="room_participants_unban_title">Felhasználó visszaengedése</string>
+    <string name="settings_secure_backup_section_title">Biztonsági mentés</string>
+    <string name="settings_secure_backup_manage">Kezelés</string>
+    <string name="settings_secure_backup_setup">Biztonsági mentés beállítása</string>
+    <string name="settings_secure_backup_reset">Biztonsági mentés alaphelyzetbe állítása</string>
+    <string name="settings_secure_backup_enter_to_setup">Beállítás ezen az eszközön</string>
+    <string name="settings_secure_backup_section_info">A titkosítási kulcsokat feltölti a szerverre, így megelőzi a titkosított üzenetekhez való hozzáférés elvesztését.</string>
+    <string name="reset_secure_backup_title">Új Biztonsági Kulcs generálása, vagy a jelenlegi mentésedhez új Biztonsági Jelmondat megadása.</string>
+    <string name="reset_secure_backup_warning">A jelenlegi Kulcsod vagy Jelmondatod ki lesz cserélve erre.</string>
+
+    <string name="disabled_integration_dialog_title">Az integrációk ki vannak kapcsolva</string>
+    </resources>
