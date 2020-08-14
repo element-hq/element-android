@@ -3,6 +3,7 @@ Changes in Element 1.0.5 (2020-XX-XX)
 
 Features ✨:
  - Protect access to the app by a pin code (#1700)
+ - Conference with Jitsi support  (#43)
 
 Improvements 🙌:
  - Give user the possibility to prevent accidental call (#1869)
