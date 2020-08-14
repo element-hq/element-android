@@ -352,7 +352,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             val roomId: String = room.roomId
             val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
 
-            // DO NOT COMMIT
             val jitsiDomain = session.getHomeServerCapabilities().preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
 
             // We use the default element wrapper for this widget
