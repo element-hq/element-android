@@ -39,7 +39,9 @@ data class HomeServerCapabilities(
          * (as it was before) for various environments where this is desired.
          */
         val adminE2EByDefault: Boolean = true,
-
+        /**
+         * Preferred Jitsi domain, provided in Wellknown
+         */
         val preferredJitsiDomain: String? = null
 ) {
     companion object {

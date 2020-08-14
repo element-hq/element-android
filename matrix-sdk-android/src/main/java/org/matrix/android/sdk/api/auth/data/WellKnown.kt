@@ -74,9 +74,7 @@ data class E2EWellKnownConfig(
 )
 
 @JsonClass(generateAdapter = true)
-class WellKnownPreferredConfig {
-
-    @JvmField
-    @Json(name = "preferredDomain")
-    var preferredDomain: String? = null
-}
+data class WellKnownPreferredConfig(
+        @Json(name = "preferredDomain")
+        val preferredDomain: String? = null
+)

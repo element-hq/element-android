@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
-    android:foreground="?attr/selectableItemBackground"
     tools:parentTag="android.widget.RelativeLayout">
 
     <TextView
@@ -13,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/deleteWidgetButton"
-        android:background="?attr/selectableItemBackground"
         android:drawableStart="@drawable/ic_call"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
@@ -26,8 +24,9 @@
         app:drawableTint="@color/white"
         tools:text="@string/ongoing_conference_call" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteWidgetButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/activeConferenceInfo"
@@ -39,7 +38,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
         android:text="@string/action_close"
-        android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />

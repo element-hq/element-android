@@ -25,8 +25,9 @@
         android:textColor="@color/white"
         app:drawableTint="@color/white" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/returnToCallButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/activeCallInfo"
@@ -38,7 +39,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
         android:text="@string/return_to_call"
-        android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />

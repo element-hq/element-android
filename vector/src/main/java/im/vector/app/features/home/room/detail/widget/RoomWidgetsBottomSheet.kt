@@ -38,9 +38,9 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying active widgets in a room
  */
-class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidgetController.Listener {
+class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidgetsController.Listener {
 
-    @Inject lateinit var epoxyController: RoomWidgetController
+    @Inject lateinit var epoxyController: RoomWidgetsController
     @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var navigator: Navigator
 

@@ -55,7 +55,7 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
 
     @Inject lateinit var viewModelFactory: JitsiCallViewModel.Factory
 
-    var jitsiMeetView: JitsiMeetView? = null
+    private var jitsiMeetView: JitsiMeetView? = null
 
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
 

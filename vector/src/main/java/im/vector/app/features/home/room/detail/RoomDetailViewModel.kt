@@ -333,13 +333,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
         viewModelScope.launch(Dispatchers.IO) {
             // Build data for a jitsi widget
-
-            // Build data for a jitsi widget
             val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
-
-            // Create a random enough jitsi conference id
-            // Note: the jitsi server automatically creates conference when the conference
-            // id does not exist yet
 
             // Create a random enough jitsi conference id
             // Note: the jitsi server automatically creates conference when the conference
@@ -356,9 +350,14 @@ class RoomDetailViewModel @AssistedInject constructor(
 
             // We use the default element wrapper for this widget
             // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
-            val url = "https://app.element.io/jitsi.html?" +
-                    "confId=$confId#conferenceDomain=\$domain&conferenceId=\$conferenceId&isAudioOnly=${action.video}" +
-                    "&displayName=\$matrix_display_name&avatarUrl=\$matrix_avatar_url&userId=\$matrix_user_id"
+            val url = "https://app.element.io/jitsi.html" +
+                    "?confId=$confId" +
+                    "#conferenceDomain=\$domain" +
+                    "&conferenceId=\$conferenceId" +
+                    "&isAudioOnly=${!action.withVideo}" +
+                    "&displayName=\$matrix_display_name" +
+                    "&avatarUrl=\$matrix_avatar_url" +
+                    "&userId=\$matrix_user_id"
 
             val widgetEventContent = mapOf(
                     "url" to url,
@@ -366,7 +365,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     "data" to mapOf(
                             "conferenceId" to confId,
                             "domain" to jitsiDomain,
-                            "isAudioOnly" to !action.video
+                            "isAudioOnly" to !action.withVideo
                     ),
                     "creatorUserId" to session.myUserId,
                     "id" to widgetId,
@@ -377,7 +376,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 val widget = awaitCallback<Widget> {
                     session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent, it)
                 }
-                _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.video))
+                _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.withVideo))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
             } finally {

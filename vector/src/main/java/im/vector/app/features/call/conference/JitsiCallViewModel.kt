@@ -23,11 +23,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.call.WebRtcPeerConnectionManager
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -36,16 +33,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import java.net.URL
 
-sealed class JitsiCallViewActions : VectorViewModelAction
-
-sealed class JitsiCallViewEvents : VectorViewEvents
-
 class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
         @Assisted val args: VectorJitsiActivity.Args,
-        val session: Session,
-        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
-        val stringProvider: StringProvider
+        private val session: Session,
+        private val stringProvider: StringProvider
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -56,7 +48,7 @@ class JitsiCallViewModel @AssistedInject constructor(
     init {
         val me = session.getUser(session.myUserId)?.toMatrixItem()
         val userInfo = JitsiMeetUserInfo().apply {
-            displayName = me?.displayName
+            displayName = me?.getBestName()
             avatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }?.let { URL(it) }
         }
         val roomName = session.getRoomSummary(args.roomId)?.displayName
@@ -73,7 +65,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                     if (jitsiWidget != null) {
                         val uri = Uri.parse(jitsiWidget.computedUrl)
                         val confId = uri.getQueryParameter("confId")
-                        val ppt = jitsiWidget.computedUrl?.let { JitsiWidgetProperties(it, stringProvider) }
+                        val ppt = jitsiWidget.computedUrl?.let { url -> JitsiWidgetProperties(url, stringProvider) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),
@@ -89,7 +81,8 @@ class JitsiCallViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: JitsiCallViewActions) {
@@ -108,7 +101,6 @@ class JitsiCallViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): JitsiCallViewState? {
             val args: VectorJitsiActivity.Args = viewModelContext.args()
-//            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
 
             return JitsiCallViewState(
                     roomId = args.roomId,

@@ -82,7 +82,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object SelectStickerAttachment : RoomDetailAction()
     object OpenIntegrationManager: RoomDetailAction()
     object ManageIntegrations: RoomDetailAction()
-    data class AddJitsiWidget(val video: Boolean): RoomDetailAction()
+    data class AddJitsiWidget(val withVideo: Boolean): RoomDetailAction()
     data class RemoveWidget(val widgetId: String): RoomDetailAction()
-    data class EnsureNativeWidgetAllowed(val widget: Widget, val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+    data class EnsureNativeWidgetAllowed(val widget: Widget,
+                                         val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
 }

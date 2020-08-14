@@ -36,7 +36,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     var text: String? = null
 
     @EpoxyAttribute
-    var itemClickAction: View.OnClickListener? = null
+    var buttonClickAction: View.OnClickListener? = null
 
     @EpoxyAttribute
     @ColorInt
@@ -57,7 +57,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
             holder.button.icon = null
         }
 
-        itemClickAction?.let { holder.button.setOnClickListener(it) }
+        buttonClickAction?.let { holder.button.setOnClickListener(it) }
     }
 
     class Holder : VectorEpoxyHolder() {

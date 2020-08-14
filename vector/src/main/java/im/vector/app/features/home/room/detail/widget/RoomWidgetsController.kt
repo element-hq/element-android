@@ -29,7 +29,10 @@ import javax.inject.Inject
 /**
  * Epoxy controller for room widgets list
  */
-class RoomWidgetController @Inject constructor(val stringProvider: StringProvider, val colorProvider: ColorProvider) : TypedEpoxyController<List<Widget>>() {
+class RoomWidgetsController @Inject constructor(
+        val stringProvider: StringProvider,
+        val colorProvider: ColorProvider)
+    : TypedEpoxyController<List<Widget>>() {
 
     var listener: Listener? = null
 
@@ -41,18 +44,18 @@ class RoomWidgetController @Inject constructor(val stringProvider: StringProvide
             }
         } else {
             widgets.forEach {
-                RoomWidgetItem_()
-                        .id(it.widgetId)
-                        .widget(it)
-                        .widgetClicked { listener?.didSelectWidget(it) }
-                        .addTo(this)
+                roomWidgetItem {
+                    id(it.widgetId)
+                    widget(it)
+                    widgetClicked { listener?.didSelectWidget(it) }
+                }
             }
         }
         genericButtonItem {
             id("addIntegration")
             text(stringProvider.getString(R.string.room_manage_integrations))
             textColor(colorProvider.getColor(R.color.riotx_accent))
-            itemClickAction(View.OnClickListener { listener?.didSelectManageWidgets() })
+            buttonClickAction(View.OnClickListener { listener?.didSelectManageWidgets() })
         }
     }
 

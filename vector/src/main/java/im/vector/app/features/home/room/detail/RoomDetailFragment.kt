@@ -154,6 +154,14 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_room_detail.*
+import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
+import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.session.Session
@@ -176,21 +184,13 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
-import org.billcarsonfr.jsonviewer.JSonViewerDialog
-import org.commonmark.parser.Parser
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import timber.log.Timber
 import java.io.File
 import java.net.URL
@@ -370,24 +370,24 @@ class RoomDetailFragment @Inject constructor(
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
         val tag = RoomWidgetPermissionBottomSheet::class.java.name
-        val dFrag = childFragmentManager
-                .findFragmentByTag(tag) as? RoomWidgetPermissionBottomSheet
+        val dFrag = childFragmentManager.findFragmentByTag(tag) as? RoomWidgetPermissionBottomSheet
         if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
             return
         } else {
-            RoomWidgetPermissionBottomSheet
-                    .newInstance(WidgetArgs(
+            RoomWidgetPermissionBottomSheet.newInstance(
+                    WidgetArgs(
                             baseUrl = it.domain,
                             kind = WidgetKind.ROOM,
                             roomId = roomDetailArgs.roomId,
                             widgetId = it.widget.widgetId
-                    )).apply {
-                        directListener = { granted ->
-                            if (granted) {
-                                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(it.widget, it.grantedEvents))
-                            }
-                        }
+                    )
+            ).apply {
+                directListener = { granted ->
+                    if (granted) {
+                        roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(it.widget, it.grantedEvents))
                     }
+                }
+            }
                     .show(childFragmentManager, tag)
         }
     }
@@ -592,7 +592,8 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu.findItem(R.id.open_matrix_apps).let { menuItem ->
+        // We use a custom layout for this menu item, so we need to set a ClickListener
+        menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.setOnClickListener {
                 onOptionsItemSelected(menuItem)
             }
@@ -604,24 +605,23 @@ class RoomDetailFragment @Inject constructor(
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
         withState(roomDetailViewModel) { state ->
-            val findItem = menu.findItem(R.id.open_matrix_apps)
-            val widgetsCount = state.activeRoomWidgets.invoke()?.size
-            if (widgetsCount ?: 0 > 0) {
-                val actionView = findItem.actionView
+            val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
+            val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
+            if (widgetsCount > 0) {
+                val actionView = matrixAppsMenuItem.actionView
                 actionView
                         .findViewById<ImageView>(R.id.action_view_icon_image)
                         .setColorFilter(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
-                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = true
-                actionView.findViewById<TextView>(R.id.cart_badge).text = "$widgetsCount"
-                findItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             } else {
                 // icon should be default color no badge
-                val actionView = findItem.actionView
+                val actionView = matrixAppsMenuItem.actionView
                 actionView
                         .findViewById<ImageView>(R.id.action_view_icon_image)
                         .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.riotx_text_secondary))
                 actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
-                findItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             }
         }
     }
@@ -646,6 +646,7 @@ class RoomDetailFragment @Inject constructor(
             R.id.voice_call,
             R.id.video_call          -> {
                 handleCallRequest(item)
+                true
             }
             R.id.hangup_call         -> {
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
@@ -655,10 +656,10 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun handleCallRequest(item: MenuItem): Boolean = withState(roomDetailViewModel) { state ->
-        val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState true
+    private fun handleCallRequest(item: MenuItem) = withState(roomDetailViewModel) { state ->
+        val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         val isVideoCall = item.itemId == R.id.video_call
-        return@withState when (roomSummary.joinedMembersCount) {
+        when (roomSummary.joinedMembersCount) {
             1    -> {
                 val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
                 if (pendingInvite) {
@@ -668,7 +669,6 @@ class RoomDetailFragment @Inject constructor(
                     // You cannot place a call with yourself.
                     showDialogWithMessage(getString(R.string.cannot_call_yourself))
                 }
-                true
             }
             2    -> {
                 val activeCall = sharedCallActionViewModel.activeCall.value
@@ -685,7 +685,6 @@ class RoomDetailFragment @Inject constructor(
                 } else {
                     safeStartCall(isVideoCall)
                 }
-                true
             }
             else -> {
                 // it's jitsi call
@@ -709,7 +708,6 @@ class RoomDetailFragment @Inject constructor(
                                 .show()
                     }
                 }
-                true
             }
         }
     }
@@ -1724,10 +1722,6 @@ class RoomDetailFragment @Inject constructor(
                 .setPositiveButton(getString(R.string.ok), null)
                 .show()
     }
-
-//    private fun joinCurrentJitsiCall(withVideo: Boolean) {
-//
-//    }
 
 // VectorInviteView.Callback
 

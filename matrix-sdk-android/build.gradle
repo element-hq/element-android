@@ -137,7 +137,7 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.8.1"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
-    implementation("com.squareup.okhttp3:okhttp-urlconnection")
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection'
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"

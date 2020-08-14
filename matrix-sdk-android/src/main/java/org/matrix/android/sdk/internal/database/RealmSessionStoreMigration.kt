@@ -17,10 +17,10 @@
 
 package org.matrix.android.sdk.internal.database
 
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,8 +55,12 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
     }
 
     private fun migrateTo3(realm: DynamicRealm) {
-        Timber.d("Step 1 -> 2")
+        Timber.d("Step 2 -> 3")
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.addField(HomeServerCapabilitiesEntityFields.PREFERRED_JITSI_DOMAIN, String::class.java)
+                ?.transform { obj ->
+                    // Schedule a refresh of the capabilities
+                    obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
+                }
     }
 }

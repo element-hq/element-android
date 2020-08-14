@@ -92,7 +92,7 @@ class ActiveConferenceView @JvmOverloads constructor(
         val summary = state.asyncRoomSummary()
         if (summary?.membership == Membership.JOIN) {
             // We only display banner for 'live' widgets
-            val activeConf = // for now only jitsi?
+            val activeConf =
                     state.activeRoomWidgets()?.firstOrNull {
                         // for now only jitsi?
                         it.type == WidgetType.Jitsi
