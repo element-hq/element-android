@@ -41,9 +41,11 @@
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
 
-    <!-- Ignore error from HtmlCompressor lib -->
     <issue id="InvalidPackage">
+        <!-- Ignore error from HtmlCompressor lib -->
         <ignore path="**/htmlcompressor-1.4.jar" />
+        <!-- Ignore error from dropbox-core-sdk-3.0.8 lib, which comes with Jitsi library -->
+        <ignore path="**/dropbox-core-sdk-3.0.8.jar" />
     </issue>
 
     <!-- Manifest -->
