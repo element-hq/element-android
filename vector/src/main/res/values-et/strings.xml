@@ -1045,4 +1045,63 @@
 
     <string name="verification_profile_device_verified_because">Kuna %1$s (%2$s) on selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) logis sisse uues sessioonis:</string>
+    <string name="room_participants_power_level_prompt">Sa ei saa seda muudatust hiljem tagasi pöörata, sest annad teisele kasutajale samad õigused, mis sinul on.
+\nKas sa oled ikka kindel\?</string>
+
+    <string name="room_participants_power_level_demote_warning_title">Kas vähendad enda õigusi\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Kuna sa vähendad enda õigusi, siis sul ei pruugi enam olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.</string>
+    <string name="room_participants_power_level_demote">Vähenda enda õigusi</string>
+
+
+    <string name="room_participants_action_ignore_title">Eira kasutajat</string>
+    <string name="room_participants_action_ignore_prompt_msg">Selle kasutaja eiramine eemaldab teie jagatud jututoast tema sõnumid.
+\n
+\nÜldistest seadistustest saad seda alati muuta.</string>
+    <string name="room_participants_action_ignore">Eira selle kasutaja sõnumeid</string>
+
+    <string name="room_participants_action_unignore_title">Lõpeta selle kasutaja eiramine</string>
+    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.</string>
+    <string name="room_participants_action_unignore">Lõpeta eiramine</string>
+
+    <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
+    <string name="room_participants_kick_title">Müksa kasutaja välja</string>
+    <string name="room_participants_kick_reason">Jututoast väljamüksamise põhjus</string>
+    <string name="room_participants_kick_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
+\n
+\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
+    <string name="room_participants_ban_title">Määra kasutajale suhtluskeeld</string>
+    <string name="room_participants_ban_reason">Suhtluskeelu põhjus</string>
+    <string name="room_participants_unban_title">Taasta selle kasutaja ligipääs</string>
+    <string name="room_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta jututoast välja ning ei võimalda uuesti liitumist.</string>
+    <string name="room_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab jututoaga uuesti liituda.</string>
+
+    <string name="reason_hint">Põhjus</string>
+
+    <string name="room_participants_invite_prompt_msg">Kas sa oled kindel, et soovid kutsuda %s vestlusele\?</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s ja %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="people_search_invite_by_id"><u>Kutsu tunnuse alusel</u></string>
+    <string name="people_search_local_contacts">KONTAKTID SIIN SEADMES (%d)</string>
+    <string name="people_search_user_directory">KASUTAJATE LOEND (%s)</string>
+    <string name="people_search_filter_text">Vaid Matrix\'i kasutajad</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Kutsu kasutajat tunnuse alusel</string>
+    <string name="people_search_invite_by_id_dialog_description">Palun sisesta üks või enam e-posti aadressi või Matrix\'i kasutajatunnust</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-posti aadress või Matrix\'i kasutajatunnus</string>
+
+    <string name="room_menu_search">Otsi</string>
+    <string name="room_one_user_is_typing">%s kirjutab…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s kirjutavad…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$ &amp; teised kirjutavad…</string>
+    <string name="room_message_placeholder_encrypted">Saada krüptitud sõnum…</string>
+    <string name="room_message_placeholder_not_encrypted">Saada krüptimata sõnum…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Saada krüptitud vastus…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Saada krüptimata vastus…</string>
+    <string name="room_offline_notification">Ühendus sinu serveriga on katkenud.</string>
+    <string name="room_unsent_messages_notification">Sõnumid pole saadetud. %1$s või %2$s nüüd\?</string>
+    <string name="room_unknown_devices_messages_notification">Kuna leidub tundmatuid sessioone, siis sõnumid pole saadetud. %1$s või %2$s nüüd\?</string>
+    <string name="room_prompt_resend">Saada kõik uuesti</string>
     </resources>
