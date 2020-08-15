@@ -10,6 +10,7 @@ Improvements 🙌:
  - Ensure users do not accidentally ignore other users (#1890)
 
 Bugfix 🐛:
+ - Fix incorrect date format for some Asian languages (#1928)
  - Fix invisible toolbar (Status.im theme) (#1746)
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
