@@ -785,7 +785,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Communities die Abzeichen an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -819,7 +819,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="forget_room">Raum vergessen</string>
     <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
-    <string name="settings_flair">Flair</string>
+    <string name="settings_flair">Abzeichen</string>
 
     <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
 
@@ -1895,7 +1895,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
-    <string name="login_splash_title">Befreie deine Kommunikation</string>
+    <string name="login_splash_title">Es ist dein Gespräch. Besitze es.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
     <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
@@ -2109,7 +2109,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
 
 
-    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_cross_signing_state">Kreuz-Signierung</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
     <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
@@ -2626,4 +2626,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
     <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
-</resources>
+<string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
+    </resources>
