@@ -228,7 +228,7 @@
     <string name="call_connecting">Chamando…</string>
     <string name="call_ended">Chamada encerrada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Recebendo chamada de voz</string>
+    <string name="incoming_call">Recebendo chamada</string>
     <string name="incoming_video_call">Recebendo chamada de vídeo</string>
     <string name="incoming_voice_call">Recebendo chamada de voz</string>
     <string name="call_in_progress">Chamada em andamento…</string>
@@ -250,16 +250,16 @@
     <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
+\nPor favor, permita o acesso na próxima tela para fazer a chamada."</string>
     <string name="permissions_rationale_msg_record_audio">Element necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n↵
 \n↵
-\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para fazer chamadas de vídeo.↵
-\n↵
-\nPor favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
+\nPor favor, permita o acesso na próxima tela para fazer a chamada."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para fazer chamadas de vídeo.↵ 
+\n↵ 
+\nPor favor, permita o acesso na próxima tela para fazer a chamada.</string>
     <string name="permissions_rationale_msg_contacts">Element precisa de permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus e-mails e números de telefone. Se você concordar em usar a sua lista de contatos para esse propósito, permita o acesso na próxima janela pop-up.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element precisa de permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus e-mails e números de telefone.↵
 \n↵
@@ -334,7 +334,7 @@
     <string name="people_search_local_contacts">CONTATOS LOCAIS (%d)</string>
     <string name="people_search_filter_text">Apenas usuários Matrix</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Convidar pessoa pelo seu ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Convidar pessoa por sua ID</string>
     <string name="people_search_invite_by_id_dialog_description">Por favor, digite um ou mais endereços de e-mail ou ID Matrix</string>
     <string name="people_search_invite_by_id_dialog_hint">E-mail ou ID Matrix</string>
 
@@ -1326,7 +1326,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_background_fdroid_sync_mode_real_time_description">O Element sincronizará periodicamente em segundo plano, no momento estabelecido (configurável).↵
 \nIsso afetará o uso de dados e da bateria. Haverá uma notificação permanente informando que o Element está sincronizando.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sem sincronização em segundo plano</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Você não será notificado de mensagens recebidas quando o Element está em segundo plano.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Você não será notificado sobre mensagens recebidas quando o Element estiver em segundo plano.</string>
     <string name="settings_background_sync_update_error">Não foi possível actualizar a configuração.</string>
 
 
@@ -1474,7 +1474,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_setup_step3_success_title">Parabéns !</string>
     <string name="keys_backup_setup_step3_text_line1">Está sendo feito backup das suas chaves.</string>
     <string name="keys_backup_setup_step3_text_line2">Sua chave de recuperação é uma rede de proteção - você pode usá-la para restaurar o acesso às suas mensagens criptografadas se você esquecer sua frase de recuperação.
-\n
 \nMantenha a sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Mantenha sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
     <string name="keys_backup_setup_step3_button_title">Pronto</string>
@@ -1493,7 +1492,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_setup_override_stop">Parar</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Faça uma cópia</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Compartilha sua chave de recuperação com…</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Compartilhar chave de recuperação com…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Gerando Chave de Recuperação usando a frase secreta, este processo pode levar alguns segundos.</string>
     <string name="recovery_key">Chave de recuperação</string>
     <string name="unexpected_error">Erro inesperado</string>
@@ -1509,7 +1508,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_restore_use_recovery_key">use sua chave de recuperação</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Não sabe sua frase secreta de recuperação, você pode %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Use a sua Chave de Recuperação para desbloquear o seu histórico de mensagens encriptadas</string>
+    <string name="keys_backup_restore_with_recovery_key">Use a sua Chave de Recuperação para desbloquear o seu histórico de mensagens criptografadas</string>
     <string name="keys_backup_restore_key_enter_hint">Digite a chave de recuperação</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Recuperação de Mensagem</string>
@@ -1562,7 +1561,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="keys_backup_settings_checking_backup_state">A verificando o estado de backup</string>
     <string name="keys_backup_settings_delete_confirm_title">Excluir Backup</string>
-    <string name="keys_backup_settings_delete_confirm_message">Excluir as chaves de encriptação do servidor\? Você não será mais capaz de usar sua chave de recuperação para ler o histórico de mensagens criptografadas.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Excluir as chaves de criptografia do servidor\? Você não será mais capaz de usar a sua chave de recuperação para ler o histórico de mensagens criptografadas.</string>
 
     <string name="new_recovery_method_popup_title">Novo Backup da Chave</string>
     <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.↵
@@ -1597,8 +1596,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="autodiscover_invalid_response">Resposta de descoberta inválida no servidor local</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Completar Automaticamente as Opções do Servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element detectou uma configuração personalizada do servidor para o seu ID \"%1$s\":
-\n
+    <string name="autodiscover_well_known_autofill_dialog_message">Element detectou uma configuração personalizada do servidor para a sua ID de usuário \"%1$s\":↵
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usar a Configuração</string>
 
@@ -1614,7 +1612,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="sas_emoji_description">Verifique esta sessão confirmando o emoji a seguir que será exibido na tela dele</string>
     <string name="sas_decimal_description">Verifique esta sessão confirmando se o número a seguir aparece na tela dele</string>
 
-    <string name="sas_incoming_verification_request_dialog">Você recebeu um pedido de verificação.</string>
+    <string name="sas_incoming_verification_request_dialog">Você recebeu uma solicitação de verificação.</string>
     <string name="sas_view_request_action">Ver pedido</string>
     <string name="sas_waiting_for_partner">Aguardando seu contato confirmar…</string>
 
@@ -1647,7 +1645,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="sas_error_m_mismatched_sas">O SAS não corresponde</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
     <string name="sas_error_m_invalid_message">Foi recebida uma mensagem inválida</string>
-    <string name="sas_error_m_key_mismatch">Chave não corresponde</string>
+    <string name="sas_error_m_key_mismatch">Chave incorreta</string>
     <string name="sas_error_m_user_error">Contato não corresponde</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
 
@@ -1803,7 +1801,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="add_identity_server">Configurar servidor de identidade</string>
     <string name="change_identity_server">Alterar o servidor de identidade</string>
     <string name="settings_discovery_identity_server_info">Atualmente você está usando %1$s para descobrir e ser descoberto pelos contatos existentes.</string>
-    <string name="settings_discovery_identity_server_info_none">Atualmente você não está usando servidor de identidade. Para descobrir e ser descoberto pelos contatos que você conhece, configure um abaixo.</string>
+    <string name="settings_discovery_identity_server_info_none">No momento, você não está usando um servidor de identidade. Para descobrir e ser descoberto pelos contatos existentes, adicione um abaixo.</string>
     <string name="settings_discovery_emails_title">Endereços de e-mail detectáveis</string>
     <string name="settings_discovery_no_mails">As opções de descoberta aparecerão uma vez que você tenha adicionado um e-mail.</string>
     <string name="settings_discovery_no_msisdn">As opções de descoberta aparecerão uma vez que você tenha adicionado um número de telefone.</string>
@@ -1955,15 +1953,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_server_url_form_common_notice">Digite o endereço do servidor que você deseja usar</string>
 
     <string name="login_sso_error_message">Ocorreu um erro ao carregar a página: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">O aplicativo não pode entrar a este servidor. O servidor suporta o seguinte tipo(s) de serviços: %1$s.
-\n
-\n
-\nVocê quer entrar usando um cliente web\?</string>
+    <string name="login_mode_not_supported">O aplicativo não pode entrar neste servidor. O servidor suporta os seguintes tipos de login: %1$s.↵
+\n↵
+\nDeseja entrar no servidor usando o Element Web\?</string>
     <string name="login_registration_disabled">Desculpe, este servidor não está aceitando novas contas.</string>
-    <string name="login_registration_not_supported">O aplicativo não pode criar uma conta neste servidor.
-\n
-\n
-\nVocê quer entrar usando um cliente web\?</string>
+    <string name="login_registration_not_supported">O aplicativo não pode criar uma conta neste servidor.↵
+\n↵
+\nDeseja criar uma conta no servidor usando o Element Web\?</string>
 
     <string name="login_login_with_email_error">Este e-mail não está associado a nenhuma conta.</string>
 
@@ -2046,7 +2042,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
         <item quantity="other">Recebemos demasiado pedidos. Você pode tentar novamente em %1$d segundos…</item>
     </plurals>
 
-    <string name="login_connect_using_matrix_id_notice">Alternativamente, se você já tem uma conta e conhece seu identificador do Matrix e a senha, você pode usar este método:</string>
+    <string name="login_connect_using_matrix_id_notice">Alternativamente, se você já tem uma conta e conhece a sua ID de usuário na Matrix e a senha, você pode usar este método:</string>
     <string name="login_connect_using_matrix_id_submit">Entre com ID do Matrix</string>
     <string name="login_signin_matrix_id_title">Entre com ID do Matrix</string>
     <string name="login_signin_matrix_id_notice">Se você criar uma conta no servidor local, use ID do Matrix (e.g. @user:domain.com) e a senha abaixo.</string>
@@ -2116,7 +2112,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="create_room_encryption_title">Ativar criptografia</string>
     <string name="create_room_encryption_description">Uma vez ativada, a criptografia não poderá ser desativada.</string>
 
-    <string name="login_error_threepid_denied">Seu domínio de e-mail não está autorizado a se registrar neste servidor</string>
+    <string name="login_error_threepid_denied">Seu domínio de e-mail não está permitido a se registrar neste servidor</string>
 
     <string name="verification_conclusion_warning">Entrada não confiável</string>
     <string name="verification_sas_match">Correspondem</string>
@@ -2489,7 +2485,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="command_description_discard_session">Força a atual sessão da comunidade em uma sala criptografada a ser descartada</string>
     <string name="command_description_discard_session_not_handled">Só é suportado em salas criptografadas</string>
     <string name="enter_secret_storage_passphrase_or_key">Use seu %1$s ou %2$s para continuar.</string>
-    <string name="use_recovery_key">Use a Chave de Recuperação</string>
+    <string name="use_recovery_key">Usar a chave de recuperação</string>
     <string name="enter_secret_storage_input_key">Selecione sua Chave de Recuperação, ou insira manualmente digitando-a ou colando-a da sua área de transferência</string>
     <string name="keys_backup_recovery_key_error_decrypt">O backup não pôde ser descriptografado com essa Chave de Recuperação: verifique se você digitou a Chave de Recuperação correta.</string>
     <string name="failed_to_access_secure_storage">Falha ao acessar o armazenamento seguro</string>
