@@ -14,6 +14,7 @@ Bugfix 🐛:
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
+ - Fix http stack corruption after network change (e.g. Wifi -> LTE) (#1934)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
