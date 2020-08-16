@@ -292,8 +292,8 @@
 
     <string name="notice_room_guest_access_can_join">%1$s permitiu que convidados entrem na sala.</string>
     <string name="notice_room_guest_access_can_join_by_you">Você permitiu que convidados entrem na sala.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s impediu que convidados entrem na sala.</string>
-    <string name="notice_room_guest_access_forbidden_by_you">Você impediu que convidados entrem na sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s impediu que convidados entrassem na sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Você impediu que convidados entrassem na sala.</string>
 
     <string name="notice_end_to_end_ok">%1$s ativou a criptografia de ponta a ponta.</string>
     <string name="notice_end_to_end_ok_by_you">Você ativou a criptografia de ponta a ponta.</string>
