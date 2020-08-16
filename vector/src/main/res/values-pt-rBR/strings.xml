@@ -343,7 +343,7 @@
     <string name="room_one_user_is_typing">%s está digitando…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s estão digitando…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; outros estão digitando…</string>
-    <string name="room_message_placeholder_encrypted">Enviar mensagem criptografada…</string>
+    <string name="room_message_placeholder_encrypted">Digite uma mensagem criptografada…</string>
     <string name="room_message_placeholder_not_encrypted">Digite uma mensagem (não criptografada)…</string>
     <string name="room_offline_notification">A conexão com o servidor se perdeu.</string>
     <string name="room_unsent_messages_notification">Mensagens não enviadas. %1$s ou %2$s agora?</string>
@@ -353,7 +353,7 @@
     <string name="room_resend_unsent_messages">Reenviar mensagens não enviadas</string>
     <string name="room_delete_unsent_messages">Apagar mensagens não enviadas</string>
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
-    <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
+    <string name="room_do_not_have_permission_to_post">Você não tem permissão para digitar nesta sala</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -939,8 +939,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="room_participants_invite_join_names_and">%1$s e %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
-    <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta criptografada…</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não criptografada)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Digite sua resposta criptografada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Digite sua resposta (não criptografada)…</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d selecionado</item>
         <item quantity="other">%d selecionados</item>
@@ -1116,8 +1116,8 @@ Tente reiniciar a aplicação.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorar a otimização</string>
 
     <string name="settings_inline_url_preview_summary">Prévia de links dentro do chat quando seu homeserver suporta este recurso.</string>
-    <string name="settings_send_typing_notifs">Enviar notificações de digitação</string>
-    <string name="settings_send_typing_notifs_summary">Deixar outros usuários saberem quando você estiver digitando.</string>
+    <string name="settings_send_typing_notifs">Permitir que saibam quando eu estiver digitando</string>
+    <string name="settings_send_typing_notifs_summary">Deixe outros usuários saberem quando você estiver digitando.</string>
     <string name="settings_show_read_receipts">Mostrar confirmações de leitura</string>
     <string name="settings_show_read_receipts_summary">Clique nas notificações de leitura para uma lista detalhada.</string>
     <string name="settings_show_join_leave_messages">Mostrar eventos de entrada e saída de sala</string>
@@ -1304,9 +1304,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_participants_action_cancel_invite_prompt_msg">Tem certeza que quer cancelar o convite para este usuário\?</string>
     <string name="room_participants_kick_title">Remover usuário</string>
     <string name="room_participants_kick_reason">Motivo da remoção</string>
-    <string name="room_participants_kick_prompt_msg">esta ação removerá o usuário desta sala.↵
-\n↵
-\nPara evitar que o usuário nunca mais entre novamente, você precisará bani-lo.</string>
+    <string name="room_participants_kick_prompt_msg">esta ação removerá o usuário desta sala.↵ 
+\n↵ 
+\nPara impedir que o usuário nunca mais entre novamente, você precisará bani-lo.</string>
     <string name="room_participants_ban_title">Banir usuário</string>
     <string name="room_participants_ban_reason">Motivo do banimento</string>
     <string name="room_participants_unban_title">Remover banimento do usuário</string>
@@ -1350,7 +1350,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="settings_discovery_category">Encontrar</string>
     <string name="settings_discovery_manage">Gerencie suas configurações de descoberta.</string>
-    <string name="settings_data_save_mode_summary">Armazenamento Seguro de Dados aplica um filtro específico para que as atualizações e as notificações presentes sejam filtradas.</string>
+    <string name="settings_data_save_mode_summary">O modo de baixo uso de dados desativa a atualização de presença e a animação de que alguém está digitando.</string>
 
     <string name="settings_integration_allow">Permitir integrações</string>
     <string name="settings_integration_manager">Gerenciador de Integrações</string>
@@ -1811,7 +1811,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_discovery_confirm_mail_not_clicked">Enviamos um e-mail de confirmação para %s, for favor primeiro verifique seu e-mail e clique no link de confirmação</string>
     <string name="settings_discovery_mail_pending">Aguardando</string>
 
-    <string name="settings_discovery_enter_identity_server">Digitar o endereço de um servidor de identidade</string>
+    <string name="settings_discovery_enter_identity_server">Digite o endereço de um servidor de identidade</string>
     <string name="settings_discovery_bad_identity_server">Não foi possível conectar-se ao servidor de identidade</string>
     <string name="settings_discovery_please_enter_server">Digite o endereço do servidor de identidade</string>
     <string name="settings_discovery_no_terms_title">O servidor de identidade não tem termos de serviço</string>
@@ -2539,7 +2539,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="identity_server_set_default_notice">Seu servidor doméstico (%1$s) propõe o uso de %2$s para seu servidor de identidade</string>
     <string name="identity_server_set_default_submit">Use %1$s</string>
-    <string name="identity_server_set_alternative_notice">Como alternativa, você pode digitar o endereço de qualquer outro servidor de identidade</string>
+    <string name="identity_server_set_alternative_notice">Como alternativa, você pode digitar o endereço de outro servidor de identidade</string>
     <string name="identity_server_set_alternative_notice_no_default">Digite o endereço de um servidor de identidade</string>
     <string name="identity_server_set_alternative_submit">Submeter</string>
     <string name="power_level_edit_title">Definir a função</string>
@@ -2621,6 +2621,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_security_pin_code_title">Ativar o PIN</string>
     <string name="settings_security_pin_code_summary">Se você quiser redefinir seu PIN, toque no Esqueci o PIN para sair e redefinir-lo.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
-<string name="settings_call_show_confirmation_dialog_title">Prevenir chamadas acidentais</string>
+<string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
     <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
     </resources>
