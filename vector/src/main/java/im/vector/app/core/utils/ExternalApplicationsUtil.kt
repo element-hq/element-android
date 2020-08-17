@@ -134,9 +134,7 @@ fun openFileSelection(activity: Activity,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-        fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
-    }
+    fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
     fileIntent.addCategory(Intent.CATEGORY_OPENABLE)
     fileIntent.type = "*/*"

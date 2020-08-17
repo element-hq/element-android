@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,9 +86,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test_ko)
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        statusIconImage.imageTintList = null
-                    }
+                    statusIconImage.imageTintList = null
 
                     descriptionText.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
                 }

@@ -101,15 +101,10 @@ fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: In
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    } else {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra("app_package", activity.packageName)
         intent.putExtra("app_uid", activity.applicationInfo?.uid)
-    } else {
-        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        intent.addCategory(Intent.CATEGORY_DEFAULT)
-        val uri = Uri.fromParts("package", activity.packageName, null)
-        intent.data = uri
     }
     activity.startActivityForResult(intent, requestCode)
 }
@@ -140,11 +135,7 @@ fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
 fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null, requestCode: Int? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-    } else {
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
+    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)

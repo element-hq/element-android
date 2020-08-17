@@ -16,7 +16,6 @@
 package im.vector.app.features.widgets.permissions
 
 import android.content.DialogInterface
-import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
@@ -71,18 +70,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         permissionData.permissionsList.forEach {
             infoBuilder.append("\n")
             val bulletPoint = getString(it)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            } else {
-                val start = infoBuilder.length
-                infoBuilder.append(bulletPoint)
-                infoBuilder.setSpan(
-                        BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()),
-                        start,
-                        bulletPoint.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
+            infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         infoBuilder.append("\n")
         widgetPermissionSharedInfo.text = infoBuilder

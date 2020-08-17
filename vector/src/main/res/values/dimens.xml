@@ -9,9 +9,9 @@
     <dimen name="layout_vertical_margin_big">32dp</dimen>
 
     <dimen name="profile_avatar_size">50dp</dimen>
-    <dimen name="floating_action_button_margin">0dp</dimen>
-    <dimen name="navigation_view_height">172dp</dimen>
-    <dimen name="navigation_avatar_top_margin">20dp</dimen>
+    <dimen name="floating_action_button_margin">16dp</dimen>
+    <dimen name="navigation_view_height">196dp</dimen>
+    <dimen name="navigation_avatar_top_margin">44dp</dimen>
     <dimen name="item_decoration_left_margin">72dp</dimen>
 
     <dimen name="chat_avatar_size">40dp</dimen>

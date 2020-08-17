@@ -17,7 +17,6 @@
 
 package org.matrix.android.sdk.internal.session.widgets
 
-import android.os.Build
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import com.squareup.moshi.Moshi
@@ -172,11 +171,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
             Timber.v("BRIDGE sendResponse: $functionLine")
             // call the javascript method
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                webView?.loadUrl("javascript:$functionLine")
-            } else {
-                webView?.evaluateJavascript(functionLine, null)
-            }
+            webView?.evaluateJavascript(functionLine, null)
         } catch (e: Exception) {
             Timber.e(e, "## sendResponse() failed ")
         }
