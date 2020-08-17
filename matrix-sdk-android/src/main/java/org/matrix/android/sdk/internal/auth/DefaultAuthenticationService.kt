@@ -176,10 +176,11 @@ internal class DefaultAuthenticationService @Inject constructor(
             }
         }
                 .map { riotConfig ->
-                    if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
+                    val defaultHomeServerUrl = riotConfig.getPreferredHomeServerUrl()
+                    if (defaultHomeServerUrl?.isNotEmpty() == true) {
                         // Ok, good sign, we got a default hs url
                         val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                                homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
+                                homeServerUri = Uri.parse(defaultHomeServerUrl)
                         )
 
                         val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
@@ -188,7 +189,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                             apiCall = newAuthAPI.versions()
                         }
 
-                        getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
+                        getLoginFlowResult(newAuthAPI, versions, defaultHomeServerUrl)
                     } else {
                         // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
                         throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
