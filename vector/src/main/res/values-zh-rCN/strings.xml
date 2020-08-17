@@ -2020,7 +2020,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_developer_mode_fail_fast_title">快速失败</string>
     <string name="settings_developer_mode_fail_fast_summary">发生意外错误时，Element 可能更经常崩溃</string>
 
-    <string name="command_description_verify">请求验证给定 userID</string>
     <string name="command_description_shrug">在明文消息前添加 ¯\\_(ツ)_/¯</string>
 
     <string name="create_room_encryption_title">启用加密</string>

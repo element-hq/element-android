@@ -1929,7 +1929,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
     <string name="settings_developer_mode_fail_fast_summary">Element aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
-    <string name="command_description_verify">Eskatu emandako erabiltzaile IDa egiaztatzea</string>
     <string name="command_description_shrug">"Jarri ¯\\_(ツ)_/¯  testu-soileko mezuaren aurretik"</string>
 
     <string name="create_room_encryption_title">Gaitu zifratzea</string>

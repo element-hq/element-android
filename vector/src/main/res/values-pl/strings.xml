@@ -1915,7 +1915,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_developer_mode_fail_fast_title">Bezproblemowy</string>
     <string name="settings_developer_mode_fail_fast_summary">Element może zawieszać się częściej gdy napotka na niespodziewany błąd</string>
 
-    <string name="command_description_verify">Żądanie weryfikujące podany userID</string>
     <string name="command_description_shrug">Preparuje ¯\\_(ツ)_/¯ dla zwykłej wiadomości tekstowej</string>
 
     <string name="create_room_encryption_title">Aktywuj szyfrowanie</string>

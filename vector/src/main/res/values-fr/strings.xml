@@ -1933,7 +1933,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
     <string name="settings_developer_mode_fail_fast_summary">Element peut planter plus souvent quand une erreur inattendue survient</string>
-    <string name="command_description_verify">Demande de vérification de l’identifiant utilisateur fourni</string>
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
 
     <string name="create_room_encryption_title">Activer le chiffrement</string>
