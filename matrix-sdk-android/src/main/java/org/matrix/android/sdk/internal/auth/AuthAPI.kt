@@ -42,6 +42,11 @@ import retrofit2.http.Url
  * The login REST API.
  */
 internal interface AuthAPI {
+    /**
+     * Get a Riot config file, using the name including the domain
+     */
+    @GET("config.{domain}.json")
+    fun getRiotConfigDomain(@Path("domain") domain: String): Call<RiotConfig>
 
     /**
      * Get a Riot config file
