@@ -1201,4 +1201,32 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="done">完了</string>
     <string name="ignore">無視</string>
     <string name="review">レビュー</string>
+    <string name="send_file_step_idle">待機中…</string>
+    <string name="send_file_step_encrypting_thumbnail">サムネイル暗号化中…</string>
+    <string name="send_file_step_sending_thumbnail">サムネイル送信中 (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">ファイル暗号化中…</string>
+    <string name="send_file_step_sending_file">ファイル送信中 (%1$s / %2$s)</string>
+
+    <string name="downloading_file">ファイルをダウンロード中 %1$s…</string>
+    <string name="attachment_type_file">ファイル</string>
+    <string name="attachment_type_contact">連絡先</string>
+    <string name="attachment_type_camera">カメラ</string>
+    <string name="attachment_type_audio">音声</string>
+    <string name="attachment_type_gallery">ギャラリー</string>
+    <string name="attachment_type_sticker">ステッカー</string>
+    <string name="report_content_spam">スパムメッセージです</string>
+    <string name="report_content_inappropriate">不適切なメッセージです</string>
+    <string name="report_content_custom">その他の報告…</string>
+    <string name="report_content_custom_title">コンテンツの報告</string>
+    <string name="report_content_custom_hint">このコンテンツを報告する理由</string>
+    <string name="report_content_custom_submit">報告する</string>
+    <string name="block_user">ユーザーをブロック</string>
+
+    <string name="message_ignore_user">ユーザーをブロック</string>
+
+    <string name="enter_secret_storage_passphrase_warning">警告:</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="other">元の大きさのまま画像を送信する</item>
+</plurals>
+
     </resources>
