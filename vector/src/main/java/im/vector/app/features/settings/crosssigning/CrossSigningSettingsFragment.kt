@@ -29,6 +29,9 @@ import im.vector.app.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
+/**
+ * This Fragment is only used when user activates developer mode from the settings
+ */
 class CrossSigningSettingsFragment @Inject constructor(
         private val controller: CrossSigningSettingsController,
         val viewModelFactory: CrossSigningSettingsViewModel.Factory

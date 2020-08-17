@@ -17,6 +17,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         android:title="@string/settings_cryptography">
+
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY"
             android:persistent="false"
