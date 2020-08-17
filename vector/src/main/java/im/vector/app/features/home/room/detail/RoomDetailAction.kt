@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageStickerConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
@@ -80,4 +81,10 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     object SelectStickerAttachment : RoomDetailAction()
     object OpenIntegrationManager: RoomDetailAction()
+    object ManageIntegrations: RoomDetailAction()
+    data class AddJitsiWidget(val withVideo: Boolean): RoomDetailAction()
+    data class RemoveWidget(val widgetId: String): RoomDetailAction()
+    data class EnsureNativeWidgetAllowed(val widget: Widget,
+                                         val userJustAccepted: Boolean,
+                                         val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
 }

@@ -29,8 +29,11 @@ import android.text.Spannable
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -77,6 +80,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
@@ -110,6 +114,7 @@ import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.util.toImageRes
@@ -129,7 +134,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
-import im.vector.app.features.home.room.detail.widget.RoomWidgetsBannerView
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.html.EventHtmlRenderer
@@ -147,6 +151,17 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
+import im.vector.app.features.widgets.WidgetArgs
+import im.vector.app.features.widgets.WidgetKind
+import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_room_detail.*
+import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
+import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.session.Session
@@ -169,20 +184,13 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
-import org.billcarsonfr.jsonviewer.JSonViewerDialog
-import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
 import java.net.URL
@@ -217,7 +225,7 @@ class RoomDetailFragment @Inject constructor(
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
-        RoomWidgetsBannerView.Callback,
+//        RoomWidgetsBannerView.Callback,
         ActiveCallView.Callback {
 
     companion object {
@@ -292,7 +300,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToReadMarkerView()
         setupActiveCallView()
         setupJumpToBottomView()
-        setupWidgetsBannerView()
+        setupConfBannerView()
 
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -350,7 +358,41 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
                 is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
+                RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
+                is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
+                is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
+                RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
+                RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
+                is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
             }.exhaustive
+        }
+    }
+
+    private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
+        val tag = RoomWidgetPermissionBottomSheet::class.java.name
+        val dFrag = childFragmentManager.findFragmentByTag(tag) as? RoomWidgetPermissionBottomSheet
+        if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
+            return
+        } else {
+            RoomWidgetPermissionBottomSheet.newInstance(
+                    WidgetArgs(
+                            baseUrl = it.domain,
+                            kind = WidgetKind.ROOM,
+                            roomId = roomDetailArgs.roomId,
+                            widgetId = it.widget.widgetId
+                    )
+            ).apply {
+                directListener = { granted ->
+                    if (granted) {
+                        roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                                widget = it.widget,
+                                userJustAccepted = true,
+                                grantedEvents = it.grantedEvents
+                        ))
+                    }
+                }
+            }
+                    .show(childFragmentManager, tag)
         }
     }
 
@@ -363,8 +405,33 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
-    private fun setupWidgetsBannerView() {
-        roomWidgetsBannerView.callback = this
+    private fun setupConfBannerView() {
+        activeConferenceView.callback = object : ActiveConferenceView.Callback {
+            override fun onTapJoinAudio(jitsiWidget: Widget) {
+                // need to check if allowed first
+                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                        widget = jitsiWidget,
+                        userJustAccepted = false,
+                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, false))
+                )
+            }
+
+            override fun onTapJoinVideo(jitsiWidget: Widget) {
+                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
+                        widget = jitsiWidget,
+                        userJustAccepted = false,
+                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+                )
+            }
+
+            override fun onDelete(jitsiWidget: Widget) {
+                roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidget.widgetId))
+            }
+        }
+    }
+
+    private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
+        navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
@@ -529,9 +596,39 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        // We use a custom layout for this menu item, so we need to set a ClickListener
+        menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
+            menuItem.actionView.setOnClickListener {
+                onOptionsItemSelected(menuItem)
+            }
+        }
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.forEach {
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
+        }
+        withState(roomDetailViewModel) { state ->
+            val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
+            val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
+            if (widgetsCount > 0) {
+                val actionView = matrixAppsMenuItem.actionView
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .setColorFilter(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            } else {
+                // icon should be default color no badge
+                val actionView = matrixAppsMenuItem.actionView
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.riotx_text_secondary))
+                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
+                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            }
         }
     }
 
@@ -549,26 +646,12 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.open_matrix_apps    -> {
-                roomDetailViewModel.handle(RoomDetailAction.OpenIntegrationManager)
+                roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
             R.id.voice_call,
             R.id.video_call          -> {
-                val activeCall = sharedCallActionViewModel.activeCall.value
-                val isVideoCall = item.itemId == R.id.video_call
-                if (activeCall != null) {
-                    // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (activeCall.roomId == roomDetailArgs.roomId) {
-                        onTapToReturnToCall()
-                    }
-//                        else {
-                    // TODO might not work well, and should prompt
-//                            webRtcPeerConnectionManager.endCall()
-//                            safeStartCall(it, isVideoCall)
-//                        }
-                } else {
-                    safeStartCall(isVideoCall)
-                }
+                handleCallRequest(item)
                 true
             }
             R.id.hangup_call         -> {
@@ -576,6 +659,62 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             else                     -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun handleCallRequest(item: MenuItem) = withState(roomDetailViewModel) { state ->
+        val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
+        val isVideoCall = item.itemId == R.id.video_call
+        when (roomSummary.joinedMembersCount) {
+            1    -> {
+                val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
+                if (pendingInvite) {
+                    // wait for other to join
+                    showDialogWithMessage(getString(R.string.cannot_call_yourself_with_invite))
+                } else {
+                    // You cannot place a call with yourself.
+                    showDialogWithMessage(getString(R.string.cannot_call_yourself))
+                }
+            }
+            2    -> {
+                val activeCall = sharedCallActionViewModel.activeCall.value
+                if (activeCall != null) {
+                    // resume existing if same room, if not prompt to kill and then restart new call?
+                    if (activeCall.roomId == roomDetailArgs.roomId) {
+                        onTapToReturnToCall()
+                    }
+                    //                        else {
+                    // TODO might not work well, and should prompt
+                    //                            webRtcPeerConnectionManager.endCall()
+                    //                            safeStartCall(it, isVideoCall)
+                    //                        }
+                } else {
+                    safeStartCall(isVideoCall)
+                }
+            }
+            else -> {
+                // it's jitsi call
+                // can you add widgets??
+                if (!state.isAllowedToManageWidgets) {
+                    // You do not have permission to start a conference call in this room
+                    showDialogWithMessage(getString(R.string.no_permissions_to_start_conf_call))
+                } else {
+                    if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
+                        // A conference is already in progress!
+                        showDialogWithMessage(getString(R.string.conference_call_in_progress))
+                    } else {
+                        AlertDialog.Builder(requireContext())
+                                .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)
+                                .setMessage(R.string.audio_video_meeting_description)
+                                .setPositiveButton(getString(R.string.create)) { _, _ ->
+                                    // create the widget, then navigate to it..
+                                    roomDetailViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
+                                }
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show()
+                    }
+                }
+            }
         }
     }
 
@@ -871,9 +1010,9 @@ class RoomDetailFragment @Inject constructor(
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
+        activeConferenceView.render(state)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            roomWidgetsBannerView.render(state.activeRoomWidgets())
             jumpToBottomView.count = summary.notificationCount
             jumpToBottomView.drawBadge = summary.hasUnreadMessages
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
@@ -1111,7 +1250,7 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
@@ -1583,7 +1722,14 @@ class RoomDetailFragment @Inject constructor(
         Snackbar.make(requireView(), message, duration).show()
     }
 
-    // VectorInviteView.Callback
+    private fun showDialogWithMessage(message: String) {
+        AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.ok), null)
+                .show()
+    }
+
+// VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
@@ -1595,7 +1741,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
-    // JumpToReadMarkerView.Callback
+// JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
         jumpToReadMarkerView.isVisible = false
@@ -1611,7 +1757,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
     }
 
-    // AttachmentTypeSelectorView.Callback
+// AttachmentTypeSelectorView.Callback
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
         if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
@@ -1632,7 +1778,7 @@ class RoomDetailFragment @Inject constructor(
         }.exhaustive
     }
 
-    // AttachmentsHelper.Callback
+// AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         if (roomDetailViewModel.preventAttachmentPreview) {
@@ -1662,7 +1808,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.SendMessage(formattedContact, false))
     }
 
-    override fun onViewWidgetsClicked() {
+    private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
     }

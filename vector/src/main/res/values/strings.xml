@@ -89,8 +89,17 @@
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
+    <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
+    <string name="conference_call_in_progress">A conference is already in progress!</string>
+    <string name="video_meeting">Start video meeting</string>
+    <string name="audio_meeting">Start audio meeting</string>
+    <string name="audio_video_meeting_description">Meetings use Jitsi security and permission policies. All people currently in the room will see an invite to join while your meeting is happening.</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
+    <string name="cannot_call_yourself">You cannot place a call with yourself</string>
+    <string name="cannot_call_yourself_with_invite">You cannot place a call with yourself, wait for participants to accept invitation</string>
     <string name="device_information">Session information</string>
+    <string name="failed_to_add_widget">Failed to add widget</string>
+    <string name="failed_to_remove_widget">Failed to remove widget</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
@@ -1210,6 +1219,8 @@
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="integration_manager_not_configured">No integration manager configured.</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
+    <string name="room_manage_integrations">Manage Integrations</string>
+    <string name="room_no_active_widgets">No active widgets</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>

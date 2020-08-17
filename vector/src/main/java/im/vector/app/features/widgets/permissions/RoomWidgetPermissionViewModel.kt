@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.net.URL
@@ -57,20 +59,33 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                     }
                     // TODO check from widget urls the perms that should be shown?
                     // For now put all
-                    val infoShared = listOf(
-                            R.string.room_widget_permission_display_name,
-                            R.string.room_widget_permission_avatar_url,
-                            R.string.room_widget_permission_user_id,
-                            R.string.room_widget_permission_theme,
-                            R.string.room_widget_permission_widget_id,
-                            R.string.room_widget_permission_room_id
-                    )
-                    RoomWidgetPermissionViewState.WidgetPermissionData(
-                            widget = widget,
-                            isWebviewWidget = true,
-                            permissionsList = infoShared,
-                            widgetDomain = domain
-                    )
+                    if (widget.type == WidgetType.Jitsi) {
+                        val infoShared = listOf(
+                                R.string.room_widget_permission_display_name,
+                                R.string.room_widget_permission_avatar_url
+                        )
+                        RoomWidgetPermissionViewState.WidgetPermissionData(
+                                widget = widget,
+                                isWebviewWidget = false,
+                                permissionsList = infoShared,
+                                widgetDomain = widget.widgetContent.data["domain"] as? String
+                        )
+                    } else {
+                        val infoShared = listOf(
+                                R.string.room_widget_permission_display_name,
+                                R.string.room_widget_permission_avatar_url,
+                                R.string.room_widget_permission_user_id,
+                                R.string.room_widget_permission_theme,
+                                R.string.room_widget_permission_widget_id,
+                                R.string.room_widget_permission_room_id
+                        )
+                        RoomWidgetPermissionViewState.WidgetPermissionData(
+                                widget = widget,
+                                isWebviewWidget = true,
+                                permissionsList = infoShared,
+                                widgetDomain = domain
+                        )
+                    }
                 }
                 .execute {
                     copy(permissionData = it)
@@ -91,7 +106,14 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, false)
                 } else {
-                    // TODO JITSI
+                    awaitCallback<Unit> {
+                        session.integrationManagerService().setNativeWidgetDomainAllowed(
+                                state.permissionData.invoke()?.widget?.type?.preferred ?: "",
+                                state.permissionData.invoke()?.widgetDomain ?: "",
+                                false,
+                                it
+                        )
+                    }
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure revoking widget: ${state.widgetId}")
@@ -109,7 +131,14 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, true)
                 } else {
-                    // TODO JITSI
+                    awaitCallback<Unit> {
+                        session.integrationManagerService().setNativeWidgetDomainAllowed(
+                                state.permissionData.invoke()?.widget?.type?.preferred ?: "",
+                                state.permissionData.invoke()?.widgetDomain ?: "",
+                                true,
+                                it
+                        )
+                    }
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure allowing widget: ${state.widgetId}")

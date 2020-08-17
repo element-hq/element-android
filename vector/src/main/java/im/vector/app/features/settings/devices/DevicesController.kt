@@ -111,7 +111,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 //                            id("complete_security")
 //                            iconRes(R.drawable.ic_shield_warning)
 //                            text(stringProvider.getString(R.string.complete_security))
-//                            itemClickAction(DebouncedClickListener(View.OnClickListener { _ ->
+//                            buttonClickAction(DebouncedClickListener(View.OnClickListener { _ ->
 //                                callback?.completeSecurity()
 //                            }))
 //                        }

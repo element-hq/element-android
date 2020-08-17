@@ -97,7 +97,7 @@ interface Navigator {
 
     fun openIntegrationManager(fragment: Fragment, roomId: String, integId: String?, screen: String?)
 
-    fun openRoomWidget(context: Context, roomId: String, widget: Widget)
+    fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
 
     fun openMediaViewer(activity: Activity,
                         roomId: String,

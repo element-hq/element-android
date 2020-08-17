@@ -48,6 +48,9 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
+    // Use this if you don't need the full activity view model
+    var directListener: ((Boolean) -> Unit)? = null
+
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
@@ -88,6 +91,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @OnClick(R.id.widgetPermissionDecline)
     fun doDecline() {
         viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
+        directListener?.invoke(false)
         // optimistic dismiss
         dismiss()
     }
@@ -95,6 +99,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @OnClick(R.id.widgetPermissionContinue)
     fun doAccept() {
         viewModel.handle(RoomWidgetPermissionActions.AllowWidget)
+        directListener?.invoke(true)
         // optimistic dismiss
         dismiss()
     }
