@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.send
+package org.matrix.android.sdk.internal.session.room.send
 
-import im.vector.matrix.android.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 /**

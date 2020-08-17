@@ -143,20 +143,22 @@ internal class DefaultFileService @Inject constructor(
                         Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
 
                         if (elementToDecrypt != null) {
-                            Timber.v("## decrypt file")
-                            val decryptedStream = MXEncryptedAttachments.decryptAttachment(source.inputStream(), elementToDecrypt)
+                            Timber.v("## FileService: decrypt file")
+                            val decryptSuccess = MXEncryptedAttachments.decryptAttachment(
+                                    source.inputStream(),
+                                    elementToDecrypt,
+                                    destFile.outputStream().buffered()
+                            )
                             response.close()
-                            if (decryptedStream == null) {
+                            if (!decryptSuccess) {
                                 return@flatMap Try.Failure(IllegalStateException("Decryption error"))
-                            } else {
-                                decryptedStream.use {
-                                    writeToFile(decryptedStream, destFile)
-                                }
                             }
                         } else {
                             writeToFile(source.inputStream(), destFile)
                             response.close()
                         }
+                    } else {
+                        Timber.v("## FileService: cache hit for $url")
                     }
 
                     Try.just(copyFile(destFile, downloadMode))

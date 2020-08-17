@@ -24,6 +24,7 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.default
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -37,12 +38,15 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.session.DefaultFileService
+import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.UUID
 import javax.inject.Inject
 
@@ -71,6 +75,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var fileUploader: FileUploader
     @Inject lateinit var contentUploadStateTracker: DefaultContentUploadStateTracker
     @Inject lateinit var fileService: DefaultFileService
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -102,6 +107,13 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
         var newImageAttributes: NewImageAttributes? = null
 
+        val allCancelled = params.events.all { cancelSendTracker.isCancelRequestedFor(it.eventId, it.roomId) }
+        if (allCancelled) {
+            // there is no point in uploading the image!
+            return Result.success(inputData)
+                    .also { Timber.e("## Send: Work cancelled by user") }
+        }
+
         try {
             val inputStream = context.contentResolver.openInputStream(attachment.queryUri)
                     ?: return Result.success(
@@ -112,16 +124,16 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             )
                     )
 
-            inputStream.use {
-                var uploadedThumbnailUrl: String? = null
-                var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
+//            inputStream.use {
+            var uploadedThumbnailUrl: String? = null
+            var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
-                ThumbnailExtractor.extractThumbnail(context, params.attachment)?.let { thumbnailData ->
-                    val thumbnailProgressListener = object : ProgressRequestBody.Listener {
-                        override fun onProgress(current: Long, total: Long) {
-                            notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
-                        }
+            ThumbnailExtractor.extractThumbnail(context, params.attachment)?.let { thumbnailData ->
+                val thumbnailProgressListener = object : ProgressRequestBody.Listener {
+                    override fun onProgress(current: Long, total: Long) {
+                        notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
                     }
+                }
 
                     try {
                         val contentUploadResponse = if (params.isEncrypted) {
@@ -140,27 +152,30 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     thumbnailProgressListener)
                         }
 
-                        uploadedThumbnailUrl = contentUploadResponse.contentUri
-                    } catch (t: Throwable) {
-                        Timber.e(t, "Thumbnail update failed")
-                    }
+                    uploadedThumbnailUrl = contentUploadResponse.contentUri
+                } catch (t: Throwable) {
+                    Timber.e(t, "Thumbnail update failed")
                 }
+            }
 
-                val progressListener = object : ProgressRequestBody.Listener {
-                    override fun onProgress(current: Long, total: Long) {
-                        notifyTracker(params) {
-                            if (isStopped) {
-                                contentUploadStateTracker.setFailure(it, Throwable("Cancelled"))
-                            } else {
-                                contentUploadStateTracker.setProgress(it, current, total)
-                            }
+            val progressListener = object : ProgressRequestBody.Listener {
+                override fun onProgress(current: Long, total: Long) {
+                    notifyTracker(params) {
+                        if (isStopped) {
+                            contentUploadStateTracker.setFailure(it, Throwable("Cancelled"))
+                        } else {
+                            contentUploadStateTracker.setProgress(it, current, total)
                         }
                     }
                 }
+            }
 
-                var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
+            var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-                return try {
+            return try {
+                var modifiedStream: InputStream
+
+                if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
                     // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
                     // copy it to a cache folder by using InputStream and OutputStream.
                     // https://github.com/zetbaitsu/Compressor/pull/150
@@ -178,58 +193,86 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         inputStream.copyTo(outputStream)
                     }
 
-                    if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
-                        cacheFile = Compressor.compress(context, cacheFile) {
-                            default(
-                                    width = MAX_IMAGE_SIZE,
-                                    height = MAX_IMAGE_SIZE
-                            )
-                        }.also { compressedFile ->
-                            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                            BitmapFactory.decodeFile(compressedFile.absolutePath, options)
-                            val fileSize = compressedFile.length().toInt()
-                            newImageAttributes = NewImageAttributes(
-                                    options.outWidth,
-                                    options.outHeight,
-                                    fileSize
-                            )
+                    val compressedFile = Compressor.compress(context, cacheFile) {
+                        default(
+                                width = MAX_IMAGE_SIZE,
+                                height = MAX_IMAGE_SIZE
+                        )
+                    }
+
+                    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    BitmapFactory.decodeFile(compressedFile.absolutePath, options)
+                    val fileSize = compressedFile.length().toInt()
+                    newImageAttributes = NewImageAttributes(
+                            options.outWidth,
+                            options.outHeight,
+                            fileSize
+                    )
+                    modifiedStream = compressedFile.inputStream()
+                } else {
+                    // Unfortunatly the original stream is not always able to provide content length
+                    // by passing by a temp copy it's working (better experience for upload progress..)
+                    modifiedStream = if (tryThis { inputStream.available() } ?: 0 <= 0) {
+                        val tmp = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                        tmp.outputStream().use {
+                            inputStream.copyTo(it)
                         }
-                    }
+                        tmp.inputStream()
+                    } else inputStream
+                }
 
-                    val contentUploadResponse = if (params.isEncrypted) {
-                        Timber.v("Encrypt file")
-                        notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
+                val contentUploadResponse = if (params.isEncrypted) {
+                    Timber.v("## FileService: Encrypt file")
 
-                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(cacheFile.inputStream(), attachment.getSafeMimeType())
-                        uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
+                    val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
 
-                        fileUploader
-                                .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
-                    } else {
-                        fileUploader
-                                .uploadFile(cacheFile, attachment.name, attachment.getSafeMimeType(), progressListener)
-                    }
+                    uploadedFileEncryptedFileInfo =
+                            MXEncryptedAttachments.encrypt(modifiedStream, attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
+                                notifyTracker(params) {
+                                    contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
+                                }
+                            }
 
-                    // If it's a file update the file service so that it does not redownload?
-                    if (params.attachment.type == ContentAttachmentData.Type.FILE) {
+                    Timber.v("## FileService: Uploading file")
+
+                    fileUploader
+                            .uploadFile(tmpEncrypted, attachment.name, "application/octet-stream", progressListener)
+                            .also {
+                                // we can delete?
+                                tryThis { tmpEncrypted.delete() }
+                            }
+                } else {
+                    Timber.v("## FileService: Clear file")
+                    fileUploader
+                            .uploadInputStream(modifiedStream, attachment.name, attachment.getSafeMimeType(), progressListener)
+                }
+
+                // If it's a file update the file service so that it does not redownload?
+//                if (params.attachment.type == ContentAttachmentData.Type.FILE) {
+                    Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
+                    try {
                         context.contentResolver.openInputStream(attachment.queryUri)?.let {
                             fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
                         }
+                        Timber.v("## FileService: cache storage updated")
+                    } catch (failure: Throwable) {
+                        Timber.e(failure, "## FileService: Failed to update fileservice cache")
                     }
+//                }
 
-                    handleSuccess(params,
-                            contentUploadResponse.contentUri,
-                            uploadedFileEncryptedFileInfo,
-                            uploadedThumbnailUrl,
-                            uploadedThumbnailEncryptedFileInfo,
-                            newImageAttributes)
-                } catch (t: Throwable) {
-                    Timber.e(t)
-                    handleFailure(params, t)
-                }
+                handleSuccess(params,
+                        contentUploadResponse.contentUri,
+                        uploadedFileEncryptedFileInfo,
+                        uploadedThumbnailUrl,
+                        uploadedThumbnailEncryptedFileInfo,
+                        newImageAttributes)
+            } catch (t: Throwable) {
+                Timber.e(t, "## FileService: ERROR ${t.localizedMessage}")
+                handleFailure(params, t)
             }
+//            }
         } catch (e: Exception) {
-            Timber.e(e)
+            Timber.e(e, "## FileService: ERROR")
             notifyTracker(params) { contentUploadStateTracker.setFailure(it, e) }
             return Result.success(
                     WorkerParamsFactory.toData(
@@ -259,7 +302,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                               thumbnailUrl: String?,
                               thumbnailEncryptedFileInfo: EncryptedFileInfo?,
                               newImageAttributes: NewImageAttributes?): Result {
-        Timber.v("handleSuccess $attachmentUrl, work is stopped $isStopped")
         notifyTracker(params) { contentUploadStateTracker.setSuccess(it) }
 
         val updatedEvents = params.events
@@ -268,7 +310,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 }
 
         val sendParams = MultipleEventSendingDispatcherWorker.Params(params.sessionId, updatedEvents, params.isEncrypted)
-        return Result.success(WorkerParamsFactory.toData(sendParams))
+        return Result.success(WorkerParamsFactory.toData(sendParams)).also {
+            Timber.v("## handleSuccess $attachmentUrl, work is stopped $isStopped")
+        }
     }
 
     private fun updateEvent(event: Event,

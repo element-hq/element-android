@@ -39,6 +39,7 @@ import im.vector.app.core.utils.isLocalFile
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import kotlinx.android.parcel.Parcelize
+import org.matrix.android.sdk.api.extensions.tryThis
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject

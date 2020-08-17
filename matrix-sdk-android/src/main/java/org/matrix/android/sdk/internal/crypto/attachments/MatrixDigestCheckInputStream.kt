@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.attachments
+package org.matrix.android.sdk.internal.crypto.attachments
 
 import android.util.Base64
 import java.io.FilterInputStream

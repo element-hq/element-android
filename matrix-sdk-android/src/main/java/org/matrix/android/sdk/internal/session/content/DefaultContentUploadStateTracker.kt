@@ -74,8 +74,8 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         updateState(key, progressData)
     }
 
-    internal fun setEncrypting(key: String) {
-        val progressData = ContentUploadStateTracker.State.Encrypting
+    internal fun setEncrypting(key: String, current: Long, total: Long) {
+        val progressData = ContentUploadStateTracker.State.Encrypting(current, total)
         updateState(key, progressData)
     }
 

@@ -61,19 +61,23 @@ internal class DefaultContentDownloadStateTracker @Inject constructor() : Progre
 //    private fun URL.toKey() = toString()
 
     override fun update(url: String, bytesRead: Long, contentLength: Long, done: Boolean) {
-        Timber.v("## DL Progress url:$url read:$bytesRead total:$contentLength done:$done")
-        if (done) {
-            updateState(url, ContentDownloadStateTracker.State.Success)
-        } else {
-            updateState(url, ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
+        mainHandler.post {
+            Timber.v("## DL Progress url:$url read:$bytesRead total:$contentLength done:$done")
+            if (done) {
+                updateState(url, ContentDownloadStateTracker.State.Success)
+            } else {
+                updateState(url, ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
+            }
         }
     }
 
     override fun error(url: String, errorCode: Int) {
-        Timber.v("## DL Progress Error code:$errorCode")
-        updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
-        listeners[url]?.forEach {
-            tryThis { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+        mainHandler.post {
+            Timber.v("## DL Progress Error code:$errorCode")
+            updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
+            listeners[url]?.forEach {
+                tryThis { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+            }
         }
     }
 

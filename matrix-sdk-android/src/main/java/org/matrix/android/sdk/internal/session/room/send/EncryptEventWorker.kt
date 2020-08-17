@@ -54,6 +54,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
     @Inject lateinit var crypto: CryptoService
     @Inject lateinit var localEchoRepository: LocalEchoRepository
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
 
     override suspend fun doWork(): Result {
         Timber.v("Start Encrypt work")
@@ -61,7 +62,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                 ?: return Result.success()
                         .also { Timber.e("Unable to parse work parameters") }
 
-        Timber.v("Start Encrypt work for event ${params.event.eventId}")
+        Timber.v("## SendEvent: Start Encrypt work for event ${params.event.eventId}")
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
@@ -75,6 +76,12 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         if (localEvent.eventId == null) {
             return Result.success()
         }
+
+        if (cancelSendTracker.isCancelRequestedFor(localEvent.eventId, localEvent.roomId)) {
+            return Result.success()
+                    .also { Timber.e("## SendEvent: Event sending has been cancelled ${localEvent.eventId}") }
+        }
+
         localEchoRepository.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
         val localMutableContent = localEvent.content?.toMutableMap() ?: mutableMapOf()
