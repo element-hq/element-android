@@ -656,14 +656,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
-                        is ParsedCommand.VerifyUser               -> {
-                            session
-                                    .cryptoService()
-                                    .verificationService()
-                                    .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), slashCommandResult.userId, room.roomId)
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
-                            popDraft()
-                        }
                         is ParsedCommand.SendPoll                 -> {
                             room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> OptionItem(s, "$index. $s") })
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())

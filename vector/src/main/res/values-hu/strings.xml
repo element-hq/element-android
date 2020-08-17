@@ -1930,7 +1930,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="settings_developer_mode_fail_fast_title">Összeomlás-hamar</string>
     <string name="settings_developer_mode_fail_fast_summary">Element a nem várt hibák esetén többször fog összeomlani</string>
-    <string name="command_description_verify">Az adott felhasználói azonosító ellenőrzésének kérése</string>
     <string name="command_description_shrug">Hozzáteszi a sima szöveges üzenethez ezt: ¯\\_(ツ)_/¯</string>
 
     <string name="create_room_encryption_title">Titkosítás engedélyezése</string>

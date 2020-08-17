@@ -1981,7 +1981,6 @@
 
     <string name="settings_developer_mode_fail_fast_title">Crash facile</string>
     <string name="settings_developer_mode_fail_fast_summary">Element potrebbe crashare più spesso quando si verifica un errore imprevisto</string>
-    <string name="command_description_verify">Richiedi di verificare l\'ID utente in questione</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ ad un messaggio testuale</string>
 
     <string name="create_room_encryption_title">Attiva la cifratura</string>

@@ -2214,7 +2214,6 @@
     <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
     <string name="settings_developer_mode_fail_fast_summary">Element может падать чаще, когда происходит непредвиденная ошибка</string>
 
-    <string name="command_description_verify">Запрос на проверку данного идентификатора пользователя</string>
     <string name="command_description_shrug">Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения</string>
 
     <string name="create_room_encryption_description">После включения шифрования оно не может быть отключено.</string>

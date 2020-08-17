@@ -1890,7 +1890,6 @@
 
     <string name="settings_developer_mode_fail_fast_summary">Element mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
     <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
-    <string name="command_description_verify">Kërko të verifikohet userID-ja i dhënë</string>
     <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
 
     <string name="create_room_encryption_title">Aktivizoni fshehtëzim</string>

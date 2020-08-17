@@ -2112,7 +2112,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_developer_mode_fail_fast_title">Relatar imediatamente as falhas</string>
     <string name="settings_developer_mode_fail_fast_summary">Element pode quebrar com mais freqüência quando ocorre um erro inesperado</string>
 
-    <string name="command_description_verify">Solicitação para verificar o ID do usuário</string>
     <string name="command_description_shrug">Adicionar ¯\\_(ツ)_/¯ para uma mensagem de texto simples</string>
 
     <string name="create_room_encryption_title">Ativar criptografia</string>

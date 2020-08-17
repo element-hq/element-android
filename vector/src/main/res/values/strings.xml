@@ -2022,7 +2022,6 @@
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <string name="settings_developer_mode_fail_fast_summary">Element may crash more often when an unexpected error occurs</string>
 
-    <string name="command_description_verify">Request to verify the given userID</string>
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>

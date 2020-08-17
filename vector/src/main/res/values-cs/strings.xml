@@ -1909,7 +1909,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <string name="settings_developer_mode_fail_fast_summary">Element se může zbořit častěji, když se objeví neočekávané chyby</string>
 
-    <string name="command_description_verify">Požadavek ověření daného uživatelského ID</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
 
     <string name="create_room_encryption_title">Zapnout šifrování</string>

@@ -2016,7 +2016,6 @@ Haluatko lisätä paketteja?</string>
     <string name="verification_conclusion_not_secure">Ei turvallinen</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Kuva.</string>
-    <string name="command_description_verify">Pyyntö annetun käyttäjä-ID:n vahvistamiseksi</string>
     <string name="verification_conclusion_compromised">Johonkin näistä on mahdollisesti murtauduttu:
 \n
 \n - Kotipalvelimesi

@@ -1884,7 +1884,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
     <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，Element 可能更常當機</string>
-    <string name="command_description_verify">請求驗證給定的 userID</string>
     <string name="command_description_shrug">"將  ¯\\_(ツ)_/¯ 附加到純文字訊息中"</string>
 
     <string name="create_room_encryption_title">啟用加密</string>
