@@ -45,7 +45,6 @@ import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.UUID
 import javax.inject.Inject
@@ -124,6 +123,12 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             )
                     )
 
+            // always use a temporary file, it guaranties that we could report progress on upload and simplifies the flows
+            val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+            workingFile.outputStream().use {
+                inputStream.copyTo(it)
+            }
+
 //            inputStream.use {
             var uploadedThumbnailUrl: String? = null
             var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
@@ -173,27 +178,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
             return try {
-                var modifiedStream: InputStream
+                val streamToUpload: InputStream
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
                     // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
                     // copy it to a cache folder by using InputStream and OutputStream.
                     // https://github.com/zetbaitsu/Compressor/pull/150
                     // As soon as the above PR is merged, we can use attachment.queryUri instead of creating a cacheFile.
-                    var cacheFile = File.createTempFile(attachment.name ?: UUID.randomUUID().toString(), ".jpg", context.cacheDir)
-                    cacheFile.parentFile?.mkdirs()
-                    if (cacheFile.exists()) {
-                        cacheFile.delete()
-                    }
-                    cacheFile.createNewFile()
-                    cacheFile.deleteOnExit()
-
-                    val outputStream = cacheFile.outputStream()
-                    outputStream.use {
-                        inputStream.copyTo(outputStream)
-                    }
-
-                    val compressedFile = Compressor.compress(context, cacheFile) {
+                    val compressedFile = Compressor.compress(context, workingFile) {
                         default(
                                 width = MAX_IMAGE_SIZE,
                                 height = MAX_IMAGE_SIZE
@@ -208,17 +200,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             options.outHeight,
                             fileSize
                     )
-                    modifiedStream = compressedFile.inputStream()
+                    streamToUpload = compressedFile.inputStream()
                 } else {
-                    // Unfortunatly the original stream is not always able to provide content length
-                    // by passing by a temp copy it's working (better experience for upload progress..)
-                    modifiedStream = if (tryThis { inputStream.available() } ?: 0 <= 0) {
-                        val tmp = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
-                        tmp.outputStream().use {
-                            inputStream.copyTo(it)
-                        }
-                        tmp.inputStream()
-                    } else inputStream
+                    streamToUpload = workingFile.inputStream()
                 }
 
                 val contentUploadResponse = if (params.isEncrypted) {
@@ -227,7 +211,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
 
                     uploadedFileEncryptedFileInfo =
-                            MXEncryptedAttachments.encrypt(modifiedStream, attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
+                            MXEncryptedAttachments.encrypt(streamToUpload, attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
                                 notifyTracker(params) {
                                     contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
                                 }
@@ -244,21 +228,18 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 } else {
                     Timber.v("## FileService: Clear file")
                     fileUploader
-                            .uploadInputStream(modifiedStream, attachment.name, attachment.getSafeMimeType(), progressListener)
+                            .uploadInputStream(streamToUpload, attachment.name, attachment.getSafeMimeType(), progressListener)
                 }
 
-                // If it's a file update the file service so that it does not redownload?
-//                if (params.attachment.type == ContentAttachmentData.Type.FILE) {
-                    Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
-                    try {
-                        context.contentResolver.openInputStream(attachment.queryUri)?.let {
-                            fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
-                        }
-                        Timber.v("## FileService: cache storage updated")
-                    } catch (failure: Throwable) {
-                        Timber.e(failure, "## FileService: Failed to update fileservice cache")
+                Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
+                try {
+                    context.contentResolver.openInputStream(attachment.queryUri)?.let {
+                        fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
                     }
-//                }
+                    Timber.v("## FileService: cache storage updated")
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## FileService: Failed to update fileservice cache")
+                }
 
                 handleSuccess(params,
                         contentUploadResponse.contentUri,
@@ -270,7 +251,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 Timber.e(t, "## FileService: ERROR ${t.localizedMessage}")
                 handleFailure(params, t)
             }
-//            }
         } catch (e: Exception) {
             Timber.e(e, "## FileService: ERROR")
             notifyTracker(params) { contentUploadStateTracker.setFailure(it, e) }
