@@ -9,6 +9,7 @@ Improvements 🙌:
  - Give user the possibility to prevent accidental call (#1869)
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
  - Ensure users do not accidentally ignore other users (#1890)
+ - Support new config.json format and config.domain.json files (#1682)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
