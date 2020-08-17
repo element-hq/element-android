@@ -20,15 +20,14 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import org.matrix.android.sdk.rx.rx
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
@@ -48,15 +47,12 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                     val xSigningIsEnableInAccount = crossSigningKeys != null
                     val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
                     val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
-                    val hasSeveralDevices = data.invoke()?.first?.size ?: 0 > 1
 
                     copy(
                             crossSigningInfo = crossSigningKeys,
                             xSigningIsEnableInAccount = xSigningIsEnableInAccount,
                             xSigningKeysAreTrusted = xSigningKeysAreTrusted,
-                            xSigningKeyCanSign = xSigningKeyCanSign,
-                            deviceHasToBeVerified = hasSeveralDevices && (xSigningIsEnableInAccount && !xSigningKeyCanSign),
-                            recoveryHasToBeSetUp = !session.sharedSecretStorageService.isRecoverySetup()
+                            xSigningKeyCanSign = xSigningKeyCanSign
                     )
                 }
     }
@@ -67,17 +63,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
     }
 
     override fun handle(action: CrossSigningSettingsAction) {
-        when (action) {
-            CrossSigningSettingsAction.SetUpRecovery -> {
-                _viewEvents.post(CrossSigningSettingsViewEvents.SetUpRecovery)
-            }
-            CrossSigningSettingsAction.VerifySession -> {
-                _viewEvents.post(CrossSigningSettingsViewEvents.VerifySession)
-            }
-            CrossSigningSettingsAction.SetupCrossSigning -> {
-                _viewEvents.post(CrossSigningSettingsViewEvents.SetupCrossSigning)
-            }
-        }.exhaustive
+        // No op for the moment
+        // when (action) {
+        // }.exhaustive
     }
 
     companion object : MvRxViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {

@@ -18,8 +18,4 @@ package im.vector.app.features.settings.crosssigning
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class CrossSigningSettingsAction : VectorViewModelAction {
-    object SetUpRecovery : CrossSigningSettingsAction()
-    object VerifySession : CrossSigningSettingsAction()
-    object SetupCrossSigning : CrossSigningSettingsAction()
-}
+sealed class CrossSigningSettingsAction : VectorViewModelAction
