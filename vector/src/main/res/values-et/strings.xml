@@ -1104,4 +1104,129 @@
     <string name="room_unsent_messages_notification">Sõnumid pole saadetud. %1$s või %2$s nüüd\?</string>
     <string name="room_unknown_devices_messages_notification">Kuna leidub tundmatuid sessioone, siis sõnumid pole saadetud. %1$s või %2$s nüüd\?</string>
     <string name="room_prompt_resend">Saada kõik uuesti</string>
+    <string name="room_prompt_cancel">Tühista kõik</string>
+    <string name="room_resend_unsent_messages">Saada saatmata sõnumid uuesti</string>
+    <string name="room_delete_unsent_messages">Kustuta saatmata sõnumid</string>
+    <string name="room_message_file_not_found">Faili ei leidunud</string>
+    <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks</string>
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 uus sõnum</item>
+	<item quantity="other">%d uut sõnumit</item>
+</plurals>
+
+    <string name="ssl_trust">Usalda</string>
+    <string name="ssl_do_not_trust">Ära usalda</string>
+    <string name="ssl_logout_account">Logi välja</string>
+    <string name="ssl_remain_offline">Eira</string>
+    <string name="ssl_fingerprint_hash">Sõrmejälg (%s):</string>
+    <string name="ssl_could_not_verify">Serveri õigsust ei olnud võimalik kontrollida.</string>
+    <string name="room_recents_directory">LOEND</string>
+    <string name="settings_notification_troubleshoot">Lahenda teavitustega seotud vigu</string>
+    <string name="settings_troubleshoot_diagnostic">Vigade tuvastamine</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Käivita testid</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Parasjagu testime… (%1$d / %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Esmasel vaatlusel vigu ei leidu. Kui sa jätkuvalt ei saa teavitusi, siis palun saada edaspidise uurimise jaoks meile veateade.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Üks või enam testi andis tulemuseks vea, palun proovi pakutud lahendusi.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Üks või enam testi andis tulemuseks vea, palun saada edaspidise uurimise jaoks meile veateade.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_success">Süsteemi seadistustes on teavitused kasutusel.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Süsteemi seadistustes ei ole teavitusi kasutusel.
+\nPalun vaata need üle.</string>
+    <string name="open_settings">Ava seadistused</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Pane tähele, et mõned teavitused on seadistatud vaiksetena (teavitus kuvatakse ilma helilise märguandeta).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Mõned teavitused on sinu kohandatud seadistustes kinni keeratud.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Kohandatud reeglite laadimine ei õnnestunud. Palun proovi uuesti.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Palun kontrolli seadistusi</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Goolge Play teenuste kontrollimine</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on kättesaadav ja uuendatud.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Element kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Paranda Google Play teenused</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase tunnusluba</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM tunnusloa laadimine õnnestus:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM tunnusloa laadimine ei õnnestunud:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nSee viga on väljaspool Element\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nSee viga on väljaspool Element\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nSee viga on väljaspool Element\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisa Google\'i konto</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Tunnusloa registreerimine</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM tunnusloa registreerimine koduserveris õnnestus.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM tunnusloa registreerimine koduserveris ei õnnestunud:
+\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Teavituste teenus</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Teavituste teenus töötab.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Teavituste teenus ei tööta.
+\nProovi, kas Element\'i uuesti käivitamine aitab.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käivita teenus</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Teavituste teenuse automaatne taaskäivitamine</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Teenus suleti ja käivitati automaatselt uuesti.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Teenuse uuesti käivitamine ei õnnestunud</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Käivita teenus seadme käivitamisel</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Teenus käivitatakse nutiseadme käivitamisel.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui Element on vähemalt korra avatud.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Käivita teenus nutiseadme käivitamisel</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Kontrolli taustapiiranguid</string>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 jututuba</item>
+	<item quantity="other">%d jututuba</item>
+</plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 sõnum</item>
+	<item quantity="other">%1$s: %2$d sõnumit</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d teavitus</item>
+	<item quantity="other">%d teavitust</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
+    <string name="notification_unknown_new_event">Uus sündmus</string>
+    <string name="notification_unknown_room_name">Jututuba</string>
+    <string name="notification_new_messages">Uued sõnumid</string>
+    <string name="notification_new_invitation">Uus kutse</string>
+    <string name="notification_sender_me">Mina</string>
+    <string name="notification_inline_reply_failed">** Saatmine ei õnenstunud - palun ava jututoa vaade</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="historical_placeholder">Otsi ajaloost</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 5.0)</string>
+    <string name="room_widget_resource_permission_title">See vidin soovib kasutada järgmisi andmeid:</string>
+    <string name="room_widget_resource_grant_permission">Luba</string>
+    <string name="room_widget_resource_decline_permission">Ära luba mitte midagi</string>
+    <string name="room_widget_webview_access_camera">Luba kaamera kasutamine</string>
+    <string name="room_widget_webview_access_microphone">Luba mikrofoni kasutamine</string>
+    <string name="room_widget_webview_read_protected_media">Luba DRM\'iga kaitstud meedia avamine</string>
+
+    <string name="widget_integration_unable_to_create">Vidina loomine ei õnnestunud.</string>
+    <string name="widget_integration_failed_to_send_request">Päringu saatmine ei õnnestunud.</string>
+    <string name="widget_integration_positive_power_level">Õiguste tase peab olema positiivne täisarv.</string>
+    <string name="widget_integration_must_be_in_room">Sa ei asu selles jututoas.</string>
+    <string name="widget_integration_no_permission_in_room">Sinul pole selle toimingu jaoks selles jututoas õigusi.</string>
+    <string name="widget_integration_missing_room_id">Päringus puudub jututoa tunnus ehk room_id.</string>
+    <string name="widget_integration_missing_user_id">Päringus puudub kasutaja tunnus ehk user_id.</string>
+    <string name="widget_integration_room_not_visible">Jututuba %s ei ole nähtav.</string>
+    <string name="widget_integration_missing_parameter">Nõutav parameeter on puudu.</string>
+    <string name="widget_integration_invalid_parameter">Parameeter ei ole sobilik.</string>
+    <string name="integration_manager_not_configured">Lõiminguhaldur on seadistamata.</string>
+    <string name="room_add_matrix_apps">Lisa Matrix\'i rakendusi</string>
+    <string name="settings_labs_native_camera">Luba süsteemi poolt hallatud kaamera kasutamine</string>
+    <string name="settings_labs_native_camera_summary">Käivita kohandatud vaate asemel süsteemne kaamera vaade.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Kasuta reavahetuse klahvi sõnumi saatmiseks</string>
+    <string name="settings_labs_enable_send_voice">Saada häälsõnumeid</string>
     </resources>
