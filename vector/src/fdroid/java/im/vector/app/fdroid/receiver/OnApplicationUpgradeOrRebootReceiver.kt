@@ -21,7 +21,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.push.fcm.worker.BackgroundSyncWorker
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
 
@@ -31,7 +33,7 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
         if (appContext is HasVectorInjector) {
             val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
             if (activeSession != null) {
-                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.sessionId, 10)
+                BackgroundSyncWorker.scheduleWork(context, activeSession.sessionId, 10, TimeUnit.MILLISECONDS)
             }
         }
     }
