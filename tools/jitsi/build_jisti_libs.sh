@@ -52,14 +52,14 @@ npm install
 #
 #react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output index.android.bundle --assets-dest android/app/src/main/res/
 
-./android/scripts/release-sdk.sh /tmp/jitsi2/
+./android/scripts/release-sdk.sh /tmp/jitsi/
 
 # Also copy jsc
 
-mkdir -p /tmp/jitsi2/org/webkit/
-cp -r ./node_modules/jsc-android/dist/org/webkit/android-jsc /tmp/jitsi2/org/webkit/
+mkdir -p /tmp/jitsi/org/webkit/
+cp -r ./node_modules/jsc-android/dist/org/webkit/android-jsc /tmp/jitsi/org/webkit/
 
 echo
 echo "##################################################"
-echo "Release has been done here: /tmp/jitsi2/"
+echo "Release has been done here: /tmp/jitsi/"
 echo "##################################################"
