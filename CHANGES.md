@@ -32,6 +32,7 @@ Other changes:
  - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
  - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`
  - Rename package `im.vector.riotx` to `im.vector.app`
+ - Add Official Gradle Wrapper Validation Action
 
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
