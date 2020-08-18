@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Trace
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -43,7 +44,7 @@ class EmojiDrawView @JvmOverloads constructor(
     var emoji: String? = null
 
     override fun onDraw(canvas: Canvas?) {
-        EmojiRecyclerAdapter.beginTraceSession("EmojiDrawView.onDraw")
+        Trace.beginSection("EmojiDrawView.onDraw")
         super.onDraw(canvas)
         canvas?.save()
         val space = abs((width - emojiSize) / 2f)
@@ -52,7 +53,7 @@ class EmojiDrawView @JvmOverloads constructor(
             mLayout!!.draw(canvas)
         }
         canvas?.restore()
-        EmojiRecyclerAdapter.endTraceSession()
+        Trace.endSection()
     }
 
     companion object {

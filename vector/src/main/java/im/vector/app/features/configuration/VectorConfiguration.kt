@@ -82,9 +82,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             } else {
                 @Suppress("DEPRECATION")
                 configuration.locale = locale
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    configuration.setLayoutDirection(locale)
-                }
+                configuration.setLayoutDirection(locale)
                 @Suppress("DEPRECATION")
                 resources.updateConfiguration(configuration, resources.displayMetrics)
                 return context

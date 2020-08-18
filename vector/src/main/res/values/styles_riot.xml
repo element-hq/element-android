@@ -63,14 +63,6 @@
         <item name="android:dropDownVerticalOffset">0dp</item>
     </style>
 
-    <style name="Vector.PopupMenu" parent="Vector.PopupMenuBase">
-        <!--
-            Before Lollipop the popup background is white on dark theme, so force color here.
-            (v21 will revert back to default drawable)
-        -->
-        <item name="android:popupBackground">?colorBackgroundFloating</item>
-    </style>
-
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="colorControlNormal">@android:color/white</item>
