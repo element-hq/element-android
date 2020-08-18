@@ -18,8 +18,6 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
@@ -363,11 +361,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     }
                 }
                 else                                -> {
-                    // Fallback for old android, try to restart capture when attached
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && capturerIsInError && call.mxCall.isVideoCall) {
-                        // try to restart capture?
-                        videoCapturer?.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
-                    }
                     // sink existing tracks (configuration change, e.g screen rotation)
                     attachViewRenderersInternal()
                 }
@@ -478,12 +471,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                         // We then register in order to restart capture as soon as the camera is available again
                         Timber.v("## VOIP onCameraClosed")
                         this@WebRtcPeerConnectionManager.capturerIsInError = true
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
-                            callContext.cameraAvailabilityCallback = restarter
-                            val cameraManager = context.getSystemService<CameraManager>()!!
-                            cameraManager.registerAvailabilityCallback(restarter, null)
-                        }
+                        val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
+                        callContext.cameraAvailabilityCallback = restarter
+                        val cameraManager = context.getSystemService<CameraManager>()!!
+                        cameraManager.registerAvailabilityCallback(restarter, null)
                     }
                 })
 
@@ -792,10 +783,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.localVideoTrack?.setEnabled(false)
 
         currentCall?.cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val cameraManager = context.getSystemService<CameraManager>()!!
-                cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
-            }
+            val cameraManager = context.getSystemService<CameraManager>()!!
+            cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
 
         if (originatedByMe) {
@@ -1041,7 +1030,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     inner class CameraRestarter(val cameraId: String, val callId: String) : CameraManager.AvailabilityCallback() {
 
         override fun onCameraAvailable(cameraId: String) {

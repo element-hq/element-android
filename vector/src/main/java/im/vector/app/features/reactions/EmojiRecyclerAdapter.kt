@@ -125,7 +125,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        beginTraceSession("MyAdapter.onCreateViewHolder")
+        Trace.beginSection("MyAdapter.onCreateViewHolder")
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(viewType, parent, false)
         itemView.setOnClickListener(itemClickListener)
@@ -133,16 +133,16 @@ class EmojiRecyclerAdapter @Inject constructor(
             R.layout.grid_section_header -> SectionViewHolder(itemView)
             else                         -> EmojiViewHolder(itemView)
         }
-        endTraceSession()
+        Trace.endSection()
         return viewHolder
     }
 
     override fun getItemViewType(position: Int): Int {
-        beginTraceSession("MyAdapter.getItemViewType")
+        Trace.beginSection("MyAdapter.getItemViewType")
         if (isSection(position)) {
             return R.layout.grid_section_header
         }
-        endTraceSession()
+        Trace.endSection()
         return R.layout.grid_item_emoji
     }
 
@@ -183,7 +183,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        beginTraceSession("MyAdapter.onBindViewHolder")
+        Trace.beginSection("MyAdapter.onBindViewHolder")
         val sectionNumber = getSectionForAbsoluteIndex(position)
         if (isSection(position)) {
             holder.bind(dataSource.rawData.categories[sectionNumber].name)
@@ -202,7 +202,7 @@ class EmojiRecyclerAdapter @Inject constructor(
                 holder.bind(null)
             }
         }
-        endTraceSession()
+        Trace.endSection()
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
@@ -259,18 +259,6 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     companion object {
-        fun endTraceSession() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                Trace.endSection()
-            }
-        }
-
-        fun beginTraceSession(sectionName: String) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                Trace.beginSection(sectionName)
-            }
-        }
-
         private val staticLayoutCache = HashMap<String, StaticLayout>()
 
         private fun getStaticLayoutForEmoji(emoji: String): StaticLayout {

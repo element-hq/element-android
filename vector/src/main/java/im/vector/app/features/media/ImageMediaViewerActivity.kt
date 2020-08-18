@@ -19,12 +19,10 @@ package im.vector.app.features.media
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.transition.addListener
@@ -84,7 +82,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
         configureToolbar(imageMediaViewerToolbar, mediaData)
 
-        if (isFirstCreation() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
+        if (isFirstCreation() && addTransitionListener()) {
             // Encrypted image
             imageTransitionView.isVisible = true
             imageMediaViewerImageView.isVisible = false
@@ -183,7 +181,6 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
      *
      * @return true if we were successful in adding a listener to the enter transition
      */
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun addTransitionListener(): Boolean {
         val transition = window.sharedElementEnterTransition
 

@@ -10,8 +10,10 @@ Improvements 🙌:
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
  - Ensure users do not accidentally ignore other users (#1890)
  - Support new config.json format and config.domain.json files (#1682)
+ - Increase Font size on Calling screen (#1643)
 
 Bugfix 🐛:
+ - Fix incorrect date format for some Asian languages (#1928)
  - Fix invisible toolbar (Status.im theme) (#1746)
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
@@ -33,6 +35,8 @@ Other changes:
  - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
  - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`
  - Rename package `im.vector.riotx` to `im.vector.app`
+ - Remove old code that was used on devices with api level <21
+ - Add Official Gradle Wrapper Validation Action
 
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
