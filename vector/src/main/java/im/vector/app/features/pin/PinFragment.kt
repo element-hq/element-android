@@ -61,7 +61,7 @@ class PinFragment @Inject constructor(
         val encodedPin = pinCodeStore.getEncodedPin() ?: return
         val authFragment = PFLockScreenFragment()
         val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setUseFingerprint(true)
+                .setUseBiometric(true)
                 .setTitle(getString(R.string.auth_pin_confirm_to_disable_title))
                 .setClearCodeOnError(true)
                 .setMode(PFFLockScreenConfiguration.MODE_AUTH)
@@ -71,7 +71,7 @@ class PinFragment @Inject constructor(
             override fun onPinLoginFailed() {
             }
 
-            override fun onFingerprintSuccessful() {
+            override fun onBiometricAuthSuccessful() {
                 lifecycleScope.launch {
                     pinCodeStore.deleteEncodedPin()
                     vectorBaseActivity.setResult(Activity.RESULT_OK)
@@ -79,7 +79,7 @@ class PinFragment @Inject constructor(
                 }
             }
 
-            override fun onFingerprintLoginFailed() {
+            override fun onBiometricAuthLoginFailed() {
             }
 
             override fun onCodeInputSuccessful() {
@@ -122,7 +122,7 @@ class PinFragment @Inject constructor(
         val encodedPin = pinCodeStore.getEncodedPin() ?: return
         val authFragment = PFLockScreenFragment()
         val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setUseFingerprint(true)
+                .setUseBiometric(true)
                 .setTitle(getString(R.string.auth_pin_title))
                 .setLeftButton(getString(R.string.auth_pin_forgot))
                 .setClearCodeOnError(true)
@@ -136,12 +136,12 @@ class PinFragment @Inject constructor(
             override fun onPinLoginFailed() {
             }
 
-            override fun onFingerprintSuccessful() {
+            override fun onBiometricAuthSuccessful() {
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
 
-            override fun onFingerprintLoginFailed() {
+            override fun onBiometricAuthLoginFailed() {
             }
 
             override fun onCodeInputSuccessful() {
