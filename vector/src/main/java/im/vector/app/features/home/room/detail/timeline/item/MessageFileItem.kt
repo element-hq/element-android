@@ -28,6 +28,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import org.matrix.android.sdk.api.session.room.send.SendState
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -87,7 +88,12 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.fileImageWrapper.setOnLongClickListener(attributes.itemLongClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
 
-        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState.isInProgress()
+        holder.eventSendingIndicator.isVisible = when (attributes.informationData.sendState) {
+            SendState.UNSENT,
+            SendState.ENCRYPTING,
+            SendState.SENDING -> true
+            else              -> false
+        }
     }
 
     override fun unbind(holder: Holder) {

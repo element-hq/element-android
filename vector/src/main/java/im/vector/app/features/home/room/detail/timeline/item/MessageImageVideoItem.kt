@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.session.room.send.SendState
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
@@ -62,7 +63,12 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
 
-        holder.eventSendingIndicator.isVisible = attributes.informationData.sendState.isInProgress()
+        holder.eventSendingIndicator.isVisible = when (attributes.informationData.sendState) {
+            SendState.UNSENT,
+            SendState.ENCRYPTING,
+            SendState.SENDING -> true
+            else              -> false
+        }
     }
 
     override fun unbind(holder: Holder) {
