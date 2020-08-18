@@ -1229,4 +1229,24 @@
     <string name="settings_labs_native_camera_summary">Käivita kohandatud vaate asemel süsteemne kaamera vaade.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Kasuta reavahetuse klahvi sõnumi saatmiseks</string>
     <string name="settings_labs_enable_send_voice">Saada häälsõnumeid</string>
+    <string name="permissions_rationale_msg_contacts">Element saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti ja telefoninumbrite põhjal. Kui nõustute oma aadressiraamatut sel eesmärgil jagama, lubage juurdepääs järgmisel hüpikaknal.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti ja telefoninumbrite põhjal.
+\n
+\nKas olete nõus oma aadressiraamatut sel eesmärgil jagama\?</string>
+
+    <string name="room_event_action_report_prompt_ignore_user">Kas soovite peita selle kasutaja kõik kirjad\?
+\n
+\nPange tähele, et see toiming taaskäivitab rakenduse ja see võib võtta veidi aega.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Taustapiirangud on Elemendi jaoks keelatud. Seda testi tuleks läbi viia mobiilse andmeside abil (WIFI puudub).
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Elemendi jaoks on taustpiirangud lubatud.
+\nTöö, mida rakendus proovib teha, on agressiivselt piiratud, kui see on taustal ja see võib mõjutada teatiste kättesaamist.
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Keela piirangud</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Aku optimeerimine</string>
+    <string name="settings_troubleshoot_test_battery_success">Aku optimeerimine ei mõjuta Elementi.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Kui kasutaja jätab seadme mõneks ajaks vooluvõrgust välja ja ühele kohale paigale ning ekraan on välja lülitatud, lülitub seade Doze režiimi. See takistab rakendustel juurdepääsu võrgule ja lükkab edasi nende töö, sünkroonimise ja tavalised teated.</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignoreeri optimeerimist</string>
+
     </resources>
