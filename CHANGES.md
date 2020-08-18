@@ -15,6 +15,7 @@ Bugfix 🐛:
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
+ - Fix Canvas: trying to draw too large bitmap (#1951)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them

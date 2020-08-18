@@ -117,7 +117,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                     .load(resolvedUrl)
         }
 
-        req.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+        req
                 .fitCenter()
                 .into(target)
     }
