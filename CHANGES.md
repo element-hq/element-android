@@ -20,7 +20,7 @@ Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
 
 Other changes:
- -
+ - Use File extension functions to make code more concise (#1996)
 
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================
