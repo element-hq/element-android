@@ -308,11 +308,23 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     }
 }
 
+private fun appendTimeToFilename(name: String): String {
+    val dateExtension = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+    if (!name.contains(".")) return name + "_" + dateExtension
+
+    val filename = name.substringBeforeLast(".")
+    val fileExtension = name.substringAfterLast(".")
+
+    return """${filename}_$dateExtension.$fileExtension"""
+}
+
 fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val filename = appendTimeToFilename(title)
+
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.TITLE, title)
-            put(MediaStore.Images.Media.DISPLAY_NAME, title)
+            put(MediaStore.Images.Media.TITLE, filename)
+            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
             put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
             put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
             put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
@@ -338,7 +350,7 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             }
             notificationUtils.buildDownloadFileNotification(
                     uri,
-                    title,
+                    filename,
                     mediaMimeType ?: "application/octet-stream"
             ).let { notification ->
                 notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
