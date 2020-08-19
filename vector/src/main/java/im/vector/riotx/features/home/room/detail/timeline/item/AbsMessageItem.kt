@@ -226,7 +226,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 bubbleView.setPadding(0, 0, 0, 0)
             }
             BubbleThemeUtils.BUBBLE_STYLE_START, BubbleThemeUtils.BUBBLE_STYLE_BOTH -> {
-                bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
+                if (attributes.informationData.showInformation) {
+                    bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
+                } else {
+                    bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble2_outgoing else R.drawable.msg_bubble2_incoming)
+                }
                 var tintColor = ColorStateList(
                         arrayOf(intArrayOf(0)),
                         intArrayOf(ThemeUtils.getColor(bubbleView.context,
