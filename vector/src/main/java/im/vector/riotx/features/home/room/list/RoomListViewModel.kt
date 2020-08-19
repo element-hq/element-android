@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.list
 
+import android.content.Context
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -59,6 +60,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     init {
         observeRoomSummaries()
         observeMembershipChanges()
+    }
+
+    fun initWithContext(context: Context, displayMode: RoomListDisplayMode) {
+        setState {
+            // RoomListViewState.initWithContext
+            this.initWithContext(context, displayMode)
+        }
     }
 
     override fun handle(action: RoomListAction) {

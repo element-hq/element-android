@@ -16,7 +16,10 @@
 
 package im.vector.riotx.features.home.room.list
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.annotation.StringRes
+import androidx.preference.PreferenceManager
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
@@ -41,7 +44,30 @@ data class RoomListViewState(
         val isServerNoticeRoomsExpanded: Boolean = true
 ) : MvRxState {
 
+    companion object {
+        const val ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX = "ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_"
+    }
+
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
+
+    private fun getSharedPreferences(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+    }
+    private fun getRoomListExpandedLowPriorityPref(displayMode: RoomListDisplayMode): String {
+        return ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX + displayMode.toString()
+    }
+
+    fun initWithContext(context: Context, displayMode: RoomListDisplayMode): RoomListViewState {
+        val sp = getSharedPreferences(context)
+        val pref = getRoomListExpandedLowPriorityPref(displayMode)
+        return copy(isLowPriorityRoomsExpanded = sp.getBoolean(pref, isLowPriorityRoomsExpanded))
+    }
+
+    fun persistWithContext(context: Context, displayMode: RoomListDisplayMode) {
+        val sp = getSharedPreferences(context)
+        val pref = getRoomListExpandedLowPriorityPref(displayMode)
+        sp.edit().putBoolean(pref, isLowPriorityRoomsExpanded).apply()
+    }
 
     fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
         return when (roomCategory) {

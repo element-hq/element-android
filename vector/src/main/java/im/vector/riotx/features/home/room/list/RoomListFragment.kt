@@ -96,6 +96,12 @@ class RoomListFragment @Inject constructor(
         super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        context?.let { roomListViewModel.initWithContext(it, roomListParams.displayMode) }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupCreateRoomButton()
@@ -116,6 +122,14 @@ class RoomListFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        withState(roomListViewModel) {
+            state -> context?.let { state.persistWithContext(it, roomListParams.displayMode) }
+        }
     }
 
     override fun showFailure(throwable: Throwable) {
