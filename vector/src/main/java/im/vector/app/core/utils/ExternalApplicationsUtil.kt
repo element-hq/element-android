@@ -317,7 +317,7 @@ private fun appendTimeToFilename(name: String): String {
     val filename = name.substringBeforeLast(".")
     val fileExtension = name.substringAfterLast(".")
 
-    return """${filename}_${dateExtension}.$fileExtension"""
+    return """${filename}_$dateExtension.$fileExtension"""
 }
 
 fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
