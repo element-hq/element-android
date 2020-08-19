@@ -11,6 +11,7 @@ Improvements 🙌:
  - Ensure users do not accidentally ignore other users (#1890)
  - Support new config.json format and config.domain.json files (#1682)
  - Increase Font size on Calling screen (#1643)
+ - Make the user's Avatar live in the general settings
 
 Bugfix 🐛:
  - Fix incorrect date format for some Asian languages (#1928)

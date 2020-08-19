@@ -21,6 +21,7 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.text.Editable
 import android.util.Patterns
 import android.view.View
@@ -40,13 +41,6 @@ import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
-import im.vector.lib.multipicker.MultiPicker
-import im.vector.lib.multipicker.entity.MultiPickerImageType
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.failure.isInvalidPassword
-import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
-import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
@@ -68,10 +62,20 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.SignOutUiWorker
+import im.vector.lib.multipicker.MultiPicker
+import im.vector.lib.multipicker.entity.MultiPickerImageType
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
 
@@ -120,10 +124,21 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        session.rx()
+                .liveUser(session.myUserId)
+                .unwrap()
+                .distinctUntilChanged { user -> user.avatarUrl }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { mUserAvatarPreference.refreshAvatar(it) }
+                .disposeOnDestroyView()
+    }
+
     override fun bindPref() {
         // Avatar
         mUserAvatarPreference.let {
-            it.setSession(session)
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onUpdateAvatarClick()
                 false
@@ -447,8 +462,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 if (!isAdded) return
-
-                mUserAvatarPreference.refreshAvatar()
                 onCommonDone(null)
             }
 
