@@ -47,7 +47,12 @@ internal class FallbackNetworkCallbackStrategy @Inject constructor(private val c
 
     override fun unregister() {
         networkInfoReceiver.isConnectedCallback = null
-        context.unregisterReceiver(networkInfoReceiver)
+        // Crashes if the SyncThread calls this before registration completed
+        try {
+            context.unregisterReceiver(networkInfoReceiver)
+        } catch (t: Throwable) {
+            Timber.e(t, "Unable to unregister network info receiver")
+        }
     }
 }
 

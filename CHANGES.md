@@ -18,6 +18,7 @@ Bugfix 🐛:
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
+ - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
