@@ -19,6 +19,7 @@ Bugfix 🐛:
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
  - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
+ - Failed to build unique file (#1954)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
