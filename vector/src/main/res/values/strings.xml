@@ -1640,6 +1640,7 @@
     <string name="create_room_public_description">"Anyone will be able to join this room"</string>
     <string name="create_room_directory_title">"Room Directory"</string>
     <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+    <string name="create_room_federation_error">"The room has been created, but some invitations have not been sent for the following reason:\n\n%s"</string>
 
     <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
