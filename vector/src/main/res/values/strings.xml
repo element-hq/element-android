@@ -2517,6 +2517,12 @@
 
     <string name="alert_push_are_disabled_title">Push notifications are disabled</string>
     <string name="alert_push_are_disabled_description">Review your settings to enable push notifications</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Wrong code, %d remaining attempt</item>
+        <item quantity="other">Wrong code, %d remaining attempts</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Warning! Last remaining attempt before logout!</string>
+    <string name="too_many_pin_failures">Too many errors, you\'ve been logged out</string>
     <string name="create_pin_title">Choose a PIN for security</string>
     <string name="create_pin_confirm_title">Confirm PIN</string>
     <string name="create_pin_confirm_failure">Failed to validate pin, please tap a new one.</string>

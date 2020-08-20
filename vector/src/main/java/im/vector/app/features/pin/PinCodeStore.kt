@@ -37,6 +37,25 @@ interface PinCodeStore {
     fun getEncodedPin(): String?
 
     suspend fun hasEncodedPin(): Boolean
+
+    fun getRemainingPinCodeAttemptsNumber(): Int
+
+    fun getRemainingBiometricsAttemptsNumber(): Int
+
+    /**
+     * Will return the number of remaining attempts
+     */
+    fun onWrongPin(): Int
+
+    /**
+     * Will return the number of remaining attempts
+     */
+    fun onWrongBiometrics(): Int
+
+    /**
+     * Will reset the counters
+     */
+    fun resetCounters()
 }
 
 class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: SharedPreferences) : PinCodeStore {
@@ -48,6 +67,8 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
     }
 
     override suspend fun deleteEncodedPin() = withContext(Dispatchers.IO) {
+        // Also reset the counters
+        resetCounters()
         sharedPreferences.edit {
             remove(ENCODED_PIN_CODE_KEY)
         }
@@ -72,11 +93,47 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
         result.error == null && result.result
     }
 
+    override fun getRemainingPinCodeAttemptsNumber(): Int {
+        return sharedPreferences.getInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT)
+    }
+
+    override fun getRemainingBiometricsAttemptsNumber(): Int {
+        return sharedPreferences.getInt(REMAINING_BIOMETRICS_ATTEMPTS_KEY, MAX_BIOMETRIC_ATTEMPTS_NUMBER_BEFORE_FORCE_PIN)
+    }
+
+    override fun onWrongPin(): Int {
+        val remaining = getRemainingPinCodeAttemptsNumber() - 1
+        sharedPreferences.edit {
+            putInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, remaining)
+        }
+        return remaining
+    }
+
+    override fun onWrongBiometrics(): Int {
+        val remaining = getRemainingBiometricsAttemptsNumber() - 1
+        sharedPreferences.edit {
+            putInt(REMAINING_BIOMETRICS_ATTEMPTS_KEY, remaining)
+        }
+        return remaining
+    }
+
+    override fun resetCounters() {
+        sharedPreferences.edit {
+            remove(REMAINING_PIN_CODE_ATTEMPTS_KEY)
+            remove(REMAINING_BIOMETRICS_ATTEMPTS_KEY)
+        }
+    }
+
     private suspend inline fun <T> awaitPinCodeCallback(crossinline callback: (PFPinCodeHelperCallback<T>) -> Unit) = suspendCoroutine<PFResult<T>> { cont ->
         callback(PFPinCodeHelperCallback<T> { result -> cont.resume(result) })
     }
 
     companion object {
         private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
+        private const val REMAINING_PIN_CODE_ATTEMPTS_KEY = "REMAINING_PIN_CODE_ATTEMPTS_KEY"
+        private const val REMAINING_BIOMETRICS_ATTEMPTS_KEY = "REMAINING_BIOMETRICS_ATTEMPTS_KEY"
+
+        private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
+        private const val MAX_BIOMETRIC_ATTEMPTS_NUMBER_BEFORE_FORCE_PIN = 5
     }
 }
