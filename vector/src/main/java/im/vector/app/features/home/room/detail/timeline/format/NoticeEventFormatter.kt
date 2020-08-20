@@ -327,6 +327,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         val eventContent: RoomMemberContent? = event.getClearContent().toModel()
         val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
+                || eventContent?.membership == Membership.LEAVE
         return if (isMembershipEvent) {
             buildMembershipNotice(event, senderName, eventContent, prevEventContent)
         } else {
@@ -569,6 +570,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                                     sp.getString(R.string.notice_room_withdraw_with_reason, senderDisplayName, targetDisplayName, reason)
                                 } ?: sp.getString(R.string.notice_room_withdraw, senderDisplayName, targetDisplayName)
                             }
+                        Membership.LEAVE,
                         Membership.JOIN   ->
                             if (event.isSentByCurrentUser()) {
                                 eventContent.safeReason?.let { reason ->
