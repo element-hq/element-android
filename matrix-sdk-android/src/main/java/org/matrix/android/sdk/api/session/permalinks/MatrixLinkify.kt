@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.permalinks
+package org.matrix.android.sdk.api.session.permalinks
 
 import android.text.Spannable
 

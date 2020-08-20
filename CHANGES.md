@@ -6,6 +6,7 @@ Features ✨:
  - Conference with Jitsi support (#43)
 
 Improvements 🙌:
+ - Share button in rooms gives room ID link without via parameters (#1927)
  - Give user the possibility to prevent accidental call (#1869)
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
  - Ensure users do not accidentally ignore other users (#1890)
@@ -20,8 +21,10 @@ Bugfix 🐛:
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
+ - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
  - Failed to build unique file (#1954)
  - Highlighted Event when opening a permalink from another room (#1033)
+ - A Kick appears has "someone has made no change" (#1959)
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them

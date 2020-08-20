@@ -22,7 +22,6 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
 import org.matrix.android.sdk.R
-import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -59,8 +58,8 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
+import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
@@ -79,8 +78,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val stringProvider: StringProvider,
         private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
-        private val taskExecutor: TaskExecutor,
-        private val localEchoRepository: LocalEchoRepository
+        private val localEchoRepository: LocalEchoRepository,
+        private val permalinkFactory: PermalinkFactory
 ) {
     fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
@@ -169,9 +168,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = PermalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { PermalinkFactory.createPermalink(it) }
-                ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -207,7 +205,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
             ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment)
         }
     }
 
@@ -361,12 +359,15 @@ internal class LocalEchoEventFactory @Inject constructor(
         return System.currentTimeMillis()
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Event? {
+    fun createReplyTextEvent(roomId: String,
+                             eventReplied: TimelineEvent,
+                             replyText: CharSequence,
+                             autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = PermalinkFactory.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(
