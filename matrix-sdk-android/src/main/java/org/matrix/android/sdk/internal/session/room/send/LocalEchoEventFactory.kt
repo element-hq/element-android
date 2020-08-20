@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
@@ -59,6 +58,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
+import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
@@ -79,7 +79,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
         private val localEchoRepository: LocalEchoRepository,
-        private val permalinkService: PermalinkService
+        private val permalinkFactory: PermalinkFactory
 ) {
     fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
@@ -168,8 +168,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = permalinkService.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { permalinkService.createPermalink(it) } ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -205,7 +205,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
             ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment)
         }
     }
 
@@ -365,9 +365,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                              autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkService.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkService.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(
