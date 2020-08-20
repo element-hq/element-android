@@ -15,55 +15,58 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.permalinks
+package org.matrix.android.sdk.api.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
  * Useful methods to create Matrix permalink (matrix.to links).
  */
-object PermalinkFactory {
+interface PermalinkService {
 
-    const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
+    companion object {
+        const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
+    }
 
     /**
      * Creates a permalink for an event.
      * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org"
      *
      * @param event the event
+     *
      * @return the permalink, or null in case of error
      */
-    fun createPermalink(event: Event): String? {
-        if (event.roomId.isNullOrEmpty() || event.eventId.isNullOrEmpty()) {
-            return null
-        }
-        return createPermalink(event.roomId, event.eventId)
-    }
+    fun createPermalink(event: Event): String?
 
     /**
-     * Creates a permalink for an id (can be a user Id, Room Id, etc.).
+     * Creates a permalink for an id (can be a user Id, etc.).
+     * For a roomId, consider using [createRoomPermalink]
      * Ex: "https://matrix.to/#/@benoit:matrix.org"
      *
      * @param id the id
      * @return the permalink, or null in case of error
      */
-    fun createPermalink(id: String): String? {
-        return if (id.isEmpty()) {
-            null
-        } else MATRIX_TO_URL_BASE + escape(id)
-    }
+    fun createPermalink(id: String): String?
 
     /**
-     * Creates a permalink for an event. If you have an event you can use [.createPermalink]
-     * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org"
+     * Creates a permalink for a roomId, including the via parameters
+     *
+     * @param roomId the room id
+     *
+     * @return the permalink, or null in case of error
+     */
+    fun createRoomPermalink(roomId: String): String?
+
+    /**
+     * Creates a permalink for an event. If you have an event you can use [createPermalink]
+     * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org?via=matrix.org"
      *
      * @param roomId  the id of the room
      * @param eventId the id of the event
+     *
      * @return the permalink
      */
-    fun createPermalink(roomId: String, eventId: String): String {
-        return MATRIX_TO_URL_BASE + escape(roomId) + "/" + escape(eventId)
-    }
+    fun createPermalink(roomId: String, eventId: String): String
 
     /**
      * Extract the linked id from the universal link
@@ -71,31 +74,5 @@ object PermalinkFactory {
      * @param url the universal link, Ex: "https://matrix.to/#/@benoit:matrix.org"
      * @return the id from the url, ex: "@benoit:matrix.org", or null if the url is not a permalink
      */
-    fun getLinkedId(url: String): String? {
-        val isSupported = url.startsWith(MATRIX_TO_URL_BASE)
-
-        return if (isSupported) {
-            url.substring(MATRIX_TO_URL_BASE.length)
-        } else null
-    }
-
-    /**
-     * Escape '/' in id, because it is used as a separator
-     *
-     * @param id the id to escape
-     * @return the escaped id
-     */
-    internal fun escape(id: String): String {
-        return id.replace("/", "%2F")
-    }
-
-    /**
-     * Unescape '/' in id
-     *
-     * @param id the id to escape
-     * @return the escaped id
-     */
-    internal fun unescape(id: String): String {
-        return id.replace("%2F", "/")
-    }
+    fun getLinkedId(url: String): String?
 }

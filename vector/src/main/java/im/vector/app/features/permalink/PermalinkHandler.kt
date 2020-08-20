@@ -20,12 +20,12 @@ import android.content.Context
 import android.net.Uri
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.navigation.Navigator
-import org.matrix.android.sdk.api.permalinks.PermalinkData
-import org.matrix.android.sdk.api.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.util.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 

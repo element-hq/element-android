@@ -22,21 +22,22 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.RoomCreateItem_
-import org.matrix.android.sdk.api.permalinks.PermalinkFactory
+import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 class RoomCreateItemFactory @Inject constructor(private val stringProvider: StringProvider,
                                                 private val userPreferencesProvider: UserPreferencesProvider,
+                                                private val session: Session,
                                                 private val noticeItemFactory: NoticeItemFactory) {
 
     fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>() ?: return null
         val predecessorId = createRoomContent.predecessor?.roomId ?: return defaultRendering(event, callback)
-        val roomLink = PermalinkFactory.createPermalink(predecessorId) ?: return null
+        val roomLink = session.permalinkService().createRoomPermalink(predecessorId) ?: return null
         val text = span {
             +stringProvider.getString(R.string.room_tombstone_continuation_description)
             +"\n"
