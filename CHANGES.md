@@ -23,6 +23,7 @@ Bugfix 🐛:
  - Fix refreshing of sessions list when another session is logged out
  - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
  - Failed to build unique file (#1954)
+ - Highlighted Event when opening a permalink from another room (#1033)
  - A Kick appears has "someone has made no change" (#1959)
 
 Translations 🗣:
