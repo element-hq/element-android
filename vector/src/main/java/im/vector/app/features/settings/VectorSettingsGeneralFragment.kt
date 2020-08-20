@@ -127,6 +127,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeUserAvatar()
+    }
+
+    private fun observeUserAvatar() {
         session.rx()
                 .liveUser(session.myUserId)
                 .unwrap()
