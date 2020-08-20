@@ -21,6 +21,7 @@ Bugfix 🐛:
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
+ - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
  - Failed to build unique file (#1954)
  - A Kick appears has "someone has made no change" (#1959)
 

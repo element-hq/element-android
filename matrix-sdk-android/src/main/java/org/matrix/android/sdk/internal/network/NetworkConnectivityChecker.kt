@@ -75,9 +75,7 @@ internal class DefaultNetworkConnectivityChecker @Inject constructor(private val
 
     override fun register(listener: NetworkConnectivityChecker.Listener) {
         if (listeners.isEmpty()) {
-            if (backgroundDetectionObserver.isInBackground) {
-                unbind()
-            } else {
+            if (!backgroundDetectionObserver.isInBackground) {
                 bind()
             }
             backgroundDetectionObserver.register(backgroundDetectionObserverListener)
