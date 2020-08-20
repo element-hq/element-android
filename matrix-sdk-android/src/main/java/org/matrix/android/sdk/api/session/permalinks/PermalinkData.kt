@@ -15,25 +15,21 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.permalinks
+package org.matrix.android.sdk.api.session.permalinks
 
-import android.text.style.ClickableSpan
-import android.view.View
-import org.matrix.android.sdk.api.permalinks.MatrixPermalinkSpan.Callback
+import android.net.Uri
 
 /**
- * This MatrixPermalinkSpan is a clickable span which use a [Callback] to communicate back.
- * @param url the permalink url tied to the span
- * @param callback the callback to use.
+ * This sealed class represents all the permalink cases.
+ * You don't have to instantiate yourself but should use [PermalinkParser] instead.
  */
-class MatrixPermalinkSpan(private val url: String,
-                          private val callback: Callback? = null) : ClickableSpan() {
+sealed class PermalinkData {
 
-    interface Callback {
-        fun onUrlClicked(url: String)
-    }
+    data class RoomLink(val roomIdOrAlias: String, val isRoomAlias: Boolean, val eventId: String?) : PermalinkData()
 
-    override fun onClick(widget: View) {
-        callback?.onUrlClicked(url)
-    }
+    data class UserLink(val userId: String) : PermalinkData()
+
+    data class GroupLink(val groupId: String) : PermalinkData()
+
+    data class FallbackLink(val uri: Uri) : PermalinkData()
 }

@@ -21,15 +21,15 @@ import android.text.style.URLSpan
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.permalinks.PermalinkData
-import org.matrix.android.sdk.api.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.MatrixItem
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.tag.LinkHandler
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class MxLinkTagHandler(private val glideRequests: GlideRequests,
                        private val context: Context,

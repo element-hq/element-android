@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.permalinks
 
-import org.matrix.android.sdk.api.permalinks.PermalinkService
-import org.matrix.android.sdk.api.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.di.UserId

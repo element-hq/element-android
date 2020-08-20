@@ -19,6 +19,13 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -37,6 +44,7 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
@@ -63,14 +71,6 @@ import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createUIHandler
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import org.matrix.android.sdk.api.permalinks.PermalinkService
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider

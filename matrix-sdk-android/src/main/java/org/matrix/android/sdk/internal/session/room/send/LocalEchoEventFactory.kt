@@ -22,7 +22,6 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
 import org.matrix.android.sdk.R
-import org.matrix.android.sdk.api.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -31,6 +30,7 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo

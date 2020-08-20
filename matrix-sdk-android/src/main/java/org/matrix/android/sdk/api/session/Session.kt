@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.pushrules.PushRuleService
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
@@ -48,8 +50,6 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
-import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.permalinks.PermalinkService
 
 /**
  * This interface defines interactions with a session.
