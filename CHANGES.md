@@ -6,6 +6,7 @@ Features ✨:
  - Conference with Jitsi support (#43)
 
 Improvements 🙌:
+ - Share button in rooms gives room ID link without via parameters (#1927)
  - Give user the possibility to prevent accidental call (#1869)
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
  - Ensure users do not accidentally ignore other users (#1890)

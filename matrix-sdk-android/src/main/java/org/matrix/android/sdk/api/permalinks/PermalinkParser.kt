@@ -37,7 +37,7 @@ object PermalinkParser {
      * Turns an uri to a [PermalinkData]
      */
     fun parse(uri: Uri): PermalinkData {
-        if (!uri.toString().startsWith(PermalinkFactory.MATRIX_TO_URL_BASE)) {
+        if (!uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)) {
             return PermalinkData.FallbackLink(uri)
         }
 

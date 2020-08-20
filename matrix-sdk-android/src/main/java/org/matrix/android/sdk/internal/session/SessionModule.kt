@@ -84,6 +84,8 @@ import org.matrix.android.sdk.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.permalinks.PermalinkService
+import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -355,6 +357,9 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
+
+    @Binds
+    abstract fun bindPermalinkService(service: DefaultPermalinkService): PermalinkService
 
     @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker

@@ -22,8 +22,11 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.R
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
@@ -31,10 +34,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import im.vector.app.R
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import java.util.UUID
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomProfileViewState,
@@ -118,9 +117,10 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
     }
 
     private fun handleShareRoomProfile() {
-        PermalinkFactory.createPermalink(initialState.roomId)?.let { permalink ->
-            _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
-        }
+        session.permalinkService().createRoomPermalink(initialState.roomId)
+                ?.let { permalink ->
+                    _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
+                }
     }
 
     private fun handleChangeAvatar(action: RoomProfileAction.ChangeRoomAvatar) {

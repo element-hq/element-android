@@ -156,11 +156,15 @@ internal class DefaultRelationService @AssistedInject constructor(
                            originalTimelineEvent: TimelineEvent,
                            newBodyText: String,
                            compatibilityBodyText: String): Cancelable {
-        val event = eventFactory
-                .createReplaceTextOfReply(roomId,
-                        replyToEdit,
-                        originalTimelineEvent,
-                        newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+        val event = eventFactory.createReplaceTextOfReply(
+                roomId,
+                replyToEdit,
+                originalTimelineEvent,
+                newBodyText,
+                true,
+                MessageType.MSGTYPE_TEXT,
+                compatibilityBodyText
+        )
                 .also { saveLocalEcho(it) }
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))

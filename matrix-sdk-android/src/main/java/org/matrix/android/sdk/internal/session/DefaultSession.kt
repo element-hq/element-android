@@ -70,6 +70,7 @@ import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.matrix.android.sdk.api.permalinks.PermalinkService
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -96,6 +97,7 @@ internal class DefaultSession @Inject constructor(
         private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
+        private val permalinkService: Lazy<PermalinkService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val widgetService: Lazy<WidgetService>,
@@ -253,6 +255,8 @@ internal class DefaultSession @Inject constructor(
     override fun identityService() = defaultIdentityService
 
     override fun fileService(): FileService = defaultFileService.get()
+
+    override fun permalinkService(): PermalinkService = permalinkService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
 

@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.permalinks.PermalinkService
 
 /**
  * This interface defines interactions with a session.
@@ -194,6 +195,11 @@ interface Session :
      * Returns the file download service associated with the session
      */
     fun fileService(): FileService
+
+    /**
+     * Returns the permalink service associated with the session
+     */
+    fun permalinkService(): PermalinkService
 
     /**
      * Add a listener to the session.
