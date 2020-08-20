@@ -21,6 +21,8 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -62,8 +64,19 @@ internal class DefaultCreateRoomTask @Inject constructor(
 
         val createRoomBody = createRoomBodyBuilder.build(params)
 
-        val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(createRoomBody)
+        val createRoomResponse = try {
+            executeRequest<CreateRoomResponse>(eventBus) {
+                apiCall = roomAPI.createRoom(createRoomBody)
+            }
+        } catch (throwable: Throwable) {
+            if (throwable is Failure.ServerError
+                    && throwable.httpCode == 403
+                    && throwable.error.code == MatrixError.M_FORBIDDEN
+                    && throwable.error.message.startsWith("Federation denied with")) {
+                throw CreateRoomFailure.CreatedWithFederationFailure(throwable.error)
+            } else {
+                throw throwable
+            }
         }
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
