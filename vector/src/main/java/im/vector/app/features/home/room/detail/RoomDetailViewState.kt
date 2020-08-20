@@ -70,5 +70,10 @@ data class RoomDetailViewState(
         val isAllowedToManageWidgets: Boolean = false
 ) : MvRxState {
 
-    constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)
+    constructor(args: RoomDetailArgs) : this(
+            roomId = args.roomId,
+            eventId = args.eventId,
+            // Also highlight the target event, if any
+            highlightedEventId = args.eventId
+    )
 }
