@@ -40,7 +40,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/composer_related_message_action_image"
@@ -105,11 +104,9 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
         app:layout_goneMarginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/composer_shield"
@@ -166,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintVertical_bias="1" />
 
-    <im.vector.riotx.features.home.room.detail.composer.ComposerEditText
+    <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
         style="@style/ComposerEditTextStyle"
         android:layout_width="0dp"

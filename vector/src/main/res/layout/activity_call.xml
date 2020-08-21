@@ -28,31 +28,38 @@
 
     <TextView
         android:id="@+id/participantNameText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:gravity="center"
         android:textColor="?riotx_text_primary"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/callTypeText"
-        tools:text="Joe" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/callTypeText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@id/otherMemberAvatar"
-        tools:text="Video Call" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/action_video_call" />
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_centerVertical="true"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:contentDescription="@string/avatar"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,21 +71,25 @@
 
     <TextView
         android:id="@+id/callStatusText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
-        tools:text="Connecting..." />
+        tools:text="@string/call_connecting" />
 
     <ProgressBar
         android:id="@+id/callConnectingProgress"
         style="?android:attr/progressBarStyle"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="participantNameText, callTypeText, otherMemberAvatar, callStatusText" />
+        app:constraint_referenced_ids="participantNameText,callTypeText,otherMemberAvatar,callStatusText" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/callVideoGroup"
@@ -101,8 +112,7 @@
         app:constraint_referenced_ids="pip_video_view, fullscreen_video_view"
         tools:visibility="invisible" />
 
-
-    <im.vector.riotx.features.call.CallControlsView
+    <im.vector.app.features.call.CallControlsView
         android:id="@+id/callControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

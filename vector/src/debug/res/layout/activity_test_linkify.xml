@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/riot_secondary_text_color_status"
-    tools:context="im.vector.riotx.features.debug.TestLinkifyActivity">
+    tools:context=".features.debug.TestLinkifyActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

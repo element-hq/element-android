@@ -1,0 +1,31 @@
+Element je inovatívny kolaboračný komunikátor ktorý:
+
+1. Ponecháva kontrolu nad zachovaním vašeho súkromia
+2. Umožňuje komunikovať s kýmkoľvek v sieti Matrix a vďaka integráciám s aplikáciami napríklad Slack aj s mnohými ďalšími
+3. Chráni vás pred reklamami, zhromažďovaním údajov a nedostatkami uzavretých platforiem
+4. Posilňuje vašu bezpečnosť vďaka E2E šifrovaniu a krížovému podpisovaniu určenému na overovanie ostatných
+
+
+Element sa od ostatných komunikačných a kolaboračných aplikácií odlišuje tým, že je decentralizovaný a open-source.
+
+S elementom sa môžete pripojiť k vlastnému serveru alebo si môžete vybrať dôveryhodného poskytovateľa servera, čím si zachováte súkromie, vlastníctvo a kontrolu nad vašimi konverzáciami a údajmi. Získavate vlastne prístup do otvorenej siete a teda nie ste limitovaní na komunikáciu len s ostatnými Element používateľmi. A samozrejme komunikácia je veľmi bezpečná.
+
+Element všetko toto dokáže vďaka tomu, že pracuje podľa protokolu Matrix - štandardu na otvorenú, decentralizovanú komunikáciu.
+
+Element vám dáva kontrolu tým, že si samy vyberiete, ako budete hostovať vaše konverzácie. Priamo v aplikácii Element si môžete vybrať z rôznych spôsobov hostovania:
+
+1. Získajte účet zdarma na verejnom servery matrix.org
+2. Hostujte si účet spustením vlastného servera použitím vlastného hardvéru
+3. Prihláste sa k účtu na vlastnom servery objednaním služieb na platforme Element Matrix Services
+
+<b>Prečo si vybrať element?</b>
+
+<b>PONECHAJTE SI VAŠE ÚDAJE</b>: Len vy sa rozhodujete o tom, kde si budete uchovávať vaše správy a ostatné údaje. Len vy vlastníte vaše údaje a riadite zaobchádzanie s nimi, nie nejaká obrovská korporácia, ktorá z nich ťaží alebo k nim poskytuje prístup tretím stranám.
+
+<b>OTVORENÁ KOMUNIKÁCIA a KOLABORÁCIA</b>: Konverzovať môžete s kýmkoľvek v otvorenej sieti Matrix nezávisle na tom, či používa Element alebo inú kompatibilnú aplikáciu, alebo dokonca aj s tými, ktorí používajú iný systém určený na okamžitú komunikáciu ako sú Slack, IRC alebo XMPP.
+
+<b>VEĽMI VYSOKÉ ZABEZPEČENIE</b>: Skutočné šifrovanie od zariadenia k zariadeniu (len diskutujúci môžu dešifrovať správy) a krížové podpisovanie určené na overovanie jednotlivých zariadení členov konverzácií.
+
+<b>KOMPLETNÁ KOMUNIKÁCIA</b>: Okamžité správy, telefonáty a video hovory, zdieľanie súborov, zdieľanie obrazovky a veľké množstvo integrácií, botov a widgetov. Vytvorte si vlastné miestnosti, založte komunity, ostante v kontakte a vyriešte úlohy.
+
+<b>KDEKOĽVEK SA NACHÁDZATE</b>: Ostante v kontakte kdekoľvek práve ste s plne synchronizovanou históriou konverzácií naprieč všetkými vašimi zariadeniami aj cez web na adrese https://app.element.io.

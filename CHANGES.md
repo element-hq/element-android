@@ -1,3 +1,52 @@
+Changes in Element 1.0.5 (2020-08-21)
+===================================================
+
+Features ✨:
+ - Protect access to the app by a pin code (#1700)
+ - Conference with Jitsi support (#43)
+
+Improvements 🙌:
+ - Share button in rooms gives room ID link without via parameters (#1927)
+ - Give user the possibility to prevent accidental call (#1869)
+ - Display device information (name, id and key) in Cryptography setting screen (#1784)
+ - Ensure users do not accidentally ignore other users (#1890)
+ - Better handling DM creation when invitees cannot be inviting due to denied federation
+ - Support new config.json format and config.domain.json files (#1682)
+ - Increase Font size on Calling screen (#1643)
+ - Make the user's Avatar live in the general settings
+
+Bugfix 🐛:
+ - Fix incorrect date format for some Asian languages (#1928)
+ - Fix invisible toolbar (Status.im theme) (#1746)
+ - Fix relative date time formatting (#822)
+ - Fix crash reported by RageShake
+ - Fix refreshing of sessions list when another session is logged out
+ - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
+ - Failed to build unique file (#1954)
+ - Highlighted Event when opening a permalink from another room (#1033)
+ - A Kick appears has "someone has made no change" (#1959)
+ - Avoid NetworkOnMainThreadException when setting a user avatar
+ - Renew turnserver credentials when ttl runs out
+
+Translations 🗣:
+ - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
+
+SDK API changes ⚠️:
+ - Rename package `im.vector.matrix.android` to `org.matrix.android.sdk`
+ - Rename package `im.vector.matrix.rx` to `org.matrix.android.sdk.rx`
+
+Build 🧱:
+ - Fix RtlHardcoded issues (use `Start` and `End` instead of `Left` and `Right` layout attributes)
+
+Other changes:
+ - Use `Context#getSystemService` extension function provided by `core-ktx` (#1702)
+ - Hide Flair settings, this is not implemented yet.
+ - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
+ - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`
+ - Rename package `im.vector.riotx` to `im.vector.app`
+ - Remove old code that was used on devices with api level <21
+ - Add Official Gradle Wrapper Validation Action
+
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
 

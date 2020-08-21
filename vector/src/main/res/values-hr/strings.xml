@@ -269,7 +269,6 @@
     <string name="login_error_no_homeserver_found">Ovo nije ispravna adresa poslužitelja Matrixa</string>
     <string name="login_error_homeserver_not_found">Poslužitelj na ovom URL-u je nedostupan, provjerite ga</string>
     <string name="login_error_ssl_handshake">Vaš uređaj koristi zastario sigurnosni protokol TLS podložan napadima pa se nećete moći spojiti radi vlastite sigurnosti</string>
-    <string name="login_mobile_device">Mobitel</string>
 
     <string name="login_error_forbidden">Neispravno korisničko ime/lozinka</string>
     <string name="login_error_unknown_token">Navedena pristupna oznaka nije prepoznata</string>
@@ -278,10 +277,6 @@
     <string name="login_error_limit_exceeded">Poslano je previše zahtjeva</string>
     <string name="login_error_user_in_use">Ovo se korisničko ime već koristi</string>
     <string name="login_error_login_email_not_yet">Još uvijek niste kliknuli na poveznicu u e-pošti</string>
-
-    <string name="e2e_need_log_in_again">Morate se ponovno prijaviti kako bi se generirali ključevi za šifriranje od kraja do kraja za ovu sesiju i poslati javni ključ na Vaš poslužitelj.
-\nOvo morate napraviti samo jednom.
-\nOprostite na neugodnosti.</string>
 
     <string name="e2e_re_request_encryption_key">Ponovno zatražite ključeve za šifriranje od Vaših drugih sesija.</string>
 
@@ -318,7 +313,7 @@
     <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Koristi zadan zvuk tona Elementa za dolazne pozive</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Koristi zadan zvuk tona Elementa za dolazne pozive</string>
     <string name="settings_call_ringtone_use_default_stun">Dozvoli rezervnog poslužitelja za pozivnog pomoćnika</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Koristit će se %s kao pomoćnik u slučaju da ga Vaš poslužitelj nema (Vaša IP adresa će biti podijeljena tijekom poziva)</string>
     <string name="settings_call_ringtone_title">Zvuk tona dolaznog poziva</string>
@@ -595,7 +590,6 @@
 
 
     <string name="settings_notification_advanced">Napredne postavke obavijesti</string>
-    <string name="settings_notification_advanced_summary">Postavite važnost obavijesti po događajima, podesite zvuk, indikatorsku lampicu i vibriranje</string>
     <string name="settings_notification_by_event">Važnost obavijesti po događajima</string>
 
     <string name="settings_notification_privacy">Privatnost obavještavanja</string>
@@ -1046,9 +1040,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nije pronađen valjajući APK Usluga za Google Play. Moguće je da obavijesti neće ispravno raditi.</string>
 
-    <string name="store_title">Element - Komunicirajte onako kako Vama odgovara</string>
-    <string name="store_whats_new">Stalno radimo na izmjenama i poboljšanjima Element-a. Cjelovit dnevnik izmjena je moguće pronaći u %1$s. Kako biste ostali informirani o novostima, imajte omogućeno ažuriranje.</string>
-    <string name="store_short_description">Univerzalna aplikacija za sigurno ćaskanje pod Vašom kontrolom.</string>
     <string name="passphrase_create_passphrase">Napravi fraza-lozinku</string>
     <string name="passphrase_confirm_passphrase">Potvrdi fraza-lozinku</string>
     <string name="passphrase_enter_passphrase">Unesite fraza-lozinku</string>
@@ -1074,11 +1065,6 @@
 
     <string name="identity_server_not_defined">Ne koristite poslužitelja identiteta</string>
     <string name="identity_server_not_defined_for_password_reset">Nije podešen poslužitelj identiteta. Potreban je za poništavanje Vaše lozinke.</string>
-
-    <string name="security_warning_identity_server">Prijašnje inačice Elementa imale su sigurnosni propust koji bi Vašem poslužitelju identiteta (%1$s) omogućio pristup Vašem računu. Ako vjerujete %2$s, možete ovo zanemariti. U suprotnom se odjavite i ponovno prijavite.
-\n
-\nOvdje možete pronaći više informacija:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="error_user_already_logged_in">Čini se da se pokušavate spojiti na drugi poslužitelj. Želite li se odjaviti\?</string>
 
@@ -1127,8 +1113,6 @@
 
     <string name="create_room_title">Nova soba</string>
     <string name="create_room_action_create">IZRADI</string>
-    <string name="riotx_no_registration_notice">%1$s kako biste otvorili račun.</string>
-    <string name="riotx_no_registration_notice_colored_part">Koristite staru aplikaciju</string>
 
 
     <string name="message_edits">Uređivanja poruka</string>
@@ -1302,7 +1286,6 @@
     <string name="encryption_import_import">Uvezi</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifriraj samo ka potvrđenim sesijama</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikada iz ove sesije ne šalji šifrirane poruke nepotvrđenim sesijama.</string>
-    <string name="encryption_import_room_keys_success">%1$d od %2$d ključ(eva) je uspješno uvezeno.</string>
 
     <string name="encryption_information_not_verified">Nije potvrđeno</string>
     <string name="encryption_information_verified">Potvrđeno</string>
@@ -1321,10 +1304,6 @@
     <string name="encryption_information_verify_device_warning">Potvrdite usporedbom sljedećeg s korisničkim postavkama u Vašoj drugoj sesiji:</string>
     <string name="encryption_information_verify_device_warning2">Ako se ne podudaraju, sigurnost Vaše komunikacije može biti narušena.</string>
     <string name="encryption_information_verify_key_match">Potvrđujem da ključevi odgovaraju</string>
-
-    <string name="e2e_enabling_on_app_update">Element podržava šifriranje s kraja na kraj, no trebat ćete se ponovno prijaviti kako biste ga omogućili.
-\n
-\nTo možete sada učiniti ili kasnije iz postavki aplikacije.</string>
 
     <string name="unknown_devices_alert_title">Soba sadrži nepoznate sesije</string>
     <string name="select_room_directory">Odaberite popis soba</string>
@@ -1616,12 +1595,6 @@
     <string name="create_room_directory_description">Objavi ovu sobu u popisu soba</string>
 
     <string name="keys_backup_unable_to_get_keys_backup_data">Došlo je do greške pri dohvaćanju podataka iz sigurnosne kopije ključeva</string>
-
-    <string name="alpha_disclaimer_title">Dobrodošli u radnu inačicu!</string>
-    <string name="alpha_disclaimer_content_line_1">Obzirom da je Element u fazi ranog razvoja, neke značajke mogu nedostajati i moguće su greške u aplikaciji.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Najnoviji popis značajki se uvijek nalazi na %1$s. Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis za trgovinu Play</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
 
     <string name="import_e2e_keys_from_file">Uvezi ključeve za E2E iz datoteke \"%1$s\".</string>
 

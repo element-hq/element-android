@@ -73,7 +73,6 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:paddingEnd="48dp"
-                    android:paddingRight="48dp"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>

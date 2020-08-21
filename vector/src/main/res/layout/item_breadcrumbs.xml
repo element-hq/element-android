@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/breadcrumbsUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

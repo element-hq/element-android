@@ -60,7 +60,7 @@
     <attr name="riotx_bottom_sheet_background" format="color" />
     <color name="riotx_bottom_sheet_background_light">#FFFFFFFF</color>
     <color name="riotx_bottom_sheet_background_dark">#FF282C35</color>
-    <color name="riotx_bottom_sheet_background_black">#FF000000</color>
+    <color name="riotx_bottom_sheet_background_black">#FF282C35</color>
 
     <attr name="riotx_base_text_icon_primary" format="color" />
     <color name="riotx_base_text_icon_primary_light">#FFFFFFFF</color>
@@ -163,6 +163,11 @@
     <color name="riotx_fab_label_bg_dark">#FF181B21</color>
     <color name="riotx_fab_label_bg_black">#FF181B21</color>
 
+    <attr name="riotx_fab_label_stroke" format="color" />
+    <color name="riotx_fab_label_stroke_light">#1EFFFFFF</color>
+    <color name="riotx_fab_label_stroke_dark">@color/black</color>
+    <color name="riotx_fab_label_stroke_black">@color/black</color>
+
     <attr name="riotx_fab_label_color" format="color" />
     <color name="riotx_fab_label_color_light">#FF2E2F32</color>
     <color name="riotx_fab_label_color_dark">#FFA1B2D1</color>
@@ -220,8 +225,8 @@
     <color name="riotx_disabled_view_color_dark">#61708B</color>
 
     <attr name="riotx_list_bottom_sheet_divider_color" format="color" />
-    <color name="riotx_list_bottom_sheet_divider_color_light">#EEEFEF</color>
-    <color name="riotx_list_bottom_sheet_divider_color_dark">#FF61708B</color>
+    <color name="riotx_list_bottom_sheet_divider_color_light">#E3E8F0</color>
+    <color name="riotx_list_bottom_sheet_divider_color_dark">#7F61708B</color>
     <color name="riotx_list_bottom_sheet_divider_color_black">#FF22262E</color>
 
     <!-- (color from RiotWeb) -->

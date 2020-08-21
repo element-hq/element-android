@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reactionSelector"
     android:layout_width="wrap_content"
-    android:minWidth="44dp"
     android:layout_height="26dp"
     android:background="@drawable/rounded_rect_shape"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:minWidth="44dp">
 
 
     <!--<View-->
-        <!--android:id="@+id/reactionSelector"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/rounded_rect_shape" />-->
+    <!--android:id="@+id/reactionSelector"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@drawable/rounded_rect_shape" />-->
 
-    <im.vector.riotx.features.reactions.widget.DotsView
+    <im.vector.app.features.reactions.widget.DotsView
         android:id="@+id/dots"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="@+id/reactionText"
         app:layout_constraintTop_toTopOf="@+id/reactionText" />
 
-    <im.vector.riotx.features.reactions.widget.CircleView
+    <im.vector.app.features.reactions.widget.CircleView
         android:id="@+id/circle"
         android:layout_width="14dp"
         android:layout_height="14dp"
@@ -39,32 +39,27 @@
         android:id="@+id/reactionText"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:minWidth="20dp"
         android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
+        android:ellipsize="middle"
         android:gravity="center"
+        android:maxEms="10"
+        android:minWidth="20dp"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="13sp"
-        android:maxEms="10"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/reactionCount"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/reactionCount"
         tools:text="* Party Parrot Again * 👀" />
 
     <TextView
         android:id="@+id/reactionCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintBaseline_toBaselineOf="@id/reactionText"
         android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="?riotx_text_secondary"
@@ -73,8 +68,10 @@
         app:autoSizeMaxTextSize="14sp"
         app:autoSizeMinTextSize="8sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintStart_toEndOf="@id/reactionText"
+        app:layout_constraintBaseline_toBaselineOf="@id/reactionText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/reactionText"
         tools:text="13450" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,8 @@
     <string name="rename">Перейменувати</string>
     <string name="report_content">Поскаржитись на вміст</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.\nПриєднатись %1$s чи %2$s.</string>
+    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.
+\nПриєднатись як %1$s чи %2$s</string>
     <string name="ongoing_conference_call_voice">голосом</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
@@ -196,7 +197,6 @@
     <string name="login_error_unable_register">Збій реєстрації</string>
     <string name="login_error_unable_register_mail_ownership">Збій реєстрації: не вдалося перевірити email</string>
     <string name="login_error_invalid_home_server">Введіть дійсний URL</string>
-    <string name="login_mobile_device">Мобільний</string>
 
     <string name="login_error_forbidden">Неправильне ім\'я користувача або пароль</string>
     <string name="login_error_unknown_token">Вказаний токен доступу не розпізнано</string>
@@ -207,7 +207,6 @@
     <string name="login_error_login_email_not_yet">Ви не перейшли за посиланням в електронному листі</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам треба знов ся залогувати для створення E2E-ключів для цього пристрою та надсилання їх на сервер.\nЦе одноразова дія.\nВибачте за незручності.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Перегляд списку вступників</string>
@@ -305,7 +304,7 @@
 
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Idle</string>
+    <string name="room_participants_idle">Перестій</string>
 
     <string name="room_participants_header_admin_tools">АДМІНІСТРУВАННЯ</string>
     <string name="room_participants_header_call">ВИКЛИК</string>
@@ -677,8 +676,6 @@
 Якщо ні, хтось втрутився в цей пристрій, і Вам імовірно слід його заблокувати.
 У майбутньому цей процес верифікації стане більш складним.</string>
     <string name="encryption_information_verify_key_match">Я підтверджую, що ключі співпадають</string>
-
-    <string name="e2e_enabling_on_app_update">Тепер Element підтримує наскрізне шифрування, але вам треба залогуватися знову, щоб його увімкнути.\n\nМожете зробити це зараз або пізніше у налаштуваннях застосунку.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Кімната містить невідомі пристрої</string>
@@ -1107,15 +1104,13 @@
     <string name="markdown_has_been_disabled">Markdown вимкнено.</string>
 
     <string name="settings_call_category">Виклики</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Використовувати стандартний рингтон Element для вхідних викликів</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Використовувати стандартний рингтон Element для вхідних викликів</string>
     <string name="settings_call_ringtone_title">Рингтон вхідного виклику</string>
     <string name="settings_call_ringtone_dialog_title">Оберіть рингтон для викликів:</string>
 
     <string name="accept">Прийняти</string>
 
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(і/ів) успішно імпортовано.</string>
 
     <string name="action_mark_room_read">Позначити як прочитане</string>
 </resources>

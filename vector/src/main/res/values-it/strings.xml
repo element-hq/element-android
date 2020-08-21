@@ -26,7 +26,7 @@
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">Collegamento permanente</string>
     <string name="view_source">Vedi il codice sorgente</string>
     <string name="view_decrypted_source">Vedi il codice sorgente decifrato</string>
     <string name="delete">Elimina</string>
@@ -169,7 +169,7 @@
     <string name="auth_recaptcha_message">Questo Home Server vorrebbe assicurarsi che tu non sia un robot</string>
     <string name="auth_username_in_use">Nome utente già in uso</string>
     <string name="auth_home_server">Home Server:</string>
-    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_identity_server">Server identità:</string>
     <string name="auth_reset_password_next_step_button">Ho verificato il mio indirizzo email</string>
     <string name="auth_reset_password_message">Per reimpostare la password, inserisci l\'indirizzo email associato al tuo account:</string>
     <string name="auth_reset_password_missing_email">Va inserito l\'indirizzo email associato al tuo account.</string>
@@ -198,9 +198,6 @@
     <string name="login_error_login_email_not_yet">Il link nella mail non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questa sessione ed inviare la chiave pubblica all\'homeserver 
-\nQuesto inconveniente non capiterà più. 
-\nScusa per il disguido.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
@@ -500,7 +497,7 @@
 
     <string name="settings_logged_in">Autenticato come</string>
     <string name="settings_home_server">Home Server</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_identity_server">Server identità</string>
 
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua</string>
@@ -672,10 +669,6 @@
     <string name="encryption_information_verify_device_warning2">Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
 
-    <string name="e2e_enabling_on_app_update">Element supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
-\n
-\nPuoi farlo ora, o più tardi, dalle impostazioni dell\'applicazione.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La stanza contiene sessioni sconosciute</string>
     <string name="unknown_devices_alert_message">Questa stanza contiene sessioni sconosciute che non sono state verificate. 
@@ -735,8 +728,6 @@
     <string name="notification_listening_for_events">Rilevazione eventi</string>
     <string name="title_activity_bug_report">Segnalazione errore</string>
 
-    <string name="login_mobile_device">Smartphone</string>
-
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
@@ -773,7 +764,7 @@
         <item quantity="one">1 utente</item>
         <item quantity="other">%d utenti</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bannare questo utente\?</string>
+    <string name="room_participants_ban_prompt_msg">Bandire l\'utente lo espellerà dalla stanza e gli impedirà di rientrare.</string>
 
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nuovo messaggio</item>
@@ -1088,15 +1079,13 @@
     <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
 
     <string name="settings_call_category">Chiamate</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usa la suoneria predefinita di Element per le chiamate in arrivo</string>
     <string name="settings_call_ringtone_title">Suoneria delle chiamate in arrivo</string>
     <string name="settings_call_ringtone_dialog_title">Scegli la suoneria per le chiamate:</string>
 
     <string name="accept">Accetta</string>
 
     <string name="auth_accept_policies">Per favore, leggi e accetta i termini di servizio di questo Home Server:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chiav(i) importate con successo.</string>
 
     <string name="settings_notification_troubleshoot">Diagnostica delle notifiche</string>
     <string name="settings_troubleshoot_diagnostic">Diagnosi</string>
@@ -1180,27 +1169,8 @@
 
     <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
 
-    <string name="store_title">Element - Comunica, a modo tuo</string>
-    <string name="store_short_description">Una App per chat universali, sicure ed interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Una App per chat flessibile e interamente sotto il tuo controllo. Element ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n 
-\nPuoi aprire un account matrix.org gratuito, creare il tuo server su https://modular.im o usare un altro server Matrix. 
-\n 
-\nPerché scegliere Element\?
-\n 
-\n• COMUNICAZIONE COMPLETA: crea stanze per discussione pubbliche o private per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai chiamate video o audio - tutto gratuito. 
-\n 
-\n• GRANDI INTEGRAZIONI: collega Element alle piattaforme che conosci ed ami. Con Element puoi addirittura chattare con utenti e gruppi che usano altre App di chat.
-\n 
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino sempre tali. 
-\n 
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Riprendi il possesso dei tuoi dati creando il tuo server Matrix personale, o scegliendone uno di cui ti fidi. 
-\n 
-\n• OVUNQUE TU SIA: stai sul pezzo ovunque tu sia grazie la cronologia dei messaggi sempre sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
-
     <string name="video_call_in_progress">Chiamata video in corso…</string>
 
-    <string name="store_whats_new">Element continua a crescere e migliorare. Il registro completo delle modifiche si può trovare qui: %1$s. Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
     <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
     <string name="keys_backup_is_not_finished_please_wait">Il Backup delle chiavi non è concluso, attendere prego…</string>
@@ -1227,7 +1197,6 @@
     <string name="auth_login_sso">Accedi con single sign-on</string>
     <string name="login_error_unknown_host">Questo URL è irraggiungibile. Per favore controllalo</string>
     <string name="login_error_ssl_handshake">"Il tuo dispositivo usa  un protocollo di sicurezza TLS obsoleto e vulnerabile agli attacchi. Per la tua sicurezza, ti viene impedito di connetterti"</string>
-    <string name="settings_notification_advanced_summary">Imposta i livelli di importanza delle notifiche in base al tipo. Configura i suoni, i led, e la vibrazione</string>
     <string name="settings_notification_by_event">Importanza delle notifiche in base al tipo</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Impostazioni personalizzate.</string>
@@ -1336,7 +1305,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questo codice di recupero: verifica di avere inserito il codice di recupero corretto.</string>
 
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
-    <string name="keys_backup_restore_success_description">Ripristinate %1$d chiavi di sessione e aggiunte %2$d nuove chiavi finora sconosciute a questa sessione</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Ripristinato un Backup con %d chiave.</item>
         <item quantity="other">Ripristinato un Backup con %d chiavi.</item>
@@ -1554,12 +1522,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati dal Backup delle chiavi</string>
 
-    <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Element si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">L\'elenco di funzioni più recenti è sempre nel %1$s, se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
-
     <string name="import_e2e_keys_from_file">Importa le chiavi di crittografia dal file \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versione SDK Matrix</string>
@@ -1597,16 +1559,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella Timeline</string>
 
-    <string name="store_riotx_title">Element - Client Matrix di nuova generazione</string>
-    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero che utilizza gli ultimi framework di Android</string>
-    <string name="store_riotx_full_description">Element è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. Element è stato completamente riscritto rispetto a Riot Android, ed è a sua volta basato su un SDK Android di Matrix totalmente riscritto.
-\n 
-\nDisclaimer: questa è una versione beta. Element è attualmente in uno sviluppo attivo e contiene ancora alcune limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti!
-\n 
-\nElement supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
-\n 
-\nNon tutte le funzioni di Element sono già implementate in Element. Principali funzioni mancanti (prossimamente!): • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
-
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
 
@@ -1620,9 +1572,6 @@
     <string name="downloaded_file">Il file %1$s è stato scaricato!</string>
 
     <string name="edited_suffix">(modificato)</string>
-
-    <string name="riotx_no_registration_notice">%1$s per creare un account.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usa la vecchia app</string>
 
 
     <string name="message_edits">Modifiche messaggio</string>
@@ -1640,7 +1589,7 @@
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
 
-    <string name="settings_integration_manager">Integration Manager</string>
+    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
 
     <string name="integration_manager_not_configured">Non è stato configurato nessun Integration Manager.</string>
     <string name="add_by_matrix_id">Aggiungi per ID utente</string>
@@ -1657,11 +1606,6 @@
     <string name="decline">Rifiuta</string>
 
     <string name="widget_integration_review_terms">Per continuare devi accettare i termini di servizio.</string>
-
-    <string name="security_warning_identity_server">Alcune precedenti versioni di Element contenevano un errore di sicurezza che permetteva al tuo Identity Server (%1$s) di accedere al tuo account. Se ti fidi di %2$s, puoi ignorare questo avviso; altrimenti disconnettiti e riaccedi di nuovo.
-\n 
-\nLeggi maggiori dettagli qui: 
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Termini di servizio</string>
     <string name="review_terms">Leggi i termini di servizio</string>
@@ -1759,7 +1703,6 @@
     <string name="a11y_hide_password">Nascondi password</string>
     <string name="a11y_jump_to_bottom">Salta in fondo</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s ed altri %3$d hanno letto</string>
     <string name="three_users_read">%1$s, %2$s e %3$s hanno letto</string>
     <string name="two_users_read">%1$s e %2$s hanno letto</string>
     <string name="one_user_read">%s ha letto</string>
@@ -1776,7 +1719,7 @@
     <string name="attachment_type_camera">Fotocamera</string>
     <string name="attachment_type_audio">Audio</string>
     <string name="attachment_type_gallery">Galleria</string>
-    <string name="attachment_type_sticker">Sticker</string>
+    <string name="attachment_type_sticker">Adesivo</string>
     <string name="error_handling_incoming_share">Errore nella gestione dei dati condivisi</string>
 
     <string name="report_content_spam">È spam</string>
@@ -1864,7 +1807,7 @@
     <string name="room_join_rules_invite">%1$s ha reso la stanza solo ad invito.</string>
     <string name="timeline_unread_messages">Messaggi non letti</string>
 
-    <string name="login_splash_title">Libera le tue comunicazioni</string>
+    <string name="login_splash_title">È la tua conversazione. Tienitela.</string>
     <string name="login_splash_text1">Chatta con persone direttamente o in gruppi</string>
     <string name="login_splash_text2">Tieni private le conversazioni con la cifratura</string>
     <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
@@ -2034,7 +1977,6 @@
 
     <string name="settings_developer_mode_fail_fast_title">Crash facile</string>
     <string name="settings_developer_mode_fail_fast_summary">Element potrebbe crashare più spesso quando si verifica un errore imprevisto</string>
-    <string name="command_description_verify">Richiedi di verificare l\'ID utente in questione</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ ad un messaggio testuale</string>
 
     <string name="create_room_encryption_title">Attiva la cifratura</string>
@@ -2255,7 +2197,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Le chiavi sono già aggiornate!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Richieste di chiavi</string>
 
@@ -2354,7 +2296,7 @@
     <string name="settings_messages_in_e2e_group_chat">Messaggi cifrati in chat di gruppo</string>
     <string name="settings_when_rooms_are_upgraded">Quando le stanze vengono aggiornate</string>
     <string name="settings_troubleshoot_title">Risoluzione problemi</string>
-    <string name="settings_notification_advanced_summary_riotx">Imposta l\'importanza della notifica per evento</string>
+    <string name="settings_notification_advanced_summary">Imposta l\'importanza della notifica per evento</string>
 
     <string name="command_description_plain">Invia un messaggio come testo semplice, senza interpretarlo come markdown</string>
 
@@ -2395,12 +2337,12 @@
     <string name="change_password_summary">Imposta una nuova password dell\'account…</string>
 
     <string name="use_other_session_content_description">Usa l\'ultima versione di Element sui tuoi altri dispositivi, Element Web, Element Desktop, Element iOS, Element per Android o un altro client Matrix che supporti la firma incrociata</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement per Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">o un altro client Matrix che supporti la firma incrociata</string>
-    <string name="use_latest_riot">Usa l\'ultimo Element sui tuoi altri dispositivi:</string>
+    <string name="use_latest_app">Usa l\'ultimo Element sui tuoi altri dispositivi:</string>
     <string name="command_description_discard_session">Forza l\'attuale sessione di gruppo in uscita in una stanza cifrata ad essere scartata</string>
     <string name="command_description_discard_session_not_handled">Supportato solo nelle stanze cifrate</string>
     <string name="enter_secret_storage_passphrase_or_key">Usa la tua %1$s o la %2$s per continuare.</string>
@@ -2459,7 +2401,7 @@
     <string name="login_connect_using_matrix_id_notice">In alternativa, se hai già un account e conosci il tuo identificativo e password di Matrix, puoi usare questo metodo:</string>
     <string name="login_connect_using_matrix_id_submit">Accedi con il mio identificativo di Matrix</string>
     <string name="login_signin_matrix_id_title">Accedi</string>
-    <string name="login_signin_matrix_id_notice">Inserisci il tuo identificativo e la password</string>
+    <string name="login_signin_matrix_id_notice">Se configuri un account in un homeserver, usa il tuo ID Matrix (es. @utente:dominio.com) e la password qua sotto.</string>
     <string name="login_signin_matrix_id_hint">Identificativo utente</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Non è un identificativo valido. Formato previsto: \'@utente:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Impossibile trovare un homeserver valido. Controlla il tuo identificativo</string>
@@ -2486,4 +2428,196 @@
     <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un server di identità</string>
     <string name="identity_server_set_alternative_submit">Invia</string>
 
+    <string name="play_video">Riproduci</string>
+    <string name="pause_video">Pausa</string>
+    <string name="dismiss">Annulla</string>
+
+
+    <string name="action_copy">Copia</string>
+    <string name="dialog_title_success">Completato</string>
+
+    <string name="bottom_action_notification">Notifiche</string>
+    <string name="call_failed_no_connection">Telefonata di Element fallita</string>
+    <string name="call_failed_no_connection_description">Connessione in tempo reale fallita.
+\nChiedi all\'amministratore del tuo homeserver di configurare un server TURN per fare funzionare le chiamate.</string>
+
+    <string name="call_select_sound_device">Seleziona dispositivo audio</string>
+    <string name="sound_device_phone">Telefono</string>
+    <string name="sound_device_speaker">Altoparlante</string>
+    <string name="sound_device_headset">Cuffie</string>
+    <string name="sound_device_wireless_headset">Cuffie senza fili</string>
+    <string name="call_switch_camera">Cambia fotocamera</string>
+    <string name="call_camera_front">Frontale</string>
+    <string name="call_camera_back">Posteriore</string>
+    <string name="call_format_turn_hd_off">Disattiva l\'HD</string>
+    <string name="call_format_turn_hd_on">Attiva l\'HD</string>
+
+    <string name="login_error_ssl_peer_unverified">Errore SSL: l\'identità del peer non è stata verificata.</string>
+    <string name="login_error_ssl_other">Errore SSL.</string>
+    <string name="active_call_with_duration">Telefonata attiva (%s)</string>
+    <string name="return_to_call">Torna alla telefonata</string>
+
+    <string name="room_participants_action_cancel_invite">Annulla invito</string>
+    <string name="room_participants_power_level_demote_warning_title">Vuoi declassarti\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Non potrai annullare questa modifica dato che ti stai declassando, se sei l\'ultimo utente privilegiato nella stanza sarà impossibile ottenere di nuovo i privilegi.</string>
+    <string name="room_participants_power_level_demote">Declassa</string>
+
+
+    <string name="room_participants_action_ignore_title">Ignora utente</string>
+    <string name="room_participants_action_ignore_prompt_msg">Ignorando questo utente verranno rimossi i suoi messaggi dalle stanze che condividete.
+\n
+\nPuoi annullare questa azione in qualsiasi momento nelle impostazioni generali.</string>
+    <string name="room_participants_action_unignore_title">Non ignorare più</string>
+    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.</string>
+    <string name="room_participants_action_cancel_invite_title">Annulla invito</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
+    <string name="room_participants_kick_title">Butta fuori l\'utente</string>
+    <string name="room_participants_kick_reason">Motivo</string>
+    <string name="room_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questa stanza.
+\n
+\nPer evitare che possa rientrare, dovresti invece bandirlo.</string>
+    <string name="room_participants_ban_title">Bandisci l\'utente</string>
+    <string name="room_participants_ban_reason">Motivo del ban</string>
+    <string name="room_participants_unban_title">Togli il ban dell\'utente</string>
+    <string name="room_participants_unban_prompt_msg">Togliere il ban dell\'utente gli permetterà di rientrare nella stanza.</string>
+
+    <string name="settings_secure_backup_section_title">Backup Sicuro</string>
+    <string name="settings_secure_backup_manage">Gestisci</string>
+    <string name="settings_secure_backup_setup">Imposta il Backup Sicuro</string>
+    <string name="settings_secure_backup_reset">Reimposta il Backup Sicuro</string>
+    <string name="settings_secure_backup_enter_to_setup">Configura in questo dispositivo</string>
+    <string name="settings_secure_backup_section_info">Proteggiti contro la perdita dell\'accesso ai messaggi e dati cifrati facendo un backup delle chiavi crittografiche sul tuo server.</string>
+    <string name="reset_secure_backup_title">Genera una nuova chiave di sicurezza o imposta una nuova frase di sicurezza per il backup esistente.</string>
+    <string name="reset_secure_backup_warning">Ciò sostituirà la tua attuale chiave o frase.</string>
+
+    <string name="disabled_integration_dialog_title">Le integrazioni sono disattivate</string>
+    <string name="disabled_integration_dialog_content">Attiva \'Permetti integrazioni\' nelle impostazioni per continuare.</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d utente bandito</item>
+        <item quantity="other">%d utenti banditi</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">Chiavi esportate correttamente</string>
+
+    <string name="active_widget_view_action">VEDI</string>
+    <string name="active_widgets_title">Widget attivi</string>
+
+
+    <string name="recovery_key_export_saved">La chiave di recupero è stata salvata.</string>
+
+    <string name="secure_backup_banner_setup_line1">Backup Sicuro</string>
+    <string name="secure_backup_banner_setup_line2">Proteggiti dalla perdita dei messaggi e dati crittografati</string>
+
+    <string name="secure_backup_setup">Imposta il Backup Sicuro</string>
+
+    <string name="labs_merge_e2e_in_timeline">Decifrazione del messaggio nella timeline fallita</string>
+    <string name="labs_show_unread_notifications_as_tab">Aggiungi una scheda dedicata per le notifiche non lette nella schermata principale.</string>
+
+    <string name="room_list_quick_actions_favorite_add">Aggiungi ai preferiti</string>
+    <string name="room_list_quick_actions_favorite_remove">Rimuovi dai preferiti</string>
+    <string name="notice_member_no_changes_by_you">Non hai fatto modifiche</string>
+    <string name="room_join_rules_public_by_you">Hai reso pubblica la stanza a chiunque conosca il link.</string>
+    <string name="room_join_rules_invite_by_you">Hai reso la stanza solo su invito.</string>
+    <string name="login_server_url_form_common_notice">Inserisci l\'indirizzo del server che vuoi usare</string>
+
+    <string name="login_signin_matrix_id_password_notice">Se non sai la tua password, torna indietro per reimpostarla.</string>
+    <string name="send_a_sticker">Adesivo</string>
+
+    <string name="room_profile_section_admin">Azioni amministratore</string>
+    <string name="room_member_power_level_default_in">Predefinito in %1$s</string>
+    <string name="settings_hs_admin_e2e_disabled">L\'amministratore del server ha disattivato la crittografia end-to-end in modo predefinito nelle stanze private e nei messaggi diretti.</string>
+    <string name="bootstrap_info_text_2">Inserisci una frase di sicurezza che conosci solo tu, usata per proteggere i segreti nel tuo server.</string>
+
+    <string name="bootstrap_cancel_text">Se annulli ora, potresti perdere i messaggi e dati cifrati se perdi l\'accesso ai tuoi login.
+\n
+\nPuoi anche configurare il backup sicuro e gestire le tue chiavi nelle impostazioni.</string>
+
+    <string name="room_created_summary_item_by_you">Hai creato e configurato la stanza.</string>
+
+    <string name="auth_invalid_login_deactivated_account">Questo account è stato disattivato.</string>
+
+    <string name="setup_cross_signing">Attiva la firma incrociata</string>
+    <string name="error_saving_media_file">Impossibile salvare il file multimediale</string>
+    <string name="power_level_edit_title">Imposta ruolo</string>
+    <string name="power_level_title">Ruolo</string>
+    <string name="a11y_open_chat">Apri chat</string>
+    <string name="a11y_mute_microphone">Spegni il microfono</string>
+    <string name="a11y_unmute_microphone">Accendi il microfono</string>
+    <string name="a11y_stop_camera">Ferma la fotocamera</string>
+    <string name="a11y_start_camera">Avvia la fotocamera</string>
+
+    <string name="settings_setup_secure_backup">Imposta il Backup Sicuro</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Backup sicuro</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Proteggiti contro la perdita dell\'accesso ai messaggi e dati cifrati facendo un backup delle chiavi crittografiche sul tuo server.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Configura</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Usa una chiave di sicurezza</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Genera una chiave di sicurezza da conservare in qualche posto sicuro, come un gestore di password o una cassaforte.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Usa una frase di sicurezza</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Inserisci una frase segreta che conosci solo tu e genera una chiave per backup.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Salva la chiave di sicurezza</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Conserva la chiave di sicurezza in qualche posto sicuro, come un gestore di password o una cassaforte.</string>
+
+    <string name="set_a_security_phrase_title">Imposta una frase di sicurezza</string>
+    <string name="set_a_security_phrase_notice">Inserisci una frase di sicurezza che conosci solo tu, usata per proteggere i segreti nel tuo server.</string>
+    <string name="set_a_security_phrase_hint">Frase di sicurezza</string>
+    <string name="set_a_security_phrase_again_notice">Inserisci la frase di sicurezza di nuovo per confermarla.</string>
+
+    <string name="save_your_security_key_title">Salva la chiave di sicurezza</string>
+    <string name="save_your_security_key_notice">Conserva la chiave di sicurezza in qualche posto sicuro, come un gestore di password o una cassaforte.</string>
+
+    <string name="room_settings_name_hint">Nome stanza</string>
+    <string name="room_settings_topic_hint">Argomento</string>
+    <string name="room_settings_save_success">Hai cambiato le impostazioni della stanza correttamente</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">Non puoi accedere a questo messaggio</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">In attesa del messaggio, potrebbe volerci un po\'</string>
+    <string name="crypto_utd">Impossibile decifrare</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">A causa della crittografia end-to-end, devi aspettare che arrivi un messaggio di qualcuno poiché non ti sono state inviate correttamente le chiavi di crittografia.</string>
+    <string name="crypto_error_withheld_blacklisted">Non puoi accedere a questo messaggio perché sei stato bloccato dal mittente</string>
+    <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perché la tua sessione non è fidata dal mittente</string>
+    <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perché il mittente non ha inviato le chiavi di proposito</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">In attesa della cronologia di crittografia</string>
+
+    <string name="element_disclaimer_title">Riot ora si chiama Element!</string>
+    <string name="element_disclaimer_content">Siamo entusiasti di annunciare che abbiamo cambiato nome! La tua app è aggiornata e hai fatto l\'accesso al tuo account.</string>
+    <string name="element_disclaimer_negative_button">CAPITO</string>
+    <string name="element_disclaimer_positive_button">MAGGIORI INFO</string>
+
+    <string name="element_login_splash_brand">element</string>
+
+
+    <string name="save_recovery_key_chooser_hint">Salva chiave di ripristino in</string>
+
+    <string name="add_from_phone_book">Aggiungi dalla mia rubrica</string>
+    <string name="empty_phone_book">La tua rubrica è vuota</string>
+    <string name="phone_book_title">Rubrica</string>
+    <string name="search_in_my_contacts">Cerca nei miei contatti</string>
+    <string name="loading_contact_book">Rilevazione dei tuoi contatti…</string>
+    <string name="empty_contact_book">Il tuo elenco di contatti è vuoto</string>
+    <string name="contacts_book_title">Elenco contatti</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">Revoca invito</string>
+    <string name="three_pid_revoke_invite_dialog_content">Revocare l\'invito a %1$s\?</string>
+
+    <string name="member_banned_by">Bandito da %1$s</string>
+    <string name="failed_to_unban">Rimozione ban fallita</string>
+
+    <string name="alert_push_are_disabled_title">Le notifiche push sono disattivate</string>
+    <string name="alert_push_are_disabled_description">Verifica le tue impostazioni per attivare le notifiche push</string>
+    <string name="create_pin_title">Scegli un PIN di sicurezza</string>
+    <string name="create_pin_confirm_title">Conferma PIN</string>
+    <string name="create_pin_confirm_failure">Validazione PIN fallita, inseriscine uno nuovo.</string>
+    <string name="auth_pin_title">Inserisci il tuo PIN</string>
+    <string name="auth_pin_forgot">PIN dimenticato\?</string>
+    <string name="auth_pin_reset_title">Reimposta PIN</string>
+    <string name="auth_pin_new_pin_action">Nuovo PIN</string>
+    <string name="auth_pin_reset_content">Per reimpostare il PIN, dovrai riaccedere e crearne uno nuovo.</string>
+    <string name="settings_security_pin_code_title">Attiva PIN</string>
+    <string name="settings_security_pin_code_summary">Se vuoi reimpostare il PIN, tocca \"PIN dimenticato\" per disconnetterti e reimpostarlo.</string>
+    <string name="auth_pin_confirm_to_disable_title">Conferma il PIN per disattivarlo</string>
+    <string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Chiedi conferma prima di iniziare una chiamata</string>
 </resources>

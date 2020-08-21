@@ -121,7 +121,7 @@
         android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
-    <im.vector.riotx.features.home.room.detail.composer.ComposerEditText
+    <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
         style="@style/ComposerEditTextStyle"
         android:layout_width="0dp"

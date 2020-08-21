@@ -41,6 +41,8 @@ allprojects {
                 includeGroupByRegex 'com\\.github\\.BillCarsonFr'
                 // PhotoView
                 includeGroupByRegex 'com\\.github\\.chrisbanes'
+                // PFLockScreen-Android
+                includeGroupByRegex 'com\\.github\\.vector-im'
             }
         }
         maven {
@@ -50,6 +52,12 @@ allprojects {
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        // Jitsi repo
+        maven {
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-2.9.3"
+            // Note: to test Jitsi release you can use a local file like this:
+            // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-2.9.3"
+        }
         google()
         jcenter()
     }

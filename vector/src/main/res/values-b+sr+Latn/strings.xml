@@ -162,7 +162,6 @@
     <string name="auth_reset_password_message">Kako bi resetovali vašu lozinku, unesite adresu elektronske pošte povezanu sa vašim nalogom:</string>
     <string name="auth_reset_password_missing_email">Morate uneti adresu elektronske pošte povezane sa vašim nalogom.</string>
     <string name="auth_reset_password_missing_password">Morate uneti novu lozinku.</string>
-    <string name="login_mobile_device">Mobilni</string>
 
     <string name="login_error_limit_exceeded">Poslato je previše zahteva</string>
     <string name="login_error_user_in_use">Ovo korisničko ime je već korišćeno</string>
@@ -184,7 +183,7 @@
     <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Koristi podrazumevani Element zvuk zvona za dolazeće pozive</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Koristi podrazumevani Element zvuk zvona za dolazeće pozive</string>
     <string name="settings_call_ringtone_title">Zvuk zvona dolazećeg poziva</string>
     <string name="settings_call_ringtone_dialog_title">Izaberite zvuk zvona za pozive:</string>
 

@@ -27,6 +27,7 @@
         <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_dark</item>
         <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_dark</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_dark</item>
+        <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_dark</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_dark</item>
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_dark</item>
         <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_dark</item>
@@ -37,9 +38,6 @@
         <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_dark</item>
 
         <item name="riotx_keys_backup_banner_accent_color">@color/riotx_keys_backup_banner_accent_color_dark</item>
-
-        <!-- Drawables -->
-        <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_dark</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
@@ -83,40 +81,24 @@
         <item name="vctr_toolbar_secondary_text_color">@color/riot_secondary_text_color_dark</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
-        <!-- application bar text hint color -->
-        <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>
-
-        <item name="vctr_tab_home">@color/primary_color_dark</item>
-        <item name="vctr_tab_home_secondary">@color/primary_color_dark_dark</item>
-
         <!-- default text colors -->
         <item name="vctr_default_text_hint_color">@color/default_text_hint_color_dark</item>
 
         <!-- room message colors -->
-        <!--Unread Room Indent-->
-        <item name="vctr_unread_room_indent_color">#FF2E3648</item>
         <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">@color/vector_fuchsia_color</item>
         <item name="vctr_message_text_color">@android:color/white</item>
         <item name="vctr_notice_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_encrypting_message_text_color">@color/accent_color_dark</item>
         <item name="vctr_sending_message_text_color">@color/riotx_text_secondary_dark</item>
-        <item name="vctr_highlighted_message_text_color">@color/vector_fuchsia_color</item>
-        <item name="vctr_highlighted_searched_message_text_color">@color/primary_color_light</item>
-        <item name="vctr_search_mode_room_name_text_color">#CCC3C3C3</item>
-        <item name="vctr_unread_marker_line_color">@color/accent_color_dark</item>
         <item name="vctr_markdown_block_background_color">@android:color/black</item>
         <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
-        <item name="vctr_room_activity_divider_color">#565656</item>
+
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="riot_primary_text_color_disabled">@color/riot_primary_text_color_disabled_dark</item>
 
         <!-- tab bar colors -->
         <item name="vctr_tab_bar_inverted_background_color">?colorPrimary</item>
-        <item name="vctr_tab_bar_selected_background_color">
-            @color/tab_bar_selected_background_color_dark
-        </item>
-        <item name="vctr_tab_bar_unselected_background_color">
-            @color/tab_bar_unselected_background_color_dark
-        </item>
 
         <!-- list colors -->
         <!--Header/Panel Background-->
@@ -129,19 +111,8 @@
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_dark</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_dark</item>
 
-        <item name="vctr_redacted_message_color">@color/list_divider_color_dark</item>
-
-        <!-- gradient on the home bottom -->
-        <item name="vctr_activity_bottom_gradient_color">#80000000</item>
-
         <!-- outgoing call background color -->
         <item name="vctr_pending_outgoing_view_background_color">#33FFFFFF</item>
-
-        <!-- multi selection member background color -->
-        <item name="vctr_multi_selection_background_color">#4d4d4d</item>
-
-        <!-- sliding menu icon colors -->
-        <item name="vctr_home_navigation_icon_color">@color/riot_primary_text_color_dark</item>
 
         <!-- room notification text color (typing, unsent...) -->
         <!--Notice (secondary)-->
@@ -150,32 +121,8 @@
         <!-- icon colors -->
         <item name="vctr_settings_icon_tint_color">@android:color/white</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@color/riotx_accent</item>
-        <item name="vctr_icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
-        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
-        <!-- dedicated drawables are created for each theme -->
-        <item name="vctr_line_divider">@drawable/line_divider_dark</item>
-        <item name="vctr_shadow_bottom">@drawable/shadow_bottom_dark</item>
-        <item name="vctr_shadow_top">@drawable/shadow_top_dark</item>
-        <item name="vctr_tabbar_selected_background">
-            @drawable/vector_tabbar_selected_background_dark
-        </item>
-        <item name="vctr_tabbar_unselected_background">
-            @drawable/vector_tabbar_unselected_background_dark
-        </item>
-        <item name="vctr_tabbar_background">@drawable/vector_tabbar_background_dark</item>
-
-        <item name="vctr_pill_background_user_id">@drawable/pill_background_user_id_dark</item>
-        <item name="vctr_pill_background_room_alias">@drawable/pill_background_room_alias_dark</item>
-
-        <item name="vctr_pill_text_color_user_id">@android:color/white</item>
-        <item name="vctr_pill_text_color_room_alias">@color/riot_primary_text_color_dark</item>
-
-        <item name="vctr_pill_receipt">@drawable/pill_receipt_dark</item>
-
-        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_dark</item>
-
-        <item name="vctr_widget_banner_background">#FF454545</item>
+        <item name="list_divider_color">@color/list_divider_color_dark</item>
 
         <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
@@ -203,12 +150,15 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Dark</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Dark</item>
+        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView</item>
 
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
+
+        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
+        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
 
         <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
@@ -222,13 +172,27 @@
         <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
         <!-- Style to use for message text within a SnackBar in this theme. -->
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
+
+        <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
+        <item name="pf_key_button">@style/PinCodeKeyButtonStyle</item>
+        <item name="pf_title">@style/PinCodeTitleStyle</item>
+        <item name="pf_hint">@style/PinCodeHintStyle</item>
+        <item name="pf_code_view">@style/PinCodeDotsViewStyle</item>
+        <item name="pf_delete_button">@style/PinCodeDeleteButtonStyle</item>
+        <item name="pf_fingerprint_button">@style/PinCodeFingerprintButtonStyle</item>
+        <item name="pf_next">@style/PinCodeNextButtonStyle</item>
+
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
+        <item name="android:navigationBarColor">@color/riotx_header_panel_background_dark</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
-
-    <style name="Vector.TabView.Dark" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_dark</item>
-        <item name="background">@drawable/vector_tabbar_background_dark</item>
-    </style>
 
 </resources>

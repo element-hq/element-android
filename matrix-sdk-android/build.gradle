@@ -132,8 +132,13 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.8.1"))
+    implementation 'com.squareup.okhttp3:okhttp'
+    implementation 'com.squareup.okhttp3:logging-interceptor'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection'
+
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
@@ -174,8 +179,10 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
     // Web RTC
-    // TODO meant for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
-    implementation 'org.webrtc:google-webrtc:1.0.+'
+    // org.webrtc:google-webrtc is for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
+    // implementation 'org.webrtc:google-webrtc:1.0.+'
+    // Use the same WebRTC library than the one used by Jitsi library
+    implementation('com.facebook.react:react-native-webrtc:1.84.0-jitsi-5112273@aar')
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'

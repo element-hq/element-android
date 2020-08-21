@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.matrix.rx" />
+    package="org.matrix.android.sdk.rx" />

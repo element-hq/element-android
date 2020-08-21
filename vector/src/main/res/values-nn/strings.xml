@@ -217,7 +217,6 @@
     <string name="login_error_unable_register">Fekk ikkje til å registrere</string>
     <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å registrere: feil med e-posteigarskap</string>
     <string name="login_error_invalid_home_server">Skriv inn ein gyldig URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Brukarnamnet/passordet er ikkje gyldig</string>
     <string name="login_error_unknown_token">Den oppgjevne tilgangsnøkkelen vart ikkje kjent att</string>
@@ -745,8 +744,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne verifikasjonsprosessen bli meir forbetra.</string>
     <string name="encryption_information_verify_key_match">Eg stadfestar at nøkklane er like</string>
 
-    <string name="e2e_enabling_on_app_update">Element støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
-
     <string name="unknown_devices_alert_title">Rommet inneheld ukjende sesjonar</string>
     <string name="unknown_devices_alert_message">Rommet inneheld ukjende sesjonar som ikkje har blitt verifiserte. Det er med andre ord ingen garanti for at sesjonane høyrer til brukarane dei hevdar. Vi tilråder deg å gå gjennom verifikasjonsprosessen for kvar eining før du går vidare, men du kan sende meldingen på nytt utan å godkjenne viss du vil. 
 \n
@@ -863,10 +860,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="rejoin">Vert med att</string>
     <string name="forget_room">Gløym rommet</string>
 
-    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-krypteringsnnøkklar til denne sesjonen og senda den offentlege nøkkelen (public key) til heimetenaren. 
-\nDette trengst berre éin gong. 
-\nBeklagar ulempa.</string>
-
     <string name="directory_server_native_rooms">Alle %s-rom på Matrix</string>
 
     <string name="settings_labs_native_camera">Bruk det innebygde kameraet</string>
@@ -962,7 +955,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
     <string name="settings_call_category">Oppringingar</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Element-ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard Element-ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
 
@@ -972,7 +965,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="reason_hint">Grunn</string>
 
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
-    <string name="settings_notification_advanced_summary">Sett prioritet for varslingar etter hending, still inn lyd, LED, vibrasjon</string>
     <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>
 
     <string name="settings_notification_troubleshoot">Løys problem med varslingar</string>
@@ -1070,21 +1062,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_show_join_leave_messages">Vis bli-med/forlat hendelsar</string>
     <string name="settings_show_join_leave_messages_summary">Invitasjonar, utkastingar og utestengingar gjeld ikkje dette.</string>
     <string name="room_widget_open_in_browser">Opna i nettlesar</string>
-    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. Element let deg kommunisera på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon.
-\n 
-\nOpprett ein gratis matrix.org-konto, sett opp eigen tenar på https://modular.im, eller ta i bruk ein annan Matrix-tenar. 
-\n 
-\nKvifor velje Element\?
-\n 
-\n• KOMPLETT KOMMUNIKASJON: Bygg rom rund teamet, venner, fellesskapet - du bestemmer! Send direktemeldingar, del filer, legg til tillegg, start talesamtalar og videokonferansar! Alt saman er tilgjengeleg utan kostnad.
-\n 
-\n• KRAFTIGE INTEGRASJONAR: Bruk Element saman med verktøya du nyttar frå før. Med Element kan du kommunisera med brukarar på andre plattformar.
-\n 
-\n• PRIVAT OG SIKKER: Hald dine samtalar hemmelege. Industristandard ende-til-ende-kryptering sørgjer for at private samtalar forblir private. 
-\n 
-\n• OPEN, IKKJE LUKKA: Open kjeldekode, på toppen av Matrix-protokollen. Eig dine eigne data ved å drifta eigen tenar eller hjå nokon du stolar på. 
-\n 
-\n• OVERALT DER DU ER: Hald kontakten uansett kvar du er; fullstendig synkronisert meldingshistorikk på alle klientar, samt i nettlesar på https://riot.im.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Hentar sikkerheitskopiversjon…</string>
     <string name="keys_backup_info_title_version">Versjon</string>

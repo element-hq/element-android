@@ -196,9 +196,6 @@
     <string name="login_error_login_email_not_yet">Er is nog niet op de koppeling in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">U moet zich opnieuw aanmelden om de sleutels voor eind-tot-eind-versleuteling voor deze sessie te genereren, en om de publieke sleutel naar uw thuisserver te sturen. 
-\nDit is eenmalig. 
-\nExcuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Leesbevestigingslijst</string>
@@ -659,10 +656,6 @@
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, drukt u op de knop ‘Verifiëren’ hieronder. Als het niet overeenkomt, dan onderschept iemand anders deze sessie en zou u het beter blokkeren. In de toekomst zal dit verificatieproces verbeterd worden.</string>
     <string name="encryption_information_verify_key_match">Ik verifieer dat de sleutels overeenkomen</string>
 
-    <string name="e2e_enabling_on_app_update">Element ondersteunt nu eind-tot-eind-versleuteling, maar u moet zich opnieuw aanmelden om het in te schakelen.
-\n
-\nU kunt dit nu of later doen vanuit de app-instellingen.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Dit gesprek bevat onbekende sessies</string>
     <string name="unknown_devices_alert_message">Dit gesprek bevat onbekende sessies die niet geverifieerd zijn. 
@@ -717,8 +710,6 @@
 
     <string name="notification_sync_in_progress">Bezig met synchroniseren…</string>
     <string name="notification_listening_for_events">Luisteren voor evenementen</string>
-
-    <string name="login_mobile_device">Mobiel</string>
 
     <string name="settings_notification_ringtone">Meldingsgeluid</string>
     <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12-uursformaat weergeven</string>
@@ -1055,7 +1046,7 @@
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>
 
     <string name="settings_call_category">Oproepen</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
 
@@ -1103,7 +1094,6 @@
     <string name="video_call_in_progress">Video-oproep gaande…</string>
 
     <string name="settings_notification_advanced">Geavanceerde meldingsinstellingen</string>
-    <string name="settings_notification_advanced_summary">Stel het belang van meldingen in op gebeurtenis, en configureer geluiden, LED’s en vibratie</string>
     <string name="settings_notification_by_event">Meldingsbelang op gebeurtenis</string>
 
     <string name="settings_notification_troubleshoot">Problemen met meldingen oplossen</string>
@@ -1229,8 +1219,6 @@
     <string name="encryption_message_recovery">Herstel van versleutelde berichten</string>
     <string name="encryption_settings_manage_message_recovery_summary">Sleutelback-up beheren</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d sleutel(s) geïmporteerd.</string>
-
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 bericht</item>
         <item quantity="other">%1$s: %2$d berichten</item>
@@ -1275,25 +1263,6 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Er is geen geldige APK van Google Play Services gevonden. Meldingen zullen mogelijk niet correct functioneren.</string>
-
-    <string name="store_title">Element - Communiceer op uw manier</string>
-    <string name="store_whats_new">We blijven Element voortdurend aanpassen en verbeteren. Het volledige wijzigingslogboek vindt u hier: %1$s. Om niets te missen, houdt u best uw updates ingeschakeld.</string>
-    <string name="store_short_description">Een universele en veilige chat-app, volledig onder uw controle.</string>
-    <string name="store_full_description">Een chat-app, onder uw controle en heel flexibel. Element laat u communiceren zoals u dat wilt. Gemaakt voor [matrix] - de standaard voor open, gedecentraliseerde communicatie.
-\n 
-\nMaak een gratis account aan op matrix.org, verkrijg uw eigen server op https://modular.im, of gebruik een andere Matrix-server. 
-\n 
-\nWaarom zou ik voor Element kiezen\?
-\n 
-\n• VOLLEDIGE COMMUNICATIE: maak gesprekken aan rond uw teams, uw vrienden, uw gemeenschap - hoe u maar wilt! Chat, deel bestanden, voeg widgets toe en maak stem- en video-oproepen - allemaal volledig gratis. 
-\n 
-\n• KRACHTIGE INTEGRATIE: gebruik Element met de hulpmiddelen waarmee u vertrouwd bent. Met Element kunt u zelfs chatten met gebruikers en groepen op andere chat-apps.
-\n 
-\n• PRIVÉ EN VEILIG: houd uw gesprekken geheim. Eind-tot-eind-versleuteling van de bovenste plank zorgt ervoor dat uw privécommunicatie ook privé blijft. 
-\n 
-\n• OPEN, NIET GESLOTEN: vrije software, gebouwd op Matrix. Wees baas over uw eigen gegevens door uw eigen server te gebruiken, of te kiezen voor een andere server die u vertrouwt. 
-\n 
-\n• WAAR U OOK BENT: houd contact waar u ook bent met volledig gesynchroniseerde berichtgeschiedenis op al uw apparaten, en online op https://riot.im.</string>
 
     <string name="passphrase_create_passphrase">Wachtwoord aanmaken</string>
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
@@ -1368,7 +1337,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">De back-up kan met deze herstelsleutel niet ontsleuteld worden: controleer of u de juiste herstelsleutel heeft ingevoerd.</string>
 
     <string name="keys_backup_restore_success_title">Back-up hersteld %s!</string>
-    <string name="keys_backup_restore_success_description">%1$d sessiesleutels hersteld, en %2$d nieuwe sleutel(s) die deze sessie nog niet kende toegevoegd</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Back-up met %d sleutel hersteld.</item>
         <item quantity="other">Back-up met %d sleutels hersteld.</item>
@@ -1595,11 +1563,6 @@
 
     <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
-
-    <string name="security_warning_identity_server">Vorige versies van Element hadden een veiligheidsfout die er voor kon zorgen dat je Identiteits Server (%1$s) toegang tot je account had. Indien je %2$s vertrouwt, dan kun je dit negeren; anders log je uit en weer in.
-\n
-\nLees meer details hier:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="error_user_already_logged_in">Het lijkt er op dat je probeert verbinding te maken met een andere thuisserver. Wil je uitloggen\?</string>
 

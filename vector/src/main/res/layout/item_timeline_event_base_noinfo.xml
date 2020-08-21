@@ -6,13 +6,13 @@
     android:addStatesFromChildren="true"
     android:background="?attr/selectableItemBackground">
 
-    <im.vector.riotx.core.platform.CheckableView
+    <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/readReceiptsView"
         android:layout_alignParentTop="true"
-        android:background="?riotx_highlighted_message_background" />
+        android:background="@drawable/highlighted_message_background" />
 
     <View
         android:id="@+id/messageStartGuideline"
@@ -82,7 +82,7 @@
         tools:visibility="visible" />
 
 
-    <im.vector.riotx.core.ui.views.ReadReceiptsView
+    <im.vector.app.core.ui.views.ReadReceiptsView
         android:id="@+id/readReceiptsView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -250,7 +250,6 @@
     <string name="login_error_invalid_home_server">একটি বৈধ URL প্রবেশ করুন</string>
     <string name="login_error_unknown_host">এই URL টি পৌঁছানোর যোগ্য নয়, দয়া করে এটি পরীক্ষা করুন</string>
     <string name="login_error_ssl_handshake">আপনার যন্ত্র একটি সেকেলে TLS নিরাপত্তা খসড়া চুক্তি,অরক্ষিত সংঘর্ষ করতে ,আপনার নিত্যাপাত্তার জন্য আপনি সম্পর্ক করতে পারবেন না</string>
-    <string name="login_mobile_device">মোবাইল</string>
 
     <string name="login_error_forbidden">অবৈধ ব্যাবহারকারির নাম/সংকেত শব্দ</string>
     <string name="login_error_unknown_token">প্রবেশকারী টোকেনটা চিনতে নির্দিষ্ট ছিলো না</string>
@@ -259,10 +258,6 @@
     <string name="login_error_limit_exceeded">অনেকগুলো অনুরোধ পাঠানো হয়েছে</string>
     <string name="login_error_user_in_use">এই ব্যাবহারকারী আগেও নাম ব্যবহার করে ছিল</string>
     <string name="login_error_login_email_not_yet">এই ইমেইল লিংক যেটা এখনো ক্লিক করা হয়নি</string>
-
-    <string name="e2e_need_log_in_again">আপনার প্রয়জনীয় পিছনে লগ করা সেশানের জন্য এনক্রিপশন চাবি উৎপন্ন করতে শেষ থেকে শেষে এবং জমা করা জনগণ এর চাবি আপনার ঘরের লোক এর কাছে। 
-\nএটাই হলো একবার। 
-\nক্ষমা করবেন এটাই হলো অসুবিধা।</string>
 
     <string name="e2e_re_request_encryption_key"><u>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</u>আপনার অন্য সেশানগুলি থেকে।</string>
 
@@ -298,7 +293,7 @@
     <string name="room_info_room_topic">ঘরএর বিষয়</string>
 
     <string name="settings_call_category">ডাকা</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">ব্যবহার করছেন অনুপস্থিত Element রিংটোন আগামী ডাক এর জন্য</string>
+    <string name="settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত Element রিংটোন আগামী ডাক এর জন্য</string>
     <string name="settings_call_ringtone_title">আসা কল এর রিংটোন</string>
     <string name="settings_call_ringtone_dialog_title">নির্বাচন করুন রিংটোন কল আর জন্য:</string>
 
@@ -420,15 +415,15 @@
     <string name="room_participants_action_set_default_power_level">স্বাভাবিক ব্যবহারকারী তে রিসেট করুন</string>
     <string name="room_participants_action_set_moderator">মডারেটর কর</string>
     <string name="room_participants_action_set_admin">অ্যাডমিন কর</string>
-    <string name="room_participants_action_ignore">এই ব্যবহারকারীর কাছ থেকে সব বার্তা লুকান</string>
-    <string name="room_participants_action_unignore">এই ব্যবহারকারীর সব বার্তা দেখান</string>
+    <string name="room_participants_action_ignore">উপেক্ষা</string>
+    <string name="room_participants_action_unignore">উপেক্ষা</string>
     <string name="room_participants_invite_search_another_user">ব্যবহারকারী আইডি, নাম বা ইমেইল</string>
     <string name="room_participants_action_mention">উল্লেখ</string>
     <string name="room_participants_action_devices_list">সেশান তালিকা প্রদর্শন কর</string>
     <string name="room_participants_power_level_prompt">আপনি এই পরিবর্তনটি পূর্বাবস্থায় ফিরিয়ে আনতে সক্ষম হবেন না যেহেতু আপনি ব্যবহারকারীকে একই শক্তি স্তর হিসাবে প্রচার করার জন্য প্রচার করছেন।
 \nআপনি কি নিশ্চিত\?</string>
 
-    <string name="room_participants_ban_prompt_msg">আপনি কি এই চ্যাট থেকে এই ব্যবহারকারীকে নিষিদ্ধ করতে চান\?</string>
+    <string name="room_participants_ban_prompt_msg">নিষিদ্ধ ব্যবহারকারীরা তাদের এই ঘর থেকে কীক মেরে দেবে এবং আবার যোগদান করতে বাধা দেবেন।</string>
     <string name="reason_hint">কারণ</string>
 
     <string name="room_participants_invite_prompt_msg">আপনি এই চ্যাটে %s কে আমন্ত্রণ জানাতে চান\?</string>
@@ -558,7 +553,6 @@
 
 
     <string name="settings_notification_advanced">উন্নত বিজ্ঞপ্তি সেটিংস</string>
-    <string name="settings_notification_advanced_summary">ইভেন্ট দ্বারা বিজ্ঞপ্তি সেট করুন, শব্দ, নেতৃত্বে, কম্পন কনফিগার করুন</string>
     <string name="settings_notification_by_event">ঘটনা দ্বারা বিজ্ঞপ্তির গুরুত্ব</string>
 
     <string name="settings_notification_privacy">বিজ্ঞপ্তির গোপনীয়তা</string>
@@ -661,9 +655,6 @@
     <string name="settings_theme">থিম</string>
 
     <string name="encryption_information_verify_device_warning">এই সেশানটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই সেশানটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
-    <string name="e2e_enabling_on_app_update">দাঙ্গা এখন শেষ-থেকে-শেষ এনক্রিপশন সমর্থন করে তবে এটি সক্ষম করতে আপনাকে আবার লগ ইন করতে হবে।
-\n
-\nআপনি এখন বা পরে এপ্লিকেশন সেটিংস থেকে এটি করতে পারেন।</string>
 
     <string name="font_size">অক্ষর এর আকার</string>
     <string name="you_added_a_new_device">আপনি একটি নতুন সেশান \'%s\' যোগ করেছেন, যা এনক্রিপশন কীগুলির জন্য অনুরোধ করছে।</string>
@@ -677,7 +668,6 @@
     <string name="merged_events_collapse">বন্ধ</string>
 
     <string name="keys_backup_restore_with_key_helper">আপনার পুনরুদ্ধারের কুঞ্জি হারিয়ে গেছে\? আপনি সেটিংস একটি নতুন সেট আপ করতে পারেন।</string>
-    <string name="keys_backup_restore_success_description">"%1$d  সেশন কী পুনরুদ্ধার করা হয়েছে, এবং %2$d নতুন কী (গুলি) জোড়া হয়েছে যা এই ডিভাইসটি জানত না"</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
         <item quantity="other">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
@@ -958,7 +948,6 @@
     <string name="encryption_import_import">ইম্পোর্ট</string>
     <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই সেশানে এনক্রিপ্ট করুন</string>
     <string name="encryption_never_send_to_unverified_devices_summary">এই সেশান থেকে যাচাই করা সেশানগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d কুঞ্জি(গুলি) সাফল্য সাথে ইম্পোর্ট করা হয়েছে।</string>
 
     <string name="encryption_information_not_verified">যাচাই করা হয়নি</string>
     <string name="encryption_information_verified">প্রতিপাদিত</string>
@@ -1255,4 +1244,166 @@
     <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
     <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
 
+    <string name="resources_script">Beng</string>
+
+    <string name="play_video">চালু</string>
+    <string name="pause_video">থামাও</string>
+    <string name="dismiss">বাতিল</string>
+
+
+    <string name="action_copy">অনুলিপি</string>
+    <string name="dialog_title_success">সাফল্য</string>
+
+    <string name="bottom_action_notification">বিজ্ঞপ্তিগুলি</string>
+    <string name="call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
+    <string name="call_failed_no_connection_description">রিয়েল টাইম সংযোগ স্থাপন করতে ব্যর্থ।
+\nকলগুলি নির্ভরযোগ্যতার সাথে কাজ করার জন্য দয়া করে আপনার হোমসার্ভারের প্রশাসককে একটি টার্ন সার্ভার কনফিগার করতে বলুন।</string>
+
+    <string name="call_select_sound_device">সাউন্ড ডিভাইস নির্বাচন করুন</string>
+    <string name="sound_device_phone">ফোন</string>
+    <string name="sound_device_speaker">স্পিকার</string>
+    <string name="sound_device_headset">হেডসেট</string>
+    <string name="sound_device_wireless_headset">বেতার হেডসেট</string>
+    <string name="call_switch_camera">ক্যামেরা স্যুইচ করুন</string>
+    <string name="call_camera_front">সম্মুখ</string>
+    <string name="call_camera_back">পেছনের</string>
+    <string name="call_format_turn_hd_off">এইচডি বন্ধ করুন</string>
+    <string name="call_format_turn_hd_on">এইচডি চালু করুন</string>
+
+    <string name="login_error_ssl_peer_unverified">এসএসএল ত্রুটি: পিয়ারের পরিচয় যাচাই করা হয়নি।</string>
+    <string name="login_error_ssl_other">এসএসএল ত্রুটি।</string>
+    <string name="active_call_with_duration">অ্যাক্টিভ কল (%s)</string>
+    <string name="return_to_call">কল ফিরে যান</string>
+
+    <string name="room_participants_action_cancel_invite">আমন্ত্রণ বাতিল করুন</string>
+    <string name="room_participants_power_level_demote_warning_title">নিজেকে হিনপদস্থ করবেন\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">আপনি নিজেকে হ্রাসকারী হিসাবে আপনি এই পরিবর্তনটিকে পূর্বাবস্থায় ফিরিয়ে আনতে পারবেন না, আপনি যদি রুমের সর্বশেষ সুবিধাযুক্ত ব্যবহারকারী হন তবে সুযোগ সুবিধাগুলি ফিরে পাওয়া অসম্ভব।</string>
+    <string name="room_participants_power_level_demote">হীনপদস্থ</string>
+
+
+    <string name="room_participants_action_ignore_title">ব্যবহারকারীকে উপেক্ষা করুন</string>
+    <string name="room_participants_action_ignore_prompt_msg">এই ব্যবহারকারীর উপেক্ষা করা আপনার ভাগ করা কক্ষগুলি থেকে তাদের বার্তা সরিয়ে দেবে।
+\n
+\nআপনি সাধারণ সেটিংসে যে কোনও সময় এই ক্রিয়াটি বিপরীত করতে পারেন।</string>
+    <string name="room_participants_action_unignore_title">উপেক্ষা তালিকা থেকে ব্যবহারকারীকে সরান</string>
+    <string name="room_participants_action_unignore_prompt_msg">এই ব্যবহারকারী কে উপেক্ষা তালিকা থেকে সরালে তাদের থেকে সমস্ত বার্তা আবার দেখাবে।</string>
+    <string name="room_participants_action_cancel_invite_title">আমন্ত্রণ বাতিল করুন</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীর জন্য আমন্ত্রণটি বাতিল করতে চান\?</string>
+    <string name="room_participants_kick_title">ব্যবহারকারী কে কীক করুন</string>
+    <string name="room_participants_kick_reason">কীক করার কারণ</string>
+    <string name="room_participants_kick_prompt_msg">কীক করা ব্যবহারকারী কে তাদের এই ঘর থেকে সরিয়ে দেবে।
+\n
+\nতাদের আবার যোগদানের হাত থেকে বাঁচাতে আপনার পরিবর্তে ওদেরকে নিষিদ্ধ করা উচিত।</string>
+    <string name="room_participants_ban_title">ব্যবহারকারীকে নিষিদ্ধ করুন</string>
+    <string name="room_participants_ban_reason">নিষিদ্ধ করার কারণ</string>
+    <string name="room_participants_unban_title">ব্যবহারকারী কে নিষেধাজ্ঞা মুক্ত করুন</string>
+    <string name="room_participants_unban_prompt_msg">নিষিদ্ধ মুক্ত ব্যবহারকারীরা আবার ঘরে যোগদানের অনুমতি দেওয়া হবে।</string>
+
+    <string name="settings_secure_backup_section_title">সুরক্ষিত ব্যাকআপ</string>
+    <string name="settings_secure_backup_manage">পরিচালনা</string>
+    <string name="settings_secure_backup_setup">সুরক্ষিত ব্যাকআপ সেট আপ করুন</string>
+    <string name="settings_secure_backup_reset">সুরক্ষিত ব্যাকআপ পুনরায় সেট করুন</string>
+    <string name="settings_secure_backup_enter_to_setup">এই ডিভাইসে সেট আপ করুন</string>
+    <string name="settings_secure_backup_section_info">আপনার সার্ভারে এনক্রিপশন কীগুলি ব্যাক আপ করে এনক্রিপ্ট করা বার্তাগুলি এবং ডেটাতে অ্যাক্সেস হারানোর বিরুদ্ধে সুরক্ষা।</string>
+    <string name="reset_secure_backup_title">আপনার বিদ্যমান ব্যাকআপের জন্য একটি নতুন সুরক্ষা কী তৈরি করুন বা একটি নতুন সুরক্ষা বাক্য সেট করুন।</string>
+    <string name="reset_secure_backup_warning">এটি আপনার বর্তমান কী বা বাক্যাংশটি প্রতিস্থাপন করবে।</string>
+
+    <string name="disabled_integration_dialog_title">সংহতকরণ অক্ষম করা হয়েছে</string>
+    <string name="disabled_integration_dialog_content">এটি করতে সেটিংসে \'একীকরণের অনুমতি দিন\' সক্ষম করুন।</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d নিষিদ্ধ ব্যবহারকারী</item>
+        <item quantity="other">%d নিষিদ্ধ ব্যবহারকারী</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">কীগুলি সফলভাবে উত্পাদন হয়েছিল</string>
+
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widget_view_action">দেখুন</string>
+    <string name="active_widgets_title">সক্রিয় উইজেটগুলি</string>
+
+
+    <string name="resource_limit_soft_contact">এই সীমাটি বৃদ্ধি পেতে দয়া করে %s করুন।</string>
+    <string name="resource_limit_hard_contact">এই পরিষেবাটি ব্যবহার চালিয়ে যেতে দয়া করে %s করুন।</string>
+
+    <string name="settings_lazy_loading_title">রুম সদস্যরাদের অলস লোড করুন</string>
+    <string name="settings_lazy_loading_description">প্রথম দর্শনে কেবল রুমের সদস্যদের লোড করে কর্মক্ষমতা বাড়ান।</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">আপনার হোমসার্ভারটি এখনও সদস্যদের অলস লোডিং সমর্থন করে না। পরে চেষ্টা করুন।</string>
+
+    <string name="unknown_error">দুঃখিত, একটি ত্রুটি ঘটেছে</string>
+
+    <string name="settings_info_area_show">তথ্য অঞ্চলটি দেখান</string>
+    <string name="show_info_area_always">সর্বদা</string>
+    <string name="show_info_area_messages_and_errors">বার্তা এবং ত্রুটির জন্য</string>
+    <string name="show_info_area_only_errors">শুধুমাত্র ত্রুটির জন্য</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">কোনও বৈধ গুগল প্লে পরিষেবা APK পাওয়া যায় নি। বিজ্ঞপ্তিগুলি সঠিকভাবে কাজ করতে পারে না।</string>
+
+    <string name="passphrase_create_passphrase">পাসফ্রেজ তৈরি করুন</string>
+    <string name="passphrase_confirm_passphrase">পাসফ্রেজ নিশ্চিত করুন</string>
+    <string name="passphrase_enter_passphrase">পাসফ্রেজ প্রবেশ করুন</string>
+    <string name="passphrase_passphrase_does_not_match">পাসফ্রেজ মেলে নি</string>
+    <string name="passphrase_empty_error_message">দয়া করে একটি পাসফ্রেজ লিখুন</string>
+    <string name="passphrase_passphrase_too_weak">পাসফ্রেজটি খুব দুর্বল</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">আপনি যদি এলিমেন্টটি পুনরুদ্ধার কী তৈরি করতে চান তবে দয়া করে পাসফ্রেজটি মুছুন।</string>
+    <string name="keys_backup_no_session_error">কোনও ম্যাট্রিক্স সেশন উপলব্ধ নেই</string>
+
+    <string name="keys_backup_setup_step1_title">এনক্রিপ্ট করা বার্তাগুলি কখনই হারাবেন না</string>
+    <string name="keys_backup_setup_step1_description">এনক্রিপ্ট করা কক্ষের বার্তাগুলি শেষ-থেকে-শেষ এনক্রিপশন সহ সুরক্ষিত। এই বার্তাগুলি পড়ার জন্য কেবলমাত্র আপনার এবং প্রাপকের (গুলি) কী রয়েছে।
+\n
+\n আপনার কীগুলি এড়াতে নিরাপদে ব্যাক আপ দিন।</string>
+    <string name="keys_backup_setup">কী ব্যাকআপ ব্যবহার শুরু করুন</string>
+    <string name="keys_backup_setup_step1_advanced">(উন্নত)</string>
+    <string name="keys_backup_setup_step1_manual_export">ম্যানুয়ালি কী রপ্তানি করুন</string>
+
+    <string name="keys_backup_setup_step2_text_title">একটি পাসফ্রেজ দিয়ে আপনার ব্যাকআপ সুরক্ষিত করুন।</string>
+    <string name="keys_backup_setup_step2_text_description">আমরা আপনার হোমসভারে আপনার কীগুলির একটি এনক্রিপ্ট করা অনুলিপি সঞ্চয় করব। আপনার ব্যাকআপটিকে সুরক্ষিত রাখতে একটি পাসফ্রেজ দিয়ে সুরক্ষিত করুন।
+\n
+\nসর্বাধিক সুরক্ষার জন্য, এটি আপনার অ্যাকাউন্টের পাসওয়ার্ডের থেকে আলাদা হওয়া উচিত।</string>
+    <string name="keys_backup_setup_step2_button_title">পাসফ্রেজ সেট করুন</string>
+    <string name="keys_backup_setup_creating_backup">ব্যাকআপ তৈরি করা হচ্ছে</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">বা, আপনার ব্যাকআপটিকে পুনরুদ্ধার কী দ্বারা সুরক্ষিত করুন, এটি কোথাও নিরাপদ সাশ্রয় করুন।</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(উন্নত) পুনরুদ্ধার কী সহ সেট আপ করুন</string>
+    <string name="keys_backup_setup_step3_success_title">সাফল্য!</string>
+    <string name="keys_backup_setup_step3_text_line1">আপনার কীগুলি ব্যাক আপ করা হচ্ছে।</string>
+    <string name="keys_backup_setup_step3_text_line2">আপনার পুনরুদ্ধার কীটি একটি সুরক্ষা জাল - আপনি যদি আপনার পাসফ্রেজ ভুলে যান তবে আপনি এটি আপনার এনক্রিপ্ট করা বার্তাগুলির অ্যাক্সেস পুনরুদ্ধার করতে ব্যবহার করতে পারেন।
+\nআপনার পুনরুদ্ধার কীটি কোথাও খুব সুরক্ষিত রাখুন যেমন একটি পাসওয়ার্ড পরিচালক (বা নিরাপদ)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">আপনার পুনরুদ্ধার কীটি কোথাও খুব সুরক্ষিত রাখুন যেমন একটি পাসওয়ার্ড পরিচালক (বা নিরাপদ)</string>
+    <string name="keys_backup_setup_step3_button_title">সম্পন্ন</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">আমি একটি অনুলিপি তৈরি করেছি</string>
+    <string name="keys_backup_setup_step3_copy_button_title">রিকভারি কী সংরক্ষণ করুন</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">অংশভাগ</string>
+    <string name="keys_backup_setup_step3_save_button_title">ফাইল হিসাবে সংরক্ষণ করুন</string>
+    <string name="recovery_key_export_saved_as_warning">পুনরুদ্ধার কীটি \'%s\' তে সংরক্ষণ করা হয়েছে।
+\n
+\nসতর্কতা: অ্যাপ্লিকেশনটি আনইনস্টল করা হলে এই ফাইলটি মুছে যেতে পারে।</string>
+    <string name="recovery_key_export_saved">পুনরুদ্ধার কী সংরক্ষণ করা হয়েছে।</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">আপনার হোম সার্ভারে ইতিমধ্যে একটি ব্যাকআপ রয়েছে</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">দেখে মনে হচ্ছে আপনার অন্য সেশন থেকে ইতিমধ্যে সেটআপ কী ব্যাকআপ রয়েছে। আপনি কি এটি তৈরি করছেন তার সাথে প্রতিস্থাপন করতে চান\?</string>
+    <string name="keys_backup_setup_override_replace">প্রতিস্থাপন</string>
+    <string name="keys_backup_setup_override_stop">থামুন</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">দয়া করে একটি অনুলিপি করুন</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">এর সাথে পুনরুদ্ধার কী ভাগ করুন…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">পাসফ্রেজ ব্যবহার করে পুনরুদ্ধার কী তৈরি করা হচ্ছে, এই প্রক্রিয়াটি কয়েক সেকেন্ড সময় নিতে পারে।</string>
+    <string name="recovery_key">পুনরুদ্ধার কী</string>
+    <string name="unexpected_error">অপ্রত্যাশিত ত্রুটি</string>
+    <string name="keys_backup_setup_backup_started_title">ব্যাকআপ শুরু হয়েছে</string>
+    <string name="keys_backup_setup_backup_started_message">আপনার এনক্রিপশন কীগুলি এখন ব্যাকগ্রাউন্ডে আপনার হোমসার্ভারে ব্যাক আপ করা হচ্ছে। প্রাথমিক ব্যাকআপটি কয়েক মিনিট সময় নিতে পারে।</string>
+
+
+    <string name="keys_backup_setup_skip_title">তুমি কি নিশ্চিত\?</string>
+    <string name="keys_backup_setup_skip_msg">আপনি লগ আউট বা এই ডিভাইসটি হারাতে পারলে আপনি আপনার বার্তাগুলির অ্যাক্সেস হারিয়ে ফেলতে পারেন।</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">ব্যাকআপ সংস্করণ আনছে…</string>
+    <string name="keys_backup_restore_with_passphrase">আপনার এনক্রিপ্ট করা বার্তাগুলির ইতিহাস আনলক করতে আপনার পুনরুদ্ধার পাসফ্রেজটি ব্যবহার করুন</string>
+    <string name="keys_backup_restore_use_recovery_key">আপনার পুনরুদ্ধার কী ব্যবহার করুন</string>
 </resources>

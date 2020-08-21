@@ -29,6 +29,7 @@
         <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_black</item>
         <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_black</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_black</item>
+        <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_black</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_black</item>
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_black</item>
         <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_black</item>
@@ -37,9 +38,6 @@
         <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_black</item>
 
         <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_black</item>
-
-        <!-- Drawables -->
-        <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_black</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
@@ -63,7 +61,6 @@
 
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
-        <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark</item>
 
         <item name="android:textColorLink">@color/riotx_links</item>
 
@@ -73,26 +70,26 @@
         <!-- list colors -->
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">#FF090A0C</item>
-        <!--Header/Panel Text Primary-->
-        <item name="vctr_tab_home">@color/primary_color_black</item>
-        <!--Header/Panel Text Secondary-->
-        <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
 
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_black</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_black</item>
 
-        <item name="vctr_redacted_message_color">@color/list_divider_color_black</item>
-
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
-
-        <item name="vctr_pill_receipt">@drawable/pill_receipt_black</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
         <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>
         <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_black</item>
 
-        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_black</item>
+        <item name="android:navigationBarColor">@color/riotx_header_panel_background_black</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />

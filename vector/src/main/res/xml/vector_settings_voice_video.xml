@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
 
-        <im.vector.riotx.core.preference.VectorSwitchPreference
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY"
+            android:summary="@string/settings_call_show_confirmation_dialog_summary"
+            android:title="@string/settings_call_show_confirmation_dialog_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
-            android:title="@string/settings_call_ringtone_use_riot_ringtone" />
+            android:title="@string/settings_call_ringtone_use_app_ringtone"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
             android:key="SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
-            android:title="@string/settings_call_ringtone_title" />
+            android:title="@string/settings_call_ringtone_title"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

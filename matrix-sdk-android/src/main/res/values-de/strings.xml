@@ -204,6 +204,103 @@
     <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivierte Ende-zu-Ende-Verschlüsselung (unbekannter Algorithmus %2$s).</string>
 
-    <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung Ihres Schlüssels auf, jedoch unterstützt Ihr Client nicht die Schlüsselüberprüfung im Chat. Sie müssen die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
+    <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung deines Schlüssels auf, jedoch unterstützt dein Client nicht die Schlüsselüberprüfung im Chat. Du musst die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
 
+    <string name="summary_you_sent_image">Du hast ein Bild gesendet.</string>
+    <string name="summary_you_sent_sticker">Du hast einen Sticker gesendet.</string>
+
+    <string name="notice_room_invite_no_invitee_by_you">Deine Einladung</string>
+    <string name="notice_room_created">%1$s hat den Raum erstellt</string>
+    <string name="notice_room_created_by_you">Du hast den Raum erstellt</string>
+    <string name="notice_room_invite_by_you">Du hast %1$s eingeladen</string>
+    <string name="notice_room_join_by_you">Du bist dem Raum beigetreten</string>
+    <string name="notice_room_leave_by_you">Du hast den Raum verlassen</string>
+    <string name="notice_room_reject_by_you">Du hast die Einladung abgelehnt</string>
+    <string name="notice_room_kick_by_you">Du hast %1$s aus dem Raum entfernt</string>
+    <string name="notice_room_unban_by_you">Du hast den Bann von %1$s aufgehoben</string>
+    <string name="notice_room_ban_by_you">Du hast %1$s gebannt</string>
+    <string name="notice_room_withdraw_by_you">Du hast die Einladung von %1$s zurückgenommen</string>
+    <string name="notice_avatar_url_changed_by_you">Du hast dein Profilbild geändert</string>
+    <string name="notice_display_name_set_by_you">Du hast deinen Anzeigenamen zu %1$s geändert</string>
+    <string name="notice_display_name_changed_from_by_you">Du hast deinen Anzeigenamen von %1$s zu %2$s geändert</string>
+    <string name="notice_display_name_removed_by_you">Du hast deinen Anzeigenamen entfernt (er war %1$s)</string>
+    <string name="notice_room_topic_changed_by_you">Du hast das Thema geändert auf: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s hat das Bild des Raumes geändert</string>
+    <string name="notice_room_avatar_changed_by_you">Du hast das Bild des Raumes geändert</string>
+    <string name="notice_room_name_changed_by_you">Du hast den Raumnamen zu %1$s geändert</string>
+    <string name="notice_placed_video_call_by_you">Du hast einen Videoanruf gestartet.</string>
+    <string name="notice_placed_voice_call_by_you">Du hast einen Audioanruf gestartet.</string>
+    <string name="notice_answered_call_by_you">Du hast den Anruf angenommen.</string>
+    <string name="notice_ended_call_by_you">Du hast den Anruf beendet.</string>
+    <string name="notice_made_future_room_visibility_by_you">Du hast den zukünftigen Nachrichtenverlauf für %1$s sichtbar gemacht</string>
+    <string name="notice_end_to_end_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert (%1$s)</string>
+    <string name="notice_room_update_by_you">Du hast den Raum aufgwertet.</string>
+
+    <string name="notice_requested_voip_conference_by_you">Du hast eine VoIP-Konferenz angefordert</string>
+    <string name="notice_room_name_removed_by_you">Du hast den Raumnamen entfernt</string>
+    <string name="notice_room_topic_removed_by_you">Du hast das Raumthema entfernt</string>
+    <string name="notice_room_avatar_removed">%1$s hat das Bild des Raumes entfernt</string>
+    <string name="notice_room_avatar_removed_by_you">Du hast das Bild des Raumes entfernt</string>
+    <string name="notice_profile_change_redacted_by_you">Du hast dein Profil %1$s aktualisiert</string>
+    <string name="notice_room_third_party_invite_by_you">Du hast %1$s in den Raum eingeladen</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Du hast die Einladung für %1$s zurückgenommen</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Du hast die Einladung für %1$s akzeptiert</string>
+
+    <string name="notice_widget_added">%1$s hat das %2$s Widget hinzugefügt</string>
+    <string name="notice_widget_added_by_you">Du hast das %1$s Widget hinzugefügt</string>
+    <string name="notice_widget_removed">%1$s hat das %2$s Widget entfernt</string>
+    <string name="notice_widget_removed_by_you">Du hast das %1$s Widget entfernt</string>
+    <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
+    <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
+
+    <string name="power_level_admin">Administrator</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_default">Standard</string>
+    <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
+    <string name="power_level_custom_no_value">Benutzerdefiniert</string>
+
+    <string name="notice_power_level_changed_by_you">Du hast die Berechtigungsstufe von %1$s geändert.</string>
+    <string name="notice_power_level_changed">%1$s hat die Berechtigungsstufe von %2$s geändert.</string>
+    <string name="notice_power_level_diff">%1$s von %2$s zu %3$s</string>
+
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Deine Einladung. Grund: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Du hast %1$s eingeladen. Grund: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Du bist dem Raum beigetreten. Grund: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Du hast den Raum verlassen. Grund: %1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Du hast die Einladung abgelehnt. Grund: %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Du hast %1$s aus dem Raum entfernt. Grund %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Du hast den Bann von %1$s aufgehoben. Grund: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Du hast %1$s gebannt. Grund: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Du hast %1$s in den Raum eingeladen. Grund: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Du hast die Einladung für %1$s zurückgenommen. Grund: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Du hast die Einladung von %1$s angenommen. Grund: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Du hast die Einladung von %1$s abgelehnt. Grund: %2$s</string>
+
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Du hast die Raumaddresse %1$s hinzugefügt.</item>
+        <item quantity="other">Du hast die Raumaddressen %1$s hinzugefügt.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Du hast die Raumaddresse %1$s vom Raum entfernt.</item>
+        <item quantity="other">Du hast die Raumaddressen %1$s vom Raum entfernt.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed_by_you">Du hast den Raumaddressen %1$s hinzugefügt und %2$s entfernt.</string>
+
+    <string name="notice_room_canonical_alias_set_by_you">Du hast die Hauptaddresse für diesen Raum auf %1$s gesetzt.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Du hast die Hauptaddresse des Raums entfernt.</string>
+
+    <string name="notice_room_guest_access_can_join_by_you">Du hast Gästen erlaubt dem Raum beizutreten.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Du hast Gästen untersagt dem Raum beizutreten.</string>
+
+    <string name="notice_end_to_end_ok_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert (unbekannter Algorithmus %1$s).</string>
+
+    <string name="call_notification_answer">Akzeptiere</string>
+    <string name="call_notification_reject">Ablehnen</string>
+    <string name="call_notification_hangup">Anruf beenden</string>
+
+    <string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
+    <string name="notice_call_candidates_by_you">Du hast Daten geschickt, um eine Anruf zu starten.</string>
 </resources>

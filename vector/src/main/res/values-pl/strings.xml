@@ -576,11 +576,8 @@ Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
     <string name="auth_identity_server">Serwer Tożsamości:</string>
     <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane. Zostałeś wylogowany ze wszystkich sesji i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
 
-    <string name="login_mobile_device">Numer telefonu</string>
-
     <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
-    <string name="e2e_need_log_in_again">Należy się ponownie zalogować w celu wygenerowania kluczy szyfrowania end-to-end dla tej sesji i wysłania klucza publicznego do Twojego serwera domowego. Jest to jednorazowe działanie. Przepraszamy za trudności.</string>
 
     <string name="groups_list">Lista grup</string>
 
@@ -788,9 +785,6 @@ Uwaga: ten plik może zostać usunięty, jeśli aplikacja zostanie odinstalowana
     <string name="encryption_information_unverify">Usuń weryfikację</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
-    <string name="e2e_enabling_on_app_update">Element obsługuje już szyfrowanie end-to-end (E2E), ale musisz zalogować się ponownie, aby je włączyć.
-
-Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
 
     <string name="unknown_devices_alert_message">Ten pokój zawiera nieznane sesje, które nie zostały zweryfikowane. Oznacza to brak gwarancji, że sesje należą do użytkowników do których twierdzą, że należą. Przed kontynuowaniem, zalecamy wykonanie procesu weryfikacji każdego urządzenia, ale możesz ponownie wysłać wiadomość bez weryfikacji, jeśli wolisz. Nieznane sesje:</string>
 
@@ -1029,7 +1023,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">Użyj domyślnego dzwonka Element dla przychodzących połączeń</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka Element dla przychodzących połączeń</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_kick">Wyrzuć</string>
@@ -1048,8 +1042,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="accept">Akceptuj</string>
 
     <string name="auth_accept_policies">Przeczytaj i zaakceptuj zasady tego serwera domowego:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d klucz(y) zaimportowano z sukcesem.</string>
 
     <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
 
@@ -1077,9 +1069,6 @@ Sprawdź ustawienia systemowe.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Powiadomienia są wyłączone dla twojego konta.
 Sprawdź ustawienia konta.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są włączone dla tej sesji. Proszę sprawdź ustawienia Element.</string>
-    <string name="store_whats_new">"Zawsze wprowadzamy zmiany i ulepszenia do Element.
-Pełną listę zmian można znaleźć tutaj: %1$s.
-Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktualizacje."</string>
     <string name="account_additional_info">Dodatkowe informacje: %s</string>
 
     <string name="account_phone_number_error">Wystąpił błąd podczas weryfikowania numeru telefonu.</string>
@@ -1201,7 +1190,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_settings_status_ok">Kopia zapasowa klucza została prawidłowo skonfigurowana dla tej sesji.</string>
     <string name="notification_sync_init">Inicjalizacja usługi</string>
     <string name="auth_login_sso">Zaloguj się za pomocą logowania jednorazowego</string>
-    <string name="settings_notification_advanced_summary">Ustaw ważność powiadomienia za pomocą wydarzeń, skonfiguruj dźwięk, diodę LED, wibracje</string>
     <string name="settings_notification_by_event">Ważność powiadomień ze względu na wydarzenie</string>
 
     <string name="settings_notification_troubleshoot">Diagnostyka powiadomień</string>
@@ -1297,7 +1285,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="error_no_network">Brak sieci. Sprawdź swoje połączenie z Internetem.</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="room_preview_no_preview">Tego pokoju nie można podejrzeć</string>
-    <string name="alpha_disclaimer_title">Witaj w programie beta!</string>
     <string name="settings_security_and_privacy">Bezpieczeństwo i Prywatność</string>
     <string name="settings_expert">Ekspert</string>
     <string name="settings_push_rules_no_rules">Brak reguł push</string>
@@ -1516,24 +1503,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="no_valid_google_play_services_apk">Nie znaleziono prawidłowej aplikacji Usługi Google Play. Powiadomienia mogą nie działać prawidłowo.</string>
 
-    <string name="store_title">Element - Rozmawiaj, we własny sposób</string>
-    <string name="store_short_description">Bezpieczna aplikacja czatu całkowicie pod Twoją kontrolą.</string>
-    <string name="store_full_description">Aplikacja czatu, całkowicie pod twoją kontrolą i całkowicie dopasowująca się. Element pozwala na komunikowanie się w jakikolwiek sposób chcesz. Stworzony dla [Matrix] - standardu otwartej, zdecentralizowanej komunikacji.
-\n
-\nStwórz darmowe konto matrix.org, zdobądź swój własny serwer na https://modular.im, lub użyj innego serwera Matrix.
-\n
-\nDlaczego warto wybrać Element\?
-\n
-\n• KOMPLETNA KOMUNIKACJA: Stwórz pokoje dla twojego zespołu, przyjaciół, społeczności - tak, jak lubisz! Czatuj, udostępniaj pliki, dodawaj widżety i wykonuj połączenia głosowe lub wideo - wszystko za darmo.
-\n
-\n• SILNA INTEGRACJA: Używaj Element z narzędziami które znasz i kochasz. Z Element możesz pisać z użytkownikami i grupami na innych aplikacjach do czatu.
-\n
-\n• PRYWATNE I BEZPIECZNE: Utrzymuj twoje konwersacje w sekrecie. Nowoczesne szyfrowanie typu \"end-to-end\" zapewnia, że to co jest prywatne, pozostaje prywatne
-\n
-\n• OTWARTE, NIE ZAMKNIĘTE: Otwartoźródłowe i oparte o Matrix. Bądź w posiadaniu swoich danych posiadając swój własny serwer, lub wybierając taki, któremu ufasz.
-\n
-\n•GDZIEKOLWIEK JESTEŚ: Bądź w kontakcie gdziekolwiek jesteś wraz z w pełni synchronizowaną historią wiadomości na wszystkich twoich urządzeniach lub na https://riot.im.</string>
-
     <string name="passphrase_passphrase_too_weak">Hasło jest zbyt słabe</string>
 
     <string name="keys_backup_passphrase_not_empty_error_message">Proszę usunąć hasło, jeżeli chcesz aby Element wygenerował klucz odzyskiwania.</string>
@@ -1579,7 +1548,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_restoring_waiting_message">Przywracanie kopii zapasowej:</string>
     <string name="keys_backup_recovery_code_error_decrypt">Kopia zapasowa nie może zostać zdeszyfrowana za pomocą tego klucza odzyskiwania: proszę upewnij się, czy wprowadzony klucz odzyskiwania jest poprawny.</string>
 
-    <string name="keys_backup_restore_success_description">Przywrócono %1$d kluczy sesji, i dodano %2$d nowych kluczy które nie były znane tej sesji</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Szyfrowanie sesji nie jest aktywowane</string>
 
 
@@ -1655,10 +1623,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="sas_error_m_mismatched_sas">SAS nie zgadza się</string>
     <string name="sas_error_m_unexpected_message">Sesja otrzymała niespodziewaną wiadomość</string>
     <string name="sas_error_m_invalid_message">Otrzymano nieprawidłową wiadomość</string>
-    <string name="security_warning_identity_server">Poprzednie wersje Element posiadały błąd bezpieczeństwa, który umożliwiał Twojemu serwerowi tożsamości (%1$s) dostęp do Twojego konta. Jeżeli ufasz %2$s, możesz to zignorować; w przeciwnym wypadku wyloguj się i zaloguj ponownie.
-\n
-\nInformacje o szczegółach tutaj:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="room_list_empty">Dołącz do pokoju, aby rozpocząć korzystanie z aplikacji.</string>
     <string name="room_list_catchup_welcome_body">Zapoznaj się z nieprzeczytanymi wiadomościami tutaj</string>
@@ -1670,11 +1634,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
-
-    <string name="alpha_disclaimer_content_line_1">Jako że Element jest we wczesnej fazie rozwoju, niektóre funkcje mogą być niedostępne i możesz doświadczyć błędów.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Najnowsza lista funkcji jest zawsze na %1$s, i jeżeli znajdziesz błąd, proszę wyślij raport w lewym górnym menu poprzez \"Ekran domowy\", postaramy załatać się go tak szybko, jak tylko się da.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis w Sklepie Play</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Jeżeli znajdziesz błędy, proszę wyślij raport za pomocą menu w lewym górnym rogu \"Ekranu domowego\", postaramy się je naprawić tak szybko, jak tylko się da.</string>
 
     <string name="import_e2e_keys_from_file">Importowanie kluczy E2E z pliku \"%1$s\".</string>
 
@@ -1695,20 +1654,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Wyświetl ukryte wydarzenia na linii czasowej</string>
 
-    <string name="store_riotx_title">Element - Klient Matrix następnej generacji</string>
-    <string name="store_riotx_short_description">Szybszy i lżejszy klient Matrix używający najnowszych frameworków Androida</string>
-    <string name="store_riotx_full_description">Element jest nowym klientem dla protokołu Matrix (Matrix.org): otwarta sieć dla bezpiecznej, zdecentralizowej komunikacji. Element jest całkowicie przepisanym klientem Riot, opartym na nowym SDK Matrix dla systemu Android.
-\n
-\nUwaga: Jest to wersja beta. Element jest obecnie w fazie aktywnego rozwoju i posiada ograniczenia oraz (mamy nadzieje że niewiele) błędy. Wszystkie opinie są mile widziane!
-\n
-\nElement wspiera: • Logowanie do istniejącego konta • Tworzenie pokoi oraz dołączanie do pokoi publicznych • Akceptowanie i odrzucanie zaproszeń • Wyświetlanie listy pokoi użytkowników • Wyświetlanie informacji o pokoju • Wysyłanie wiadomości tekstowych • Wysyłanie załączników • Odczytywanie i pisanie wiadomości w zaszyfrowanych pokojach • Kryptografia: Kopię zapasową kluczy E2E, zaawansowaną weryfikację urządzeń, żądanie udostępniania kluczy i odpowiedzi na nie • Powiadomienia push • Jasne, Ciemne oraz Czarne motywy
-\n
-\nNie wszystkie funkcje Element są wdrożone w Element. Główne niedostępne (pojawią się już wkrótce!) funkcje: • Ustawienia pokoi (wyświetl listę członków pokoi) • Rozmowy • Widżety • …</string>
-
     <string name="edited_suffix">(edytowano)</string>
-
-    <string name="riotx_no_registration_notice">%1$s aby utworzyć konto.</string>
-    <string name="riotx_no_registration_notice_colored_part">Użyj starszej aplikacji</string>
 
 
     <string name="message_edits">Edycje wiadomości</string>
@@ -1763,7 +1709,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="a11y_create_menu_open">Otwórz menu tworzenia pokoju</string>
     <string name="a11y_create_menu_close">Zamknij menu tworzenia pokoju…</string>
     <string name="a11y_close_keys_backup_banner">Zamknij baner kopii zapasowej kluczy</string>
-    <string name="two_and_some_others_read">odczytano przez %1$s, %2$s oraz %3$d</string>
     <string name="three_users_read">odczytano przez %1$s, %2$s oraz %3$s</string>
     <string name="two_users_read">odczytano przez %1$s oraz %2$s</string>
     <string name="one_user_read">%s odczytał</string>
@@ -1966,7 +1911,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_developer_mode_fail_fast_title">Bezproblemowy</string>
     <string name="settings_developer_mode_fail_fast_summary">Element może zawieszać się częściej gdy napotka na niespodziewany błąd</string>
 
-    <string name="command_description_verify">Żądanie weryfikujące podany userID</string>
     <string name="command_description_shrug">Preparuje ¯\\_(ツ)_/¯ dla zwykłej wiadomości tekstowej</string>
 
     <string name="create_room_encryption_title">Aktywuj szyfrowanie</string>
@@ -2234,7 +2178,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="e2e_use_keybackup">Odblokuj historię zaszyfrowanych wiadomości</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="refresh">Odśwież</string>
 

@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="?dialogPreferredPadding"
-    android:paddingLeft="?dialogPreferredPadding"
     android:paddingTop="12dp"
     android:paddingEnd="?dialogPreferredPadding"
-    android:paddingRight="?dialogPreferredPadding"
     android:paddingBottom="12dp">
 
     <LinearLayout

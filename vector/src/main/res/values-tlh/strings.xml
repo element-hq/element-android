@@ -143,7 +143,6 @@
     <string name="auth_reset_password_missing_password">chaw\' ngoq chu\' ghItlhnISlu\'</string>
     <string name="login_error_must_start_http">bI\'reSDaq http[s]:// ghajnIS URL</string>
     <string name="login_error_invalid_home_server">URL mub yIghItlh!</string>
-    <string name="login_mobile_device">QumwI\'</string>
 
     <string name="login_error_forbidden">mubbe\' lo\'wI\' pong, chaw\' ngoq joq</string>
     <string name="auth_send_reset_email">cherqa\'bogh emayIl ngeH</string>

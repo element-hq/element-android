@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="im.vector.riotx.features.debug.DebugMenuActivity"
+    tools:context=".features.debug.DebugMenuActivity"
     tools:ignore="HardcodedText">
 
     <ScrollView
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="Scan QR-code" />
 
-            <im.vector.riotx.core.ui.views.QrCodeImageView
+            <im.vector.app.core.ui.views.QrCodeImageView
                 android:id="@+id/debug_qr_code"
                 android:layout_width="200dp"
                 android:layout_height="200dp"

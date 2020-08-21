@@ -45,7 +45,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <im.vector.riotx.features.sync.widget.SyncStateView
+    <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/groupToolbar" />
 
-    <im.vector.riotx.core.ui.views.KeysBackupBanner
+    <im.vector.app.core.ui.views.KeysBackupBanner
         android:id="@+id/homeKeysBackupBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
-    <im.vector.riotx.core.ui.views.ActiveCallView
+    <im.vector.app.core.ui.views.ActiveCallView
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

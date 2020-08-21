@@ -195,9 +195,6 @@ A sessão foi terminada em todos os dispositivos e não receberá mais notifica�
     <string name="login_error_login_email_not_yet">O link no email ainda não foi clicado</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Necessita iniciar sessão novamente para gerar as chaves de cifragem ponta-a-ponta para este dispositivo e submeter a chave pública para o seu servidor.
-Só terá que fazer isto uma vez.
-Pedimos desculpa pela inconveniência.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Ler lista de recibos de leitura</string>
@@ -659,10 +656,6 @@ Atenção: este ficheiro poderá ser apagado se a aplicação for desinstalada.<
     <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar, abaixo. Se não é igual, então alguém está a interceptar este dispositivo e você poderá querer colocá-lo na lista negra. No futuro, este processo de verificação irá ser mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
 
-    <string name="e2e_enabling_on_app_update">O Element agora permite criptografia ponta-a-ponta mas necessita de iniciar sessão novamente para ativá-la.
-
-Pode fazê-lo agora ou mais tarde a partir das definições da aplicação.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">A sala contém dispositivos desconhecidos</string>
     <string name="unknown_devices_alert_message">Esta sala contém dispositivos desconhecidos que não foram verificados.
@@ -714,8 +707,6 @@ Dispositivos desconhecidos:</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
     <string name="black_them">Tema Preto</string>
-
-    <string name="login_mobile_device">Dispositivo Móvel</string>
 
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
@@ -1105,7 +1096,7 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="auth_accept_policies">Por favor veja e aceite, apolice para este servidor</string>
 
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar toque padrão para chamadas recebidas</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar toque padrão para chamadas recebidas</string>
     <string name="settings_call_ringtone_title">Toque para chamadas recebidas</string>
     <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
 
@@ -1171,4 +1162,5 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
 
 
+    <string name="notification_sync_init">Inicializando serviço</string>
 </resources>

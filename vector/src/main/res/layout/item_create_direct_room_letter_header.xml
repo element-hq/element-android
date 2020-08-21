@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/createDirectRoomLetterView"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createDirectRoomLetterView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
+    android:layout_marginStart="8dp"
     android:fontFamily="sans-serif-medium"
     android:padding="8dp"
     android:textColor="?attr/riotx_text_primary"

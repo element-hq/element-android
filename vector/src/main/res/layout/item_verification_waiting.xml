@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="72dp"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingRight="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
     <TextView

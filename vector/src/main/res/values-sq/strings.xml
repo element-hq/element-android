@@ -174,7 +174,6 @@
     <string name="login_error_registration_network_error">S’arrihet të regjistrohet: Gabim rrjeti</string>
     <string name="login_error_unable_register">S’arrihet të regjistrohet</string>
     <string name="login_error_invalid_home_server">Ju lutemi, jepni një URL të vlefshme</string>
-    <string name="login_mobile_device">Celular</string>
 
     <string name="login_error_forbidden">Emër përdoruesi/fjalëkalim i pavlefshëm</string>
     <string name="login_error_unknown_token">Token-i i hyrjeve i dhënë nuk u njoh</string>
@@ -774,10 +773,6 @@
     <string name="room_settings_addresses_e2e_encryption_warning">Aktivizo fshehtëzim 
 \n(kujdes: s’mund të çaktivizohet më!)</string>
 
-    <string name="e2e_enabling_on_app_update">Element tani mbulon fshehtëzim skaj-më-skaj, por lypset të ribëni hyrjen që ta aktivizoni.
-\n
-\nMund ta bëni tani ose më vonë, që prej rregullimeve të aplikacionit.</string>
-
     <string name="unknown_devices_alert_message">Kjo dhomë përmban sesione të panjohur që s’janë verifikuar.
 \nKjo do të thotë se nuk ka garanci se sesionet u përkasin përdoruesve që pretendojnë se u përkasin.
 \nPërpara se të vazhdoni, këshillojmë që të kaloni në proces verifikimi çdo sesion, por mund të ridërgoni mesazhin pa verifikuar gjë, nëse parapëlqeni kështu.
@@ -936,9 +931,6 @@
     <string name="resource_limit_soft_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="resource_limit_soft_mau"> Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="send_bug_report_logs_description">Që të mund të diagnostikohen probleme, regjistra prej këtij klienti do të dërgohen tok me këtë njoftim të metash. Ky njoftim të metash, përfshi regjistrat dhe foton e ekranit, nuk do të jenë të dukshëm publikisht. Nëse do të parapëlqenit të dërgohej vetëm teksti më sipër, ju lutemi, hiqjani shenjën kutizës:</string>
-    <string name="e2e_need_log_in_again">Që të prodhohen kyçe fshehtëzimi skaj-më-skaj për këtë sesion, lypset të ribëni hyrjen dhe të parashtroni kyçin publik te shërbyesi juaj Home.
-\nKjo duhet vetëm një herë.
-\nNa ndjeni për belanë.</string>
 
     <string name="ssl_cert_not_trust">Kjo mund të ishte shenjë se dikush po përgjon me dashakeqësi trafikun tuaj, ose se telefoni juaj nuk i beson dëshmisë së furnizuar nga shërbyesi i largët.</string>
     <string name="ssl_cert_new_account_expl">Nëse përgjegjësi i shërbyesit ka thënë se kjo është e pritshme, sigurohuni që shenjat e gishtave më poshtë përputhen me shenjat e gishtave të furnizuara prej tyre.</string>
@@ -990,7 +982,7 @@
     <string name="option_send_sticker">Dërgoni një ngjitës</string>
     <string name="go_on_with">vazhdoni me…</string>
     <string name="settings_call_category">Thirrje</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të Element-it</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të Element-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
 
@@ -1002,8 +994,6 @@
     <string name="accept">Pranoje</string>
 
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
 
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostikime</string>
@@ -1088,29 +1078,8 @@
 
     <string name="no_valid_google_play_services_apk">S’u gjet APK për Google Play Services. Njoftimet mund të mos punojnë saktë.</string>
 
-    <string name="store_title">Element - Komunikoni, sipas mënyrës tuaj</string>
-    <string name="store_short_description">Një aplikacion universal i sigurt bisedash, tërësisht nën kontrollin tuaj.</string>
-    <string name="store_full_description">Një aplikacion fjalosjesh, nën kontrollin tuaj dhe plotësisht i zhdërvjellët. Element-i ju lejon të komunikoni sipas mënyrës që doni. I krijuar për [matrix] - standardi për komunikime të hapura, të decentralizuara.
-\n
-\nMerrni një llogari matrix.org falas, merrni shërbyesin tuaj te https://modular.im, ose përdorni një tjetër shërbyes Matrix.
-\n
-\nPse të zgjidhet Element\?
-\n
-\n• KOMUNIKIM I PLOTË: Krijoni dhoma rreth ekipeve tuaj, shokëve tuaj, bashkësisë tuaj - ç’të doni! Llafosuni, shkëmbeni kartela, shtoni widget-e dhe bëni thirrje me zë dhe figurë - gjithçka falas.
-\n
-\n• INTEGRIME TË FUQISHME: Përdoreni Element me mjete që njihni dhe që i doni. Me Element mundeni madje edhe të bisedoni me përdorues dhe grupe nën aplikacione të tjera fjalosjesh.
-\n
-\n• PRIVAT DHE I SIGURT: Mbajini bisedat tuaja të fshehta. Fshehtëzimi skaj-më-skaj i fjalës së fundit garanton që komunikimet private të mbeten private.
-\n
-\n• I HAPUR, JO I MBYLLUR: Me burim të hapur, i ngritur mbi Matrix. Jini zot i të dhënave tuaja, përmes strehimit të shërbyesit tuaj, ose duke përzgjedhur një të cilit i zini besë.
-\n
-\n• KUDO KU TË JENI: Mbani lidhjet kudo ku të jeni, me historik mesazhesh plotësisht të njëkohësuar nëpër krejt pajisjet tuaja dhe <em>online</em> te https://riot.im.</string>
-
     <string name="video_call_in_progress">Thirrje Video Në Kryerje e Sipër…</string>
 
-    <string name="store_whats_new">"Bëjmë përherë ndryshime dhe përmirësime te Element.
-Regjistri i plotë i ndryshimeve mund të gjendet këtu: %1$s.
-Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekanizmin e përditësimeve."</string>
     <string name="title_activity_keys_backup_setup">Kopjeruajtje Kyçesh</string>
     <string name="title_activity_keys_backup_restore">Përdor Kopjeruajtje Kyçesh</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopjeruajtja e kyçeve s’ka përfunduar, ju lutemi, pritni…</string>
@@ -1119,7 +1088,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="done">U bë</string>
 
     <string name="settings_notification_advanced">Rregullime të Mëtejshme Për Njoftimet</string>
-    <string name="settings_notification_advanced_summary">Caktoni rëndësi njoftimesh sipas aktesh, formësoni tinguj, dritëza led, dridhje</string>
     <string name="settings_notification_by_event">Rëndësi njoftimi sipas aktesh</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Rregullime Vetjake.</string>
@@ -1196,7 +1164,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rimarrjeve.</string>
 
     <string name="keys_backup_restore_success_title">Kopjeruajtja u Rikthye %s !</string>
-    <string name="keys_backup_restore_success_description">U rikthyen %1$d kyçe sesioni, dhe u shtuan %2$d kyç(e) të rinj që nuk njiheshin nga ky sesion</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">U rikthye një kopjeruajtje me %d kyç.</item>
         <item quantity="other">U rikthye një kopjeruajtje me %d kyçe.</item>
@@ -1466,12 +1433,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_unable_to_get_trust_info">Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
 
-    <string name="alpha_disclaimer_title">Mirë se vini në beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Teksa Element është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Lista e veçorive më të reja gjendet te %1$s, dhe nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Përshkrim në Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
-
     <string name="import_e2e_keys_from_file">Importo kyçe e2e prej kartelës \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versioni Matrix SDK</string>
@@ -1503,16 +1464,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
 
-    <string name="store_riotx_title">Element - Klient Matrix i Brezit të Ardhshëm</string>
-    <string name="store_riotx_short_description">Një klient më i shpejtë dhe më i lehtë për Matrix, që përdor mekanizmat më të rinj Android</string>
-    <string name="store_riotx_full_description">Element është një klient i ri për protokollin Matrix (Matrix.org): një rrjet i hapur për komunikim të sigurt, të centralizuar. Element është një rishkrim i plotë i klientit Riot Android, bazuar në një rishkrim të plotë të Matrix Android SDK-së.
-\n
-\nKlauzolë: Ky është një version beta. Element-i është ende nën zhivillim aktiv dhe përmban kufizime dhe (shpresojmë të mos jenë shumë) të meta. Mirëpresim krejt përshtypjet dhe sugjerimet!
-\n
-\nElement-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
-\n
-\nNë Element s’janë sendërtuar ende krejt veçoritë e Element-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Thirrje • Widget-es • …</string>
-
     <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
 
     <string name="integration_manager_not_configured">Pa përgjegjës Integrimesh të formësuar.</string>
@@ -1532,9 +1483,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="downloaded_file">Kartela %1$s u shkarkua!</string>
 
     <string name="edited_suffix">(u përpunua)</string>
-
-    <string name="riotx_no_registration_notice">%1$s që të krijohet një llogari.</string>
-    <string name="riotx_no_registration_notice_colored_part">Përdor aplikacionin e dikurshëm</string>
 
 
     <string name="message_edits">Përpunime Mesazhi</string>
@@ -1564,11 +1512,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="decline">Hidhe poshtw</string>
 
     <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
-
-    <string name="security_warning_identity_server">Versione të dikurshëm të Element-it përmbanin një të metë sigurie, e cila mund t’i lejonte Shërbyesit tuaj të Identiteteve (%1$s) hyrje në llogarinë tuaj. Nëse i besoni %2$s, mund ta shpërfillni këtë sinjalizim; përndryshe dilni nga llogaria dhe ribëni hyrjen.
-\n
-\nLexoni më tepër hollësi këtu:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Kushte Shërbimi</string>
     <string name="review_terms">Shqyrtoni Kushtet</string>
@@ -1666,7 +1609,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="a11y_hide_password">Fshihe fjalëkalimin</string>
     <string name="a11y_jump_to_bottom">Hidhu në fund</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s dhe %3$d të tjerë të lexuar</string>
     <string name="three_users_read">%1$s, %2$s dhe %3$s të lexuar</string>
     <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
     <string name="one_user_read">%s i lexuar</string>
@@ -1944,7 +1886,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_developer_mode_fail_fast_summary">Element mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
     <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
-    <string name="command_description_verify">Kërko të verifikohet userID-ja i dhënë</string>
     <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
 
     <string name="create_room_encryption_title">Aktivizoni fshehtëzim</string>
@@ -2165,7 +2106,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Kërkesa Kyçi</string>
 
@@ -2263,7 +2204,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_messages_in_e2e_group_chat">Mesazhe të fshehtëzuar te biseda në grup</string>
     <string name="settings_when_rooms_are_upgraded">Kur dhomat përditësohen</string>
     <string name="settings_troubleshoot_title">Diagnostikoje</string>
-    <string name="settings_notification_advanced_summary_riotx">Caktoni rëndësi njoftimi sipas aktesh</string>
+    <string name="settings_notification_advanced_summary">Caktoni rëndësi njoftimi sipas aktesh</string>
 
     <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
 
@@ -2305,12 +2246,12 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="change_password_summary">Caktoni një fjalëkalim të ri llogarie…</string>
 
     <string name="use_other_session_content_description">Përdorni Element-in më të ri në pajisjet tuaja të tjera, Element Web, Element Desktop, Element iOS, Element për Android, ose ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement për Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="use_latest_riot">Përdorni Element-in më të ri në pajisjet tuaja të tjera:</string>
+    <string name="use_latest_app">Përdorni Element-in më të ri në pajisjet tuaja të tjera:</string>
     <string name="command_description_discard_session_not_handled">Mbulohet vetëm për dhoma të fshehtëzuara</string>
     <string name="enter_secret_storage_passphrase_or_key">Përdorni %1$s tuaj ose përdorni %2$s tuaj që të vazhdohet.</string>
     <string name="use_recovery_key">Përdorni Kyçin Rimarrjesh</string>

@@ -32,11 +32,11 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en curso.
-\nUnirse con %1$s o %2$s</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en curso. 
+\nUnirse como %1$s o %2$s</string>
     <string name="ongoing_conference_call_voice">Voz</string>
     <string name="ongoing_conference_call_video">Vídeo</string>
-    <string name="cannot_start_call">No se puede iniciar la llamada, por favor inténtalo de nuevo más tarde</string>
+    <string name="cannot_start_call">No se puedo iniciar la llamada, por favor inténtelo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
@@ -168,7 +168,7 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_username_in_use">Nombre de usuario en uso</string>
     <string name="auth_home_server">Servidor Doméstico:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
-    <string name="auth_reset_password_next_step_button">He verificado mi dirección de correo electrónico</string>
+    <string name="auth_reset_password_next_step_button">He verificado mi correo electrónico</string>
     <string name="auth_reset_password_message">Para restablecer tu contraseña, ingresa la dirección de correo electrónico vinculada a tu cuenta:</string>
     <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_missing_password">Debes ingresar una nueva contraseña.</string>
@@ -196,9 +196,6 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="login_error_login_email_not_yet">El enlace del correo electrónico que aún no se ha seguido</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Tienes que volver a iniciar sesión para generar claves de cifrado de extremo a extremo para esta sesión y enviar la clave pública a tu servidor doméstico. 
-\nSolo deberás hacer esto una vez. 
-\nDisculpa por las molestia.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
@@ -324,7 +321,7 @@ Quizás quieras iniciar sesión con otra cuenta, o añadir este correo electrón
     <string name="room_participants_action_set_moderator">Convertir a moderador</string>
     <string name="room_participants_action_set_admin">Convertir a administrador</string>
     <string name="room_participants_action_ignore">Ocultar todos los mensajes de este usuario</string>
-    <string name="room_participants_action_unignore">Mostrar todos los mensajes de este usuario</string>
+    <string name="room_participants_action_unignore">Mostrar todos los mensajes del usuario</string>
     <string name="room_participants_invite_search_another_user">ID de Usuario, Nombre o correo electrónico</string>
     <string name="room_participants_action_mention">Mencionar</string>
     <string name="room_participants_action_devices_list">Mostrar Lista de Sesiones</string>
@@ -660,10 +657,6 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando esta sesión y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Element ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
-
-Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala contiene sesiones desconocidas</string>
     <string name="unknown_devices_alert_message">Esta sala contiene sesiones desconocidas que no han sido verificados. Esto significa que no hay garantía de que las sesiones pertenezcan a los usuarios a los que dicen pertenecer. Recomendamos que pases por el proceso de verificación para cada sesión antes de continuar. Puedes reenviar el mensaje sin verificarlas si prefieres. Sesiones desconocidas:</string>
@@ -722,8 +715,6 @@ Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
 
     <string name="option_take_photo">Tomar foto</string>
     <string name="option_take_video">Tomar vídeo</string>
-
-    <string name="login_mobile_device">Móvil</string>
 
     <string name="call">Llamar</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
@@ -1064,7 +1055,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
@@ -1099,7 +1090,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_login_sso">Iniciar sesión con single-sign-on</string>
     <string name="login_error_ssl_handshake">Tu dispositivo usa una versión anticuada e insegura del protocolo de seguridad TLS. Por tu seguridad no puedes conectarte</string>
     <string name="settings_notification_advanced">Ajustes avanzados de notificaciones</string>
-    <string name="settings_notification_advanced_summary">Ajusta la importancia de las notificaciones por evento, configura el sonido, LED y vibración</string>
     <string name="settings_notification_by_event">Importancia de notificación por evento</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Ajustes de sistema.</string>
@@ -1246,8 +1236,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="encryption_message_recovery">Recuperación de mensajes cifrados</string>
     <string name="encryption_settings_manage_message_recovery_summary">Gestionar copia de seguridad clave</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d clave(s) importada(s) satisfactoriamente.</string>
-
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 mensaje</item>
         <item quantity="other">%1$s: %2$d mensajes</item>
@@ -1285,23 +1273,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
-
-    <string name="store_title">Element - Comunicate a tu manera</string>
-    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Element. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
-    <string name="store_short_description">Una app de chat universal completamente bajo tu control.</string>
-    <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Element deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
-\nConsigue tu cuenta de matrix.org gratis. Consigue tu servidor en https://modular.im o usa otro servidor de Matrix.
-\nPor qué escoger a Element\?
-\n
-\n• COMUNICACIÓN COMPLETA: Crea salas para tus equipos, tus amigos, vuestra comunidad - de la forma que quieras! Chatea, comparte archivos, añade widgets y haz llamadas de voz y video - Todo de forma gratuita.
-\n
-\n• POTENTES INTEGRACIONES: Usa Element con las herramientas que conoces y que mas te gustan. Con Element puedes hasta chatear con usuarios y grupos de otras apps de chat.
-\n
-\n• PRIVADA Y SEGURA: Mantén privadas tus conversaciones. La condición de encriptación de extremo a extremo asegura que las conversaciones privadas sigan siendo siempre privadas.
-\n
-\n• ABIERTO, NO CERRADO: Código abierto y construido en Matrix. Posee tus propios datos alojando tu propio servidor o selecciona uno en el que confíes.
-\n
-\n• ALLÁ DONDE ESTÉS: Mantente en contacto dondequiera que estés con el historial de mensajes totalmente sincronizado a través de todos tus dispositivos online en http://riot.im.</string>
 
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
@@ -1372,7 +1343,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_recovery_code_error_decrypt">La copia de seguridad no se ha podido descifrar con esta contraseña: por favor verificar que has introducido la contraseña de recuperación correcta.</string>
 
     <string name="keys_backup_restore_success_title">Copia de seguridad restaurada %s !</string>
-    <string name="keys_backup_restore_success_description">Se han restaurado %1$d claves de sesión y se han añadido %2$d nuevas claves que esta sesión no conocía</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Copia de seguridad restaurada con la clave %d.</item>
         <item quantity="other">Copia de seguridad restaurada con las claves %d.</item>
@@ -1548,7 +1518,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
     <string name="room_list_catchup_empty_title">!Estás al día!</string>
-    <string name="alpha_disclaimer_content_line_1">Mientras Element esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
     <string name="preference_voice_and_video">Voz &amp; Video</string>
@@ -1594,7 +1563,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
-    <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
@@ -1648,16 +1616,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="identity_server_not_defined">No estás usando ningún Servidor de Identidad</string>
     <string name="identity_server_not_defined_for_password_reset">No hay ningún Servidor de Identidad configurado, esto es requerido para restablecer tu contraseña.</string>
 
-    <string name="security_warning_identity_server">Las versiones anteriores de Element tenían un error de seguridad que podía dar a su Servidor de Identidad (%1$s) acceso a su cuenta. Si confías en %2$s, puedes ignorar esto; de lo contrario, por favor cierra la sesión y vuelve a entrar.
-\n
-\nLee más detalles aquí:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Parece que estás intentando conectarte a otro servidor doméstico. ¿Quieres cerrar sesión\?</string>
-
-    <string name="alpha_disclaimer_content_line_2_gplay">La última lista de características está siempre en %1$s, y si encuentras errores por favor envía un informe des del menú superior izquierdo de Inicio, y los arreglaremos tan rápido como podamos.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripción de Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si encuentras errores por favor envía un informe de errores des del menú superior izquierdo del menú de Inicio. Resolveremos el error tan rápido como podamos.</string>
 
     <string name="import_e2e_keys_from_file">Importar llaves E2E des del fichero \"%1$s\".</string>
 
@@ -1689,16 +1648,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_labs_show_hidden_events_in_timeline">Mostrar eventos ocultos en la línea de tiempo</string>
 
-    <string name="store_riotx_title">Element - Cliente Matrix de Futura Generación</string>
-    <string name="store_riotx_short_description">Un cliente para Matrix más rápido y ligero que usa los últimos frameworks de Android</string>
-    <string name="store_riotx_full_description">Element es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. Element es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
-\n
-\nDescargo de responsabilidad: Esta es una versión beta. Element está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
-\n
-\nElement soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
-\n
-\nNo todas las características de Element están implementadas en Element todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
-
     <string name="bottom_action_people_x">Mensajes Directos</string>
 
     <string name="send_file_step_idle">Esperando…</string>
@@ -1711,9 +1660,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="downloaded_file">¡El archivo %1$s ha sido descargado!</string>
 
     <string name="edited_suffix">(editado)</string>
-
-    <string name="riotx_no_registration_notice">%1$s para crear una cuenta.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usar la app antigua</string>
 
 
     <string name="message_edits">Modificación de mensajes</string>
@@ -1793,7 +1739,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="a11y_hide_password">Esconder contraseña</string>
     <string name="a11y_jump_to_bottom">Saltar al final</string>
 
-    <string name="two_and_some_others_read">Leído por %1$s, %2$s, %3$d y otros</string>
     <string name="three_users_read">Leído por %1$s, %2$s y %3$s</string>
     <string name="two_users_read">Leído por %1$s y %2$s</string>
     <string name="one_user_read">Leído por %s</string>
@@ -1887,7 +1832,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Element o servidor que quieres usar</string>
     <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Element al que quieres conectarte</string>
 
-    <string name="login_sso_error_message">Se produjo un error al cargar la pagina: %1$s (%2$d)</string>
+    <string name="login_sso_error_message">Se produjo un error al cargar la página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">"La aplicación no es capaz de iniciar sesión en este servidor. Este solo soporta el acceso mediante:  %1$s.
 \n
 \n¿Quieres acceder usando un cliente web\?"</string>
@@ -1901,4 +1846,74 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_reset_password_on">Reiniciar contraseña en %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">¡Las claves ya están al día!</string>
 
+    <string name="play_video">Reproducir</string>
+    <string name="pause_video">Pausar</string>
+    <string name="dismiss">Descartar</string>
+
+
+    <string name="action_copy">Copiar</string>
+    <string name="dialog_title_success">Correcto</string>
+
+    <string name="bottom_action_notification">Notificaciones</string>
+    <string name="call_failed_no_connection">Element Fallo la Llamada</string>
+    <string name="call_failed_no_connection_description">Fallo al intentar establecer conexion.
+\nTURN Server fallo. Por favor, contacte con el administrador de su Servidor y notifique el fallo.</string>
+
+    <string name="call_select_sound_device">Seleccionar Dispositivo de Sonido</string>
+    <string name="sound_device_phone">Telefono</string>
+    <string name="sound_device_speaker">Altavoz</string>
+    <string name="sound_device_headset">Auricular</string>
+    <string name="sound_device_wireless_headset">Auriculares inalámbricos</string>
+    <string name="call_switch_camera">Cambiar cámara</string>
+    <string name="call_camera_front">Frontal</string>
+    <string name="call_camera_back">Tracera</string>
+    <string name="call_format_turn_hd_off">Apagar HD</string>
+    <string name="call_format_turn_hd_on">Activar HD</string>
+
+    <string name="login_error_ssl_peer_unverified">Error SSl: la identidad del par no a sido verificada.</string>
+    <string name="login_error_ssl_other">Error SSL.</string>
+    <string name="settings_call_ringtone_use_default_stun">Permitir servidor de asistencia de llamadas</string>
+    <string name="active_call_with_duration">Llamada activa (%s)</string>
+    <string name="return_to_call">Regresar a la llamada</string>
+
+    <string name="room_participants_action_cancel_invite">Cancelar invitación</string>
+    <string name="room_participants_action_ignore_title">Ignorar Usuario</string>
+    <string name="room_participants_action_cancel_invite_title">Cancelar Invitacion</string>
+    <string name="error_empty_field_choose_user_name">Por favor, elija un nombre de usuario.</string>
+    <string name="error_empty_field_choose_password">Por favor, elija una contraseña.</string>
+    <string name="external_link_confirmation_title">Verifica este enlace</string>
+    <string name="external_link_confirmation_message">Este link %1$s loredirecciona a otro sitio %2$s. .
+\nEsta seguro de continuar\?</string>
+
+    <string name="add_members_to_room">Adicionar miembros</string>
+    <string name="invite_users_to_room_action_invite">INVITAR</string>
+    <string name="inviting_users_to_room">Invitando usuarios…</string>
+    <string name="invite_users_to_room_title">Invitar Usuarios</string>
+    <string name="invitation_sent_to_one_user">Invitación enviada a %1$s</string>
+    <string name="invitations_sent_to_two_users">Invitación enviada a %1$s y %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
+        <item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">No se pudo invitar el usuario. Por favor, intente nuevamente.</string>
+
+    <string name="choose_locale_current_locale_title">Idioma actual</string>
+    <string name="choose_locale_other_locales_title">Otros idiomas disponibles</string>
+    <string name="choose_locale_loading_locales">Cargando lenguajes disponibles</string>
+
+    <string name="open_terms_of">Leer los terminos de %s</string>
+    <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad %s\?</string>
+    <string name="identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. Element solo soporta API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Operación no posible. Servidor desactualizado.</string>
+    <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>
+    <string name="element_disclaimer_title">Riot ahora es Element!</string>
+    <string name="element_disclaimer_negative_button">Entendido</string>
+    <string name="element_disclaimer_positive_button">Aprender Mas</string>
+
+    <string name="element_login_splash_brand">Element</string>
+
+
+    <string name="search_in_my_contacts">Buscar en mis contactos</string>
+    <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
+    <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>
 </resources>

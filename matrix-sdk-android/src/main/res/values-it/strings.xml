@@ -204,4 +204,100 @@
     <string name="key_verification_request_fallback_message">%s sta chiedendo di verificare la tua chiave, ma il tuo client non supporta la verifica in-chat. Dovrai usare il metodo di verifica obsoleto per verificare le chiavi.</string>
 
     <string name="notice_room_created">%1$s ha creato la stanza</string>
+    <string name="summary_you_sent_image">Hai inviato un\'immagine.</string>
+    <string name="summary_you_sent_sticker">Hai inviato un adesivo.</string>
+
+    <string name="notice_room_invite_no_invitee_by_you">Il tuo invito</string>
+    <string name="notice_room_created_by_you">Hai creato la stanza</string>
+    <string name="notice_room_invite_by_you">Hai invitato %1$s</string>
+    <string name="notice_room_join_by_you">Sei entrato nella stanza</string>
+    <string name="notice_room_leave_by_you">Sei uscito dalla stanza</string>
+    <string name="notice_room_reject_by_you">Hai rifiutato l\'invito</string>
+    <string name="notice_room_kick_by_you">Hai buttato fuori %1$s</string>
+    <string name="notice_room_unban_by_you">Hai riammesso %1$s</string>
+    <string name="notice_room_ban_by_you">Hai bandito %1$s</string>
+    <string name="notice_room_withdraw_by_you">Hai ritirato l\'invito di %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Hai cambiato il tuo avatar</string>
+    <string name="notice_display_name_set_by_you">Hai impostato il tuo nome visualizzato a %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Hai cambiato il tuo nome visualizzato da %1$s a %2$s</string>
+    <string name="notice_display_name_removed_by_you">Hai rimosso il tuo nome visibile (era %1$s)</string>
+    <string name="notice_room_topic_changed_by_you">Hai cambiato l\'argomento a: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s ha modificato l\'avatar della stanza</string>
+    <string name="notice_room_avatar_changed_by_you">Hai modificato l\'avatar della stanza</string>
+    <string name="notice_room_name_changed_by_you">Hai cambiato il nome della stanza a: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Hai iniziato una videochiamata.</string>
+    <string name="notice_placed_voice_call_by_you">Hai iniziato una telefonata.</string>
+    <string name="notice_call_candidates">%s ha inviato dati per impostare la chiamata.</string>
+    <string name="notice_call_candidates_by_you">Hai inviato dati per impostare la chiamata.</string>
+    <string name="notice_answered_call_by_you">Hai risposto alla chiamata.</string>
+    <string name="notice_ended_call_by_you">Hai terminato la chiamata.</string>
+    <string name="notice_made_future_room_visibility_by_you">Hai reso visibile la futura cronologia della stanza a %1$s</string>
+    <string name="notice_end_to_end_by_you">Hai attivato la crittografia end-to-end (%1$s)</string>
+    <string name="notice_room_update_by_you">Hai aggiornato questa stanza.</string>
+
+    <string name="notice_requested_voip_conference_by_you">Hai richiesto una conferenza VoIP</string>
+    <string name="notice_room_name_removed_by_you">Hai rimosso il nome della stanza</string>
+    <string name="notice_room_topic_removed_by_you">Hai rimosso l\'argomento della stanza</string>
+    <string name="notice_room_avatar_removed">%1$s ha rimosso l\'avatar della stanza</string>
+    <string name="notice_room_avatar_removed_by_you">Hai rimosso l\'avatar della stanza</string>
+    <string name="notice_profile_change_redacted_by_you">Hai aggiornato il tuo profilo %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Hai mandato un invito a %1$s a unirsi alla stanza</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Hai revocato l\'invito per %1$s a unirsi alla stanza</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Hai accettato l\'invito per %1$s</string>
+
+    <string name="notice_widget_added">%1$s ha aggiunto il widget %2$s</string>
+    <string name="notice_widget_added_by_you">Hai aggiunto il widget %1$s</string>
+    <string name="notice_widget_removed">%1$s ha rimosso il widget %2$s</string>
+    <string name="notice_widget_removed_by_you">Hai rimosso il widget %1$s</string>
+    <string name="notice_widget_modified">%1$s ha modificato il widget %2$s</string>
+    <string name="notice_widget_modified_by_you">Hai modificato il widget %1$s</string>
+
+    <string name="power_level_admin">Amministratore</string>
+    <string name="power_level_moderator">Moderatore</string>
+    <string name="power_level_default">Predefinito</string>
+    <string name="power_level_custom">Personalizzato (%1$d)</string>
+    <string name="power_level_custom_no_value">Personalizzato</string>
+
+    <string name="notice_power_level_changed_by_you">Hai cambiato il livello di potere di %1$s.</string>
+    <string name="notice_power_level_changed">%1$s ha cambiato il livello di potere di %2$s.</string>
+    <string name="notice_power_level_diff">%1$s da %2$s a %3$s</string>
+
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Il tuo invito. Motivo: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Hai invitato %1$s. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Sei entrato nella stanza. Motivo: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Sei uscito dalla stanza. Motivo: %1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Hai rifiutato l\'invito. Motivo: %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Hai buttato fuori %1$s. Motivo: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Hai riammesso %1$s. Motivo: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Hai bandito %1$s. Motivo: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Hai mandato un invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Hai revocato l\'invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Hai accettato l\'invito per %1$s. Motivo: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Hai ritirato l\'invito di %2$s. Motivo: %2$s</string>
+
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Hai aggiunto %1$s come indirizzo per questa stanza.</item>
+        <item quantity="other">Hai aggiunto %1$s come indirizzi per questa stanza.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Hai rimosso %1$s come indirizzo per questa stanza.</item>
+        <item quantity="other">Hai rimosso %2$s come indirizzi per questa stanza.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed_by_you">Hai aggiunto %1$s e rimosso %2$s come indirizzi per questa stanza.</string>
+
+    <string name="notice_room_canonical_alias_set_by_you">Hai impostato l\'indirizzo principale per questa stanza a %1$s.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Hai rimosso l\'indirizzo principale per questa stanza.</string>
+
+    <string name="notice_room_guest_access_can_join_by_you">Hai permesso l\'accesso alla stanza per gli ospiti.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Hai impedito l\'accesso alla stanza per gli ospiti.</string>
+
+    <string name="notice_end_to_end_ok_by_you">Hai attivato la crittografia end-to-end.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Hai attivato la crittografia end-to-end (algoritmo %1$s sconosciuto).</string>
+
+    <string name="call_notification_answer">Accetta</string>
+    <string name="call_notification_reject">Rifiuta</string>
+    <string name="call_notification_hangup">Riaggancia</string>
+
 </resources>

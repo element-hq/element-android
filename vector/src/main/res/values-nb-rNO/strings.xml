@@ -107,7 +107,6 @@
     <string name="auth_forgot_password">Glemt passord\?</string>
     <string name="auth_reset_password_next_step_button">Jeg har verifisert E-postadressen min</string>
     <string name="login_error_invalid_home_server">Vennligst skriv inn en gyldig URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Store</string>
@@ -231,7 +230,7 @@
     <string name="settings_phone_number_country_label">Land</string>
     <string name="settings_phone_number_label">Telefonnummer</string>
     <string name="settings_phone_number_code">Kode</string>
-    <string name="settings_media">Media</string>
+    <string name="settings_media">Medier</string>
     <string name="compression_opt_list_choose">Velg</string>
     <string name="media_source_choose">Velg</string>
     <string name="settings_flair">Merkeskilt</string>
@@ -582,7 +581,6 @@
     <string name="fab_menu_create_chat">Direktemeldinger</string>
 
     <string name="create_room_name_hint">Rommets navn</string>
-    <string name="alpha_disclaimer_title">Velkommen til betaen!</string>
     <string name="push_gateway_item_url">URL:</string>
     <string name="bottom_action_people_x">Direktemeldinger</string>
 

@@ -35,7 +35,6 @@
     <!--        android:layout_width="@dimen/chat_avatar_size"-->
     <!--        android:layout_height="@dimen/chat_avatar_size"-->
     <!--        android:layout_marginStart="4dp"-->
-    <!--        android:layout_marginLeft="4dp"-->
     <!--        app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"-->
     <!--        app:layout_constraintTop_toTopOf="parent"-->
     <!--        tools:src="@drawable/filetype_attachment" />-->
@@ -46,7 +45,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         android:layout_marginEnd="32dp"
         android:autoLink="none"
         android:gravity="center_vertical"
@@ -70,7 +68,6 @@
         android:layout_height="46dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

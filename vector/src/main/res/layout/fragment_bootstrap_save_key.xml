@@ -38,7 +38,7 @@
         android:layout_height="1dp"
         android:background="?attr/vctr_list_divider_color" />
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/recoveryCopy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         android:layout_height="1dp"
         android:background="?attr/vctr_list_divider_color" />
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/recoverySave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:layout_height="1dp"
         android:background="?attr/vctr_list_divider_color" />
 
-    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/recoveryContinue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
