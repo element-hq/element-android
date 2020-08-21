@@ -1,3 +1,27 @@
+Changes in Element 1.0.6 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================
 
