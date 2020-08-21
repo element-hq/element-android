@@ -2580,9 +2580,9 @@
     <string name="notice_crypto_unable_to_decrypt_friendly">In attesa del messaggio, potrebbe volerci un po\'</string>
     <string name="crypto_utd">Impossibile decifrare</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">A causa della crittografia end-to-end, devi aspettare che arrivi un messaggio di qualcuno poiché non ti sono state inviate correttamente le chiavi di crittografia.</string>
-    <string name="crypto_error_withheld_blacklisted">Non puoi accedere a questo messaggio perchè sei stato bloccato dal mittente</string>
-    <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perchè la tua sessione non è fidata dal mittente</string>
-    <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perchè il mittente non ha inviato le chiavi di proposito</string>
+    <string name="crypto_error_withheld_blacklisted">Non puoi accedere a questo messaggio perché sei stato bloccato dal mittente</string>
+    <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perché la tua sessione non è fidata dal mittente</string>
+    <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perché il mittente non ha inviato le chiavi di proposito</string>
     <string name="notice_crypto_unable_to_decrypt_merged">In attesa della cronologia di crittografia</string>
 
     <string name="element_disclaimer_title">Riot ora si chiama Element!</string>

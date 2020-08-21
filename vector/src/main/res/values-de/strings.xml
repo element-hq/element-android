@@ -1997,7 +1997,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
     <string name="verification_sas_match">Sie stimmen überein</string>
     <string name="verification_sas_do_not_match">Sie stimmen nicht überein</string>
-    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in der selben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
     <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzer!n vertrauenswürdig ist. Vertraue allen Benutzer!nnen in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
 
@@ -2365,7 +2365,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="unencrypted">Unverschlüsselt</string>
     <string name="encrypted_unverified">Verschlüsselt von einem unbekannten Gerät</string>
     <string name="review_logins">Überprüfe, wo du angemeldet bist</string>
-    <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicher zu stellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
+    <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>

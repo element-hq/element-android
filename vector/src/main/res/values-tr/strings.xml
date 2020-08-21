@@ -1310,7 +1310,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_background_fdroid_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
     <string name="settings_set_workmanager_delay">Tercih Edilen Senkronize Aralığı</string>
     <string name="settings_set_workmanager_delay_summary">%s
-\nSenkronizasyon kaynağın (pil) yada cihazın durumuna (uyku) bağlı olarak değişebilir.</string>
+\nSenkronizasyon kaynağın (pil) ya da cihazın durumuna (uyku) bağlı olarak değişebilir.</string>
     <string name="settings_integrations">Entegrasyonlar</string>
     <string name="settings_integrations_summary">Botları, köprüleri, widget\'ları ve etiket paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.
 \nEntegrasyon yöneticileri yapılandırma verilerini alır ve widget\'ları değiştirebilir, oda davetlerini gönderebilir ve sizin adınıza yetki seviyelerini ayarlayabilir.</string>
@@ -1442,7 +1442,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="sas_error_m_user">Kullanıcı doğrulamayı iptal etti</string>
     <string name="sas_error_m_timeout">Doğrulama işlemi zaman aşımına uğradı</string>
     <string name="sas_error_m_unknown_transaction">Oturum bu işlemi bilmiyor</string>
-    <string name="sas_error_m_unknown_method">Oturum anahtar anlaşması, hash, MAC, yada SAS yöntemi üzerinde anlaşamaz</string>
+    <string name="sas_error_m_unknown_method">Oturum anahtar anlaşması, hash, MAC, ya da SAS yöntemi üzerinde anlaşamaz</string>
     <string name="sas_error_m_mismatched_commitment">Hash tahaddütü eşleşmedi</string>
     <string name="sas_error_m_mismatched_sas">SAS eşleşmedi</string>
     <string name="sas_error_m_unexpected_message">Oturum beklenmeyen bir mesaj aldı</string>
