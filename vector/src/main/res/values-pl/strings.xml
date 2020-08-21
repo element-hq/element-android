@@ -1043,8 +1043,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
 
     <string name="auth_accept_policies">Przeczytaj i zaakceptuj zasady tego serwera domowego:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d klucz(y) zaimportowano z sukcesem.</string>
-
     <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
 
     <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
@@ -1550,7 +1548,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_restoring_waiting_message">Przywracanie kopii zapasowej:</string>
     <string name="keys_backup_recovery_code_error_decrypt">Kopia zapasowa nie może zostać zdeszyfrowana za pomocą tego klucza odzyskiwania: proszę upewnij się, czy wprowadzony klucz odzyskiwania jest poprawny.</string>
 
-    <string name="keys_backup_restore_success_description">Przywrócono %1$d kluczy sesji, i dodano %2$d nowych kluczy które nie były znane tej sesji</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Szyfrowanie sesji nie jest aktywowane</string>
 
 
@@ -1712,7 +1709,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="a11y_create_menu_open">Otwórz menu tworzenia pokoju</string>
     <string name="a11y_create_menu_close">Zamknij menu tworzenia pokoju…</string>
     <string name="a11y_close_keys_backup_banner">Zamknij baner kopii zapasowej kluczy</string>
-    <string name="two_and_some_others_read">odczytano przez %1$s, %2$s oraz %3$d</string>
     <string name="three_users_read">odczytano przez %1$s, %2$s oraz %3$s</string>
     <string name="two_users_read">odczytano przez %1$s oraz %2$s</string>
     <string name="one_user_read">%s odczytał</string>

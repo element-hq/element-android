@@ -1142,8 +1142,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="account_phone_number_error">Ocorreu um erro ao confirmar seu número de telefone.</string>
     <string name="account_additional_info">Informação adicional: %s</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chave(es) importada(as) com sucesso.</string>
-
     <string name="settings_labs_native_camera_summary">Inicie a câmera do sistema em vez da câmera personalizada.</string>
     <string name="settings_labs_enable_send_voice_summary">Esta opção requer um aplicativo de terceiros para gravar as mensagens.</string>
 
@@ -1526,7 +1524,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_recovery_code_error_decrypt">O backup não pôde ser descriptografado com essa chave de recuperação: verifique se você digitou a chave de recuperação correta.</string>
 
     <string name="keys_backup_restore_success_title">Backup restaurado %s !</string>
-    <string name="keys_backup_restore_success_description">Restauradas %1$d chaves de sessão, e adicionadas %2$d chave(s) nova(s) que não eram conhecidas nesta sessão</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Restaurou um backup com chave %d.</item>
         <item quantity="other">Restaurou um backup com chaves %d.</item>
@@ -1840,7 +1837,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="a11y_hide_password">Esconder senha</string>
     <string name="a11y_jump_to_bottom">Saltar para parte inferior</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s e %3$d outros leram</string>
     <string name="three_users_read">%1$s, %2$s e %3$s leu</string>
     <string name="two_users_read">%1$s e %2$s lê</string>
     <string name="one_user_read">%s lê</string>
@@ -2618,6 +2614,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_security_pin_code_title">Ativar o PIN</string>
     <string name="settings_security_pin_code_summary">Se você quiser redefinir seu PIN, toque no Esqueci o PIN para sair e redefinir-lo.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
-<string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
+    <string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
     <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
-    </resources>
+</resources>

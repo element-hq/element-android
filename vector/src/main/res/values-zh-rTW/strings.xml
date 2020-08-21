@@ -992,8 +992,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="auth_accept_policies">請審閱並接受此家伺服器的政策：</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 個金鑰匯入成功。</string>
-
     <string name="settings_notification_troubleshoot">疑難排解通知</string>
     <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">執行測試</string>
@@ -1163,7 +1161,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_recovery_code_error_decrypt">備份可能無法使用此復原金鑰解密：請驗證您是否輸入正確的復原金鑰。</string>
 
     <string name="keys_backup_restore_success_title">備份已復原 %s！</string>
-    <string name="keys_backup_restore_success_description">已復原 %1$d 工作階段金鑰，並已加入未被此工作階段知道的 %2$d 新的金鑰</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">使用 %d 金鑰復原備份。</item>
     </plurals>
@@ -1609,7 +1606,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="a11y_hide_password">隱藏密碼</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
 
-    <string name="two_and_some_others_read">%1$s、%2$s 與 %3$d 個其他人已閱讀</string>
     <string name="three_users_read">%1$s、%2$s 與 %3$s 已閱讀</string>
     <string name="two_users_read">%1$s 與 %2$s 已閱讀</string>
     <string name="one_user_read">%s 已閱讀</string>
@@ -2518,6 +2514,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_security_pin_code_title">啟用 PIN 碼</string>
     <string name="settings_security_pin_code_summary">如果您想要重設您的 PIN 碼，點擊忘記 PIN 碼以登出並重設。</string>
     <string name="auth_pin_confirm_to_disable_title">確認 PIN 碼以停用 PIN 碼</string>
-<string name="settings_call_show_confirmation_dialog_title">避免意外的通話</string>
+    <string name="settings_call_show_confirmation_dialog_title">避免意外的通話</string>
     <string name="settings_call_show_confirmation_dialog_summary">開始通話前要求確認</string>
-    </resources>
+</resources>

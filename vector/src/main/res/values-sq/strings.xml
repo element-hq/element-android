@@ -995,8 +995,6 @@
 
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
-
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostikime</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Xhironi Teste</string>
@@ -1166,7 +1164,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rimarrjeve.</string>
 
     <string name="keys_backup_restore_success_title">Kopjeruajtja u Rikthye %s !</string>
-    <string name="keys_backup_restore_success_description">U rikthyen %1$d kyçe sesioni, dhe u shtuan %2$d kyç(e) të rinj që nuk njiheshin nga ky sesion</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">U rikthye një kopjeruajtje me %d kyç.</item>
         <item quantity="other">U rikthye një kopjeruajtje me %d kyçe.</item>
@@ -1612,7 +1609,6 @@
     <string name="a11y_hide_password">Fshihe fjalëkalimin</string>
     <string name="a11y_jump_to_bottom">Hidhu në fund</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s dhe %3$d të tjerë të lexuar</string>
     <string name="three_users_read">%1$s, %2$s dhe %3$s të lexuar</string>
     <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
     <string name="one_user_read">%s i lexuar</string>

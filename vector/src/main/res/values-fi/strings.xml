@@ -1115,8 +1115,6 @@ Haluatko lisätä paketteja?</string>
     <string name="encryption_message_recovery">Salattujen viestien palautus</string>
     <string name="encryption_settings_manage_message_recovery_summary">Hallitse avainten varmuuskopiointia</string>
 
-    <string name="encryption_import_room_keys_success">%1$d / %2$d avainta tuotu onnistuneesti.</string>
-
     <string name="lock_screen_hint">Kirjoita tähän…</string>
 
     <plurals name="notification_unread_notified_messages">
@@ -1293,7 +1291,6 @@ Haluatko lisätä paketteja?</string>
     <string name="keys_backup_recovery_code_error_decrypt">Varmuuskopiota ei pystytty purkamaan tällä palautusavaimella. Tarkista, että olet syöttänyt oikean palautusavaimen.</string>
 
     <string name="keys_backup_restore_success_title">Varmuuskopio palautettu %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d istuntoavainta palautettu, ja lisättiin %2$d uutta avainta, joita tämä laite ei tuntenut</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Varmuuskopio palautettiin yhdellä avaimella.</item>
         <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
@@ -1628,7 +1625,6 @@ Haluatko lisätä paketteja?</string>
     <string name="a11y_hide_password">Piilota salasana</string>
     <string name="a11y_jump_to_bottom">Siirry loppuun</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s ja %3$d muuta lukivat</string>
     <string name="three_users_read">%1$s, %2$s ja %3$s lukivat</string>
     <string name="two_users_read">%1$s ja %2$s lukivat</string>
     <string name="one_user_read">%s luki</string>

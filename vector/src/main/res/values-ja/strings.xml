@@ -1183,7 +1183,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="encryption_enabled_tile_description">この部屋内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効化されていません</string>
     <string name="settings_notification_configuration">通知設定</string>
-<string name="disconnect">切断</string>
+    <string name="disconnect">切断</string>
     <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
     <string name="action_mark_room_read">既読にする</string>
     <string name="action_copy">コピー</string>
@@ -1226,7 +1226,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 
     <string name="enter_secret_storage_passphrase_warning">警告:</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="other">元の大きさのまま画像を送信する</item>
-</plurals>
+        <item quantity="other">元の大きさのまま画像を送信する</item>
+    </plurals>
 
-    </resources>
+</resources>

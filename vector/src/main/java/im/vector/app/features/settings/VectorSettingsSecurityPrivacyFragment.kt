@@ -416,7 +416,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val sharedDataItem = sharedDataItems[0]
 
             val uri = when (sharedDataItem) {
-                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataUri -> sharedDataItem.uri
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
                 else                                     -> null
             }
@@ -479,7 +479,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                                         hideLoadingView()
 
                                         AlertDialog.Builder(thisActivity)
-                                                .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
+                                                        data.successfullyNumberOfImportedKeys,
                                                         data.successfullyNumberOfImportedKeys,
                                                         data.totalNumberOfKeys))
                                                 .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }

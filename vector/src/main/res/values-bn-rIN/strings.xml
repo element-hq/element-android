@@ -668,7 +668,6 @@
     <string name="merged_events_collapse">বন্ধ</string>
 
     <string name="keys_backup_restore_with_key_helper">আপনার পুনরুদ্ধারের কুঞ্জি হারিয়ে গেছে\? আপনি সেটিংস একটি নতুন সেট আপ করতে পারেন।</string>
-    <string name="keys_backup_restore_success_description">"%1$d  সেশন কী পুনরুদ্ধার করা হয়েছে, এবং %2$d নতুন কী (গুলি) জোড়া হয়েছে যা এই ডিভাইসটি জানত না"</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
         <item quantity="other">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
@@ -949,7 +948,6 @@
     <string name="encryption_import_import">ইম্পোর্ট</string>
     <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই সেশানে এনক্রিপ্ট করুন</string>
     <string name="encryption_never_send_to_unverified_devices_summary">এই সেশান থেকে যাচাই করা সেশানগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d কুঞ্জি(গুলি) সাফল্য সাথে ইম্পোর্ট করা হয়েছে।</string>
 
     <string name="encryption_information_not_verified">যাচাই করা হয়নি</string>
     <string name="encryption_information_verified">প্রতিপাদিত</string>

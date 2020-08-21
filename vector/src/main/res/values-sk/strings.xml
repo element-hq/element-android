@@ -1126,8 +1126,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="account_phone_number_error">Pri pokuse overiť vaše telefónne číslo sa vyskytla chyba.</string>
     <string name="account_additional_info">Dodatočné informácie: %s</string>
 
-    <string name="encryption_import_room_keys_success">Úspešne importovaných %1$d/%2$d kľúč(ov).</string>
-
     <string name="settings_labs_native_camera_summary">Spustiť predvolený fotoaparát v systéme namiesto zobrazenia vlastnej vstavanej obrazovky.</string>
     <string name="settings_labs_enable_send_voice_summary">Vyžaduje externú aplikáciu na nahrávanie zvuku.</string>
 

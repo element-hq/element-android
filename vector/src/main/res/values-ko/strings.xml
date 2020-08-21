@@ -920,7 +920,6 @@
     <string name="encryption_import_import">가져오기</string>
     <string name="encryption_never_send_to_unverified_devices_title">확인된 기기로만 암호화</string>
     <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않습니다.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 키를 성공적으로 가져왔습니다.</string>
 
     <string name="encryption_information_not_verified">확인되지 않음</string>
     <string name="encryption_information_verified">확인됨</string>
@@ -1239,7 +1238,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">이 복구 키로 백업을 복호화할 수 없습니다: 올바른 복구 키를 입력해서 확인해주세요.</string>
 
     <string name="keys_backup_restore_success_title">백업이 복구되었습니다 %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d개의 세션 키를 복구했고, 이 기기에서 알려지지 않은 %2$d개의 새 키를 추가함</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">%d개의 키와 함께 백업을 복구했습니다.</item>
     </plurals>
@@ -1584,7 +1582,6 @@
     <string name="a11y_hide_password">비밀번호 감추기</string>
     <string name="a11y_jump_to_bottom">맨 아래로 건너뛰기</string>
 
-    <string name="two_and_some_others_read">%1$s님, %2$s님 외 %3$d명이 읽음</string>
     <string name="three_users_read">%1$s님, %2$s님 그리고 %3$s님이 읽음</string>
     <string name="two_users_read">%1$s님 그리고 %2$s님이 읽음</string>
     <string name="one_user_read">%s님이 읽음</string>

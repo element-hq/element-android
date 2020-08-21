@@ -1016,7 +1016,6 @@
     <string name="settings_show_avatar_display_name_changes_messages">Показване на събития за потребителски профили</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включва промени в снимки и имена.</string>
     <string name="settings_password">Парола</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(а) бяха успешно импортирани.</string>
 
     <string name="settings_labs_native_camera_summary">Използване на системната камера вместо собствената интеграция на приложението.</string>
     <string name="settings_labs_enable_send_voice_summary">Тази опция изисква отделно приложение за записване на съобщенията.</string>
@@ -1194,7 +1193,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
 
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
-    <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Възстановено резервно копие с %d ключ.</item>
         <item quantity="other">Възстановено резервно копие с %d ключа.</item>
@@ -1648,7 +1646,6 @@
     <string name="a11y_hide_password">Скрий паролата</string>
     <string name="a11y_jump_to_bottom">Отиди най-отдолу</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s и %3$d други прочетоха</string>
     <string name="three_users_read">%1$s, %2$s и %3$s прочетоха</string>
     <string name="two_users_read">%1$s и %2$s прочетоха</string>
     <string name="one_user_read">%s прочете</string>

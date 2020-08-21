@@ -27,4 +27,4 @@ Element coloca você no controle ao permitir quem hospeda suas conversas. Neste 
 
 <b>COMUNICAÇÃO COMPLETA</b>: Mensagens, chamadas de voz, chamadas de vídeo, compartilhamento de arquivos, compartilhamento de tela e um monte de integrações, robôs e widgets. Construa salas, comunidades, mantenha contato e faça seus projetos.
 
-<b>NÃO IMPORTA ONDE VOCÊ ESTEJA</b>: Mantenha contato não importa onde você esteja com o histórico sincronizado de mensagens em todos os seus dispositivos e no navegador em https://element.io/app.
+<b>NÃO IMPORTA ONDE VOCÊ ESTEJA</b>: Mantenha contato não importa onde você esteja com o histórico sincronizado de mensagens em todos os seus dispositivos e no navegador em https://app.element.io.

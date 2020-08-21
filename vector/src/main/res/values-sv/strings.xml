@@ -935,7 +935,7 @@
     <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
     <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
 
-<string name="play_video">Spela</string>
+    <string name="play_video">Spela</string>
     <string name="pause_video">Pausa</string>
     <string name="dismiss">Avfärda</string>
 
@@ -952,9 +952,9 @@
     <string name="room_message_placeholder_not_encrypted">Skicka ett meddelande (okrypterat)…</string>
     <string name="room_message_file_not_found">Filen hittades inte</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nytt meddelande</item>
-	<item quantity="other">%d nya meddelanden</item>
-</plurals>
+        <item quantity="one">1 nytt meddelande</item>
+        <item quantity="other">%d nya meddelanden</item>
+    </plurals>
 
     <string name="ssl_expected_existing_expl">Certifikatet har ändrats från en pålitligt till en som vi inte litar på. Servern kan ha förnyat sitt certifikat. Kontakta serveradministratören för det förväntade fingeravtrycket.</string>
     <string name="room_details_settings">Inställningar</string>
@@ -992,17 +992,17 @@
 
     <string name="select_room_directory">Välj en rumskatalog</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 oläst aviserat meddelande</item>
-	<item quantity="other">%s olästa aviserade meddelanden</item>
-</plurals>
+        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="other">%s olästa aviserade meddelanden</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 oläst aviserat meddelande</item>
-	<item quantity="other">%s olästa aviserade meddelanden</item>
-</plurals>
+        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="other">%s olästa aviserade meddelanden</item>
+    </plurals>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 meddelande</item>
-	<item quantity="other">%1$s: %2$d meddelanden</item>
-</plurals>
+        <item quantity="one">%1$s: 1 meddelande</item>
+        <item quantity="other">%1$s: %2$d meddelanden</item>
+    </plurals>
     <string name="font_size">Teckenstorlek</string>
     <string name="tiny">Pytteliten</string>
     <string name="small">Liten</string>
@@ -1105,4 +1105,4 @@
     <string name="crypto_error_withheld_generic">Du kan inte komma åt det här meddelandet för att avsändaren avsiktligt inte skickade nycklarna</string>
     <string name="search_in_my_contacts">Sök i mina kontakter</string>
     <string name="empty_contact_book">Din kontaktbok är tom</string>
-    </resources>
+</resources>

@@ -230,7 +230,7 @@
     <string name="settings_phone_number_country_label">Land</string>
     <string name="settings_phone_number_label">Telefonnummer</string>
     <string name="settings_phone_number_code">Kode</string>
-    <string name="settings_media">Media</string>
+    <string name="settings_media">Medier</string>
     <string name="compression_opt_list_choose">Velg</string>
     <string name="media_source_choose">Velg</string>
     <string name="settings_flair">Merkeskilt</string>

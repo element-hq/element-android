@@ -1004,7 +1004,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_import_import">Import</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
-    <string name="encryption_import_room_keys_success">Klíče %1$d/%2$d importovány úspěšně.</string>
 
     <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>
@@ -1385,7 +1384,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřte, že jste zadali správný klíč obnovy.</string>
 
     <string name="keys_backup_restore_success_title">Záloha obnovena %s !</string>
-    <string name="keys_backup_restore_success_description">Obnoveno %1$d relačních klíčů a doplněno %2$d nových klíčů, které této relaci nebyly známy</string>
     <string name="keys_backup_get_version_error">Načtení poslední verze klíčů obnovy selhalo (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Krypto relace není zapnuto</string>
 
@@ -1669,7 +1667,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="a11y_hide_password">Skrýt heslo</string>
     <string name="a11y_jump_to_bottom">Přeskočit až dolů</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s a %3$d dalších přečetli</string>
     <string name="three_users_read">%1$s, %2$s a %3$s přečetli</string>
     <string name="two_users_read">%1$s a %2$s přečetli</string>
     <string name="one_user_read">%s přečetl(a)</string>

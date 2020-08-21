@@ -1286,7 +1286,6 @@
     <string name="encryption_import_import">Uvezi</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifriraj samo ka potvrđenim sesijama</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikada iz ove sesije ne šalji šifrirane poruke nepotvrđenim sesijama.</string>
-    <string name="encryption_import_room_keys_success">%1$d od %2$d ključ(eva) je uspješno uvezeno.</string>
 
     <string name="encryption_information_not_verified">Nije potvrđeno</string>
     <string name="encryption_information_verified">Potvrđeno</string>

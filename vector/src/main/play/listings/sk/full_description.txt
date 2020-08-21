@@ -28,4 +28,4 @@ Element vám dáva kontrolu tým, že si samy vyberiete, ako budete hostovať va
 
 <b>KOMPLETNÁ KOMUNIKÁCIA</b>: Okamžité správy, telefonáty a video hovory, zdieľanie súborov, zdieľanie obrazovky a veľké množstvo integrácií, botov a widgetov. Vytvorte si vlastné miestnosti, založte komunity, ostante v kontakte a vyriešte úlohy.
 
-<b>KDEKOĽVEK SA NACHÁDZATE</b>: Ostante v kontakte kdekoľvek práve ste s plne synchronizovanou históriou konverzácií naprieč všetkými vašimi zariadeniami aj cez web na adrese https://element.io/app.
+<b>KDEKOĽVEK SA NACHÁDZATE</b>: Ostante v kontakte kdekoľvek práve ste s plne synchronizovanou históriou konverzácií naprieč všetkými vašimi zariadeniami aj cez web na adrese https://app.element.io.
