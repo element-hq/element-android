@@ -212,7 +212,7 @@
     <string name="notice_room_invite_no_invitee_by_you">Deine Einladung</string>
     <string name="notice_room_created">%1$s hat den Raum erstellt</string>
     <string name="notice_room_created_by_you">Du hast den Raum erstellt</string>
-    <string name="notice_room_invite_by_you">Du hast $1$s eingeladen</string>
+    <string name="notice_room_invite_by_you">Du hast %1$s eingeladen</string>
     <string name="notice_room_join_by_you">Du bist dem Raum beigetreten</string>
     <string name="notice_room_leave_by_you">Du hast den Raum verlassen</string>
     <string name="notice_room_reject_by_you">Du hast die Einladung abgelehnt</string>

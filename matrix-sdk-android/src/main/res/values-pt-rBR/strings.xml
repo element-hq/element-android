@@ -292,15 +292,15 @@
 
     <string name="notice_room_guest_access_can_join">%1$s permitiu que convidados entrem na sala.</string>
     <string name="notice_room_guest_access_can_join_by_you">Você permitiu que convidados entrem na sala.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s impediu que convidados entrem na sala.</string>
-    <string name="notice_room_guest_access_forbidden_by_you">Você impediu que convidados entrem na sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s impediu que convidados entrassem na sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Você impediu que convidados entrassem na sala.</string>
 
     <string name="notice_end_to_end_ok">%1$s ativou a criptografia de ponta a ponta.</string>
     <string name="notice_end_to_end_ok_by_you">Você ativou a criptografia de ponta a ponta.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ativou a criptografia de ponta a ponta (algoritmo não reconhecido %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Você ativou a criptografia de ponta a ponta (algoritmo não reconhecido %1$s).</string>
 
-    <string name="key_verification_request_fallback_message">%s deseja verificar a sua chave, mas o seu aplicativo não suporta a verificação da chave da conversa. Você precisará usar a verificação tradicional de chaves para verificar chaves.</string>
+    <string name="key_verification_request_fallback_message">%s deseja confirmar a sua chave, mas o seu aplicativo não suporta a confirmação da chave da conversa. Você precisará usar a confirmação tradicional de chaves para confirmar chaves.</string>
 
     <string name="call_notification_answer">Aceitar</string>
     <string name="call_notification_reject">Recusar</string>

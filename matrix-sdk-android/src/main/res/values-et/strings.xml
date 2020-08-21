@@ -110,7 +110,7 @@
     <string name="verification_emoji_heart">Süda</string>
     <string name="verification_emoji_smiley">Smaili</string>
     <string name="verification_emoji_robot">Robot</string>
-    <string name="verification_emoji_hat">Müts</string>
+    <string name="verification_emoji_hat">Kübar</string>
     <string name="verification_emoji_glasses">Prillid</string>
     <string name="verification_emoji_wrench">Mutrivõti</string>
     <string name="verification_emoji_santa">Jõuluvana</string>
@@ -141,7 +141,7 @@
     <string name="verification_emoji_anchor">Ankur</string>
     <string name="verification_emoji_headphone">Kõrvaklapid</string>
     <string name="verification_emoji_folder">Kaust</string>
-    <string name="verification_emoji_pin">Knopka</string>
+    <string name="verification_emoji_pin">Nööpnõel</string>
 
     <string name="initial_sync_start_importing_account">Alglaadimine:
 \nImpordin kontot…</string>
