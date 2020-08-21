@@ -25,6 +25,7 @@ Bugfix 🐛:
  - Failed to build unique file (#1954)
  - Highlighted Event when opening a permalink from another room (#1033)
  - A Kick appears has "someone has made no change" (#1959)
+ - Avoid NetworkOnMainThreadException when setting a user avatar
  - Renew turnserver credentials when ttl runs out
 
 Translations 🗣:
