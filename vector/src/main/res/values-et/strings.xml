@@ -1095,7 +1095,7 @@
     <string name="room_menu_search">Otsi</string>
     <string name="room_one_user_is_typing">%s kirjutab…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s kirjutavad…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$ &amp; teised kirjutavad…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; teised kirjutavad…</string>
     <string name="room_message_placeholder_encrypted">Saada krüptitud sõnum…</string>
     <string name="room_message_placeholder_not_encrypted">Saada krüptimata sõnum…</string>
     <string name="room_message_placeholder_reply_to_encrypted">Saada krüptitud vastus…</string>
@@ -1783,7 +1783,7 @@
     <string name="send_you_invite">Saatis sulle kutse</string>
     <string name="invited_by">%s kutsus</string>
 
-    <string name="room_list_catchup_empty_title">Ei tea... kõik vist on nüüd tehtud!</string>
+    <string name="room_list_catchup_empty_title">Ei tea… kõik vist on nüüd tehtud!</string>
     <string name="room_list_catchup_empty_body">Sul ei ole rohkem lugemata sõnumeid</string>
     <string name="room_list_catchup_welcome_title">Tere tulemast koju!</string>
     <string name="room_list_catchup_welcome_body">Leiad lugemata sõnumid siit</string>
@@ -1968,7 +1968,6 @@
     <string name="settings_developer_mode_fail_fast_title">Kiire lõppmäng</string>
     <string name="settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib Element sagedamini kokku joosta</string>
 
-    <string name="command_description_verify">Päring antud kasutajatunnuse verifitseerimiseks</string>
     <string name="command_description_shrug">Lisa ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse</string>
 
     <string name="create_room_encryption_title">Võta jututoas krüptimine kasutusele</string>
