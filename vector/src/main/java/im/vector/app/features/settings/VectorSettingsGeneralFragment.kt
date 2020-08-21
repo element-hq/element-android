@@ -128,6 +128,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeUserAvatar()
+        observeUserDisplayName()
     }
 
     private fun observeUserAvatar() {
@@ -137,6 +138,21 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 .distinctUntilChanged { user -> user.avatarUrl }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { mUserAvatarPreference.refreshAvatar(it) }
+                .disposeOnDestroyView()
+    }
+
+    private fun observeUserDisplayName() {
+        session.rx()
+                .liveUser(session.myUserId)
+                .unwrap()
+                .distinctUntilChanged { user -> user.displayName }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { user ->
+                    mDisplayNamePreference.let {
+                        it.summary = user.displayName ?: ""
+                        it.text = user.displayName ?: ""
+                    }
+                }
                 .disposeOnDestroyView()
     }
 
@@ -151,8 +167,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = session.getUser(session.myUserId)?.displayName ?: ""
-            it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 newValue
                         ?.let { value -> (value as? String)?.trim() }
