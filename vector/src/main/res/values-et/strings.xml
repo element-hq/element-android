@@ -2139,4 +2139,68 @@
     <string name="failed_to_unban">Kasutaja ligipääsu taastamine ei õnnestunud</string>
 
     <string name="alert_push_are_disabled_title">Tõuketeavitused on välja lülitatud</string>
+    <string name="enter_account_password">Jätkamaks sisesta oma %s.</string>
+
+    <string name="bootstrap_info_text">%s abil krüpti ja loe oma sõnumeid ning taga usaldusseosed.</string>
+    <string name="bootstrap_info_confirm_text">Kinnituseks sisesta %s uuesti.</string>
+    <string name="bootstrap_dont_reuse_pwd">Palun ära kasuta selleks oma tavalist konto salasõna.</string>
+
+    <string name="bootstrap_info_text_2">Andmete kaitsmiseks sinu koduserveris sisesta turvafraas, mida vaid sina tead.</string>
+
+    <string name="bootstrap_loading_text">Selleks võib kuluda mitu sekundit.</string>
+    <string name="bootstrap_loading_title">Alustame taastamist.</string>
+    <string name="your_recovery_key">Sinu taastevõti</string>
+    <string name="bootstrap_finish_title">Valmis!</string>
+    <string name="keep_it_safe">Hoia seda turvaliselt</string>
+    <string name="finish">Lõpeta</string>
+
+    <string name="bootstrap_save_key_description">Kasuta seda %1$s turvavõrguna olukorras, kus unustad oma %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Avaldan justloodud Identiteedivõtmed</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Loon paroolifraasi põhjal turvavõtme</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Määratlen vaikimisi kasutatava SSSS-võtme</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Sünkroniseerin üldvõtit</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Sünkroniseerin kasutaja võtit</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Sünkroniseerin allkirjavõtit</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Teeme võtmetest varukoopia</string>
+
+
+    <string name="bootstrap_crosssigning_print_it">Trüki ta välja ja hoia turvalises kohas</string>
+    <string name="bootstrap_crosssigning_save_usb">Salvesta ta mälupulgale või varunduskettale</string>
+    <string name="bootstrap_crosssigning_save_cloud">Kopeeri ta isiklikku andmehoidlasse mis asub pilves</string>
+
+    <string name="auth_flow_not_supported">Seda tegevust ei saa teha nutiseadmest</string>
+
+    <string name="bootstrap_skip_text">Paroolifraasi kasutusele võtmine võimaldab sul krüptida ja lugeda oma sõnumeid ning tagada usaldusseoseid.
+\n
+\nKui sa ei soovi selleks kasutada sõnumite salasõna, siis võid genereerida ka sõnumivõtme.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Paroolifraasi kasutusele võtmine võimaldab sul krüptida ja lugeda oma sõnumeid ning tagada usaldusseoseid.</string>
+    <string name="bootstrap_cancel_text">Kui sa tühistad nüüd, siis sa võid peale viimasest seadmest välja logimist kaotada ligipääsu oma krüptitud sõnumitele ja andmetele.
+\n
+\nAga sa võid seadistustes võtta kasutusele turvalise varunduse ning hallata oma krüptovõtmeid.</string>
+
+    <string name="encryption_enabled">Krüptimine on kasutusel</string>
+    <string name="encryption_enabled_tile_description">Sõnumid selles jututoas on läbivalt krüptitud. Uuri lisaks ja verifitseeri kasutajad nende kasutajaprofiilides.</string>
+    <string name="encryption_not_enabled">Krüptimine ei ole kasutusel</string>
+    <string name="encryption_unknown_algorithm_tile_description">Selles jututoas kasutatud krüptimine ei ole toetatud</string>
+
+    <string name="room_created_summary_item">%s lõi ja seadistas jututoa.</string>
+    <string name="room_created_summary_item_by_you">Sina lõid ja seadistasid jututoa.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Peaaegu valmis! Kas teises seadmes kuvatakse sama kilpi\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Peaaegu valmis! Ootan kinnitust…</string>
+    <string name="qr_code_scanned_verif_waiting">Ootan vastust kasutajalt %s…</string>
+
+    <string name="error_failed_to_import_keys">Võtmete importimine ei õnnestunud</string>
+
+    <string name="settings_notification_configuration">Teavituste seadistused</string>
+    <string name="settings_messages_at_room">Sõnumid, mis sisaldavad sõna @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Kahepoolsete vestluste krüptitud sõnumid</string>
+    <string name="settings_messages_in_e2e_group_chat">Rühmavestluste krüptitud sõnumid</string>
+    <string name="settings_when_rooms_are_upgraded">Kui jututubasid uuendatakse</string>
+    <string name="settings_troubleshoot_title">Leia lahendus vigadele</string>
+    <string name="settings_notification_advanced_summary">Seadista teavituse olulisus sündmuse alusel</string>
+
+    <string name="command_description_plain">Saadab sõnumi vormindamata tekstina ega tõlgenda seda markdown-vormindusena</string>
+
     </resources>
