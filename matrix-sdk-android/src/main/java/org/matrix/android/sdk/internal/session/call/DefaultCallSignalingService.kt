@@ -17,6 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.call
 
+import android.os.SystemClock
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.call.CallSignalingService
@@ -59,10 +60,10 @@ internal class DefaultCallSignalingService @Inject constructor(
     private val activeCalls = mutableListOf<MxCall>()
 
     private val cachedTurnServerResponse = object {
-
+        // Keep one minute safe to avoid considering the data is valid and then actually it is not when effectively using it.
         private val MIN_TTL = 60
 
-        private val now = { System.currentTimeMillis() / 1000 }
+        private val now = { SystemClock.elapsedRealtime() / 1000 }
 
         private var expiresAt: Long = 0
 
