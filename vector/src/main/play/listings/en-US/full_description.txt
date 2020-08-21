@@ -27,4 +27,4 @@ Element puts you in control by letting you choose who hosts your conversations. 
 
 <b>COMPLETE COMMUNICATION</b>: Messaging, voice and video calls, file sharing, screen sharing and a whole bunch of integrations, bots and widgets. Build rooms, communities, stay in touch and get things done.
 
-<b>EVERYWHERE YOU ARE</b>: Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://element.io/app.
+<b>EVERYWHERE YOU ARE</b>: Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io.

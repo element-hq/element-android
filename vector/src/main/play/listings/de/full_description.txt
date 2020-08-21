@@ -27,4 +27,4 @@ Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine
 
 <b>VOLLSTÄNDIGE KOMMUNIKATION</b>: Nachrichten, Telefonate und Videoanrufe, Teilen von Dateien oder dem eigenen Bildschirm und viele andere Integrationen, Bots und Widgets. Erstelle Räume, Communities, bleib in Kontakt und sei produktiv.
 
-<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Web auf https://element.io/app.
+<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Web auf https://app.element.io.

@@ -27,4 +27,4 @@ Element sätter dig i kontroll genom att låta dig välja att vara värd för di
 
 <b>Komplett kommunikation</b>: Meddelanden, röst- och videosamtal, fildelning, skärmdelning och massa integrationer, bottar och widgets. Skapa rum och gemenskaper, håll kontakten och få saker gjorda.
 
-<b>ÖVERALLT DÄR DU ÄR</b>: Håll kontakten vart du än befinner dig med fullständigt synkroniserad meddelandehistorik på alla dina enheter och på webben på https://element.io/app.
+<b>ÖVERALLT DÄR DU ÄR</b>: Håll kontakten vart du än befinner dig med fullständigt synkroniserad meddelandehistorik på alla dina enheter och på webben på https://app.element.io.

@@ -27,4 +27,4 @@ Az Element a te kezedbe adja az irányítást azáltal, hogy eldöntheted, ki t�
 
 <b>TELJES KOMMUNIKÁCIÓ</b>: Üzenetküldés, hang- és videóhívások, fájlmegosztás, képernyőmegosztás, és egy rakás integráció, bot, és widget. Hozz létre szobákat, közösségeket, maradj elérhető, és végezzétek el a feladatokat.
 
-<b>AKÁRHOL, AHOL CSAK SZÜKSÉG VAN RÁ</b>: Akárhol is vagy, maradj elérhető, a teljes mértékben szinkronizált beszélgetésekkel az összes eszközödön, és a weben a https://element.io/app oldalon.
+<b>AKÁRHOL, AHOL CSAK SZÜKSÉG VAN RÁ</b>: Akárhol is vagy, maradj elérhető, a teljes mértékben szinkronizált beszélgetésekkel az összes eszközödön, és a weben a https://app.element.io oldalon.
