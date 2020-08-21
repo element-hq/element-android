@@ -58,7 +58,7 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private val activeCalls = mutableListOf<MxCall>()
 
-    private var cachedTurnServerResponse = object {
+    private val cachedTurnServerResponse = object {
 
         private val MIN_TTL = 60
 
