@@ -2533,6 +2533,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_security_pin_code_title">启用 PIN</string>
     <string name="settings_security_pin_code_summary">如果您想要重置您的 PIN，点按忘记 PIN 登出并重置。</string>
     <string name="auth_pin_confirm_to_disable_title">确认 PIN 并禁用 PIN</string>
-<string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
+    <string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
     <string name="settings_call_show_confirmation_dialog_summary">发起通话之前要求确认</string>
-    </resources>
+</resources>

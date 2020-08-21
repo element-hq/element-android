@@ -110,9 +110,9 @@
     <string name="no_room_placeholder">Oda yok</string>
     <string name="no_public_room_placeholder">Hiç girilebilir oda yok</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 kullanıcı</item>
-	<item quantity="other">%d kullanıcı</item>
-</plurals>
+        <item quantity="one">1 kullanıcı</item>
+        <item quantity="other">%d kullanıcı</item>
+    </plurals>
 
     <string name="groups_invite_header">Davet</string>
     <string name="groups_header">Topluluk</string>
@@ -1522,7 +1522,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_background_sync_update_error">Ayarlar güncellenemedi.</string>
 
 
-<string name="play_video">Oynat</string>
+    <string name="play_video">Oynat</string>
     <string name="pause_video">Durdur</string>
     <string name="dismiss">Kapat</string>
 
@@ -1590,9 +1590,9 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="disabled_integration_dialog_content">Bunun için ayarlardan \'Entegrasyonlara İzin Ver\'i açın.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">1 yasaklanmış kullanıcı</item>
-	<item quantity="other">%d yasaklanmış kullanıcı</item>
-</plurals>
+        <item quantity="one">1 yasaklanmış kullanıcı</item>
+        <item quantity="other">%d yasaklanmış kullanıcı</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Anahtarlar başarıyla dışarı aktarıldı</string>
 
@@ -1606,4 +1606,4 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="recovery_key_export_saved">Kurtarma anahtarın kaydedildi.</string>
 
     <string name="secure_backup_banner_setup_line1">Güvenli Yedekleme</string>
-    </resources>
+</resources>

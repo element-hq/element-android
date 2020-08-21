@@ -2625,7 +2625,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
     <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
-<string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
+    <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
-    </resources>
+</resources>

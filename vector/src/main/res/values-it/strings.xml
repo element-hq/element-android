@@ -2622,6 +2622,6 @@
     <string name="settings_security_pin_code_title">Attiva PIN</string>
     <string name="settings_security_pin_code_summary">Se vuoi reimpostare il PIN, tocca \"PIN dimenticato\" per disconnetterti e reimpostarlo.</string>
     <string name="auth_pin_confirm_to_disable_title">Conferma il PIN per disattivarlo</string>
-<string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
+    <string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
     <string name="settings_call_show_confirmation_dialog_summary">Chiedi conferma prima di iniziare una chiamata</string>
-    </resources>
+</resources>

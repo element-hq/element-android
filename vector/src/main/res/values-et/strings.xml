@@ -918,7 +918,7 @@
     <string name="soft_logout_clear_data_dialog_title">Eemalda andmed</string>
     <string name="soft_logout_clear_data_dialog_content">Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?
 \nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.</string>
-<string name="login_error_ssl_peer_unverified">SSL\'i viga: teise osapoole identiteeti ei õnnestu kontrollida.</string>
+    <string name="login_error_ssl_peer_unverified">SSL\'i viga: teise osapoole identiteeti ei õnnestu kontrollida.</string>
     <string name="settings_call_show_confirmation_dialog_title">Väldi juhuslikke kõnesid</string>
     <string name="settings_call_show_confirmation_dialog_summary">Enne kõne algatamist küsi kinnitust</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kasuta %s kõnehõlbustusserverina siis, kui sinu koduserveris ei ole see funktsionaalsus seadistatud (kõne ajal jagatakse temaga nii sinu avalikku, kui privaatvõrgu IP-aadressi)</string>
@@ -929,31 +929,31 @@
     <string name="room_creation_title">Uus vestlus</string>
     <string name="room_creation_add_member">Lisa osaleja</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktiivne osaleja</item>
-	<item quantity="other">%d aktiivset osalejat</item>
-</plurals>
+        <item quantity="one">1 aktiivne osaleja</item>
+        <item quantity="other">%d aktiivset osalejat</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 osaleja</item>
-	<item quantity="other">%d osalejat</item>
-</plurals>
+        <item quantity="one">1 osaleja</item>
+        <item quantity="other">%d osalejat</item>
+    </plurals>
     <string name="room_title_one_member">1 osaleja</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1 sekund</item>
-	<item quantity="other">%d sekundit</item>
-</plurals>
+        <item quantity="one">1 sekund</item>
+        <item quantity="other">%d sekundit</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 minut</item>
-	<item quantity="other">%d minutit</item>
-</plurals>
+        <item quantity="one">1 minut</item>
+        <item quantity="other">%d minutit</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 tund</item>
-	<item quantity="other">%d tundi</item>
-</plurals>
+        <item quantity="one">1 tund</item>
+        <item quantity="other">%d tundi</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 päev</item>
-	<item quantity="other">%d päeva</item>
-</plurals>
+        <item quantity="one">1 päev</item>
+        <item quantity="other">%d päeva</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Lahku jututoast</string>
     <string name="room_participants_leave_prompt_msg">Kas oled kindel, et soovid lahkuda jututoast\?</string>
@@ -1023,9 +1023,9 @@
     <string name="settings_active_sessions_unverified_device_desc">Verifitseeri see sessioon selleks, et teda võiks lugeda usaldusväärseks ja saaks ligipääsu krüptitud sõnumitele. Kui sina pole sellesse sessiooni sisse loginud, siis sinu kasutajakonto võib olla sattunud võõraste kontrolli alla:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d aktiivne sessioon</item>
-	<item quantity="other">%d aktiivset sessiooni</item>
-</plurals>
+        <item quantity="one">%d aktiivne sessioon</item>
+        <item quantity="other">%d aktiivset sessiooni</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Verifitseeri see sisselogimissessioon</string>
     <string name="crosssigning_other_user_not_trust">Teised kasutajad ei pruugi seda usaldada</string>
@@ -1110,9 +1110,9 @@
     <string name="room_message_file_not_found">Faili ei leidunud</string>
     <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 uus sõnum</item>
-	<item quantity="other">%d uut sõnumit</item>
-</plurals>
+        <item quantity="one">1 uus sõnum</item>
+        <item quantity="other">%d uut sõnumit</item>
+    </plurals>
 
     <string name="ssl_trust">Usalda</string>
     <string name="ssl_do_not_trust">Ära usalda</string>
@@ -1180,18 +1180,18 @@
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrolli taustapiiranguid</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 jututuba</item>
-	<item quantity="other">%d jututuba</item>
-</plurals>
+        <item quantity="one">1 jututuba</item>
+        <item quantity="other">%d jututuba</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 sõnum</item>
-	<item quantity="other">%1$s: %2$d sõnumit</item>
-</plurals>
+        <item quantity="one">%1$s: 1 sõnum</item>
+        <item quantity="other">%1$s: %2$d sõnumit</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d teavitus</item>
-	<item quantity="other">%d teavitust</item>
-</plurals>
+        <item quantity="one">%d teavitus</item>
+        <item quantity="other">%d teavitust</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
     <string name="notification_unknown_new_event">Uus sündmus</string>
@@ -1484,13 +1484,13 @@
     <string name="lock_screen_hint">Kirjuta siia…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 lugemata teavitatud sõnum</item>
-	<item quantity="other">%d lugemata teavitatud sõnumit</item>
-</plurals>
+        <item quantity="one">1 lugemata teavitatud sõnum</item>
+        <item quantity="other">%d lugemata teavitatud sõnumit</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 lugemata teavitatud sõnum</item>
-	<item quantity="other">%s lugemata teavitatud sõnumit</item>
-</plurals>
+        <item quantity="one">1 lugemata teavitatud sõnum</item>
+        <item quantity="other">%s lugemata teavitatud sõnumit</item>
+    </plurals>
     <string name="settings_labs_enable_send_voice_summary">Selle valiku kasutamine eeldab kolmanda osapoole rakendust sõnumite salvestamiseks.</string>
     <string name="widget_integration_review_terms">Jätkamaks pead nõustuma kasutustingimustega.</string>
 
@@ -1559,14 +1559,14 @@
     <string name="filter_group_rooms">Filtreeri kogukonna jututubasid</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 liige</item>
-	<item quantity="other">%d liiget</item>
-</plurals>
+        <item quantity="one">1 liige</item>
+        <item quantity="other">%d liiget</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 jututuba</item>
-	<item quantity="other">%d jututuba</item>
-</plurals>
+        <item quantity="one">1 jututuba</item>
+        <item quantity="other">%d jututuba</item>
+    </plurals>
     <string name="group_no_long_description">Kogukonna haldur ei ole kogukonna pikka kirjeldust koostanud.</string>
 
     <string name="has_been_kicked">%2$s müksas sind välja %1$s jututoast</string>
@@ -1677,13 +1677,13 @@
     <string name="keys_backup_restore_success_title">Varukoopiast taastatud %s!</string>
     <string name="keys_backup_restore_success_description">Taastasin %1$d sessioonivõtit ning lisasin %2$d uut võtit, mis ei olnud sellele sessioonile teada</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Taastasin varukoopiast ühe võtmega.</item>
-	<item quantity="other">Taastasin varukoopiast %d võtmega.</item>
-</plurals>
+        <item quantity="one">Taastasin varukoopiast ühe võtmega.</item>
+        <item quantity="other">Taastasin varukoopiast %d võtmega.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Üks uus võti on lisatud siia sessiooni.</item>
-	<item quantity="other">%d uut võtit on lisatud siia sessiooni.</item>
-</plurals>
+        <item quantity="one">Üks uus võti on lisatud siia sessiooni.</item>
+        <item quantity="other">%d uut võtit on lisatud siia sessiooni.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Ei õnnestunud laadida taastevõtmete versiooni (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Sessioonis pole krüptograafia kasutusel</string>
@@ -1737,9 +1737,9 @@
 
     <string name="keys_backup_info_keys_all_backup_up">Kõik krüptovõtmed on varundatud</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Varundan üht krüptovõtit…</item>
-	<item quantity="other">Varundan %d krüptovõtit…</item>
-</plurals>
+        <item quantity="one">Varundan üht krüptovõtit…</item>
+        <item quantity="other">Varundan %d krüptovõtit…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versioon</string>
     <string name="keys_backup_info_title_algorithm">Algoritm</string>
@@ -1940,9 +1940,9 @@
     <string name="login_error_outdated_homeserver_content">Selle koduserveri versioon on ühenduse loomiseks liiga vana. Palu oma koduserveri haldajal seda uuendada.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Liiga palju samaaegseid päringuid. Proovi uuesti ühe sekundi pärast…</item>
-	<item quantity="other">Liiga palju samaaegseid päringuid. Proovi uuesti %1$d sekundi pärast…</item>
-</plurals>
+        <item quantity="one">Liiga palju samaaegseid päringuid. Proovi uuesti ühe sekundi pärast…</item>
+        <item quantity="other">Liiga palju samaaegseid päringuid. Proovi uuesti %1$d sekundi pärast…</item>
+    </plurals>
 
     <string name="login_signin_matrix_id_error_invalid_matrix_id">See ei ole õige kasutajatunnus. Õige vorming on: \'@torekasutaja:koduserver.ee\'</string>
     <string name="autodiscover_well_known_error">Ei leia toimivat koduserverit. Palun vaata, et kasutajatunnus oleks õige</string>
@@ -2050,9 +2050,9 @@
     <string name="invitation_sent_to_one_user">Kutse saadetud kasutajale %1$s</string>
     <string name="invitations_sent_to_two_users">Kutsed saadetud kasutajatele %1$s ja %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Kutsed saadetud kasutajatele %1$s ja veel ühele teisele kasutajale</item>
-	<item quantity="other">Kutsed saadetud kasutajatele %1$s ja veel %2$d\'le kasutajale</item>
-</plurals>
+        <item quantity="one">Kutsed saadetud kasutajatele %1$s ja veel ühele teisele kasutajale</item>
+        <item quantity="other">Kutsed saadetud kasutajatele %1$s ja veel %2$d\'le kasutajale</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Meil ei õnnestunud neile kasutajatele kutset saata. Palun kontrolli, keda soovid kutsuda ning proovi uuesti.</string>
 
     <string name="choose_locale_current_locale_title">Hetkel kasutatav keel</string>
@@ -2203,4 +2203,4 @@
 
     <string name="command_description_plain">Saadab sõnumi vormindamata tekstina ega tõlgenda seda markdown-vormindusena</string>
 
-    </resources>
+</resources>

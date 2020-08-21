@@ -2381,7 +2381,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_set_default_submit">%1$s használata</string>
     <string name="identity_server_set_alternative_notice">Vagy beírhatsz más azonosítási szerver URL-t</string>
     <string name="identity_server_set_alternative_notice_no_default">Add meg az azonosítási szerver URL-jét</string>
-<string name="pause_video">Szünet</string>
+    <string name="pause_video">Szünet</string>
     <string name="action_copy">Másol</string>
     <string name="dialog_title_success">Siker</string>
 
@@ -2418,4 +2418,4 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="reset_secure_backup_warning">A jelenlegi Kulcsod vagy Jelmondatod ki lesz cserélve erre.</string>
 
     <string name="disabled_integration_dialog_title">Az integrációk ki vannak kapcsolva</string>
-    </resources>
+</resources>

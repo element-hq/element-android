@@ -71,7 +71,7 @@
         <item quantity="one">%1$s a 1 ďalší</item>
         <item quantity="few">%1$s a %2$d ďalší</item>
         <item quantity="many">%1$s a %2$d ďalších</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
 
@@ -188,10 +188,10 @@
     </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
-	<item quantity="few">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
-	<item quantity="other">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
-</plurals>
+        <item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s pridal/a adresy %2$s a odstránil/a adresy %3$s pre túto miestnosť.</string>
 
@@ -199,7 +199,7 @@
     <string name="notice_room_canonical_alias_unset">%1$s odstránil/a hlavnú adresu tejto miestnosti.</string>
 
     <string name="notice_room_guest_access_can_join">%1$s povolil/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
-<string name="summary_you_sent_image">Poslali ste obrázok.</string>
+    <string name="summary_you_sent_image">Poslali ste obrázok.</string>
     <string name="summary_you_sent_sticker">Poslali ste nálepku.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Pozvanie od vás</string>
@@ -272,16 +272,16 @@
     <string name="notice_room_withdraw_with_reason_by_you">Vzali ste späť pozvanie %1$s. Dôvod: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Pridali ste adresu %1$s pre túto miestnosť.</item>
-	<item quantity="few">Pridali ste adresy %1$s pre túto miestnosť.</item>
-	<item quantity="other">Pridali ste adresy %1$s pre túto miestnosť.</item>
-</plurals>
+        <item quantity="one">Pridali ste adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Pridali ste adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Pridali ste adresy %1$s pre túto miestnosť.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Odstránili ste adresu %1$s pre túto miestnosť.</item>
-	<item quantity="few">Odstránili ste adresy %2$s pre túto miestnosť.</item>
-	<item quantity="other">Odstránili ste adresy %2$s pre túto miestnosť.</item>
-</plurals>
+        <item quantity="one">Odstránili ste adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Odstránili ste adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">Odstránili ste adresy %2$s pre túto miestnosť.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">Pridali ste %1$s a odstránili adresy %2$s pre túto miestnosť.</string>
 
