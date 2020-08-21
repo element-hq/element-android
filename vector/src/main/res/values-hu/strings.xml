@@ -1032,8 +1032,6 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
 
     <string name="auth_accept_policies">Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d kulcs sikeresen betöltve.</string>
-
     <string name="settings_notification_troubleshoot">Értesítéshibák felderítése</string>
     <string name="settings_troubleshoot_diagnostic">Hibakereső diagnosztika</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tesztek futtatása</string>

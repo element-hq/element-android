@@ -1447,7 +1447,6 @@
     <string name="encryption_import_import">Impordi</string>
     <string name="encryption_never_send_to_unverified_devices_title">Kasuta krüptimist vaid verifitseeritud sessioonides</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d võtme importimine õnnestus.</string>
 
     <string name="encryption_information_not_verified">Ei ole verifitseeritud</string>
     <string name="encryption_information_verified">Verifitseeritud</string>

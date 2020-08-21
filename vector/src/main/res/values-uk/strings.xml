@@ -1112,7 +1112,5 @@
 
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(і/ів) успішно імпортовано.</string>
-
     <string name="action_mark_room_read">Позначити як прочитане</string>
 </resources>

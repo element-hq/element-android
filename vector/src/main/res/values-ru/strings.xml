@@ -1194,7 +1194,6 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
     <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(и) успешно импортированы.</string>
 
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
     <string name="settings_info_area_show">Показать информацию</string>

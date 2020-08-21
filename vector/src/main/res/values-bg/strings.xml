@@ -1016,7 +1016,6 @@
     <string name="settings_show_avatar_display_name_changes_messages">Показване на събития за потребителски профили</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включва промени в снимки и имена.</string>
     <string name="settings_password">Парола</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(а) бяха успешно импортирани.</string>
 
     <string name="settings_labs_native_camera_summary">Използване на системната камера вместо собствената интеграция на приложението.</string>
     <string name="settings_labs_enable_send_voice_summary">Тази опция изисква отделно приложение за записване на съобщенията.</string>

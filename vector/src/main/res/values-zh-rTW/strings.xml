@@ -992,8 +992,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="auth_accept_policies">請審閱並接受此家伺服器的政策：</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 個金鑰匯入成功。</string>
-
     <string name="settings_notification_troubleshoot">疑難排解通知</string>
     <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">執行測試</string>

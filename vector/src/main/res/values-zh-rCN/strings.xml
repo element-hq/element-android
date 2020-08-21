@@ -962,7 +962,6 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
-    <string name="encryption_import_room_keys_success">导入了 %2$d 个密钥，其中 %1$d 个导入成功。</string>
 
     <string name="status_theme">Status.im 主题</string>
 

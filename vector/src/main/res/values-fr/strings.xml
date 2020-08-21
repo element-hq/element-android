@@ -1035,8 +1035,6 @@ Voulez-vous en ajouter ?</string>
 
     <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d’accueil :</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
-
     <string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lancer les tests</string>

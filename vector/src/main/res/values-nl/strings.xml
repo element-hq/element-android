@@ -1219,8 +1219,6 @@
     <string name="encryption_message_recovery">Herstel van versleutelde berichten</string>
     <string name="encryption_settings_manage_message_recovery_summary">Sleutelback-up beheren</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d sleutel(s) geïmporteerd.</string>
-
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 bericht</item>
         <item quantity="other">%1$s: %2$d berichten</item>

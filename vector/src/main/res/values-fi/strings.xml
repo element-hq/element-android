@@ -1115,8 +1115,6 @@ Haluatko lisätä paketteja?</string>
     <string name="encryption_message_recovery">Salattujen viestien palautus</string>
     <string name="encryption_settings_manage_message_recovery_summary">Hallitse avainten varmuuskopiointia</string>
 
-    <string name="encryption_import_room_keys_success">%1$d / %2$d avainta tuotu onnistuneesti.</string>
-
     <string name="lock_screen_hint">Kirjoita tähän…</string>
 
     <plurals name="notification_unread_notified_messages">

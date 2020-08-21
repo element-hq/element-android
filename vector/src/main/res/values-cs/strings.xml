@@ -1004,7 +1004,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_import_import">Import</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
-    <string name="encryption_import_room_keys_success">Klíče %1$d/%2$d importovány úspěšně.</string>
 
     <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>

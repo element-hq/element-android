@@ -949,7 +949,6 @@
     <string name="encryption_import_import">ইম্পোর্ট</string>
     <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই সেশানে এনক্রিপ্ট করুন</string>
     <string name="encryption_never_send_to_unverified_devices_summary">এই সেশান থেকে যাচাই করা সেশানগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d কুঞ্জি(গুলি) সাফল্য সাথে ইম্পোর্ট করা হয়েছে।</string>
 
     <string name="encryption_information_not_verified">যাচাই করা হয়নি</string>
     <string name="encryption_information_verified">প্রতিপাদিত</string>

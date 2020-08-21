@@ -1085,7 +1085,10 @@
     <string name="encryption_import_import">Import</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d key imported with success.</item>
+        <item quantity="other">%1$d/%2$d keys imported with success.</item>
+    </plurals>
 
     <string name="encryption_information_not_verified">Not Verified</string>
     <string name="encryption_information_verified">Verified</string>

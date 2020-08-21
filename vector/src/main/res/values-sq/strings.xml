@@ -995,8 +995,6 @@
 
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
-
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostikime</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Xhironi Teste</string>

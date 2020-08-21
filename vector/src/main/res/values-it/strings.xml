@@ -1087,8 +1087,6 @@
 
     <string name="auth_accept_policies">Per favore, leggi e accetta i termini di servizio di questo Home Server:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chiav(i) importate con successo.</string>
-
     <string name="settings_notification_troubleshoot">Diagnostica delle notifiche</string>
     <string name="settings_troubleshoot_diagnostic">Diagnosi</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Esegui i test</string>

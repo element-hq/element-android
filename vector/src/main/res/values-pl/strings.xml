@@ -1043,8 +1043,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
 
     <string name="auth_accept_policies">Przeczytaj i zaakceptuj zasady tego serwera domowego:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d klucz(y) zaimportowano z sukcesem.</string>
-
     <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
 
     <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>

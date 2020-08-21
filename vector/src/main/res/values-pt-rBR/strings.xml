@@ -1142,8 +1142,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="account_phone_number_error">Ocorreu um erro ao confirmar seu número de telefone.</string>
     <string name="account_additional_info">Informação adicional: %s</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chave(es) importada(as) com sucesso.</string>
-
     <string name="settings_labs_native_camera_summary">Inicie a câmera do sistema em vez da câmera personalizada.</string>
     <string name="settings_labs_enable_send_voice_summary">Esta opção requer um aplicativo de terceiros para gravar as mensagens.</string>
 

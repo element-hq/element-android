@@ -920,7 +920,6 @@
     <string name="encryption_import_import">가져오기</string>
     <string name="encryption_never_send_to_unverified_devices_title">확인된 기기로만 암호화</string>
     <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않습니다.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 키를 성공적으로 가져왔습니다.</string>
 
     <string name="encryption_information_not_verified">확인되지 않음</string>
     <string name="encryption_information_verified">확인됨</string>

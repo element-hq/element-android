@@ -1089,8 +1089,6 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="settings_password">Contrasenya</string>
     <string name="account_additional_info">Informació addicional: %s</string>
 
-    <string name="encryption_import_room_keys_success">S\'ha importat %1$d/%2$d claus amb èxit.</string>
-
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
 
