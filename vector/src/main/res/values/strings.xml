@@ -1782,7 +1782,10 @@
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
 
     <!-- Read receipts list a11y -->
-    <string name="two_and_some_others_read">%1$s, %2$s and %3$d others read</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s and %3$d other read</item>
+        <item quantity="other">%1$s, %2$s and %3$d others read</item>
+    </plurals>
     <string name="three_users_read">%1$s, %2$s and %3$s read</string>
     <string name="two_users_read">%1$s and %2$s read</string>
     <string name="one_user_read">%s read</string>

@@ -1667,7 +1667,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="a11y_hide_password">Skrýt heslo</string>
     <string name="a11y_jump_to_bottom">Přeskočit až dolů</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s a %3$d dalších přečetli</string>
     <string name="three_users_read">%1$s, %2$s a %3$s přečetli</string>
     <string name="two_users_read">%1$s a %2$s přečetli</string>
     <string name="one_user_read">%s přečetl(a)</string>

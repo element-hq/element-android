@@ -2047,7 +2047,6 @@
 
     <string name="command_description_discard_session_not_handled">Поддерживается только в зашифрованных комнатах</string>
     <string name="a11y_create_direct_message">Создать новый диалог</string>
-    <string name="two_and_some_others_read">%1$s, %2$s и %3$d других прочли</string>
     <string name="three_users_read">%1$s, %2$s и %3$s прочли</string>
     <string name="two_users_read">%1$s и %2$s прочли</string>
     <string name="error_file_too_big">Файл \'%1$s\' (%2$s) слишком большой. Максимальный размер для загрузки %3$s.</string>

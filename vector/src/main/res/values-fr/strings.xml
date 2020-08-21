@@ -1655,7 +1655,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="a11y_hide_password">Masquer le mot de passe</string>
     <string name="a11y_jump_to_bottom">Sauter en bas de page</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s et %3$d autres ont lu</string>
     <string name="three_users_read">%1$s, %2$s et %3$s ont lu</string>
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="one_user_read">%s a lu</string>

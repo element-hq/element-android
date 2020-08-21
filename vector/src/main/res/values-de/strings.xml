@@ -1819,7 +1819,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine Email Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
 
-    <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
 
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>

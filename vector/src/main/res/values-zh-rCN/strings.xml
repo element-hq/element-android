@@ -1764,7 +1764,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="a11y_hide_password">隐藏密码</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
 
-    <string name="two_and_some_others_read">%1$s，%2$s 和 %3$d 其他人已读</string>
     <string name="three_users_read">%1$s，%2$s 和 %3$s 已读</string>
     <string name="two_users_read">%1$s 和 %2$s 已读</string>
     <string name="one_user_read">%s 已读</string>

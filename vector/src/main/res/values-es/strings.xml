@@ -1739,7 +1739,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="a11y_hide_password">Esconder contraseña</string>
     <string name="a11y_jump_to_bottom">Saltar al final</string>
 
-    <string name="two_and_some_others_read">Leído por %1$s, %2$s, %3$d y otros</string>
     <string name="three_users_read">Leído por %1$s, %2$s y %3$s</string>
     <string name="two_users_read">Leído por %1$s y %2$s</string>
     <string name="one_user_read">Leído por %s</string>

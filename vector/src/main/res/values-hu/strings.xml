@@ -1651,7 +1651,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="a11y_hide_password">Jelszó elrejtése</string>
     <string name="a11y_jump_to_bottom">Végére ugrás</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s és %3$d olvasták</string>
     <string name="three_users_read">%1$s, %2$s és %3$s olvasták</string>
     <string name="two_users_read">%1$s és %2$s olvasták</string>
     <string name="one_user_read">%s olvasta</string>

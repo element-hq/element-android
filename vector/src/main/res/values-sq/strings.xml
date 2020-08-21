@@ -1609,7 +1609,6 @@
     <string name="a11y_hide_password">Fshihe fjalëkalimin</string>
     <string name="a11y_jump_to_bottom">Hidhu në fund</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s dhe %3$d të tjerë të lexuar</string>
     <string name="three_users_read">%1$s, %2$s dhe %3$s të lexuar</string>
     <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
     <string name="one_user_read">%s i lexuar</string>

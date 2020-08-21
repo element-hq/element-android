@@ -1837,7 +1837,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="a11y_hide_password">Esconder senha</string>
     <string name="a11y_jump_to_bottom">Saltar para parte inferior</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s e %3$d outros leram</string>
     <string name="three_users_read">%1$s, %2$s e %3$s leu</string>
     <string name="two_users_read">%1$s e %2$s lê</string>
     <string name="one_user_read">%s lê</string>
