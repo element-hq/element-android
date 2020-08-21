@@ -1461,7 +1461,6 @@
 
     <!-- %s will be replaced by an emoji -->
     <string name="keys_backup_restore_success_title">Backup Restored %s !</string>
-    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this session</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Restored a backup with %d key.</item>
         <item quantity="other">Restored a backup with %d keys.</item>

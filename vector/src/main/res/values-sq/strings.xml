@@ -1164,7 +1164,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rimarrjeve.</string>
 
     <string name="keys_backup_restore_success_title">Kopjeruajtja u Rikthye %s !</string>
-    <string name="keys_backup_restore_success_description">U rikthyen %1$d kyçe sesioni, dhe u shtuan %2$d kyç(e) të rinj që nuk njiheshin nga ky sesion</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">U rikthye një kopjeruajtje me %d kyç.</item>
         <item quantity="other">U rikthye një kopjeruajtje me %d kyçe.</item>

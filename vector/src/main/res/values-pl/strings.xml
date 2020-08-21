@@ -1548,7 +1548,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_restoring_waiting_message">Przywracanie kopii zapasowej:</string>
     <string name="keys_backup_recovery_code_error_decrypt">Kopia zapasowa nie może zostać zdeszyfrowana za pomocą tego klucza odzyskiwania: proszę upewnij się, czy wprowadzony klucz odzyskiwania jest poprawny.</string>
 
-    <string name="keys_backup_restore_success_description">Przywrócono %1$d kluczy sesji, i dodano %2$d nowych kluczy które nie były znane tej sesji</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Szyfrowanie sesji nie jest aktywowane</string>
 
 

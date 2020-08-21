@@ -1305,7 +1305,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questo codice di recupero: verifica di avere inserito il codice di recupero corretto.</string>
 
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
-    <string name="keys_backup_restore_success_description">Ripristinate %1$d chiavi di sessione e aggiunte %2$d nuove chiavi finora sconosciute a questa sessione</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Ripristinato un Backup con %d chiave.</item>
         <item quantity="other">Ripristinato un Backup con %d chiavi.</item>

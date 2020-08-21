@@ -1291,7 +1291,6 @@ Haluatko lisätä paketteja?</string>
     <string name="keys_backup_recovery_code_error_decrypt">Varmuuskopiota ei pystytty purkamaan tällä palautusavaimella. Tarkista, että olet syöttänyt oikean palautusavaimen.</string>
 
     <string name="keys_backup_restore_success_title">Varmuuskopio palautettu %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d istuntoavainta palautettu, ja lisättiin %2$d uutta avainta, joita tämä laite ei tuntenut</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Varmuuskopio palautettiin yhdellä avaimella.</item>
         <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>

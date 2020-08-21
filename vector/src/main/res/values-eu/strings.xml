@@ -1205,7 +1205,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_passphrase_error_decrypt">Ezin izan da babes-kopia deszifratu pasaesaldi honekin: egiaztatu pasaesaldi zuzena idatzi duzula.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Ezin izan da babes-kopia deszifratu berreskuratze gako honekin: egiaztatu berreskuratze gako egokia sartu duzula.</string>
 
-    <string name="keys_backup_restore_success_description">"%1$d  saio gako berrezarri dira, eta saio honek ezagutzen ez zituen %2$d gako berri gehitu dira"</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Berrezarri gako %d duen babes-kopia.</item>
         <item quantity="other">Berrezarri %d gako dituen babes-kopia.</item>

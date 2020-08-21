@@ -1226,7 +1226,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="keys_backup_recovery_code_error_decrypt">Yedekleme bu kurtarma anahtarı ile çözülemez: lütfen doğru kurtarma anahtarını girdiğinizi doğrulayın.</string>
 
     <string name="keys_backup_restore_success_title">Yedekleme İşlendi %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d oturum anahtarı onarıldı ve bu oturum tarafından bilinmeyen %2$d yeni anahtar eklendi</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Yedekleme %d anahtarı ile işlendi.</item>
         <item quantity="other">Yedekleme %d anahtarları ile işlendi.</item>

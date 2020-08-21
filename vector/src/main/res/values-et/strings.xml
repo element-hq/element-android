@@ -1674,7 +1674,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Selle taastevõtmega ei õnnestunud varundust dekrüptida: palun kontrolli, kas sa kasutad õiget taastevõtit.</string>
 
     <string name="keys_backup_restore_success_title">Varukoopiast taastatud %s!</string>
-    <string name="keys_backup_restore_success_description">Taastasin %1$d sessioonivõtit ning lisasin %2$d uut võtit, mis ei olnud sellele sessioonile teada</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Taastasin varukoopiast ühe võtmega.</item>
         <item quantity="other">Taastasin varukoopiast %d võtmega.</item>

@@ -668,7 +668,6 @@
     <string name="merged_events_collapse">বন্ধ</string>
 
     <string name="keys_backup_restore_with_key_helper">আপনার পুনরুদ্ধারের কুঞ্জি হারিয়ে গেছে\? আপনি সেটিংস একটি নতুন সেট আপ করতে পারেন।</string>
-    <string name="keys_backup_restore_success_description">"%1$d  সেশন কী পুনরুদ্ধার করা হয়েছে, এবং %2$d নতুন কী (গুলি) জোড়া হয়েছে যা এই ডিভাইসটি জানত না"</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
         <item quantity="other">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>

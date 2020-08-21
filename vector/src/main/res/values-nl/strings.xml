@@ -1337,7 +1337,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">De back-up kan met deze herstelsleutel niet ontsleuteld worden: controleer of u de juiste herstelsleutel heeft ingevoerd.</string>
 
     <string name="keys_backup_restore_success_title">Back-up hersteld %s!</string>
-    <string name="keys_backup_restore_success_description">%1$d sessiesleutels hersteld, en %2$d nieuwe sleutel(s) die deze sessie nog niet kende toegevoegd</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Back-up met %d sleutel hersteld.</item>
         <item quantity="other">Back-up met %d sleutels hersteld.</item>

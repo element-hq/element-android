@@ -1200,7 +1200,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
 
     <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
-    <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak a munkamenet számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Mentés visszaállítva %d kulccsal.</item>
         <item quantity="other">Mentés visszaállítva %d kulccsal.</item>

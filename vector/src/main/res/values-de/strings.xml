@@ -1261,7 +1261,6 @@ Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf
     <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
 
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurde(n) wiederhergestellt und %2$d vorher unbekannte(r) Schlüssel wurde(n) hinzugefügt</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
         <item quantity="other">Backup mit %d Schlüsseln wiederhergestellt.</item>

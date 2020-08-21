@@ -1343,7 +1343,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_recovery_code_error_decrypt">La copia de seguridad no se ha podido descifrar con esta contraseña: por favor verificar que has introducido la contraseña de recuperación correcta.</string>
 
     <string name="keys_backup_restore_success_title">Copia de seguridad restaurada %s !</string>
-    <string name="keys_backup_restore_success_description">Se han restaurado %1$d claves de sesión y se han añadido %2$d nuevas claves que esta sesión no conocía</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Copia de seguridad restaurada con la clave %d.</item>
         <item quantity="other">Copia de seguridad restaurada con las claves %d.</item>

@@ -1384,7 +1384,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřte, že jste zadali správný klíč obnovy.</string>
 
     <string name="keys_backup_restore_success_title">Záloha obnovena %s !</string>
-    <string name="keys_backup_restore_success_description">Obnoveno %1$d relačních klíčů a doplněno %2$d nových klíčů, které této relaci nebyly známy</string>
     <string name="keys_backup_get_version_error">Načtení poslední verze klíčů obnovy selhalo (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Krypto relace není zapnuto</string>
 

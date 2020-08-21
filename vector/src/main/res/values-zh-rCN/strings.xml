@@ -1228,7 +1228,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="keys_backup_recovery_code_error_decrypt">无法使用此恢复密钥解密备份：请检查您输入的恢复密钥是否正确。</string>
 
     <string name="keys_backup_restore_success_title">备份已恢复 %s ！</string>
-    <string name="keys_backup_restore_success_description">恢复了 %1$d 个会话密钥，并添加了 %2$d 个此设备未知的新密钥</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">恢复了一个包含 %d 个密钥的备份。</item>
     </plurals>

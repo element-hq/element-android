@@ -1193,7 +1193,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
 
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
-    <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Възстановено резервно копие с %d ключ.</item>
         <item quantity="other">Възстановено резервно копие с %d ключа.</item>

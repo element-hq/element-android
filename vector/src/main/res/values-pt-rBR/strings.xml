@@ -1524,7 +1524,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_recovery_code_error_decrypt">O backup não pôde ser descriptografado com essa chave de recuperação: verifique se você digitou a chave de recuperação correta.</string>
 
     <string name="keys_backup_restore_success_title">Backup restaurado %s !</string>
-    <string name="keys_backup_restore_success_description">Restauradas %1$d chaves de sessão, e adicionadas %2$d chave(s) nova(s) que não eram conhecidas nesta sessão</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Restaurou um backup com chave %d.</item>
         <item quantity="other">Restaurou um backup com chaves %d.</item>
