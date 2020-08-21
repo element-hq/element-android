@@ -1,4 +1,4 @@
-Changes in Element 1.0.5 (2020-XX-XX)
+Changes in Element 1.0.5 (2020-08-21)
 ===================================================
 
 Features ✨:
