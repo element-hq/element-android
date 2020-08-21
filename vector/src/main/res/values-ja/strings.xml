@@ -506,9 +506,9 @@
     <string name="permissions_rationale_msg_storage">Elementは添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
 
 あなたの携帯端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-通話をするには、次のポップアップでアクセスできるように設定してください。</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\n通話をするには、次のポップアップでアクセスできるように設定してください。"</string>
     <string name="permissions_rationale_msg_record_audio">Elementアプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
@@ -1183,4 +1183,50 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="encryption_enabled_tile_description">この部屋内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効化されていません</string>
     <string name="settings_notification_configuration">通知設定</string>
-</resources>
+<string name="disconnect">切断</string>
+    <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
+    <string name="action_mark_room_read">既読にする</string>
+    <string name="action_copy">コピー</string>
+    <string name="dialog_title_success">成功</string>
+
+    <string name="bottom_action_notification">通知</string>
+    <string name="call_failed_no_ice_title">サーバーの設定ミスにより通話に失敗しました</string>
+    <string name="revoke">破棄</string>
+    <string name="play_video">再生</string>
+    <string name="pause_video">一時停止</string>
+    <string name="dismiss">消去</string>
+
+
+    <string name="skip">スキップ</string>
+    <string name="done">完了</string>
+    <string name="ignore">無視</string>
+    <string name="review">レビュー</string>
+    <string name="send_file_step_idle">待機中…</string>
+    <string name="send_file_step_encrypting_thumbnail">サムネイル暗号化中…</string>
+    <string name="send_file_step_sending_thumbnail">サムネイル送信中 (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">ファイル暗号化中…</string>
+    <string name="send_file_step_sending_file">ファイル送信中 (%1$s / %2$s)</string>
+
+    <string name="downloading_file">ファイルをダウンロード中 %1$s…</string>
+    <string name="attachment_type_file">ファイル</string>
+    <string name="attachment_type_contact">連絡先</string>
+    <string name="attachment_type_camera">カメラ</string>
+    <string name="attachment_type_audio">音声</string>
+    <string name="attachment_type_gallery">ギャラリー</string>
+    <string name="attachment_type_sticker">ステッカー</string>
+    <string name="report_content_spam">スパムメッセージです</string>
+    <string name="report_content_inappropriate">不適切なメッセージです</string>
+    <string name="report_content_custom">その他の報告…</string>
+    <string name="report_content_custom_title">コンテンツの報告</string>
+    <string name="report_content_custom_hint">このコンテンツを報告する理由</string>
+    <string name="report_content_custom_submit">報告する</string>
+    <string name="block_user">ユーザーをブロック</string>
+
+    <string name="message_ignore_user">ユーザーをブロック</string>
+
+    <string name="enter_secret_storage_passphrase_warning">警告:</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="other">元の大きさのまま画像を送信する</item>
+</plurals>
+
+    </resources>
