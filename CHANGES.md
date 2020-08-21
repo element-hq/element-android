@@ -26,6 +26,7 @@ Bugfix 🐛:
  - Highlighted Event when opening a permalink from another room (#1033)
  - A Kick appears has "someone has made no change" (#1959)
  - Avoid NetworkOnMainThreadException when setting a user avatar
+ - Renew turnserver credentials when ttl runs out
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
