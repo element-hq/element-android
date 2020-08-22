@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <im.vector.riotx.core.ui.views.WrapWidthTextView
+        <im.vector.app.core.ui.views.WrapWidthTextView
             android:id="@+id/codeBlockTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
 
     </HorizontalScrollView>
 
-    <im.vector.riotx.core.ui.views.WrapWidthTextView
+    <im.vector.app.core.ui.views.WrapWidthTextView
         android:id="@+id/codeBlockEditedView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -130,7 +130,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <im.vector.riotx.core.platform.CheckableConstraintLayout
+            <im.vector.app.core.platform.CheckableConstraintLayout
                 android:id="@+id/loginServerChoiceMatrixOrg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrgIcon" />
 
-            </im.vector.riotx.core.platform.CheckableConstraintLayout>
+            </im.vector.app.core.platform.CheckableConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginServerChoiceEms"

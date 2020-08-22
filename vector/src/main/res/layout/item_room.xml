@@ -114,7 +114,7 @@
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
         tools:visibility="visible" />
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

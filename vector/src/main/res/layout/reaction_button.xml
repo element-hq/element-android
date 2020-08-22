@@ -16,7 +16,7 @@
         <!--android:layout_height="match_parent"-->
         <!--android:background="@drawable/rounded_rect_shape" />-->
 
-    <im.vector.riotx.features.reactions.widget.DotsView
+    <im.vector.app.features.reactions.widget.DotsView
         android:id="@+id/dots"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="@+id/reactionText"
         app:layout_constraintTop_toTopOf="@+id/reactionText" />
 
-    <im.vector.riotx.features.reactions.widget.CircleView
+    <im.vector.app.features.reactions.widget.CircleView
         android:id="@+id/circle"
         android:layout_width="14dp"
         android:layout_height="14dp"

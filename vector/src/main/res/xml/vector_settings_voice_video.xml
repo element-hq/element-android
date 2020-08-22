@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
 
-        <im.vector.riotx.core.preference.VectorSwitchPreference
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
             android:title="@string/settings_call_ringtone_use_riot_ringtone" />
 
-        <im.vector.riotx.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
             android:key="SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
             android:title="@string/settings_call_ringtone_title" />
 
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

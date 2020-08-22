@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/actionUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

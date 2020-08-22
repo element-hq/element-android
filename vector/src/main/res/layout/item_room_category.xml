@@ -32,7 +32,7 @@
         android:textStyle="bold"
         tools:text="@string/room_participants_header_direct_chats" />
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
