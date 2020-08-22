@@ -23,9 +23,9 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.rx.rx
-import im.vector.matrix.rx.unwrap
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 
 class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
                                                                 private val session: Session

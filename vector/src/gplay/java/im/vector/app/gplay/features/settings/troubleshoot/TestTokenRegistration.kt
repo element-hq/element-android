@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import im.vector.matrix.android.api.session.pushers.PusherState
+import org.matrix.android.sdk.api.session.pushers.PusherState
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager

@@ -27,10 +27,10 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.Membership
 import io.reactivex.schedulers.Schedulers
+import org.matrix.android.sdk.rx.rx
 
 /**
  * View model used to update the home bottom bar notification counts, observe the sync state and

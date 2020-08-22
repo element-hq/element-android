@@ -23,8 +23,8 @@ import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.appendParamToUrl
-import im.vector.matrix.android.api.auth.SSO_REDIRECT_PATH
-import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
+import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
+import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,

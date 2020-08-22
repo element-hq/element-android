@@ -17,8 +17,8 @@
 package im.vector.app.features.home.room.list
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 sealed class RoomListAction : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListAction()

@@ -20,8 +20,8 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import im.vector.matrix.android.api.failure.GlobalError
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment

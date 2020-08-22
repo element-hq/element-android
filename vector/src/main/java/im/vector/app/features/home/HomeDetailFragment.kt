@@ -47,9 +47,9 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
 import javax.inject.Inject

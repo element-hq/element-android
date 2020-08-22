@@ -49,10 +49,10 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
-import im.vector.matrix.android.api.session.call.CallState
-import im.vector.matrix.android.api.session.call.EglUtils
-import im.vector.matrix.android.api.session.call.MxCallDetail
-import im.vector.matrix.android.api.session.call.TurnServerResponse
+import org.matrix.android.sdk.api.session.call.CallState
+import org.matrix.android.sdk.api.session.call.EglUtils
+import org.matrix.android.sdk.api.session.call.MxCallDetail
+import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*

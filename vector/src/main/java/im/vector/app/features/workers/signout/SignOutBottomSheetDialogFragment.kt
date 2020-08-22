@@ -35,8 +35,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog

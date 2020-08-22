@@ -17,7 +17,7 @@
 package im.vector.app.features.home
 
 import im.vector.app.core.platform.VectorViewEvents
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class HomeActivityViewEvents : VectorViewEvents {
     data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem?) : HomeActivityViewEvents()

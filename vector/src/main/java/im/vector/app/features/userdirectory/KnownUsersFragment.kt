@@ -29,7 +29,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.matrix.android.api.session.user.model.User
+import org.matrix.android.sdk.api.session.user.model.User
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith

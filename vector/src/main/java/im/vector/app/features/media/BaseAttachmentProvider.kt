@@ -26,8 +26,8 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.file.FileService
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.file.FileService
 import java.io.File
 
 abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRenderer, val fileService: FileService) : AttachmentSourceProvider {

@@ -20,10 +20,10 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
-import im.vector.matrix.android.api.query.QueryStringValue
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.group.groupSummaryQueryParams
-import im.vector.matrix.android.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import javax.inject.Inject
 
 class AutocompleteGroupPresenter @Inject constructor(context: Context,

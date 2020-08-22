@@ -24,7 +24,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.room.uploads.UploadEvent
+import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith

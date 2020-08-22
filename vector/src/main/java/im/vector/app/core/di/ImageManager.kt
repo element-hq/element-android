@@ -23,7 +23,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.glide.FactoryUrl
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import java.io.InputStream
 import javax.inject.Inject
 

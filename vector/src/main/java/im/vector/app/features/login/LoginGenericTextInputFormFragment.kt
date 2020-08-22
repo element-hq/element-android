@@ -32,9 +32,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.matrix.android.api.auth.registration.RegisterThreePid
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.is401
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.is401
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject

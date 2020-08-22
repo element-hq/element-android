@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 fun EpoxyController.buildProfileSection(title: String) {
     profileSectionItem {

@@ -21,7 +21,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import im.vector.matrix.android.api.session.sync.SyncState
+import org.matrix.android.sdk.api.session.sync.SyncState
 import im.vector.app.R
 import im.vector.app.core.utils.isAirplaneModeOn
 import kotlinx.android.synthetic.main.view_sync_state.view.*

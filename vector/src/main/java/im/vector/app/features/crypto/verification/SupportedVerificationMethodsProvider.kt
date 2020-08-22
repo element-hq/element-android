@@ -17,7 +17,7 @@
 package im.vector.app.features.crypto.verification
 
 import im.vector.app.core.hardware.HardwareInfo
-import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import timber.log.Timber
 import javax.inject.Inject
 

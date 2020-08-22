@@ -27,7 +27,7 @@ import androidx.core.graphics.drawable.IconCompat
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

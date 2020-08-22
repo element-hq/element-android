@@ -18,8 +18,8 @@ package im.vector.app.features.command
 
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
-import im.vector.matrix.android.api.MatrixPatterns
-import im.vector.matrix.android.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 
 object CommandParser {

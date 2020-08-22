@@ -17,8 +17,8 @@
 package im.vector.app.features.settings.ignored
 
 import com.airbnb.epoxy.EpoxyController
-import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider

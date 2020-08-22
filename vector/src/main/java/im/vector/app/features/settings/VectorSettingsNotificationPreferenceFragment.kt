@@ -25,9 +25,9 @@ import android.os.Parcelable
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.pushrules.RuleIds
-import im.vector.matrix.android.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.pushrules.RuleKind
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.preference.VectorPreference

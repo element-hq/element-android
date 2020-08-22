@@ -29,10 +29,10 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
-import im.vector.matrix.rx.RxRoom
-import im.vector.matrix.rx.unwrap
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
+import org.matrix.android.sdk.rx.RxRoom
+import org.matrix.android.sdk.rx.unwrap
 import io.reactivex.Observable
 import io.reactivex.Single
 

@@ -27,13 +27,13 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
-import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.rx.rx
 
 data class DeviceListViewState(
         val userItem: MatrixItem? = null,

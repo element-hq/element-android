@@ -18,7 +18,7 @@ package im.vector.app.features.settings.push
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.matrix.android.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents

@@ -17,7 +17,7 @@
 package im.vector.app.features.login.terms
 
 import com.airbnb.mvrx.MvRxState
-import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 data class LoginTermsViewState(
         val localizedFlowDataLoginTermsChecked: List<LocalizedFlowDataLoginTermsChecked>

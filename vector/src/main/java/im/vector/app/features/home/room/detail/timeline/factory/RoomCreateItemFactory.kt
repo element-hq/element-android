@@ -22,10 +22,10 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.RoomCreateItem_
-import im.vector.matrix.android.api.permalinks.PermalinkFactory
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.permalinks.PermalinkFactory
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import me.gujun.android.span.span
 import javax.inject.Inject
 

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RoomSettingsAction : VectorViewModelAction {

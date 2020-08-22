@@ -21,7 +21,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**

@@ -21,7 +21,7 @@ import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.matrix.android.api.failure.is401
+import org.matrix.android.sdk.api.failure.is401
 import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
 

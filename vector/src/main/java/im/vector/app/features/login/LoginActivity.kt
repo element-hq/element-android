@@ -44,9 +44,9 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
-import im.vector.matrix.android.api.auth.registration.FlowResult
-import im.vector.matrix.android.api.auth.registration.Stage
-import im.vector.matrix.android.api.extensions.tryThis
+import org.matrix.android.sdk.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.extensions.tryThis
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 

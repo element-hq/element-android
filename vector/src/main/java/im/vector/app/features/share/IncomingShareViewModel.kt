@@ -22,18 +22,18 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.query.QueryStringValue
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.attachments.isPreviewable
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.home.room.list.BreadcrumbsRoomComparator
+import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
 class IncomingShareViewModel @AssistedInject constructor(

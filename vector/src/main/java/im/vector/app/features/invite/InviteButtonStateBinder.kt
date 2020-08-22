@@ -18,7 +18,7 @@ package im.vector.app.features.invite
 
 import androidx.core.view.isInvisible
 import im.vector.app.core.platform.ButtonStateView
-import im.vector.matrix.android.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 
 object InviteButtonStateBinder {
 

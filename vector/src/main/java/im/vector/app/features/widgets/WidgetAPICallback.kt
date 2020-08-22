@@ -16,9 +16,9 @@
 
 package im.vector.app.features.widgets
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
-import im.vector.matrix.android.api.util.JsonDict
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
+import org.matrix.android.sdk.api.util.JsonDict
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 

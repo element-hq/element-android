@@ -23,8 +23,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import im.vector.app.core.platform.Restorable
 import im.vector.lib.multipicker.MultiPicker
-import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"

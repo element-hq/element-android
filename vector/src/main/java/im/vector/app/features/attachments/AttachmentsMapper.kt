@@ -22,7 +22,7 @@ import im.vector.lib.multipicker.entity.MultiPickerContactType
 import im.vector.lib.multipicker.entity.MultiPickerFileType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
 fun MultiPickerContactType.toContactAttachment(): ContactAttachment {

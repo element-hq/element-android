@@ -17,9 +17,9 @@
 package im.vector.app.features.login
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.registration.RegisterThreePid
-import im.vector.matrix.android.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed class LoginAction : VectorViewModelAction {
     data class UpdateServerType(val serverType: ServerType) : LoginAction()

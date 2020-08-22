@@ -23,8 +23,8 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
-import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject

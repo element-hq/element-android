@@ -23,7 +23,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import im.vector.matrix.android.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.events.model.Content
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment

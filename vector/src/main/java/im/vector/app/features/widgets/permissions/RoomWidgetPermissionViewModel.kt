@@ -22,13 +22,13 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.query.QueryStringValue
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.net.URL
 

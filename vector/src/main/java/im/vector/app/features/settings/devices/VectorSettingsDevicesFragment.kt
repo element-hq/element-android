@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.dialogs.PromptPasswordDialog

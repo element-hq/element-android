@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.getColorFromUserId
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.matrix.android.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 class MessageColorProvider @Inject constructor(

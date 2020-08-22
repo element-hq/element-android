@@ -23,12 +23,12 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
-import im.vector.matrix.android.api.session.crypto.verification.VerificationService
-import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
 

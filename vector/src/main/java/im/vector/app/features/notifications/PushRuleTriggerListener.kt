@@ -16,10 +16,10 @@
 
 package im.vector.app.features.notifications
 
-import im.vector.matrix.android.api.pushrules.Action
-import im.vector.matrix.android.api.pushrules.PushRuleService
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.Event
+import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.PushRuleService
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

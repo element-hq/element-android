@@ -61,12 +61,12 @@ import im.vector.app.features.share.SharedData
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
-import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
-import im.vector.matrix.android.api.session.terms.TermsService
-import im.vector.matrix.android.api.session.widgets.model.Widget
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
+import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
 

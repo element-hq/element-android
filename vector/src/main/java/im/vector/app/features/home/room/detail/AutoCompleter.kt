@@ -39,12 +39,12 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 class AutoCompleter @AssistedInject constructor(
         @Assisted val roomId: String,

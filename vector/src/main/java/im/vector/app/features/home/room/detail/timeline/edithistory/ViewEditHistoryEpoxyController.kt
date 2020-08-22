@@ -31,11 +31,11 @@ import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
-import im.vector.matrix.android.internal.session.room.send.TextContent
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
+import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
+import org.matrix.android.sdk.internal.session.room.send.TextContent
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
 import java.util.Calendar

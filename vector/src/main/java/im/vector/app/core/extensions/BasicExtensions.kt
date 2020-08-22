@@ -21,7 +21,7 @@ import android.util.Patterns
 import androidx.fragment.app.Fragment
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import im.vector.matrix.android.api.extensions.ensurePrefix
+import org.matrix.android.sdk.api.extensions.ensurePrefix
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 

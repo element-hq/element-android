@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?)
     : VectorEpoxyModel.OnVisibilityStateChangedListener {

@@ -21,8 +21,8 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
-import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem

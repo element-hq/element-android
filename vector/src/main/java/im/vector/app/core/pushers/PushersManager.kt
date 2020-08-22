@@ -21,7 +21,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.matrix.android.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCallback
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs

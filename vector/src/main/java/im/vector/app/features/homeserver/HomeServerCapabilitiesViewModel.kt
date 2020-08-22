@@ -22,7 +22,7 @@ import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 class HomeServerCapabilitiesViewModel(initialState: HomeServerCapabilitiesViewState)
     : VectorViewModel<HomeServerCapabilitiesViewState, EmptyAction, EmptyViewEvents>(initialState) {

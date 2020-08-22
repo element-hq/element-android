@@ -16,7 +16,7 @@
 
 package im.vector.app.features.login.terms
 
-import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 data class LocalizedFlowDataLoginTermsChecked(val localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms,
                                               var checked: Boolean = false)

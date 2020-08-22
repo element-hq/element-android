@@ -51,8 +51,8 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
-import im.vector.matrix.android.api.session.InitialSyncProgressService
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*

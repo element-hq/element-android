@@ -19,7 +19,7 @@ package im.vector.app.features.roomdirectory.picker
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 
 data class RoomDirectoryPickerViewState(
         val asyncThirdPartyRequest: Async<Map<String, ThirdPartyProtocol>> = Uninitialized

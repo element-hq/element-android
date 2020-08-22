@@ -16,9 +16,9 @@
 package im.vector.app.features.settings.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem

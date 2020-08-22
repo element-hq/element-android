@@ -17,7 +17,7 @@
 package im.vector.app.features.discovery
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.matrix.android.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.identity.ThreePid
 
 sealed class DiscoverySettingsAction : VectorViewModelAction {
     object RetrieveBinding : DiscoverySettingsAction()

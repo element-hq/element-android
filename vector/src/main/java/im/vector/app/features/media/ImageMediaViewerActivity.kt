@@ -44,9 +44,9 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.shareMedia
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.file.FileService
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.file.FileService
 import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 import timber.log.Timber
 import java.io.File

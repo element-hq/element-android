@@ -18,7 +18,7 @@ package im.vector.app.features.login.terms
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 class PolicyController @Inject constructor() : TypedEpoxyController<List<LocalizedFlowDataLoginTermsChecked>>() {

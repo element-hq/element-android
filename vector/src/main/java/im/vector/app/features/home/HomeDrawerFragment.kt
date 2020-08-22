@@ -23,8 +23,8 @@ import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.grouplist.GroupListFragment
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.toMatrixItem
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 import javax.inject.Inject
 

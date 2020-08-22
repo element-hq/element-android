@@ -20,13 +20,13 @@ import android.content.Context
 import android.net.Uri
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.navigation.Navigator
-import im.vector.matrix.android.api.permalinks.PermalinkData
-import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.rx.rx
+import org.matrix.android.sdk.api.permalinks.PermalinkData
+import org.matrix.android.sdk.api.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.util.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,

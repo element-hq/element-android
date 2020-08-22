@@ -19,7 +19,7 @@ package im.vector.app.features.signout.hard
 import android.content.Context
 import android.content.Intent
 import butterknife.OnClick
-import im.vector.matrix.android.api.failure.GlobalError
+import org.matrix.android.sdk.api.failure.GlobalError
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.MainActivity

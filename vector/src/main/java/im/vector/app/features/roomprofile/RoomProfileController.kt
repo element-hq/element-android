@@ -18,7 +18,7 @@
 package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection

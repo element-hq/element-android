@@ -28,7 +28,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
 import kotlin.math.roundToInt
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)

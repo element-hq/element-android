@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.members
 
-import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import javax.inject.Inject
 
 class RoomMemberSummaryComparator @Inject constructor() : Comparator<RoomMemberSummary> {

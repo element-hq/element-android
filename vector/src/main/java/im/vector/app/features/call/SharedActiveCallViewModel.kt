@@ -18,7 +18,7 @@ package im.vector.app.features.call
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.matrix.android.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxCall
 import javax.inject.Inject
 
 class SharedActiveCallViewModel @Inject constructor(

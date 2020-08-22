@@ -25,7 +25,7 @@ import androidx.core.content.getSystemService
 import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.notifications.NotificationUtils
-import im.vector.matrix.android.internal.session.sync.job.SyncService
+import org.matrix.android.sdk.internal.session.sync.job.SyncService
 
 class VectorSyncService : SyncService() {
 

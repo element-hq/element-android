@@ -28,7 +28,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.reactions.widget.ReactionButton
-import im.vector.matrix.android.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.send.SendState
 
 /**
  * Base timeline item with reactions and read receipts.

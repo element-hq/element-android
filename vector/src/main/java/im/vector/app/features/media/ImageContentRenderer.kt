@@ -36,8 +36,8 @@ import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.isLocalFile
-import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import java.io.File

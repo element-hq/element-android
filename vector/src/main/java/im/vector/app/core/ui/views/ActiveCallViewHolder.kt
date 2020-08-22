@@ -21,9 +21,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.call.WebRtcPeerConnectionManager
-import im.vector.matrix.android.api.session.call.CallState
-import im.vector.matrix.android.api.session.call.EglUtils
-import im.vector.matrix.android.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.CallState
+import org.matrix.android.sdk.api.session.call.EglUtils
+import org.matrix.android.sdk.api.session.call.MxCall
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 

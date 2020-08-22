@@ -21,7 +21,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.matrix.android.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider

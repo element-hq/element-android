@@ -31,8 +31,8 @@ import com.google.android.material.chip.ChipDrawable
 import im.vector.app.R
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.matrix.android.api.session.room.send.MatrixItemSpan
-import im.vector.matrix.android.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
+import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 
 /**

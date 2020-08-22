@@ -17,7 +17,7 @@
 package im.vector.app.features.home
 
 import im.vector.app.core.utils.BehaviorDataSource
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 import javax.inject.Singleton
 

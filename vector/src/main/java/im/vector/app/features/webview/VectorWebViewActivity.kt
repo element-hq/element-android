@@ -22,7 +22,7 @@ import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.CallSuper
-import im.vector.matrix.android.api.session.Session
+import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
