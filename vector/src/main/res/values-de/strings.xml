@@ -785,7 +785,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Communities die Abzeichen an</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Community Avatare an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -819,7 +819,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="forget_room">Raum vergessen</string>
     <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
-    <string name="settings_flair">Abzeichen</string>
+    <string name="settings_flair">Community Avatare</string>
 
     <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
 
@@ -1763,7 +1763,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="report_content_custom_title">Diesen Inhalt melden</string>
     <string name="report_content_custom_hint">Meldegrund</string>
     <string name="report_content_custom_submit">MELDEN</string>
-    <string name="block_user">NUTZER BLOCKIEREN</string>
+    <string name="block_user">NUTZER IGNORIEREN</string>
 
     <string name="content_reported_title">Inhalt gemeldet</string>
     <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
@@ -1784,7 +1784,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="no_network_indicator">Aktuell besteht keine Netzwerkverbindung</string>
 
-    <string name="message_ignore_user">Nutzer blockieren</string>
+    <string name="message_ignore_user">Nutzer ignorieren</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Alle Nachrichten (laut)</string>
     <string name="room_list_quick_actions_notifications_all">Alle Nachrichten</string>
@@ -1891,7 +1891,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
-    <string name="login_splash_title">Es ist dein Gespräch. Besitze es.</string>
+    <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
     <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
@@ -2620,7 +2620,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
-    <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
+    <string name="labs_merge_e2e_in_timeline">Fasse \"unable to decrypt\"-Fehler im Chatverlauf zu Hinweisen zusammen</string>
     <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
@@ -2644,4 +2644,14 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \n%s</string>
 
+    <plurals name="two_and_some_others_read">
+	<item quantity="one">Von %1$s, %2$s und %3$d anderem gelesen</item>
+	<item quantity="other">Von %1$s, %2$s und %3$d anderen gelesen</item>
+</plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+	<item quantity="one">Falscher code, %d verbleibender Versuch</item>
+	<item quantity="other">Falscher code, %d verbleibende Versuche</item>
+</plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
+    <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
     </resources>
