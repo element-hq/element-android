@@ -1623,7 +1623,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
 
     <string name="settings_set_workmanager_delay">Bevorzugtes Synchronisationsintervall</string>
-    <string name="settings_discovery_category">Fund</string>
+    <string name="settings_discovery_category">Auffindbarkeit</string>
     <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen du kommunizierst)</string>
     <string name="device_name_warning">Der öffentliche Name der Sitzung ist für Personen sichtbar, mit denen du kommunizierst</string>
     <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
