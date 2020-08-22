@@ -30,6 +30,9 @@ find "$mydir/vector/src/main/res" -name strings.xml -exec \
 sed -i 's|!nnen|wolpertinger|g' "$mydir/vector/src/main/res/values-de/strings.xml"
 sed -i 's|!n|schlumpfwesen|g' "$mydir/vector/src/main/res/values-de/strings.xml"
 
+# Remove Triple-T stuff to avoid using them in F-Droid
+rm -rf "$mydir/vector/src/main/play/listings"
+
 git add -A
 git commit -m "Automatic SchildiChat string correction"
 
