@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@
 
 package org.matrix.android.sdk.internal.database
 
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,6 +31,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
+        if (oldVersion <= 2) migrateTo3(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -49,6 +51,16 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.addField(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, Boolean::class.java)
                 ?.transform { obj ->
                     obj.setBoolean(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, true)
+                }
+    }
+
+    private fun migrateTo3(realm: DynamicRealm) {
+        Timber.d("Step 2 -> 3")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.PREFERRED_JITSI_DOMAIN, String::class.java)
+                ?.transform { obj ->
+                    // Schedule a refresh of the capabilities
+                    obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
                 }
     }
 }

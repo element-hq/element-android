@@ -22,7 +22,6 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -102,14 +101,6 @@ class LoginWebFragment @Inject constructor(
             launchWebView(state)
         } else {
             if (!cookieManager.hasCookies()) {
-                launchWebView(state)
-            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    cookieManager.removeAllCookie()
-                } catch (e: Exception) {
-                    Timber.e(e, " cookieManager.removeAllCookie() fails")
-                }
-
                 launchWebView(state)
             } else {
                 try {

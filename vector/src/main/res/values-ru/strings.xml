@@ -1194,7 +1194,6 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
     <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(и) успешно импортированы.</string>
 
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
     <string name="settings_info_area_show">Показать информацию</string>
@@ -1312,7 +1311,6 @@
         <item quantity="few">Восстановлены резервные копии с %d ключами.</item>
         <item quantity="many">Восстановлены резервные копии с %d ключами.</item>
     </plurals>
-    <string name="keys_backup_restore_success_description">Восстановлены %1$d сессионные ключи и добавлены %2$d новые ключи, которые не были известны этой сессии</string>
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого ключа восстановления: убедитесь, что вы ввели правильный ключ.</string>
 
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью данного пароля: убедитесь, что вы ввели верный пароль.</string>
@@ -2049,7 +2047,6 @@
 
     <string name="command_description_discard_session_not_handled">Поддерживается только в зашифрованных комнатах</string>
     <string name="a11y_create_direct_message">Создать новый диалог</string>
-    <string name="two_and_some_others_read">%1$s, %2$s и %3$d других прочли</string>
     <string name="three_users_read">%1$s, %2$s и %3$s прочли</string>
     <string name="two_users_read">%1$s и %2$s прочли</string>
     <string name="error_file_too_big">Файл \'%1$s\' (%2$s) слишком большой. Максимальный размер для загрузки %3$s.</string>
@@ -2214,7 +2211,6 @@
     <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
     <string name="settings_developer_mode_fail_fast_summary">Element может падать чаще, когда происходит непредвиденная ошибка</string>
 
-    <string name="command_description_verify">Запрос на проверку данного идентификатора пользователя</string>
     <string name="command_description_shrug">Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения</string>
 
     <string name="create_room_encryption_description">После включения шифрования оно не может быть отключено.</string>
@@ -2666,4 +2662,6 @@
     <string name="settings_security_pin_code_title">Включить PIN-код</string>
     <string name="settings_security_pin_code_summary">Для сброса PIN-кода нажмите Забыл(а) PIN-код, чтобы выйти из сессии и сбросить его.</string>
     <string name="auth_pin_confirm_to_disable_title">Подтвердите PIN-код, чтобы отключить PIN-код</string>
+    <string name="settings_call_show_confirmation_dialog_title">Предотвращение случайных звонков</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Спрашивать подтверждение перед звонком</string>
 </resources>

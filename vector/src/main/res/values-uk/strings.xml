@@ -43,7 +43,8 @@
     <string name="rename">Перейменувати</string>
     <string name="report_content">Поскаржитись на вміст</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.\nПриєднатись %1$s чи %2$s.</string>
+    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.
+\nПриєднатись як %1$s чи %2$s</string>
     <string name="ongoing_conference_call_voice">голосом</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
@@ -303,7 +304,7 @@
 
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Idle</string>
+    <string name="room_participants_idle">Перестій</string>
 
     <string name="room_participants_header_admin_tools">АДМІНІСТРУВАННЯ</string>
     <string name="room_participants_header_call">ВИКЛИК</string>
@@ -1110,8 +1111,6 @@
     <string name="accept">Прийняти</string>
 
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(і/ів) успішно імпортовано.</string>
 
     <string name="action_mark_room_read">Позначити як прочитане</string>
 </resources>

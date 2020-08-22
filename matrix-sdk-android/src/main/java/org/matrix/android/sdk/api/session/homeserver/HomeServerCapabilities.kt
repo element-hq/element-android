@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +38,11 @@ data class HomeServerCapabilities(
          * Option to allow homeserver admins to set the default E2EE behaviour back to disabled for DMs / private rooms
          * (as it was before) for various environments where this is desired.
          */
-        val adminE2EByDefault: Boolean = true
+        val adminE2EByDefault: Boolean = true,
+        /**
+         * Preferred Jitsi domain, provided in Wellknown
+         */
+        val preferredJitsiDomain: String? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L

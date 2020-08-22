@@ -48,9 +48,9 @@ import im.vector.app.features.userdirectory.UserDirectoryFragment
 import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
+import kotlinx.android.synthetic.main.activity.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
-import kotlinx.android.synthetic.main.activity.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
@@ -138,19 +138,29 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun renderCreationFailure(error: Throwable) {
         hideWaitingView()
-        if (error is CreateRoomFailure.CreatedWithTimeout) {
-            finish()
-        } else {
-            val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
-                // This error happen if the invited userId does not exist.
-                getString(R.string.create_room_dm_failure)
-            } else {
-                errorFormatter.toHumanReadable(error)
+        when (error) {
+            is CreateRoomFailure.CreatedWithTimeout -> {
+                finish()
             }
-            AlertDialog.Builder(this)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok, null)
-                    .show()
+            is CreateRoomFailure.CreatedWithFederationFailure -> {
+                AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                        .show()
+            }
+            else                                              -> {
+                val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
+                    // This error happen if the invited userId does not exist.
+                    getString(R.string.create_room_dm_failure)
+                } else {
+                    errorFormatter.toHumanReadable(error)
+                }
+                AlertDialog.Builder(this)
+                        .setMessage(message)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
         }
     }
 

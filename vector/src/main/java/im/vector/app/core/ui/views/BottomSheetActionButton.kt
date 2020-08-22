@@ -19,7 +19,6 @@ package im.vector.app.core.ui.views
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -105,13 +104,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
     var tint: Int? = null
         set(value) {
             field = value
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
-            } else {
-                leftIcon?.let {
-                    leftIcon = ThemeUtils.tintDrawable(context, it, value ?: ThemeUtils.getColor(context, android.R.attr.textColor))
-                }
-            }
+            leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     init {

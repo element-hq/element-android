@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +21,31 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class RiotConfig(
-        // There are plenty of other elements in the file config.json of a RiotWeb client, but for the moment only one is interesting
-        // Ex: "brand", "branding", etc.
+internal data class RiotConfig(
+        /**
+         * This is now deprecated, but still used first, rather than value from "default_server_config"
+         */
         @Json(name = "default_hs_url")
-        val defaultHomeServerUrl: String?
+        val defaultHomeServerUrl: String?,
+
+        @Json(name = "default_server_config")
+        val defaultServerConfig: RiotConfigDefaultServerConfig?
+) {
+    fun getPreferredHomeServerUrl(): String? {
+        return defaultHomeServerUrl
+                ?.takeIf { it.isNotEmpty() }
+                ?: defaultServerConfig?.homeServer?.baseURL
+    }
+}
+
+@JsonClass(generateAdapter = true)
+internal data class RiotConfigDefaultServerConfig(
+        @Json(name = "m.homeserver")
+        val homeServer: RiotConfigBaseConfig? = null
+)
+
+@JsonClass(generateAdapter = true)
+internal data class RiotConfigBaseConfig(
+        @Json(name = "base_url")
+        val baseURL: String? = null
 )

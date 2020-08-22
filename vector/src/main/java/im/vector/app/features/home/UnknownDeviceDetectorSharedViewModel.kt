@@ -100,7 +100,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
 
         Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, List<DeviceDetectionInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDeviceInfo(),
+                session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
                 Function3 { cryptoList, infoList, pInfo ->
                     //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
@@ -133,12 +133,13 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 }
 
         session.rx().liveUserCryptoDevices(session.myUserId)
-                .distinct()
+                .distinctUntilChanged()
                 .throttleLast(5_000, TimeUnit.MILLISECONDS)
                 .subscribe {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
 
         // trigger a refresh of lastSeen / last Ip
         session.cryptoService().fetchDevicesList(NoOpMatrixCallback())

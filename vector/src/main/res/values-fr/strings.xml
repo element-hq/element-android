@@ -1035,8 +1035,6 @@ Voulez-vous en ajouter ?</string>
 
     <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d’accueil :</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
-
     <string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lancer les tests</string>
@@ -1206,7 +1204,6 @@ Attention : ce fichier pourrait être supprimé si l’application est désinsta
     <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
 
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d clés de session restaurées et %2$d nouvelles clés ajoutées qui étaient inconnues à cette session</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Sauvegarde restaurée avec %d clé.</item>
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
@@ -1658,7 +1655,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="a11y_hide_password">Masquer le mot de passe</string>
     <string name="a11y_jump_to_bottom">Sauter en bas de page</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s et %3$d autres ont lu</string>
     <string name="three_users_read">%1$s, %2$s et %3$s ont lu</string>
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="one_user_read">%s a lu</string>
@@ -1933,7 +1929,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
     <string name="settings_developer_mode_fail_fast_summary">Element peut planter plus souvent quand une erreur inattendue survient</string>
-    <string name="command_description_verify">Demande de vérification de l’identifiant utilisateur fourni</string>
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
 
     <string name="create_room_encryption_title">Activer le chiffrement</string>

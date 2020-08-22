@@ -17,7 +17,6 @@
 package im.vector.app.features.widgets.webview
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.PermissionRequest
@@ -68,10 +67,8 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     }
     webViewClient = VectorWebViewClient(webViewEventListener)
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.setAcceptThirdPartyCookies(this, false)
-    }
+    val cookieManager = CookieManager.getInstance()
+    cookieManager.setAcceptThirdPartyCookies(this, false)
 }
 
 fun WebView.clearAfterWidget() {

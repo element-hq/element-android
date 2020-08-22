@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +42,11 @@ import retrofit2.http.Url
  * The login REST API.
  */
 internal interface AuthAPI {
+    /**
+     * Get a Riot config file, using the name including the domain
+     */
+    @GET("config.{domain}.json")
+    fun getRiotConfigDomain(@Path("domain") domain: String): Call<RiotConfig>
 
     /**
      * Get a Riot config file

@@ -279,11 +279,6 @@ object CommandParser {
 
                     ParsedCommand.SendShrug(message)
                 }
-                Command.VERIFY_USER.command            -> {
-                    val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
-
-                    ParsedCommand.VerifyUser(message)
-                }
                 Command.POLL.command                   -> {
                     val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
                     val split = rawCommand.split("|").map { it.trim() }

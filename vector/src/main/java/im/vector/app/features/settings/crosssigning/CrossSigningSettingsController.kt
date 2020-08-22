@@ -22,7 +22,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -32,11 +31,7 @@ class CrossSigningSettingsController @Inject constructor(
         private val dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
-    interface InteractionListener {
-        fun setupRecovery()
-        fun verifySession()
-        fun initCrossSigning()
-    }
+    interface InteractionListener
 
     var interactionListener: InteractionListener? = null
 
@@ -68,45 +63,6 @@ class CrossSigningSettingsController @Inject constructor(
                 genericItem {
                     id("not")
                     title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
-                }
-            }
-        }
-
-        if (data.recoveryHasToBeSetUp) {
-            if (data.xSigningIsEnableInAccount) {
-                bottomSheetVerificationActionItem {
-                    id("setup_recovery")
-                    title(stringProvider.getString(R.string.settings_setup_secure_backup))
-                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                    iconRes(R.drawable.ic_arrow_right)
-                    listener {
-                        interactionListener?.setupRecovery()
-                    }
-                }
-            } else {
-                // Propose to setup cross signing
-                bottomSheetVerificationActionItem {
-                    id("setup_xSgning")
-                    title(stringProvider.getString(R.string.setup_cross_signing))
-                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                    subTitle(stringProvider.getString(R.string.security_prompt_text))
-                    iconRes(R.drawable.ic_arrow_right)
-                    listener {
-                        interactionListener?.initCrossSigning()
-                    }
-                }
-            }
-        }
-
-        if (data.deviceHasToBeVerified) {
-            bottomSheetVerificationActionItem {
-                id("verify")
-                title(stringProvider.getString(R.string.crosssigning_verify_this_session))
-                titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                listener {
-                    interactionListener?.verifySession()
                 }
             }
         }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         context: Context) {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 2L
+        const val SESSION_STORE_SCHEMA_VERSION = 3L
     }
 
     // Keep legacy preferences name for compatibility reason

@@ -34,12 +34,6 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
-import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -50,6 +44,7 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.features.crypto.keys.KeysExporter
@@ -65,6 +60,13 @@ import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
@@ -83,6 +85,18 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
+    }
+
+    private val cryptoInfoDeviceNamePreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY")!!
+    }
+
+    private val cryptoInfoDeviceIdPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY")!!
+    }
+
+    private val cryptoInfoDeviceKeyPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY")!!
     }
 
     private val mCrossSigningStatePreference by lazy {
@@ -225,9 +239,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     override fun bindPref() {
-        // Push target
-        refreshPushersList()
-
         // Refresh Key Management section
         refreshKeysManagementSection()
 
@@ -294,6 +305,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         mCrossSigningStatePreference.isVisible = true
+        if (!vectorPreferences.developerMode()) {
+            // When not in developer mode, intercept click on this preference
+            mCrossSigningStatePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { true }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -401,7 +416,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val sharedDataItem = sharedDataItems[0]
 
             val uri = when (sharedDataItem) {
-                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataUri -> sharedDataItem.uri
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
                 else                                     -> null
             }
@@ -464,7 +479,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                                         hideLoadingView()
 
                                         AlertDialog.Builder(thisActivity)
-                                                .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
+                                                        data.successfullyNumberOfImportedKeys,
                                                         data.successfullyNumberOfImportedKeys,
                                                         data.totalNumberOfKeys))
                                                 .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
@@ -488,58 +504,48 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     /**
      * Build the cryptography preference section.
-     *
-     * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
-//        val userId = session.myUserId
-//        val deviceId = session.sessionParams.deviceId
 
-        // device name
-//        if (null != aMyDeviceInfo) {
-//            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
-//
-//            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-//                // TODO device can be rename only from the device list screen for the moment
-//                // displayDeviceRenameDialog(aMyDeviceInfo)
-//                true
-//            }
-//
-//            cryptoInfoDeviceNamePreference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-//                override fun onPreferenceLongClick(preference: Preference): Boolean {
-//                    activity?.let { copyToClipboard(it, aMyDeviceInfo.displayName!!) }
-//                    return true
-//                }
-//            }
-//        }
-//
-//        // crypto section: device ID
-//        if (!deviceId.isNullOrEmpty()) {
-//            cryptoInfoDeviceIdPreference.summary = deviceId
-//
-//            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
-//                activity?.let { copyToClipboard(it, deviceId) }
-//                true
-//            }
-//        }
-//
-//        // crypto section: device key (fingerprint)
-//        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
-//            val deviceInfo = session.getDeviceInfo(userId, deviceId)
-//
-//            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
-//                cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
-//
-//                cryptoInfoTextPreference.setOnPreferenceClickListener {
-//                    deviceInfo.fingerprint()?.let {
-//                        copyToClipboard(requireActivity(), it)
-//                    }
-//                    true
-//                }
-//            }
-//        }
+        val userId = session.myUserId
+        val deviceId = session.sessionParams.deviceId
+
+        val aMyDeviceInfo = devices.find { it.deviceId == deviceId }
+
+        // crypto section: device name
+        if (aMyDeviceInfo != null) {
+            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
+
+            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                copyToClipboard(requireActivity(), aMyDeviceInfo.displayName ?: "")
+                true
+            }
+        }
+
+        // crypto section: device ID
+        if (!deviceId.isNullOrEmpty()) {
+            cryptoInfoDeviceIdPreference.summary = deviceId
+
+            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
+                copyToClipboard(requireActivity(), deviceId)
+                true
+            }
+        }
+
+        // crypto section: device key (fingerprint)
+        val deviceInfo = session.cryptoService().getDeviceInfo(userId, deviceId)
+
+        val fingerprint = deviceInfo?.fingerprint()
+        if (fingerprint?.isNotEmpty() == true) {
+            cryptoInfoDeviceKeyPreference.summary = deviceInfo.getFingerprintHumanReadable()
+
+            cryptoInfoDeviceKeyPreference.setOnPreferenceClickListener {
+                copyToClipboard(requireActivity(), fingerprint)
+                true
+            }
+        }
 
         sendToUnverifiedDevicesPref.isChecked = session.cryptoService().getGlobalBlacklistUnverifiedDevices()
 
@@ -580,103 +586,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         })
     }
 
-    // ==============================================================================================================
-    // pushers list management
-    // ==============================================================================================================
-
-    /**
-     * Refresh the pushers list
-     */
-    private fun refreshPushersList() {
-        activity?.let { _ ->
-            /* TODO
-            val pushManager = Matrix.getInstance(activity).pushManager
-            val pushersList = ArrayList(pushManager.mPushersList)
-
-            if (pushersList.isEmpty()) {
-                preferenceScreen.removePreference(mPushersSettingsCategory)
-                preferenceScreen.removePreference(mPushersSettingsDivider)
-                return
-            }
-
-            // check first if there is an update
-            var isNewList = true
-            if (pushersList.size == mDisplayedPushers.size) {
-                isNewList = !mDisplayedPushers.containsAll(pushersList)
-            }
-
-            if (isNewList) {
-                // remove the displayed one
-                mPushersSettingsCategory.removeAll()
-
-                // add new emails list
-                mDisplayedPushers = pushersList
-
-                var index = 0
-
-                for (pushRule in mDisplayedPushers) {
-                    if (null != pushRule.lang) {
-                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pushRule.pushkey)
-
-                        val preference = VectorPreference(activity).apply {
-                            mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
-                        }
-                        preference.title = pushRule.deviceDisplayName
-                        preference.summary = pushRule.appDisplayName
-                        preference.key = PUSHER_PREFERENCE_KEY_BASE + index
-                        index++
-                        mPushersSettingsCategory.addPreference(preference)
-
-                        // the user cannot remove the self device target
-                        if (!isThisDeviceTarget) {
-                            preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                                override fun onPreferenceLongClick(preference: Preference): Boolean {
-                                    AlertDialog.Builder(activity)
-                                            .setTitle(R.string.dialog_title_confirmation)
-                                            .setMessage(R.string.settings_delete_notification_targets_confirmation)
-                                            .setPositiveButton(R.string.remove)
-                                            { _, _ ->
-                                                displayLoadingView()
-                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit> {
-                                                    override fun onSuccess(info: Void?) {
-                                                        refreshPushersList()
-                                                        onCommonDone(null)
-                                                    }
-
-                                                    override fun onNetworkError(e: Exception) {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-
-                                                    override fun onMatrixError(e: MatrixError) {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-
-                                                    override fun onUnexpectedError(e: Exception) {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-                                                })
-                                            }
-                                            .setNegativeButton(R.string.cancel, null)
-                                            .show()
-                                    return true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        */
-        }
-    }
-
     companion object {
         private const val REQUEST_E2E_FILE_REQUEST_CODE = 123
         private const val REQUEST_CODE_SAVE_MEGOLM_EXPORT = 124
-
-        private const val PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE"
-        private const val DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE"
-
-        // TODO i18n
-        const val LABEL_UNAVAILABLE_DATA = "none"
     }
 }

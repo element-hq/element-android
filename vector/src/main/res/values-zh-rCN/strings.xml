@@ -962,7 +962,6 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
-    <string name="encryption_import_room_keys_success">导入了 %2$d 个密钥，其中 %1$d 个导入成功。</string>
 
     <string name="status_theme">Status.im 主题</string>
 
@@ -1229,7 +1228,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="keys_backup_recovery_code_error_decrypt">无法使用此恢复密钥解密备份：请检查您输入的恢复密钥是否正确。</string>
 
     <string name="keys_backup_restore_success_title">备份已恢复 %s ！</string>
-    <string name="keys_backup_restore_success_description">恢复了 %1$d 个会话密钥，并添加了 %2$d 个此设备未知的新密钥</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">恢复了一个包含 %d 个密钥的备份。</item>
     </plurals>
@@ -1766,7 +1764,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="a11y_hide_password">隐藏密码</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
 
-    <string name="two_and_some_others_read">%1$s，%2$s 和 %3$d 其他人已读</string>
     <string name="three_users_read">%1$s，%2$s 和 %3$s 已读</string>
     <string name="two_users_read">%1$s 和 %2$s 已读</string>
     <string name="one_user_read">%s 已读</string>
@@ -2020,7 +2017,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_developer_mode_fail_fast_title">快速失败</string>
     <string name="settings_developer_mode_fail_fast_summary">发生意外错误时，Element 可能更经常崩溃</string>
 
-    <string name="command_description_verify">请求验证给定 userID</string>
     <string name="command_description_shrug">在明文消息前添加 ¯\\_(ツ)_/¯</string>
 
     <string name="create_room_encryption_title">启用加密</string>
@@ -2534,4 +2530,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_security_pin_code_title">启用 PIN</string>
     <string name="settings_security_pin_code_summary">如果您想要重置您的 PIN，点按忘记 PIN 登出并重置。</string>
     <string name="auth_pin_confirm_to_disable_title">确认 PIN 并禁用 PIN</string>
+    <string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
+    <string name="settings_call_show_confirmation_dialog_summary">发起通话之前要求确认</string>
 </resources>

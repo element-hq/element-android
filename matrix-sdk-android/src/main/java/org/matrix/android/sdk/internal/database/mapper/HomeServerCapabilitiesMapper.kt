@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,8 @@ internal object HomeServerCapabilitiesMapper {
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                adminE2EByDefault = entity.adminE2EByDefault
+                adminE2EByDefault = entity.adminE2EByDefault,
+                preferredJitsiDomain = entity.preferredJitsiDomain
         )
     }
 }

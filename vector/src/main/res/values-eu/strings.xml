@@ -1030,8 +1030,6 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="auth_accept_policies">Irakurri eta onartu hasiera-zerbitzari honen baldintzak:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
-
     <string name="settings_notification_troubleshoot">Egiaztatu arazoak jakinarazpenekin</string>
     <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Abiatu probak</string>
@@ -1207,7 +1205,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_passphrase_error_decrypt">Ezin izan da babes-kopia deszifratu pasaesaldi honekin: egiaztatu pasaesaldi zuzena idatzi duzula.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Ezin izan da babes-kopia deszifratu berreskuratze gako honekin: egiaztatu berreskuratze gako egokia sartu duzula.</string>
 
-    <string name="keys_backup_restore_success_description">"%1$d  saio gako berrezarri dira, eta saio honek ezagutzen ez zituen %2$d gako berri gehitu dira"</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Berrezarri gako %d duen babes-kopia.</item>
         <item quantity="other">Berrezarri %d gako dituen babes-kopia.</item>
@@ -1653,7 +1650,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="a11y_hide_password">Ezkutatu pasahitza</string>
     <string name="a11y_jump_to_bottom">Jauzi behera</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s eta beste %3$d erabiltzailek irakurria</string>
     <string name="three_users_read">%1$s, %2$s eta%3$s erabiltzaileek irakurria</string>
     <string name="two_users_read">%1$s eta %2$s erabiltzaileek irakurria</string>
     <string name="one_user_read">%s erabiltzaileak irakurria</string>
@@ -1929,7 +1925,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
     <string name="settings_developer_mode_fail_fast_summary">Element aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
-    <string name="command_description_verify">Eskatu emandako erabiltzaile IDa egiaztatzea</string>
     <string name="command_description_shrug">"Jarri ¯\\_(ツ)_/¯  testu-soileko mezuaren aurretik"</string>
 
     <string name="create_room_encryption_title">Gaitu zifratzea</string>

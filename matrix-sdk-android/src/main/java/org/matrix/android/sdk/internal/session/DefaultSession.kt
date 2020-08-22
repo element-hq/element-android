@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,13 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -36,6 +44,7 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
@@ -62,13 +71,6 @@ import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createUIHandler
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -95,6 +97,7 @@ internal class DefaultSession @Inject constructor(
         private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
+        private val permalinkService: Lazy<PermalinkService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val widgetService: Lazy<WidgetService>,
@@ -252,6 +255,8 @@ internal class DefaultSession @Inject constructor(
     override fun identityService() = defaultIdentityService
 
     override fun fileService(): FileService = defaultFileService.get()
+
+    override fun permalinkService(): PermalinkService = permalinkService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
 

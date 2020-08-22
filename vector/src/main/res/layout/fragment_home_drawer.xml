@@ -32,7 +32,6 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginLeft="@dimen/layout_horizontal_margin"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

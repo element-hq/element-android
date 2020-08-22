@@ -31,6 +31,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.call.conference.JitsiCallViewModel
+import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -66,6 +68,7 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -270,9 +273,14 @@ class DefaultNavigator @Inject constructor(
         fragment.startActivityForResult(intent, WidgetRequestCodes.INTEGRATION_MANAGER_REQUEST_CODE)
     }
 
-    override fun openRoomWidget(context: Context, roomId: String, widget: Widget) {
-        val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
-        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+    override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
+        if (widget.type is WidgetType.Jitsi) {
+            val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
+            context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+        } else {
+            val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
+            context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+        }
     }
 
     override fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int) {

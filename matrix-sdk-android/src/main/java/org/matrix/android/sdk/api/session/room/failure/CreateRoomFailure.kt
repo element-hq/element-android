@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,9 @@
 package org.matrix.android.sdk.api.session.room.failure
 
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 
 sealed class CreateRoomFailure : Failure.FeatureFailure() {
-
-    object CreatedWithTimeout: CreateRoomFailure()
+    object CreatedWithTimeout : CreateRoomFailure()
+    data class CreatedWithFederationFailure(val matrixError: MatrixError) : CreateRoomFailure()
 }

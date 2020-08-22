@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,11 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.TimeoutCancellationException
+import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -33,9 +39,6 @@ import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelpe
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,10 +57,26 @@ internal class DefaultCreateRoomTask @Inject constructor(
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
+        val otherUserId = if (params.isDirect()) {
+            params.getFirstInvitedUserId()
+                    ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
+        } else null
+
         val createRoomBody = createRoomBodyBuilder.build(params)
 
-        val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(createRoomBody)
+        val createRoomResponse = try {
+            executeRequest<CreateRoomResponse>(eventBus) {
+                apiCall = roomAPI.createRoom(createRoomBody)
+            }
+        } catch (throwable: Throwable) {
+            if (throwable is Failure.ServerError
+                    && throwable.httpCode == 403
+                    && throwable.error.code == MatrixError.M_FORBIDDEN
+                    && throwable.error.message.startsWith("Federation denied with")) {
+                throw CreateRoomFailure.CreatedWithFederationFailure(throwable.error)
+            } else {
+                throw throwable
+            }
         }
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
@@ -69,17 +88,14 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
-        if (params.isDirect()) {
-            handleDirectChatCreation(params, roomId)
+        if (otherUserId != null) {
+            handleDirectChatCreation(roomId, otherUserId)
         }
         setReadMarkers(roomId)
         return roomId
     }
 
-    private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {
-        val otherUserId = params.getFirstInvitedUserId()
-                ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
-
+    private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String) {
         monarchy.awaitTransaction { realm ->
             RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                 this.directUserId = otherUserId

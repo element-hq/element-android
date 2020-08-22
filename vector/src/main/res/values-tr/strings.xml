@@ -110,8 +110,8 @@
     <string name="no_room_placeholder">Oda yok</string>
     <string name="no_public_room_placeholder">Hiç girilebilir oda yok</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">kullanıcı</item>
-        <item quantity="other">kullanıcı</item>
+        <item quantity="one">1 kullanıcı</item>
+        <item quantity="other">%d kullanıcı</item>
     </plurals>
 
     <string name="groups_invite_header">Davet</string>
@@ -449,7 +449,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı sen ile aynı erişim seviyesine getiriyorsun.
 \nEmin misin\?</string>
 
-    <string name="room_participants_ban_prompt_msg">Kullanıcıyı bu sohbetten engellemek istediğine emin misin\?</string>
+    <string name="room_participants_ban_prompt_msg">Kullanıcıyı bu engellersen bu odadan kovulacak ve bir daha giremeyecek.</string>
     <string name="reason_hint">Neden</string>
 
     <string name="room_participants_invite_prompt_msg">%s adlı kullanıcılar(ı) bu sohbete davet etmek istediğinden emin misin\?</string>
@@ -938,7 +938,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="encryption_import_import">İçe aktar</string>
     <string name="encryption_never_send_to_unverified_devices_title">Sadece doğrulanmış oturumlara şifrele</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Asla bu cihazdan doğrulanmamış oturumlara şifrelenmiş mesaj gönderme.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d anahtar başarı ile içe aktarıldı.</string>
 
     <string name="encryption_information_not_verified">Doğrulanmamış</string>
     <string name="encryption_information_verified">Doğrulanmış</string>
@@ -1227,7 +1226,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="keys_backup_recovery_code_error_decrypt">Yedekleme bu kurtarma anahtarı ile çözülemez: lütfen doğru kurtarma anahtarını girdiğinizi doğrulayın.</string>
 
     <string name="keys_backup_restore_success_title">Yedekleme İşlendi %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d oturum anahtarı onarıldı ve bu oturum tarafından bilinmeyen %2$d yeni anahtar eklendi</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Yedekleme %d anahtarı ile işlendi.</item>
         <item quantity="other">Yedekleme %d anahtarları ile işlendi.</item>
@@ -1310,7 +1308,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_background_fdroid_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
     <string name="settings_set_workmanager_delay">Tercih Edilen Senkronize Aralığı</string>
     <string name="settings_set_workmanager_delay_summary">%s
-\nSenkronizasyon kaynağın (pil) yada cihazın durumuna (uyku) bağlı olarak değişebilir.</string>
+\nSenkronizasyon kaynağın (pil) ya da cihazın durumuna (uyku) bağlı olarak değişebilir.</string>
     <string name="settings_integrations">Entegrasyonlar</string>
     <string name="settings_integrations_summary">Botları, köprüleri, widget\'ları ve etiket paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.
 \nEntegrasyon yöneticileri yapılandırma verilerini alır ve widget\'ları değiştirebilir, oda davetlerini gönderebilir ve sizin adınıza yetki seviyelerini ayarlayabilir.</string>
@@ -1442,7 +1440,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="sas_error_m_user">Kullanıcı doğrulamayı iptal etti</string>
     <string name="sas_error_m_timeout">Doğrulama işlemi zaman aşımına uğradı</string>
     <string name="sas_error_m_unknown_transaction">Oturum bu işlemi bilmiyor</string>
-    <string name="sas_error_m_unknown_method">Oturum anahtar anlaşması, hash, MAC, yada SAS yöntemi üzerinde anlaşamaz</string>
+    <string name="sas_error_m_unknown_method">Oturum anahtar anlaşması, hash, MAC, ya da SAS yöntemi üzerinde anlaşamaz</string>
     <string name="sas_error_m_mismatched_commitment">Hash tahaddütü eşleşmedi</string>
     <string name="sas_error_m_mismatched_sas">SAS eşleşmedi</string>
     <string name="sas_error_m_unexpected_message">Oturum beklenmeyen bir mesaj aldı</string>
@@ -1522,4 +1520,88 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_background_sync_update_error">Ayarlar güncellenemedi.</string>
 
 
+    <string name="play_video">Oynat</string>
+    <string name="pause_video">Durdur</string>
+    <string name="dismiss">Kapat</string>
+
+
+    <string name="action_copy">Kopyala</string>
+    <string name="dialog_title_success">Başarılı</string>
+
+    <string name="bottom_action_notification">Bildirimler</string>
+    <string name="call_failed_no_connection">Element Araması Başarısız Oldu</string>
+    <string name="call_failed_no_connection_description">Eş zamanlı bağlantı kurulamadı.
+\nAramaların hatasız çalışması için snucunuzun yöneticisinden TURN sunucusu ayarlamasını rica edin.</string>
+
+    <string name="call_select_sound_device">Ses Cihazı Seç</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Hoparlör</string>
+    <string name="sound_device_headset">Kulaklık</string>
+    <string name="sound_device_wireless_headset">Kablosuz Kulaklık</string>
+    <string name="call_switch_camera">Kamerayı Değiştir</string>
+    <string name="call_camera_front">Ön</string>
+    <string name="call_camera_back">Arka</string>
+    <string name="call_format_turn_hd_off">Yüksek çözünürlüğü kapat</string>
+    <string name="call_format_turn_hd_on">Yüksek çözünürlüğü aç</string>
+
+    <string name="login_error_ssl_peer_unverified">SSL Hatası: karşınıdaki kişinin kimliği doğrulanmadı.</string>
+    <string name="login_error_ssl_other">SSL Hatası.</string>
+    <string name="settings_call_show_confirmation_dialog_title">Kazara aramayı önle</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Arama başlatmadan önce onay iste</string>
+    <string name="active_call_with_duration">Mevcut Arama (%s)</string>
+    <string name="return_to_call">Aramaya dön</string>
+
+    <string name="room_participants_action_cancel_invite">Daveti Geri Çevir</string>
+    <string name="room_participants_power_level_demote_warning_title">Kendini alçaltmak istediğinden emin misin\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Kendi yetkinizi alçalttığınız için bunu geri alma şansınız olmayacak, eğer bu odadaki son yetkili kişiyseniz yetkileri geri alma imkânınız olmayacak.</string>
+    <string name="room_participants_power_level_demote">Alçalt</string>
+
+
+    <string name="room_participants_action_ignore_title">Kullanıcıyı yoksay</string>
+    <string name="room_participants_action_ignore_prompt_msg">Bu kullanıcıyı yoksayarsanız ortak odalarınızda mesajlarını görmeyeceksiniz.
+\n
+\nBunu istediğiniz zaman genel ayarlardan geri alabilirsiniz.</string>
+    <string name="room_participants_action_unignore_title">Kullanıcıyı yoksaymaktan vazgeç</string>
+    <string name="room_participants_action_unignore_prompt_msg">Bu kullanıcıyı yoksaymaktan vazgeçerseniz tekrar tüm mesajlarını görmeye başlayacaksınız.</string>
+    <string name="room_participants_action_cancel_invite_title">Daveti geri çevir</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Bu kullanıcıdan gelen daveti geri çevirmek istediğinizden emin misiniz\?</string>
+    <string name="room_participants_kick_title">Kullanıcıyı kov</string>
+    <string name="room_participants_kick_reason">Kovma sebebi</string>
+    <string name="room_participants_kick_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
+\n
+\nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.</string>
+    <string name="room_participants_ban_title">Kullanıcıyı yasakla</string>
+    <string name="room_participants_ban_reason">Yasaklama sebebi</string>
+    <string name="room_participants_unban_title">Kullanıcının yasağını kaldır</string>
+    <string name="room_participants_unban_prompt_msg">Kullanıcının yasağını kaldırırsanız odaya tekrar girebilir.</string>
+
+    <string name="settings_secure_backup_section_title">Güvenli Yedek</string>
+    <string name="settings_secure_backup_manage">Yönet</string>
+    <string name="settings_secure_backup_setup">Güvenli Yedeği Ayarla</string>
+    <string name="settings_secure_backup_reset">Güvenli Yedeği Sıfırla</string>
+    <string name="settings_secure_backup_enter_to_setup">Bu cihazda ayarla</string>
+    <string name="settings_secure_backup_section_info">Şifreli mesajlarınıza ve verilerinize erişiminizin kesilmesine karşı şifreleme anahtarlarını sunucunuzda saklayan bir teminat.</string>
+    <string name="reset_secure_backup_title">Mevcut yedeğin için yeni bir Güvenlik Anahtarı oluştur veya bir Güvenlik Sözcük Grubu belirle.</string>
+    <string name="reset_secure_backup_warning">Bu, mevcut Anahtarınızı veya Sözcük Grubunuzu değiştirecek.</string>
+
+    <string name="disabled_integration_dialog_title">Entegrasyonlar kapalı</string>
+    <string name="disabled_integration_dialog_content">Bunun için ayarlardan \'Entegrasyonlara İzin Ver\'i açın.</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">1 yasaklanmış kullanıcı</item>
+        <item quantity="other">%d yasaklanmış kullanıcı</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">Anahtarlar başarıyla dışarı aktarıldı</string>
+
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widget_view_action">GÖSTER</string>
+    <string name="active_widgets_title">Etkin widget\'lar</string>
+
+
+    <string name="recovery_key_export_saved">Kurtarma anahtarın kaydedildi.</string>
+
+    <string name="secure_backup_banner_setup_line1">Güvenli Yedekleme</string>
 </resources>

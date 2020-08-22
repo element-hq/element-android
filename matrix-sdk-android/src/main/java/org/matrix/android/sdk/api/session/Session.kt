@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.pushrules.PushRuleService
@@ -34,6 +36,7 @@ import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
@@ -47,7 +50,6 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
-import okhttp3.OkHttpClient
 
 /**
  * This interface defines interactions with a session.
@@ -193,6 +195,11 @@ interface Session :
      * Returns the file download service associated with the session
      */
     fun fileService(): FileService
+
+    /**
+     * Returns the permalink service associated with the session
+     */
+    fun permalinkService(): PermalinkService
 
     /**
      * Add a listener to the session.

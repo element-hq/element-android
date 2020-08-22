@@ -81,6 +81,15 @@
         <item name="riotx_bottom_nav_background_color">@color/riotx_bottom_nav_background_color_black</item>
         <item name="riotx_bottom_nav_background_border_color">@color/riotx_bottom_nav_background_border_color_black</item>
 
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_black</item>
+        <item name="android:navigationBarColor">@color/riotx_header_panel_background_black</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />

@@ -13,11 +13,6 @@
         tools:visible="true" />
 
     <item
-        android:id="@+id/open_matrix_apps"
-        android:title="@string/room_add_matrix_apps"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/voice_call"
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
@@ -34,6 +29,12 @@
         app:iconTint="@color/riotx_destructive_accent"
         app:showAsAction="always"
         tools:visible="true" />
+
+    <item
+        android:id="@+id/open_matrix_apps"
+        android:title="@string/room_add_matrix_apps"
+        app:actionLayout="@layout/custom_action_item_layout_badge"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/resend_all"

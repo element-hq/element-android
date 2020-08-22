@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +71,7 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveMyDeviceInfo(): Observable<List<DeviceInfo>> {
+    fun liveMyDevicesInfo(): Observable<List<DeviceInfo>> {
         return session.cryptoService().getLiveMyDevicesInfo().asObservable()
                 .startWithCallable {
                     session.cryptoService().getMyDevicesInfo()

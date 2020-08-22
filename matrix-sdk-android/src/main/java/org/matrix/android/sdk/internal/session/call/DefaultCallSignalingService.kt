@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,18 +58,32 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private val activeCalls = mutableListOf<MxCall>()
 
-    private var cachedTurnServerResponse: TurnServerResponse? = null
+    private val cachedTurnServerResponse = object {
+
+        private val MIN_TTL = 60
+
+        private val now = { System.currentTimeMillis() / 1000 }
+
+        private var expiresAt: Long = 0
+
+        var data: TurnServerResponse? = null
+            get() = if (expiresAt > now()) field else null
+            set(value) {
+                expiresAt = now() + (value?.ttl ?: 0) - MIN_TTL
+                field = value
+            }
+    }
 
     override fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable {
-        if (cachedTurnServerResponse != null) {
-            cachedTurnServerResponse?.let { callback.onSuccess(it) }
+        if (cachedTurnServerResponse.data != null) {
+            cachedTurnServerResponse.data?.let { callback.onSuccess(it) }
             return NoOpCancellable
         }
         return turnServerTask
                 .configureWith(GetTurnServerTask.Params) {
                     this.callback = object : MatrixCallback<TurnServerResponse> {
                         override fun onSuccess(data: TurnServerResponse) {
-                            cachedTurnServerResponse = data
+                            cachedTurnServerResponse.data = data
                             callback.onSuccess(data)
                         }
 

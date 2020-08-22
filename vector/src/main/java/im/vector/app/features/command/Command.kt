@@ -44,9 +44,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     POLL("/poll", "Question | Option 1 | Option 2 ...", R.string.command_description_poll),
     SHRUG("/shrug", "<message>", R.string.command_description_shrug),
     PLAIN("/plain", "<message>", R.string.command_description_plain),
-    DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session),
-    // TODO temporary command
-    VERIFY_USER("/verify", "<user-id>", R.string.command_description_verify);
+    DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session);
 
     val length
         get() = command.length + 1

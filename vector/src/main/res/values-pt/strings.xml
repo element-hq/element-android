@@ -1162,4 +1162,5 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
 
 
+    <string name="notification_sync_init">Inicializando serviço</string>
 </resources>

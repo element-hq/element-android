@@ -16,7 +16,6 @@
 package im.vector.app.features.widgets.permissions
 
 import android.content.DialogInterface
-import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
@@ -48,6 +47,9 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
+    // Use this if you don't need the full activity view model
+    var directListener: ((Boolean) -> Unit)? = null
+
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
@@ -68,18 +70,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         permissionData.permissionsList.forEach {
             infoBuilder.append("\n")
             val bulletPoint = getString(it)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            } else {
-                val start = infoBuilder.length
-                infoBuilder.append(bulletPoint)
-                infoBuilder.setSpan(
-                        BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()),
-                        start,
-                        bulletPoint.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
+            infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         infoBuilder.append("\n")
         widgetPermissionSharedInfo.text = infoBuilder
@@ -88,6 +79,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @OnClick(R.id.widgetPermissionDecline)
     fun doDecline() {
         viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
+        directListener?.invoke(false)
         // optimistic dismiss
         dismiss()
     }
@@ -95,6 +87,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @OnClick(R.id.widgetPermissionContinue)
     fun doAccept() {
         viewModel.handle(RoomWidgetPermissionActions.AllowWidget)
+        directListener?.invoke(true)
         // optimistic dismiss
         dismiss()
     }

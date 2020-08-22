@@ -786,7 +786,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Communities die Abzeichen an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -820,7 +820,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="forget_room">Raum vergessen</string>
     <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
-    <string name="settings_flair">Flair</string>
+    <string name="settings_flair">Abzeichen</string>
 
     <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
 
@@ -1086,8 +1086,6 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 
     <string name="auth_accept_policies">Bitte prüfe und akzeptiere die Richtlinien dieses Home-Servers:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d Schlüssel erfolgreich importiert.</string>
-
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
@@ -1264,7 +1262,6 @@ Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf
     <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
 
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurde(n) wiederhergestellt und %2$d vorher unbekannte(r) Schlüssel wurde(n) hinzugefügt</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
         <item quantity="other">Backup mit %d Schlüsseln wiederhergestellt.</item>
@@ -1823,7 +1820,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine Email Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
 
-    <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
 
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
@@ -1896,7 +1892,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
-    <string name="login_splash_title">Befreie deine Kommunikation</string>
+    <string name="login_splash_title">Es ist dein Gespräch. Besitze es.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
     <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
@@ -1988,7 +1984,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_developer_mode_fail_fast_title">Ausfallsicher</string>
     <string name="settings_developer_mode_fail_fast_summary">Element kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
 
-    <string name="command_description_verify">Überprüfe die angegebenen Nutzer-ID</string>
     <string name="command_description_shrug">Stellt einer Klartextnachricht ¯\\_(ツ)_/¯ voran</string>
 
     <string name="create_room_encryption_title">Aktiviere Verschlüsselung</string>
@@ -1999,7 +1994,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
     <string name="verification_sas_match">Sie stimmen überein</string>
     <string name="verification_sas_do_not_match">Sie stimmen nicht überein</string>
-    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in der selben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
     <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzer!n vertrauenswürdig ist. Vertraue allen Benutzer!nnen in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
 
@@ -2110,7 +2105,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
 
 
-    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_cross_signing_state">Kreuz-Signierung</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
     <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
@@ -2367,7 +2362,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="unencrypted">Unverschlüsselt</string>
     <string name="encrypted_unverified">Verschlüsselt von einem unbekannten Gerät</string>
     <string name="review_logins">Überprüfe, wo du angemeldet bist</string>
-    <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicher zu stellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
+    <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
@@ -2627,4 +2622,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
     <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
+    <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
 </resources>

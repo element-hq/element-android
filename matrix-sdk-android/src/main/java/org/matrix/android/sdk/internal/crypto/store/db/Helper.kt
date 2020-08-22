@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +18,14 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import android.util.Base64
-import org.matrix.android.sdk.internal.util.CompatUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 /**
  * Get realm, invoke the action, close realm, and return the result of the action
@@ -78,7 +78,7 @@ fun serializeForRealm(o: Any?): String? {
     }
 
     val baos = ByteArrayOutputStream()
-    val gzis = CompatUtil.createGzipOutputStream(baos)
+    val gzis = GZIPOutputStream(baos)
     val out = ObjectOutputStream(gzis)
     out.use {
         it.writeObject(o)
@@ -98,7 +98,7 @@ fun <T> deserializeFromRealm(string: String?): T? {
 
     val bais = ByteArrayInputStream(decodedB64)
     val gzis = GZIPInputStream(bais)
-    val ois = ObjectInputStream(gzis)
+    val ois = SafeObjectInputStream(gzis)
     return ois.use {
         it.readObject() as T
     }

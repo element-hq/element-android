@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/signedOutActionClickable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,11 +7,10 @@
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="50dp"
     android:orientation="horizontal"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingRight="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/actionIconImageView"
@@ -19,7 +18,6 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_secure_backup"
         android:tint="?riotx_text_primary" />

@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +39,8 @@ internal data class UploadSignatureQueryBuilder(
     fun build(): Map<String, Map<String, @JvmSuppressWildcards Any>> {
         val map = HashMap<String, HashMap<String, Any>>()
 
-        val usersList = (
-                deviceInfoList.map { it.userId }
-                        + signingKeyInfoList
-                        .map { it.userId }
-                ).distinct()
+        val usersList = (deviceInfoList.map { it.userId } + signingKeyInfoList.map { it.userId })
+                .distinct()
 
         usersList.forEach { userID ->
             val userMap = HashMap<String, Any>()

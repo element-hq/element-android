@@ -89,8 +89,17 @@
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
+    <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
+    <string name="conference_call_in_progress">A conference is already in progress!</string>
+    <string name="video_meeting">Start video meeting</string>
+    <string name="audio_meeting">Start audio meeting</string>
+    <string name="audio_video_meeting_description">Meetings use Jitsi security and permission policies. All people currently in the room will see an invite to join while your meeting is happening.</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
+    <string name="cannot_call_yourself">You cannot place a call with yourself</string>
+    <string name="cannot_call_yourself_with_invite">You cannot place a call with yourself, wait for participants to accept invitation</string>
     <string name="device_information">Session information</string>
+    <string name="failed_to_add_widget">Failed to add widget</string>
+    <string name="failed_to_remove_widget">Failed to remove widget</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
@@ -1055,7 +1064,7 @@
     <string name="encryption_information_device_name_with_warning">Public name (visible to people you communicate with)</string>
     <string name="device_name_warning">"A session's public name is visible to people you communicate with"</string>
     <string name="encryption_information_name">Public name</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Session ID</string>
     <string name="encryption_information_device_key">Session key</string>
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
@@ -1077,7 +1086,10 @@
     <string name="encryption_import_import">Import</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d key imported with success.</item>
+        <item quantity="other">%1$d/%2$d keys imported with success.</item>
+    </plurals>
 
     <string name="encryption_information_not_verified">Not Verified</string>
     <string name="encryption_information_verified">Verified</string>
@@ -1211,6 +1223,8 @@
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="integration_manager_not_configured">No integration manager configured.</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
+    <string name="room_manage_integrations">Manage Integrations</string>
+    <string name="room_no_active_widgets">No active widgets</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
@@ -1448,7 +1462,6 @@
 
     <!-- %s will be replaced by an emoji -->
     <string name="keys_backup_restore_success_title">Backup Restored %s !</string>
-    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this session</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Restored a backup with %d key.</item>
         <item quantity="other">Restored a backup with %d keys.</item>
@@ -1630,6 +1643,7 @@
     <string name="create_room_public_description">"Anyone will be able to join this room"</string>
     <string name="create_room_directory_title">"Room Directory"</string>
     <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+    <string name="create_room_federation_error">"The room has been created, but some invitations have not been sent for the following reason:\n\n%s"</string>
 
     <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
@@ -1769,7 +1783,10 @@
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
 
     <!-- Read receipts list a11y -->
-    <string name="two_and_some_others_read">%1$s, %2$s and %3$d others read</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s and %3$d other read</item>
+        <item quantity="other">%1$s, %2$s and %3$d others read</item>
+    </plurals>
     <string name="three_users_read">%1$s, %2$s and %3$s read</string>
     <string name="two_users_read">%1$s and %2$s read</string>
     <string name="one_user_read">%s read</string>
@@ -1802,7 +1819,7 @@
     <string name="report_content_custom_title">"Report this content"</string>
     <string name="report_content_custom_hint">"Reason for reporting this content"</string>
     <string name="report_content_custom_submit">"REPORT"</string>
-    <string name="block_user">"BLOCK USER"</string>
+    <string name="block_user">"IGNORE USER"</string>
 
     <string name="content_reported_title">"Content reported"</string>
     <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
@@ -1815,7 +1832,7 @@
 
     <string name="no_network_indicator">There is no network connection right now</string>
 
-    <string name="message_ignore_user">Block user</string>
+    <string name="message_ignore_user">Ignore user</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>
@@ -2012,7 +2029,6 @@
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <string name="settings_developer_mode_fail_fast_summary">Element may crash more often when an unexpected error occurs</string>
 
-    <string name="command_description_verify">Request to verify the given userID</string>
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>
@@ -2507,6 +2523,12 @@
 
     <string name="alert_push_are_disabled_title">Push notifications are disabled</string>
     <string name="alert_push_are_disabled_description">Review your settings to enable push notifications</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Wrong code, %d remaining attempt</item>
+        <item quantity="other">Wrong code, %d remaining attempts</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Warning! Last remaining attempt before logout!</string>
+    <string name="too_many_pin_failures">Too many errors, you\'ve been logged out</string>
     <string name="create_pin_title">Choose a PIN for security</string>
     <string name="create_pin_confirm_title">Confirm PIN</string>
     <string name="create_pin_confirm_failure">Failed to validate pin, please tap a new one.</string>

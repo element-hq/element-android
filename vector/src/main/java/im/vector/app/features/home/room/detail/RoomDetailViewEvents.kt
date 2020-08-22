@@ -35,9 +35,14 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
 
     data class ShowMessage(val message: String) : RoomDetailViewEvents()
+    data class ShowInfoOkDialog(val message: String) : RoomDetailViewEvents()
     data class ShowE2EErrorMessage(val withHeldCode: WithHeldCode?) : RoomDetailViewEvents()
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
+    data class JoinJitsiConference(val widget: Widget, val withVideo: Boolean) : RoomDetailViewEvents()
+
+    object ShowWaitingView: RoomDetailViewEvents()
+    object HideWaitingView: RoomDetailViewEvents()
 
     data class FileTooBigError(
             val filename: String,
@@ -66,6 +71,10 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class OpenStickerPicker(val widget: Widget): RoomDetailViewEvents()
 
     object OpenIntegrationManager: RoomDetailViewEvents()
+    object OpenActiveWidgetBottomSheet: RoomDetailViewEvents()
+    data class RequestNativeWidgetPermission(val widget: Widget,
+                                             val domain: String,
+                                             val grantedEvents: RoomDetailViewEvents) : RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()

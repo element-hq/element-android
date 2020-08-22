@@ -1087,8 +1087,6 @@
 
     <string name="auth_accept_policies">Per favore, leggi e accetta i termini di servizio di questo Home Server:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chiav(i) importate con successo.</string>
-
     <string name="settings_notification_troubleshoot">Diagnostica delle notifiche</string>
     <string name="settings_troubleshoot_diagnostic">Diagnosi</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Esegui i test</string>
@@ -1307,7 +1305,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questo codice di recupero: verifica di avere inserito il codice di recupero corretto.</string>
 
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
-    <string name="keys_backup_restore_success_description">Ripristinate %1$d chiavi di sessione e aggiunte %2$d nuove chiavi finora sconosciute a questa sessione</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Ripristinato un Backup con %d chiave.</item>
         <item quantity="other">Ripristinato un Backup con %d chiavi.</item>
@@ -1706,7 +1703,6 @@
     <string name="a11y_hide_password">Nascondi password</string>
     <string name="a11y_jump_to_bottom">Salta in fondo</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s ed altri %3$d hanno letto</string>
     <string name="three_users_read">%1$s, %2$s e %3$s hanno letto</string>
     <string name="two_users_read">%1$s e %2$s hanno letto</string>
     <string name="one_user_read">%s ha letto</string>
@@ -1981,7 +1977,6 @@
 
     <string name="settings_developer_mode_fail_fast_title">Crash facile</string>
     <string name="settings_developer_mode_fail_fast_summary">Element potrebbe crashare più spesso quando si verifica un errore imprevisto</string>
-    <string name="command_description_verify">Richiedi di verificare l\'ID utente in questione</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ ad un messaggio testuale</string>
 
     <string name="create_room_encryption_title">Attiva la cifratura</string>
@@ -2581,9 +2576,9 @@
     <string name="notice_crypto_unable_to_decrypt_friendly">In attesa del messaggio, potrebbe volerci un po\'</string>
     <string name="crypto_utd">Impossibile decifrare</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">A causa della crittografia end-to-end, devi aspettare che arrivi un messaggio di qualcuno poiché non ti sono state inviate correttamente le chiavi di crittografia.</string>
-    <string name="crypto_error_withheld_blacklisted">Non puoi accedere a questo messaggio perchè sei stato bloccato dal mittente</string>
-    <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perchè la tua sessione non è fidata dal mittente</string>
-    <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perchè il mittente non ha inviato le chiavi di proposito</string>
+    <string name="crypto_error_withheld_blacklisted">Non puoi accedere a questo messaggio perché sei stato bloccato dal mittente</string>
+    <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perché la tua sessione non è fidata dal mittente</string>
+    <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perché il mittente non ha inviato le chiavi di proposito</string>
     <string name="notice_crypto_unable_to_decrypt_merged">In attesa della cronologia di crittografia</string>
 
     <string name="element_disclaimer_title">Riot ora si chiama Element!</string>
@@ -2623,4 +2618,6 @@
     <string name="settings_security_pin_code_title">Attiva PIN</string>
     <string name="settings_security_pin_code_summary">Se vuoi reimpostare il PIN, tocca \"PIN dimenticato\" per disconnetterti e reimpostarlo.</string>
     <string name="auth_pin_confirm_to_disable_title">Conferma il PIN per disattivarlo</string>
+    <string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Chiedi conferma prima di iniziare una chiamata</string>
 </resources>

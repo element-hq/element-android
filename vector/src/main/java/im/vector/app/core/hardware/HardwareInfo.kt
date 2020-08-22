@@ -22,7 +22,6 @@ import android.content.Context
 import android.hardware.Camera
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
-import android.os.Build
 import androidx.core.content.getSystemService
 import javax.inject.Inject
 
@@ -33,10 +32,6 @@ class HardwareInfo @Inject constructor(
      * Tell if the device has a back (or external) camera
      */
     fun hasBackCamera(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return Camera.getNumberOfCameras() > 0
-        }
-
         val manager = context.getSystemService<CameraManager>() ?: return Camera.getNumberOfCameras() > 0
 
         return manager.cameraIdList.any {

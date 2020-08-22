@@ -80,7 +80,7 @@
     <string name="notice_event_redacted_by">%1$s দ্বারা বার্তা সরানো হয়েছে</string>
     <string name="notice_event_redacted_with_reason">বার্তা সরানো হয়েছে [কারণ:%1$s]</string>
     <string name="notice_event_redacted_by_with_reason">%1$s দ্বারা বার্তা সরানো হয়েছে [কারণ: %2$s]</string>
-    <string name="notice_profile_change_redacted">%1$s তাদের প্রোফাইল %2$ আপডেট করেছে</string>
+    <string name="notice_profile_change_redacted">%1$s তাদের প্রোফাইল %2$s আপডেট করেছে</string>
     <string name="notice_profile_change_redacted_by_you">আপনি আপনার প্রোফাইল %1$s আপডেট করেছেন</string>
     <string name="notice_room_third_party_invite">%1$s %2$s কে ঘরে যোগদানের জন্য একটি আমন্ত্রণ পাঠিয়েছে</string>
     <string name="notice_room_third_party_invite_by_you">আপনি %1$s কে ঘরে যোগদানের জন্য একটি আমন্ত্রণ প্রেরণ করেছেন</string>
