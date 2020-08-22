@@ -83,7 +83,7 @@
     <string name="user_directory_header">Adresár používateľov</string>
     <string name="matrix_only_filter">Len Matrix kontakty</string>
     <string name="no_conversation_placeholder">Žiadne konverzácie</string>
-    <string name="no_contact_access_placeholder">Aplikácii SchildiChat ste nepovolili prístup k lokálnym kontaktom</string>
+    <string name="no_contact_access_placeholder">Aplikácii Element ste nepovolili prístup k lokálnym kontaktom</string>
     <string name="no_result_placeholder">Žiadne výsledky</string>
 
     <string name="rooms_header">Miestnosti</string>
@@ -103,7 +103,7 @@
     <string name="send_bug_report">Nahlásiť chybu</string>
     <string name="send_bug_report_description">Prosím, Napíšte text hlásenia. Čo ste práve robili? Čo ste očakávali? Čo sa v skutočnosti udialo?</string>
     <string name="send_bug_report_placeholder">Tu popíšte váš problém</string>
-    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu SchildiChat. Toto hlásenie vrátane priložených záznamov a snímky obrazovky nebude verejne dostupné. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
+    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Element. Toto hlásenie vrátane priložených záznamov a snímky obrazovky nebude verejne dostupné. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
     <string name="send_bug_report_alert_message">Zdá sa, že v zlosti trasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
     <string name="send_bug_report_app_crashed">Posledné spustenie aplikácie skončilo pádom. Chceli by ste odoslať hlásenie o chybe?</string>
 
@@ -237,24 +237,24 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="media_picker_cannot_record_video">Nie je možné nahrať video</string>
 
     <string name="permissions_rationale_popup_title">Informácia</string>
-    <string name="permissions_rationale_msg_storage">Aby ste mohli posielať a prijímať súbory, SchildiChat potrebuje prístup k fotkám, videám a súborom vo vašom zariadení.
+    <string name="permissions_rationale_msg_storage">Aby ste mohli posielať a prijímať súbory, Element potrebuje prístup k fotkám, videám a súborom vo vašom zariadení.
 
 Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, SchildiChat potrebuje prístup k fotoaparátu.</string>
+    <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, Element potrebuje prístup k fotoaparátu.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, SchildiChat potrebuje prístup k mikrofónu vašeho zariadenia.</string>
+    <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, Element potrebuje prístup k mikrofónu vašeho zariadenia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, SchildiChat potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
+    <string name="permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, Element potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
 
 Prosím, povoľte prístup na nasledujúcich obrazovkách.</string>
-    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, SchildiChat potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, SchildiChat potrebuje prístup k vašim kontaktom.
+    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Element potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Element potrebuje prístup k vašim kontaktom.
 
-Chcete aplikácii SchildiChat povoliť prístup k vašim kontaktom?</string>
+Chcete aplikácii Element povoliť prístup k vašim kontaktom?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Prepáčte, akcia nebola vykonaná kvôli chýbajúcim oprávneniam</string>
 
@@ -610,7 +610,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="passphrase_confirm_passphrase">Potvrďte heslo</string>
     <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
 
-Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii SchildiChat.</string>
+Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Element.</string>
 
     <string name="encryption_import_e2e_room_keys">Importovať E2E kľúče miestností</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>
@@ -636,7 +636,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
 
-    <string name="e2e_enabling_on_app_update">SchildiChat od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
+    <string name="e2e_enabling_on_app_update">Element od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
 
 Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia.</string>
 
@@ -865,7 +865,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
 
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
-    <string name="startup_notification_privacy_message">SchildiChat môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
+    <string name="startup_notification_privacy_message">Element môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
     <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
@@ -880,8 +880,8 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <string name="settings_deactivate_my_account">Deaktivovať môj účet</string>
 
     <string name="settings_opt_in_of_analytics">Odosielať analytické údaje</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať SchildiChat.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať Element.</string>
     <string name="settings_opt_in_of_analytics_ok">Áno, chcem pomôcť!</string>
 
     <string name="widget_integration_missing_parameter">Chýba zadanie povinného argumentu.</string>
@@ -911,7 +911,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="e2e_re_request_encryption_key">Znovu požiadať o šifrovacie kľúče z vašich ostatných relácií.<u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite SchildiChat na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na túto reláciu.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Element na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na túto reláciu.</string>
 
     <string name="option_send_voice">Odoslať hlasovú správu</string>
 
@@ -1046,7 +1046,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
 
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Použiť predvolené zvonenie SchildiChat pre prichádzajúce hovory</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
 
@@ -1078,12 +1078,12 @@ Prosím, skontrolujte nastavenia účtu.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Nastavenia relácií.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre túto reláciu.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
-\nProsím, skontrolujte nastavenia SchildiChatu.</string>
+\nProsím, skontrolujte nastavenia Elementu.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Povoliť</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Kontrola aplikácii Služby Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Aplikácia Služby Google Playje k dispozícii a aktualizovaná.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
+    <string name="settings_troubleshoot_test_play_services_failed">Element používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opraviť Služby Play</string>
 
@@ -1110,19 +1110,19 @@ Prosím skúste reštartovať aplikáciu.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Spustenie po zapnutí</string>
     <string name="settings_troubleshoot_test_service_boot_success">Služba sa automaticky spustí po reštarte zariadenia.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte SchildiChat aspoň raz.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte Element aspoň raz.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Povoliť spustenie služby po reštarte</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrola obmedzenia spustenia na pozadí</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre SchildiChat. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre Element. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Obmedzenie spustenia na pozadí je aktívne pre SchildiChat.
-Činnosť aplikácii bude agresívne obmedzovaná operačným systémom, keď je SchildiChat na pozadí. Môže to mať negatívny vplyv na doručovanie oznámení.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Obmedzenie spustenia na pozadí je aktívne pre Element.
+Činnosť aplikácii bude agresívne obmedzovaná operačným systémom, keď je Element na pozadí. Môže to mať negatívny vplyv na doručovanie oznámení.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Deaktivovať obmedzenia</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimalizácia batérie</string>
-    <string name="settings_troubleshoot_test_battery_success">Chod SchildiChat nie je ovplyvnený nastavením optimalizácie batérie.</string>
+    <string name="settings_troubleshoot_test_battery_success">Chod Element nie je ovplyvnený nastavením optimalizácie batérie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ak používateľ na nejaký čas ponechá zariadenie s vypnutou obrazovkou odložené odpojené od napájania, na zariadení sa použije režim Doze. Toto aplikáciám zabráni pristupovať k sieti, pozastaví ich naplánované úlohy, synchronizáciu aj bežné signály.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovať optimalizáciu</string>
 
@@ -1138,8 +1138,8 @@ Prosím skúste reštartovať aplikáciu.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Zobrazovať udalosti účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahŕňa zmeny zobrazovaného mena a obrázka v profile.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Pripojenie na pozadí</string>
-    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
-Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí pre SchildiChat. Prosím povoľte ho.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
+Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí pre Element. Prosím povoľte ho.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udeliť oprávnenie</string>
 
     <string name="account_email_error">Pri pokuse overiť vašu emailovú adresu sa vyskytla chyba.</string>
@@ -1159,20 +1159,20 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 
     <string name="no_valid_google_play_services_apk">Nenájdená aktívna aplikácia Služby Google Play. Je možné, že nebude správne fungovať doručovanie oznámení.</string>
 
-    <string name="store_title">SchildiChat - Komunikujte, Podľa seba</string>
-    <string name="store_whats_new">"SchildiChat neustále aktualizujeme s vylepšeniami a zmenami.
+    <string name="store_title">Element - Komunikujte, Podľa seba</string>
+    <string name="store_whats_new">"Element neustále aktualizujeme s vylepšeniami a zmenami.
 Podrobný zoznam zmien (anglicky) nájdete na adrese: %1$s.
 Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</string>
     <string name="store_short_description">Univerzálna a bezpečná aplikácia na okamžitú komunikáciu úplne pod vašou kontrolou.</string>
-    <string name="store_full_description">Četovacia aplikácia, pod vašou kontrolou a úplne flexibilná. SchildiChat vám umožňuje komunikovať presne tak, ako to vy chcete. Vytvorená pre [matrix] - štandard pre otvorenú, decentralizovanú komunikáciu.
+    <string name="store_full_description">Četovacia aplikácia, pod vašou kontrolou a úplne flexibilná. Element vám umožňuje komunikovať presne tak, ako to vy chcete. Vytvorená pre [matrix] - štandard pre otvorenú, decentralizovanú komunikáciu.
 \n
 \nZaložte si bezplatný účet u matrix.org, založte si svoj server na https://modular.im alebo použite iný Matrix server.
 \n
-\nPrečo si vybrať SchildiChat\?
+\nPrečo si vybrať Element\?
 \n
 \n• KOMPLETNÁ KOMUNIKÁCIA: Vytvárajte miestnosti pre vaše týmy, priateľov či komunity - akokoľvek chcete! Píšte si, zdieľajte súbory, pridávajte widgety a uskutočňujte hlasové hovory či video-hovory - všetko bezplatne.
 \n
-\n• INTEGRÁCIE: Používajte SchildiChat s nástrojmi, ktoré poznáte a s obľubou používate. S SchildiChat môžete taktiež komunikovať s používateľmi a skupinami na iných četovacích platformách.
+\n• INTEGRÁCIE: Používajte Element s nástrojmi, ktoré poznáte a s obľubou používate. S Element môžete taktiež komunikovať s používateľmi a skupinami na iných četovacích platformách.
 \n
 \n• SÚKROMNÝ A ZABEZPEČENÝ: Udržte si svoje konverzácie tajné. Špičkové end-to-end šifrovanie zaručí, že súkromné konverzácie ostanú súkromnými.
 \n
@@ -1217,11 +1217,11 @@ Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</str
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Skontrolovať nastavenia</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia SchildiChat nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
+\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia Element nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nKonfigurácia SchildiChat nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
+\nKonfigurácia Element nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia SchildiChat nemá vplyv na zobrazenie tejto chyby.</string>
+\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia Element nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
 
     <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nepotrebuje</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>

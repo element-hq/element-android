@@ -83,7 +83,7 @@
     <string name="local_address_book_header">Lista de endereços local</string>
     <string name="matrix_only_filter">Apenas contactos do Matrix</string>
     <string name="no_conversation_placeholder">Não há conversas</string>
-    <string name="no_contact_access_placeholder">Não permitiu ao SchildiChat aceder aos seus contactos locais</string>
+    <string name="no_contact_access_placeholder">Não permitiu ao Element aceder aos seus contactos locais</string>
     <string name="no_result_placeholder">Sem resultados</string>
 
     <!-- Rooms fragment -->
@@ -246,26 +246,26 @@ Pedimos desculpa pela inconveniência.</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">O SchildiChat necessita de permissão para aceder ao seu armazenamento de fotos e vídeos para poder enviar e guardar anexos.
+    <string name="permissions_rationale_msg_storage">O Element necessita de permissão para aceder ao seu armazenamento de fotos e vídeos para poder enviar e guardar anexos.
 
 Permita o acesso na próxima janela para poder enviar ficheiros a partir do seu telefone.</string>
-    <string name="permissions_rationale_msg_camera">O SchildiChat necessita de permissão para aceder à sua câmara para poder tirar fotos e fazer chamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera">O Element necessita de permissão para aceder à sua câmara para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Por favor, permita o acesso na próxima janela para poder realizar a chamada.</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChat necessita de permissão para aceder ao seu microfone para realizar chamadas de áudio.</string>
+    <string name="permissions_rationale_msg_record_audio">Element necessita de permissão para aceder ao seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Por favor, permita acesso na próxima janela para poder efetuar a chamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat necessita de permissão para aceder à sua câmara e ao seu microfone para realizar chamadas de vídeo.
+    <string name="permissions_rationale_msg_camera_and_audio">Element necessita de permissão para aceder à sua câmara e ao seu microfone para realizar chamadas de vídeo.
 
 Por favor, permita o acesso na próxima janela para poder efetuar a chamada.</string>
-    <string name="permissions_rationale_msg_contacts">O SchildiChat necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus e-mails e números de telefone.
+    <string name="permissions_rationale_msg_contacts">O Element necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus e-mails e números de telefone.
 
-Por favor, permita o acesso na próxima janela para poder encontrar utilizadores na sua lista de contactos que podem ser contactados pelo SchildiChat.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">O SchildiChat necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus endereços de email e números de telefone.
+Por favor, permita o acesso na próxima janela para poder encontrar utilizadores na sua lista de contactos que podem ser contactados pelo Element.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">O Element necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus endereços de email e números de telefone.
 
-Permitir ao SchildiChat aceder aos seus contactos?</string>
+Permitir ao Element aceder aos seus contactos?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissões</string>
 
@@ -659,7 +659,7 @@ Atenção: este ficheiro poderá ser apagado se a aplicação for desinstalada.<
     <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar, abaixo. Se não é igual, então alguém está a interceptar este dispositivo e você poderá querer colocá-lo na lista negra. No futuro, este processo de verificação irá ser mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
 
-    <string name="e2e_enabling_on_app_update">O SchildiChat agora permite criptografia ponta-a-ponta mas necessita de iniciar sessão novamente para ativá-la.
+    <string name="e2e_enabling_on_app_update">O Element agora permite criptografia ponta-a-ponta mas necessita de iniciar sessão novamente para ativá-la.
 
 Pode fazê-lo agora ou mais tarde a partir das definições da aplicação.</string>
 
@@ -794,7 +794,7 @@ Adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key_sent">Pedido de chaves enviado.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor abra o SchildiChat num dispositivo que consiga decifrar a mensagem, para que esse dispositivo possa enviar as chaves para este dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor abra o Element num dispositivo que consiga decifrar a mensagem, para que esse dispositivo possa enviar as chaves para este dispositivo.</string>
 
     <string name="groups_list">Lista de Grupos</string>
 
@@ -887,14 +887,14 @@ Adicionar alguns agora?</string>
     <string name="settings_deactivate_my_account">Desactivar a minha conta</string>
 
     <string name="startup_notification_privacy_title">Privacidade das Notificações</string>
-    <string name="startup_notification_privacy_message">O SchildiChat pode executar em segundo plano para gerir as notificações de forma segura e confidencial (isso poderá afectar a utilização da bateria).</string>
+    <string name="startup_notification_privacy_message">O Element pode executar em segundo plano para gerir as notificações de forma segura e confidencial (isso poderá afectar a utilização da bateria).</string>
     <string name="startup_notification_privacy_button_grant">Conceder permissão</string>
     <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
     <string name="settings_opt_in_of_analytics">Enviar dados de análise de estatísticas</string>
-    <string name="settings_opt_in_of_analytics_summary">O SchildiChat recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, permita o envio de dados de análise para ajudar-nos a melhorar o SchildiChat.</string>
+    <string name="settings_opt_in_of_analytics_summary">O Element recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, permita o envio de dados de análise para ajudar-nos a melhorar o Element.</string>
     <string name="settings_opt_in_of_analytics_ok">Sim, quero ajudar!</string>
 
     <string name="settings_flair">Insígnias</string>
@@ -1162,7 +1162,7 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricções</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimização de bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">SchildiChat não é afectado por Optimização de bateria</string>
+    <string name="settings_troubleshoot_test_battery_success">Element não é afectado por Optimização de bateria</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Optimização</string>
 
     <string name="settings_noisy_notifications_preferences">Configurar Notificações de ruido</string>

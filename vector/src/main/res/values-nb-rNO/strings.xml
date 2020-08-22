@@ -490,7 +490,7 @@
     <string name="room_settings_mention_only">Kun nevninger</string>
     <string name="settings_olm_version">olm-versjon</string>
     <string name="settings_deactivate_account_section">Deaktiver kontoen</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="settings_integration_manager">Integreringsbehandler</string>
 
@@ -698,7 +698,7 @@
     <string name="user_directory_header">Brukerkatalog</string>
     <string name="matrix_only_filter">Bare matrix-kontakter</string>
     <string name="no_conversation_placeholder">Ingen samtaler</string>
-    <string name="no_contact_access_placeholder">Du ga ikke SchildiChat tilgang til dine lokale kontakter</string>
+    <string name="no_contact_access_placeholder">Du ga ikke Element tilgang til dine lokale kontakter</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurert.</string>
 
     <string name="rooms_directory_header">Romkatalog</string>
