@@ -29,5 +29,6 @@
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
+    <issue id="ObsoleteSdkInt" severity="error" />
 
 </lint>

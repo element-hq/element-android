@@ -99,7 +99,7 @@
     <string name="action_voice_call">Röstsamtal</string>
     <string name="action_video_call">Videosamtal</string>
     <string name="action_global_search">Global sökning</string>
-    <string name="action_mark_all_as_read">Markera alla som skickade</string>
+    <string name="action_mark_all_as_read">Markera alla som lästa</string>
     <string name="action_historical">Historisk</string>
     <string name="action_quick_reply">Snabbsvar</string>
     <string name="action_mark_room_read">Markera som läst</string>
@@ -272,7 +272,6 @@
     <string name="login_error_no_homeserver_found">Det här är inte en giltig Matrixserveradress</string>
     <string name="login_error_homeserver_not_found">Kan inte nå en hemserver på den här URLen, vänligen kolla den</string>
     <string name="login_error_ssl_handshake">Din enhet använder ett utdaterat TLS-protokoll, sårbart för anfall, så för din säkerhets skull så kommer du inte kunna ansluta</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Felaktigt användarnamn/lösenord</string>
     <string name="login_error_unknown_token">Den åtkomsttoken du specificerade kändes inte igen</string>
@@ -281,10 +280,6 @@
     <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
     <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
     <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
-
-    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för totalsträckskryptering för den här sessionen och skicka den publika nyckeln till hemservern. 
-\nDet här behövs bara en gång. 
-\nUrsäkta för besväret.</string>
 
     <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
 
@@ -320,7 +315,7 @@
     <string name="room_info_room_topic">Rumsämne</string>
 
     <string name="settings_call_category">Samtal</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
@@ -497,23 +492,11 @@
     <string name="fab_menu_create_room">Rum</string>
     <string name="fab_menu_create_chat">Direktmeddelanden</string>
 
-    <string name="alpha_disclaimer_content_line_2_gplay">Den senaste funktionslistan finns alltid i %1$s, och om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-beskrivningen</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
-
     <string name="send_suggestion">Ge ett förslag</string>
     <string name="send_suggestion_content">Vänligen skriv ditt förslag nedan.</string>
     <string name="send_suggestion_report_placeholder">Beskriv ditt förslag här</string>
     <string name="send_suggestion_sent">Tack, ditt förslag har skickats framgångsrikt</string>
     <string name="send_suggestion_failed">Förslaget misslyckades att skickas (%s)</string>
-
-    <string name="store_riotx_full_description">Element är en ny klient för Matrix-protokollet (Matrix.org): ett öppet nätverk för säker, decentraliserad kommunikation. Element är en komplett omskrivning av klienten Riot för Android, baserat på en komplett omskrivning av Matrix-SDK:t för Android.
-\n
-\nVarning: Detta är en betaversion. Element är för närvarande under aktiv utveckling och innehåller begränsningar och (vi hoppas inte alltför många) buggar. All feedback är välkommen!
-\n
-\nElement stöder: • Logga in med ett existerande konto • Skapa rum och gå med i publika rum • Acceptera och neka inbjudningar • Lista användares rum • Visa rumsdetaljer • Skicka textmeddelanden • Skicka bilagor • Läsa och skriva meddelanden i krypterade rum • Krypto: säkerhetskopiering av E2E-nycklar, avancerad enhetsverifiering, nyckeldelningsförfrågan och -svar • Pushnotiser • Ljust, mörkt eller svart tema
-\n
-\nInte alla funktioner i Element är implementerade i Element än. Huvudsakligen saknade (vilka kommer snart!) funktioner: • Rumsinställningar (lista rumsmedlemmar, o.s.v.) • Röstsamtal • Widgets • …</string>
 
     <string name="bottom_action_people_x">Direktmeddelanden</string>
 
@@ -578,8 +561,6 @@
 
     <string name="settings_general_title">Allmänt</string>
     <string name="settings_preferences">Alternativ</string>
-    <string name="store_riotx_title">Element - Nästa generations Matrix-klient</string>
-    <string name="store_riotx_short_description">En snabbare och lättviktigare klient för Matrix som använder de senaste Android-ramverken</string>
     <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
 
     <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>
@@ -616,7 +597,6 @@
     <string name="settings_app_info_link_title">Appinfo</string>
     <string name="settings_app_info_link_summary">Visa info om appen i systeminställningarna.</string>
     <string name="settings_notification_advanced">Avancerade aviseringsinställningar</string>
-    <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet efter händelser, konfigurera ljud, LED, vibration</string>
     <string name="settings_notification_by_event">Aviseringsprioritet för händelser</string>
 
     <string name="settings_notification_privacy">Aviseringssekretess</string>
@@ -724,9 +704,6 @@
     <string name="device_name_warning">En sessions publika namn är synligt för personer du pratar med</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner från den här sessionen.</string>
-    <string name="e2e_enabling_on_app_update">Element stöder nu totalsträckskryptering men du behöver logga in igen för att aktivera det.
-\n
-\nDu kan göra det nu eller senare från appinställningarna.</string>
 
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d avisering</item>
@@ -768,10 +745,6 @@
     <string name="sas_incoming_request_description">Verifiera den här sessionen för att markera den som pålitligt. Att lita på folks sessioner ger dig extra sinnesro när du skickar totalsträckskrypterade meddelanden.</string>
     <string name="sas_verified_successful_description">Säkra meddelanden mellan dig och den här användaren är totalsträckskrypterade och kommer inte att vara läsbara för tredje parter.</string>
     <string name="identity_server_not_defined">Du använder ingen identitetsserver</string>
-    <string name="security_warning_identity_server">Tidigare versioner av Element hade en säkerhetsbugg som kunde ge din identitetsserver (%1$s) tillgång till ditt konto. Om du litar på %2$s så kan du ignorera detta; annars bör du logga ut och logga in igen.
-\n
-\nLäs mer detaljer här:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="settings_sdk_version">Matrix-SDK-version</string>
     <string name="settings_security_and_privacy">Säkerhet och sekretess</string>
@@ -912,7 +885,7 @@
     <string name="encryption_not_enabled">Kryptering inte aktiverat</string>
     <string name="settings_notification_configuration">Aviseringskonfiguration</string>
     <string name="settings_messages_at_room">Meddelanden som innehåller @room</string>
-    <string name="settings_notification_advanced_summary_riotx">Sätt aviseringsprioritet för händelser</string>
+    <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet för händelser</string>
 
     <string name="media_file_added_to_gallery">Mediafiler tillagda till galleriet</string>
     <string name="error_adding_media_file_to_gallery">Kunde inte lägga till mediafilen till galleriet</string>
@@ -962,4 +935,174 @@
     <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
     <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
 
+    <string name="play_video">Spela</string>
+    <string name="pause_video">Pausa</string>
+    <string name="dismiss">Avfärda</string>
+
+
+    <string name="action_copy">Kopiera</string>
+    <string name="dialog_title_success">Framgång</string>
+
+    <string name="bottom_action_notification">Aviseringar</string>
+    <string name="call_switch_camera">Byt kamera</string>
+    <string name="room_participants_action_ignore_prompt_msg">Att ignorera den här användaren kommer att ta bort hens meddelanden från rum ni delar.
+\n
+\nDu kan återkalla det här när som helst i de allmänna inställningarna.</string>
+    <string name="room_message_placeholder_encrypted">Skicka ett krypterat meddelande…</string>
+    <string name="room_message_placeholder_not_encrypted">Skicka ett meddelande (okrypterat)…</string>
+    <string name="room_message_file_not_found">Filen hittades inte</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 nytt meddelande</item>
+        <item quantity="other">%d nya meddelanden</item>
+    </plurals>
+
+    <string name="ssl_expected_existing_expl">Certifikatet har ändrats från en pålitligt till en som vi inte litar på. Servern kan ha förnyat sitt certifikat. Kontakta serveradministratören för det förväntade fingeravtrycket.</string>
+    <string name="room_details_settings">Inställningar</string>
+    <string name="room_sliding_menu_settings">Inställningar</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Systeminställningar.</string>
+    <string name="open_settings">Öppna inställningar</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Kontoinställningar.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Sessionsinställningar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Anpassade inställningar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Kolla inställningar</string>
+
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_integrations">Integrationer</string>
+    <string name="settings_integrations_summary">Använd en integrationshanterare för att hantera bottar, bryggor, widgets och klistermärkespaket.
+\nIntegrationshanterare får konfigurationsdata, och kan ändra widgets, skicka rumsinbjudningar, och ändra användarnivåer å dina vägnar.</string>
+    <string name="settings_send_message_with_enter">Skicka meddelande med retur</string>
+    <string name="settings_send_message_with_enter_summary">Returtangenten på mjukvarutangentbordet kommer att skicka ett meddelande istället för att lägga till ett radslut</string>
+
+    <string name="settings_secure_backup_section_info">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data genom att säkerhetskopiera krypteringsnycklarna på din server.</string>
+    <string name="settings_integration_allow">Tillåt integrationer</string>
+    <string name="disabled_integration_dialog_title">Integrationer är avstängda</string>
+    <string name="disabled_integration_dialog_content">Aktivera \'Tillåt integrationer\' I inställningarna för att göra detta.</string>
+
+    <string name="encryption_export_room_keys_summary">Exportera nycklarna till en lokal fil</string>
+    <string name="encryption_export_saved_as">Krypteringsnycklarna har sparats till \'%s\'.
+\n
+\nVarning: den har filen kan komma att raderas om appen avinstalleras.</string>
+    <string name="encryption_import_room_keys_summary">Importera nycklarna från en lokal fil</string>
+    <string name="unknown_devices_alert_message">Det här rummet innehåller okända sessioner som inte har verifierats.
+\nDetta betyder att det inte finns någon garanti att sessionerna tillhör användarna de påstår sig göra.
+\nVi rekommenderar att du går igenom verifieringsprocessen för varje session innan du fortsätter, men du kan skicka meddelandet utan att verifiera om du föredrar.
+\n
+\nOkända sessioner:</string>
+
+    <string name="select_room_directory">Välj en rumskatalog</string>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="other">%s olästa aviserade meddelanden</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="other">%s olästa aviserade meddelanden</item>
+    </plurals>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 meddelande</item>
+        <item quantity="other">%1$s: %2$d meddelanden</item>
+    </plurals>
+    <string name="font_size">Teckenstorlek</string>
+    <string name="tiny">Pytteliten</string>
+    <string name="small">Liten</string>
+    <string name="normal">Normal</string>
+    <string name="large">Stor</string>
+    <string name="larger">Större</string>
+    <string name="largest">Störst</string>
+    <string name="huge">Enorm</string>
+
+    <string name="room_widget_webview_access_camera">Använd kameran</string>
+    <string name="room_add_matrix_apps">Lägg till Matrix-appar</string>
+    <string name="settings_labs_native_camera">Använd den inbyggda kameran</string>
+    <string name="settings_labs_native_camera_summary">Starta systemets kamera istället för den inbyggda kameraskärmen.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Använd returtangenten för att skicka meddelande</string>
+    <string name="encrypted_message">Krypterat meddelande</string>
+
+    <string name="resource_limit_contact_action">Kontakta administratören</string>
+
+    <string name="resource_limit_contact_admin">kontakta din tjänstadministratör</string>
+
+    <string name="keys_backup_setup_step3_save_button_title">Spara som fil</string>
+    <string name="recovery_key_export_saved_as_warning">Återställningsnyckeln har sparats till \'%s\'.
+\n
+\nVarning: den har filen kan komma att raderas om appen avinstalleras.</string>
+    <string name="keys_backup_restore_setup_recovery_key">Meddelandeåterställning</string>
+
+    <string name="keys_backup_settings_delete_confirm_message">Radera dina säkerhetskopierade krypteringsnycklar från servern\? Du kommer inte längre kunna använda din återställningsnyckel för att läsa krypterad meddelandehistorik.</string>
+
+    <string name="secure_backup_banner_setup_line2">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data</string>
+
+    <string name="keys_backup_banner_update_line1">Nya säkra meddelandenycklar</string>
+    <string name="sas_error_m_unexpected_message">Den här sessionen fick ett oväntat meddelande</string>
+    <string name="sas_error_m_invalid_message">Ett ogiltigt meddelande mottogs</string>
+    <string name="room_list_people_empty_body">Dina direktmeddelandekonversationer kommer att visas här</string>
+    <string name="event_redacted">Meddelande raderat</string>
+    <string name="import_e2e_keys_from_file">Importera krypteringsnycklar från filen \"%1$s\".</string>
+
+    <string name="send_file_step_encrypting_file">Krypterar fil…</string>
+    <string name="send_file_step_sending_file">Skickar fil (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Laddar ner filen %1$s…</string>
+    <string name="downloaded_file">Filen %1$s har laddats ner!</string>
+
+    <string name="message_edits">Meddelanderedigeringar</string>
+    <string name="labs_merge_e2e_in_timeline">Sammanfogaren misslyckades med att avkryptera ett meddelande i tidslinjen</string>
+    <string name="add_by_matrix_id">Lägg till med Matrix-ID</string>
+    <string name="direct_room_no_known_users">Inga resultat hittade, använd \"Lägg till med Matrix-ID\" för att söka på servern.</string>
+    <string name="terms_description_for_integration_manager">Använd bottar, bryggor, widgets och klistermärkespaket</string>
+
+    <string name="settings_text_message_sent">Ett textmeddelande har skickats till %s. Vänligen skriv in verifieringskoden det innehåller.</string>
+    <string name="error_file_too_big">Filen \'%1$s\' (%2$s) är för stor för att laddas upp. Gränsen är %3$s.</string>
+
+    <string name="attachment_type_file">Fil</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Kamera</string>
+    <string name="attachment_type_audio">Ljud</string>
+    <string name="attachment_type_gallery">Galleri</string>
+    <string name="attachment_type_sticker">Klistermärke</string>
+    <string name="command_description_spoiler">Skickar det valda meddelandet som en spoiler</string>
+    <string name="login_server_matrix_org_text">Gå med miljontals användare gratis på den största publika servern</string>
+    <string name="command_description_shrug">Lägger till ¯\\_(ツ)_/¯ till början av ett textmeddelande</string>
+
+    <string name="sent_an_audio_file">Ljud</string>
+    <string name="sent_a_file">Fil</string>
+    <string name="send_a_sticker">Klistermärke</string>
+
+    <string name="rendering_event_error_type_of_message_not_handled">Element hanterar inte meddelanden av typen \'%1$s\'</string>
+    <string name="command_description_rainbow">Skickar det valda meddelandet I regnbågsfärger</string>
+    <string name="settings_category_composer">Meddelanderedigering</string>
+
+    <string name="message_key">Meddelandenyckel</string>
+    <string name="generate_message_key">Generera en meddelandenyckel</string>
+
+    <string name="bootstrap_cancel_text">Om du avbryter nu så kan du komma att förlora krypterade meddelanden och data om du förlorar åtkomst till dina inloggade sessioner.
+\n
+\nDu kan också sätta upp säker säkerhetskopiering och hantera dina nycklar in inställningarna.</string>
+
+    <string name="settings_messages_in_e2e_one_to_one">Krypterade meddelanden i en-till-en-chattar</string>
+    <string name="settings_messages_in_e2e_group_chat">Krypterade meddelanden i gruppchattar</string>
+    <string name="settings_troubleshoot_title">Felsökning</string>
+    <string name="command_description_plain">Skicka ett meddelande som vanlig text, utan att tolka det som Markdown</string>
+
+    <string name="room_message_placeholder">Meddelande…</string>
+
+    <string name="use_file">Använd fil</string>
+
+    <string name="error_saving_media_file">Kunde inte spara mediefil</string>
+    <string name="change_password_summary">Sätt ett nytt kontolösenord…</string>
+
+    <string name="confirm_your_identity">Bekräfta din identitet genom att verifiera den här inloggningen från en av dina andra sessioner, och ge den åtkomst till dina krypterade meddelanden.</string>
+    <string name="a11y_stop_camera">Stoppa kameran</string>
+    <string name="a11y_start_camera">Starta kameran</string>
+
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data genom att säkerhetskopiera krypteringsnycklarna på din server.</string>
+    <string name="notice_crypto_unable_to_decrypt_final">Du kan inte komma åt det här meddelandet</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Väntar på det här meddelandet, det här kan ta ett tag</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Vid totalsträckskryptering så kan du behöva vänta på att någons meddelande ska komma för att krypteringsnycklarna inte har skickats till dig.</string>
+    <string name="crypto_error_withheld_blacklisted">Du kan inte komma åt det här meddelandet för att du har blockerats av avsändaren</string>
+    <string name="crypto_error_withheld_unverified">Du kan inte komma åt det här meddelandet för att avsändaren inte litar på din session</string>
+    <string name="crypto_error_withheld_generic">Du kan inte komma åt det här meddelandet för att avsändaren avsiktligt inte skickade nycklarna</string>
+    <string name="search_in_my_contacts">Sök i mina kontakter</string>
+    <string name="empty_contact_book">Din kontaktbok är tom</string>
 </resources>

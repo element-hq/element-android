@@ -7,13 +7,13 @@
     android:addStatesFromChildren="true"
     android:background="?attr/selectableItemBackground">
 
-    <im.vector.riotx.core.platform.CheckableView
+    <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/informationBottom"
         android:layout_alignParentTop="true"
-        android:background="?riotx_highlighted_message_background" />
+        android:background="@drawable/highlighted_message_background" />
 
     <ImageView
         android:id="@+id/messageAvatarImageView"
@@ -29,10 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginRight="8dp"
         android:layout_toStartOf="@+id/messageTimeView"
         android:layout_toEndOf="@+id/messageStartGuideline"
         android:ellipsize="end"
@@ -49,9 +47,7 @@
         android:layout_alignBaseline="@+id/messageMemberNameView"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         tools:text="@tools:sample/date/hhmm" />
@@ -160,13 +156,13 @@
             tools:layout_height="40dp">
 
             <!-- ReactionButtons will be added here in the code -->
-            <!--im.vector.riotx.features.reactions.widget.ReactionButton
+            <!--im.vector.app.features.reactions.widget.ReactionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" /-->
 
         </com.google.android.flexbox.FlexboxLayout>
 
-        <im.vector.riotx.core.ui.views.ReadReceiptsView
+        <im.vector.app.core.ui.views.ReadReceiptsView
             android:id="@+id/readReceiptsView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

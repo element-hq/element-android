@@ -201,7 +201,6 @@
     <string name="login_error_login_email_not_yet">Sähköpostiisi lähetetty linkki, jota ei ole vielä klikattu</string> <!-- ??? -->
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Sinun pitää kirjautua uudelleen, luodaksesi salausavaimet tälle laitteelle.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lukukuittaukset</string>
@@ -661,9 +660,6 @@
 \nTulevaisuudessa tämä varmennusprosessi tulee olemaan hienostuneempi.</string>
     <string name="encryption_information_verify_key_match">Vahvistan, että avaimet täsmäävät</string>
 
-    <string name="e2e_enabling_on_app_update">Element tukee päästä päähän -salausta. Kirjaudu sisään uudelleen ottaaksesi salaus käyttöön.
-\nVoit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia istuntoja</string>
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
@@ -721,8 +717,6 @@
 
     <string name="option_take_photo">Ota kuva</string>
     <string name="option_take_video">Kaappaa video</string>
-
-    <string name="login_mobile_device">Mobiili</string>
 
     <string name="call">Puhelu</string>
     <string name="settings_notification_ringtone">Ilmoitusääni</string>
@@ -923,7 +917,7 @@ Haluatko lisätä paketteja?</string>
         <item quantity="other">%d jäsenyysmuutosta</item>
     </plurals>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
 
@@ -985,7 +979,6 @@ Haluatko lisätä paketteja?</string>
         <item quantity="other">%1$s huonetta löydetty kohteelle %2$s</item>
     </plurals>
     <string name="settings_notification_advanced">Yksityiskohtaiset ilmoitusasetukset</string>
-    <string name="settings_notification_advanced_summary">Aseta ilmoituksien tärkeys kohteittain ja määritä hälytysäänet, ledin värit ja värinähälytykset</string>
     <string name="settings_notification_by_event">Ilmoituksen tärkeys kohteittain</string>
 
     <string name="settings_notification_privacy">Ilmoitusten yksityisyys</string>
@@ -1122,8 +1115,6 @@ Haluatko lisätä paketteja?</string>
     <string name="encryption_message_recovery">Salattujen viestien palautus</string>
     <string name="encryption_settings_manage_message_recovery_summary">Hallitse avainten varmuuskopiointia</string>
 
-    <string name="encryption_import_room_keys_success">%1$d / %2$d avainta tuotu onnistuneesti.</string>
-
     <string name="lock_screen_hint">Kirjoita tähän…</string>
 
     <plurals name="notification_unread_notified_messages">
@@ -1227,11 +1218,6 @@ Haluatko lisätä paketteja?</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Kelvollista Google Play Services APK:ta ei löytynyt. Ilmoitukset eivät ehkä toimi oikein.</string>
 
-    <string name="store_title">Element - Kommunikoi, sinun tavallasi</string>
-    <string name="store_whats_new">"Olemme aina tekemässä muutoksia ja parannuksia Element:ään.
-Täydellisen muutoslokin löydät täältä: %1$s.
-Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä."</string>
-    <string name="store_short_description">Universaali ja turvallinen keskusteluohjelma kokonaan sinun hallinnassa.</string>
     <string name="passphrase_create_passphrase">Luo salalause</string>
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
     <string name="passphrase_empty_error_message">Syötä salalause</string>
@@ -1305,7 +1291,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="keys_backup_recovery_code_error_decrypt">Varmuuskopiota ei pystytty purkamaan tällä palautusavaimella. Tarkista, että olet syöttänyt oikean palautusavaimen.</string>
 
     <string name="keys_backup_restore_success_title">Varmuuskopio palautettu %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d istuntoavainta palautettu, ja lisättiin %2$d uutta avainta, joita tämä laite ei tuntenut</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Varmuuskopio palautettiin yhdellä avaimella.</item>
         <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
@@ -1377,22 +1362,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="passwords_do_not_match">Salasanat eivät täsmää</string>
 
     <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
-
-    <string name="store_full_description">Keskustelusovellus, joka on sinun hallinnassasi ja erittäin joustava. Element antaa sinun viestiä juuri sillä tavalla kuin haluat. Taustalla [matrix] – avoimen ja hajautetun viestinnän standardi.
-\n
-\nHanki ilmainen matrix.org-tili, hanki oma palvelimesi osoitteesta https://modular.im tai käytä muuta Matrix-palvelinta. 
-\n
-\nMiksi valita Element\?
-\n
-\n• Kattavat mahdollisuudet viestintään: rakenna huoneita tiimeillesi, ystävillesi ja yhteisöllesi – juuri niin kuin haluat! Keskustele, jaa tiedostoja, lisää sovelmia ja soita ääni‐ ja videopuheluita – kaikki tämä ilmaiseksi.
-\n 
-\n• Tehokkaat integraatiot: Käytä Elementia tuntemiesi työkalujen kanssa. Element mahdollistaa keskustelut jopa eri keskusteluohjelmia käyttävien ihmisten ja ryhmien kanssa.
-\n
-\n• Yksityinen ja turvallinen: Pidä keskustelusi salaisina. Nykyaikainen osapuolten välinen salaus pitää huolen, että yksityiset keskustelut pysyvät yksityisinä. 
-\n
-\n• Avoin, ei suljettu: Avointa lähdekoodia ja rakennettu käyttämään Matrixia. Voit omistaa oman datasi ylläpitämällä omaa palvelintasi, tai käyttämällä palvelinta, johon luotat. 
-\n
-\n• Kaikkialla, missä olet: pysy yhteydessä missä ikinä oletkin, täysin synkronoidulla viestihistorialla kaikkien laitteidesi ja https://riot.im-verkkopalvelun välillä.</string>
 
     <string name="new_recovery_method_popup_description">Uusi avainvarmuuskopio löydetty.
 \n
@@ -1508,8 +1477,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nViimeksi nähty: %2$s
 \nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
 
-    <string name="alpha_disclaimer_title">Tervetuloa beetaan!</string>
-    <string name="alpha_disclaimer_content_line_1">Element on varhaisessa kehitysvaiheessa, mistä johtuen osa ominaisuuksista puuttuu ja saatat kohdata virheitä.</string>
     <string name="settings_sdk_version">Matrix SDK:n versio</string>
     <string name="settings_other_third_party_notices">Muut kolmansien osapuolten huomautukset</string>
     <string name="quick_reactions">Pikareaktiot</string>
@@ -1536,8 +1503,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_labs_show_hidden_events_in_timeline">Näytä piilotetut tapahtumat aikajanalla</string>
 
-    <string name="store_riotx_title">Element - seuraavan sukupolven Matrix-asiakasohjelma</string>
-    <string name="store_riotx_short_description">Nopeampi ja kevyempi Matrix-asiakasohjelma</string>
     <string name="bottom_action_people_x">Yksityisviestit</string>
 
     <string name="send_file_step_idle">Odotetaan…</string>
@@ -1548,8 +1513,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="downloaded_file">Tiedosto %1$s ladattu!</string>
 
     <string name="edited_suffix">(muokattu)</string>
-
-    <string name="riotx_no_registration_notice_colored_part">Käytä vanhaa sovellusta</string>
 
 
     <string name="no_message_edits_found">Muokkauksia ei löytynyt</string>
@@ -1592,9 +1555,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="create_room_directory_title">Huoneluettelo</string>
     <string name="create_room_directory_description">Julkaise tämä huone huoneluettelossa</string>
 
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvauksessa</string>
     <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
-    <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
     <string name="disconnect">Katkaise yhteys</string>
     <string name="decline">Kieltäydy</string>
 
@@ -1664,7 +1625,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="a11y_hide_password">Piilota salasana</string>
     <string name="a11y_jump_to_bottom">Siirry loppuun</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s ja %3$d muuta lukivat</string>
     <string name="three_users_read">%1$s, %2$s ja %3$s lukivat</string>
     <string name="two_users_read">%1$s ja %2$s lukivat</string>
     <string name="one_user_read">%s luki</string>
@@ -1764,14 +1724,8 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="sas_error_m_unknown_method">Laitteet eivät pysty sopimaan avaimista, tiivisteestä, MAC:sta tai SAS-metodista</string>
     <string name="sas_error_m_mismatched_commitment">Tiivisteet eivät täsmänneet</string>
-    <string name="security_warning_identity_server">Vanhoissa Elementin versioissa oli tietoturvaongelma, joka saattoi antaa identiteettipalvelimelle(%1$s) pääsyn tunnukseesi. Jos luotat kohteeseen %2$s, voit jättää tämän huomiotta. Muussa tapauksessa, kirjaudu ulos ja kirjaudu uudelleen Elementiin.
-\n
-\nLue lisää:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="action_change">Muuta</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Viimeisin ominaisuuslista on aina %1$s. Jos löydät virheitä, lähetäthän virheraportin painikkeella, joka löytyy ylhäällä ja vasemmalla olevasta kotivalikosta, niin korjaamme vian niin nopeasti kuin pystymme.</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Jos löytät virheitä, lähetäthän virheraportin ylhäältä ja vasemmalta löytyvästä kotivalikosta, niin korjaamme ongelman niin nopeasti kuin vain pystymme.</string>
 
     <string name="import_e2e_keys_from_file">Tuo osapuolten välisen salauksen avaimet tiedostosta ”%1$s”.</string>
 
@@ -1785,14 +1739,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="push_gateway_item_format">Formaatti:</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Rekisteröi tunniste</string>
-
-    <string name="store_riotx_full_description">Element on uusi Matrix-protokollaa (Matrix.org) käyttävä ohjelma: avointa ja hajautettua keskustelua tukeva turvallinen verkko. Element on täysin uusittu versio Riot Android -ohjelmasta, joka perustuu Matrix Android SDK:n uudelleenkirjoitukseen.
-\n
-\nHuomaa: tämä on betaversio. Element on vielä kehitystyössä, ja siinä on rajoitteita ja (toivottavasti ei kuitenkaan monta) bugeja. Kaikki palaute on tervetullutta!
-\n
-\nElement tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
-\n
-\nKaikkia Elementin ominaisuuksia ei ole vielä toteutettu Element:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
 
     <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
     <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>
@@ -2066,7 +2012,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="verification_conclusion_not_secure">Ei turvallinen</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Kuva.</string>
-    <string name="command_description_verify">Pyyntö annetun käyttäjä-ID:n vahvistamiseksi</string>
     <string name="verification_conclusion_compromised">Johonkin näistä on mahdollisesti murtauduttu:
 \n
 \n - Kotipalvelimesi
@@ -2216,7 +2161,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Avainpyynnöt</string>
 

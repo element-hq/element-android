@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 4
+ext.versionPatch = 6
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -346,7 +346,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
-    implementation 'com.github.ganfra:PFLockScreen-Android:1.0.0-beta8'
+    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta9'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.2.0'
@@ -405,8 +405,10 @@ dependencies {
 
     implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 
-    // TODO meant for development purposes only
-    implementation 'org.webrtc:google-webrtc:1.0.+'
+    // WebRTC
+    // org.webrtc:google-webrtc is for development purposes only
+    // implementation 'org.webrtc:google-webrtc:1.0.+'
+    implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

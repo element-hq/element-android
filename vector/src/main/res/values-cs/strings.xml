@@ -196,7 +196,6 @@
     <string name="login_error_unable_register">Nelze se registrovat</string>
     <string name="login_error_unable_register_mail_ownership">Nelze se registrovat: chyba ověření vlastnictví e-mailu</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Neplatný uživatelský jméno/heslo</string>
     <string name="login_error_bad_json">Poškozený JSON</string>
@@ -247,10 +246,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="login_error_not_json">Neobsahuje platný JSON</string>
     <string name="login_error_login_email_not_yet">E-mailový odkaz, na který ještě nebylo klepnuto</string>
 
-    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč vašemu homeserveru.
-\nToto je nutné pouze jednou. 
-\nOmlouváme se za způsobené nepříjemnosti.</string>
-
     <string name="e2e_re_request_encryption_key">Znovu požádat o šifrovací klíče z vašich ostatních relací.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
@@ -258,8 +253,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="membership_changes">
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
-        <item quantity="many">%d změn členství</item>
-        <item quantity="other" />
+        <item quantity="other">%d změn členství</item>
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -280,7 +274,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_info_room_topic">Téma místnosti</string>
 
     <string name="settings_call_category">Volání</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Použít původní vyzvánění Element pro příchozí hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění Element pro příchozí hovory</string>
     <string name="settings_call_ringtone_title">Vyzvánění příchozího hovoru</string>
     <string name="settings_call_ringtone_dialog_title">Vybrat vyzvánění pro hovory:</string>
 
@@ -346,14 +340,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
-        <item quantity="many">%d aktivních členů</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktivních členů</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
-        <item quantity="many">%d členů</item>
-        <item quantity="other" />
+        <item quantity="other">%d členů</item>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
@@ -444,8 +436,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
-        <item quantity="many">%d nových zpráv</item>
-        <item quantity="other" />
+        <item quantity="other">%d nových zpráv</item>
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -461,8 +452,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <plurals name="room_details_selected">
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
-        <item quantity="many">%d vybráno</item>
-        <item quantity="other" />
+        <item quantity="other">%d vybráno</item>
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -583,7 +573,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
 
     <string name="settings_notification_advanced">Rozšířená nestavení oznámení</string>
-    <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení na základě události, nastavení zvuku, LED, vibrací</string>
     <string name="settings_notification_by_event">Důležitost oznámení na základě události</string>
 
     <string name="notification_sync_init">Spouštím služby</string>
@@ -1015,7 +1004,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_import_import">Import</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
-    <string name="encryption_import_room_keys_success">Klíče %1$d/%2$d importovány úspěšně.</string>
 
     <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>
@@ -1078,9 +1066,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="encryption_information_verify_device_warning">Potvrďte porovnáním následujícího s nastavením uživatele ve svých dalších relacích:</string>
     <string name="encryption_information_verify_device_warning2">Pokud se neshodují, zabezpečení Vaší komunikace může být ohroženo.</string>
-    <string name="e2e_enabling_on_app_update">Element nyní podporuje šifrování end-to-end, ale pro aktivaci se musíte se opět přihlásit.
-\n
-\nMůžete to provést nyní nebo později z aplikačních nastavení.</string>
 
     <string name="unknown_devices_alert_title">Místnost obsahuje neznámé relace</string>
     <string name="unknown_devices_alert_message">Tato místnost obsahuje neznámé relace, která nebyla ověřena.
@@ -1329,25 +1314,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
 
-    <string name="store_title">Element - Komunikujte, svým způsobem</string>
-    <string name="store_whats_new">Stále měníme a vylepšujeme Element. Úplný seznam změn je k nalezení zde: %1$s. Abyste zajistili, že nic nezmeškáte, ponechte aktualizace zapnuté.</string>
-    <string name="store_short_description">Univerzální zabezpečená chat aplikace zcela pod Vaší kontrolou.</string>
-    <string name="store_full_description">Chat aplikace pod Vaší kontrolou a zcela flexibilní. Element Vás nechá komunikovat způsobem, kterým chcete. Vytvořena pro [matrix] - standard otevřené, decentralizované komunikace.
-\n
-\nZaložte si bezplatný účet u matrix.org, založte si svůj server na https://modular.im nebo použijte jiný Matrix server.
-\n
-\nProč zvolit Element\?
-\n
-\n• KOMPLETNÍ KOMUNIKACE: Zakládejte místnosti pro své týmy, přátele, komunitu - jakkoli chcete! Chatujte, sdílejte soubory, přidávejte widgety, komunikujte hovorem či video hovorem - vše bezplatně.
-\n
-\n• HLUBOKÉ INTEGRACE: Používejte Element s nástroji, jež znáte a máte rádi. S Element můžete dokonce chatovat s uživateli a skupinami s jinými chat aplikacemi.
-\n
-\n• SOUKROMÁ A ZABEZBEČENÁ: Udržujte své konverzace tajné. Nejmodernější end-to-end šifrování zaručí, že soukromé konverzace soukromými zůstanou. 
-\n
-\n• OTEVŘENÁ, NE ZAVŘENÁ: Open source a postavená na Matrixu. Staňte se vlastníky svých dat tím, že si založíte vlastní server, nebo si zvolíte ten, jemuž důvěřujete.
-\n
-\n• KDEKOLI JSTE: Zůstaňte v kontaktu, ať už jste kdekoli, s plně synchronizovanou historií zpráv přes všechna svá zařízení nebo online u https://riot.im.</string>
-
     <string name="passphrase_create_passphrase">Založit heslo</string>
     <string name="passphrase_confirm_passphrase">Potvrdit heslo</string>
     <string name="passphrase_enter_passphrase">Zadat heslo</string>
@@ -1418,7 +1384,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřte, že jste zadali správný klíč obnovy.</string>
 
     <string name="keys_backup_restore_success_title">Záloha obnovena %s !</string>
-    <string name="keys_backup_restore_success_description">Obnoveno %1$d relačních klíčů a doplněno %2$d nových klíčů, které této relaci nebyly známy</string>
     <string name="keys_backup_get_version_error">Načtení poslední verze klíčů obnovy selhalo (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Krypto relace není zapnuto</string>
 
@@ -1520,11 +1485,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
     <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
 
-    <string name="security_warning_identity_server">Předchozí verze Elementu měly bezpečnostní chybu, jež umožnila serveru pro identity (%1$s) přístup k Vašemu účtu. Pokud důvěřujete %2$s, můžete ignorovat; jinak se, prosím, odhlašte a znovu přihlašte.
-\n
-\nDetaily zde:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému homeserveru. Chcete se odhlásit\?</string>
 
     <string name="edit">Upravit</string>
@@ -1581,12 +1541,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_unable_to_get_trust_info">Při načítání důvěryhodnosti došlo k chybě</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Při načítání dat zálohy klíčů došlo k chybě</string>
 
-    <string name="alpha_disclaimer_title">Vítejte v betě!</string>
-    <string name="alpha_disclaimer_content_line_1">Protože Element je v raném vývoji, některé funkce mohou chybět a mohou se objevit i chyby.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Seznam nejnovějších funkcí je vždy na %1$s a pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Popis v Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
-
     <string name="settings_sdk_version">Verze Matrix SDK</string>
     <string name="settings_other_third_party_notices">Jiná oznámení třetích stran</string>
     <string name="navigate_to_room_when_already_in_the_room">Již se díváte do této místnosti!</string>
@@ -1622,16 +1576,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Ukázat skryté události v časovém sledu</string>
 
-    <string name="store_riotx_title">Element - Klient Matrixu pro příští generaci</string>
-    <string name="store_riotx_short_description">Rychlejši a lehčí klient Matrixu s nejnovějšími konstrukcemi Androidu</string>
-    <string name="store_riotx_full_description">"Element je nový klient protokolu Matrix (Matrix.org): otevřená síť pro bezpečnou, decentralizovanou komunikaci. Element je úplný přepis klienta Riot Android založený na úplném přepisu Matrix Android SDK.
-\n
-\nProhlášení: Toto je beta verze. Element nyní prochází aktivním vývojem, obsahuje omezení a (doufáme, že ne moc) chyby. Veškerý feedback je vítán.
-\n
-\nElement podporuje: • Přihlášní do existujícího účtu  • Založení místnosti a vstup do veřejných místností  • Přijetí a odmítnutí pozvánek  • Seznam místností uživatelů  • Náhled podrobností místnosti  • Odesílání textových zpráv  • Odesílání příloh  • Čtení a psaní zpráv v zašifrovaných místnostech  • Krypto: záloha klíčů E2E, pokročilé ověření zařízení, požadavek na sdílení klíče a jeho uspokojení   • Push oznámení  • Světlý, tmavý a černý motiv
-\n
-\nJeště nejsou všechny funkce Elementu v Element implementovány. Hlavní chybějící funkce (přijdou brzy!): • Nastavení místnosti (seznam členů místnosti, atd.) • Hovory • Widgety • …"</string>
-
     <string name="bottom_action_people_x">Přímé zprávy</string>
 
     <string name="send_file_step_idle">Čekám…</string>
@@ -1644,9 +1588,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="downloaded_file">Soubor %1$s byl stažen!</string>
 
     <string name="edited_suffix">(upraveno)</string>
-
-    <string name="riotx_no_registration_notice">%1$s pro založení účtu.</string>
-    <string name="riotx_no_registration_notice_colored_part">Použít zastaralou aplikaci</string>
 
 
     <string name="message_edits">Úpravy zpráv</string>
@@ -1726,7 +1667,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="a11y_hide_password">Skrýt heslo</string>
     <string name="a11y_jump_to_bottom">Přeskočit až dolů</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s a %3$d dalších přečetli</string>
     <string name="three_users_read">%1$s, %2$s a %3$s přečetli</string>
     <string name="two_users_read">%1$s a %2$s přečetli</string>
     <string name="one_user_read">%s přečetl(a)</string>
@@ -1966,7 +1906,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <string name="settings_developer_mode_fail_fast_summary">Element se může zbořit častěji, když se objeví neočekávané chyby</string>
 
-    <string name="command_description_verify">Požadavek ověření daného uživatelského ID</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
 
     <string name="create_room_encryption_title">Zapnout šifrování</string>
@@ -2192,7 +2131,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Klíče jsou již aktuální!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Požadavky na klíče</string>
 
@@ -2291,7 +2230,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_messages_in_e2e_group_chat">Zašifrované zprávy ve skupinových chatech</string>
     <string name="settings_when_rooms_are_upgraded">Když dojde k upgradu místností</string>
     <string name="settings_troubleshoot_title">Řešit problémy</string>
-    <string name="settings_notification_advanced_summary_riotx">Nastavit důležitost oznámení podle události</string>
+    <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení podle události</string>
 
     <string name="command_description_plain">Odešle zprávu jako prostý text bez interpretace markdown</string>
 
@@ -2357,12 +2296,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
 
     <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější Element, Element Web, Element Desktop, Element iOS, Element pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement pro Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="use_latest_riot">Použijte na svých zařízeních nejnovější Element:</string>
+    <string name="use_latest_app">Použijte na svých zařízeních nejnovější Element:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
     <string name="enter_secret_storage_passphrase_or_key">Použijte své %1$s nebo použijte svůj %2$s a pokračujte.</string>

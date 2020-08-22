@@ -245,7 +245,6 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="room_jump_to_first_unread">Jauzi irakurri gabeko lehen mezura.</string>
 
     <string name="room_preview_invitation_format">%s erabiltzaileak gela honetara elkartzera gonbidatu zaitu</string>
-    <string name="e2e_need_log_in_again">Berriro hasi behar duzu saioa muturretik muturrerako zifratzerako saio honentzako gakoak sortzeko eta gako publikoa zure hasiera zerbitzarira bidali. Hau behin bakarrik egin behar duzu. Barkatu eragozpenak.</string>
 
     <string name="permissions_rationale_msg_storage">Elementek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
 
@@ -609,10 +608,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="encryption_information_verify_device_warning2">Bat badator, sakatu beheko egiaztatu botoia. Ez badator bat, beste inor saioa atzematen dago eta zerrenda beltzean sartu beharko zenuke. Etorkizunean egiaztaketa metodoa hobetuko da.</string>
     <string name="encryption_information_verify_key_match">Gakoak bat datozela egiaztatu dut</string>
 
-    <string name="e2e_enabling_on_app_update">Elementek orain muturretik muturrerako zifratzea onartzen du baina berriro hasi behar duzu saioa hau gaitzeko.
-
-Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
-
     <string name="unknown_devices_alert_title">Gelan saio ezezagunak daude</string>
     <string name="unknown_devices_alert_message">Gela honetan egiaztatu gabeko saio ezezagunak daude. 
 \nEzin da bermatu saioak benetan dioten jabeenak direla. 
@@ -651,8 +646,6 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen…</string>
     <string name="notification_listening_for_events">Entzun gertaerak</string>
-
-    <string name="login_mobile_device">Mugikorra</string>
 
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
     <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan</string>
@@ -1007,7 +1000,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="call_anyway">Deitu hala ere</string>
     <string name="settings_call_category">Deiak</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Erabili Elementen lehenetsitako dei-doinua jasotako deientzat</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Erabili Elementen lehenetsitako dei-doinua jasotako deientzat</string>
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
@@ -1036,8 +1029,6 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="accept">Onartu</string>
 
     <string name="auth_accept_policies">Irakurri eta onartu hasiera-zerbitzari honen baldintzak:</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
 
     <string name="settings_notification_troubleshoot">Egiaztatu arazoak jakinarazpenekin</string>
     <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
@@ -1118,32 +1109,12 @@ Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan 
 
     <string name="no_valid_google_play_services_apk">Ez da baliozko Google Play Services APK-rik aurkitu. Jakinarazpenak agian ez dira ongi ibiliko.</string>
 
-    <string name="store_title">Element - Komunikatu, zure erara</string>
-    <string name="store_short_description">Txat seguru eta unibertsala zure kontrolpean erabat.</string>
     <string name="settings_troubleshoot_test_battery_failed">Erabiltzaile batek gailu bat deskonektatuta eta erabili gabe uzten badu denbora batez, pantaila itzalita duela, gailua kuluxka moduan sartzen da. Honek aplikazioak sarera konektatzea eragozten du eta beraien lanak atzeratzen ditu, baita ohiko alarmak.</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element-ek bigarren planoko konexio arin bat behar du jakinarazpen fidagarriak izateko.
 Hurrengo pantailan Element-i bigarren planoan aritzeko baimena eskatuko zaizu, onartu ezazu mesedez.</string>
-    <string name="store_full_description">"Txaterako aplikazio bat, zure kontrolpean eta erabat malgua. Element-ek zuk nahi duzun eran komunikatzea ahalbidetzen dizu. [matrix] erabiltzeko egina, komunikaziorako estandar ireki eta deszentralizatua.
-\n
-\nEskuratu matrix.org kontu bat doan, ezarri zure zerbitzari propioa  https://modular.im bidez, edo erabili beste Matrix zerbitzari bat.
-\n
-\nZergatik erabili Element\?
-\n
-\n* KOMUNIKAZIO OSOA: Sortu gelak zure lantalde, adiskide, edo komunitateentzat, zuk nahi bezalakoak! Txateatu, partekatu fitxategiak, gehitu trepetak eta egin ahots eta bideo deiak, den dena doan.
-\n
-\n* INTEGRAZIO AHALTSUAK: Erabili Element jada ezagutu eta maite dituzun tresnekin. Element erabiliz beste txat aplikazioetako erabiltzaileekin ere aritu zaitezke.
-\n
-\n* PRIBATUA ETA SEGURUA: Mantendu zure elkarrizketak sekretupean. Muturretik muturrerako zifratzeak pribatua den hori pribatu izaten jarraituko duela bermatzen du.
-\n
-\n* IREKIA, EZ ITXIA; Kode irekikoa, eta Matrix sarearen gainean eraikia. Izan zure datuen jabe zure zerbitzaria ostatatuz, edo zuretzat fidagarria den bat aukeratuz.
-\n
-\n* ZUREKIN EDONON: Mantendu kontaktua zure gailuetan zehar guztiz sinkronizatutako mezuen historial batekin, eta web bidez https://riot.im helbidean."</string>
 
     <string name="video_call_in_progress">Bide-deia abioan…</string>
 
-    <string name="store_whats_new">"Etengabe egiten dizkiogu hobekuntzak eta aldaketak Element aplikazioari.
-Aldaketen zerrenda osoa hemen aurkitu daiteke: %1$s.
-Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="title_activity_keys_backup_setup">Gakoen babes-kopia</string>
     <string name="title_activity_keys_backup_restore">Erabili gakoen babes-kopia</string>
     <string name="keys_backup_is_not_finished_please_wait">Gakoen babes-kopia ez da amaitu, itxaron mesedez…</string>
@@ -1152,7 +1123,6 @@ Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="done">Egina</string>
 
     <string name="settings_notification_advanced">Jakinarazpenen ezarpen aurreratuak</string>
-    <string name="settings_notification_advanced_summary">Ezarri jakinarazpenen garrantzia gertaerako, konfiguratu soinua, leda, bibrazioa</string>
     <string name="settings_notification_by_event">Jakinarazpenen garrantzia gertaerako</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Ezarpen pertsonalizatuak.</string>
@@ -1235,7 +1205,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_passphrase_error_decrypt">Ezin izan da babes-kopia deszifratu pasaesaldi honekin: egiaztatu pasaesaldi zuzena idatzi duzula.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Ezin izan da babes-kopia deszifratu berreskuratze gako honekin: egiaztatu berreskuratze gako egokia sartu duzula.</string>
 
-    <string name="keys_backup_restore_success_description">"%1$d  saio gako berrezarri dira, eta saio honek ezagutzen ez zituen %2$d gako berri gehitu dira"</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Berrezarri gako %d duen babes-kopia.</item>
         <item quantity="other">Berrezarri %d gako dituen babes-kopia.</item>
@@ -1500,12 +1469,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
-    <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
-    <string name="alpha_disclaimer_content_line_1">Element oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
-
     <string name="import_e2e_keys_from_file">"Inportatu e2e gakoak \"%1$s\"  fitxategitik."</string>
 
     <string name="settings_sdk_version">Matrix SDK bertsioa</string>
@@ -1542,16 +1505,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Erakutsi ezkutatutako gertaerak denbora lerroan</string>
 
-    <string name="store_riotx_title">Element - Hurrengo belaunaldiko Matrix bezeroa</string>
-    <string name="store_riotx_short_description">Matrix-erako bezero azkarrago eta arinago bat azken Android tresnak erabiliz eginak</string>
-    <string name="store_riotx_full_description">Element bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. Element Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
-\n 
-\nAbisua: hau beta bertsio bat da. Element garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
-\n 
-\nElement bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Azal argia, iluna eta beltza
-\n 
-\nEz dira oraindik Element bezeroaren ezaugarri guztiak ezarri Element bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
-
     <string name="push_gateway_item_app_display_name">aplikazio_pantaila_izena:</string>
     <string name="bottom_action_people_x">Mezu zuzenak</string>
 
@@ -1565,9 +1518,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="downloaded_file">%1$s fitxategia deskargatu da!</string>
 
     <string name="edited_suffix">(editatua)</string>
-
-    <string name="riotx_no_registration_notice">%1$s kontua sortzeko.</string>
-    <string name="riotx_no_registration_notice_colored_part">Erabili aplikazio zaharra</string>
 
 
     <string name="message_edits">Mezuen edizioak</string>
@@ -1645,11 +1595,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="identity_server_not_defined">Ez duzu identitate zerbitzaririk erabiltzen</string>
     <string name="identity_server_not_defined_for_password_reset">Ez da identitate zerbitzaririk konfiguratu, zure pasahitza berrezartzeko beharrezkoa da.</string>
 
-    <string name="security_warning_identity_server">Element bertsio zaharrek segurtasun akats bat zuten eta zure identitate zerbitzariak (%1$s) zure kontua atzitu zezakeen. %2$s fidagarritzat jotzen baduzu hau ezikusi dezakezu, bestela maiatu saioa eta hasi berriro.
-\n
-\nXehetasun gehiago hemen:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
-
     <string name="error_user_already_logged_in">Badirudi beste hasiera-zerbitzari batera konektatzen saiatzen ari zarela. Saioa amaitu nahi duzu\?</string>
 
     <string name="terms_of_service">Erabilera baldintzak</string>
@@ -1705,7 +1650,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="a11y_hide_password">Ezkutatu pasahitza</string>
     <string name="a11y_jump_to_bottom">Jauzi behera</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s eta beste %3$d erabiltzailek irakurria</string>
     <string name="three_users_read">%1$s, %2$s eta%3$s erabiltzaileek irakurria</string>
     <string name="two_users_read">%1$s eta %2$s erabiltzaileek irakurria</string>
     <string name="one_user_read">%s erabiltzaileak irakurria</string>
@@ -1981,7 +1925,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
     <string name="settings_developer_mode_fail_fast_summary">Element aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
-    <string name="command_description_verify">Eskatu emandako erabiltzaile IDa egiaztatzea</string>
     <string name="command_description_shrug">"Jarri ¯\\_(ツ)_/¯  testu-soileko mezuaren aurretik"</string>
 
     <string name="create_room_encryption_title">Gaitu zifratzea</string>
@@ -2202,7 +2145,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Gako eskaerak</string>
 
@@ -2301,7 +2244,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_messages_in_e2e_group_chat">Zifratutako mezuak talde-txatetan</string>
     <string name="settings_when_rooms_are_upgraded">Gelak eguneratzean</string>
     <string name="settings_troubleshoot_title">Arazo-ehiza</string>
-    <string name="settings_notification_advanced_summary_riotx">Ezarri jakinarazpenen garrantzia gertaerako</string>
+    <string name="settings_notification_advanced_summary">Ezarri jakinarazpenen garrantzia gertaerako</string>
 
     <string name="command_description_plain">Mezua test arrunt gisa bidaltzen du, markdown den aztertu gabe</string>
 
@@ -2345,12 +2288,12 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <string name="use_other_session_content_description">Erabili azken Element bertsioa zure beste gailuetan, Element Web, Element Desktop, Element iOS, Element Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement Android plataformarako</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
-    <string name="use_latest_riot">Erabili azken Element bertsioa zure beste gailuetan:</string>
+    <string name="use_latest_app">Erabili azken Element bertsioa zure beste gailuetan:</string>
     <string name="command_description_discard_session">Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du</string>
     <string name="command_description_discard_session_not_handled">Zifratutako gelatan onartzen da soilik</string>
     <string name="enter_secret_storage_passphrase_or_key">Erabili zure %1$s edo %2$s jarraitzeko.</string>

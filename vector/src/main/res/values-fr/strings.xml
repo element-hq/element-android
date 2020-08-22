@@ -467,10 +467,6 @@
     <string name="login_error_user_in_use">Ce nom d’utilisateur est déjà utilisé</string>
     <string name="login_error_login_email_not_yet">Vous n’avez pas encore cliqué sur le lien dans l’e-mail</string>
 
-    <string name="e2e_need_log_in_again">Vous devez vous identifier à nouveau pour générer des clés de chiffrement de bout en bout pour cette session et envoyer la clé publique à votre serveur d’accueil.
-\nCeci ne se produira qu’une fois.
-\nVeuillez nous excuser pour ce désagrément.</string>
-
     <string name="attachment_cancel_upload">Annuler l’envoi ?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$d min %2$d s</string>
@@ -606,10 +602,6 @@ Attention : ce fichier peut être supprimé si l’application est désinstallé
     <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
 
-    <string name="e2e_enabling_on_app_update">Element prend désormais en charge le chiffrement de bout en bout, mais vous devez vous reconnecter pour l’activer.
-
-Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’application.</string>
-
     <string name="unknown_devices_alert_title">Le salon contient des sessions inconnues</string>
     <string name="unknown_devices_alert_message">Ce salon contient des sessions inconnues, qui n’ont pas été vérifiées.
 \nCela signifie qu’il n’y a aucune garantie que les sessions appartiennent aux utilisateurs qu’elles prétendent.
@@ -661,8 +653,6 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’ap
 
     <string name="notification_sync_in_progress">Synchronisation…</string>
     <string name="notification_listening_for_events">Écoute d’évènements</string>
-
-    <string name="login_mobile_device">Portable</string>
 
     <string name="settings_notification_ringtone">Son de notification</string>
     <string name="settings_12_24_timestamps">Afficher l’horodatage au format 12 heures</string>
@@ -1037,15 +1027,13 @@ Voulez-vous en ajouter ?</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
 
     <string name="settings_call_category">Appels</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Utiliser la sonnerie par défaut de Element pour les appels entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Utiliser la sonnerie par défaut de Element pour les appels entrants</string>
     <string name="settings_call_ringtone_title">Sonnerie d’appel entrant</string>
     <string name="settings_call_ringtone_dialog_title">Sélectionner la sonnerie pour les appels :</string>
 
     <string name="accept">Accepter</string>
 
     <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d’accueil :</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
 
     <string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
@@ -1130,29 +1118,8 @@ Sur l’écran suivant on vous demandera d’autoriser Element à toujours fonct
 
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
 
-    <string name="store_title">Element - Communiquez, à votre façon</string>
-    <string name="store_short_description">Une application de discussion sécurisée universelle que vous contrôlez.</string>
-    <string name="store_full_description">"Une application de discussion, que vous contrôlez et entièrement flexible. Element vous laisse communiquer comme vous le souhaitez. Conçu pour [matrix], le standard pour les communications libres et décentralisées.
-
-Créez un compte matrix.org gratuit, gérez votre propre serveur sur https://modular.im ou utilisez un autre serveur Matrix.
-
-Pourquoi choisir Element ?
-
-• COMMUNICATION COMPLÈTE : Construisez des salons autours de vos équipes, de vos amis, de votre communauté comme vous le souhaitez ! Discutez, partagez des fichiers, ajoutez des widgets et passez des appels audio et vidéo gratuitement.
-
-• INTÉGRATIONS PUISSANTES : Utilisez Element avec les outils que vous connaissez déjà. Avec Element vous pouvez même discuter avec les utilisateurs et les groupes qui utilisent d’autres applications de discussion.
-
-• PRIVÉ ET SÉCURISÉ : Gardez vos conversations secrètes. Un chiffrement de bout en bout de pointe vous garanti que vos communications privées restent privées.
-
-• OUVERT, PAS FERMÉ : Open source, et construit autour de Matrix. Restez en possession de vos données en hébergeant votre propre serveur, ou choisissez celui auquel vous faites confiance.
-
-• PARTOUT OÙ VOUS ÊTES : Restez en contact où que vous soyez avec la synchronisation complète de l’historique de vos messages entre vos différents appareils et en ligne sur https://riot.im."</string>
-
     <string name="video_call_in_progress">Appel vidéo en cours…</string>
 
-    <string name="store_whats_new">"Nous sommes constamment en train de modifier et d’améliorer Element.
-Le journal des modifications peut être consulté ici : %1$s.
-Afin d’être sûr de ne rien manquer, continuez à installer les mises à jour."</string>
     <string name="title_activity_keys_backup_setup">Sauvegarde de clés</string>
     <string name="title_activity_keys_backup_restore">Utiliser la sauvegarde de clés</string>
     <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n’est pas terminée, veuillez patienter…</string>
@@ -1161,7 +1128,6 @@ Afin d’être sûr de ne rien manquer, continuez à installer les mises à jour
     <string name="done">Terminé</string>
 
     <string name="settings_notification_advanced">Paramètres de notification avancés</string>
-    <string name="settings_notification_advanced_summary">Régler l’importance des notifications par évènement, configurer le son, les led, les vibrations</string>
     <string name="settings_notification_by_event">Importance des notifications par évènement</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Paramètres personnalisés.</string>
@@ -1238,7 +1204,6 @@ Attention : ce fichier pourrait être supprimé si l’application est désinsta
     <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
 
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d clés de session restaurées et %2$d nouvelles clés ajoutées qui étaient inconnues à cette session</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Sauvegarde restaurée avec %d clé.</item>
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
@@ -1510,12 +1475,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
 
-    <string name="alpha_disclaimer_title">Bienvenue à la bêta !</string>
-    <string name="alpha_disclaimer_content_line_1">Comme Element est au début de son développement, il se peut que certaines fonctionnalités soient manquantes et que vous rencontriez quelques anomalies.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">La dernière liste de fonctionnalités est toujours dans la %1$s, et si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">description du Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
-
     <string name="import_e2e_keys_from_file">Importer les clés de chiffrement depuis le fichier « %1$s ».</string>
 
     <string name="settings_sdk_version">Version du SDK de Matrix</string>
@@ -1553,16 +1512,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans les discussions</string>
 
-    <string name="store_riotx_title">Element − Client Matrix nouvelle génération</string>
-    <string name="store_riotx_short_description">Un client pour Matrix plus rapide et plus léger utilisant les derniers frameworks Android</string>
-    <string name="store_riotx_full_description">Element est un nouveau client pour le protocole Matrix (Matrix.org) : un réseau ouvert pour des communications sécurisées et décentralisées. Element est une réécriture complète du client Android Riot, basée sur une réécriture complète du SDK Android de Matrix.
-\n
-\nMise en garde : Ceci est une version bêta. Element est actuellement en plein développement et a des limites et (peu, nous l’espérons) des anomalies. Tout commentaire est le bienvenu !
-\n
-\nElement prend en charge : • Se connecter à un compte existant • Créer de salons et rejoindre des salons publics • Accepter et refuser des invitations • Lister les salons des utilisateurs • Voir les informations des salons • Envoyer des messages texte • Envoyer des pièces jointes • Lire et écrire des messages dans les salons chiffrés • Chiffrement : sauvegarde des clés de chiffrement, vérification avancée des appareils, demande et réponse de partage de clé • Notifications • Thèmes clair, sombre et noir
-\n
-\nToutes les fonctionnalités de Element ne sont pas encore implémentées dans Element. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Réglages des salons (lister les membres du salon etc.) • Appels • Widgets • …</string>
-
     <string name="bottom_action_people_x">Messages directs</string>
 
     <string name="send_file_step_idle">Attente…</string>
@@ -1575,9 +1524,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="downloaded_file">Le fichier %1$s a été téléchargé !</string>
 
     <string name="edited_suffix">(édité)</string>
-
-    <string name="riotx_no_registration_notice">%1$s pour créer un compte.</string>
-    <string name="riotx_no_registration_notice_colored_part">Utilisez l’ancienne application</string>
 
 
     <string name="message_edits">Éditions de message</string>
@@ -1612,11 +1558,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="decline">Refuser</string>
 
     <string name="widget_integration_review_terms">Pour continuer, vous devez accepter les conditions de ce service.</string>
-
-    <string name="security_warning_identity_server">Les versions précédentes de Element avaient un problème de sécurité qui pouvait permettre à votre serveur d’identité (%1$s) d’accéder à votre compte. Si vous faites confiance à %2$s, vous pouvez ignorer cela ; sinon déconnectez-vous et reconnectez-vous.
-\n
-\nVous trouverez plus de détails ici :
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Conditions de service</string>
     <string name="review_terms">Examiner les conditions</string>
@@ -1714,7 +1655,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="a11y_hide_password">Masquer le mot de passe</string>
     <string name="a11y_jump_to_bottom">Sauter en bas de page</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s et %3$d autres ont lu</string>
     <string name="three_users_read">%1$s, %2$s et %3$s ont lu</string>
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="one_user_read">%s a lu</string>
@@ -1989,7 +1929,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
     <string name="settings_developer_mode_fail_fast_summary">Element peut planter plus souvent quand une erreur inattendue survient</string>
-    <string name="command_description_verify">Demande de vérification de l’identifiant utilisateur fourni</string>
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
 
     <string name="create_room_encryption_title">Activer le chiffrement</string>
@@ -2210,7 +2149,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Demandes de clé</string>
 
@@ -2309,7 +2248,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_messages_in_e2e_group_chat">Messages chiffrés dans les discussions de groupe</string>
     <string name="settings_when_rooms_are_upgraded">Quand les salons sont mis à niveau</string>
     <string name="settings_troubleshoot_title">Résolution de problèmes</string>
-    <string name="settings_notification_advanced_summary_riotx">Définir l’importance des notifications par évènement</string>
+    <string name="settings_notification_advanced_summary">Définir l’importance des notifications par évènement</string>
 
     <string name="command_description_plain">Envoie un message en texte simple, sans l’interpréter comme du Markdown</string>
 
@@ -2350,12 +2289,12 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
 
     <string name="use_other_session_content_description">Utilisez la dernière version de Element sur vos autres appareils : Element Web, Element pour Bureau, Element iOS, Element pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement pour Bureau</string>
-    <string name="riot_ios_android">Element iOS
-\nElement pour Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
-    <string name="use_latest_riot">Utilisez la dernière version de Element sur vos autres appareils :</string>
+    <string name="use_latest_app">Utilisez la dernière version de Element sur vos autres appareils :</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>

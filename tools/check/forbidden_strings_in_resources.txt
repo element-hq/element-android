@@ -73,10 +73,10 @@ layout_constraintLeft_
 ### Use Preference from androidx library (androidx.preference.PreferenceScreen)
 <PreferenceScreen
 
-### Use im.vector.riotx.core.preference.VectorSwitchPreference to support multiline of the title
+### Use im.vector.app.core.preference.VectorSwitchPreference to support multiline of the title
 <SwitchPreference
 
-### Use im.vector.riotx.core.preference.VectorPreference to support multiline of the title
+### Use im.vector.app.core.preference.VectorPreference to support multiline of the title
 <Preference\n
 
 ### Will crash on API < 21. Use ?colorAccent instead

@@ -263,7 +263,6 @@
     <string name="login_error_unable_register">Неуспешна регистрация</string>
     <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на собствеността на имейла</string>
     <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
-    <string name="login_mobile_device">Мобилно устройство</string>
 
     <string name="login_error_forbidden">Невалидно потребителско име/парола</string>
     <string name="login_error_unknown_token">Не е разпознат указаният тоукън за достъп</string>
@@ -272,10 +271,6 @@
     <string name="login_error_limit_exceeded">Бяха изпратени твърде много заявки</string>
     <string name="login_error_user_in_use">Това потребителско име е вече заето</string>
     <string name="login_error_login_email_not_yet">Все още не сте кликнали върху връзката в имейла</string>
-
-    <string name="e2e_need_log_in_again">Трябва да влезете обратно в профила си, за да се създадат ключове за шифроване от край до край за това устройство и да се изпрати публичния ключ към Home сървъра.
-Това е еднократно.
-Извинете за неудобството.</string>
 
     <string name="read_receipts_list">Списък с потвърждения за прочитане</string>
 
@@ -622,10 +617,6 @@
     <string name="encryption_information_verify_device_warning">За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който вижда в настройките на потребителя за това устройство, съвпада с ключа по-долу:</string>
     <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък. В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
-
-    <string name="e2e_enabling_on_app_update">Element поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
-
-Може да го направите сега или по-късно от настройките на приложението.</string>
 
     <string name="unknown_devices_alert_title">Стаята съдържа непознати устройства</string>
     <string name="unknown_devices_alert_message">Тази стая съдържа непознати устройства, който не са били потвърдени.
@@ -1006,7 +997,7 @@
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
 
     <string name="settings_call_category">Обаждания</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Използвай мелодията по подразбиране на Element за входящи повиквания</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Използвай мелодията по подразбиране на Element за входящи повиквания</string>
     <string name="settings_call_ringtone_title">Мелодия за входящо повикване</string>
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
 
@@ -1025,7 +1016,6 @@
     <string name="settings_show_avatar_display_name_changes_messages">Показване на събития за потребителски профили</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включва промени в снимки и имена.</string>
     <string name="settings_password">Парола</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(а) бяха успешно импортирани.</string>
 
     <string name="settings_labs_native_camera_summary">Използване на системната камера вместо собствената интеграция на приложението.</string>
     <string name="settings_labs_enable_send_voice_summary">Тази опция изисква отделно приложение за записване на съобщенията.</string>
@@ -1117,29 +1107,8 @@
 
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
 
-    <string name="store_title">Element - комуникирайте по свой начин</string>
-    <string name="store_short_description">Универсален и сигурен чат изцяло под ваш контрол.</string>
-    <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Element позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
-
-Използвайте безплатен matrix.org акаунт, собствен сървър от https://modular.im или друг Matrix сървър.
-
-Защо да изберете Element?
-
-• ПЪЛНА КОМУНИКАЦИЯ: Създавайте каквито пожелаете чат стаи - свързани с работни екипи, приятели или друг вид общности! Чатете, споделяйте файлове, добавяйте приспособления и водете аудио и видео разговори - всичко това, изцяло безплатно.
-
-• МОЩНИ ИНТЕГРАЦИИ: Използвайте Element с досега-познатите Ви инструменти. Посредством Element дори можете да чатите с потребители и групи използващи други чат приложения.
-
-• ЛИЧНО И ЗАЩИТЕНО: Пазете комуникацията си в тайна. Съвременна технология за шифроване от край до край гарантира, че Вашата комуникацията наистина остава Ваша.
-
-• ОТВОРЕНО, А НЕ ЗАТВОРЕНО: Приложение с отворен код, изградено върху Matrix. Дръжте данните си под Ваш контрол, като използвате Ваш собствен сървър или като изберете сървър, на който вярвате.
-
-• КЪДЕТО И ДА СТЕ: Поддържайте връзка където и да сте, с напълно синхронизирана чат история на всички Ваши устройства или онлайн на https://riot.im."</string>
-
     <string name="video_call_in_progress">В момента тече видео разговор…</string>
 
-    <string name="store_whats_new">"Постоянно правим промени и подобрения по Element.
-Пълният списък с промени може да бъде намерен тук: %1$s.
-За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени."</string>
     <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
     <string name="title_activity_keys_backup_restore">Използвай резервно копие на ключовете</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервното копиране на ключовете не е завършило. Моля почакайте…</string>
@@ -1148,7 +1117,6 @@
     <string name="done">Готово</string>
 
     <string name="settings_notification_advanced">Разширени настройки за известия</string>
-    <string name="settings_notification_advanced_summary">Настройка на важност според тип събитие, настройка на звук, LED, вибрация</string>
     <string name="settings_notification_by_event">Важност на известията според типа събитие</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Собствени настройки.</string>
@@ -1225,7 +1193,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
 
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
-    <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Възстановено резервно копие с %d ключ.</item>
         <item quantity="other">Възстановено резервно копие с %d ключа.</item>
@@ -1498,11 +1465,6 @@
     <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
-    <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
-    <string name="alpha_disclaimer_content_line_1">Докато Element е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описанието</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
-
     <string name="import_e2e_keys_from_file">Импортирай e2e ключове от файл \"%1$s\".</string>
 
     <string name="settings_sdk_version">Matrix SDK версия</string>
@@ -1516,7 +1478,6 @@
     <string name="settings_expert">Експертни</string>
     <string name="settings_push_rules">Правила за уведомление</string>
     <string name="settings_push_rules_no_rules">Не са дефинирани правила за уведомление</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Списъкът с последни функции винаги е в %1$s. Ако намерите бъг, изпратете доклад за грешка от менюто горе в ляво, и ще го поправим възможно най-скоро.</string>
     <string name="settings_other_third_party_notices">Други известия</string>
     <string name="settings_push_gateway_no_pushers">Не са регистрирани адреси за push уведомления</string>
 
@@ -1541,16 +1502,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">Показвай скрити събития в чата</string>
 
-    <string name="store_riotx_title">Element - следващо поколение Matrix клиент</string>
-    <string name="store_riotx_short_description">По-бърз и по-лек Matrix клиент, използващ последните Android технологии</string>
-    <string name="store_riotx_full_description">Element в нов клиент за Matrix протокола (Matrix.org): отворена мрежа за сигурна, децентрализирана комуникация. Element е изцяло пренаписан Riot Android клиент, базиран на изцяло пренаписан Matrix Android SDK.
-\n
-\nЗабележка: Това е бета версия. Element в момента се разработва активно и все още има ограничения и (надяваме се не прекалено много) бъгове. Всякаква обратна връзка е добре дошла!
-\n
-\nElement поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
-\n
-\nЗасега не всички функции на Element са налични в Element. Основни липсващи (и скоро пристигащи!) функции са: • Настройки на стаи (показване на членове и т.н.) • Обаждания • Приспособления • …</string>
-
     <string name="bottom_action_people_x">Директни съобщения</string>
 
     <string name="send_file_step_idle">Изчакване…</string>
@@ -1563,9 +1514,6 @@
     <string name="downloaded_file">Файлът %1$s беше изтеглен!</string>
 
     <string name="edited_suffix">(редактирано)</string>
-
-    <string name="riotx_no_registration_notice">%1$s за да създадете профил.</string>
-    <string name="riotx_no_registration_notice_colored_part">Използвай старото приложение</string>
 
 
     <string name="message_edits">Редакции на съобщението</string>
@@ -1600,11 +1548,6 @@
     <string name="decline">Откажи</string>
 
     <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
-
-    <string name="security_warning_identity_server">Предишни версии на Element имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
-\n
-\nНаучете повече подробности тук:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Условия за ползване</string>
     <string name="review_terms">Прегледай условията</string>
@@ -1703,7 +1646,6 @@
     <string name="a11y_hide_password">Скрий паролата</string>
     <string name="a11y_jump_to_bottom">Отиди най-отдолу</string>
 
-    <string name="two_and_some_others_read">%1$s, %2$s и %3$d други прочетоха</string>
     <string name="three_users_read">%1$s, %2$s и %3$s прочетоха</string>
     <string name="two_users_read">%1$s и %2$s прочетоха</string>
     <string name="one_user_read">%s прочете</string>

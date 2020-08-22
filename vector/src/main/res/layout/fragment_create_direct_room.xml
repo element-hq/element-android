@@ -58,7 +58,7 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <im.vector.riotx.core.platform.MaxHeightScrollView
+        <im.vector.app.core.platform.MaxHeightScrollView
             android:id="@+id/chipGroupScrollView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 app:lineSpacing="2dp" />
 
-        </im.vector.riotx.core.platform.MaxHeightScrollView>
+        </im.vector.app.core.platform.MaxHeightScrollView>
 
         <EditText
             android:id="@+id/createDirectRoomFilter"

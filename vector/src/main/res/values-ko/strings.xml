@@ -174,7 +174,6 @@
     <string name="auth_reset_password_success_message">비밀번호가 초기화되었습니다.
 \n
 \n모든 기기에서 로그아웃되고 알림도 가지 않을 거에요. 다시 알림을 받으려면, 각 기기에 다시 로그인하세요.</string>
-    <string name="login_mobile_device">모바일</string>
 
     <string name="notification_listening_for_events">이벤트 청취하기</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">키 백업이 진행 중입니다. 지금 로그아웃하면 암호화된 메시지에 접근할 수 없습니다.</string>
@@ -265,10 +264,6 @@
     <string name="login_error_user_in_use">이 사용자 이름은 이미 사용 중입니다</string>
     <string name="login_error_login_email_not_yet">이메일 링크를 아직 클릭하지 않았습니다</string>
 
-    <string name="e2e_need_log_in_again">이 기기를 위한 종단간 암호화 키를 생성하고 공개 키를 홈서버에 제출하려면 다시 로그인해야 합니다.
-\n한 번이면 됩니다.
-\n불편을 드려 죄송합니다.</string>
-
     <string name="e2e_re_request_encryption_key">다른 기기에서 온 <u>다시 요청된 암호 키</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">키 요청을 보냈습니다.</string>
@@ -302,7 +297,7 @@
     <string name="room_info_room_topic">방 주제</string>
 
     <string name="settings_call_category">전화</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">수신 전화에 Element 기본 벨소리를 사용합니다</string>
+    <string name="settings_call_ringtone_use_app_ringtone">수신 전화에 Element 기본 벨소리를 사용합니다</string>
     <string name="settings_call_ringtone_title">수신 전화 벨소리</string>
     <string name="settings_call_ringtone_dialog_title">전화에 사용할 벨소리를 선택하세요:</string>
 
@@ -554,7 +549,6 @@
 
 
     <string name="settings_notification_advanced">고급 알림 설정</string>
-    <string name="settings_notification_advanced_summary">이벤트 별로 알림 중요도를 설정하고, 소리, LED, 진동을 설정하세요</string>
     <string name="settings_notification_by_event">이벤트 별 알림 중요도</string>
 
     <string name="settings_notification_privacy">알림 개인 정보</string>
@@ -926,7 +920,6 @@
     <string name="encryption_import_import">가져오기</string>
     <string name="encryption_never_send_to_unverified_devices_title">확인된 기기로만 암호화</string>
     <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않습니다.</string>
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 키를 성공적으로 가져왔습니다.</string>
 
     <string name="encryption_information_not_verified">확인되지 않음</string>
     <string name="encryption_information_verified">확인됨</string>
@@ -945,10 +938,6 @@
     <string name="encryption_information_verify_device_warning">이 기기가 신뢰할 수 있는 지 확인하려면, 다른 방법을 사용하여 소유자에게 연락하세요 (예: 현실에서 혹은 전화로) 그리고 이 기기의 사용자 설정에서 표시된 키가 아래에 있는 키와 맞는지 물어보세요:</string>
     <string name="encryption_information_verify_device_warning2">그것이 맞다면, 아래의 확인 버튼을 누르세요. 맞지 않다면, 다른 사람이 이 기기를 가로채고 있는 것이고 블랙리스트에 올려야 합니다. 앞으로 이 확인 절차는 더 정교해질 것입니다.</string>
     <string name="encryption_information_verify_key_match">키가 맞다는 것은 확인합니다</string>
-
-    <string name="e2e_enabling_on_app_update">Element은 이제 종단간 암호화를 지원하지만 활성화하려면 다시 로그인해야 합니다.
-\n
-\n지금 바로 하거나 나중에 애플리케이션 설정에서 할 수 있습니다.</string>
 
     <string name="unknown_devices_alert_title">알 수 없는 기기가 있는 방</string>
     <string name="unknown_devices_alert_message">이 방에는 확인되지 않은 알 수 없는 기기가 있습니다. 
@@ -1169,25 +1158,6 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">올바른 Google Play 서비스 APK를 찾을 수 없습니다. 알림이 제대로 작동하지 않을 수 있습니다.</string>
 
-    <string name="store_title">Element - 대화하세요, 나만의 방식</string>
-    <string name="store_whats_new">우리는 항상 Element을 변경하고 개선하고 있습니다. 전체 변경 내역은 여기서 찾을 수 있습니다: %1$s. 놓치지 않도록 업데이트를 켜 놓아주세요.</string>
-    <string name="store_short_description">전적으로 여러분의 통제 하에 있는 범용 보안 대화 앱.</string>
-    <string name="store_full_description">여러분의 통제 하에 완전히 유연한 대화 앱. Element은 여러분이 원하는 방식으로 대화할 수 있도록 합니다. 개방형 분산 커뮤니티의 표준 - [matrix]를 위해 제작됨.
-\n 
-\n무료 matrix.org 계정을 만들고, https://modular.im 에서 자신만의 서버, 혹은 다른 Matrix 서버를 얻으세요. 
-\n 
-\n왜 Element을 선택해야 하나요\?
-\n 
-\n• 완전한 대화: 원하는 대로 팀이나 친구, 커뮤니티를 중심으로 방을 만드세요! 대화, 파일 공유, 위젯 추가와 음성 및 영상 통화 - 모두 무료입니다. 
-\n 
-\n• 강력한 통합: 여러분이 알고 사랑하는 도구와 함께 Element을 사용하세요. Element이라면 다른 대화 앱의 사용자와 그룹까지도 대화할 수 있습니다.
-\n 
-\n• 개인 및 보안: 대화를 비밀로 유지하세요. 최첨단 종단간 암호화로 비밀 대화를 은밀하게 유지해줍니다. 
-\n 
-\n• 오픈 소스: Matrix로 만들어진 오픈 소스입니다. 자신의 데이터를 자신의 서버에 소유하거나, 신뢰하는 서버에 맡기세요. 
-\n 
-\n• 어디에 있든: 모든 기기나 https://riot.im 에서 완전히 동기화된 메시지 기록으로 연락을 유지합니다.</string>
-
     <string name="passphrase_create_passphrase">암호 만들기</string>
     <string name="passphrase_confirm_passphrase">암호 확인</string>
     <string name="passphrase_enter_passphrase">암호 입력</string>
@@ -1268,7 +1238,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">이 복구 키로 백업을 복호화할 수 없습니다: 올바른 복구 키를 입력해서 확인해주세요.</string>
 
     <string name="keys_backup_restore_success_title">백업이 복구되었습니다 %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d개의 세션 키를 복구했고, 이 기기에서 알려지지 않은 %2$d개의 새 키를 추가함</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">%d개의 키와 함께 백업을 복구했습니다.</item>
     </plurals>
@@ -1436,12 +1405,6 @@
     <string name="keys_backup_unable_to_get_trust_info">신뢰 정보를 얻는 과정에서 오류가 발생했습니다</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">키 백업 데이터를 얻는 과정에서 오류가 발생했습니다</string>
 
-    <string name="alpha_disclaimer_title">베타 버전에 온 것을 환영합니다!</string>
-    <string name="alpha_disclaimer_content_line_1">ElementX가 개발 중에 있기에, 일부 기능이 부족하고 버그가 나올 수 있습니다.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">최신 기능 목록은 항상 %1$s에 있고, 버그를 발견했다면 홈의 왼쪽 위 메뉴에서 신고해주세요, 그러면 가능한 한 빨리 고치겠습니다.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play 스토어 설명</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">버그를 발견했다면 홈의 왼쪽 위 메뉴에서 신고해주세요, 그러면 가능한 한 빨리 고치겠습니다.</string>
-
     <string name="import_e2e_keys_from_file">파일 \"%1$s\"에서 종단간 암호화 키 가져옴.</string>
 
     <string name="settings_sdk_version">Matrix SDK 버전</string>
@@ -1479,16 +1442,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">타임라인에서 숨겨진 이벤트 보이기</string>
 
-    <string name="store_riotx_title">Element - 차세대 Matrix 클라이언트</string>
-    <string name="store_riotx_short_description">최신 안드로이드 프레임워크를 사용해 더 빠르고 가벼운 Matrix를 위한 클라이언트</string>
-    <string name="store_riotx_full_description">Element는 Matrix 프로토콜 (Matrix.org)을 위한 새 클라이언트입니다: 안전한 분산 통신을 위한 개방형 네트워크. Element는 Matrix 안드로이드 SDK의 Element 안드로이드 클라이언트 전체 개정판을 기반으로 한 Riot 안드로이드 클라이언트의 전체 개정판입니다.
-\n 
-\n면책 조항: 이것은 베타 버전입니다. Element는 현재 개발 중이고 한계가 있으며 (많지 않으면 좋겠지만) 버그가 있습니다. 모든 피드백은 환영합니다!
-\n 
-\nElement 지원: • 존재하는 계정으로 로그인 • 방을 만들고 공공 방에 참가 • 초대를 수락하거나 거절 • 사용자 방 목록 • 방 세부 정보 보기 • 문자 메시지 보내기 • 첨부 파일 보내기 • 암호화된 방에서 메시지 읽고 쓰기 • 암호화: 종단간 암호화 키 백업, 고급 기기 확인, 키 공유 요청과 답장 • 푸시 알림 • 밝은 테마, 어두운 테마 그리고 검정 테마
-\n 
-\n아직 Element의 모든 기능이 Element에 구현되지 않았습니다. 주요 없는 (그리고 곧 나올!) 기능: • 방 설정 (방 구성원 목록 등) • 전화 • 위젯 • …</string>
-
     <string name="bottom_action_people_x">다이렉트 메시지</string>
 
     <string name="send_file_step_idle">기다리세요…</string>
@@ -1501,9 +1454,6 @@
     <string name="downloaded_file">파일 %1$s을(를) 다운로드했습니다!</string>
 
     <string name="edited_suffix">(편집됨)</string>
-
-    <string name="riotx_no_registration_notice">계정을 만들려면 %1$s하세요.</string>
-    <string name="riotx_no_registration_notice_colored_part">예전 앱을 사용</string>
 
 
     <string name="message_edits">메시지 편집</string>
@@ -1535,11 +1485,6 @@
     <string name="decline">끊기</string>
 
     <string name="widget_integration_review_terms">계속 하려면 이 서비스 약관에 동의해야 합니다.</string>
-
-    <string name="security_warning_identity_server">Element의 이전 버전은 보안 버그로 ID 서버 (%1$s)가 계정으로 접근할 수 있었습니다. %2$s을(를) 신뢰하면 이것을 무시하고, 그렇지 않다면 로그아웃한 후 다시 로그인하세요.
-\n
-\n자세한 설명은 여기서 읽으세요:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">서비스 약관</string>
     <string name="review_terms">조건 검토</string>
@@ -1637,7 +1582,6 @@
     <string name="a11y_hide_password">비밀번호 감추기</string>
     <string name="a11y_jump_to_bottom">맨 아래로 건너뛰기</string>
 
-    <string name="two_and_some_others_read">%1$s님, %2$s님 외 %3$d명이 읽음</string>
     <string name="three_users_read">%1$s님, %2$s님 그리고 %3$s님이 읽음</string>
     <string name="two_users_read">%1$s님 그리고 %2$s님이 읽음</string>
     <string name="one_user_read">%s님이 읽음</string>

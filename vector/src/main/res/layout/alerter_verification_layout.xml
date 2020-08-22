@@ -23,11 +23,11 @@
         android:id="@+id/ivIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:src="@drawable/ic_shield_warning"
         app:layout_constraintCircle="@+id/ivUserAvatar"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="20dp"
         tools:ignore="MissingConstraints"
-        android:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
     <LinearLayout
@@ -47,7 +47,6 @@
             android:layout_marginStart="@dimen/alerter_padding_half"
             android:layout_marginEnd="@dimen/alerter_padding_half"
             android:paddingStart="@dimen/alerter_padding_small"
-            android:paddingLeft="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
             android:textAppearance="@style/AlertTextAppearance.Title"
             android:visibility="gone"
@@ -60,15 +59,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/alerter_padding_half"
             android:layout_marginEnd="@dimen/alerter_padding_half"
+            android:maxLines="3"
             android:paddingStart="@dimen/alerter_padding_small"
-            android:paddingLeft="@dimen/alerter_padding_small"
             android:paddingTop="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
             android:paddingBottom="@dimen/alerter_padding_small"
             android:textAppearance="@style/AlertTextAppearance.Text"
             android:visibility="gone"
             tools:text="Text"
-            android:maxLines="3"
             tools:visibility="visible" />
 
     </LinearLayout>

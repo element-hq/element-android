@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-adb shell dumpsys jobscheduler im.vector.riotx.debug
+adb shell dumpsys jobscheduler im.vector.app.debug

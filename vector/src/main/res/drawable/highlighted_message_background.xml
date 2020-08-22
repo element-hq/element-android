@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true">
+
+        <layer-list>
+
+            <!-- Draw the BG. -->
+            <item android:left="6dp" android:right="2dp">
+                <shape>
+                    <corners android:bottomRightRadius="4dp" android:topRightRadius="4dp" />
+                    <solid android:color="?riotx_header_panel_background" />
+                </shape>
+            </item>
+
+            <item android:gravity="start" android:left="2dp">
+                <shape>
+                    <size android:width="4dp" />
+                    <corners android:bottomLeftRadius="40dp" android:topLeftRadius="40dp" />
+                    <solid android:color="@color/riotx_accent" />
+                </shape>
+            </item>
+
+        </layer-list>
+
+    </item>
+
+    <item android:state_checked="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+
+</selector>

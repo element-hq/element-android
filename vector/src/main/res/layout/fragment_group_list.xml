@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.app.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stateView"
     android:layout_width="match_parent"
@@ -12,4 +12,4 @@
         android:overScrollMode="always"
         tools:listitem="@layout/item_group" />
 
-</im.vector.riotx.core.platform.StateView>
+</im.vector.app.core.platform.StateView>

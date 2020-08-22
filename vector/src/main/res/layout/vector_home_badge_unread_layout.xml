@@ -5,19 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/actionUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:minWidth="8dp"
         android:minHeight="8dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:textColor="@android:color/white"
         android:textSize="10sp"
         tools:background="@drawable/bg_unread_highlight"

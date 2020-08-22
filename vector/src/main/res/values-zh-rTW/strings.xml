@@ -202,7 +202,6 @@
     <string name="login_error_unable_register">無法註冊</string>
     <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
     <string name="login_error_invalid_home_server">請輸入有效的網址</string>
-    <string name="login_mobile_device">行動</string>
 
     <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
     <string name="login_error_unknown_token">指定的存取權杖無法被認可</string>
@@ -211,8 +210,6 @@
     <string name="login_error_limit_exceeded">傳送太多請求</string>
     <string name="login_error_user_in_use">此使用者名稱已被使用</string>
     <string name="login_error_login_email_not_yet">此電子郵件連結已經被點擊過</string>
-
-    <string name="e2e_need_log_in_again">你需要重新登入來產生此工作階段的端對端加密金鑰，及送出公開金鑰到家伺服器。 這會斷線一次。 抱歉造成困擾。</string>
 
     <string name="read_receipts_list">讀取接收者清單</string>
 
@@ -335,7 +332,7 @@
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_action_devices_list">顯示工作階段清單</string>
     <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
-    <string name="room_participants_ban_prompt_msg">您確定想要封鎖此聊天室的使用者？</string>
+    <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中踢除，並避免他們再次加入。</string>
 
     <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>
     <string name="people_search_local_contacts">裝置上的聯絡人（%d）</string>
@@ -395,7 +392,7 @@
 
 要新增一些貼圖嗎？</string>
 
-    <string name="go_on_with">使用…打開</string>
+    <string name="go_on_with">開啟以……</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
 
     <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
@@ -740,10 +737,6 @@
     <string name="encryption_information_verify_device_warning2">如果不符合的話，您的通訊安全可能正受到威脅。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
-    <string name="e2e_enabling_on_app_update">Element 目前支援端到端加密，但您需要重新登入以啟用。
-\n
-\n您可以現在重新登入或稍後在應用程式設定中進行。</string>
-
     <string name="unknown_devices_alert_title">聊天室包含未知工作階段</string>
     <string name="unknown_devices_alert_message">此聊天室包含未經驗證的工作階段。
 \n無法保證這些工作階段屬於他們聲稱的使用者。
@@ -991,15 +984,13 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="x_plus">%d+</string>
 
     <string name="settings_call_category">通話</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">為來電使用預設的 Element 鈴聲</string>
+    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 Element 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
 
     <string name="accept">接受</string>
 
     <string name="auth_accept_policies">請審閱並接受此家伺服器的政策：</string>
-
-    <string name="encryption_import_room_keys_success">%1$d/%2$d 個金鑰匯入成功。</string>
 
     <string name="settings_notification_troubleshoot">疑難排解通知</string>
     <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
@@ -1033,7 +1024,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play 服務</string>
 
-    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_title">Firebase 權杖</string>
     <string name="settings_troubleshoot_test_fcm_success">成功擷取 FCM token：
 %1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">擷取 FCM token 失敗：
@@ -1084,29 +1075,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
 
-    <string name="store_title">Element - 以您的方式溝通</string>
-    <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
-    <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Element 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
-
-取得免費的 matrix.org 帳號，在 https://modular.im 取得您自己的伺服器，或是使用其他的 Matrix 伺服器。
-
-為什麼選擇 Element？
-
-• 完整的溝通：與您的團隊、朋友、社群一同建構聊天室，不管您喜歡什麼都可以！聊天、分享檔案、新增小工具與進行語音和視訊通話，全都是免費的。
-
-• 強大的整合：與您知道且所愛的工具一同使用 Element。使用 Element，您甚至可以與其他聊天應用程式的使用者與群組聊天。
-
-• 隱密且安全：讓您的對話保持隱密。最先進的端到端加密確保隱密的溝通會繼續保持隱密。
-
-• 開放，並不封閉：開放原始碼，建基於 Matrix。透過建構您自己的伺服器來擁有自己的資料，或選取您信任的。
-
-• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。"</string>
-
     <string name="video_call_in_progress">視訊通話進行中……</string>
 
-    <string name="store_whats_new">"我們會不斷為 Element 做出變更與改善。
-完整的變更紀錄可以在此找到：%1$s。
-為了確保您不會錯過任何事情，只要把更新打開就行了。"</string>
     <string name="title_activity_keys_backup_setup">金鑰備份</string>
     <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
@@ -1115,7 +1085,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="done">完成</string>
 
     <string name="settings_notification_advanced">進階通知設定</string>
-    <string name="settings_notification_advanced_summary">透過活動、音效、LED 與震動設定通知重要程度</string>
     <string name="settings_notification_by_event">活動通知重要程度</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">自訂設定。</string>
@@ -1192,7 +1161,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_recovery_code_error_decrypt">備份可能無法使用此復原金鑰解密：請驗證您是否輸入正確的復原金鑰。</string>
 
     <string name="keys_backup_restore_success_title">備份已復原 %s！</string>
-    <string name="keys_backup_restore_success_description">已復原 %1$d 工作階段金鑰，並已加入未被此工作階段知道的 %2$d 新的金鑰</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">使用 %d 金鑰復原備份。</item>
     </plurals>
@@ -1459,12 +1427,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_unable_to_get_trust_info">取得信任資訊時發生錯誤</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">取得金鑰備份資料時發生錯誤</string>
 
-    <string name="alpha_disclaimer_title">歡迎使用測試版！</string>
-    <string name="alpha_disclaimer_content_line_1">Element 還在早期開發階段，可能會缺少某些功能，您可能會遇到臭蟲。</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">最新的功能清單一直都會在 %1$s，如果您發現臭蟲，請在首頁左上角的選單中遞交回報，我們將會盡快修復。</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play 商店描述</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">如果您發現臭蟲，請在首頁左上角的選單中遞交回報，我們將會盡快修復。</string>
-
     <string name="import_e2e_keys_from_file">從檔案「%1$s」匯入 e2e 金鑰。</string>
 
     <string name="settings_sdk_version">Matrix SDK 版本</string>
@@ -1502,16 +1464,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_labs_show_hidden_events_in_timeline">在時間軸中顯示隱藏的活動</string>
 
-    <string name="store_riotx_title">Element - 下一代的 Matrix 客戶端</string>
-    <string name="store_riotx_short_description">使用最新 Android 框架的 Matrix 較快且輕量的客戶端</string>
-    <string name="store_riotx_full_description">Element 是 Matrix 協定 (Matrix.org) 的新客戶端：安全、去中心化通訊的開放網路。Element 是 Riot Android 客戶端的完全重寫，以 Matrix Android SDK 的完全重寫為基礎。
-\n
-\n免責聲明：這是測試版。Element 目前仍在積極開發中，包含限制與（我們希望不多的）臭蟲。所有的回饋都很歡迎！
-\n
-\nElement 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
-\n
-\n不是所有 Element 的功能都已在 Element 中實作。主要缺少（會在稍後到來！）的功能 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
-
     <string name="bottom_action_people_x">直接訊息</string>
 
     <string name="send_file_step_idle">正在等待……</string>
@@ -1524,9 +1476,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="downloaded_file">檔案 %1$s 已下載！</string>
 
     <string name="edited_suffix">（已編輯）</string>
-
-    <string name="riotx_no_registration_notice">%1$s 以建立帳號。</string>
-    <string name="riotx_no_registration_notice_colored_part">使用舊的應用程式</string>
 
 
     <string name="message_edits">訊息編輯</string>
@@ -1561,11 +1510,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="decline">婉拒</string>
 
     <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
-
-    <string name="security_warning_identity_server">先前版本的 Element 有一個安全性問題，讓您的身份識別伺服器 (%1$s) 存取您的帳號。如果您信任 %2$s，您可以忽略這個；否則請登出再登入。
-\n
-\n在此閱讀更多詳細資訊：
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">服務條款</string>
     <string name="review_terms">審閱條款</string>
@@ -1662,7 +1606,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="a11y_hide_password">隱藏密碼</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
 
-    <string name="two_and_some_others_read">%1$s、%2$s 與 %3$d 個其他人已閱讀</string>
     <string name="three_users_read">%1$s、%2$s 與 %3$s 已閱讀</string>
     <string name="two_users_read">%1$s 與 %2$s 已閱讀</string>
     <string name="one_user_read">%s 已閱讀</string>
@@ -1768,7 +1711,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_join_rules_invite">%1$s 將聊天室設為僅邀請可進入。</string>
     <string name="timeline_unread_messages">未讀訊息</string>
 
-    <string name="login_splash_title">讓您的通訊自由</string>
+    <string name="login_splash_title">這是您的通訊。您才是所有者。</string>
     <string name="login_splash_text1">直接或在群組中與夥伴們聊天</string>
     <string name="login_splash_text2">透過加密讓對話保持隱密</string>
     <string name="login_splash_text3">擴展並自訂您的體驗</string>
@@ -1937,7 +1880,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
     <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，Element 可能更常當機</string>
-    <string name="command_description_verify">請求驗證給定的 userID</string>
     <string name="command_description_shrug">"將  ¯\\_(ツ)_/¯ 附加到純文字訊息中"</string>
 
     <string name="create_room_encryption_title">啟用加密</string>
@@ -2153,7 +2095,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">金鑰請求</string>
 
@@ -2252,7 +2194,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_messages_in_e2e_group_chat">群組聊天中的已加密訊息</string>
     <string name="settings_when_rooms_are_upgraded">當聊天室升級時</string>
     <string name="settings_troubleshoot_title">疑難排解</string>
-    <string name="settings_notification_advanced_summary_riotx">按事件設定通知重要性</string>
+    <string name="settings_notification_advanced_summary">按事件設定通知重要性</string>
 
     <string name="command_description_plain">傳送純文字訊息，不將它們解譯為 markdown</string>
 
@@ -2293,12 +2235,12 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="change_password_summary">設定新的帳號密碼……</string>
 
     <string name="use_other_session_content_description">在您的其他裝置上使用最新的 Element、Element Web、Element 桌面版、Element iOS、Element for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement 桌面版</string>
-    <string name="riot_ios_android">Element iOS
-\nElement for Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="use_latest_riot">在您的其他裝置上使用最新的 Element：</string>
+    <string name="use_latest_app">在您的其他裝置上使用最新的 Element：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
     <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 以繼續。</string>
@@ -2356,7 +2298,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="login_connect_using_matrix_id_notice">或者如果您已有帳號，而且您也知道您 Matrix 的識別符與密碼，您可以使用此方式：</string>
     <string name="login_connect_using_matrix_id_submit">使用我的 Matrix 識別符登入</string>
     <string name="login_signin_matrix_id_title">登入</string>
-    <string name="login_signin_matrix_id_notice">輸入您的識別符與您的密碼</string>
+    <string name="login_signin_matrix_id_notice">如果您在家伺服器上建立了帳號，使用您的 Matrix ID（例如 @user:domain.com）與下方的密碼。</string>
     <string name="login_signin_matrix_id_hint">使用者識別符</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">這不是有效的使用者識別符。預期中的格式：\'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">找不到有效的家伺服器。請檢查您的識別符</string>
@@ -2383,4 +2325,195 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="identity_server_set_alternative_notice_no_default">輸入身份識別伺服器 URL</string>
     <string name="identity_server_set_alternative_submit">遞交</string>
 
+    <string name="play_video">播放</string>
+    <string name="pause_video">暫停</string>
+    <string name="dismiss">忽略</string>
+
+
+    <string name="action_copy">複製</string>
+    <string name="dialog_title_success">成功</string>
+
+    <string name="bottom_action_notification">通知</string>
+    <string name="call_failed_no_connection">Element 呼叫失敗</string>
+    <string name="call_failed_no_connection_description">建立即時連線失敗。
+\n請要求您家伺服器的管理員設定 TURN 伺服器以讓通話的運作更可靠。</string>
+
+    <string name="call_select_sound_device">選取音效裝置</string>
+    <string name="sound_device_phone">電話</string>
+    <string name="sound_device_speaker">喇叭</string>
+    <string name="sound_device_headset">耳機</string>
+    <string name="sound_device_wireless_headset">無線耳機</string>
+    <string name="call_switch_camera">切換相機</string>
+    <string name="call_camera_front">前</string>
+    <string name="call_camera_back">後</string>
+    <string name="call_format_turn_hd_off">關閉 HD</string>
+    <string name="call_format_turn_hd_on">開啟 HD</string>
+
+    <string name="login_error_ssl_peer_unverified">SSL 錯誤：對方的身份未驗證。</string>
+    <string name="login_error_ssl_other">SSL 錯誤。</string>
+    <string name="active_call_with_duration">有效通話 (%s)</string>
+    <string name="return_to_call">回到通話</string>
+
+    <string name="room_participants_action_cancel_invite">取消邀請</string>
+    <string name="room_participants_power_level_demote_warning_title">將您自己降級？</string>
+    <string name="room_participants_power_level_demote_warning_prompt">您將無法復原此變更，因為您要把自己降級，如果您是聊天室中最後一個有此權限的使用者，那將無法重新取得權限。</string>
+    <string name="room_participants_power_level_demote">降級</string>
+
+
+    <string name="room_participants_action_ignore_title">忽略使用者</string>
+    <string name="room_participants_action_ignore_prompt_msg">忽略此使用者將會從您分享的聊天室移除他們的訊息。
+\n
+\n您隨時都可以在一般設定中撤銷此動作。</string>
+    <string name="room_participants_action_unignore_title">取消忽略使用者</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。</string>
+    <string name="room_participants_action_cancel_invite_title">取消邀請</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
+    <string name="room_participants_kick_title">踢除使用者</string>
+    <string name="room_participants_kick_reason">踢除的理由</string>
+    <string name="room_participants_kick_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
+\n
+\n要避免他們再次加入，您應改為封鎖他們。</string>
+    <string name="room_participants_ban_title">封鎖使用者</string>
+    <string name="room_participants_ban_reason">封鎖的理由</string>
+    <string name="room_participants_unban_title">取消封鎖使用者</string>
+    <string name="room_participants_unban_prompt_msg">取消封鎖使用者將會再次允許他們加入聊天室。</string>
+
+    <string name="settings_secure_backup_section_title">安全備份</string>
+    <string name="settings_secure_backup_manage">管理</string>
+    <string name="settings_secure_backup_setup">設定安全備份</string>
+    <string name="settings_secure_backup_reset">重設安全備份</string>
+    <string name="settings_secure_backup_enter_to_setup">在此裝置上設定</string>
+    <string name="settings_secure_backup_section_info">透過備份加密金鑰到您的伺服器上以防止遺失對加密訊息與資料的存取權。</string>
+    <string name="reset_secure_backup_title">為您現有的備份生成新的安全金鑰或設定新的安全密語。</string>
+    <string name="reset_secure_backup_warning">這將會取代您目前的金鑰或密語。</string>
+
+    <string name="disabled_integration_dialog_title">整合被停用</string>
+    <string name="disabled_integration_dialog_content">在設定中啟用「允許整合」以執行此動作。</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="other">%d 封鎖了使用者</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">金鑰已成功匯出</string>
+
+    <string name="active_widget_view_action">檢視</string>
+    <string name="active_widgets_title">作用中的小工具</string>
+
+
+    <string name="recovery_key_export_saved">復原金鑰已儲存。</string>
+
+    <string name="secure_backup_banner_setup_line1">安全備份</string>
+    <string name="secure_backup_banner_setup_line2">防止遺失對加密訊息與資料的存取權</string>
+
+    <string name="secure_backup_setup">設定安全備份</string>
+
+    <string name="labs_merge_e2e_in_timeline">合併未能在時間軸中解密訊息</string>
+    <string name="labs_show_unread_notifications_as_tab">在主畫面上新增專用的未讀通知分頁。</string>
+
+    <string name="room_list_quick_actions_favorite_add">新增到最愛</string>
+    <string name="room_list_quick_actions_favorite_remove">從最愛移除</string>
+    <string name="notice_member_no_changes_by_you">您未做出變更</string>
+    <string name="room_join_rules_public_by_you">您讓聊天室對所有知道連結的人公開。</string>
+    <string name="room_join_rules_invite_by_you">您讓聊天室變為僅邀請可加入。</string>
+    <string name="login_server_url_form_common_notice">輸入您想要使用的伺服器地址</string>
+
+    <string name="login_signin_matrix_id_password_notice">如果您不知道您的密碼，請返回並重設。</string>
+    <string name="send_a_sticker">貼圖</string>
+
+    <string name="room_profile_section_admin">管理動作</string>
+    <string name="room_member_power_level_default_in">在 %1$s 中的預設</string>
+    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與直接訊息中預設停用端到端加密。</string>
+    <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您伺服器上的安全祕密。</string>
+
+    <string name="bootstrap_cancel_text">如果您現在取消，您可能會失去對加密訊息與資料的存取權，如果您失去對您登入的存取權的話。
+\n
+\n您也可以在設定中設定安全備份與管理您的金鑰。</string>
+
+    <string name="room_created_summary_item_by_you">您建立並設定了聊天室。</string>
+
+    <string name="auth_invalid_login_deactivated_account">此帳號已被停用。</string>
+
+    <string name="setup_cross_signing">啟用交叉簽章</string>
+    <string name="error_saving_media_file">無法儲存媒體檔案</string>
+    <string name="power_level_edit_title">設定角色</string>
+    <string name="power_level_title">角色</string>
+    <string name="a11y_open_chat">開啟聊天</string>
+    <string name="a11y_mute_microphone">讓麥克風靜音</string>
+    <string name="a11y_unmute_microphone">取消麥克風靜音</string>
+    <string name="a11y_stop_camera">停止相機</string>
+    <string name="a11y_start_camera">開啟相機</string>
+
+    <string name="settings_setup_secure_backup">設定安全備份</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">安全備份</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">透過備份加密金鑰到您的伺服器上以防止遺失對加密訊息與資料的存取權。</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">設定</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">使用安全金鑰</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">生成安全金鑰並儲存在安全的地方，如密碼管理員或保險櫃。</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">使用安全密語</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">輸入只有您知道的密語，並生成金鑰備份。</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">儲存您的安全金鑰</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">將您的安全金鑰儲存在安全的地方，如密碼管理員或保險櫃。</string>
+
+    <string name="set_a_security_phrase_title">設定安全密語</string>
+    <string name="set_a_security_phrase_notice">輸入僅有您知道的安全密語，用於保護在您伺服器上的安全祕密。</string>
+    <string name="set_a_security_phrase_hint">安全密語</string>
+    <string name="set_a_security_phrase_again_notice">再次輸入您的安全密語以確認。</string>
+
+    <string name="save_your_security_key_title">儲存您的安全金鑰</string>
+    <string name="save_your_security_key_notice">將您的安全金鑰儲存在安全的地方，如密碼管理員或保險櫃。</string>
+
+    <string name="room_settings_name_hint">聊天室設定</string>
+    <string name="room_settings_topic_hint">主題</string>
+    <string name="room_settings_save_success">您成功變更了聊天室設定</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">您無法存取此訊息</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">正在等待此訊息，可能需要花一點時間</string>
+    <string name="crypto_utd">無法解密</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">由於端到端加密，您可能要等待某人的訊息抵達，因為加密金鑰未正確地傳送給您。</string>
+    <string name="crypto_error_withheld_blacklisted">您無法存取此訊息，因為您被傳送者封鎖</string>
+    <string name="crypto_error_withheld_unverified">您無法存取此訊息，因為您的工作階段未被傳送者所信任</string>
+    <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意未傳送金鑰</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密歷史</string>
+
+    <string name="element_disclaimer_title">Riot 現在是 Element 了！</string>
+    <string name="element_disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
+    <string name="element_disclaimer_negative_button">知道了</string>
+    <string name="element_disclaimer_positive_button">取得更多資訊</string>
+
+    <string name="element_login_splash_brand">element</string>
+
+
+    <string name="save_recovery_key_chooser_hint">儲存復原金鑰於</string>
+
+    <string name="add_from_phone_book">從我的電話簿新增</string>
+    <string name="empty_phone_book">您的電話簿是空的</string>
+    <string name="phone_book_title">電話簿</string>
+    <string name="search_in_my_contacts">在我們聯絡人中搜尋</string>
+    <string name="loading_contact_book">正在擷取您的聯絡人……</string>
+    <string name="empty_contact_book">您的通訊錄為空</string>
+    <string name="contacts_book_title">通訊錄</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">撤銷邀請</string>
+    <string name="three_pid_revoke_invite_dialog_content">撤銷對 %1$s 的邀請？</string>
+
+    <string name="member_banned_by">被 %1$s 封鎖</string>
+    <string name="failed_to_unban">取消封鎖使用者失敗</string>
+
+    <string name="alert_push_are_disabled_title">推送通知已停用</string>
+    <string name="alert_push_are_disabled_description">審閱您的設定以啟用推送通知</string>
+    <string name="create_pin_title">選擇 PIN 碼以確保安全</string>
+    <string name="create_pin_confirm_title">確認 PIN 碼</string>
+    <string name="create_pin_confirm_failure">驗證 PIN 碼失敗，請點擊新的。</string>
+    <string name="auth_pin_title">輸入您的 PIN 碼</string>
+    <string name="auth_pin_forgot">忘記 PIN 碼？</string>
+    <string name="auth_pin_reset_title">重設 PIN 碼</string>
+    <string name="auth_pin_new_pin_action">新 PIN 碼</string>
+    <string name="auth_pin_reset_content">要重設您的 PIN 碼，您將需要重新登入並建立新的。</string>
+    <string name="settings_security_pin_code_title">啟用 PIN 碼</string>
+    <string name="settings_security_pin_code_summary">如果您想要重設您的 PIN 碼，點擊忘記 PIN 碼以登出並重設。</string>
+    <string name="auth_pin_confirm_to_disable_title">確認 PIN 碼以停用 PIN 碼</string>
+    <string name="settings_call_show_confirmation_dialog_title">避免意外的通話</string>
+    <string name="settings_call_show_confirmation_dialog_summary">開始通話前要求確認</string>
 </resources>

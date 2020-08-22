@@ -93,8 +93,7 @@
     <plurals name="public_room_nb_users">
         <item quantity="one">1 používateľ</item>
         <item quantity="few">%d používatelia</item>
-        <item quantity="many">%d používateľov</item>
-        <item quantity="other" />
+        <item quantity="other">%d používateľov</item>
     </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
@@ -185,7 +184,6 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="login_error_unable_register">Nie je možné sa registrovať</string>
     <string name="login_error_unable_register_mail_ownership">Nie je možné sa registrovať: Zlyhalo overenie emailovej adresy</string>
     <string name="login_error_invalid_home_server">Zadajte platnú adresu URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Neplatné používateľské meno/heslo</string>
     <string name="login_error_unknown_token">Prepáčte, tento domovský server používa neznámy spôsob prihlasovania</string>
@@ -194,10 +192,6 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="login_error_limit_exceeded">Bol prekročený maximálny počet požiadaviek</string>
     <string name="login_error_user_in_use">Toto používateľské meno sa už používa</string>
     <string name="login_error_login_email_not_yet">Zatiaľ ste neklikli na odkaz zaslaný emailom</string>
-
-    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre túto reláciu a odošle zodpovedajúci verejný kľúč domovskému serveru.
-\nToto je potrebné urobiť len raz. 
-\nOspravedlňujeme sa za spôsobené ťažkosti.</string>
 
     <string name="read_receipts_list">Zoznam potvrdení o prečítaní</string>
 
@@ -636,10 +630,6 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
 
-    <string name="e2e_enabling_on_app_update">Element od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
-
-Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia.</string>
-
     <string name="unknown_devices_alert_title">V miestnosti sú neznáme relácie</string>
     <string name="unknown_devices_alert_message">V tejto miestnosti sa nachádzajú neznáme relácie, ktoré neboli overené.
 \nZnamená to, že príslušnosť týchto relácií k ich údajným používateľom nemôže byť garantovaná.
@@ -785,8 +775,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <plurals name="membership_changes">
         <item quantity="one">1 zmena stavu</item>
         <item quantity="few">%d zmeny stavu</item>
-        <item quantity="many">%d zmien stavu</item>
-        <item quantity="other" />
+        <item quantity="other">%d zmien stavu</item>
     </plurals>
 
     <string name="list_members">Zobraziť členov</string>
@@ -795,45 +784,38 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <plurals name="room_header_active_members_count">
         <item quantity="one">1 aktívny člen</item>
         <item quantity="few">%d aktívni členovia</item>
-        <item quantity="many">%d aktívnych členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktívnych členov</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
-        <item quantity="many">%d členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d členov</item>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová správa</item>
         <item quantity="few">%d nové správy</item>
-        <item quantity="many">%d nových správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d nových správ</item>
     </plurals>
 
     <plurals name="directory_search_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
-        <item quantity="many">%d miestností</item>
-        <item quantity="other" />
+        <item quantity="other">%d miestností</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
         <item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
-        <item quantity="many">Nájdených %1$s miestností pre %2$s</item>
-        <item quantity="other" />
+        <item quantity="other">Nájdených %1$s miestností pre %2$s</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
-        <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d neprečítaných správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
-        <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other" />
+        <item quantity="other">%d neprečítaných správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 miestnosť</item>
@@ -845,8 +827,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <plurals name="active_widgets">
         <item quantity="one">1 aktívny widget</item>
         <item quantity="few">%d aktívne widgety</item>
-        <item quantity="many">%d aktívnych widgetov</item>
-        <item quantity="other" />
+        <item quantity="other">%d aktívnych widgetov</item>
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -957,8 +938,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <plurals name="room_details_selected">
         <item quantity="one">1 vybratý</item>
         <item quantity="few">%d vybratí</item>
-        <item quantity="many">%d vybratých</item>
-        <item quantity="other" />
+        <item quantity="other">%d vybratých</item>
     </plurals>
     <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
 
@@ -982,15 +962,13 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <plurals name="group_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
-        <item quantity="many">%d členov</item>
-        <item quantity="other" />
+        <item quantity="other">%d členov</item>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
-        <item quantity="many">%d miestností</item>
-        <item quantity="other" />
+        <item quantity="other">%d miestností</item>
     </plurals>
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
@@ -1046,7 +1024,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
 
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
 
@@ -1148,8 +1126,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="account_phone_number_error">Pri pokuse overiť vaše telefónne číslo sa vyskytla chyba.</string>
     <string name="account_additional_info">Dodatočné informácie: %s</string>
 
-    <string name="encryption_import_room_keys_success">Úspešne importovaných %1$d/%2$d kľúč(ov).</string>
-
     <string name="settings_labs_native_camera_summary">Spustiť predvolený fotoaparát v systéme namiesto zobrazenia vlastnej vstavanej obrazovky.</string>
     <string name="settings_labs_enable_send_voice_summary">Vyžaduje externú aplikáciu na nahrávanie zvuku.</string>
 
@@ -1158,27 +1134,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="markdown_has_been_disabled">Markdown bol zakázaný.</string>
 
     <string name="no_valid_google_play_services_apk">Nenájdená aktívna aplikácia Služby Google Play. Je možné, že nebude správne fungovať doručovanie oznámení.</string>
-
-    <string name="store_title">Element - Komunikujte, Podľa seba</string>
-    <string name="store_whats_new">"Element neustále aktualizujeme s vylepšeniami a zmenami.
-Podrobný zoznam zmien (anglicky) nájdete na adrese: %1$s.
-Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</string>
-    <string name="store_short_description">Univerzálna a bezpečná aplikácia na okamžitú komunikáciu úplne pod vašou kontrolou.</string>
-    <string name="store_full_description">Četovacia aplikácia, pod vašou kontrolou a úplne flexibilná. Element vám umožňuje komunikovať presne tak, ako to vy chcete. Vytvorená pre [matrix] - štandard pre otvorenú, decentralizovanú komunikáciu.
-\n
-\nZaložte si bezplatný účet u matrix.org, založte si svoj server na https://modular.im alebo použite iný Matrix server.
-\n
-\nPrečo si vybrať Element\?
-\n
-\n• KOMPLETNÁ KOMUNIKÁCIA: Vytvárajte miestnosti pre vaše týmy, priateľov či komunity - akokoľvek chcete! Píšte si, zdieľajte súbory, pridávajte widgety a uskutočňujte hlasové hovory či video-hovory - všetko bezplatne.
-\n
-\n• INTEGRÁCIE: Používajte Element s nástrojmi, ktoré poznáte a s obľubou používate. S Element môžete taktiež komunikovať s používateľmi a skupinami na iných četovacích platformách.
-\n
-\n• SÚKROMNÝ A ZABEZPEČENÝ: Udržte si svoje konverzácie tajné. Špičkové end-to-end šifrovanie zaručí, že súkromné konverzácie ostanú súkromnými.
-\n
-\n• OTVORENÝ, NIE UZAMKNUTÝ: Open source a stavané na Matrixe. Staňte sa vlastníkom svojich dát, že si založíte vlastný server alebo si vyberiete ten, ktorému dôverujete.
-\n
-\n• VŠADE, KDE STE: Zostaňte v kontakte kdekoľvek ste s plne synchronizovanou históriou správ naprieč všetkými vašimi zariadeniami alebo online na https://riot.im.</string>
 
     <string name="notification_sync_init">Inicializácia služby</string>
     <string name="title_activity_keys_backup_setup">Zálohovanie kľúčov</string>
@@ -1207,7 +1162,6 @@ Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</str
     <string name="login_error_unknown_host">Na tejto adrese nie je dostupný žiadny obsah. Prosím, skontrolujte jej správnosť</string>
     <string name="login_error_ssl_handshake">Vaše zariadenie používa zastaralú verziu protokolu TLS, ktorá je náchylná na zraniteľnosti. Z dôvodu zachovania maximálnej bezpečnosti sa nebudete môcť pripojiť</string>
     <string name="settings_notification_advanced">Pokročilé nastavenia oznámení</string>
-    <string name="settings_notification_advanced_summary">Nastavenie dôležitosti oznámení pre udalosti, konfigurácia zvukových, vibračných a LED upozornení</string>
     <string name="settings_notification_by_event">Dôležitosť oznámení pre udalosti</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastné nastavenia.</string>

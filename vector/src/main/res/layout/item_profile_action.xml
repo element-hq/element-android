@@ -9,9 +9,9 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="64dp"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingRight="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
     <ImageView
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:src="@drawable/ic_shield_warning"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/actionEditable"

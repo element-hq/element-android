@@ -211,7 +211,6 @@
     <string name="login_error_unable_register">No s\'ha pogut fer el registre</string>
     <string name="login_error_unable_register_mail_ownership">No s\'ha pogut fer el registre: s\'ha produït una errada en la propietat del correu electrònic</string>
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
-    <string name="login_mobile_device">Mòbil</string>
 
     <string name="login_error_forbidden">El nom d\'usuari/contrasenya és invàlid</string>
     <string name="login_error_unknown_token">No s\'ha reconegut el testimoni d\'accés</string>
@@ -222,9 +221,6 @@
     <string name="login_error_login_email_not_yet">L\'enllaç del correu electrònic que encara no heu fet clic</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al vostre servidor base.
-\nAixò només s\'ha de fer un cop.
-\nDisculpeu les molèsties.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
@@ -708,8 +704,6 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
 
-    <string name="e2e_enabling_on_app_update">El Element ara permet l\'ús d\'encriptació d\'extrem a extrem però us heu de tronar a connectar per tal d\'activar-la.\n\nHo podeu fer ara o més tard des de les preferències de l\'aplicació.</string>
-
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala conté dispositius desconeguts</string>
     <string name="unknown_devices_alert_message">Aquesta sala conté dispositius desconeguts que no han estat verificats.\nAixò vol dir que no hi ha cap garantia que aquests dispositius siguin dels usuaris corresponents.\nEs recomana que feu el procés de verificació per a cada dispositiu abans de continuar, tot i que, si ho preferiu, podeu reenviar el missatge sense verificar.\n\nDispositius desconeguts:</string>
@@ -1035,7 +1029,7 @@ En voleu afegir algun?</string>
     <string name="accept">Acceptar</string>
 
     <string name="settings_call_category">Trucada</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
     <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
 
@@ -1095,8 +1089,6 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="settings_password">Contrasenya</string>
     <string name="account_additional_info">Informació addicional: %s</string>
 
-    <string name="encryption_import_room_keys_success">S\'ha importat %1$d/%2$d claus amb èxit.</string>
-
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
 
@@ -1113,11 +1105,6 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
 
-    <string name="store_title">Element - Comunica\'t, a la teva manera</string>
-    <string name="store_whats_new">"Sempre hi som fent canvis i millores al Element.
-Podeu trobar el registre de canvis complet aquí: %1$s.
-Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades."</string>
-    <string name="store_short_description">Una aplicació de xat universal i segura sota el vostre control.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de la clau</string>
     <string name="title_activity_keys_backup_restore">Empra una còpia de seguretat de la clau</string>
 
@@ -1125,7 +1112,6 @@ Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacio
     <string name="done">Fet</string>
 
     <string name="settings_notification_advanced">Paràmetres avançats de notificacions</string>
-    <string name="settings_notification_advanced_summary">Estableix la importància de les notificacions per tipus d\'esdeveniment, configura el so, led i vibració</string>
     <string name="settings_notification_by_event">Importància de les notificacions per esdeveniment</string>
 
     <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>
@@ -1237,21 +1223,6 @@ Aquest error és fora del control del Element. No hi ha cap compte de Google al 
 Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
 %1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode d\'estalvi d\'energia. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
-    <string name="store_full_description">"Una aplicació de xat, sota el vostre control i totalment flexible. El Element us permet comunicar-vos de la manera que preferiu. Fet per al [matrix] - l’estàndard per a la comunicació oberta i descentralitzada.
-
-Obteniu un compte gratuït de matrix.org, executeu el vostre servidor propi a https://modular.im, o empreu un altre servidor de Matrix.
-
-Per què triar Element?
-
-• COMUNICACIÓ COMPLETA: Creeu sales al voltant dels vostres equips, els vostre amics o la vostra comunitat - de la manera que preferiu! Converseu, compartiu fitxers, afegiu ginys i feu trucades de veu i vídeo - tot de manera gratuïta.
-
-• INTEGRACIONS POTENTS: Empreu el Element amb les eines que ja coneixeu i us agraden. Amb el Element fins i tot podeu conversar amb usuaris i grups d’altres aplicacions de xat.
-
-• PRIVAT I SEGUR: Mantingueu les vostres converses en secret. Xifratge punt a punt us assegura que les comunicacions privades continuaran sent privades.
-
-• OBERT, NO TANCAT: Programari lliure, i construït damunt de Matrix. Sigueu els propietaris de les vostres dades hostatjant el vostre servidor propi, o emprant un en què confieu.
-
-• ALLÀ ON SIGUEU: Esteu en contacte allà on esteu amb una sincronització total de l’historial dels missatges en tots els vostres dispositius, i en línia a https://riot.im."</string>
 
 
     <string name="keys_backup_setup_step3_generating_key_status">S\'està generant la clau de recuperació emprant una frase de pas. Aquest procés pot trigar uns segons.</string>
@@ -1293,7 +1264,6 @@ Per què triar Element?
 
     <string name="keys_backup_settings_delete_confirm_title">Suprimeix la còpia de seguretat</string>
 
-    <string name="keys_backup_restore_success_description">S\'ha restaurat %1$d claus de sessió, i afegit %2$d claus noves que no eren conegudes per aquest dispositiu</string>
     <string name="keys_backup_settings_signature_from_unknown_device">La còpia de seguretat té una signatura d\'un dispositiu desconegut amb ID %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">La còpia de seguretat té una signatura vàlida d\'aquest dispositiu.</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">La còpia de seguretat té una signatura vàlida del dispositiu verificat %s.</string>
@@ -1545,12 +1515,6 @@ Per què triar Element?
 
     <string name="keys_backup_unable_to_get_trust_info">Hi ha hagut un error rebent informació de confança</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Hi ha hagut un error rebent dades de la còpia de seguretat de les claus</string>
-
-    <string name="alpha_disclaimer_title">Benvinguts a la beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Element estigui en les primeres etapes de desenvolupament, faltaran algunes funcions i podríeu experimentar alguns errors.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">L\'última llista de característiques està sempre a %1$s, i si trobeu errors si us plau reporteu informe des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripció de la Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si trobeu errors si us plau envieu un informe d\'errors des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
 
     <string name="import_e2e_keys_from_file">Importar claus e2e des del fitxer \"%1$s\".</string>
 

@@ -10,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:paddingStart="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
         android:textStyle="bold"
         tools:text="Smiley &amp; Peolple" />
 

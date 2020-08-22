@@ -25,10 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:text="@string/send_bug_report_progress"
             android:textColor="?riotx_text_primary"
             android:visibility="gone"
@@ -41,9 +39,7 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:max="100"
             android:visibility="gone"
             tools:progress="70"
@@ -66,9 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_description"
                     android:textColor="?riotx_text_primary" />
 
@@ -78,10 +72,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:hint="@string/send_bug_report_placeholder"
                     android:textColorHint="?attr/vctr_default_text_hint_color"
                     app:counterEnabled="true"
@@ -100,9 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_description_in_english"
                     android:textColor="?riotx_text_secondary"
                     android:textSize="12sp" />
@@ -112,10 +102,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_logs_description"
                     android:textColor="?riotx_text_primary" />
 
@@ -124,9 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:checked="true"
                     android:text="@string/send_bug_report_include_logs" />
 
@@ -135,9 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:checked="true"
                     android:text="@string/send_bug_report_include_crash_logs" />
 
@@ -146,9 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:checked="true"
                     android:text="@string/send_bug_report_include_screenshot" />
 

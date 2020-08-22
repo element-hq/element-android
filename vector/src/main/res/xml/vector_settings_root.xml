@@ -2,57 +2,55 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_general"
         android:title="@string/settings_general_title"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsGeneralFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsGeneralFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
-        android:enabled="@bool/false_not_implemented"
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_flair"
         android:title="@string/settings_flair"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsFlairFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsFlairFragment"
+        app:isPreferenceVisible="@bool/false_not_implemented" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_notification"
         android:title="@string/settings_notifications"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsNotificationPreferenceFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_preferences"
         android:title="@string/settings_preferences"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsPreferencesFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsPreferencesFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
-        app:isPreferenceVisible="@bool/false_not_implemented"
-        android:enabled="@bool/false_not_implemented"
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_call"
         android:title="@string/preference_voice_and_video"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsVoiceVideoFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsVoiceVideoFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_ignored_users"
         android:title="@string/settings_ignored_users"
-        app:fragment="im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
+        app:fragment="im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_security_privacy"
         android:title="@string/settings_security_and_privacy"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsLabsFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsLabsFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_advanced"
         android:title="@string/settings_advanced_settings"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedSettingsFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsAdvancedSettingsFragment" />
 
-    <im.vector.riotx.core.preference.VectorPreference
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_help_about"
         android:title="@string/preference_root_help_about"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment" />
+        app:fragment="im.vector.app.features.settings.VectorSettingsHelpAboutFragment" />
 
 </androidx.preference.PreferenceScreen>

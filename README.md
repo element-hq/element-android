@@ -1,5 +1,5 @@
 [![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f66c690f7788bc6aa80a7628e37f3.svg?branch=develop)](https://buildkite.com/matrix-dot-org/riotx-android/builds?branch=develop)
-[![Weblate](https://translate.riot.im/widgets/riot-android/-/svg-badge.svg)](https://translate.riot.im/engage/riot-android/?utm_source=widget)
+[![Weblate](https://translate.riot.im/widgets/element-android/-/svg-badge.svg)](https://translate.riot.im/engage/element-android/?utm_source=widget)
 [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riotx&metric=alert_status)](https://sonarcloud.io/dashboard?id=vector.android.riotx)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riotx&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=vector.android.riotx)

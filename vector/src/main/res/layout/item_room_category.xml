@@ -11,10 +11,8 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="8dp"
-    android:paddingLeft="8dp"
     android:paddingTop="12dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingRight="@dimen/layout_horizontal_margin"
     android:paddingBottom="4dp">
 
     <TextView
@@ -32,15 +30,15 @@
         android:textStyle="bold"
         tools:text="@string/room_participants_header_direct_chats" />
 
-    <im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minWidth="16dp"
         android:minHeight="16dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:textColor="@android:color/white"
         android:textSize="10sp"
         tools:background="@drawable/bg_unread_highlight"

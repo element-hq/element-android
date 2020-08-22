@@ -146,16 +146,12 @@
     <string name="login_error_unable_register">تعذّر التسجيل</string>
     <string name="login_error_unable_register_mail_ownership">تعذّر التسجيل: فشل في ملكية البريد</string>
     <string name="login_error_invalid_home_server">أدخِل مسارا صالحا</string>
-    <string name="login_mobile_device">المحمول</string>
 
     <string name="login_error_forbidden">اسم المستخدم/كلمة السر غير صالحة</string>
     <string name="login_error_not_json">لم يحتوي JSON صالح</string>
     <string name="login_error_limit_exceeded">أُرسلت الكثير من الطلبات</string>
     <string name="login_error_user_in_use">اسم المستخدم هذا مستخدم بالفعل</string>
     <string name="login_error_login_email_not_yet">لم يُنقر بعد على الرابط في البريد</string>
-
-    <string name="e2e_need_log_in_again">عليك الولوج ثانيةً لتوليد مفاتيح تعمية الطرفين لهذا الجهاز وإرسال المفتاح العمومي إلى خادوم المنزل.
-نرجو المعذرة.</string>
 
     <string name="attachment_cancel_download">أأُلغي التنزيل؟</string>
     <string name="attachment_cancel_upload">أأُلغي الرفع؟</string>
@@ -763,10 +759,6 @@
 ننصحك بأن تبدأ عملية التأكيد لكل جهاز وذلك قبل أن تتابع. يمكنك طبعا إرسال الرسالة دون تأكيد إن أردت ذلك.
 
 الأجهزة المجهولة:</string>
-
-    <string name="e2e_enabling_on_app_update">بات يدعم Element تعمية الطرفين، ولكن عليك الولوج مجددا لتفعيلها.
-
-يمكنك فعل ذلك الآن أو لاحقا وذلك من إعدادات التطبيق.</string>
 
     <string name="encryption_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة إلى الأجهزة غير المؤكّدة</string>
 

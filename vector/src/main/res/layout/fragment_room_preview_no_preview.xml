@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/layout_horizontal_margin"
-                android:paddingRight="@dimen/layout_horizontal_margin">
+                android:paddingStart="@dimen/layout_horizontal_margin"
+                android:paddingEnd="@dimen/layout_horizontal_margin">
 
                 <ImageView
                     android:id="@+id/roomPreviewNoPreviewAvatar"
@@ -118,7 +118,7 @@
                     tools:text="Error"
                     tools:visibility="visible" />
 
-                <im.vector.riotx.core.platform.ButtonStateView
+                <im.vector.app.core.platform.ButtonStateView
                     android:id="@+id/roomPreviewNoPreviewJoin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

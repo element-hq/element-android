@@ -209,7 +209,6 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
     <string name="login_error_unable_register">Reģistrācija neizdevās</string>
     <string name="login_error_unable_register_mail_ownership">Registrācija neizdevās: epasta verifikācijas kļūda</string>
     <string name="login_error_invalid_home_server">Ievadi korektu URL adresi</string>
-    <string name="login_mobile_device">Mobilais</string>
 
     <string name="login_error_forbidden">Nepareizs lietotājvārds / parole</string>
     <string name="login_error_unknown_token">Attiecīgais pieejas tokens netika atpazīts</string>
@@ -218,9 +217,6 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
     <string name="login_error_limit_exceeded">Nosūtīti par daudz pieprasījumi</string>
     <string name="login_error_user_in_use">Šis lietotājvārds ir aizņemts</string>
     <string name="login_error_login_email_not_yet">Nav noklikšķināts uz tīmekļa saites saņemtajā epastā</string>
-
-    <string name="e2e_need_log_in_again">Tev jāieiet sistēmā, lai šai ierīcei ģenerētu \"end-to-end\" šifrēšanas atslēgas un nosūtītu publisko atslēgu bāzes serverim.
-Šī darbība jāveic tikai vienu reizi. Atvainojamies par neērtībām.</string>
 
     <string name="read_receipts_list">Lasīt jaunbiedru sarakstu</string>
 
@@ -714,10 +710,6 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="encryption_information_verify_device_warning2">Ja tā sakrīt, nospied zemāk esošo verifikācijas pogu. Ja tā nesakrīt, tad kāds ir pārtvēris šo ierīci un Tu droši vien vēlies šo ierīci pievienot melnajam sarakstam.
 Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="encryption_information_verify_key_match">Apstiprinu, ka atslēgas sakrīt</string>
-
-    <string name="e2e_enabling_on_app_update">Element tagad nodrošina end-to-end šifrēšanu, bet Tev ir jāizrakstās un jāierakstās par jaunu, lai to iespējotu.
-
-Tu to vari izdarīt tūlīt vai vēlāk - lietotnes Iestatījumos.</string>
 
     <string name="unknown_devices_alert_title">Istabā atrodas nepazīstamas ierīces</string>
     <string name="unknown_devices_alert_message">Šajā istabā atrodas nepazīstamas ierīces, kuras nav verificētas.

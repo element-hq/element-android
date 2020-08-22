@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector.riotx">
+    package="im.vector.app">
 
     <!-- Needed for VOIP call to detect and switch to headset-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -27,6 +27,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Needed for incoming calls  -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
+    <uses-permission
+        android:name="android.permission.READ_CALENDAR"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.WRITE_CALENDAR"
+        tools:node="remove" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -124,8 +132,8 @@
                 android:value=".features.home.HomeActivity" />
         </activity>
         <activity android:name=".features.debug.DebugMenuActivity" />
-        <activity android:name="im.vector.riotx.features.createdirect.CreateDirectRoomActivity" />
-        <activity android:name="im.vector.riotx.features.invite.InviteUsersToRoomActivity" />
+        <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
+        <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
         <activity android:name=".features.link.LinkHandlerActivity">
             <intent-filter>
@@ -202,6 +210,9 @@
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
         <activity android:name=".features.call.VectorCallActivity" />
+        <activity
+            android:name=".features.call.conference.VectorJitsiActivity"
+            android:configChanges="orientation|screenSize" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />

@@ -6,6 +6,7 @@
     <issue id="MissingTranslation" severity="warning" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="UnusedQuantity" severity="error" />
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />
@@ -29,20 +30,22 @@
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
-    <!-- Now with min API set to 19, we do not need Left and Right attribute, Start and End is enougth. For the moment, just reduce the severity -->
-    <issue id="RtlHardcoded" severity="warning" />
+    <issue id="RtlHardcoded" severity="error" />
     <issue id="RtlSymmetry" severity="error" />
 
     <!-- Code -->
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
+    <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
 
-    <!-- Ignore error from HtmlCompressor lib -->
     <issue id="InvalidPackage">
+        <!-- Ignore error from HtmlCompressor lib -->
         <ignore path="**/htmlcompressor-1.4.jar" />
+        <!-- Ignore error from dropbox-core-sdk-3.0.8 lib, which comes with Jitsi library -->
+        <ignore path="**/dropbox-core-sdk-3.0.8.jar" />
     </issue>
 
     <!-- Manifest -->

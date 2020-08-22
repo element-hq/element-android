@@ -8,32 +8,21 @@
         <attr name="vctr_toolbar_secondary_text_color" format="color" />
         <attr name="vctr_toolbar_link_text_color" format="color" />
 
-        <!-- application bar text hint color -->
-        <attr name="vctr_primary_hint_text_color" format="color" />
-
         <!-- default text colors -->
         <attr name="vctr_default_text_hint_color" format="color" />
 
         <!-- room message colors -->
-        <attr name="vctr_unread_room_indent_color" format="color" />
         <attr name="vctr_unsent_message_text_color" format="color" />
         <attr name="vctr_message_text_color" format="color" />
         <attr name="vctr_notice_text_color" format="color" />
         <attr name="vctr_notice_secondary" format="color" />
         <attr name="vctr_encrypting_message_text_color" format="color" />
         <attr name="vctr_sending_message_text_color" format="color" />
-        <attr name="vctr_highlighted_message_text_color" format="color" />
-        <attr name="vctr_highlighted_searched_message_text_color" format="color" />
-        <attr name="vctr_search_mode_room_name_text_color" format="color" />
-        <attr name="vctr_unread_marker_line_color" format="color" />
         <attr name="vctr_markdown_block_background_color" format="color" />
-        <attr name="vctr_room_activity_divider_color" format="color" />
         <attr name="vctr_spoiler_background_color" format="color" />
 
         <!-- tab bar colors -->
         <attr name="vctr_tab_bar_inverted_background_color" format="color" />
-        <attr name="vctr_tab_bar_selected_background_color" format="color" />
-        <attr name="vctr_tab_bar_unselected_background_color" format="color" />
 
         <!-- list colors -->
         <attr name="vctr_list_header_background_color" format="color" />
@@ -42,52 +31,15 @@
 
         <attr name="vctr_list_divider_color" format="color" />
 
-        <attr name="vctr_redacted_message_color" format="color" />
-
-        <!-- gradient on the bottom of some activities -->
-        <attr name="vctr_activity_bottom_gradient_color" format="color" />
-
         <!-- outgoing call background color -->
         <attr name="vctr_pending_outgoing_view_background_color" format="color" />
-
-        <!-- multi selection member background color -->
-        <attr name="vctr_multi_selection_background_color" format="color" />
-
-        <!-- sliding menu icon colors -->
-        <attr name="vctr_home_navigation_icon_color" format="color" />
 
         <!-- room notification text color (typing, unsent...) -->
         <attr name="vctr_room_notification_text_color" format="color" />
 
         <!-- icon colors -->
         <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
-        <attr name="vctr_icon_tint_on_dark_action_bar_color" format="color" />
         <attr name="vctr_settings_icon_tint_color" format="color" />
-
-        <!-- Tab home colors -->
-        <attr name="vctr_tab_home" format="color" />
-        <attr name="vctr_tab_home_secondary" format="color" />
-
-        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
-        <!-- dedicated drawables are created for each theme -->
-        <attr name="vctr_line_divider" format="reference" />
-        <attr name="vctr_shadow_bottom" format="reference" />
-        <attr name="vctr_shadow_top" format="reference" />
-        <attr name="vctr_tabbar_selected_background" format="reference" />
-        <attr name="vctr_tabbar_unselected_background" format="reference" />
-        <attr name="vctr_tabbar_background" format="reference" />
-        <attr name="vctr_direct_chat_circle" format="reference" />
-
-        <attr name="vctr_pill_background_user_id" format="reference" />
-        <attr name="vctr_pill_background_room_alias" format="reference" />
-        <attr name="vctr_pill_text_color_user_id" format="reference" />
-        <attr name="vctr_pill_text_color_room_alias" format="reference" />
-        <attr name="vctr_pill_receipt" format="reference" />
-
-        <!-- Widget banner background -->
-        <attr name="vctr_widget_banner_background" format="color" />
-
-        <attr name="riotx_highlighted_message_background" format="reference" />
 
     </declare-styleable>
 
