@@ -182,7 +182,6 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="login_error_unable_register">Kunne ikke registrere</string>
     <string name="login_error_unable_register_mail_ownership">Kunne ikke registrere : email ejerskabsfejl</string>
     <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Ugyldigt brugernavn/password</string>
     <string name="login_error_unknown_token">Adgangstokenen du skrev blev ikke godkendt</string>
@@ -197,10 +196,6 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
 
     <string name="option_take_photo">Tag billede</string>
     <string name="option_take_video">Optag video</string>
-
-    <string name="e2e_need_log_in_again">Du skal logge ind igen for at generere end-to-end krypteringsnøgler for denne enhed og sende public keyen til din homeserver.
-Dette skal kun gøres én gang.
-Beklager ulejligheden.</string>
 
     <string name="compression_options">"Send som "</string>
     <string name="compression_opt_list_original">Original</string>

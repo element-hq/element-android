@@ -195,9 +195,9 @@
 
     <string name="notice_room_created">%1$s создал(а) комнату</string>
     <plurals name="notice_room_aliases_added">
-        <item quantity="one">%1$s добавил(а) адрес %2$s для комнаты.</item>
-        <item quantity="few">%1$s добавил(а) адреса %2$s для комнаты.</item>
-        <item quantity="many">%1$s добавил(а) адреса %2$s для комнаты.</item>
+        <item quantity="one">%1$s добавил(а) %2$s в качестве адреса для этой комнаты.</item>
+        <item quantity="few">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
+        <item quantity="many">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
     </plurals>
 
     <plurals name="notice_room_aliases_removed">
@@ -306,5 +306,15 @@
 
     <string name="notice_end_to_end_ok_by_you">Вы включили сквозное шифрование.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Вы включили сквозное шифрование (неизвестный алгоритм %1$s).</string>
+
+    <string name="notice_room_avatar_changed">%1$s изменил(а) аватар комнаты</string>
+    <string name="notice_room_avatar_changed_by_you">Вы изменили аватар комнаты</string>
+    <string name="notice_call_candidates">%s отправил(а) данные для начала звонка.</string>
+    <string name="notice_call_candidates_by_you">Вы отправили данные для начала звонка.</string>
+    <string name="notice_room_avatar_removed">%1$s удалил(а) аватар комнаты</string>
+    <string name="notice_room_avatar_removed_by_you">Вы удалили аватар комнаты</string>
+    <string name="call_notification_answer">Принять</string>
+    <string name="call_notification_reject">Отклонить</string>
+    <string name="call_notification_hangup">Завершить звонок</string>
 
 </resources>

@@ -183,7 +183,6 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="login_error_unable_register">Nemoguća registracija</string>
     <string name="login_error_unable_register_mail_ownership">Nemoguća registracija : problem sa vlasništvom email adrese</string>
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
-    <string name="login_mobile_device">Mobitel</string>
 
     <string name="login_error_forbidden">Netačno korisničko ime/lozinka</string>
     <string name="login_error_unknown_token">Navedeni pristupni token nije prepoznat</string>
@@ -192,10 +191,6 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="login_error_limit_exceeded">Previše zahtjeva je poslano</string>
     <string name="login_error_user_in_use">Ovo korisničko ime se već koristi</string>
     <string name="login_error_login_email_not_yet">Link email adrese koji još uvijek nije kliknut</string>
-
-    <string name="e2e_need_log_in_again">Morate se ponovno prijaviti da biste generisali krajnje ključeve za šifriranje za ovaj uređaj i poslali javni ključ svom lokalnom serveru.
-Ovo je isključeno.
-Oprostite na neugodnosti.</string>
 
     <string name="read_receipts_list">Čitajte Listu Primalaca</string>
 

@@ -163,6 +163,11 @@
     <color name="riotx_fab_label_bg_dark">#FF181B21</color>
     <color name="riotx_fab_label_bg_black">#FF181B21</color>
 
+    <attr name="riotx_fab_label_stroke" format="color" />
+    <color name="riotx_fab_label_stroke_light">#1EFFFFFF</color>
+    <color name="riotx_fab_label_stroke_dark">@color/black</color>
+    <color name="riotx_fab_label_stroke_black">@color/black</color>
+
     <attr name="riotx_fab_label_color" format="color" />
     <color name="riotx_fab_label_color_light">#FF2E2F32</color>
     <color name="riotx_fab_label_color_dark">#FFA1B2D1</color>

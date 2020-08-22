@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
+import androidx.core.content.getSystemService
 import arrow.core.Try
 import okio.buffer
 import okio.sink
@@ -85,7 +86,7 @@ fun addEntryToDownloadManager(context: Context,
                 null
             }
         } else {
-            val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
+            val downloadManager = context.getSystemService<DownloadManager>()
             @Suppress("DEPRECATION")
             downloadManager?.addCompletedDownload(title, description, true, mimeType, file.absolutePath, file.length(), true)
             return null

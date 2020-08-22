@@ -20,6 +20,7 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
@@ -480,7 +481,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
                             callContext.cameraAvailabilityCallback = restarter
-                            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                            val cameraManager = context.getSystemService<CameraManager>()!!
                             cameraManager.registerAvailabilityCallback(restarter, null)
                         }
                     }
@@ -792,7 +793,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         currentCall?.cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                val cameraManager = context.getSystemService<CameraManager>()!!
                 cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
             }
         }
@@ -1048,8 +1049,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 // re-start the capture
                 // TODO notify that video is enabled
                 videoCapturer?.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
-                (context.getSystemService(Context.CAMERA_SERVICE) as? CameraManager)
-                        ?.unregisterAvailabilityCallback(this)
+                context.getSystemService<CameraManager>()?.unregisterAvailabilityCallback(this)
             }
         }
     }

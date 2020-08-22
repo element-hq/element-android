@@ -30,6 +30,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
@@ -47,7 +48,7 @@ import im.vector.app.features.notifications.NotificationUtils
 fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-            || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
+            || context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
 fun isAirplaneModeOn(context: Context): Boolean {
@@ -84,7 +85,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
  * @param text    the text to copy
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clipboard = context.getSystemService<ClipboardManager>()!!
     clipboard.setPrimaryClip(ClipData.newPlainText("", text))
     if (showToast) {
         context.toast(toastMessage)

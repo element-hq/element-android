@@ -60,7 +60,7 @@
     <string name="no_conversation_placeholder">گفتگوای نیست</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d کاربر</item>
+        <item quantity="one">۱ کاربر</item>
         <item quantity="other">%d کاربر</item>
     </plurals>
 
@@ -110,7 +110,6 @@
     <string name="auth_email_validation_message">برای ادامه‌ی ثبت‌نام، لطفاً ایمیل خود را بررسی کنید</string>
     <string name="auth_reset_password_next_step_button">من آدرس ایمیلم را تایید کرده‌ام</string>
     <string name="login_error_network_error">نمی‌توان وارد شد: خطای شبکه</string>
-    <string name="login_mobile_device">موبایل</string>
 
     <string name="login_error_forbidden">نام کاربری/گذرواژه نامعتبر است</string>
     <string name="login_error_user_in_use">این نام کاربری قبلا استفاده شده است</string>
@@ -244,19 +243,19 @@
     <string name="room_title_one_member">۱ عضو</string>
 
     <plurals name="format_time_s">
-        <item quantity="one">%d ثانیه</item>
+        <item quantity="one">۱ ثانیه</item>
         <item quantity="other">%d ثانیه</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%d دقیقه</item>
+        <item quantity="one">۱ دقیقه</item>
         <item quantity="other">%d دقیقه</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%d ساعت</item>
+        <item quantity="one">۱ ساعت</item>
         <item quantity="other">%d ساعت</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%d روز</item>
+        <item quantity="one">۱ روز</item>
         <item quantity="other">%d روز</item>
     </plurals>
 
@@ -491,7 +490,7 @@
     </plurals>
 
     <plurals name="notification_compat_summary_title">
-        <item quantity="one">%d آگاهی</item>
+        <item quantity="one">۱ آگاهی</item>
         <item quantity="other">%d آگاهی</item>
     </plurals>
 
@@ -586,7 +585,6 @@
 
     <string name="settings_labs_show_hidden_events_in_timeline">نمایش رویدادهای نهفته در خط زمانی</string>
 
-    <string name="store_riotx_title">ریوت‌اکس - نسل بعدی کارخواه ماتریس</string>
     <string name="bottom_action_people_x">پیام‌های مستقیم</string>
 
     <string name="send_file_step_idle">منتظر…</string>
@@ -647,7 +645,7 @@
     <string name="settings_active_sessions_show_all">نمایش تمامی نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">%d نشست فعّال</item>
+        <item quantity="one">۱ نشست فعّال</item>
         <item quantity="other">%d نشست فعّال</item>
     </plurals>
 
@@ -664,14 +662,14 @@
     <string name="call_failed_no_ice_use_alt">از %s استفاده کنید</string>
     <string name="auth_add_email_phone_message_2">یک ایمیل برای بازیابی ثبت کنید. بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید.</string>
     <string name="auth_add_email_and_phone_message_2">یک ایمیل برای بازیابی ثبت کنید. بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید.</string>
-    <string name="auth_reset_password_missing_email">نشانی ایمیل پیوست شده به حساب شما باید وارد شده باشد</string>
+    <string name="auth_reset_password_missing_email">نشانی ایمیل پیوست شده به حساب شما باید وارد شده باشد.</string>
     <string name="auth_reset_password_missing_password">گذرواژه جدیدی باید وارد شود.</string>
     <string name="auth_reset_password_email_validation_message">یک ایمیل به %s فرستاده شد. هنگامی که پیوند همراه را دنبال کردید، در زیر کلیک کنید.</string>
-    <string name="auth_reset_password_error_unauthorized">تایید نشانی ایمیل ناموفق بود: مطمئن شوید که روی پیوند در ایمیل کلیک کرده‌اید.</string>
+    <string name="auth_reset_password_error_unauthorized">تایید نشانی ایمیل ناموفق بود: مطمئن شوید که روی پیوند در ایمیل کلیک کرده‌اید</string>
     <string name="auth_reset_password_success_message">گذرواژه بازنشانی شد.
 \n
 \nشما از همه نشست‌ها خارج شدید و دیگر آگاهی ها را دریافت نخواهید کرد. برای فعال‌سازی دوباره آگاهی‌ها، در هر دستگاه دوباره وارد شوید.</string>
-    <string name="auth_accept_policies">لطفا سیاست‌های این سرور خانه را بررسی کنید و بپذیرید</string>
+    <string name="auth_accept_policies">لطفا سیاست‌های این سرور خانه را بررسی کنید و بپذیرید:</string>
 
     <string name="login_error_must_start_http">نشانی باید با http[s]:// آغاز شود</string>
     <string name="login_error_registration_network_error">نمی‌توان ثبت‌نام کرد: خطای شبکه</string>
@@ -688,7 +686,7 @@
     <string name="login_error_limit_exceeded">درخواست‌های بیش از حد ارسال شده</string>
     <string name="login_error_login_email_not_yet">هنوز روی پیوند ایمیل کلیک نشده</string>
 
-    <string name="settings_call_ringtone_use_riot_ringtone">برای تماس‌های ورودی از آهنگ زنگ پیش‌فرض ریوت استفاده کن</string>
+    <string name="settings_call_ringtone_use_app_ringtone">برای تماس‌های ورودی از آهنگ زنگ پیش‌فرض ریوت استفاده کن</string>
     <string name="settings_call_ringtone_title">آهنگ زنگ تماس ورودی</string>
     <string name="settings_call_ringtone_dialog_title">انتخاب آهنگ زنگ برای تماس‌ها:</string>
 
@@ -749,4 +747,10 @@
     <string name="settings">تنظیمات</string>
     <string name="account_password">گذرواژه حساب</string>
 
+    <string name="play_video">پخش</string>
+    <string name="pause_video">توقف</string>
+    <string name="action_copy">رونوشت</string>
+    <string name="dialog_title_success">موفقیت</string>
+
+    <string name="bottom_action_notification">اعلان‌ها</string>
 </resources>

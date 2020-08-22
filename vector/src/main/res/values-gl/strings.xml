@@ -538,7 +538,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="login_error_unable_register">Non se puido rexistrar</string>
     <string name="login_error_unable_register_mail_ownership">Non se puido rexistrar: erro coa propiedade do correo electrónico</string>
     <string name="login_error_invalid_home_server">Introduza unha URL válida</string>
-    <string name="login_mobile_device">Móbil</string>
 
     <string name="login_error_forbidden">Usuario/contrasinal incorrecto</string>
     <string name="login_error_bad_json">JSON con defectos</string>

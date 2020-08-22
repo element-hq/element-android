@@ -181,8 +181,6 @@ Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
     <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem kattintottak</string>
 
-    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez a munkamenethez és beküldeni a nyilvános kulcsot a Matrix szervernek. Ez egy egyszeri dolog. Elnézést a kellemetlenségért.</string>
-
     <string name="read_receipts_list">Lista azokról akik elolvasták</string>
 
     <string name="compression_options">Küldés mint</string>
@@ -594,10 +592,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt a munkamenetet és érdemes lenne tiltólistára tenni. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
     <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
 
-    <string name="e2e_enabling_on_app_update">Mostantól a Element támogatja a végtől végig titkosítást de előtte újra be kell jelentkezned, hogy bekapcsold.
-
-Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
-
     <string name="unknown_devices_alert_title">Szoba ismeretlen munkameneteket tartalmaz</string>
     <string name="unknown_devices_alert_message">Ez a szoba ismeretlen munkameneteket tartalmaz.
 \nEz azt jelenti, hogy nem biztos hogy a munkamenet azé akinek mondja magát.
@@ -652,8 +646,6 @@ Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
     <string name="light_theme">Világos téma</string>
     <string name="dark_theme">Sötét téma</string>
     <string name="black_them">Fekete téma</string>
-
-    <string name="login_mobile_device">Mobil</string>
 
     <string name="settings_notification_ringtone">Értesítés hangja</string>
     <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban</string>
@@ -1032,7 +1024,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="markdown_has_been_disabled">Markdown tiltva.</string>
 
     <string name="settings_call_category">Hívások</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
     <string name="settings_call_ringtone_title">Bejövő hívás csengőhangja</string>
     <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása hívásokhoz:</string>
 
@@ -1124,29 +1116,8 @@ A következő képernyőn el kell fogadnod, hogy a Element folyamatosan fusson a
 
     <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
 
-    <string name="store_title">Element - Beszélgess, ahogy tetszik</string>
-    <string name="store_short_description">Egy biztonságos és univerzális csevegő alkalmazás az irányításod alatt.</string>
-    <string name="store_full_description">A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Element megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
-\n
-\nKészíts egy ingyenes matrix.org fiókot vagy igényelj egy saját szervert a https://modular.im -től, de üzemeltethetsz is saját Matrix szervert.
-\n
-\nMiért válaszd a Element-et\?
-\n
-\n• TELJES KOMMUNIKÁCIÓ: Nyiss szobákat a csoportod, barátaid, közösséged vagy bárkiknek akiknek szeretnél! Beszélgess, ossz meg fájlokat, adj hozzá kisalkalmazásokat és indíts hang és videóhívásokat - teljesen ingyen.
-\n
-\n• ERŐS KAPCSOLATOK: Használd a Element-ot a kedvenc eszközeiddel. A Elementtal még másik rendszerekben lévő emberekkel és csoportokkal is képes lehetsz beszélgetni.
-\n
-\n• SZEMÉLYES ÉS BIZTONSÁGOS: Tartsd a beszélgetéseidet titokban. A végponttól-végpontig titkosítás biztosítja, hogy a személyes beszélgetések személyesek maradnak.
-\n
-\n• NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a Matrix-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
-\n
-\n• MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en.</string>
-
     <string name="video_call_in_progress">Videóhívás folyamatban…</string>
 
-    <string name="store_whats_new">"Folyamatosan változtatjuk és javítjuk a Element-et.
-A változások teljes listája itt található: %1$s.
-Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket."</string>
     <string name="title_activity_keys_backup_setup">Kulcsmentés</string>
     <string name="title_activity_keys_backup_restore">Kulcsmentés használata</string>
     <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kérlek várj…</string>
@@ -1155,7 +1126,6 @@ Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket."
     <string name="done">Kész</string>
 
     <string name="settings_notification_advanced">Haladó Értesítés beállítások</string>
-    <string name="settings_notification_advanced_summary">Értesítés fontosságának beállítása eseménynél. Hang, led, vibráció beállítása</string>
     <string name="settings_notification_by_event">Értesítés fontosságának beállítása eseménynél</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Egyedi beállítások.</string>
@@ -1504,12 +1474,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="keys_backup_unable_to_get_trust_info">A megbízhatósági információ beszerzésekor hiba történt</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">A kulcs mentés adatainak beszerzésekor hiba történt</string>
 
-    <string name="alpha_disclaimer_title">Üdv a béta verzióban!</string>
-    <string name="alpha_disclaimer_content_line_1">Amíg a Element újdonsült fejlesztés, néhány funkció hiányozhat és találkozhatsz hibákkal.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">A legfrissebb funkciók listáját itt találod: %1$s, és ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play áruház leírás</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
-
     <string name="import_e2e_keys_from_file">Végponttól végpontig titkosítás kulcsainak betöltése ebből a fájlból: \"%1$s\".</string>
 
     <string name="settings_sdk_version">Matrix SDK Verzió</string>
@@ -1547,16 +1511,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="settings_labs_show_hidden_events_in_timeline">Rejtett események megjelenítése az idővonalon</string>
 
-    <string name="store_riotx_title">Element - Matrix Kliens Új Nemzedéke</string>
-    <string name="store_riotx_short_description">A gyorsabb és kisebb Matrix kliens ami a legfrissebb Android keretrendszert használja</string>
-    <string name="store_riotx_full_description">Element a Matrix protokollhoz (Matrix.org) készült új kliens: nyílt hálózat biztonságos és decentralizált kommunikációhoz. Element a Riot Android kliens teljesen újraírt változata ami a teljesen újraírt Matrix Android SDK-ra épül.
-\n
-\nFigyelmeztetés: Ez egy béta verzió. Element aktív fejlesztés alatt áll és vannak korlátai és (reméljük nem olyan sok) hibái. Minden visszajelzést szívesen fogadunk!
-\n
-\nElement ezeket támogatja: • Bejelentkezés létező fiókba • Szoba készítés és nyilvános szobába való belépés • Meghívók fogadása és elutasítás • Felhasználók szobáinak listázása • Szoba adatainak megtekintése • Szöveges üzenet küldése • Csatolmány küldése • Titkosított szobákban üzenetek olvasása és írása • Titkosítás: Végponttól végpontig titkosító kulcsok mentése, fejlett eszköz ellenőrzés, kulcs megosztás kérése és válasz • „Push” értesítések • Világos, sötét és fekete téma
-\n
-\nNem minden Element funkció támogatott a Element-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Szoba beállítások (szoba tagság mutatása, stb…) • Hívások • Kisalkalmazások • …</string>
-
     <string name="bottom_action_people_x">Közvetlen beszélgetés</string>
 
     <string name="send_file_step_idle">Várakozik…</string>
@@ -1569,9 +1523,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="downloaded_file">%1$s fájl letöltve!</string>
 
     <string name="edited_suffix">(szerkesztve)</string>
-
-    <string name="riotx_no_registration_notice">%1$s fiók készítéshez.</string>
-    <string name="riotx_no_registration_notice_colored_part">Használd a régi alkalmazást</string>
 
 
     <string name="message_edits">Üzenet szerkesztések</string>
@@ -1606,11 +1557,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="decline">Elutasítás</string>
 
     <string name="widget_integration_review_terms">A továbblépéshez el kell fogadnod a Felhasználási feltételeket.</string>
-
-    <string name="security_warning_identity_server">A Element előző verziója egy biztonsági hibát tartalmazott ami az Azonosítási Szervernek (%1$s) hozzáférést adott a fiókodhoz. Ha megbízol a %2$s szerverben, akkor ezt figyelmen kívül hagyhatod különben jelentkezz ki és újra vissza.
-\n
-\nTovábbi információ itt:
-\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Felhasználási feltételek</string>
     <string name="review_terms">Feltételek átnézése</string>
@@ -2205,7 +2151,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="keys_backup_restore_success_title_already_up_to_date">A kulcsok már frissek!</string>
 
-    <string name="login_mobile_device_riotx">Element Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Kulcs kérések</string>
 
@@ -2304,7 +2250,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_messages_in_e2e_group_chat">Titkosított üzenetek a csoportos beszélgetésekben</string>
     <string name="settings_when_rooms_are_upgraded">Ha a szobák fejlesztésre kerülnek</string>
     <string name="settings_troubleshoot_title">Hibakeresés</string>
-    <string name="settings_notification_advanced_summary_riotx">Értesítés fontosságának beállítása eseménynél</string>
+    <string name="settings_notification_advanced_summary">Értesítés fontosságának beállítása eseménynél</string>
 
     <string name="command_description_plain">Az üzenet elküldése sima szövegként anélkül, hogy „markdown” formázás lenne</string>
 
@@ -2344,12 +2290,12 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_adding_media_file_to_gallery">A média fájlt nem sikerült hozzáadni a Galériához</string>
     <string name="change_password_summary">Új fiók jelszó beállítása…</string>
 
-    <string name="riot_desktop_web">Element Web
+    <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
-    <string name="riot_ios_android">Element iOS
-\nElement X for Android</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre</string>
-    <string name="use_latest_riot">A Element legújabb kliensét használd a többi eszközödön:</string>
+    <string name="use_latest_app">A Element legújabb kliensét használd a többi eszközödön:</string>
     <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
     <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
     <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>

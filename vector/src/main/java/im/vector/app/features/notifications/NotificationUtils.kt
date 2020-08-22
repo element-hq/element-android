@@ -35,6 +35,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
 import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
@@ -856,7 +857,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         }
 
         // We cannot use NotificationManagerCompat here.
-        val setting = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).currentInterruptionFilter
+        val setting = context.getSystemService<NotificationManager>()!!.currentInterruptionFilter
 
         return setting == NotificationManager.INTERRUPTION_FILTER_NONE
                 || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS

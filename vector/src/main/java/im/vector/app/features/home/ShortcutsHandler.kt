@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -96,7 +97,7 @@ class ShortcutsHandler @Inject constructor(
         // We can only disabled pinned shortcuts with the API, but at least it will prevent the crash
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                context.getSystemService(ShortcutManager::class.java)
+                context.getSystemService<ShortcutManager>()
                         ?.let {
                             it.disableShortcuts(it.pinnedShortcuts.map { pinnedShortcut -> pinnedShortcut.id })
                         }

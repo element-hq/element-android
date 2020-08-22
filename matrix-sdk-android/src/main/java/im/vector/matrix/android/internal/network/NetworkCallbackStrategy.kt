@@ -22,6 +22,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
+import androidx.core.content.getSystemService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,7 +54,7 @@ internal class FallbackNetworkCallbackStrategy @Inject constructor(private val c
 internal class PreferredNetworkCallbackStrategy @Inject constructor(context: Context) : NetworkCallbackStrategy {
 
     private var hasChangedCallback: (() -> Unit)? = null
-    private val conn = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val conn = context.getSystemService<ConnectivityManager>()!!
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
 
         override fun onLost(network: Network) {

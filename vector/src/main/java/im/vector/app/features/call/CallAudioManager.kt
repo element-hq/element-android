@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import androidx.core.content.getSystemService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
 import im.vector.matrix.android.api.session.call.MxCall
 import timber.log.Timber
@@ -55,9 +56,9 @@ class CallAudioManager(
 
     init {
         executor.execute {
-            audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audioManager = applicationContext.getSystemService()
         }
-        val bm = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+        val bm = applicationContext.getSystemService<BluetoothManager>()
         val adapter = bm?.adapter
         Timber.d("## VOIP Bluetooth adapter $adapter")
         bluetoothAdapter = adapter

@@ -5,13 +5,15 @@ Features ✨:
  - Protect access to the app by a pin code (#1700)
 
 Improvements 🙌:
- -
+ - Give user the possibility to prevent accidental call (#1869)
 
 Bugfix 🐛:
  - Fix invisible toolbar (Status.im theme) (#1746)
+ - Fix relative date time formatting (#822)
+ - Fix crash reported by RageShake
 
 Translations 🗣:
- -
+ - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
 
 SDK API changes ⚠️:
  -
@@ -20,6 +22,7 @@ Build 🧱:
  -
 
 Other changes:
+ - Use `Context#getSystemService` extension function provided by `core-ktx` (#1702)
  - Hide Flair settings, this is not implemented yet.
  - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
  - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/readReceiptsView"
         android:layout_alignParentTop="true"
-        android:background="?riotx_highlighted_message_background" />
+        android:background="@drawable/highlighted_message_background" />
 
     <View
         android:id="@+id/messageStartGuideline"

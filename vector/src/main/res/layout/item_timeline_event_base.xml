@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/informationBottom"
         android:layout_alignParentTop="true"
-        android:background="?riotx_highlighted_message_background" />
+        android:background="@drawable/highlighted_message_background" />
 
     <ImageView
         android:id="@+id/messageAvatarImageView"

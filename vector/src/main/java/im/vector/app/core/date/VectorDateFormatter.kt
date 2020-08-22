@@ -21,7 +21,23 @@ import android.text.format.DateUtils
 import im.vector.app.core.resources.LocaleProvider
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
+
+/**
+ * Returns the timestamp for the start of the day of the provided time.
+ * For example, for the time "Jul 21, 11:11" the start of the day: "Jul 21, 00:00" is returned.
+ */
+fun startOfDay(time: Long): Long {
+    val calendar = Calendar.getInstance()
+    calendar.time = Date(time)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.time.time
+}
 
 class VectorDateFormatter @Inject constructor(private val context: Context,
                                               private val localeProvider: LocaleProvider) {
@@ -41,15 +57,23 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         return messageDayFormatter.format(localDateTime)
     }
 
+    /**
+     * Formats a localized relative date time for the last 2 days, e.g, "Today, HH:MM", "Yesterday, HH:MM" or
+     * "2 days ago, HH:MM".
+     * For earlier timestamps the absolute date time is returned, e.g. "Month Day, HH:MM".
+     *
+     * @param time the absolute timestamp [ms] that should be formatted relative to now
+     */
     fun formatRelativeDateTime(time: Long?): String {
         if (time == null) {
             return ""
         }
+        val now = System.currentTimeMillis()
         return DateUtils.getRelativeDateTimeString(
                 context,
                 time,
                 DateUtils.DAY_IN_MILLIS,
-                2 * DateUtils.DAY_IN_MILLIS,
+                now - startOfDay(now - 2 * DateUtils.DAY_IN_MILLIS),
                 DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_SHOW_TIME
         ).toString()
     }

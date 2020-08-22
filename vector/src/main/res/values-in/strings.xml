@@ -224,10 +224,6 @@ Anda telah dikeluarkan dari semua perangkat dan tidak lagi menerima pemberitahua
     <string name="login_error_limit_exceeded">Pengajuan yang dikirimkan terlalu banyak</string>
     <string name="login_error_login_email_not_yet">Tautan email masih belum diklik</string>
 
-    <string name="e2e_need_log_in_again">Anda perlu masuk kembali untuk menghasilkan kunci enkripsi ujung-ke-ujung untuk perangkat ini dan menyerahkan kunci umum ke server awal Anda.
-Proses ini hanya dilakukan sekali saja.
-Mohon maaf untuk ketidaknyamannya.</string>
-
     <string name="read_receipts_list">Baca Daftar Penerimaan</string>
 
     <string name="compression_options">"Kirim sebagai "</string>
@@ -314,8 +310,6 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
 
     <string name="go_on_with">lanjutkan dengan…</string>
     <string name="error_no_external_application_found">Maaf, tidak ada aplikasi eksternal yang mendukung apa yang ingin dilakukan.</string>
-
-    <string name="login_mobile_device">Perangkat Genggam</string>
 
     <string name="e2e_re_request_encryption_key"><u>Meminta ulang kunci enkripsi</u> dari perangkat Anda yang lain.</string>
 
@@ -715,9 +709,6 @@ Pembacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan
     <string name="encryption_information_verify_device_warning2">Apabila cocok, tekan tombol verifikasi berikut.
 Apabila tidak, seseorang sedang menyadap perangkat ini dan mungkin perlu diblokir.
 Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
-    <string name="e2e_enabling_on_app_update">Element sekarang mendukung enkripsi ujung-ke-ujung tapi Anda perlu masuk kembali untuk mengaktifkannya.
-
-Ini bisa Anda lakukan sekarang atau nani dari pengaturan aplikasi.</string>
 
     <string name="unknown_devices_alert_message">Ruang ini terisi oleh perangkat tak dikenal yang belum diverifikasi.
 Ini berarti tidak ada jaminan pengguna perangkat tersebut sesuai dengan klaim mereka.
@@ -955,7 +946,7 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="auth_accept_policies">Mohon telaah dan terima kebijakan homeserver ini:</string>
 
     <string name="settings_call_category">Panggilan</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Gunakan nada dering semula Element untuk panggilan masuk</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gunakan nada dering semula Element untuk panggilan masuk</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
 
@@ -1053,7 +1044,6 @@ Aktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik 
 
     <string name="action_sign_out_confirmation_simple">Anda yakin ingin mencopot akun\?</string>
     <string name="settings_notification_advanced">Pengaturan Pemberitahuan Lanjutan</string>
-    <string name="settings_notification_advanced_summary">Setel urgensi pemberitahuan lewat kejadian, Kelola suara, LED, getaran</string>
     <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
