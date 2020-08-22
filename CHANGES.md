@@ -1,3 +1,29 @@
+Changes in Element 1.0.5 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ - Protect access to the app by a pin code (#1700)
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ - Fix invisible toolbar (Status.im theme) (#1746)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ - Hide Flair settings, this is not implemented yet.
+ - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
+ - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`
+
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
 

@@ -47,6 +47,7 @@ import im.vector.riotx.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
+import im.vector.riotx.features.pin.PinLocker
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
@@ -82,6 +83,7 @@ class VectorApplication :
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var pinLocker: PinLocker
 
     lateinit var vectorComponent: VectorComponent
 
@@ -153,6 +155,7 @@ class VectorApplication :
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
     }

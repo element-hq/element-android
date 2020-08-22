@@ -21,10 +21,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import im.vector.lib.multipicker.MultiPicker
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
-import im.vector.riotx.multipicker.MultiPicker
 import timber.log.Timber
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"

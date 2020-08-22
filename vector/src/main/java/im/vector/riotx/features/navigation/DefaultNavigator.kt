@@ -52,6 +52,9 @@ import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.AttachmentData
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.VectorAttachmentViewerActivity
+import im.vector.riotx.features.pin.PinActivity
+import im.vector.riotx.features.pin.PinArgs
+import im.vector.riotx.features.pin.PinMode
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -270,6 +273,16 @@ class DefaultNavigator @Inject constructor(
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget) {
         val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+    }
+
+    override fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int) {
+        val intent = PinActivity.newIntent(fragment.requireContext(), PinArgs(pinMode))
+        fragment.startActivityForResult(intent, requestCode)
+    }
+
+    override fun openPinCode(activity: Activity, pinMode: PinMode, requestCode: Int) {
+        val intent = PinActivity.newIntent(activity, PinArgs(pinMode))
+        activity.startActivityForResult(intent, requestCode)
     }
 
     override fun openMediaViewer(activity: Activity,

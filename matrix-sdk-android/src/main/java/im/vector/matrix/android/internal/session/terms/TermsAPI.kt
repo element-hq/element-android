@@ -35,5 +35,7 @@ internal interface TermsAPI {
      * This request requires authentication
      */
     @POST
-    fun agreeToTerms(@Url url: String, @Body params: AcceptTermsBody, @Header(HttpHeaders.Authorization) token: String): Call<Unit>
+    fun agreeToTerms(@Url url: String,
+                     @Body params: AcceptTermsBody,
+                     @Header(HttpHeaders.Authorization) token: String): Call<Unit>
 }

@@ -19,11 +19,11 @@ package im.vector.riotx.features.media
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.isVideoMessage
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.riotx.attachmentviewer.AttachmentInfo
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import java.io.File

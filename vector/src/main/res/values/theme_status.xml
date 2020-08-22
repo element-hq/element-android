@@ -29,9 +29,9 @@
         <item name="riotx_waiting_background_color">@color/riotx_waiting_background_color_status</item>
 
         <!-- application bar text color -->
-        <item name="vctr_toolbar_primary_text_color">#FFFFFFFF</item>
-        <item name="vctr_toolbar_secondary_text_color">#FFD8D8D8</item>
-        <item name="vctr_toolbar_link_text_color">#FFD8D8D8</item>
+        <item name="vctr_toolbar_primary_text_color">@color/primary_color_status</item>
+        <item name="vctr_toolbar_secondary_text_color">@color/primary_color_dark_status</item>
+        <item name="vctr_toolbar_link_text_color">@color/primary_color_dark_status</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>

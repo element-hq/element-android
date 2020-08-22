@@ -161,6 +161,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // Security
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
+        const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -816,5 +817,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun singleOverview(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SINGLE_OVERVIEW, true)
+    }
+
+    /**
+     * The user enable protecting app access with pin code
+     */
+    fun useFlagPinCode(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
     }
 }

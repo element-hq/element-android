@@ -28,6 +28,7 @@ import dagger.Lazy
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.pin.PinActivity
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -84,12 +85,10 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                 setLightStatusBar()
             }
         }
-        if (currentAlerter?.shouldBeDisplayedIn?.invoke(activity) == false || activity !is VectorBaseActivity) {
+        weakCurrentActivity = WeakReference(activity)
+        if (!shouldBeDisplayedIn(currentAlerter, activity)) {
             return
         }
-
-        weakCurrentActivity = WeakReference(activity)
-
         if (currentAlerter != null) {
             if (currentAlerter!!.expirationTimestamp != null && System.currentTimeMillis() > currentAlerter!!.expirationTimestamp!!) {
                 // this alert has expired, remove it
@@ -126,7 +125,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         }
         currentAlerter = next
         next?.let {
-            if (next.shouldBeDisplayedIn?.invoke(currentActivity) == false) return
+            if (!shouldBeDisplayedIn(next, currentActivity)) return
             val currentTime = System.currentTimeMillis()
             if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {
                 // skip
@@ -249,5 +248,12 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         Handler(Looper.getMainLooper()).postDelayed({
             displayNextIfPossible()
         }, 500)
+    }
+
+    private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
+        return alert != null
+                && activity !is PinActivity
+                && activity is VectorBaseActivity
+                && alert.shouldBeDisplayedIn?.invoke(activity) == true
     }
 }

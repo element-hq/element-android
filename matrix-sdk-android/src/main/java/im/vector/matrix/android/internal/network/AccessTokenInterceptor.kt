@@ -25,10 +25,10 @@ internal class AccessTokenInterceptor(private val accessTokenProvider: AccessTok
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        accessTokenProvider.getToken()?.let {
+        // Add the access token to all requests if it is set
+        accessTokenProvider.getToken()?.let { token ->
             val newRequestBuilder = request.newBuilder()
-            // Add the access token to all requests if it is set
-            newRequestBuilder.addHeader(HttpHeaders.Authorization, "Bearer $it")
+            newRequestBuilder.header(HttpHeaders.Authorization, "Bearer $token")
             request = newRequestBuilder.build()
         }
 

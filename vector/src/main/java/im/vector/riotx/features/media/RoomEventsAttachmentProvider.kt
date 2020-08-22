@@ -19,6 +19,7 @@ package im.vector.riotx.features.media
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.isVideoMessage
@@ -32,7 +33,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageWithAttach
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
-import im.vector.riotx.attachmentviewer.AttachmentInfo
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import java.io.File
@@ -147,7 +147,7 @@ class RoomEventsAttachmentProvider(
                     elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
-                           callback(data)
+                            callback(data)
                         }
 
                         override fun onFailure(failure: Throwable) {

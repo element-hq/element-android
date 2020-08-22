@@ -34,6 +34,8 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
+import im.vector.lib.multipicker.MultiPicker
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -60,8 +62,6 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsShare
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.createUCropWithDefaultSettings
-import im.vector.riotx.multipicker.MultiPicker
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
