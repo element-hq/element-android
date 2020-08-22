@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker
+package im.vector.lib.multipicker
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.provider.OpenableColumns
-import im.vector.riotx.multipicker.entity.MultiPickerBaseType
-import im.vector.riotx.multipicker.utils.MultiPickerFileFactory
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.utils.MultiPickerFileFactory
 
 /**
  * Implementation of selecting any type of files

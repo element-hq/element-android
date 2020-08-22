@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker.entity
+package im.vector.lib.multipicker.entity
 
 import android.net.Uri
 

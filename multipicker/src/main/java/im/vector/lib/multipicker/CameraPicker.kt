@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker
+package im.vector.lib.multipicker
 
 import android.app.Activity
 import android.content.Context
@@ -23,8 +23,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.utils.MultiPickerFileFactory
+import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.multipicker.utils.MultiPickerFileFactory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.attachments
+package im.vector.app.features.attachments
 
 import android.app.Activity
 import android.content.Context
@@ -21,10 +21,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.riotx.core.platform.Restorable
-import im.vector.riotx.multipicker.MultiPicker
+import im.vector.app.core.platform.Restorable
+import im.vector.lib.multipicker.MultiPicker
+import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"

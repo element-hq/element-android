@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.attachments
+package im.vector.app.features.attachments
 
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.riotx.multipicker.entity.MultiPickerAudioType
-import im.vector.riotx.multipicker.entity.MultiPickerBaseType
-import im.vector.riotx.multipicker.entity.MultiPickerContactType
-import im.vector.riotx.multipicker.entity.MultiPickerFileType
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.entity.MultiPickerContactType
+import im.vector.lib.multipicker.entity.MultiPickerFileType
+import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
 fun MultiPickerContactType.toContactAttachment(): ContactAttachment {
     return ContactAttachment(

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.multipicker.utils
+package im.vector.lib.multipicker.utils
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import im.vector.riotx.multipicker.entity.MultiPickerAudioType
-import im.vector.riotx.multipicker.entity.MultiPickerBaseType
-import im.vector.riotx.multipicker.entity.MultiPickerFileType
-import im.vector.riotx.multipicker.entity.MultiPickerImageType
-import im.vector.riotx.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
+import im.vector.lib.multipicker.entity.MultiPickerFileType
+import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.multipicker.entity.MultiPickerVideoType
 
 object MultiPickerFileFactory {
 
