@@ -21,20 +21,20 @@
             android:key="SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/encryption_information_cross_signing_state"
-            app:fragment="im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment"
+            app:fragment="im.vector.app.features.settings.crosssigning.CrossSigningSettingsFragment"
             tools:icon="@drawable/ic_shield_trusted"
             tools:summary="@string/encryption_information_dg_xsigning_complete" />
 
 
-        <!--        <im.vector.riotx.core.preference.VectorPreference-->
+        <!--        <im.vector.app.core.preference.VectorPreference-->
         <!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"-->
         <!--            android:title="@string/encryption_information_device_name" />-->
 
-        <!--        <im.vector.riotx.core.preference.VectorPreference-->
+        <!--        <im.vector.app.core.preference.VectorPreference-->
         <!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"-->
         <!--            android:title="@string/encryption_information_device_id" />-->
 
-        <!--        <im.vector.riotx.core.preference.VectorPreference-->
+        <!--        <im.vector.app.core.preference.VectorPreference-->
         <!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"-->
         <!--            android:title="@string/encryption_information_device_key" />-->
 
@@ -54,7 +54,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
             android:title="@string/settings_active_sessions_show_all"
-            app:fragment="im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment" />
+            app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

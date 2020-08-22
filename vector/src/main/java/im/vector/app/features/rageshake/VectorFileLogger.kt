@@ -54,10 +54,10 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         }
     }
 
-    private val sLogger = Logger.getLogger("im.vector.riotx")
+    private val sLogger = Logger.getLogger("im.vector.app")
     private var sFileHandler: FileHandler? = null
     private var sCacheDirectory: File? = null
-    private var sFileName = "riotxlogs"
+    private var sFileName = "elementLogs"
 
     private val prioPrefixes = mapOf(
             Log.VERBOSE to "V/ ",

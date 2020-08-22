@@ -260,14 +260,14 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     companion object {
         private const val NOTIFICATION_ID = 6480
 
-        private const val ACTION_INCOMING_RINGING_CALL = "im.vector.riotx.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
-        private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.riotx.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
-        private const val ACTION_CALL_CONNECTING = "im.vector.riotx.core.services.CallService.ACTION_CALL_CONNECTING"
-        private const val ACTION_ONGOING_CALL = "im.vector.riotx.core.services.CallService.ACTION_ONGOING_CALL"
-        private const val ACTION_ONGOING_CALL_BG = "im.vector.riotx.core.services.CallService.ACTION_ONGOING_CALL_BG"
-        private const val ACTION_NO_ACTIVE_CALL = "im.vector.riotx.core.services.CallService.NO_ACTIVE_CALL"
-//        private const val ACTION_ACTIVITY_VISIBLE = "im.vector.riotx.core.services.CallService.ACTION_ACTIVITY_VISIBLE"
-//        private const val ACTION_STOP_RINGING = "im.vector.riotx.core.services.CallService.ACTION_STOP_RINGING"
+        private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
+        private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
+        private const val ACTION_CALL_CONNECTING = "im.vector.app.core.services.CallService.ACTION_CALL_CONNECTING"
+        private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
+        private const val ACTION_ONGOING_CALL_BG = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL_BG"
+        private const val ACTION_NO_ACTIVE_CALL = "im.vector.app.core.services.CallService.NO_ACTIVE_CALL"
+//        private const val ACTION_ACTIVITY_VISIBLE = "im.vector.app.core.services.CallService.ACTION_ACTIVITY_VISIBLE"
+//        private const val ACTION_STOP_RINGING = "im.vector.app.core.services.CallService.ACTION_STOP_RINGING"
 
         private const val EXTRA_IS_VIDEO = "EXTRA_IS_VIDEO"
         private const val EXTRA_ROOM_NAME = "EXTRA_ROOM_NAME"

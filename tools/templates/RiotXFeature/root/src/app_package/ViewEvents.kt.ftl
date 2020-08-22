@@ -1,5 +1,5 @@
 package ${escapeKotlinIdentifiers(packageName)}
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewEvents
 
 sealed class ${viewEventsClass} : VectorViewEvents
