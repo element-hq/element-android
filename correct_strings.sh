@@ -2,6 +2,17 @@
 
 mydir="$(dirname "$(realpath "$0")")"
 
+pushd "$mydir" > /dev/null
+
+# Require clean git state
+uncommitted=`git status --porcelain`
+if [ ! -z "$uncommitted" ]; then
+    echo "Uncommitted changes are present, please commit first!"
+    exit 1
+fi
+
+mydir="."
+
 # Element -> SchildiChat
 find "$mydir/vector/src/main/res" -name strings.xml -exec \
     sed -i 's|Element|SchildiChat|g' '{}' \;
@@ -18,3 +29,8 @@ find "$mydir/vector/src/main/res" -name strings.xml -exec \
 # Requires manual intervention for correct grammar
 sed -i 's|!nnen|wolpertinger|g' "$mydir/vector/src/main/res/values-de/strings.xml"
 sed -i 's|!n|schlumpfwesen|g' "$mydir/vector/src/main/res/values-de/strings.xml"
+
+git add -A
+git commit -m "Automatic SchildiChat string correction"
+
+popd > /dev/null
