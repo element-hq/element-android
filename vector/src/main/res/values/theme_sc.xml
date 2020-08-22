@@ -22,10 +22,11 @@
         <item name="riotx_unread_room_indent">@color/background_dark_sc</item>
         <item name="riotx_android_status_bar">@color/background_black_sc</item>
         <item name="riotx_line_break_mobile">@color/text_color_disabled_sc</item>
-        <item name="riotx_unread_room_badge">@color/background_floating_sc</item>
+        <item name="riotx_unread_room_badge">?colorAccent</item>
         <item name="riotx_fab_secondary_bg">@color/background_floating_sc</item>
         <item name="riotx_fab_secondary_color">@color/text_color_secondary_sc</item>
         <item name="riotx_fab_label_bg">@color/background_floating_sc</item>
+        <item name="riotx_fab_label_stroke">@color/black</item>
         <item name="riotx_fab_label_color">#ff808080</item><!-- TODO: this is used on light background for motion_fab_menu_merge / style:VectorLabel -->
         <item name="riotx_touch_guard_bg">@color/background_black_sc</item>
         <item name="riotx_attachment_selector_background">?riotx_background</item>
@@ -34,9 +35,6 @@
         <item name="riotx_keys_backup_banner_accent_color">@color/background_floating_sc</item>
 
         <item name="riotx_bottom_nav_icon_color">#ff808080</item>
-
-        <!-- Drawables -->
-        <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_sc</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/accent_sc</item>

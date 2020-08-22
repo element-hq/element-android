@@ -17,7 +17,7 @@
                 <shape>
                     <size android:width="4dp" />
                     <corners android:bottomLeftRadius="40dp" android:topLeftRadius="40dp" />
-                    <solid android:color="@color/riotx_accent" />
+                    <solid android:color="?colorAccent" />
                 </shape>
             </item>
 
