@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * Code exclusively used by the GPlay build and not referenced on the main source code
- */
-package im.vector.riotx.gplay
+package im.vector.app
+
+import android.content.Context
+import android.content.Intent
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+
+fun openOssLicensesMenuActivity(context: Context) = context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))

@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.gplay.features.settings.troubleshoot
+package im.vector.app.gplay.features.settings.troubleshoot
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
-import im.vector.riotx.R
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.startAddGoogleAccountIntent
-import im.vector.riotx.features.settings.troubleshoot.NotificationTroubleshootTestManager
-import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
-import im.vector.riotx.push.fcm.FcmHelper
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.startAddGoogleAccountIntent
+import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
+import im.vector.app.features.settings.troubleshoot.TroubleshootTest
+import im.vector.app.push.fcm.FcmHelper
 import timber.log.Timber
 import javax.inject.Inject
 

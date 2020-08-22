@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.gplay.push.fcm
+package im.vector.app.gplay.push.fcm
 
 import android.os.Handler
 import android.os.Looper
@@ -28,18 +28,18 @@ import com.google.firebase.messaging.RemoteMessage
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.riotx.BuildConfig
-import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.extensions.vectorComponent
-import im.vector.riotx.core.pushers.PushersManager
-import im.vector.riotx.features.badge.BadgeProxy
-import im.vector.riotx.features.notifications.NotifiableEventResolver
-import im.vector.riotx.features.notifications.NotifiableMessageEvent
-import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.notifications.SimpleNotifiableEvent
-import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.push.fcm.FcmHelper
+import im.vector.app.BuildConfig
+import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.features.badge.BadgeProxy
+import im.vector.app.features.notifications.NotifiableEventResolver
+import im.vector.app.features.notifications.NotifiableMessageEvent
+import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.notifications.SimpleNotifiableEvent
+import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.push.fcm.FcmHelper
 import timber.log.Timber
 
 /**

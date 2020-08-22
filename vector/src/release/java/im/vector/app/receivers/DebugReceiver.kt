@@ -14,9 +14,25 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.debug
+@file:Suppress("UNUSED_PARAMETER")
 
-import androidx.appcompat.app.AppCompatActivity
+package im.vector.app.receivers
 
-// This activity is not accessible
-class DebugMenuActivity : AppCompatActivity()
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+
+/**
+ * No Op version
+ */
+class DebugReceiver : BroadcastReceiver() {
+
+    override fun onReceive(context: Context, intent: Intent) {
+        // No op
+    }
+
+    companion object {
+        fun getIntentFilter(context: Context) = IntentFilter()
+    }
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx
+package im.vector.app.features.debug
 
-import android.content.Context
-import android.content.Intent
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import androidx.appcompat.app.AppCompatActivity
 
-fun openOssLicensesMenuActivity(context: Context) = context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+// This activity is not accessible
+class DebugMenuActivity : AppCompatActivity()

@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.push.fcm
+package im.vector.app.push.fcm
 
 import androidx.fragment.app.Fragment
-import im.vector.riotx.features.settings.troubleshoot.NotificationTroubleshootTestManager
-import im.vector.riotx.features.settings.troubleshoot.TestAccountSettings
-import im.vector.riotx.features.settings.troubleshoot.TestDeviceSettings
-import im.vector.riotx.features.settings.troubleshoot.TestPushRulesSettings
-import im.vector.riotx.features.settings.troubleshoot.TestSystemSettings
-import im.vector.riotx.gplay.features.settings.troubleshoot.TestFirebaseToken
-import im.vector.riotx.gplay.features.settings.troubleshoot.TestPlayServices
-import im.vector.riotx.gplay.features.settings.troubleshoot.TestTokenRegistration
+import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
+import im.vector.app.features.settings.troubleshoot.TestAccountSettings
+import im.vector.app.features.settings.troubleshoot.TestDeviceSettings
+import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
+import im.vector.app.features.settings.troubleshoot.TestSystemSettings
+import im.vector.app.gplay.features.settings.troubleshoot.TestFirebaseToken
+import im.vector.app.gplay.features.settings.troubleshoot.TestPlayServices
+import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,

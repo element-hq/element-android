@@ -14,25 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_PARAMETER")
-
-package im.vector.riotx.receivers
-
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-
 /**
- * No Op version
+ * Code exclusively used by the GPlay build and not referenced on the main source code
  */
-class DebugReceiver : BroadcastReceiver() {
-
-    override fun onReceive(context: Context, intent: Intent) {
-        // No op
-    }
-
-    companion object {
-        fun getIntentFilter(context: Context) = IntentFilter()
-    }
-}
+package im.vector.app.gplay
