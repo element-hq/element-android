@@ -1,2 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s t.yuzen tugna.</string>
+    <string name="summary_you_sent_image">Tuzneḍ tugna.</string>
+    </resources>
