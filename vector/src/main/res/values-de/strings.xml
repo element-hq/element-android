@@ -608,7 +608,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_information_sender_device_information">Informationen der Absendersitzung</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
     <string name="encryption_information_name">Öffentlicher Name</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Sitzungs-ID</string>
     <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_information_verification">Verifizierungsstatus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-Fingerabdruck</string>
@@ -2624,4 +2624,24 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
-</resources>
+<string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
+    <string name="conference_call_in_progress">Es ist bereits eine Konferenz aktiv!</string>
+    <string name="video_meeting">Starte eine Videokonferenz</string>
+    <string name="audio_meeting">Starte eine Audiokonferenz</string>
+    <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwessenden können während der Konferenz beitreten.</string>
+    <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
+    <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
+    <string name="failed_to_add_widget">Hinzufügen des Widgets fehlgeschlagen</string>
+    <string name="failed_to_remove_widget">Entfernen des Widgets fehlgeschlagen</string>
+    <plurals name="encryption_import_room_keys_success">
+	<item quantity="one">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+	<item quantity="other">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+</plurals>
+
+    <string name="room_manage_integrations">Verwalte Integrationen</string>
+    <string name="room_no_active_widgets">Keine aktiven Widgets</string>
+    <string name="create_room_federation_error">Der Raum wurde erstellt, aber manche Einladungen wurden aus folgendem Grund nicht versendet:
+\n
+\n%s</string>
+
+    </resources>
