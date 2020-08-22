@@ -104,6 +104,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_edit"
+        android:tint="?android:textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
