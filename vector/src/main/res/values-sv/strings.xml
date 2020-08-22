@@ -133,7 +133,7 @@
     <string name="user_directory_header">Användarkatalog</string>
     <string name="matrix_only_filter">Bara Matrix-kontakter</string>
     <string name="no_conversation_placeholder">Inga konversationer</string>
-    <string name="no_contact_access_placeholder">Du gav inte Element tillgång till dina lokala kontakter</string>
+    <string name="no_contact_access_placeholder">Du gav inte SchildiChat tillgång till dina lokala kontakter</string>
     <string name="no_result_placeholder">Inga resultat</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurerad.</string>
 
@@ -286,7 +286,7 @@
     <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Förfrågan har skickats</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Vänligen öppna Element på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Vänligen öppna SchildiChat på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
 
     <string name="read_receipts_list">Läskvittolista</string>
 
@@ -315,7 +315,7 @@
     <string name="room_info_room_topic">Rumsämne</string>
 
     <string name="settings_call_category">Samtal</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Använd förvald SchildiChat-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
@@ -341,22 +341,22 @@
     <string name="media_picker_cannot_record_video">Kan inte spela in video</string>
 
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Element behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor.
+    <string name="permissions_rationale_msg_storage">SchildiChat behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor.
 \n
 \nVänligen tillåt åtkomst i nästa pop-up för att kunna skicka filer från din telefon.</string>
-    <string name="permissions_rationale_msg_camera">Element behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
-    <string name="permissions_rationale_msg_record_audio">Element behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
 \n
 \nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet.</string>
-    <string name="permissions_rationale_msg_contacts">Element kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillgång i nästa pop-up.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
+    <string name="permissions_rationale_msg_contacts">SchildiChat kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillgång i nästa pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
 \n
 \nVill du dela din adressbok för detta ändamål\?</string>
 
@@ -614,7 +614,7 @@
 \nVänligen kolla kontoinställningarna.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Aviseringar är aktiverade för den här sessionen.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Aviseringar är inaktiverade för den här sessionen.
-\nVänligen kolla Elementinställningarna.</string>
+\nVänligen kolla SchildiChatinställningarna.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Vissa aviseringar är inaktiverade i dina anpassade inställningar.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Aviseringstjänst</string>
@@ -622,8 +622,8 @@
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Aviseringstjänsten körs inte.
 \nFörsök att starta om appen.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av aviseringstjänsten</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens Element har öppnats en gång.</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för Element.
+    <string name="settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens SchildiChat har öppnats en gång.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för SchildiChat.
 \nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.
 \n
 \n%1$s</string>
@@ -646,8 +646,8 @@
     <string name="settings_containing_my_user_name">Meddelanden innehållande mitt användarnamn</string>
     <string name="settings_messages_in_one_to_one">Meddelanden i direktchattar</string>
     <string name="settings_messages_in_group_chat">Meddelanden i gruppchattar</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element kommer att synka I bakgrunden periodiskt vid precisa tider (konfigurerbart).
-\nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att Element lyssnar efter händelser.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat kommer att synka I bakgrunden periodiskt vid precisa tider (konfigurerbart).
+\nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att SchildiChat lyssnar efter händelser.</string>
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">olm-version</string>
     <string name="settings_keep_media">Behåll media</string>
@@ -668,9 +668,9 @@
     <string name="settings_discovery_category">Upptäckbarhet</string>
     <string name="settings_discovery_manage">Hantera dina upptäckbarhetsinställningar.</string>
     <string name="startup_notification_privacy_title">Aviseringssekretess</string>
-    <string name="startup_notification_privacy_message">Element kan köra i bakgrunden för att hantera dina aviseringar säkert och privat. Detta kan påverka batteritiden.</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element behöver hålla en bakgrundsanslutning med låg påverkan för att ha pålitliga aviseringar.
-\nPå nästa skärm kommer du att frågas om du vill tillåta att Element alltid körs i bakgrunden, vänligen acceptera.</string>
+    <string name="startup_notification_privacy_message">SchildiChat kan köra i bakgrunden för att hantera dina aviseringar säkert och privat. Detta kan påverka batteritiden.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat behöver hålla en bakgrundsanslutning med låg påverkan för att ha pålitliga aviseringar.
+\nPå nästa skärm kommer du att frågas om du vill tillåta att SchildiChat alltid körs i bakgrunden, vänligen acceptera.</string>
     <string name="settings_logged_in">Inloggad som</string>
     <string name="settings_home_server">Hemserver</string>
     <string name="settings_identity_server">Identitetsserver</string>
@@ -839,7 +839,7 @@
     <string name="settings_advanced_settings">Avancerade inställningar</string>
     <string name="autocomplete_limited_results">Visar endast de första resultaten, skriv mer…</string>
 
-    <string name="settings_developer_mode_fail_fast_summary">Element kan krascha mer när ett oväntat fel inträffar</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat kan krascha mer när ett oväntat fel inträffar</string>
 
     <string name="create_room_encryption_description">Efter aktivering så kan kryptering inte avaktiveras.</string>
 
@@ -902,7 +902,7 @@
     <string name="invite_users_to_room_failure">Vi kunde inte bjuda in användarna. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
 
     <string name="disconnect_identity_server_dialog_content">Koppla bort från identitetsservern %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. Element stöder endast API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. SchildiChat stöder endast API V2.</string>
     <string name="identity_server_error_no_identity_server_configured">Vänligen konfigurera en identitetsserver.</string>
     <string name="identity_server_error_terms_not_signed">Vänligen acceptera först identitetsserverns användarvillkor i inställningarna.</string>
     <string name="identity_server_set_default_notice">Din hemserver (%1$s) föreslår att du använder %2$s som din identitetsserver</string>
@@ -1069,7 +1069,7 @@
     <string name="sent_a_file">Fil</string>
     <string name="send_a_sticker">Klistermärke</string>
 
-    <string name="rendering_event_error_type_of_message_not_handled">Element hanterar inte meddelanden av typen \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat hanterar inte meddelanden av typen \'%1$s\'</string>
     <string name="command_description_rainbow">Skickar det valda meddelandet I regnbågsfärger</string>
     <string name="settings_category_composer">Meddelanderedigering</string>
 

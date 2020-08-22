@@ -94,7 +94,7 @@
     <string name="user_directory_header">使用者目錄</string>
     <string name="matrix_only_filter">僅 Matrix 聯絡人</string>
     <string name="no_conversation_placeholder">沒有對話</string>
-    <string name="no_contact_access_placeholder">您沒有允許 Element 存取裝置上的聯絡資訊</string>
+    <string name="no_contact_access_placeholder">您沒有允許 SchildiChat 存取裝置上的聯絡資訊</string>
     <string name="no_result_placeholder">沒有結果</string>
 
     <string name="rooms_header">聊天室</string>
@@ -251,22 +251,22 @@
     <string name="media_picker_cannot_record_video">無法錄影</string>
 
     <string name="permissions_rationale_popup_title">資訊</string>
-    <string name="permissions_rationale_msg_storage">Element 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
+    <string name="permissions_rationale_msg_storage">SchildiChat 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
 
 請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
-    <string name="permissions_rationale_msg_camera">Element 需要權限存取您的相機，來拍照與視訊通話。</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat 需要權限存取您的相機，來拍照與視訊通話。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \n為了要通話，請在下個彈跳視窗中允許存取。"</string>
-    <string name="permissions_rationale_msg_record_audio">Element 需要權限來存取麥克風，來撥打語音通話。</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat 需要權限來存取麥克風，來撥打語音通話。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n為了要通話，請在下個彈跳視窗中允許存取。"</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element 需要權限來存取相機及麥克風來撥打視訊通話。
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat 需要權限來存取相機及麥克風來撥打視訊通話。
 
 為了要通話，請在下個彈跳視窗中允許存取。</string>
-    <string name="permissions_rationale_msg_contacts">Element 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
+    <string name="permissions_rationale_msg_contacts">SchildiChat 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
 \n
 \n您同意為此用途分享您的電話簿嗎？</string>
 
@@ -400,7 +400,7 @@
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  Element, 以便它將金鑰發送到此工作階段。"</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  SchildiChat, 以便它將金鑰發送到此工作階段。"</string>
 
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
@@ -542,13 +542,13 @@
     <string name="settings_deactivate_my_account">停用我的帳號</string>
 
     <string name="startup_notification_privacy_title">通知隱私</string>
-    <string name="startup_notification_privacy_message">Element 可以在後臺安全隱密地管理通知。這可能會影響電池的使用。</string>
+    <string name="startup_notification_privacy_message">SchildiChat 可以在後臺安全隱密地管理通知。這可能會影響電池的使用。</string>
     <string name="startup_notification_privacy_button_grant">獲取權限</string>
     <string name="startup_notification_privacy_button_other">選擇其他選項</string>
 
     <string name="settings_analytics">傳送分析資料</string>
     <string name="settings_opt_in_of_analytics">傳送分析資料</string>
-    <string name="settings_opt_in_of_analytics_summary">Element 會收集匿名分析以讓我們可以改進此應用程式。</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat 會收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics_prompt">請允許收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我想要協助！</string>
 
@@ -984,7 +984,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="x_plus">%d+</string>
 
     <string name="settings_call_category">通話</string>
-    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 Element 鈴聲</string>
+    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 SchildiChat 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
 
@@ -1015,12 +1015,12 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_device_settings_title">工作階段設定。</string>
     <string name="settings_troubleshoot_test_device_settings_success">通知已為此工作階段啟用。</string>
     <string name="settings_troubleshoot_test_device_settings_failed">此工作階段未啟用通知。
-\n請檢查 Element 設定。</string>
+\n請檢查 SchildiChat 設定。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">啟用</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Play 服務檢查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 服務 APK 可用且已為最新。</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play 服務</string>
 
@@ -1047,25 +1047,25 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_troubleshoot_test_service_boot_title">開機時啟動</string>
     <string name="settings_troubleshoot_test_service_boot_success">服務將會在裝置重新啟動時自行啟動。</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">服務不會在裝置重心啟動時自行啟動，您將不能在 Element 開啟前收到通知。</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">服務不會在裝置重心啟動時自行啟動，您將不能在 SchildiChat 開啟前收到通知。</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">啟用開機時啟動</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">檢查背景限制</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">背景限制已為 Element 停用。本測試應該使用行動數據執行（不是 WiFi）。
+    <string name="settings_troubleshoot_test_bg_restricted_success">背景限制已為 SchildiChat 停用。本測試應該使用行動數據執行（不是 WiFi）。
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 Element 啟用。
+    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 SchildiChat 啟用。
 應用程式要在背景執行的工作將被顏格限制，這可能會影響通知。
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">停用限制</string>
 
     <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
-    <string name="settings_troubleshoot_test_battery_success">Element 不會被電池最佳化影響。</string>
+    <string name="settings_troubleshoot_test_battery_success">SchildiChat 不會被電池最佳化影響。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element 需要保持最低影響的背景連線以接收可靠的通知。
-在下一個畫面，您必須允許 Element 總是在背景執行，請接受。</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat 需要保持最低影響的背景連線以接收可靠的通知。
+在下一個畫面，您必須允許 SchildiChat 總是在背景執行，請接受。</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">授予權限</string>
 
     <string name="account_email_error">當驗證您的電子郵件地址時遇到錯誤。</string>
@@ -1094,11 +1094,11 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_bing_settings_quickfix">檢查設定</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-這個錯誤並非 Element 所能控制，而是與 Google 有關，這個錯誤代表裝置註冊了太多使用 FCM 的應用程式。這個錯誤只會發生在有超大量的應用程式的裝置上，所以不應該影響一般的使用者。</string>
+這個錯誤並非 SchildiChat 所能控制，而是與 Google 有關，這個錯誤代表裝置註冊了太多使用 FCM 的應用程式。這個錯誤只會發生在有超大量的應用程式的裝置上，所以不應該影響一般的使用者。</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-這個錯誤並非 Element 所能控制。可能由多種原因所導致。也可能會在稍後重試時就可以運作，您也可以檢查 Google Play 服務在系統設定中有沒有被限制使用資料，或是您裝置的時鐘是否正確，或是也可能會在自訂的 ROM 上發生。</string>
+這個錯誤並非 SchildiChat 所能控制。可能由多種原因所導致。也可能會在稍後重試時就可以運作，您也可以檢查 Google Play 服務在系統設定中有沒有被限制使用資料，或是您裝置的時鐘是否正確，或是也可能會在自訂的 ROM 上發生。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-這個錯誤並非 Element 所能控制。手機上沒有 Google 帳號。請開啟帳號管理員並新增一個 Google 帳號。</string>
+這個錯誤並非 SchildiChat 所能控制。手機上沒有 Google 帳號。請開啟帳號管理員並新增一個 Google 帳號。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">新增帳號</string>
 
     <string name="settings_noisy_notifications_preferences">設定吵鬧的通知</string>
@@ -1114,7 +1114,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="passphrase_empty_error_message">請輸入通關密語</string>
     <string name="passphrase_passphrase_too_weak">通關密語太弱了</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要讓 Element 生成復原金鑰的話，請刪除通關密語。</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要讓 SchildiChat 生成復原金鑰的話，請刪除通關密語。</string>
     <string name="keys_backup_no_session_error">沒有可用的 Matrix 工作階段</string>
 
     <string name="keys_backup_setup_step1_title">永不遺失已加密的訊息</string>
@@ -1273,7 +1273,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="autodiscover_invalid_response">無效的家伺服器探索回應</string>
     <string name="autodiscover_well_known_autofill_dialog_title">自動完成伺服器選項</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element 偵測到您的 userId 網域「%1$s」有自訂的伺服器設定：
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat 偵測到您的 userId 網域「%1$s」有自訂的伺服器設定：
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用設定</string>
 
@@ -1411,7 +1411,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="group_all_communities">所有社群</string>
 
     <string name="room_preview_no_preview">無法預覽此聊天室</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element 尚不支援預覽所有人皆可讀的聊天室</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">SchildiChat 尚不支援預覽所有人皆可讀的聊天室</string>
 
     <string name="fab_menu_create_room">聊天室</string>
     <string name="fab_menu_create_chat">直接訊息</string>
@@ -1540,11 +1540,11 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="invite_no_identity_server_error">在您的設定中新增一臺身份識別伺服器以執行此動作。</string>
     <string name="settings_background_fdroid_sync_mode">背景同步模式（實驗性）</string>
     <string name="settings_background_fdroid_sync_mode_battery">為電池最佳化</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element 將會在背景同步以節省裝置的有限資源（電池）。
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat 將會在背景同步以節省裝置的有限資源（電池）。
 \n取決於您裝置的資源狀態，作業系統可能會延遲同步。</string>
     <string name="settings_background_fdroid_sync_mode_real_time">為即時作業最佳化</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element 將會精準地定期在背景同步（可設定）。
-\n這會影響到網路與電池的使用，並會顯示指出 Element 正在監聽某事件的永久通知。</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat 將會精準地定期在背景同步（可設定）。
+\n這會影響到網路與電池的使用，並會顯示指出 SchildiChat 正在監聽某事件的永久通知。</string>
     <string name="settings_background_fdroid_sync_mode_disabled">無背景同步</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">當應用程式在背景時，您將不會收到訊息通知。</string>
     <string name="settings_background_sync_update_error">更新設定失敗。</string>
@@ -1645,7 +1645,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \n如果您不想要看到從此使用者而來的更多內容，您可以封鎖他以隱藏他的訊息</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Element 需要權限以在磁碟上儲存您的 E2E 金鑰。
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat 需要權限以在磁碟上儲存您的 E2E 金鑰。
 \n
 \n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
 
@@ -1654,7 +1654,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="resources_script">Latn</string>
 
     <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
-    <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Element 做這件事</string>
+    <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 SchildiChat 做這件事</string>
     <string name="settings_add_3pid_authentication_needed">需要驗證</string>
 
 
@@ -1737,8 +1737,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="login_server_url_form_modular_hint">Element Matrix Services 位置</string>
     <string name="login_server_url_form_other_hint">位置</string>
     <string name="login_server_url_form_modular_text">組織有專業主機</string>
-    <string name="login_server_url_form_modular_notice">輸入 Modular Element 或您想要使用的伺服器位置</string>
-    <string name="login_server_url_form_other_notice">輸入您想要連線的伺服器或 Element 的位置</string>
+    <string name="login_server_url_form_modular_notice">輸入 Modular SchildiChat 或您想要使用的伺服器位置</string>
+    <string name="login_server_url_form_other_notice">輸入您想要連線的伺服器或 SchildiChat 的位置</string>
 
     <string name="login_sso_error_message">載入頁面時發生錯誤：%1$s (%2$d)</string>
     <string name="login_mode_not_supported">應用程式無法登入此家伺服器。家伺服器支援以下登入類型：%1$s。
@@ -1856,7 +1856,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n再次登入以存取您的帳號資料與訊息。</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以復原您的加密金鑰，否則您將會失去對安全訊息的存取權。</string>
     <string name="soft_logout_clear_data_dialog_submit">清除資料</string>
-    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。Element 並不支援。
+    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。SchildiChat 並不支援。
 \n請先清除您的資料，然後再以其他帳號登入。</string>
 
     <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
@@ -1879,7 +1879,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母……</string>
 
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
-    <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，Element 可能更常當機</string>
+    <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，SchildiChat 可能更常當機</string>
     <string name="command_description_shrug">"將  ¯\\_(ツ)_/¯ 附加到純文字訊息中"</string>
 
     <string name="create_room_encryption_title">啟用加密</string>
@@ -1967,9 +1967,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="room_member_jump_to_read_receipt">跳至讀取回條</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">Element 無法處理類型為「%1$s」的事件</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element 無法處理類型為「%1$s」的訊息</string>
-    <string name="rendering_event_error_exception">在彩現 id「%1$s」事件的內容時，Element 遇到問題</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat 無法處理類型為「%1$s」的事件</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat 無法處理類型為「%1$s」的訊息</string>
+    <string name="rendering_event_error_exception">在彩現 id「%1$s」事件的內容時，SchildiChat 遇到問題</string>
 
     <string name="unignore">取消忽略</string>
 
@@ -2095,7 +2095,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
 
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
 
     <string name="settings_key_requests">金鑰請求</string>
 
@@ -2234,13 +2234,13 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_adding_media_file_to_gallery">無法新增媒體檔案到媒體庫中</string>
     <string name="change_password_summary">設定新的帳號密碼……</string>
 
-    <string name="use_other_session_content_description">在您的其他裝置上使用最新的 Element、Element Web、Element 桌面版、Element iOS、Element for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="use_other_session_content_description">在您的其他裝置上使用最新的 SchildiChat、Element Web、SchildiChat/Element 桌面版、Element iOS、SchildiChat for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
     <string name="app_desktop_web">Element Web
-\nElement 桌面版</string>
+\nSchildiChat 桌面版</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="use_latest_app">在您的其他裝置上使用最新的 Element：</string>
+    <string name="use_latest_app">在您的其他裝置上使用最新的 SchildiChat：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
     <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 以繼續。</string>
@@ -2311,11 +2311,11 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="open_terms_of">開啟 %s 的條款</string>
     <string name="disconnect_identity_server_dialog_content">從身份識別伺服器 %s 斷線？</string>
-    <string name="identity_server_error_outdated_identity_server">此身份識別伺服器太舊了。Element 僅支援 API V2。</string>
+    <string name="identity_server_error_outdated_identity_server">此身份識別伺服器太舊了。SchildiChat 僅支援 API V2。</string>
     <string name="identity_server_error_outdated_home_server">此動作是不可能的。家伺服器太舊了。</string>
     <string name="identity_server_error_no_identity_server_configured">請先設定身份識別伺服器。</string>
     <string name="identity_server_error_terms_not_signed">請先在設定中同意身份識別伺服器的條款。</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，Element 僅支援傳送雜湊過的使用者電子郵件與電話號碼。</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，SchildiChat 僅支援傳送雜湊過的使用者電子郵件與電話號碼。</string>
     <string name="identity_server_error_binding_error">關聯失敗。</string>
     <string name="identity_server_error_no_current_binding_error">目前沒有此識別符的關聯。</string>
 
@@ -2334,7 +2334,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="dialog_title_success">成功</string>
 
     <string name="bottom_action_notification">通知</string>
-    <string name="call_failed_no_connection">Element 呼叫失敗</string>
+    <string name="call_failed_no_connection">SchildiChat 呼叫失敗</string>
     <string name="call_failed_no_connection_description">建立即時連線失敗。
 \n請要求您家伺服器的管理員設定 TURN 伺服器以讓通話的運作更可靠。</string>
 
@@ -2477,7 +2477,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意未傳送金鑰</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密歷史</string>
 
-    <string name="element_disclaimer_title">Riot 現在是 Element 了！</string>
+    <string name="element_disclaimer_title">Riot 現在是 SchildiChat 了！</string>
     <string name="element_disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
     <string name="element_disclaimer_negative_button">知道了</string>
     <string name="element_disclaimer_positive_button">取得更多資訊</string>
