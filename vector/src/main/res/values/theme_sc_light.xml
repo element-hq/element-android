@@ -13,35 +13,14 @@
         <item name="materialButtonStyle">@style/VectorButtonStyle.SC</item>
         <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight.SC</item>
 
-        <item name="vctr_tab_home">@color/accent_sc</item>
-
         <item name="vctr_encrypting_message_text_color">@color/accent_sc</item>
-        <item name="vctr_highlighted_searched_message_text_color">@color/accent_sc</item>
-        <item name="vctr_unread_marker_line_color">@color/accent_sc</item>
-
-        <!-- tab bar colors -->
-        <item name="vctr_tab_bar_selected_background_color">@color/accent_sc</item>
-        <item name="vctr_tab_bar_unselected_background_color">@color/accent_sc</item>
 
         <!-- icon colors -->
         <item name="vctr_icon_tint_on_light_action_bar_color">@color/accent_sc</item>
 
-        <item name="vctr_tabbar_selected_background">
-            @drawable/vector_tabbar_selected_background_sc_light
-        </item>
-        <item name="vctr_tabbar_unselected_background">
-            @drawable/vector_tabbar_unselected_background_sc_light
-        </item>
-
-        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_sc</item>
-
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
         <item name="actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
-
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light.SC</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Light.SC</item>
 
         <item name="sc_message_bg_incoming">#FFEEEEEE</item>
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha12</item>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.SC.v23" parent="AppTheme.SC.v21">
+    <style name="AppTheme.SC.v23" parent="AppTheme.Base.SC">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="AppTheme.SC.Dark.v23" parent="AppTheme.SC.Dark.v21">
+    <style name="AppTheme.SC.Dark.v23" parent="AppTheme.Base.SC.Dark">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="AppTheme.SC.Colored.v23" parent="AppTheme.SC.Colored.v21">
+    <style name="AppTheme.SC.Colored.v23" parent="AppTheme.Base.SC.Colored">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="AppTheme.SC.Dark.Colored.v23" parent="AppTheme.SC.Dark.Colored.v21">
+    <style name="AppTheme.SC.Dark.Colored.v23" parent="AppTheme.Base.SC.Dark.Colored">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="AppTheme.SC.Light.v23" parent="AppTheme.SC.Light.v21">
+    <style name="AppTheme.SC.Light.v23" parent="AppTheme.Base.SC.Light">
         <item name="android:statusBarColor">@color/riotx_header_panel_background_light</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
