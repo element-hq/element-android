@@ -2,4 +2,19 @@
 <resources><string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s t.yuzen tugna.</string>
     <string name="summary_you_sent_image">Tuzneḍ tugna.</string>
+    <string name="notice_room_invite_no_invitee">Tinubga n %s</string>
+    <string name="notice_room_invite_no_invitee_by_you">Tinubga-k•m</string>
+    <string name="notice_room_created">%1$s yesnulfa-d taxxamt</string>
+    <string name="notice_room_created_by_you">Tesnulfaḍ-d taxxamt-a</string>
+    <string name="notice_room_invite">%1$s inced-d %2$s</string>
+    <string name="notice_room_invite_by_you">Tnecdeḍ-d %1$s</string>
+    <string name="notice_room_invite_you">%1$s inced-ik-id</string>
+    <string name="notice_room_join">%1$s yedda ɣer texxamt</string>
+    <string name="notice_room_join_by_you">Teddiḍ ɣer texxamt</string>
+    <string name="notice_room_leave">%1$s yeǧǧa taxxamt</string>
+    <string name="notice_room_leave_by_you">Teǧǧiḍ taxxamt</string>
+    <string name="notice_room_reject">%1$s yugi/tugi tinubga</string>
+    <string name="notice_room_reject_by_you">Tufiḍ tinubga</string>
+    <string name="notice_room_kick">%1$s yessufeɣ %2$s</string>
+    <string name="notice_room_kick_by_you">Tessufɣeḍ %1$s</string>
     </resources>
