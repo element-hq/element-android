@@ -209,6 +209,16 @@
         <item name="riotx_positive_accent">@color/accent_sc</item>
         <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
         <item name="riotx_toolbar_bg">?riotx_background</item>
+
+        <item name="android:statusBarColor">@color/background_black_sc</item>
+        <item name="android:navigationBarColor">@color/background_black_sc</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark">
@@ -216,6 +226,9 @@
         <item name="riotx_background">@color/background_dark_sc</item>
         <item name="riotx_base">@color/background_sc</item>
         <item name="riotx_header_panel_background">@color/background_sc</item>
+
+        <item name="android:statusBarColor">@color/background_dark_sc</item>
+        <item name="android:navigationBarColor">@color/background_black_sc</item>
     </style>
 
 

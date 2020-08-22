@@ -50,6 +50,19 @@
         <item name="riotx_toolbar_bg">?riotx_background</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light</item>
+
+
+        <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
+        <!-- Use dark color, to have enough contrast with icons color. windowLightNavigationBar is only available in API 27+ -->
+        <item name="android:navigationBarColor">@color/background_black_sc</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->
