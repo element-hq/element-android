@@ -66,6 +66,25 @@ internal class RoomSummaryUpdater @Inject constructor(
         val PREVIEWABLE_TYPES = listOf(
                 // TODO filter message type (KEY_VERIFICATION_READY, etc.)
                 EventType.MESSAGE,
+                EventType.STATE_ROOM_NAME,
+                EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_AVATAR,
+                EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER,
+                EventType.ENCRYPTED,
+                EventType.STATE_ROOM_ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                EventType.STICKER,
+                EventType.REACTION,
+                EventType.STATE_ROOM_CREATE
+        )
+        // Same as PREVIEWABLE_CONTENT_TYPES without member state changes // SC feature
+        val PREVIEWABLE_CONTENT_TYPES = listOf(
+                // TODO filter message type (KEY_VERIFICATION_READY, etc.)
+                EventType.MESSAGE,
                 /*
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -83,6 +102,31 @@ internal class RoomSummaryUpdater @Inject constructor(
                  */
                 EventType.STICKER,
                 EventType.REACTION,
+                EventType.STATE_ROOM_CREATE
+        )
+        // Same as PREVIEWABLE_ORIGINAL_CONTENT_TYPES without reactions // SC feature
+        val PREVIEWABLE_ORIGINAL_CONTENT_TYPES = listOf(
+                // TODO filter message type (KEY_VERIFICATION_READY, etc.)
+                EventType.MESSAGE,
+                /*
+                EventType.STATE_ROOM_NAME,
+                EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_AVATAR,
+                EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                 */
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER,
+                EventType.ENCRYPTED,
+                /*
+                EventType.STATE_ROOM_ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                 */
+                EventType.STICKER,
+                /*
+                EventType.REACTION,
+                 */
                 EventType.STATE_ROOM_CREATE
         )
     }
@@ -116,6 +160,10 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
                 filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
+        val latestPreviewableContentEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
+                filterTypes = PREVIEWABLE_CONTENT_TYPES, filterContentRelation = true)
+        val latestPreviewableOriginalContentEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
+                filterTypes = PREVIEWABLE_ORIGINAL_CONTENT_TYPES, filterContentRelation = true)
 
         val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
@@ -130,12 +178,22 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
                 || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+        roomSummaryEntity.hasUnreadContentMessages = roomSummaryEntity.notificationCount > 0
+                // avoid this call if we are sure there are unread events
+                || (latestPreviewableContentEvent != null
+                    && !isEventRead(realm.configuration, userId, roomId, latestPreviewableContentEvent.eventId))
+        roomSummaryEntity.hasUnreadOriginalContentMessages = roomSummaryEntity.notificationCount > 0
+                // avoid this call if we are sure there are unread events
+                || (latestPreviewableOriginalContentEvent != null
+                    && !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
+        roomSummaryEntity.latestPreviewableContentEvent = latestPreviewableContentEvent
+        roomSummaryEntity.latestPreviewableOriginalContentEvent = latestPreviewableOriginalContentEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 

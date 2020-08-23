@@ -45,6 +45,14 @@
             android:summary="@string/settings_single_overview_summary"
             android:title="@string/settings_single_overview" />
 
+        <im.vector.app.core.preference.VectorListPreference
+            android:defaultValue="1"
+            android:entries="@array/room_unread_kind_entries"
+            android:entryValues="@array/room_unread_kind_values"
+            android:key="SETTINGS_ROOM_UNREAD_KIND"
+            android:summary="%s"
+            android:title="@string/settings_room_unread_kind" />
+
         <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"

@@ -25,6 +25,7 @@ import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -37,7 +38,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer) {
+                                                 private val avatarRenderer: AvatarRenderer,
+                                                 private val scSdkPreferences: ScSdkPreferences) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -85,7 +87,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime: CharSequence = ""
-        val latestEvent = roomSummary.latestPreviewableEvent
+        val latestEvent = roomSummary.scLatestPreviewableEvent(scSdkPreferences)
         if (latestEvent != null) {
             val date = latestEvent.root.localDateTime()
             val currentDate = DateProvider.currentLocalDateTime()
@@ -111,7 +113,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .showSelected(showSelected)
                 .hasFailedSending(roomSummary.hasFailedSending)
                 .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.hasUnreadMessages)
+                .hasUnreadMessage(roomSummary.scHasUnreadMessages(scSdkPreferences))
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false
