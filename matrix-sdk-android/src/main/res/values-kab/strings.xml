@@ -289,4 +289,5 @@
 
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s issefsex tinubga n %2$s i tmerniwt ɣer texxamt. Tamentilt: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Tesfesxeḍ tinubga n %1$s i tmerna ɣer texxamt. Tamentilt: %2$s</string>
+    <string name="could_not_redact">Yegguma ad yesfeḍ</string>
     </resources>
