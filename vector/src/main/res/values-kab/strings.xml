@@ -531,4 +531,6 @@
     <string name="failed_to_add_widget">Timerniwt n uwiǧit ur teddi ara</string>
     <string name="encrypted_message">Izen yettwawgelhen</string>
 
+    <string name="missing_permissions_warning">Imi xuṣṣent tsirag, izmer ur ttilint ara kra n tmahilin…</string>
+    <string name="missing_permissions_to_start_conf_call">Tesriḍ tisirag akken ad tebduḍ asarag deg texxamt-a</string>
     </resources>
