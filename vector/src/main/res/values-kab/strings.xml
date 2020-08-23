@@ -489,4 +489,46 @@
     <string name="room_settings_name_hint">Isem n texxamt</string>
     <string name="element_disclaimer_title">Tura, Riot d aferdis!</string>
     <string name="three_pid_revoke_invite_dialog_title">Sefesex tinnubga</string>
+    <string name="status_theme">Asentel Status.im</string>
+
+    <string name="notification_sync_in_progress">Amtawi…</string>
+    <string name="notification_listening_for_events">Timesliwt n yineḍruyen</string>
+    <string name="notification_silent_notifications">Ilɣuten isusamen</string>
+
+    <string name="title_activity_member_details">Tilɣa ɣef uɛeggal</string>
+    <string name="title_activity_bug_report">Aneqqis n ubug</string>
+    <string name="title_activity_group_details">Tilɣa ɣef tmezdagnut</string>
+    <string name="title_activity_choose_sticker">Azen amenṭaḍ</string>
+    <string name="title_activity_keys_backup_setup">Akles n tsura</string>
+    <string name="title_activity_keys_backup_restore">Seqdec akles n tsura</string>
+    <string name="keys_backup_is_not_finished_please_wait">Akles n tsura ur ifukk ara, ttxil rǧu…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ad tesruḥeḍ iznan-ik•im yettwawgelhen ma teffɣeḍ tura</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Akles n tsura yetteddu. Ma teffɣeḍ tura, ad tesruḥeḍ anekcum ɣer yiznan-ik•im yettwawgelhen.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Akles aɣellsan n tsura ilaq ad yermed deg tɣimiyin-ik•im akk akken ur tesruḥuḍ ara anekcum ɣer yiznan-ik•im yettwawgelhen.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ur bɣiɣ ara iznan-iw yettwawgelhen</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Akles n tsura…</string>
+    <string name="keys_backup_activate">Seqdec akles n tsura</string>
+    <string name="backup">Kles</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ad tesruḥeḍ anekcum ɣer yiznan-ik•im yettwawgelhen anagar ma tkelseḍ tisura-inek•inem send tuffɣa.</string>
+    <string name="stay">Qqim</string>
+    <string name="speak">Mmeslay</string>
+    <string name="clear">Sfeḍ</string>
+    <string name="forward">Sɛeddi</string>
+    <string name="permalink">Aseɣwen imezgi</string>
+    <string name="view_decrypted_source">Sken aɣbalu yettwazemken</string>
+    <string name="report_content">Mel agbur</string>
+    <string name="ongoing_conference_call_voice">Taɣect</string>
+    <string name="ongoing_conference_call_video">Tavidyut</string>
+    <string name="cannot_start_call">Ulamek ad yebdu usiwel, ttxil ɛreḍ ticki</string>
+    <string name="conference_call_in_progress">Asarag ha-t-an itteddu!</string>
+    <string name="video_meeting">Bdu timlilit s tvidyut</string>
+    <string name="audio_meeting">Bdu timlilit tameslawt</string>
+    <string name="audio_video_meeting_description">Timlilit s useqdec n tsertiyin n tɣellist d tsiregt n Jitsi. Medden akk i yellan deg texxamt ad ẓren tinubga i tmerniwt mi ara d-teḍru temlilit.</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ulamek ad yebdu usiwel</string>
+    <string name="cannot_call_yourself">Ur tezmireḍ ara ad tesɛeddiḍ asiwel i yima-ik•im</string>
+    <string name="cannot_call_yourself_with_invite">Ur tezmireḍ ara ad tesɛeddiḍ asiwel i yiman-ik•im, rǧu ad qeblen yimettekkiyen tinubga</string>
+    <string name="device_information">Talɣut ɣef tɣimit</string>
+    <string name="failed_to_add_widget">Timerniwt n uwiǧit ur teddi ara</string>
+    <string name="encrypted_message">Izen yettwawgelhen</string>
+
     </resources>
