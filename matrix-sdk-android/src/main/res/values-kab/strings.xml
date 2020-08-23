@@ -88,4 +88,14 @@
 
     <string name="call_notification_answer">Qbel</string>
     <string name="call_notification_reject">Agwi</string>
+    <string name="summary_user_sent_sticker">%1$s yuzen amenṭaḍ.</string>
+    <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ</string>
+
+    <string name="notice_room_unban">%1$s yekkes agdal i %2$s</string>
+    <string name="notice_room_unban_by_you">Tekkseḍ agdal i %1$s</string>
+    <string name="notice_room_ban">%1$s igdel %2$s</string>
+    <string name="notice_room_ban_by_you">Tgedleḍ %1$s</string>
+    <string name="notice_room_withdraw">%1$s issefsex tinubga n %2$s</string>
+    <string name="notice_room_withdraw_by_you">Tesfesxeḍ tinubga n %1$s</string>
+    <string name="notice_avatar_url_changed">%1$s ibeddel avatar-is</string>
     </resources>
