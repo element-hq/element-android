@@ -27,7 +27,7 @@
 
     <string name="message_failed_to_upload">Tegguma ad d-tali tugna</string>
 
-    <string name="medium_email">Tansa n yimayl</string>
+    <string name="medium_email">Tansa imayl</string>
     <string name="verification_emoji_dog">Aqjun</string>
     <string name="verification_emoji_cat">Amcic</string>
     <string name="verification_emoji_lion">Izem</string>
@@ -175,4 +175,20 @@
     <string name="notice_made_future_room_visibility_by_you">Ad terreḍ amazray n texxamt i d-iteddun ɣer sdat yettban i %1$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s issefsax tinubga i %2$s i wakken ad d-yekcem ɣer texxamt</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Tesfesxeḍ tinubga i %1$s i wakken ad d-yernu ɣer texxamt</string>
+    <string name="room_error_join_failed_empty_room">D awezɣi tura ad nuɣal ɣer texxamt tilemt.</string>
+
+    <string name="encrypted_message">Izen yettwawgelhen</string>
+
+    <string name="medium_phone_number">Uṭṭun n tiliɣri</string>
+
+    <string name="room_displayname_invite_from">Tinubga sɣur %s</string>
+    <string name="room_displayname_room_invite">Tinubga n texxamt</string>
+
+    <string name="room_displayname_two_members">%1$s d %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s d 1 n wayeḍ</item>
+	<item quantity="other">%1$s d %2$d n wiyaḍ</item>
+</plurals>
+
     </resources>
