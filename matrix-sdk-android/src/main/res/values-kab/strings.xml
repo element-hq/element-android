@@ -98,4 +98,77 @@
     <string name="notice_room_withdraw">%1$s issefsex tinubga n %2$s</string>
     <string name="notice_room_withdraw_by_you">Tesfesxeḍ tinubga n %1$s</string>
     <string name="notice_avatar_url_changed">%1$s ibeddel avatar-is</string>
+    <string name="notice_display_name_set">%1$s isbadu isem-is i d-ittuseknen ɣer %2$s</string>
+    <string name="notice_display_name_set_by_you">Tesbaduḍ isem-ik•im i d-ittuseknen ɣer %1$s</string>
+    <string name="notice_display_name_changed_from">%1$s ibeddel isem-is i d-ittuseknen seg %2$s ɣer %3$s</string>
+    <string name="notice_display_name_changed_from_by_you">Tbeddleḍ isem-ik•im i d-ittuseknen seg %1$s ɣer %2$s</string>
+    <string name="notice_display_name_removed">%1$s yekkes isem-is i d-ittuseknen (yella %2$s)</string>
+    <string name="notice_display_name_removed_by_you">Tekkseḍ isem-ik•im i d-ittuseknen (yella %1$s)</string>
+    <string name="notice_room_topic_changed">%1$s ibeddel asentel ɣer: %2$s</string>
+    <string name="notice_room_topic_changed_by_you">Tbeddleḍ asentel ɣer: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s ibeddel avatar n texxamt</string>
+    <string name="notice_room_avatar_changed_by_you">Tbeddleḍ avatar n texxamt</string>
+    <string name="notice_room_name_changed">%1$s ibeddel isem n texxamt ɣer: %2$s</string>
+    <string name="notice_room_name_changed_by_you">Tbeddleḍ isem n texxamt ɣer: %1$s</string>
+    <string name="notice_placed_video_call">%s isɛedda asiwel s tvidyut.</string>
+    <string name="notice_placed_video_call_by_you">Tesɛeddaḍ asiwel s tvidyut.</string>
+    <string name="notice_placed_voice_call">%s isɛedda asiwel aɣectan.</string>
+    <string name="notice_placed_voice_call_by_you">Tesɛeddaḍ asiwel aɣectan.</string>
+    <string name="notice_call_candidates">%s yuzen isefka i twila n usiwel.</string>
+    <string name="notice_call_candidates_by_you">Tuzneḍ isefka i twila n usiwel.</string>
+    <string name="notice_answered_call">%s yerra i usiwel.</string>
+    <string name="notice_answered_call_by_you">Terriḍ i usiwel.</string>
+    <string name="notice_ended_call">%s ifukk asiwel.</string>
+    <string name="notice_ended_call_by_you">Tfukkeḍ asiwel.</string>
+    <string name="notice_room_visibility_invited">akk iɛeggalen n texxamt, segmi d-ttwanecden.</string>
+    <string name="notice_room_visibility_joined">akk iɛeggalen n texxamt, segmi d-rnan.</string>
+    <string name="notice_room_visibility_shared">akk iɛeggalen n texxamt.</string>
+    <string name="notice_room_visibility_world_readable">yal yiwen.</string>
+    <string name="notice_room_visibility_unknown">arussin (%s).</string>
+    <string name="notice_end_to_end">%1$s irmed awgelhen seg yixef ɣer yixef (%2$s)</string>
+    <string name="notice_end_to_end_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (%1$s)</string>
+    <string name="notice_room_update">%s ileqqem taxxamt-a.</string>
+    <string name="notice_room_update_by_you">Tleqqmeḍ taxxamt-a.</string>
+
+    <string name="notice_requested_voip_conference">%1$s yessuter asarag VoIP</string>
+    <string name="notice_requested_voip_conference_by_you">Tessutreḍ asarag VoIP</string>
+    <string name="notice_voip_started">Asarag VoIP yebda</string>
+    <string name="notice_voip_finished">Asarag VoIP yekfa</string>
+
+    <string name="notice_avatar_changed_too">(avatar daɣen ibeddel)</string>
+    <string name="notice_room_name_removed">%1$s yekkes isem n texxamt</string>
+    <string name="notice_room_name_removed_by_you">Tekkseḍ isem n texxamt</string>
+    <string name="notice_room_topic_removed">%1$s yekkes asentel n texxamt</string>
+    <string name="notice_room_topic_removed_by_you">Tekkseḍ asentel n texxamt</string>
+    <string name="notice_room_avatar_removed">%1$s yekkes avatar n texxamt</string>
+    <string name="notice_room_avatar_removed_by_you">Tekkseḍ avatar n texxamt</string>
+    <string name="notice_event_redacted">Izen ittwakkes</string>
+    <string name="notice_event_redacted_by">Izen ittwakkes sɣur %1$s</string>
+    <string name="notice_event_redacted_with_reason">Izen ittwakkes [tamentilt: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Izen ittwakkes sɣur %1$s [tamentilt: %2$s]</string>
+    <string name="notice_profile_change_redacted">%1$s ileqqem amaɣnu-ines %2$s</string>
+    <string name="notice_profile_change_redacted_by_you">Tleqqmeḍ amaɣnu-inek•inem %1$s</string>
+    <string name="notice_room_third_party_invite">%1$s yuzen tinubga i %2$s akken ad yeddu ɣer texxamt</string>
+    <string name="notice_room_third_party_invite_by_you">Tuzneḍ tinubga i %1$s akken ad yeddu ɣer texxamt</string>
+    <string name="notice_room_third_party_registered_invite">%1$s iqbel tinubga i %2$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Tqebleḍ tinubga i %1$s</string>
+
+    <string name="notice_widget_added">%1$s yerna awiǧit %2$s</string>
+    <string name="notice_widget_added_by_you">Terniḍ awiǧit %1$s</string>
+    <string name="notice_widget_removed">%1$s yekkes awiǧit %2$s</string>
+    <string name="notice_widget_removed_by_you">Tekkseḍ awiǧit %1$s</string>
+    <string name="notice_widget_modified">%1$s ibeddel awiǧit %2$s</string>
+    <string name="notice_widget_modified_by_you">Tbeddleḍ awiǧit %1$s</string>
+
+    <string name="power_level_custom">Sagen (%1$)</string>
+    <string name="notice_power_level_changed_by_you">Tbeddleḍ aswir n tezmert n %1$s.</string>
+    <string name="notice_power_level_changed">%1$s ibeddel aswir n tezmert n %2$s.</string>
+    <string name="notice_crypto_unable_to_decrypt">** Azmek d awezɣi: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Ibenk n umazan ur aɣ-d-yuzin ara tisura i yizen-a.</string>
+
+    <string name="unable_to_send_message">Tuzzna n yizen d tawezɣit</string>
+
+    <string name="network_error">Tuccḍa n uẓeṭṭa</string>
+    <string name="matrix_error">Tuccḍa n Matrix</string>
+
     </resources>
