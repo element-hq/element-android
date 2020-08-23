@@ -175,20 +175,27 @@
     <string name="notice_made_future_room_visibility_by_you">Ad terreḍ amazray n texxamt i d-iteddun ɣer sdat yettban i %1$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s issefsax tinubga i %2$s i wakken ad d-yekcem ɣer texxamt</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Tesfesxeḍ tinubga i %1$s i wakken ad d-yernu ɣer texxamt</string>
-    <string name="room_error_join_failed_empty_room">D awezɣi tura ad nuɣal ɣer texxamt tilemt.</string>
+    <string name="room_error_join_failed_empty_room">D awezɣi tura ad nales ad nuɣal ɣer texxamt tilemt.</string>
 
     <string name="encrypted_message">Izen yettwawgelhen</string>
 
     <string name="medium_phone_number">Uṭṭun n tiliɣri</string>
 
     <string name="room_displayname_invite_from">Tinubga sɣur %s</string>
-    <string name="room_displayname_room_invite">Tinubga n texxamt</string>
+    <string name="room_displayname_room_invite">Tinubga ɣer texxamt</string>
 
     <string name="room_displayname_two_members">%1$s d %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s d 1 n wayeḍ</item>
-	<item quantity="other">%1$s d %2$d n wiyaḍ</item>
+	<item quantity="one">%1$s d 1 wayeḍ</item>
+	<item quantity="other">%1$s d %2$d wiyaḍ</item>
 </plurals>
 
-    </resources>
+    <string name="verification_emoji_cactus">Akeṛmus</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Tesremdeḍ awgelhen seg yixef ɣer yixef (alguritm arussin %1$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
+
+    <string name="call_notification_hangup">Ɛelleq</string>
+
+</resources>
