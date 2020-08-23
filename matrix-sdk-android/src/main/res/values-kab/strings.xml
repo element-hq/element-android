@@ -72,13 +72,13 @@
     <string name="verification_emoji_lock">Sekkeṛ</string>
     <string name="verification_emoji_key">Tasarut</string>
     <string name="verification_emoji_hammer">Tafḍist</string>
-    <string name="verification_emoji_telephone">Tiliγri</string>
+    <string name="verification_emoji_telephone">Tiliɣri</string>
     <string name="verification_emoji_flag">Anay</string>
     <string name="verification_emoji_train">Tamacint</string>
     <string name="verification_emoji_bicycle">Azlalam</string>
     <string name="verification_emoji_rocket">Timeẓdit</string>
     <string name="verification_emoji_ball">Balles</string>
-    <string name="verification_emoji_guitar">Tagitaṛt</string>
+    <string name="verification_emoji_guitar">Tagiṭart</string>
     <string name="verification_emoji_trumpet">Lɣiḍa</string>
     <string name="verification_emoji_bell">Anayna</string>
     <string name="verification_emoji_anchor">Tamdeyt</string>
@@ -89,7 +89,7 @@
     <string name="call_notification_answer">Qbel</string>
     <string name="call_notification_reject">Agwi</string>
     <string name="summary_user_sent_sticker">%1$s yuzen amenṭaḍ.</string>
-    <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ</string>
+    <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ.</string>
 
     <string name="notice_room_unban">%1$s yekkes agdal i %2$s</string>
     <string name="notice_room_unban_by_you">Tekkseḍ agdal i %1$s</string>
@@ -192,7 +192,7 @@
 </plurals>
 
     <string name="verification_emoji_cactus">Akeṛmus</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Tesremdeḍ awgelhen seg yixef ɣer yixef (alguritm arussin %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
 
     <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
 
@@ -282,4 +282,11 @@
     <string name="notice_end_to_end_ok">%1$s yermed awgelhen seg yixef ɣer yixef.</string>
     <string name="notice_end_to_end_ok_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s yermed awgelhen seg yixef ɣer yixef (alguritm %2$s ur yettwassen ara).</string>
+    <string name="verification_emoji_wrench">Tasarut</string>
+    <string name="verification_emoji_paperclip">Tamessakt n lkaɣeḍ</string>
+    <string name="verification_emoji_trophy">Tarrazt</string>
+    <string name="clear_timeline_send_queue">Sfeḍ tabdart n uraǧu n tuzzna</string>
+
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s issefsex tinubga n %2$s i tmerniwt ɣer texxamt. Tamentilt: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Tesfesxeḍ tinubga n %1$s i tmerna ɣer texxamt. Tamentilt: %2$s</string>
     </resources>
