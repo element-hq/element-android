@@ -171,4 +171,8 @@
     <string name="network_error">Tuccḍa n uẓeṭṭa</string>
     <string name="matrix_error">Tuccḍa n Matrix</string>
 
+    <string name="notice_made_future_room_visibility">%1$s yerra amazray i d-iteddun ṣer sdat n texxamt yettban i %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Ad terreḍ amazray n texxamt i d-iteddun ɣer sdat yettban i %1$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s issefsax tinubga i %2$s i wakken ad d-yekcem ɣer texxamt</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Tesfesxeḍ tinubga i %1$s i wakken ad d-yernu ɣer texxamt</string>
     </resources>
