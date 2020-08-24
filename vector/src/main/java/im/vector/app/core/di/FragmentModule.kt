@@ -102,6 +102,7 @@ import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
+import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.terms.ReviewTermsFragment
@@ -281,6 +282,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsLabsFragment::class)
     fun bindVectorSettingsLabsFragment(fragment: VectorSettingsLabsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(PushRulesFragment::class)
+    fun bindPushRulesFragment(fragment: PushRulesFragment): Fragment
 
     @Binds
     @IntoMap

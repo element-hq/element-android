@@ -17,7 +17,6 @@ package im.vector.app.features.settings.push
 
 import android.os.Bundle
 import android.view.View
-import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -25,18 +24,17 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericFooterItem
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
-class PushRulesFragment : VectorBaseFragment() {
+class PushRulesFragment @Inject constructor(
+        private val epoxyController: PushRulesController
+) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val viewModel: PushRulesViewModel by fragmentViewModel(PushRulesViewModel::class)
-
-    private val epoxyController by lazy { PushRulesController(StringProvider(requireContext().resources)) }
 
     override fun onResume() {
         super.onResume()
@@ -55,24 +53,5 @@ class PushRulesFragment : VectorBaseFragment() {
 
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)
-    }
-
-    class PushRulesController(private val stringProvider: StringProvider) : TypedEpoxyController<PushRulesViewState>() {
-
-        override fun buildModels(data: PushRulesViewState?) {
-            data?.let {
-                it.rules.forEach {
-                    pushRuleItem {
-                        id(it.ruleId)
-                        pushRule(it)
-                    }
-                }
-            } ?: run {
-                genericFooterItem {
-                    id("footer")
-                    text(stringProvider.getString(R.string.settings_push_rules_no_rules))
-                }
-            }
-        }
     }
 }
