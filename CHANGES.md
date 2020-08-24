@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Display name not shown under Settings/General (#1926)
 
 Translations 🗣:
  -
