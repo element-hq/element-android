@@ -644,7 +644,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Sitzung verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzerschlumpfwesen und bestätige:</string>
+    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung der anderen Nutzer und bestätige:</string>
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
 
@@ -1235,7 +1235,7 @@ Dieser Fehler ist außerhalb von SchildiChat passiert. Es gibt kein Google-Konto
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
-    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfängerwolpertinger haben die Schlüssel um diese Nachrichten zu lesen. 
+    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der Empfänger haben die Schlüssel, um diese Nachrichten zu lesen. 
 \n
 \nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
     <string name="recovery_key_export_saved_as_warning">Der Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert. 
@@ -1329,7 +1329,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
     <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
 \n
-\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein/e Angreiferschlumpfwesen versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
+\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein Angreifer versuchen, auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
     <string name="new_recovery_method_popup_was_me">Ich war es</string>
     <string name="keys_backup_banner_setup_line1">Verliere nie mehr verschlüsselte Nachrichten</string>
     <string name="keys_backup_banner_setup_line2">Richte die Schlüsselsicherung ein</string>
@@ -1714,7 +1714,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
     <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzerschlumpfwesen des Dienstes vertraust</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver, den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
@@ -1959,7 +1959,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
-    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzerschlumpfwesen%1$s. Die angegebenen Anmeldeinformationen sind von Benutzerschlumpfwesen %2$s. Dies wird nicht von SchildiChat unterstützt.
+    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört %1$s. Die angegebenen Anmeldeinformationen sind von %2$s. Dies wird nicht von SchildiChat unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
 
     <string name="permalink_malformed">matrix.to-Link fehlerhaft</string>
@@ -1970,7 +1970,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_show_devices_list">Alle meine Sitzungen anzeigen</string>
     <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
     <string name="settings_developer_mode">Entwicklungsmodus</string>
-    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwicklerwolpertinger!</string>
+    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwickler!</string>
     <string name="settings_rageshake">Wutschütteln</string>
     <string name="settings_rageshake_detection_threshold">Erkennungsschwelle</string>
     <string name="settings_rageshake_detection_threshold_summary">Schüttel dein Telefon, um die Erkennungsschwelle zu testen</string>
@@ -1994,9 +1994,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
     <string name="verification_sas_match">Sie stimmen überein</string>
     <string name="verification_sas_do_not_match">Sie stimmen nicht überein</string>
-    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzerschlumpfwesen, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diesen Benutzer, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
-    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzerschlumpfwesen vertrauenswürdig ist. Vertraue allen Benutzerwolpertinger in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
+    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein Benutzer vertrauenswürdig ist. Vertraue allen Benutzern in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
 
     <string name="verification_conclusion_not_secure">Nicht sicher</string>
     <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein: 
@@ -2064,7 +2064,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_member_power_level_moderators">Moderierende</string>
     <string name="room_member_power_level_custom">benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
-    <string name="room_member_power_level_users">Nutzerschlumpfwesen</string>
+    <string name="room_member_power_level_users">Nutzer</string>
 
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
@@ -2102,7 +2102,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_emoji_notice">Vergleiche die einzigartigen Emoji und stell sicher, dass sie in derselben Reihenfolge angezeigt werden.</string>
     <string name="verification_code_notice">Vergleiche den Code mit dem Code auf dem Bildschirm deines Gegenübers.</string>
     <string name="verification_conclusion_ok_notice">Nachrichten mit diesem Gegenüber sind Ende-zu-Ende verschlüsselt und können nicht von Dritten gelesen werden.</string>
-    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzerwolpertinger sehen sie als vertrauenswürdig an.</string>
+    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer sehen sie als vertrauenswürdig an.</string>
 
 
     <string name="encryption_information_cross_signing_state">Kreuz-Signierung</string>
@@ -2132,7 +2132,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
 
     <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
-    <string name="crosssigning_other_user_not_trust">Andere Benutzerwolpertinger vertrauen ihr möglicherweise nicht</string>
+    <string name="crosssigning_other_user_not_trust">Andere Benutzer vertrauen ihr möglicherweise nicht</string>
     <string name="complete_security">Vollständige Sicherheit</string>
 
     <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
@@ -2149,7 +2149,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) hat sich in einer neuen Sitzung angemeldet:</string>
-    <string name="verification_profile_device_untrust_info">Bis diese/r Benutzerschlumpfwesen dieser Sitzung vertraut, werden an und von ihr/ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
+    <string name="verification_profile_device_untrust_info">Bis dieser Benutzer dieser Sitzung vertraut, werden an und von ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
 
 
     <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
@@ -2197,7 +2197,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="delete_event_dialog_reason_checkbox">Grund hinzufügen</string>
     <string name="delete_event_dialog_reason_hint">Grund für das Editieren</string>
 
-    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht von Benutzerschlumpfwesen, Grund: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht vom Benutzer, Grund: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministration moderiert, Grund: %1$s</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
@@ -2382,7 +2382,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
-    <string name="add_members_to_room">Nutzerschlumpfwesen hinzufügen</string>
+    <string name="add_members_to_room">Nutzer hinzufügen</string>
     <string name="invite_users_to_room_action_invite">EINLADEN</string>
     <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
     <string name="invite_users_to_room_title">Benutzer einladen</string>
