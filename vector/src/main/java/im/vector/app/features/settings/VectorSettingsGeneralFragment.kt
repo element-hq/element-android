@@ -145,12 +145,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.rx()
                 .liveUser(session.myUserId)
                 .unwrap()
-                .distinctUntilChanged { user -> user.displayName }
+                .map { it.displayName ?: "" }
+                .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { user ->
+                .subscribe { displayName ->
                     mDisplayNamePreference.let {
-                        it.summary = user.displayName ?: ""
-                        it.text = user.displayName ?: ""
+                        it.summary = displayName
+                        it.text = displayName
                     }
                 }
                 .disposeOnDestroyView()
