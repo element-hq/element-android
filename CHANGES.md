@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
 
 Other changes:
  -
