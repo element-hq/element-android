@@ -22,7 +22,7 @@
     <string name="title_activity_historical">Historisk</string>
     <string name="title_activity_bug_report">Buggrapport</string>
     <string name="title_activity_group_details">Gemenskapsdetaljer</string>
-    <string name="title_activity_choose_sticker">Skicka ett klistermärke</string>
+    <string name="title_activity_choose_sticker">Skicka en dekal</string>
     <string name="title_activity_keys_backup_setup">Säkerhetskopiering av nycklar</string>
     <string name="title_activity_keys_backup_restore">Använd nyckelsäkerhetskopiering</string>
     <string name="title_activity_verify_device">Verifiera session</string>
@@ -195,13 +195,13 @@
     <string name="call_failed_dont_ask_again">Fråga mig inte igen</string>
 
     <string name="option_send_files">Skicka filer</string>
-    <string name="option_send_sticker">Skicka klistermärke</string>
+    <string name="option_send_sticker">Skicka dekal</string>
     <string name="option_take_photo_video">Ta foto eller video</string>
     <string name="option_take_photo">Ta ett foto</string>
     <string name="option_take_video">Ta en video</string>
 
-    <string name="no_sticker_application_dialog_content">Du har för närvarande inga klistermärkespaket aktiva.
-\n
+    <string name="no_sticker_application_dialog_content">Du har för närvarande inga dekalpaket aktiva. 
+\n 
 \nLägg till några nu\?</string>
 
     <string name="go_on_with">fortsätt med…</string>
@@ -435,7 +435,7 @@
     <string name="room_participants_action_remove">Ta bort från det här rummet</string>
     <string name="room_participants_action_ban">Banna</string>
     <string name="room_participants_action_unban">Avbanna</string>
-    <string name="room_participants_action_kick">Kasta ut</string>
+    <string name="room_participants_action_kick">Kicka</string>
     <string name="room_participants_action_set_default_power_level">Återställ till vanlig användare</string>
     <string name="room_participants_action_set_moderator">Gör till moderator</string>
     <string name="room_participants_action_set_admin">Gör till administratör</string>
@@ -969,7 +969,7 @@
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_integrations">Integrationer</string>
-    <string name="settings_integrations_summary">Använd en integrationshanterare för att hantera bottar, bryggor, widgets och klistermärkespaket. 
+    <string name="settings_integrations_summary">Använd en integrationshanterare för att hantera bottar, bryggor, widgets och dekalpaket. 
 \nIntegrationshanterare får konfigurationsdata, och kan ändra widgets, skicka rumsinbjudningar, och ändra behörighetsnivåer å dina vägnar.</string>
     <string name="settings_send_message_with_enter">Skicka meddelande med retur</string>
     <string name="settings_send_message_with_enter_summary">Returtangenten på mjukvarutangentbordet kommer att skicka ett meddelande istället för att lägga till ett radslut</string>
@@ -1050,7 +1050,7 @@
     <string name="labs_merge_e2e_in_timeline">Sammanfogaren misslyckades med att avkryptera ett meddelande i tidslinjen</string>
     <string name="add_by_matrix_id">Lägg till med Matrix-ID</string>
     <string name="direct_room_no_known_users">Inga resultat hittade, använd \"Lägg till med Matrix-ID\" för att söka på servern.</string>
-    <string name="terms_description_for_integration_manager">Använd bottar, bryggor, widgets och klistermärkespaket</string>
+    <string name="terms_description_for_integration_manager">Använd bottar, bryggor, widgets och dekalpaket</string>
 
     <string name="settings_text_message_sent">Ett textmeddelande har skickats till %s. Vänligen skriv in verifieringskoden det innehåller.</string>
     <string name="error_file_too_big">Filen \'%1$s\' (%2$s) är för stor för att laddas upp. Gränsen är %3$s.</string>
@@ -1060,14 +1060,14 @@
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_audio">Ljud</string>
     <string name="attachment_type_gallery">Galleri</string>
-    <string name="attachment_type_sticker">Klistermärke</string>
+    <string name="attachment_type_sticker">Dekal</string>
     <string name="command_description_spoiler">Skickar det valda meddelandet som en spoiler</string>
     <string name="login_server_matrix_org_text">Gå med miljontals användare gratis på den största publika servern</string>
     <string name="command_description_shrug">Lägger till ¯\\_(ツ)_/¯ till början av ett textmeddelande</string>
 
     <string name="sent_an_audio_file">Ljud</string>
     <string name="sent_a_file">Fil</string>
-    <string name="send_a_sticker">Klistermärke</string>
+    <string name="send_a_sticker">Dekal</string>
 
     <string name="rendering_event_error_type_of_message_not_handled">Element hanterar inte meddelanden av typen \'%1$s\'</string>
     <string name="command_description_rainbow">Skickar det valda meddelandet I regnbågsfärger</string>
@@ -1151,15 +1151,15 @@
     <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från hen igen.</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt inbjudan</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
-    <string name="room_participants_kick_title">Sparka ut användaren</string>
-    <string name="room_participants_kick_reason">Anledning för utsparkning</string>
+    <string name="room_participants_kick_title">Kicka användaren</string>
+    <string name="room_participants_kick_reason">Anledning för kick</string>
     <string name="room_participants_kick_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
 \n
 \nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.</string>
     <string name="room_participants_ban_title">Banna användaren</string>
     <string name="room_participants_ban_reason">Anledning för bann</string>
     <string name="room_participants_unban_title">Avbanna användaren</string>
-    <string name="room_participants_ban_prompt_msg">Att banna användaren kommer att sparka ut hen från det här rummet och hindra hen från att gå med igen.</string>
+    <string name="room_participants_ban_prompt_msg">Att banna användaren kommer att kicka hen från det här rummet och hindra hen från att gå med igen.</string>
     <string name="room_participants_unban_prompt_msg">Att avbanna användaren kommer att låta hen gå med i rummet igen.</string>
 
     <string name="reason_hint">Anledning</string>
