@@ -76,6 +76,7 @@ import im.vector.app.features.rageshake.BugReportActivity
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.RageShake
 import im.vector.app.features.session.SessionListener
+import im.vector.app.features.settings.FontScale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
@@ -219,6 +220,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
         doBeforeSetContentView()
 
+        // Hack for font size
+        applyFontSize()
+
         if (getLayoutRes() != -1) {
             setContentView(getLayoutRes())
         }
@@ -237,6 +241,16 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 setTitle(titleRes)
             }
         }
+    }
+
+    /**
+     * This method has to be called for the font size setting be supported correctly.
+     */
+    private fun applyFontSize() {
+        resources.configuration.fontScale = FontScale.getFontScaleValue(this).scale
+
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
     }
 
     private fun handleGlobalError(globalError: GlobalError) {
@@ -302,10 +316,10 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PinActivity.PIN_REQUEST_CODE) {
             when (resultCode) {
-                Activity.RESULT_OK                 -> {
+                Activity.RESULT_OK -> {
                     pinLocker.unlock()
                 }
-                else                               -> {
+                else               -> {
                     pinLocker.block()
                     moveTaskToBack(true)
                 }

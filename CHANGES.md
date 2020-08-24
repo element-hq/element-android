@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
  - Fix changing language issue
+ - Fix FontSize issue (#1483, #1787)
 
 Translations 🗣:
  -
