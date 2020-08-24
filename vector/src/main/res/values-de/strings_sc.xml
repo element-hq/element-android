@@ -16,7 +16,7 @@
     <string name="sc_colored_theme">SC Schwarz, bunte Blasen</string>
     <string name="sc_dark_colored_theme">SC Dunkel, bunte Blasen</string>
 
-    <string name="bubble_style">Nachrichtblasen</string>
+    <string name="bubble_style">Sprechblasen</string>
     <string name="bubble_style_none">Keine</string>
     <string name="bubble_style_start">Selbe Seite</string>
     <string name="bubble_style_both">Beide Seiten</string>
@@ -32,7 +32,7 @@
     <string name="login_connect_using_matrix_id_text_sc">z. B. @user:domain.com</string>
     <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
     <string name="login_server_other_title_sc">Benutzerdefinierter Server</string>
-    <string name="login_server_other_text_sc">Erweiterte Server-Einstellungen</string>
+    <string name="login_server_other_text_sc">Serveradresse angeben zum Anmelden oder Registrieren</string>
 
     <string name="show_room_info_sc">Rauminfo</string>
     <string name="show_participants_sc">Teilnehmer</string>

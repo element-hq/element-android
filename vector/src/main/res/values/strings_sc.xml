@@ -32,7 +32,7 @@
     <string name="login_connect_using_matrix_id_text_sc">e.g. @user:domain.com</string>
     <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
     <string name="login_server_other_title_sc">Custom server</string>
-    <string name="login_server_other_text_sc">Advanced server settings</string>
+    <string name="login_server_other_text_sc">Enter server address to login or register</string>
 
     <string name="show_room_info_sc">Room details</string>
     <string name="show_participants_sc">Participants</string>
