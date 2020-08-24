@@ -37,3 +37,7 @@ git add -A
 git commit -m "Automatic SchildiChat string correction"
 
 popd > /dev/null
+
+mydir="$(dirname "$(realpath "$0")")"
+echo -e "\033[1;33m""Please fix -schlumpfwesen and -wolpertinger cases manually!""\033[0m"
+echo "- $mydir/vector/src/main/res/values-de/strings.xml"
