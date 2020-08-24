@@ -268,7 +268,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize = 0
+                    var newSize: Int
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
