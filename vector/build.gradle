@@ -19,7 +19,7 @@ ext.versionMajor = 1
 ext.versionMinor = 0
 ext.versionPatch = 5
 
-ext.scVersion = 16
+ext.scVersion = 17
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
