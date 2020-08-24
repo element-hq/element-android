@@ -17,7 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
-import android.content.Context
+import io.realm.Realm
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -34,14 +34,15 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
-import io.realm.Realm
+import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
 /**
  * This class computes room display name
  */
-internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
-                                                           @UserId private val userId: String
+internal class RoomDisplayNameResolver @Inject constructor(
+        private val stringProvider: StringProvider,
+        @UserId private val userId: String
 ) {
 
     /**
@@ -89,7 +90,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                         .findFirst()
                         ?.displayName
             } else {
-                context.getString(R.string.room_displayname_room_invite)
+                stringProvider.getString(R.string.room_displayname_room_invite)
             }
         } else if (roomEntity?.membership == Membership.JOIN) {
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
@@ -108,13 +109,13 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
-                0    -> context.getString(R.string.room_displayname_empty_room)
-                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
-                2    -> context.getString(R.string.room_displayname_two_members,
+                0 -> stringProvider.getString(R.string.room_displayname_empty_room)
+                1 -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                2 -> stringProvider.getString(R.string.room_displayname_two_members,
                         resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                         resolveRoomMemberName(otherMembersSubset[1], roomMembers)
                 )
-                else -> context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
+                else -> stringProvider.getQuantityString(R.plurals.room_displayname_three_and_more_members,
                         roomMembers.getNumberOfJoinedMembers() - 1,
                         resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                         roomMembers.getNumberOfJoinedMembers() - 1)
