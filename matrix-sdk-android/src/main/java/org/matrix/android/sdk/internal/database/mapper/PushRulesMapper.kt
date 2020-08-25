@@ -17,12 +17,12 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import com.squareup.moshi.Types
-import org.matrix.android.sdk.api.pushrules.Condition
+import io.realm.RealmList
+import org.matrix.android.sdk.api.pushrules.Kind
 import org.matrix.android.sdk.api.pushrules.rest.PushCondition
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import io.realm.RealmList
 import timber.log.Timber
 
 internal object PushRulesMapper {
@@ -39,7 +39,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.EventMatch.value, "content.body", pushrule.pattern)
+                        PushCondition(Kind.EventMatch.value, "content.body", pushrule.pattern)
                 )
         )
     }
@@ -60,7 +60,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.EventMatch.value, "room_id", pushrule.ruleId)
+                        PushCondition(Kind.EventMatch.value, "room_id", pushrule.ruleId)
                 )
         )
     }
@@ -72,7 +72,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.EventMatch.value, "user_id", pushrule.ruleId)
+                        PushCondition(Kind.EventMatch.value, "user_id", pushrule.ruleId)
                 )
         )
     }

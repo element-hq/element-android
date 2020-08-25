@@ -21,6 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.pushrules.Condition
 import org.matrix.android.sdk.api.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.pushrules.EventMatchCondition
+import org.matrix.android.sdk.api.pushrules.Kind
 import org.matrix.android.sdk.api.pushrules.RoomMemberCountCondition
 import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
@@ -59,8 +60,8 @@ data class PushCondition(
 ) {
 
     fun asExecutableCondition(): Condition? {
-        return when (Condition.Kind.fromString(kind)) {
-            Condition.Kind.EventMatch                   -> {
+        return when (Kind.fromString(kind)) {
+            Kind.EventMatch                   -> {
                 if (key != null && pattern != null) {
                     EventMatchCondition(key, pattern)
                 } else {
@@ -68,10 +69,10 @@ data class PushCondition(
                     null
                 }
             }
-            Condition.Kind.ContainsDisplayName          -> {
+            Kind.ContainsDisplayName          -> {
                 ContainsDisplayNameCondition()
             }
-            Condition.Kind.RoomMemberCount              -> {
+            Kind.RoomMemberCount              -> {
                 if (iz.isNullOrEmpty()) {
                     Timber.e("Malformed ROOM_MEMBER_COUNT condition")
                     null
@@ -79,7 +80,7 @@ data class PushCondition(
                     RoomMemberCountCondition(iz)
                 }
             }
-            Condition.Kind.SenderNotificationPermission -> {
+            Kind.SenderNotificationPermission -> {
                 if (key == null) {
                     Timber.e("Malformed Sender Notification Permission condition")
                     null
@@ -87,7 +88,7 @@ data class PushCondition(
                     SenderNotificationPermissionCondition(key)
                 }
             }
-            Condition.Kind.Unrecognised                 -> {
+            Kind.Unrecognised                 -> {
                 Timber.e("Unknown kind $kind")
                 null
             }
