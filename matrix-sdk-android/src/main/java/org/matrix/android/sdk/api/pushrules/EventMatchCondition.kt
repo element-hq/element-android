@@ -43,7 +43,7 @@ class EventMatchCondition(
         return conditionResolver.resolveEventMatchCondition(event, this)
     }
 
-    override fun technicalDescription() = "'$key' Matches '$pattern', words only '$wordsOnly'"
+    override fun technicalDescription() = "'$key' matches '$pattern', words only '$wordsOnly'"
 
     fun isSatisfied(event: Event): Boolean {
         // TODO encrypted events?
