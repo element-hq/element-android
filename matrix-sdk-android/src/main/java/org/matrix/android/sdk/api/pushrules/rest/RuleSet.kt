@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 
 /**
@@ -51,7 +52,7 @@ data class RuleSet(
         var result: PushRuleAndKind? = null
         // sanity check
         if (null != ruleId) {
-            if (PushRule.RULE_ID_CONTAIN_USER_NAME == ruleId) {
+            if (RuleIds.RULE_ID_CONTAIN_USER_NAME == ruleId) {
                 result = findRule(content, ruleId)?.let { PushRuleAndKind(it, RuleSetKey.CONTENT) }
             } else {
                 // assume that the ruleId is unique.
