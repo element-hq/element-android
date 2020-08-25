@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Wrong markdown parsing (#350, #1375, #1982)
 
 Translations 🗣:
  -
