@@ -31,21 +31,25 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 
-class PushrulesConditionTest: MatrixTest {
+class PushrulesConditionTest : MatrixTest {
 
     /* ==========================================================================================
      * Test EventMatchCondition
      * ========================================================================================== */
 
+    private fun createSimpleTextEvent(text: String): Event {
+        return Event(
+                type = "m.room.message",
+                eventId = "mx0",
+                content = MessageTextContent("m.text", text).toContent(),
+                originServerTs = 0)
+    }
+
     @Test
     fun test_eventmatch_type_condition() {
         val condition = EventMatchCondition("type", "m.room.message", false)
 
-        val simpleTextEvent = Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "Yo wtf?").toContent(),
-                originServerTs = 0)
+        val simpleTextEvent = createSimpleTextEvent("Yo wtf?")
 
         val rm = RoomMemberContent(
                 Membership.INVITE,
@@ -67,11 +71,7 @@ class PushrulesConditionTest: MatrixTest {
     fun test_eventmatch_path_condition() {
         val condition = EventMatchCondition("content.msgtype", "m.text", false)
 
-        val simpleTextEvent = Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "Yo wtf?").toContent(),
-                originServerTs = 0)
+        val simpleTextEvent = createSimpleTextEvent("Yo wtf?")
 
         assert(condition.isSatisfied(simpleTextEvent))
 
@@ -94,49 +94,22 @@ class PushrulesConditionTest: MatrixTest {
     fun test_eventmatch_cake_condition() {
         val condition = EventMatchCondition("content.body", "cake", false)
 
-        Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "How was the cake?").toContent(),
-                originServerTs = 0
-        ).apply {
-            assert(condition.isSatisfied(this))
-        }
-
-        Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "Howwasthecake?").toContent(),
-                originServerTs = 0
-        ).apply {
-            assert(condition.isSatisfied(this))
-        }
+        assert(condition.isSatisfied(createSimpleTextEvent("How was the cake?")))
+        assert(condition.isSatisfied(createSimpleTextEvent("Howwasthecake?")))
     }
 
     @Test
     fun test_eventmatch_cakelie_condition() {
         val condition = EventMatchCondition("content.body", "cake*lie", false)
 
-        val simpleTextEvent = Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "How was the cakeisalie?").toContent(),
-                originServerTs = 0)
-
-        assert(condition.isSatisfied(simpleTextEvent))
+        assert(condition.isSatisfied(createSimpleTextEvent("How was the cakeisalie?")))
     }
 
     @Test
     fun test_eventmatch_words_only_condition() {
         val condition = EventMatchCondition("content.body", "ben", true)
 
-        val simpleTextEvent = Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "benoit").toContent(),
-                originServerTs = 0)
-
-        assertFalse(condition.isSatisfied(simpleTextEvent))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("benoit")))
     }
 
     @Test
