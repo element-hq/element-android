@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Words containing my name should not trigger notifications (#1781)
 
 Translations 🗣:
  -

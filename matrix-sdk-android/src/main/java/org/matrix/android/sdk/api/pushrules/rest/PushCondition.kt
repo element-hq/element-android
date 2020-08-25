@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.pushrules.EventMatchCondition
 import org.matrix.android.sdk.api.pushrules.Kind
 import org.matrix.android.sdk.api.pushrules.RoomMemberCountCondition
+import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
@@ -59,11 +60,11 @@ data class PushCondition(
         val iz: String? = null
 ) {
 
-    fun asExecutableCondition(): Condition? {
+    fun asExecutableCondition(rule: PushRule): Condition? {
         return when (Kind.fromString(kind)) {
             Kind.EventMatch                   -> {
                 if (key != null && pattern != null) {
-                    EventMatchCondition(key, pattern)
+                    EventMatchCondition(key, pattern, rule.ruleId == RuleIds.RULE_ID_CONTAIN_USER_NAME)
                 } else {
                     Timber.e("Malformed Event match condition")
                     null
