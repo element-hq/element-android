@@ -18,6 +18,8 @@ package org.matrix.android.sdk.api.pushrules
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.util.hasSpecialGlobChar
+import org.matrix.android.sdk.internal.util.simpleGlobToRegExp
 import timber.log.Timber
 
 class EventMatchCondition(
@@ -47,7 +49,7 @@ class EventMatchCondition(
         // Patterns with no special glob characters should be treated as having asterisks prepended
         // and appended when testing the condition.
         try {
-            val modPattern = if (hasSpecialGlobChar(pattern)) simpleGlobToRegExp(pattern) else simpleGlobToRegExp("*$pattern*")
+            val modPattern = if (pattern.hasSpecialGlobChar()) pattern.simpleGlobToRegExp() else "*$pattern*".simpleGlobToRegExp()
             val regex = Regex(modPattern, RegexOption.DOT_MATCHES_ALL)
             return regex.containsMatchIn(value)
         } catch (e: Throwable) {
@@ -75,28 +77,5 @@ class EventMatchCondition(
             }
         }
         return null
-    }
-
-    companion object {
-
-        private fun hasSpecialGlobChar(glob: String): Boolean {
-            return glob.contains("*") || glob.contains("?")
-        }
-
-        // Very simple glob to regexp converter
-        private fun simpleGlobToRegExp(glob: String): String {
-            var out = "" // "^"
-            for (element in glob) {
-                when (element) {
-                    '*'  -> out += ".*"
-                    '?'  -> out += '.'.toString()
-                    '.'  -> out += "\\."
-                    '\\' -> out += "\\\\"
-                    else -> out += element
-                }
-            }
-            out += "" // '$'.toString()
-            return out
-        }
     }
 }
