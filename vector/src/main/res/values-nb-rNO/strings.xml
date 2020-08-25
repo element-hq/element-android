@@ -345,7 +345,7 @@
     <string name="invited_by">Invitert av %s</string>
 
     <string name="title_activity_emoji_reaction_picker">Reaksjoner</string>
-    <string name="reactions_like">Like</string>
+    <string name="reactions_like">Liker</string>
     <string name="reactions">Reaksjoner</string>
 
     <string name="action_change">Endre</string>
@@ -671,7 +671,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Kan ikke starte samtale</string>
     <string name="device_information">Informasjon om Økten</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferansesamtaler er ikke støttet i enkrypterte rom</string>
-    <string name="call_anyway">Ring likevel.</string>
+    <string name="call_anyway">Ring likevel</string>
     <string name="send_anyway">Send likevel</string>
     <string name="action_sign_out_confirmation_simple">Er du sikker på at vil logge ut\?</string>
     <string name="action_voice_call">Telefonsamtale</string>
@@ -729,4 +729,51 @@
     <string name="start_new_chat_prompt_msg">Er du sikker på du vil starte en samtale med %s\?</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på du vil starte en lydsamtale\?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på du vil starte en videosamtale\?</string>
-</resources>
+<string name="play_video">Spill av</string>
+    <string name="pause_video">Pause</string>
+    <string name="dismiss">Avslå</string>
+
+
+    <string name="no_permissions_to_start_conf_call">Du har ikke rettigheter til å starte en konferansesamtale i dette rommet</string>
+    <string name="conference_call_in_progress">Det pågår allerede en konferanse!</string>
+    <string name="video_meeting">Start videomøte</string>
+    <string name="audio_meeting">Start lydmøte</string>
+    <string name="audio_video_meeting_description">Møter bruker sikkerhets- og tilgangsregler fra Jitsi. Alle i rommet vil kunne se en invitasjon til møtet mens det pågår.</string>
+    <string name="cannot_call_yourself">Du kan ikke ringe deg selv</string>
+    <string name="cannot_call_yourself_with_invite">Du kan ikke ringe deg selv. Vent til inviterte deltakere godtar invitasjonen</string>
+    <string name="failed_to_add_widget">Kunne ikke legge til utvidelse</string>
+    <string name="failed_to_remove_widget">Kunne ikke fjerne utvidelse</string>
+    <string name="action_copy">Kopier</string>
+    <string name="dialog_title_success">Suksess</string>
+
+    <string name="bottom_action_notification">Varsler</string>
+    <string name="call_failed_no_ice_title">Oppringing feilet som følge av feilkonfigurert tjener</string>
+    <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
+    <string name="call_failed_dont_ask_again">Ikke spør meg igjen</string>
+
+    <string name="call_failed_no_connection">Element samtale feilet</string>
+    <string name="call_select_sound_device">Velg lydenhet</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Høytaler</string>
+    <string name="sound_device_headset">Hodesett</string>
+    <string name="sound_device_wireless_headset">Trådløst hodesett</string>
+    <string name="call_switch_camera">Bytt kamera</string>
+    <string name="call_camera_front">Foran</string>
+    <string name="call_camera_back">Bak</string>
+    <string name="call_format_turn_hd_off">Slå HD av</string>
+    <string name="call_format_turn_hd_on">Slå HD på</string>
+
+    <string name="option_send_files">Send filer</string>
+    <string name="option_send_sticker">Send klistremerke</string>
+    <string name="option_take_photo_video">Ta bilde eller video</string>
+    <string name="no_sticker_application_dialog_content">Du har ingen pakker med klistremerker slått på.
+\n
+\nLegge til noen nå\?</string>
+
+    <string name="go_on_with">fortsett med…</string>
+    <string name="error_no_external_application_found">Dessverre, kunne ikke finne en passende ekstern applikasjon for å utføre denne handlingen.</string>
+
+    <string name="auth_login_sso">Logg på med single sign-on</string>
+    <string name="auth_user_id_placeholder">E-post eller brukernavn</string>
+    <string name="auth_user_name_placeholder">Brukernavn</string>
+    </resources>

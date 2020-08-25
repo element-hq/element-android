@@ -204,4 +204,16 @@
     <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
 
     <string name="notice_room_created">%1$s създаде стаята</string>
-</resources>
+<string name="summary_you_sent_image">Изпратихте снимка.</string>
+    <string name="summary_you_sent_sticker">Изпратихте стикер.</string>
+
+    <string name="notice_room_invite_no_invitee_by_you">Ваша покана</string>
+    <string name="notice_room_created_by_you">Създадохте стаята</string>
+    <string name="notice_room_invite_by_you">Поканихте %1$s</string>
+    <string name="notice_room_join_by_you">Присъединихте се в стаята</string>
+    <string name="notice_room_leave_by_you">Напуснахте стаята</string>
+    <string name="notice_room_reject_by_you">Отхвърлихте поканата</string>
+    <string name="notice_room_kick_by_you">Изгонихте %1$s</string>
+    <string name="notice_room_unban_by_you">Отблокирахте %1$s</string>
+    <string name="notice_room_ban_by_you">Блокирахте %1$s</string>
+    </resources>
