@@ -660,7 +660,7 @@
     <string name="settings_notifications_targets">Aviseringsmål</string>
     <string name="settings_send_typing_notifs">Skicka \"skriver\"-statusar</string>
     <string name="settings_send_markdown_summary">Formatera meddelanden med Markdown-syntax innan de skickas. Detta tillåter avancerad formatering som att använda asterisker för att visa kursiv text.</string>
-    <string name="settings_always_show_timestamps">Visa tidpunkt för alla meddelanden</string>
+    <string name="settings_always_show_timestamps">Visa tidsstämplar för alla meddelanden</string>
     <string name="settings_show_join_leave_messages">Visa när folk går med och lämnar</string>
     <string name="settings_preview_media_before_sending">Förhandsgranska media innan den skickas</string>
     <string name="settings_deactivate_account_section">Inaktivera konto</string>
@@ -1576,7 +1576,7 @@
     <string name="settings_home_display">Hemskärm</string>
     <string name="settings_inline_url_preview">Inbäddade URL-förhandsgranskningar</string>
     <string name="settings_inline_url_preview_summary">Förhandsgranska länkar i chatten om din hemserver stöder den här funktionen.</string>
-    <string name="settings_12_24_timestamps">Visa tidpunkter i 12-timmarsformat</string>
+    <string name="settings_12_24_timestamps">Visa tidsstämplar i 12-timmarsformat</string>
     <string name="settings_show_join_leave_messages_summary">Inbjudningar, utsparkningar och bann påverkas inte.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Visa kontohändelser</string>
     <string name="settings_vibrate_on_mention">Vibrera när en användare nämns</string>
