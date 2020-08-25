@@ -533,4 +533,16 @@
 
     <string name="missing_permissions_warning">Imi xuṣṣent tsirag, izmer ur ttilint ara kra n tmahilin…</string>
     <string name="missing_permissions_to_start_conf_call">Tesriḍ tisirag akken ad tebduḍ asarag deg texxamt-a</string>
+    <string name="missing_permissions_error">Imi llant tsirag i ixuṣṣen, tigawt-a ur tezmir ara ad tili.</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Isiwlen isaragen ur ttwasefraken ara deg texxamin yettwawgelhen</string>
+    <string name="call_anyway">Ɣas siwel kan</string>
+    <string name="send_anyway">Ɣas azen kan</string>
+    <string name="action_sign_out_confirmation_simple">Tebɣiḍ s tidet ad teffɣeḍ\?</string>
+    <string name="action_voice_call">Asiwel aɣectan</string>
+    <string name="action_video_call">Asiwel s tvidyut</string>
+    <string name="action_global_search">Anadi amatu</string>
+    <string name="action_quick_reply">Tiririt taruradt</string>
+    <string name="action_mark_room_read">Creḍ yettwaɣra</string>
+    <string name="copied_to_clipboard">Nɣel deg \"ɣef ufus\"</string>
+    <string name="home_filter_placeholder_home">Sizdeg ismawen n texxamin</string>
     </resources>
