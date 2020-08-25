@@ -110,6 +110,15 @@ class PushrulesConditionTest : MatrixTest {
         val condition = EventMatchCondition("content.body", "ben", true)
 
         assertFalse(condition.isSatisfied(createSimpleTextEvent("benoit")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("Hello benoit")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("superben")))
+
+        assert(condition.isSatisfied(createSimpleTextEvent("ben")))
+        assert(condition.isSatisfied(createSimpleTextEvent("hello ben")))
+        assert(condition.isSatisfied(createSimpleTextEvent("ben is there")))
+        assert(condition.isSatisfied(createSimpleTextEvent("hello ben!")))
+        assert(condition.isSatisfied(createSimpleTextEvent("hello Ben!")))
+        assert(condition.isSatisfied(createSimpleTextEvent("BEN")))
     }
 
     @Test
