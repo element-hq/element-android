@@ -54,8 +54,8 @@ internal class MarkdownParser @Inject constructor(
         return if (isFormattedTextPertinent(text, cleanHtmlText)) {
             // According to https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
-            val plainText = textContentRenderer.render(document)
-            TextContent(plainText, cleanHtmlText.postTreatment())
+            // val plainText = textContentRenderer.render(document)
+            TextContent(text, cleanHtmlText.postTreatment())
         } else {
             TextContent(text)
         }
@@ -72,6 +72,6 @@ internal class MarkdownParser @Inject constructor(
                 // Remove extra space before and after the content
                 .trim()
                 // There is no need to include new line in an html-like source
-                .replace("\n", "")
+                //.replace("\n", "")
     }
 }
