@@ -28,6 +28,7 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.terms.ReviewTermsActivity
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -50,7 +51,7 @@ interface Navigator {
 
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
-    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)
+    fun openNotJoinedRoom(context: Context, roomId: String, eventId: String? = null, roomSummary: RoomSummary?, buildTask: Boolean = false)
 
     fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
 

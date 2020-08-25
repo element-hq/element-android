@@ -54,6 +54,7 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.roommemberprofile.RoomMemberProfileActivity
 import im.vector.app.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileActivity
@@ -64,6 +65,7 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -156,12 +158,16 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open not joined room")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
+    override fun openNotJoinedRoom(context: Context, roomId: String, eventId: String?, roomSummary: RoomSummary?, buildTask: Boolean) {
+        val roomPreviewData = RoomPreviewData(
+                roomId = roomId,
+                eventId = eventId,
+                roomAlias = roomSummary?.canonicalAlias,
+                roomName = roomSummary?.displayName,
+                avatarUrl = roomSummary?.avatarUrl
+        )
+        val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
+        context.startActivity(intent)
     }
 
     override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {

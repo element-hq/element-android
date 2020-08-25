@@ -24,20 +24,22 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.util.MatrixItem
-import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class RoomPreviewData(
         val roomId: String,
-        val roomName: String?,
-        val roomAlias: String?,
-        val topic: String?,
-        val worldReadable: Boolean,
-        val avatarUrl: String?,
-        val homeServer: String?
+        val eventId: String? = null,
+        val roomName: String? = null,
+        val roomAlias: String? = null,
+        val topic: String? = null,
+        val worldReadable: Boolean = false,
+        val avatarUrl: String? = null,
+        val homeServer: String? = null,
+        val buildTask: Boolean = false
 ) : Parcelable {
     val matrixItem: MatrixItem
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
@@ -47,6 +49,12 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
         private const val ARG = "ARG"
+
+        fun newIntent(context: Context, roomPreviewData: RoomPreviewData): Intent {
+            return Intent(context, RoomPreviewActivity::class.java).apply {
+                putExtra(ARG, roomPreviewData)
+            }
+        }
 
         fun getIntent(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData): Intent {
             return Intent(context, RoomPreviewActivity::class.java).apply {
