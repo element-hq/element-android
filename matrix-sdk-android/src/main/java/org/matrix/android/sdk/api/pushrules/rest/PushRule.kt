@@ -63,7 +63,7 @@ data class PushRule(
      * Add the default notification sound.
      */
     fun setNotificationSound(): PushRule {
-        return setNotificationSound(ACTION_VALUE_DEFAULT)
+        return setNotificationSound(Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT)
     }
 
     fun getNotificationSound(): String? {
@@ -109,13 +109,13 @@ data class PushRule(
     fun setNotify(notify: Boolean): PushRule {
         val mutableActions = actions.toMutableList()
 
-        mutableActions.remove(ACTION_DONT_NOTIFY)
-        mutableActions.remove(ACTION_NOTIFY)
+        mutableActions.remove(Action.ACTION_DONT_NOTIFY)
+        mutableActions.remove(Action.ACTION_NOTIFY)
 
         if (notify) {
-            mutableActions.add(ACTION_NOTIFY)
+            mutableActions.add(Action.ACTION_NOTIFY)
         } else {
-            mutableActions.add(ACTION_DONT_NOTIFY)
+            mutableActions.add(Action.ACTION_DONT_NOTIFY)
         }
 
         return copy(actions = mutableActions)
@@ -126,32 +126,12 @@ data class PushRule(
      *
      * @return true if the rule should play sound
      */
-    fun shouldNotify() = actions.contains(ACTION_NOTIFY)
+    fun shouldNotify() = actions.contains(Action.ACTION_NOTIFY)
 
     /**
      * Return true if the rule should not highlight the event.
      *
      * @return true if the rule should not play sound
      */
-    fun shouldNotNotify() = actions.contains(ACTION_DONT_NOTIFY)
-
-    companion object {
-
-        /* ==========================================================================================
-         * Actions
-         * ========================================================================================== */
-
-        const val ACTION_NOTIFY = "notify"
-        const val ACTION_DONT_NOTIFY = "dont_notify"
-        const val ACTION_COALESCE = "coalesce"
-
-        const val ACTION_SET_TWEAK_SOUND_VALUE = "sound"
-        const val ACTION_SET_TWEAK_HIGHLIGHT_VALUE = "highlight"
-
-        const val ACTION_PARAMETER_SET_TWEAK = "set_tweak"
-        const val ACTION_PARAMETER_VALUE = "value"
-
-        const val ACTION_VALUE_DEFAULT = "default"
-        const val ACTION_VALUE_RING = "ring"
-    }
+    fun shouldNotNotify() = actions.contains(Action.ACTION_DONT_NOTIFY)
 }

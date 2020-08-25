@@ -23,6 +23,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
+import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
@@ -145,9 +146,9 @@ class PushRulePreference : VectorPreference {
                     if (NOTIFICATION_NOISY_INDEX == index) {
                         newRule.setNotificationSound(
                                 if (safeRule.ruleId == RuleIds.RULE_ID_CALL) {
-                                    PushRule.ACTION_VALUE_RING
+                                    Action.ACTION_OBJECT_VALUE_VALUE_RING
                                 } else {
-                                    PushRule.ACTION_VALUE_DEFAULT
+                                    Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT
                                 }
                         )
                     } else {
