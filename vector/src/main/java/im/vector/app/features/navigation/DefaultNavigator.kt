@@ -158,18 +158,6 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openNotJoinedRoom(context: Context, roomId: String, eventId: String?, roomSummary: RoomSummary?, buildTask: Boolean) {
-        val roomPreviewData = RoomPreviewData(
-                roomId = roomId,
-                eventId = eventId,
-                roomAlias = roomSummary?.canonicalAlias,
-                roomName = roomSummary?.displayName,
-                avatarUrl = roomSummary?.avatarUrl
-        )
-        val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
-        context.startActivity(intent)
-    }
-
     override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
         if (context is VectorBaseActivity) {
             context.notImplemented("Open group detail")
@@ -192,7 +180,12 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData) {
-        val intent = RoomPreviewActivity.getIntent(context, publicRoom, roomDirectoryData)
+        val intent = RoomPreviewActivity.newIntent(context, publicRoom, roomDirectoryData)
+        context.startActivity(intent)
+    }
+
+    override fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData) {
+        val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
         context.startActivity(intent)
     }
 

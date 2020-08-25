@@ -28,8 +28,10 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -42,17 +44,22 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
     override fun buildModels(viewState: PublicRoomsViewState) {
         val publicRooms = viewState.publicRooms
 
-        if (publicRooms.isEmpty()
-                && viewState.asyncPublicRoomsRequest is Success) {
+        val unknownRoomItem = viewState.buildUnknownRoomIfNeeded()
+
+        val noResult = publicRooms.isEmpty() && viewState.asyncPublicRoomsRequest is Success && unknownRoomItem == null
+        if (noResult) {
             // No result
             noResultItem {
                 id("noResult")
                 text(stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
+
             publicRooms.forEach {
                 buildPublicRoom(it, viewState)
             }
+
+            unknownRoomItem?.addTo(this)
 
             if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success)
                     || viewState.asyncPublicRoomsRequest is Incomplete) {
@@ -109,7 +116,29 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         }
     }
 
+    private fun PublicRoomsViewState.buildUnknownRoomIfNeeded(): UnknownRoomItem? {
+        val roomIdOrAlias = currentFilter.trim()
+        val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.canonicalAlias == roomIdOrAlias }
+        val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.roomId == roomIdOrAlias }
+        val roomItem = when {
+            isAlias  -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
+            isRoomId -> MatrixItem.RoomItem(roomIdOrAlias)
+            else     -> null
+        }
+        return roomItem?.let {
+            UnknownRoomItem_().apply {
+                id(roomIdOrAlias)
+                matrixItem(roomItem)
+                avatarRenderer(this@PublicRoomsController.avatarRenderer)
+                globalListener {
+                    callback?.onUnknownRoomClicked(roomIdOrAlias)
+                }
+            }
+        }
+    }
+
     interface Callback {
+        fun onUnknownRoomClicked(roomIdOrAlias: String)
         fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState)
         fun onPublicRoomJoin(publicRoom: PublicRoom)
         fun loadMore()

@@ -56,18 +56,17 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
-        fun getIntent(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData): Intent {
-            return Intent(context, RoomPreviewActivity::class.java).apply {
-                putExtra(ARG, RoomPreviewData(
-                        roomId = publicRoom.roomId,
-                        roomName = publicRoom.name,
-                        roomAlias = publicRoom.getPrimaryAlias(),
-                        topic = publicRoom.topic,
-                        worldReadable = publicRoom.worldReadable,
-                        avatarUrl = publicRoom.avatarUrl,
-                        homeServer = roomDirectoryData.homeServer
-                ))
-            }
+        fun newIntent(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData): Intent {
+            val roomPreviewData = RoomPreviewData(
+                    roomId = publicRoom.roomId,
+                    roomName = publicRoom.name,
+                    roomAlias = publicRoom.getPrimaryAlias(),
+                    topic = publicRoom.topic,
+                    worldReadable = publicRoom.worldReadable,
+                    avatarUrl = publicRoom.avatarUrl,
+                    homeServer = roomDirectoryData.homeServer
+            )
+            return newIntent(context, roomPreviewData)
         }
     }
 

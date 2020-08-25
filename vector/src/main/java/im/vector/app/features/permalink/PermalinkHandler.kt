@@ -18,9 +18,11 @@ package im.vector.app.features.permalink
 
 import android.content.Context
 import android.net.Uri
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -61,7 +63,13 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         .map {
                             val roomId = it.getOrNull()
                             if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId) != true) {
-                                openRoom(context, roomId, permalinkData.eventId, buildTask)
+                                openRoom(
+                                        context = context,
+                                        roomId = roomId,
+                                        roomAlias = permalinkData.getRoomAliasOrNull(),
+                                        eventId = permalinkData.eventId,
+                                        buildTask = buildTask
+                                )
                             }
                             true
                         }
@@ -79,7 +87,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             is PermalinkData.FallbackLink -> {
                 Single.just(false)
             }
-        }
+        }.onErrorReturnItem(false)
     }
 
     private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
@@ -91,13 +99,21 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         }
     }
 
+    private fun PermalinkData.RoomLink.getRoomAliasOrNull(): String? {
+        return if (isRoomAlias) {
+            roomIdOrAlias
+        } else {
+            null
+        }
+    }
+
     /**
      * Open room either joined, or not
      */
-    private fun openRoom(context: Context, roomId: String?, eventId: String?, buildTask: Boolean) {
+    private fun openRoom(context: Context, roomId: String?, roomAlias: String?, eventId: String?, buildTask: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (roomId == null) {
-            context.toast("Couldn't get roomId in permalink data.")
+            context.toast(R.string.room_error_not_found)
             return
         }
         val roomSummary = session.getRoomSummary(roomId)
@@ -106,10 +122,18 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 navigator.openRoom(context, roomId, eventId, buildTask)
             }
             roomSummary?.membership != Membership.BAN     -> {
-                navigator.openNotJoinedRoom(context, roomId, eventId, roomSummary, buildTask)
+                val roomPreviewData = RoomPreviewData(
+                        roomId = roomId,
+                        eventId = eventId,
+                        roomAlias = roomAlias ?: roomSummary?.canonicalAlias,
+                        roomName = roomSummary?.displayName,
+                        avatarUrl = roomSummary?.avatarUrl,
+                        buildTask = buildTask
+                )
+                navigator.openRoomPreview(context, roomPreviewData)
             }
             else                                          -> {
-                context.toast("Can't open a room where you are banned from.")
+                context.toast(R.string.error_opening_banned_room)
             }
         }
     }
