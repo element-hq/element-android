@@ -23,16 +23,18 @@ internal fun String.hasSpecialGlobChar(): Boolean {
 
 // Very simple glob to regexp converter
 internal fun String.simpleGlobToRegExp(): String {
-    var out = "" // "^"
-    for (element in this) {
-        when (element) {
-            '*'  -> out += ".*"
-            '?'  -> out += '.'.toString()
-            '.'  -> out += "\\."
-            '\\' -> out += "\\\\"
-            else -> out += element
+    val string = this
+    return buildString {
+        // append("^")
+        string.forEach { char ->
+            when (char) {
+                '*'  -> append(".*")
+                '?'  -> append(".")
+                '.'  -> append("\\.")
+                '\\' -> append("\\\\")
+                else -> append(char)
+            }
         }
+        // append("$")
     }
-    out += "" // '$'.toString()
-    return out
 }
