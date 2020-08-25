@@ -18,11 +18,8 @@ package org.matrix.android.sdk.api.pushrules
 
 import org.matrix.android.sdk.api.session.events.model.Event
 
-abstract class Condition(val kind: Kind) {
+interface Condition {
+    fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean
 
-    abstract fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean
-
-    open fun technicalDescription(): String {
-        return "Kind: $kind"
-    }
+    fun technicalDescription(): String
 }

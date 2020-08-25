@@ -30,15 +30,13 @@ class EventMatchCondition(
          * be treated as having asterisks prepended and appended when testing the condition.
          */
         val pattern: String
-) : Condition(Kind.EventMatch) {
+) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveEventMatchCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "'$key' Matches '$pattern'"
-    }
+    override fun technicalDescription() = "'$key' Matches '$pattern'"
 
     fun isSatisfied(event: Event): Boolean {
         // TODO encrypted events?

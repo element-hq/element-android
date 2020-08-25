@@ -22,15 +22,13 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import timber.log.Timber
 
-class ContainsDisplayNameCondition : Condition(Kind.ContainsDisplayName) {
+class ContainsDisplayNameCondition : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveContainsDisplayNameCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "User is mentioned"
-    }
+    override fun technicalDescription() = "User is mentioned"
 
     fun isSatisfied(event: Event, displayName: String): Boolean {
         val message = when (event.type) {

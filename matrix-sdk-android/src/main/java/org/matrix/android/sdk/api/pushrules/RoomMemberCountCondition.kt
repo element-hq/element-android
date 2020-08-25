@@ -29,15 +29,13 @@ class RoomMemberCountCondition(
          * If no prefix is present, this parameter defaults to ==.
          */
         val iz: String
-) : Condition(Kind.RoomMemberCount) {
+) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveRoomMemberCountCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "Room member count is $iz"
-    }
+    override fun technicalDescription() = "Room member count is $iz"
 
     internal fun isSatisfied(event: Event, roomGetter: RoomGetter): Boolean {
         // sanity checks
