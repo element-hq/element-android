@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 
-class PushrulesConditionTest : MatrixTest {
+class PushRulesConditionTest : MatrixTest {
 
     /* ==========================================================================================
      * Test EventMatchCondition
