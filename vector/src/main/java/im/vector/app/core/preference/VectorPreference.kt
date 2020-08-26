@@ -84,15 +84,15 @@ open class VectorPreference : Preference {
 
         // display the title in multi-line to avoid ellipsis.
         try {
-            val title = itemView.findViewById<TextView>(android.R.id.title)
-            val summary = itemView.findViewById<TextView>(android.R.id.summary)
+            val title = holder.findViewById(android.R.id.title) as? TextView
+            val summary = holder.findViewById(android.R.id.summary) as? TextView
             if (title != null) {
                 title.isSingleLine = false
                 title.setTypeface(null, mTypeface)
             }
 
-            if (title !== summary) {
-                summary.setTypeface(null, mTypeface)
+            summary?.setTypeface(null, mTypeface)
+
             }
 
             // cancel existing animation (find a way to resume if happens during anim?)
