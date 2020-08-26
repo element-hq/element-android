@@ -54,7 +54,6 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
                 text(stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
-
             publicRooms.forEach {
                 buildPublicRoom(it, viewState)
             }

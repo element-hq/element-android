@@ -29,7 +29,6 @@ import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.terms.ReviewTermsActivity
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -107,5 +106,4 @@ interface Navigator {
                         view: View,
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
-
 }
