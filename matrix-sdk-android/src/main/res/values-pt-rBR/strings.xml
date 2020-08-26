@@ -124,10 +124,10 @@
     <string name="notice_room_topic_removed_by_you">Você removeu a descrição da sala</string>
     <string name="notice_room_avatar_removed">%1$s removeu a foto da sala</string>
     <string name="notice_room_avatar_removed_by_you">Você removeu a foto da sala</string>
-    <string name="notice_event_redacted">Mensagem removida</string>
-    <string name="notice_event_redacted_by">Mensagem removida por %1$s</string>
-    <string name="notice_event_redacted_with_reason">Mensagem removida [motivo: %1$s]</string>
-    <string name="notice_event_redacted_by_with_reason">Mensagem removida por %1$s [motivo: %2$s]</string>
+    <string name="notice_event_redacted">Mensagem apagada</string>
+    <string name="notice_event_redacted_by">Mensagem apagada por %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mensagem apagada [motivo: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mensagem apagada por %1$s [motivo: %2$s]</string>
     <string name="notice_profile_change_redacted_by_you">Você atualizou o seu perfil %1$s</string>
     <string name="notice_room_third_party_invite_by_you">Você enviou um convite para %1$s entrar na sala</string>
     <string name="notice_room_third_party_revoked_invite">%1$s cancelou o convite a %2$s para entrar na sala</string>
