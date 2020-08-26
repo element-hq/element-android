@@ -20,12 +20,15 @@ import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
+import androidx.core.widget.ImageViewCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
@@ -76,6 +79,12 @@ open class VectorPreference : Preference {
             notifyChanged()
         }
 
+    var tintIcon = false
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
     var currentHighlightAnimator: Animator? = null
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -84,15 +93,23 @@ open class VectorPreference : Preference {
 
         // display the title in multi-line to avoid ellipsis.
         try {
-            val title = itemView.findViewById<TextView>(android.R.id.title)
-            val summary = itemView.findViewById<TextView>(android.R.id.summary)
+            val title = holder.findViewById(android.R.id.title) as? TextView
+            val summary = holder.findViewById(android.R.id.summary) as? TextView
             if (title != null) {
                 title.isSingleLine = false
                 title.setTypeface(null, mTypeface)
             }
 
-            if (title !== summary) {
-                summary.setTypeface(null, mTypeface)
+            summary?.setTypeface(null, mTypeface)
+
+            if (tintIcon) {
+                // Tint icons (See #1786)
+                val icon = holder.findViewById(android.R.id.icon) as? ImageView
+
+                icon?.let {
+                    val color = ThemeUtils.getColor(context, R.attr.riotx_header_panel_text_secondary)
+                    ImageViewCompat.setImageTintList(it, ColorStateList.valueOf(color))
+                }
             }
 
             // cancel existing animation (find a way to resume if happens during anim?)

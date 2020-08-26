@@ -20,7 +20,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
@@ -162,7 +161,7 @@ class PushRulePreference : VectorPreference {
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
-        holder.itemView.findViewById<TextView>(android.R.id.summary)?.visibility = View.GONE
+        holder.findViewById(android.R.id.summary)?.visibility = View.GONE
         holder.itemView.setOnClickListener(null)
         holder.itemView.setOnLongClickListener(null)
 
