@@ -22,6 +22,8 @@ import android.view.View
 import android.widget.RadioGroup
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
+import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
@@ -51,7 +53,7 @@ class PushRulePreference : VectorPreference {
         get() {
             val safeRule = ruleAndKind?.pushRule ?: return NOTIFICATION_OFF_INDEX
 
-            if (safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+            if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                 if (safeRule.shouldNotNotify()) {
                     return if (safeRule.enabled) {
                         NOTIFICATION_OFF_INDEX
@@ -108,7 +110,7 @@ class PushRulePreference : VectorPreference {
         val safeKind = ruleAndKind?.kind ?: return null
 
         return if (index != ruleStatusIndex) {
-            if (safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+            if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                 when (index) {
                     NOTIFICATION_OFF_INDEX    -> {
                         safeRule.copy(enabled = true)
@@ -128,7 +130,7 @@ class PushRulePreference : VectorPreference {
                 }
             } else {
                 if (NOTIFICATION_OFF_INDEX == index) {
-                    if (safeKind == RuleSetKey.UNDERRIDE || safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+                    if (safeKind == RuleSetKey.UNDERRIDE || safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                         safeRule.setNotify(false)
                     } else {
                         safeRule.copy(enabled = false)
@@ -137,15 +139,15 @@ class PushRulePreference : VectorPreference {
                     val newRule = safeRule.copy(enabled = true)
                             .setNotify(true)
                             .setHighlight(safeKind != RuleSetKey.UNDERRIDE
-                                    && safeRule.ruleId != PushRule.RULE_ID_INVITE_ME
+                                    && safeRule.ruleId != RuleIds.RULE_ID_INVITE_ME
                                     && NOTIFICATION_NOISY_INDEX == index)
 
                     if (NOTIFICATION_NOISY_INDEX == index) {
                         newRule.setNotificationSound(
-                                if (safeRule.ruleId == PushRule.RULE_ID_CALL) {
-                                    PushRule.ACTION_VALUE_RING
+                                if (safeRule.ruleId == RuleIds.RULE_ID_CALL) {
+                                    Action.ACTION_OBJECT_VALUE_VALUE_RING
                                 } else {
-                                    PushRule.ACTION_VALUE_DEFAULT
+                                    Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT
                                 }
                         )
                     } else {

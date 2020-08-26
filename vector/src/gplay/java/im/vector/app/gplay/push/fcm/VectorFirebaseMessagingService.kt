@@ -25,9 +25,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -40,6 +37,9 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
+import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 
 /**
@@ -196,7 +196,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     description = "",
                     type = null,
                     timestamp = System.currentTimeMillis(),
-                    soundName = PushRule.ACTION_VALUE_DEFAULT,
+                    soundName = Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT,
                     isPushGatewayEvent = true
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)
