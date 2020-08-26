@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - You can now join room through permalink and within room directory search
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
