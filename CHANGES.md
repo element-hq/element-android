@@ -5,12 +5,14 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
  - Fix changing language issue
  - Fix FontSize issue (#1483, #1787)
+ - Fix bad color for settings icon on Android < 24 (#1786)
+ - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
 
 Translations 🗣:
  -
@@ -22,7 +24,7 @@ Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
 
 Other changes:
- -
+ - Use File extension functions to make code more concise (#1996)
 
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================

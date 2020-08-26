@@ -378,7 +378,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.danikula:videocache:2.7.1'
-    implementation 'com.github.yalantis:ucrop:2.2.4'
+    implementation 'com.github.yalantis:ucrop:2.2.6'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'

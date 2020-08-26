@@ -58,7 +58,7 @@ class VectorSwitchPreference : SwitchPreference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         // display the title in multi-line to avoid ellipsis.
-        holder.itemView.findViewById<TextView>(android.R.id.title)?.isSingleLine = false
+        (holder.findViewById(android.R.id.title) as? TextView)?.isSingleLine = false
 
         // cancel existing animation (find a way to resume if happens during anim?)
         currentHighlightAnimator?.cancel()
