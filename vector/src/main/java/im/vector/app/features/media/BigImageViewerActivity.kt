@@ -144,9 +144,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
                             .get(MultiPicker.IMAGE)
                             .getSelectedFiles(this, requestCode, resultCode, data)
                             .firstOrNull()?.let {
-                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
-                                // onRoomAvatarSelected(it)
-                                onAvatarCropped(it.contentUri)
+                                onRoomAvatarSelected(it)
                             }
                 }
                 UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }

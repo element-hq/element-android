@@ -21,7 +21,6 @@ import android.util.Base64
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import timber.log.Timber
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.security.MessageDigest
@@ -179,7 +178,7 @@ internal object MXEncryptedAttachments {
                     return null
                 }
 
-                return ByteArrayInputStream(outputStream.toByteArray())
+                return outputStream.toByteArray().inputStream()
                         .also { Timber.v("Decrypt in ${System.currentTimeMillis() - t0}ms") }
             } catch (oom: OutOfMemoryError) {
                 Timber.e(oom, "## decryptAttachment() failed: OOM")

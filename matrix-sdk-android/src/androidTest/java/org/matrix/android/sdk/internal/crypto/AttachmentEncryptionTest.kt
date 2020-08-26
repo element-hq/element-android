@@ -29,7 +29,6 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 /**
@@ -46,7 +45,7 @@ class AttachmentEncryptionTest {
         val inputStream: InputStream
 
         inputStream = if (`in`.isEmpty()) {
-            ByteArrayInputStream(`in`)
+            `in`.inputStream()
         } else {
             val memoryFile = MemoryFile("file" + System.currentTimeMillis(), `in`.size)
             memoryFile.outputStream.write(`in`)
