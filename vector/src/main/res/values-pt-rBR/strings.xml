@@ -9,7 +9,7 @@
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configurações</string>
-    <string name="title_activity_member_details">Detalhes dos membros</string>
+    <string name="title_activity_member_details">Detalhes do participante</string>
     <string name="title_activity_historical">Histórico</string>
 
     <!-- button names -->
@@ -32,8 +32,8 @@
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
     <string name="active_call">Chamada em andamento</string>
-    <string name="ongoing_conference_call">Chamada em grupo em andamento.↵
-\nEntre como %1$s ou %2$s</string>
+    <string name="ongoing_conference_call">Chamada em grupo em andamento.
+\nEntre com %1$s ou %2$s</string>
     <string name="ongoing_conference_call_voice">Voz</string>
     <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">Não foi possível iniciar a chamada, tente mais tarde</string>
@@ -275,7 +275,7 @@
     <string name="_continue">Continuar</string>
 
     <!-- Actions -->
-    <string name="remove">Remover</string>
+    <string name="remove">Apagar</string>
     <string name="join">Entrar</string>
     <string name="preview">Visualizar</string>
     <string name="reject">Recusar</string>
@@ -294,12 +294,12 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
-    <string name="room_title_one_member">1 integrante</string>
+    <string name="room_title_one_member">1 participante</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Deixar a sala</string>
+    <string name="room_participants_leave_prompt_title">Sair da sala</string>
     <string name="room_participants_leave_prompt_msg">Tem certeza de que deseja sair da sala\?</string>
-    <string name="room_participants_remove_prompt_msg">Você tem certeza que quer remover %s desta conversa?</string>
+    <string name="room_participants_remove_prompt_msg">Deseja remover %s desta conversa\?</string>
     <string name="room_participants_create">Criar</string>
 
     <string name="room_participants_online">Online</string>
@@ -312,7 +312,7 @@
     <string name="room_participants_header_devices">SESSÕES</string>
 
     <string name="room_participants_action_invite">Convidar</string>
-    <string name="room_participants_action_leave">Deixar esta sala</string>
+    <string name="room_participants_action_leave">Sair da sala</string>
     <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir da sala</string>
     <string name="room_participants_action_unban">Remover banimento</string>
@@ -373,7 +373,7 @@
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Arquivos</string>
     <string name="room_details_settings">Configurações</string>
-    <string name="malformed_id">ID mal formatado. Precisa ser um endereço de e-mail ou um ID Matrix, como \'@membrolocal:dominio\'</string>
+    <string name="malformed_id">ID mal formatado. Precisa ser um endereço de e-mail ou um ID Matrix, como \'@participantelocal:dominio\'</string>
     <string name="room_details_people_invited_group_name">CONVIDADOS</string>
     <string name="room_details_people_present_group_name">ENTRARAM</string>
 
@@ -387,7 +387,7 @@
 
     <!-- Search -->
     <string name="search_hint">Pesquisar</string>
-    <string name="search_members_hint">Filtrar integrantes da sala</string>
+    <string name="search_members_hint">Pesquisar participantes da sala</string>
     <string name="search_no_results">Nenhum resultado</string>
     <string name="tab_title_search_rooms">SALAS</string>
     <string name="tab_title_search_messages">MENSAGENS</string>
@@ -415,7 +415,7 @@
     <string name="room_settings_favourite">Favoritar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Conversa direta</string>
-    <string name="room_settings_leave_conversation">Deixar a conversa</string>
+    <string name="room_settings_leave_conversation">Sair da conversa</string>
     <string name="room_settings_forget">Esquecer</string>
 
     <!-- home sliding menu -->
@@ -512,9 +512,9 @@
 \n↵
 \nNote que esta ação irá reiniciar o aplicativo e pode levar algum tempo.</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Você tem certeza que quer remover este destino de notificação?</string>
+    <string name="settings_delete_notification_targets_confirmation">Deseja deixar de notificar este aparelho\?</string>
 
-    <string name="settings_delete_threepid_confirmation">Você tem certeza que quer remover o %1$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Deseja remover o %1$s %2$s\?</string>
 
     <string name="settings_select_country">Escolha um país</string>
 
@@ -552,9 +552,9 @@
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Qualquer pessoa</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Apenas integrantes (a partir do momento em que esta opção foi escolhida)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Apenas integrantes (desde que foram convidados)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Apenas integrantes (desde que entraram na sala)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Apenas participantes (a partir do momento em que esta opção foi escolhida)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Apenas participantes (desde que foram convidados)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Apenas participantes (desde que entraram na sala)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para fazer um link para uma sala, ela precisa ter um endereço.</string>
@@ -658,10 +658,10 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contém sessões desconhecidas</string>
-    <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não foram confirmadas.↵ 
-\nIsso significa que não há garantia de que estas sessões realmente pertencem aos usuários identificados.↵ 
-\nRecomendamos que você faça o processo de confirmação para cada sessão desconhecida antes de continuar, mas você pode reenviar a mensagem sem confirmar os aparelhos, se preferir.↵ 
-\n↵ 
+    <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não foram confirmadas.
+\nIsso significa que não há garantia de que estas sessões realmente pertencem aos usuários identificados.
+\nRecomendamos que você faça o processo de confirmação para cada sessão desconhecida antes de continuar, mas você pode reenviar a mensagem sem confirmar os aparelhos, se preferir.
+\n
 \nSessões desconhecidas nesta sala:</string>
 
     <!-- directory activity  -->
@@ -818,7 +818,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="rooms">Salas</string>
     <string name="joined">Entrou</string>
     <string name="invited">em que foi convidada/o</string>
-    <string name="filter_group_members">Filtrar integrantes da comunidade</string>
+    <string name="filter_group_members">Pesquisar participantes da comunidade</string>
     <string name="filter_group_rooms">Filtrar salas da comunidade</string>
 
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
@@ -832,13 +832,13 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="open_chat_header">Abrir cabeçalho</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">%d membro ativo</item>
-        <item quantity="other">%d membros ativos</item>
-    </plurals>
+	<item quantity="one">%d participante ativo</item>
+	<item quantity="other">%d participantes ativos</item>
+</plurals>
     <plurals name="room_title_members">
-        <item quantity="one">%d membro</item>
-        <item quantity="other">%d membros</item>
-    </plurals>
+	<item quantity="one">%d participante</item>
+	<item quantity="other">%d participantes</item>
+</plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nova mensagem</item>
         <item quantity="other">%d novas mensagens</item>
@@ -857,7 +857,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
         <item quantity="other">%d alterações na filiação</item>
     </plurals>
 
-    <string name="list_members">Lista de integrantes</string>
+    <string name="list_members">Lista de participantes</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d mensagem notificada não lida</item>
         <item quantity="other">%d mensagens notificadas não lidas</item>
@@ -1008,7 +1008,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 \nDesativar sua conta <b>não faz com que, por padrão, suas mensagens enviadas sejam apagadas</b>. Se você deseja que suas mensagens também sejam apagadas, marque a opção abaixo.↵
 \n↵
 \nA visibilidade de mensagens na Matrix é semelhante a um e-mail. O fato de apagarmos suas mensagens significa que suas mensagens enviadas não serão compartilhadas com nenhum usuário novo ou ainda não registrado, mas os usuários registrados que já tiveram acesso a essas mensagens ainda terão acesso uma cópia delas.</string>
-    <string name="deactivate_account_delete_checkbox">Quando minha conta for desativada, exclua todas as mensagens que eu enviei (Atenção: isso fará com que futuros usuários tenham uma visão incompleta das conversas)</string>
+    <string name="deactivate_account_delete_checkbox">Quando minha conta for desativada, apague todas as mensagens que eu enviei (Atenção: isso fará com que futuros usuários tenham uma visão incompleta das conversas)</string>
     <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
     <string name="deactivate_account_submit">Desativar minha conta</string>
 
@@ -1149,8 +1149,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="markdown_has_been_enabled">A formatação de texto foi ativada.</string>
     <string name="markdown_has_been_disabled">A formatação de texto foi desativada.</string>
 
-    <string name="settings_lazy_loading_description">Aumente o desempenho apenas carregando os membros da sala na primeira exibição.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Seu homeserver não suporta o carregamento Lazy de membros da sala ainda. Tente depois.</string>
+    <string name="settings_lazy_loading_description">Aumente o desempenho apenas carregando os participantes da sala na primeira exibição.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Seu servidor principal ainda não suporta o carregamento Lazy de participantes da sala. Tente depois.</string>
 
     <string name="unknown_error">Desculpe, ocorreu um erro</string>
 
@@ -1171,7 +1171,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um aparelho desconectado por um período de tempo, com a tela desligada, o aparelho entrará no modo Soneca. Isso impede que os aplicativos acessem a rede, adiando seus trabalhos, sincronizações e alarmes padrão.</string>
     <string name="passphrase_create_passphrase">Criar frase secreta</string>
     <string name="passphrase_passphrase_does_not_match">A frase secreta está errada</string>
-    <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
+    <string name="settings_lazy_loading_title">Carregamento Lazy dos participantes das salas</string>
 
     <string name="video_call_in_progress">Chamada de vídeo em andamento…</string>
 
@@ -1251,8 +1251,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="dialog_title_success">Pronto</string>
 
     <string name="bottom_action_notification">Notificações</string>
-    <string name="call_failed_no_ice_description">Peça ao administrador do seu servidor principal (%1$s) que configure um servidor TURN para que as chamadas funcionem de maneira confiável.↵
-\n↵
+    <string name="call_failed_no_ice_description">Peça ao administrador do seu servidor principal (%1$s) que configure um servidor TURN para que as chamadas funcionem de maneira confiável.
+\n
 \nAlternativamente, você pode tentar usar o servidor público em %2$s. No entanto, ele não é tão confiável e compartilhará o seu IP com esse servidor. Você também pode configurar isso nas Configurações.</string>
     <string name="call_failed_no_ice_use_alt">Tente usar %s</string>
     <string name="call_failed_dont_ask_again">Não pergunte novamente</string>
@@ -1302,8 +1302,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_participants_action_cancel_invite_prompt_msg">Tem certeza que quer cancelar o convite para este usuário\?</string>
     <string name="room_participants_kick_title">Remover usuário</string>
     <string name="room_participants_kick_reason">Motivo da remoção</string>
-    <string name="room_participants_kick_prompt_msg">esta ação removerá o usuário desta sala.↵ 
-\n↵ 
+    <string name="room_participants_kick_prompt_msg">esta ação removerá o usuário desta sala.
+\n
 \nPara impedir que o usuário nunca mais entre novamente, você precisará bani-lo.</string>
     <string name="room_participants_ban_title">Banir usuário</string>
     <string name="room_participants_ban_reason">Motivo do banimento</string>
@@ -1560,8 +1560,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_settings_delete_confirm_message">Excluir as chaves de criptografia do servidor\? Você não será mais capaz de usar a sua chave de recuperação para ler o histórico de mensagens criptografadas.</string>
 
     <string name="new_recovery_method_popup_title">Novo Backup da Chave</string>
-    <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.↵
-\n↵
+    <string name="new_recovery_method_popup_description">Foi detectado um novo backup da chave de mensagem.
+\n
 \nSe você não definiu o novo método de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina um novo método de recuperação imediatamente nas Configurações.</string>
     <string name="new_recovery_method_popup_was_me">Foi eu</string>
 
@@ -1638,7 +1638,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="sas_error_m_mismatched_commitment">O compromisso de hash não coincidiu</string>
     <string name="sas_error_m_mismatched_sas">O SAS não corresponde</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
-    <string name="sas_error_m_invalid_message">Foi recebida uma mensagem inválida</string>
+    <string name="sas_error_m_invalid_message">Uma mensagem inválida foi recebida</string>
     <string name="sas_error_m_key_mismatch">Chave incorreta</string>
     <string name="sas_error_m_user_error">Contato não corresponde</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
@@ -1856,10 +1856,10 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="error_handling_incoming_share">Não conseguia lidar com dados compartilhados</string>
 
     <string name="uploads_media_title">MÍDIA</string>
-    <string name="uploads_media_no_result">Não há mídia nesta sala</string>
+    <string name="uploads_media_no_result">Nenhuma mídia nesta sala</string>
     <string name="uploads_files_title">ARQUIVOS</string>
     <string name="uploads_files_subtitle">%1$s em %2$s</string>
-    <string name="uploads_files_no_result">Não há arquivos nesta sala</string>
+    <string name="uploads_files_no_result">Nenhum arquivo nesta sala</string>
 
     <string name="report_content_spam">É spam</string>
     <string name="report_content_inappropriate">É inapropriado</string>
@@ -1886,7 +1886,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 \n↵
 \nPermita o acesso na próxima janela para poder exportar suas chaves manualmente.</string>
 
-    <string name="no_network_indicator">Não há conexão de rede neste momento</string>
+    <string name="no_network_indicator">Não há conexão de rede no momento</string>
 
     <string name="message_ignore_user">Bloqueia usuário</string>
 
@@ -1896,7 +1896,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_list_quick_actions_notifications_mute">Silenciar</string>
     <string name="room_list_quick_actions_settings">Configurações</string>
     <string name="room_list_quick_actions_favorite_add">Adicionar aos favoritos</string>
-    <string name="room_list_quick_actions_favorite_remove">Excluír dos favoritos</string>
+    <string name="room_list_quick_actions_favorite_remove">Remover dos favoritos</string>
     <string name="room_list_quick_actions_leave">Sair da sala</string>
     <string name="notice_member_no_changes">%1$s não fez nenhuma alteração</string>
     <string name="notice_member_no_changes_by_you">Você não fez nenhuma alteração</string>
@@ -2047,12 +2047,12 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="seen_by">Lida por</string>
 
     <string name="signed_out_title">Você está desconectada/o</string>
-    <string name="signed_out_notice">Isso pode ser devido à vários motivos:↵
-\n↵
-\n• Você alterou sua senha em outra sessão.↵
-\n↵
-\n• Você excluiu esta sessão de outra sessão.↵
-\n↵
+    <string name="signed_out_notice">Isso pode ser devido à vários motivos:
+\n
+\n• Você alterou sua senha em outra sessão.
+\n
+\n• Você excluiu esta sessão de outra sessão.
+\n
 \n• O administrador do seu servidor invalidou seu acesso por motivos de segurança.</string>
     <string name="signed_out_submit">Entrar novamente</string>
 
@@ -2158,9 +2158,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 \n↵ 
 \nPara máxima segurança, faça isso pessoalmente.</string>
     <string name="room_profile_not_encrypted_subtitle">As mensagens nesta sala não estão criptografadas de ponta a ponta.</string>
-    <string name="room_profile_encrypted_subtitle">As mensagens nesta sala são criptografadas de ponta a ponta.↵
-\n↵
-\nSuas mensagens são protegidas com cadeados e somente você e o destinatário têm as chaves exclusivas que permitam a sua leitura.</string>
+    <string name="room_profile_encrypted_subtitle">As mensagens nesta sala estão criptografadas de ponta a ponta.
+\n
+\nSuas mensagens estão protegidas com cadeados e somente você e o destinatário têm as chaves exclusivas que permitem a leitura delas.</string>
     <string name="room_profile_section_security">Segurança</string>
     <string name="room_profile_section_security_learn_more">Saiba mais</string>
     <string name="room_profile_section_more">Mais</string>
@@ -2171,8 +2171,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
         <item quantity="one">Uma pessoa</item>
         <item quantity="other">%1$d pessoas</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Subidas</string>
-    <string name="room_profile_section_more_leave">Deixar a sala</string>
+    <string name="room_profile_section_more_uploads">Mídia e arquivos</string>
+    <string name="room_profile_section_more_leave">Sair da sala</string>
     <string name="room_profile_leaving_room">Deixando a sala…</string>
 
     <string name="room_member_power_level_admins">Administradores</string>
@@ -2303,7 +2303,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="enter_secret_storage_passphrase_warning">Atenção:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Você só deveria entrar no armazenamento secreto a partir de um aparelho confiável</string>
 
-    <string name="message_action_item_redact">Excluír…</string>
+    <string name="message_action_item_redact">Apagar</string>
     <string name="share_confirm_room">Deseja enviar este anexo para %1$s\?</string>
     <plurals name="send_images_with_original_size">
 	<item quantity="one">Enviar imagem no tamanho original</item>
@@ -2315,7 +2315,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="delete_event_dialog_reason_checkbox">Incluir o motivo</string>
     <string name="delete_event_dialog_reason_hint">Motivo da edição</string>
 
-    <string name="event_redacted_by_user_reason_with_reason">Evento excluído pelo usuário, motivo: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">Evento apagado pelo usuário, motivo: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Evento moderado pelo administrador da sala, motivo: %1$s</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">As chaves já estão atualizadas!</string>
@@ -2401,7 +2401,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="settings_notification_configuration">Configuração de notificações</string>
     <string name="settings_troubleshoot_title">Solução de problemas</string>
-    <string name="room_message_placeholder">Mensagem…</string>
+    <string name="room_message_placeholder">Digite uma mensagem…</string>
 
     <string name="use_file">Use Arquivo</string>
 
@@ -2409,7 +2409,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="backup_recovery_passphrase">Frase Secreta de Recuperação</string>
     <string name="bootstrap_progress_checking_backup">Verificando a chave de backup</string>
     <string name="bootstrap_skip_text">Criando uma Frase Secreta de Recuperação permite proteger e desbloquear mensagens criptografadas e estabelecer confiança.
-\n
 \n
 \nSe você não quiser definir uma Senha de Mensagem, crie antes uma Chave de Mensagem.</string>
     <string name="bootstrap_skip_text_no_gen_key">Criar uma Frase Secreta de Recuperação permite proteger e desbloquear mensagens criptografadas e estabelecer confiança.</string>
@@ -2503,7 +2502,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="create_room_dm_failure">Não foi possível criar sua DM. Por favor, verifique os usuários que você deseja convidar e tente novamente.</string>
 
-    <string name="add_members_to_room">Adicionar membros</string>
+    <string name="add_members_to_room">Adicionar participantes</string>
     <string name="invite_users_to_room_action_invite">CONVITE</string>
     <string name="inviting_users_to_room">Convidando os usuários…</string>
     <string name="invite_users_to_room_title">Convidar Usuários</string>
