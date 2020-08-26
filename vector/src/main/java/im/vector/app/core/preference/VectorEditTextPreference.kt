@@ -45,7 +45,7 @@ class VectorEditTextPreference : EditTextPreference {
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         // display the title in multi-line to avoid ellipsis.
         try {
-            holder.itemView.findViewById<TextView>(android.R.id.title)?.isSingleLine = false
+            (holder.findViewById(android.R.id.title) as? TextView)?.isSingleLine = false
         } catch (e: Exception) {
             Timber.e(e, "onBindView")
         }

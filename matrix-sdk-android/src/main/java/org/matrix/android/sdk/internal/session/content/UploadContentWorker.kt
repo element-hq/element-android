@@ -42,10 +42,7 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
-import java.io.ByteArrayInputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.util.UUID
 import javax.inject.Inject
 
@@ -130,7 +127,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         val contentUploadResponse = if (params.isEncrypted) {
                             Timber.v("Encrypt thumbnail")
                             notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
-                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
+                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
                             uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
                             fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
                                     "thumb_${attachment.name}",
@@ -176,7 +173,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     cacheFile.createNewFile()
                     cacheFile.deleteOnExit()
 
-                    val outputStream = FileOutputStream(cacheFile)
+                    val outputStream = cacheFile.outputStream()
                     outputStream.use {
                         inputStream.copyTo(outputStream)
                     }
@@ -203,7 +200,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         Timber.v("Encrypt file")
                         notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
-                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(cacheFile), attachment.getSafeMimeType())
+                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(cacheFile.inputStream(), attachment.getSafeMimeType())
                         uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
                         fileUploader

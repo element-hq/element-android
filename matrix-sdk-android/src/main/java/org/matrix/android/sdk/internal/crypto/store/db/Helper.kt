@@ -21,7 +21,6 @@ import android.util.Base64
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
@@ -96,7 +95,7 @@ fun <T> deserializeFromRealm(string: String?): T? {
     }
     val decodedB64 = Base64.decode(string.toByteArray(), Base64.DEFAULT)
 
-    val bais = ByteArrayInputStream(decodedB64)
+    val bais = decodedB64.inputStream()
     val gzis = GZIPInputStream(bais)
     val ois = SafeObjectInputStream(gzis)
     return ois.use {
