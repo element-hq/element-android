@@ -24,7 +24,9 @@ import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
+import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -67,4 +69,19 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
                     setSpan(UnderlineSpan(), index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
+}
+
+/**
+ * Set long click listener to copy the current text of the TextView to the clipboard and show a Snackbar
+ */
+fun TextView.copyOnLongClick() {
+    setOnLongClickListener { view ->
+        (view as? TextView)
+                ?.text
+                ?.let { text ->
+                    copyToClipboard(view.context, text, false)
+                    Snackbar.make(view, view.resources.getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT).show()
+                }
+        true
+    }
 }

@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
