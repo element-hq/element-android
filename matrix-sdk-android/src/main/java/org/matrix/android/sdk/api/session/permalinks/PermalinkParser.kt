@@ -19,6 +19,10 @@ package org.matrix.android.sdk.api.session.permalinks
 
 import android.net.Uri
 import org.matrix.android.sdk.api.MatrixPatterns
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
+import java.util.ArrayList
+import java.util.Collections
 
 /**
  * This class turns an uri to a [PermalinkData]
@@ -40,14 +44,13 @@ object PermalinkParser {
         if (!uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)) {
             return PermalinkData.FallbackLink(uri)
         }
-
         val fragment = uri.fragment
         if (fragment.isNullOrEmpty()) {
             return PermalinkData.FallbackLink(uri)
         }
-
         val indexOfQuery = fragment.indexOf("?")
         val safeFragment = if (indexOfQuery != -1) fragment.substring(0, indexOfQuery) else fragment
+        val viaQueryParameters = fragment.getViaParameters(indexOfQuery)
 
         // we are limiting to 2 params
         val params = safeFragment
@@ -65,17 +68,58 @@ object PermalinkParser {
                 PermalinkData.RoomLink(
                         roomIdOrAlias = identifier,
                         isRoomAlias = false,
-                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                        viaParameters = viaQueryParameters
                 )
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
                 PermalinkData.RoomLink(
                         roomIdOrAlias = identifier,
                         isRoomAlias = true,
-                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                        viaParameters = viaQueryParameters
                 )
             }
             else                                   -> PermalinkData.FallbackLink(uri)
         }
+    }
+
+    private fun String.getViaParameters(indexOfQuery: Int): List<String> {
+        val query = try {
+            substring(indexOfQuery + 1)
+        } catch (e: IndexOutOfBoundsException) {
+            return emptyList()
+        }
+        val encodedKey = try {
+            URLEncoder.encode("via", "UTF-8")
+        } catch (e: UnsupportedEncodingException) {
+            return emptyList()
+        }
+        val values = ArrayList<String>()
+        var start = 0
+        do {
+            val nextAmpersand = query.indexOf('&', start)
+            val end = if (nextAmpersand != -1) nextAmpersand else query.length
+            var separator = query.indexOf('=', start)
+            if (separator > end || separator == -1) {
+                separator = end
+            }
+            if (separator - start == encodedKey.length
+                    && query.regionMatches(start, encodedKey, 0, encodedKey.length)) {
+                if (separator == end) {
+                    values.add("")
+                } else {
+                    values.add(Uri.decode(query.substring(separator + 1, end)))
+                }
+            }
+
+            // Move start to end of name.
+            start = if (nextAmpersand != -1) {
+                nextAmpersand + 1
+            } else {
+                break
+            }
+        } while (true)
+        return Collections.unmodifiableList(values)
     }
 }

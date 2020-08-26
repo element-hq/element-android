@@ -38,7 +38,7 @@ data class RoomPreviewData(
         val topic: String? = null,
         val worldReadable: Boolean = false,
         val avatarUrl: String? = null,
-        val homeServer: String? = null,
+        val homeServers: List<String> = emptyList(),
         val buildTask: Boolean = false
 ) : Parcelable {
     val matrixItem: MatrixItem
@@ -64,7 +64,7 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
                     topic = publicRoom.topic,
                     worldReadable = publicRoom.worldReadable,
                     avatarUrl = publicRoom.avatarUrl,
-                    homeServer = roomDirectoryData.homeServer
+                    homeServers = listOfNotNull(roomDirectoryData.homeServer)
             )
             return newIntent(context, roomPreviewData)
         }

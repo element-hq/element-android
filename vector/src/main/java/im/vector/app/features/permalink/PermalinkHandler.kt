@@ -56,7 +56,25 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         if (deepLink == null) {
             return Single.just(false)
         }
-        return when (val permalinkData = PermalinkParser.parse(deepLink)) {
+        return Single
+                .fromCallable {
+                    PermalinkParser.parse(deepLink)
+                }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { permalinkData ->
+                    handlePermalink(permalinkData, context, navigationInterceptor, buildTask)
+                }
+                .onErrorReturnItem(false)
+    }
+
+    private fun handlePermalink(
+            permalinkData: PermalinkData,
+            context: Context,
+            navigationInterceptor: NavigationInterceptor?,
+            buildTask: Boolean
+    ): Single<Boolean> {
+        return when (permalinkData) {
             is PermalinkData.RoomLink     -> {
                 permalinkData.getRoomId()
                         .observeOn(AndroidSchedulers.mainThread())
@@ -66,8 +84,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                                 openRoom(
                                         context = context,
                                         roomId = roomId,
-                                        roomAlias = permalinkData.getRoomAliasOrNull(),
-                                        eventId = permalinkData.eventId,
+                                        permalinkData = permalinkData,
                                         buildTask = buildTask
                                 )
                             }
@@ -87,7 +104,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             is PermalinkData.FallbackLink -> {
                 Single.just(false)
             }
-        }.onErrorReturnItem(false)
+        }
     }
 
     private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
@@ -110,13 +127,20 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     /**
      * Open room either joined, or not
      */
-    private fun openRoom(context: Context, roomId: String?, roomAlias: String?, eventId: String?, buildTask: Boolean) {
+    private fun openRoom(
+            context: Context,
+            roomId: String?,
+            permalinkData: PermalinkData.RoomLink,
+            buildTask: Boolean
+    ) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (roomId == null) {
             context.toast(R.string.room_error_not_found)
             return
         }
         val roomSummary = session.getRoomSummary(roomId)
+        val eventId = permalinkData.eventId
+        val roomAlias = permalinkData.getRoomAliasOrNull()
         return when {
             roomSummary?.membership?.isActive().orFalse() -> {
                 navigator.openRoom(context, roomId, eventId, buildTask)
@@ -128,7 +152,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         roomAlias = roomAlias ?: roomSummary?.canonicalAlias,
                         roomName = roomSummary?.displayName,
                         avatarUrl = roomSummary?.avatarUrl,
-                        buildTask = buildTask
+                        buildTask = buildTask,
+                        homeServers = permalinkData.viaParameters
                 )
                 navigator.openRoomPreview(context, roomPreviewData)
             }
