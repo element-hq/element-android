@@ -356,8 +356,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                             .get(MultiPicker.IMAGE)
                             .getSelectedFiles(requireContext(), requestCode, resultCode, data)
                             .firstOrNull()?.let {
-                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
-                                onAvatarCropped(it.contentUri)
+                                onAvatarSelected(it)
                             }
                 }
                 UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }

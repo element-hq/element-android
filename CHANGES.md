@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
 
 Translations 🗣:
  -
