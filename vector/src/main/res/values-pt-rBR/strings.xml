@@ -617,7 +617,7 @@
     <string name="encryption_information_sender_device_information">Informação sobre a sessão do remetente</string>
     <string name="encryption_information_device_name">Nome público do aparelho</string>
     <string name="encryption_information_name">Nome</string>
-    <string name="encryption_information_device_id">ID do aparelho</string>
+    <string name="encryption_information_device_id">ID da Sessão</string>
     <string name="encryption_information_device_key">Chave da sessão</string>
     <string name="encryption_information_verification">Confirmação</string>
     <string name="encryption_information_ed25519_fingerprint">Impressão digital ed25519</string>
@@ -2615,4 +2615,24 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
     <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
-</resources>
+<string name="no_permissions_to_start_conf_call">Você não tem permissão para iniciar uma teleconferência nesta sala</string>
+    <string name="conference_call_in_progress">Uma conferência já está em andamento!</string>
+    <string name="video_meeting">Iniciar reunião em vídeo</string>
+    <string name="audio_meeting">Iniciar reunião de áudio</string>
+    <string name="audio_video_meeting_description">As reuniões utilizam as políticas de segurança e permissão de Jitsi. Todas as pessoas que estão atualmente na sala verão um convite para participar enquanto sua reunião está acontecendo.</string>
+    <string name="cannot_call_yourself">Você não pode iniciar uma chamada com você mesmo</string>
+    <string name="cannot_call_yourself_with_invite">Você não pode iniciar uma chamada consigo mesmo, esperar que os participantes aceitem o convite</string>
+    <string name="failed_to_add_widget">Falha ao adicionar widget</string>
+    <string name="failed_to_remove_widget">Falha ao remover widget</string>
+    <plurals name="encryption_import_room_keys_success">
+	<item quantity="one">%1$d/%2$d chave importada com êxito.</item>
+	<item quantity="other">%1$d/%2$d chaves importadas com êxito.</item>
+</plurals>
+
+    <string name="room_manage_integrations">Gerenciar integrações</string>
+    <string name="room_no_active_widgets">Sem widgets ativos</string>
+    <string name="create_room_federation_error">A sala foi criada, mas alguns convites não foram enviados pelo seguinte motivo:
+\n
+\n%s</string>
+
+    </resources>
