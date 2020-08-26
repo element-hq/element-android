@@ -25,9 +25,9 @@
     <string name="notice_answered_call">%s aceitou a chamada.</string>
     <string name="notice_ended_call">%s encerrou a chamada.</string>
     <string name="notice_made_future_room_visibility">%1$s deixou o histórico futuro da sala visível para %2$s</string>
-    <string name="notice_room_visibility_invited">todos os membros da sala, a partir do momento em que foram convidados.</string>
-    <string name="notice_room_visibility_joined">todos os membros da sala, a partir do momento em que entraram nela.</string>
-    <string name="notice_room_visibility_shared">todos os membros da sala.</string>
+    <string name="notice_room_visibility_invited">todos os participantes da sala, a partir do momento em que foram convidados.</string>
+    <string name="notice_room_visibility_joined">todos os participantes da sala, a partir do momento em que entraram nela.</string>
+    <string name="notice_room_visibility_shared">todos os participantes da sala.</string>
     <string name="notice_room_visibility_world_readable">qualquer pessoa.</string>
     <string name="notice_room_visibility_unknown">desconhecido (%s).</string>
     <string name="notice_end_to_end">%1$s ativou a criptografia de ponta a ponta (%2$s)</string>
