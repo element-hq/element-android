@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Fix bad color for settings icon on Android < 24 (#1786)
 
 Translations 🗣:
  -
