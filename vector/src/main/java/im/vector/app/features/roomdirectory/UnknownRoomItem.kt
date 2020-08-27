@@ -37,9 +37,6 @@ abstract class UnknownRoomItem : VectorEpoxyModel<UnknownRoomItem.Holder>() {
     lateinit var matrixItem: MatrixItem
 
     @EpoxyAttribute
-    var identifier: String? = null
-
-    @EpoxyAttribute
     var globalListener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {

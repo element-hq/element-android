@@ -127,7 +127,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         return roomItem?.let {
             UnknownRoomItem_().apply {
                 id(roomIdOrAlias)
-                matrixItem(roomItem)
+                matrixItem(it)
                 avatarRenderer(this@PublicRoomsController.avatarRenderer)
                 globalListener {
                     callback?.onUnknownRoomClicked(roomIdOrAlias)

@@ -139,13 +139,15 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             return
         }
         val roomSummary = session.getRoomSummary(roomId)
+        val membership = roomSummary?.membership
         val eventId = permalinkData.eventId
         val roomAlias = permalinkData.getRoomAliasOrNull()
         return when {
-            roomSummary?.membership?.isActive().orFalse() -> {
+            membership == Membership.BAN     -> context.toast(R.string.error_opening_banned_room)
+            membership?.isActive().orFalse() -> {
                 navigator.openRoom(context, roomId, eventId, buildTask)
             }
-            roomSummary?.membership != Membership.BAN     -> {
+            else                             -> {
                 val roomPreviewData = RoomPreviewData(
                         roomId = roomId,
                         eventId = eventId,
@@ -156,9 +158,6 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         homeServers = permalinkData.viaParameters
                 )
                 navigator.openRoomPreview(context, roomPreviewData)
-            }
-            else                                          -> {
-                context.toast(R.string.error_opening_banned_room)
             }
         }
     }

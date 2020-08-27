@@ -18,11 +18,8 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import android.net.Uri
+import android.net.UrlQuerySanitizer
 import org.matrix.android.sdk.api.MatrixPatterns
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
-import java.util.ArrayList
-import java.util.Collections
 
 /**
  * This class turns an uri to a [PermalinkData]
@@ -50,7 +47,7 @@ object PermalinkParser {
         }
         val indexOfQuery = fragment.indexOf("?")
         val safeFragment = if (indexOfQuery != -1) fragment.substring(0, indexOfQuery) else fragment
-        val viaQueryParameters = fragment.getViaParameters(indexOfQuery)
+        val viaQueryParameters = fragment.getViaParameters()
 
         // we are limiting to 2 params
         val params = safeFragment
@@ -84,42 +81,13 @@ object PermalinkParser {
         }
     }
 
-    private fun String.getViaParameters(indexOfQuery: Int): List<String> {
-        val query = try {
-            substring(indexOfQuery + 1)
-        } catch (e: IndexOutOfBoundsException) {
-            return emptyList()
-        }
-        val encodedKey = try {
-            URLEncoder.encode("via", "UTF-8")
-        } catch (e: UnsupportedEncodingException) {
-            return emptyList()
-        }
-        val values = ArrayList<String>()
-        var start = 0
-        do {
-            val nextAmpersand = query.indexOf('&', start)
-            val end = if (nextAmpersand != -1) nextAmpersand else query.length
-            var separator = query.indexOf('=', start)
-            if (separator > end || separator == -1) {
-                separator = end
-            }
-            if (separator - start == encodedKey.length
-                    && query.regionMatches(start, encodedKey, 0, encodedKey.length)) {
-                if (separator == end) {
-                    values.add("")
-                } else {
-                    values.add(Uri.decode(query.substring(separator + 1, end)))
+    private fun String.getViaParameters(): List<String> {
+        return UrlQuerySanitizer(this)
+                .parameterList
+                .filter {
+                    it.mParameter == "via"
+                }.map {
+                    it.mValue
                 }
-            }
-
-            // Move start to end of name.
-            start = if (nextAmpersand != -1) {
-                nextAmpersand + 1
-            } else {
-                break
-            }
-        } while (true)
-        return Collections.unmodifiableList(values)
     }
 }
