@@ -54,6 +54,7 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.roommemberprofile.RoomMemberProfileActivity
 import im.vector.app.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileActivity
@@ -156,14 +157,6 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open not joined room")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
-    }
-
     override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
         if (context is VectorBaseActivity) {
             context.notImplemented("Open group detail")
@@ -186,7 +179,12 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData) {
-        val intent = RoomPreviewActivity.getIntent(context, publicRoom, roomDirectoryData)
+        val intent = RoomPreviewActivity.newIntent(context, publicRoom, roomDirectoryData)
+        context.startActivity(intent)
+    }
+
+    override fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData) {
+        val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
         context.startActivity(intent)
     }
 

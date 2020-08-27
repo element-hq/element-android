@@ -29,9 +29,13 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
-import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.app.core.utils.toast
+import im.vector.app.features.permalink.NavigationInterceptor
+import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -41,7 +45,9 @@ import javax.inject.Inject
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
 class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController
+        private val publicRoomsController: PublicRoomsController,
+        private val permalinkHandler: PermalinkHandler,
+        private val session: Session
 ) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
@@ -110,6 +116,23 @@ class PublicRoomsFragment @Inject constructor(
         publicRoomsList.trackItemsVisibilityChange()
         publicRoomsList.configureWith(publicRoomsController)
         publicRoomsController.callback = this
+    }
+
+    override fun onUnknownRoomClicked(roomIdOrAlias: String) {
+        val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
+        permalinkHandler
+                .launch(requireContext(), permalink, object : NavigationInterceptor {
+                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                        requireActivity().finish()
+                        return false
+                    }
+                })
+                .subscribe { isSuccessful ->
+                    if (!isSuccessful) {
+                        requireContext().toast(R.string.room_error_not_found)
+                    }
+                }
+                .disposeOnDestroyView()
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {

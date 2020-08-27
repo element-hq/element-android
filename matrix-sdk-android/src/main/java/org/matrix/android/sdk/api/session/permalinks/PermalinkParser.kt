@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import android.net.Uri
+import android.net.UrlQuerySanitizer
 import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
@@ -40,14 +41,13 @@ object PermalinkParser {
         if (!uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)) {
             return PermalinkData.FallbackLink(uri)
         }
-
         val fragment = uri.fragment
         if (fragment.isNullOrEmpty()) {
             return PermalinkData.FallbackLink(uri)
         }
-
         val indexOfQuery = fragment.indexOf("?")
         val safeFragment = if (indexOfQuery != -1) fragment.substring(0, indexOfQuery) else fragment
+        val viaQueryParameters = fragment.getViaParameters()
 
         // we are limiting to 2 params
         val params = safeFragment
@@ -65,17 +65,29 @@ object PermalinkParser {
                 PermalinkData.RoomLink(
                         roomIdOrAlias = identifier,
                         isRoomAlias = false,
-                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                        viaParameters = viaQueryParameters
                 )
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
                 PermalinkData.RoomLink(
                         roomIdOrAlias = identifier,
                         isRoomAlias = true,
-                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                        viaParameters = viaQueryParameters
                 )
             }
             else                                   -> PermalinkData.FallbackLink(uri)
         }
+    }
+
+    private fun String.getViaParameters(): List<String> {
+        return UrlQuerySanitizer(this)
+                .parameterList
+                .filter {
+                    it.mParameter == "via"
+                }.map {
+                    it.mValue
+                }
     }
 }
