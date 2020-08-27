@@ -47,22 +47,11 @@ internal class SendEventWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
+            override val lastFailureMessage: String? = null,
             val event: Event? = null,
-            val eventId: String? = null,
-            val roomId: String? = null,
-            val type: String? = null,
-            override val lastFailureMessage: String? = null
-    ) : SessionWorkerParams {
-
-        constructor(sessionId: String, event: Event, lastFailureMessage: String? = null) : this(
-                sessionId = sessionId,
-                eventId = event.eventId,
-                roomId = event.roomId,
-                type = event.type,
-                event = event,
-                lastFailureMessage = lastFailureMessage
-        )
-    }
+            // Keep for compat at the moment, will be removed later
+            val eventId: String? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var roomAPI: RoomAPI
@@ -75,27 +64,31 @@ internal class SendEventWorker(context: Context,
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
-        if (params.eventId == null || params.roomId == null || params.type == null) {
-            // compat with old params, make it fail if any
-            if (params.event?.eventId != null) {
-                localEchoRepository.updateSendState(params.event.eventId, SendState.UNDELIVERED)
+
+        val event = params.event
+        if (event?.eventId == null || event.roomId == null) {
+            // Old way of sending
+            if (params.eventId != null) {
+                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
             }
             return Result.success()
+                    .also { Timber.e("Work cancelled due to bad input data") }
         }
+
         if (params.lastFailureMessage != null) {
-            localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(event.eventId, SendState.UNDELIVERED)
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
         return try {
-            sendEvent(params.eventId, params.roomId, params.type, params.event?.content)
+            sendEvent(event.eventId, event.roomId, event.type, event.content)
             Result.success()
         } catch (exception: Throwable) {
             // It does start from 0, we want it to stop if it fails the third time
             val currentAttemptCount = runAttemptCount + 1
             if (currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING || !exception.shouldBeRetried()) {
-                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+                localEchoRepository.updateSendState(event.eventId, SendState.UNDELIVERED)
                 return Result.success()
             } else {
                 Result.retry()
