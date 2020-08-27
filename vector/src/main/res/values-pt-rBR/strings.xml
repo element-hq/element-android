@@ -615,7 +615,7 @@
     <string name="encryption_information_sender_device_information">Informação sobre a sessão do remetente</string>
     <string name="encryption_information_device_name">Nome público do aparelho</string>
     <string name="encryption_information_name">Nome</string>
-    <string name="encryption_information_device_id">ID da Sessão</string>
+    <string name="encryption_information_device_id">ID da sessão</string>
     <string name="encryption_information_device_key">Chave da sessão</string>
     <string name="encryption_information_verification">Confirmação</string>
     <string name="encryption_information_ed25519_fingerprint">Impressão digital ed25519</string>
@@ -1865,7 +1865,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="report_content_custom_title">Denunciar conteúdo</string>
     <string name="report_content_custom_hint">Motivo para denúnciar este conteúdo</string>
     <string name="report_content_custom_submit">RELATÓRIO</string>
-    <string name="block_user">IGNORAR USUÁRIO</string>
+    <string name="block_user">BLOQUEAR USUÁRIO</string>
 
     <string name="content_reported_title">Conteúdo relatado</string>
     <string name="content_reported_content">Este conteúdo foi relatado.
@@ -1886,7 +1886,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="no_network_indicator">Não há conexão de rede no momento</string>
 
-    <string name="message_ignore_user">Ignorar usuário</string>
+    <string name="message_ignore_user">Bloquear usuário</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Todas as mensagens novas (com som)</string>
     <string name="room_list_quick_actions_notifications_all">Todas as mensagens novas</string>
@@ -2612,34 +2612,34 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
     <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
-<string name="no_permissions_to_start_conf_call">Você não tem permissão para iniciar uma teleconferência nesta sala</string>
-    <string name="conference_call_in_progress">Uma conferência já está em andamento!</string>
-    <string name="video_meeting">Iniciar reunião em vídeo</string>
-    <string name="audio_meeting">Iniciar reunião de áudio</string>
-    <string name="audio_video_meeting_description">As reuniões utilizam as políticas de segurança e permissão de Jitsi. Todas as pessoas que estão atualmente na sala verão um convite para participar enquanto sua reunião está acontecendo.</string>
+<string name="no_permissions_to_start_conf_call">Você não tem permissão para iniciar uma chamada em grupo nesta sala</string>
+    <string name="conference_call_in_progress">Uma chamada em grupo já está em andamento!</string>
+    <string name="video_meeting">Iniciar chamada de vídeo</string>
+    <string name="audio_meeting">Iniciar chamada de voz</string>
+    <string name="audio_video_meeting_description">As chamadas utilizam as políticas de segurança e permissão do Jitsi. Todas as pessoas que estão atualmente na sala verão um convite para participar enquanto sua chamada estiver acontecendo.</string>
     <string name="cannot_call_yourself">Você não pode iniciar uma chamada com você mesmo</string>
-    <string name="cannot_call_yourself_with_invite">Você não pode iniciar uma chamada consigo mesmo, esperar que os participantes aceitem o convite</string>
-    <string name="failed_to_add_widget">Falha ao adicionar widget</string>
-    <string name="failed_to_remove_widget">Falha ao remover widget</string>
+    <string name="cannot_call_yourself_with_invite">Você não pode iniciar uma chamada consigo mesmo. Aguarde os participantes aceitarem o convite</string>
+    <string name="failed_to_add_widget">Falha ao adicionar o widget</string>
+    <string name="failed_to_remove_widget">Falha ao remover o widget</string>
     <plurals name="encryption_import_room_keys_success">
 	<item quantity="one">%1$d/%2$d chave importada com êxito.</item>
 	<item quantity="other">%1$d/%2$d chaves importadas com êxito.</item>
 </plurals>
 
     <string name="room_manage_integrations">Gerenciar integrações</string>
-    <string name="room_no_active_widgets">Sem widgets ativos</string>
+    <string name="room_no_active_widgets">Nenhum widget ativo</string>
     <string name="create_room_federation_error">A sala foi criada, mas alguns convites não foram enviados pelo seguinte motivo:
 \n
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s e %3$d um outro leu</item>
+	<item quantity="one">%1$s, %2$s e %3$d outro leu</item>
 	<item quantity="other">%1$s, %2$s e %3$d outros leram</item>
 </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
 	<item quantity="one">Código errado, %d tentativa restante</item>
 	<item quantity="other">Código errado, %d tentativas restantes</item>
 </plurals>
-    <string name="wrong_pin_message_last_remaining_attempt">Advertência! Última tentativa restante antes de logout!</string>
-    <string name="too_many_pin_failures">Demasiados erros, você foi desconectado</string>
+    <string name="wrong_pin_message_last_remaining_attempt">Atenção! Última tentativa restante antes de você ser desconectada/o!</string>
+    <string name="too_many_pin_failures">Muitos erros, você foi desconectada/o</string>
     </resources>
