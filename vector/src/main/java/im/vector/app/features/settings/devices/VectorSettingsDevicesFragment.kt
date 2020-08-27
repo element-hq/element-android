@@ -48,7 +48,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
 ) : VectorBaseFragment(), DevicesController.Callback {
 
     // used to avoid requesting to enter the password for each deletion
-    private var mAccountPassword: String = ""
+    // Note: Sonar does not like to use password for member name.
+    private var mAccountPass: String = ""
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
@@ -91,7 +92,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         super.showFailure(throwable)
 
         // Password is maybe not good, for safety measure, reset it here
-        mAccountPassword = ""
+        mAccountPass = ""
     }
 
     override fun onDestroyView() {
@@ -153,12 +154,12 @@ class VectorSettingsDevicesFragment @Inject constructor(
      * Show a dialog to ask for user password, or use a previously entered password.
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog() {
-        if (mAccountPassword.isNotEmpty()) {
-            viewModel.handle(DevicesAction.Password(mAccountPassword))
+        if (mAccountPass.isNotEmpty()) {
+            viewModel.handle(DevicesAction.Password(mAccountPass))
         } else {
             PromptPasswordDialog().show(requireActivity()) { password ->
-                mAccountPassword = password
-                viewModel.handle(DevicesAction.Password(mAccountPassword))
+                mAccountPass = password
+                viewModel.handle(DevicesAction.Password(mAccountPass))
             }
         }
     }

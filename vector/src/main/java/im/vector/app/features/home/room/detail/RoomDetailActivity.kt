@@ -77,16 +77,15 @@ class RoomDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         waitingView = waiting_view
+        val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
+        } else {
+            intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
+        }
+        if (roomDetailArgs == null) return
+        currentRoomId = roomDetailArgs.roomId
+
         if (isFirstCreation()) {
-            val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-                RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
-            } else {
-                intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-            }
-
-            if (roomDetailArgs == null) return
-
-            currentRoomId = roomDetailArgs.roomId
             replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
             replaceFragment(R.id.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }

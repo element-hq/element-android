@@ -1,4 +1,4 @@
-A full developer contributors list can be found [here](https://github.com/vector-im/riotX-android/graphs/contributors). 
+A full developer contributors list can be found [here](https://github.com/vector-im/element-android/graphs/contributors). 
 
 # Core team:
 

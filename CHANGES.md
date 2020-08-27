@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - You can now join room through permalink and within room directory search
  - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
 
 Bugfix 🐛:
@@ -15,6 +16,8 @@ Bugfix 🐛:
  - Fix bad color for settings icon on Android < 24 (#1786)
  - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
  - Loudspeaker is always used (#1685)
+ - Fix uploads still don't work with room v6 (#1879)
+ - Can't handle ongoing call events in background (#1992)
 
 Translations 🗣:
  -

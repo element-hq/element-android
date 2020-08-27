@@ -21,16 +21,16 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.shouldBeRetried
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,24 +47,11 @@ internal class SendEventWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            // TODO remove after some time, it's used for compat
+            override val lastFailureMessage: String? = null,
             val event: Event? = null,
-            val eventId: String? = null,
-            val roomId: String? = null,
-            val type: String? = null,
-            val contentStr: String? = null,
-            override val lastFailureMessage: String? = null
-    ) : SessionWorkerParams {
-
-        constructor(sessionId: String, event: Event, lastFailureMessage: String? = null) : this(
-                sessionId = sessionId,
-                eventId = event.eventId,
-                roomId = event.roomId,
-                type = event.type,
-                contentStr = ContentMapper.map(event.content),
-                lastFailureMessage = lastFailureMessage
-        )
-    }
+            // Keep for compat at the moment, will be removed later
+            val eventId: String? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var roomAPI: RoomAPI
@@ -77,27 +64,31 @@ internal class SendEventWorker(context: Context,
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
-        if (params.eventId == null || params.roomId == null || params.type == null) {
-            // compat with old params, make it fail if any
-            if (params.event?.eventId != null) {
-                localEchoRepository.updateSendState(params.event.eventId, SendState.UNDELIVERED)
+
+        val event = params.event
+        if (event?.eventId == null || event.roomId == null) {
+            // Old way of sending
+            if (params.eventId != null) {
+                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
             }
             return Result.success()
+                    .also { Timber.e("Work cancelled due to bad input data") }
         }
+
         if (params.lastFailureMessage != null) {
-            localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(event.eventId, SendState.UNDELIVERED)
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
         return try {
-            sendEvent(params.eventId, params.roomId, params.type, params.contentStr)
+            sendEvent(event.eventId, event.roomId, event.type, event.content)
             Result.success()
         } catch (exception: Throwable) {
             // It does start from 0, we want it to stop if it fails the third time
             val currentAttemptCount = runAttemptCount + 1
             if (currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING || !exception.shouldBeRetried()) {
-                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+                localEchoRepository.updateSendState(event.eventId, SendState.UNDELIVERED)
                 return Result.success()
             } else {
                 Result.retry()
@@ -105,10 +96,10 @@ internal class SendEventWorker(context: Context,
         }
     }
 
-    private suspend fun sendEvent(eventId: String, roomId: String, type: String, contentStr: String?) {
+    private suspend fun sendEvent(eventId: String, roomId: String, type: String, content: Content?) {
         localEchoRepository.updateSendState(eventId, SendState.SENDING)
         executeRequest<SendResponse>(eventBus) {
-            apiCall = roomAPI.send(eventId, roomId, type, contentStr)
+            apiCall = roomAPI.send(eventId, roomId, type, content)
         }
         localEchoRepository.updateSendState(eventId, SendState.SENT)
     }

@@ -32,12 +32,9 @@ abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     lateinit var data: String
 
-    @EpoxyAttribute
-    var animate = false
-
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.qsrCodeImage.setData(data, animate)
+        holder.qsrCodeImage.setData(data)
     }
 
     class Holder : VectorEpoxyHolder() {

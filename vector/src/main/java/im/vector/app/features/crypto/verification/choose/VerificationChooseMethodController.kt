@@ -53,7 +53,6 @@ class VerificationChooseMethodController @Inject constructor(
                 bottomSheetVerificationQrCodeItem {
                     id("qr")
                     data(state.qrCodeText)
-                    animate(false)
                 }
 
                 dividerItem {
