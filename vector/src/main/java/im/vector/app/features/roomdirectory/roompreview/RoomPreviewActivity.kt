@@ -28,6 +28,7 @@ import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.util.MatrixItem
+import timber.log.Timber
 
 @Parcelize
 data class RoomPreviewData(
@@ -83,6 +84,7 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
             if (args?.worldReadable == true) {
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview
                 // TODO the same way if it was not world readable
+                Timber.d("just display the room preview the same way if it was not world readable")
                 addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             } else {
                 addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
