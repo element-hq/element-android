@@ -100,7 +100,8 @@ project(":vector") {
         properties {
             property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
             // exclude source code from analyses separated by a colon (:)
-            // property "sonar.exclusions", "**/*.*"
+            // Exclude Java source
+            property "sonar.exclusions", "**/BugReporterMultipartBody.java"
         }
     }
 }
