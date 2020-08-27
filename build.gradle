@@ -105,6 +105,12 @@ project(":vector") {
     }
 }
 
+project(":diff-match-patch") {
+    sonarqube {
+        skipProject = true
+    }
+}
+
 //project(":matrix-sdk-android") {
 //    sonarqube {
 //        properties {
