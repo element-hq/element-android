@@ -122,6 +122,9 @@ android {
         // Other branches (master, features, etc.) will have version code based on application version.
         versionCode project.getVersionCode()
 
+        // Required for sonar analysis
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
+
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
 
