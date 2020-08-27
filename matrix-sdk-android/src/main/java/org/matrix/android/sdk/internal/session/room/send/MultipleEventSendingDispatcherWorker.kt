@@ -105,7 +105,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     }
 
     private fun createSendEventWork(sessionId: String, event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, event = event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
