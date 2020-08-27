@@ -220,9 +220,9 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
     fun sendRelation(@Path("roomId") roomId: String,
-                     @Path("parentId") parent_id: String,
+                     @Path("parent_id") parent_id: String,
                      @Path("relation_type") relationType: String,
-                     @Path("eventType") eventType: String,
+                     @Path("event_type") eventType: String,
                      @Body content: Content?
     ): Call<SendResponse>
 
