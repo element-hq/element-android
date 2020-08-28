@@ -682,6 +682,9 @@
     <string name="settings_add_3pid_flow_not_supported">You can\'t do this from Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
+    <string name="settings_emails">Email addresses</string>
+    <string name="settings_phone_numbers">Phone numbers</string>
+    <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
@@ -926,6 +929,9 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="settings_emails_and_phone_numbers_title">Emails and phone numbers</string>
+    <string name="settings_emails_and_phone_numbers_summary">Manage emails and phone numbers linked to your Matrix account</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 

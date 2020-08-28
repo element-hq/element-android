@@ -12,7 +12,7 @@
 }
 ```
 
-### The email is already adding to an account
+### The email is already added to an account
 
 400
 
@@ -83,6 +83,8 @@ User clicks on CONTINUE
 ## User enters his password
 
 POST https://homeserver.org/_matrix/client/r0/account/3pid/add
+
+TODO: Remove "identifier"?
 
 ```json
 {

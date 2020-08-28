@@ -28,7 +28,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 internal interface ProfileAPI {
-
     /**
      * Get the combined profile information for this user.
      * This API may be used to fetch the user's own profile information or other users; either locally or on remote homeservers.
@@ -71,4 +70,22 @@ internal interface ProfileAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/unbind")
     fun unbindThreePid(@Body body: UnbindThreePidBody): Call<UnbindThreePidResponse>
+
+    /**
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/email/requestToken")
+    fun addEmail(@Body body: AddEmailBody): Call<AddThreePidResponse>
+
+    /**
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/add")
+    fun finalizeAddThreePid(@Body body: FinalizeAddThreePidBody): Call<Unit>
+
+    /**
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-delete
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/delete")
+    fun deleteThreePid(@Body body: DeleteThreePidBody): Call<DeleteThreePidResponse>
 }

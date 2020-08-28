@@ -28,6 +28,11 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -41,11 +46,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.util.awaitCallback
-import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -309,7 +309,7 @@ class DevicesViewModel @AssistedInject constructor(
                 }
 
                 if (!isPasswordRequestFound) {
-                    // LoginFlowTypes.PASSWORD not supported, and this is the only one RiotX supports so far...
+                    // LoginFlowTypes.PASSWORD not supported, and this is the only one Element supports so far...
                     setState {
                         copy(
                                 request = Fail(failure)

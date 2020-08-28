@@ -71,6 +71,9 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     var buttonAction: Action? = null
 
     @EpoxyAttribute
+    var destructiveButtonAction: Action? = null
+
+    @EpoxyAttribute
     var itemClickAction: Action? = null
 
     override fun bind(holder: Holder) {
@@ -109,6 +112,11 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
             buttonAction?.perform?.run()
         }
 
+        holder.destructiveButton.setTextOrHide(destructiveButtonAction?.title)
+        holder.destructiveButton.setOnClickListener {
+            destructiveButtonAction?.perform?.run()
+        }
+
         holder.root.setOnClickListener {
             itemClickAction?.perform?.run()
         }
@@ -122,5 +130,6 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
         val accessoryImage by bind<ImageView>(R.id.item_generic_accessory_image)
         val progressBar by bind<ProgressBar>(R.id.item_generic_progress_bar)
         val actionButton by bind<Button>(R.id.item_generic_action_button)
+        val destructiveButton by bind<Button>(R.id.item_generic_destructive_action_button)
     }
 }

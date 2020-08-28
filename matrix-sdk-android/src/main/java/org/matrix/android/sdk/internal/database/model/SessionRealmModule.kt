@@ -36,6 +36,7 @@ import io.realm.annotations.RealmModule
             RoomSummaryEntity::class,
             RoomTagEntity::class,
             SyncEntity::class,
+            PendingThreePidEntity::class,
             UserEntity::class,
             IgnoredUserEntity::class,
             BreadcrumbsEntity::class,

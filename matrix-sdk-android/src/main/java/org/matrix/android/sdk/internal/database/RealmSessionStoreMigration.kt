@@ -20,6 +20,7 @@ package org.matrix.android.sdk.internal.database
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,6 +33,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
+        if (oldVersion <= 3) migrateTo4(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -62,5 +64,18 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                     // Schedule a refresh of the capabilities
                     obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
                 }
+    }
+
+    private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Step 3 -> 4")
+        realm.schema.create("PendingThreePidEntity")
+                .addField(PendingThreePidEntityFields.CLIENT_SECRET, String::class.java)
+                .setRequired(PendingThreePidEntityFields.CLIENT_SECRET, true)
+                .addField(PendingThreePidEntityFields.EMAIL, String::class.java)
+                .addField(PendingThreePidEntityFields.MSISDN, String::class.java)
+                .addField(PendingThreePidEntityFields.SEND_ATTEMPT, Int::class.java)
+                .setRequired(PendingThreePidEntityFields.SEND_ATTEMPT, true)
+                .addField(PendingThreePidEntityFields.SID, String::class.java)
+                .setRequired(PendingThreePidEntityFields.SID, true)
     }
 }

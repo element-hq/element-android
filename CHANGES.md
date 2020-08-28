@@ -2,7 +2,7 @@ Changes in Element 1.0.6 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - List phone numbers and emails added to the Matrix account, and add Email to account (#44)
 
 Improvements 🙌:
  - You can now join room through permalink and within room directory search

@@ -58,4 +58,13 @@ internal abstract class ProfileModule {
 
     @Binds
     abstract fun bindSetAvatarUrlTask(task: DefaultSetAvatarUrlTask): SetAvatarUrlTask
+
+    @Binds
+    abstract fun bindAddThreePidTask(task: DefaultAddThreePidTask): AddThreePidTask
+
+    @Binds
+    abstract fun bindFinalizeAddingThreePidTask(task: DefaultFinalizeAddingThreePidTask): FinalizeAddingThreePidTask
+
+    @Binds
+    abstract fun bindDeleteThreePidTask(task: DefaultDeleteThreePidTask): DeleteThreePidTask
 }
