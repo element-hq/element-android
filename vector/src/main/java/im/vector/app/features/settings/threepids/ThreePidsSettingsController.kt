@@ -26,10 +26,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
-import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.discovery.settingsContinueCancelItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
@@ -88,7 +86,7 @@ class ThreePidsSettingsController @Inject constructor(
         // Pending threePids
         pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Email::class.java)
-                ?.forEach { buildPendingThreePid("email ", it) }
+                ?.forEach { buildPendingThreePid("p_email ", it) }
 
         genericButtonItem {
             id("addEmail")
@@ -107,7 +105,7 @@ class ThreePidsSettingsController @Inject constructor(
         // Pending threePids
         pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Msisdn::class.java)
-                ?.forEach { buildPendingThreePid("msisdn ", it) }
+                ?.forEach { buildPendingThreePid("p_msisdn ", it) }
 
         genericButtonItem {
             id("addMsisdn")
@@ -118,21 +116,20 @@ class ThreePidsSettingsController @Inject constructor(
     }
 
     private fun buildThreePid(idPrefix: String, threePid: ThreePid) {
-        genericItem {
+        threePidItem {
             id(idPrefix + threePid.value)
+            // TODO Add an icon for emails
+            iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
             title(threePid.value)
-            destructiveButtonAction(
-                    GenericItem.Action(stringProvider.getString(R.string.remove))
-                            .apply {
-                                perform = Runnable { interactionListener?.deleteThreePid(threePid) }
-                            }
-            )
+            deleteClickListener { interactionListener?.deleteThreePid(threePid) }
         }
     }
 
     private fun buildPendingThreePid(idPrefix: String, threePid: ThreePid) {
-        genericItem {
+        threePidItem {
             id(idPrefix + threePid.value)
+            // TODO Add an icon for emails
+            iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
             title(threePid.value)
         }
 

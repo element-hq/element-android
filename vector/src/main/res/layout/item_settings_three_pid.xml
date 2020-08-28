@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="64dp"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/item_settings_three_pid_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:scaleType="center"
+        android:tint="?riotx_text_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_phone" />
+
+    <TextView
+        android:id="@+id/item_settings_three_pid_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="?riotx_text_primary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_settings_three_pid_delete"
+        app:layout_constraintStart_toEndOf="@+id/item_settings_three_pid_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="alice@email-provider.org" />
+
+    <ImageView
+        android:id="@+id/item_settings_three_pid_delete"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_trash_24"
+        android:tint="@color/riotx_destructive_accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
