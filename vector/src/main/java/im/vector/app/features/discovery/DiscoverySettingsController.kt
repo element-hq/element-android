@@ -23,19 +23,18 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.app.R
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.attributes.ButtonType
 import im.vector.app.core.epoxy.attributes.IconMode
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
@@ -235,16 +234,7 @@ class DiscoverySettingsController @Inject constructor(
     }
 
     private fun buildMsisdn(pidInfo: PidInfo) {
-        val phoneNumber = try {
-            PhoneNumberUtil.getInstance().parse("+${pidInfo.threePid.value}", null)
-        } catch (t: Throwable) {
-            Timber.e(t, "Unable to parse the phone number")
-            null
-        }
-                ?.let {
-                    PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
-                }
-                ?: pidInfo.threePid.value
+        val phoneNumber = pidInfo.threePid.getFormattedValue()
 
         buildThreePid(pidInfo, phoneNumber)
 

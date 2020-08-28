@@ -24,6 +24,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
+import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
@@ -107,11 +109,21 @@ class ThreePidsSettingsController @Inject constructor(
                 ?.filterIsInstance(ThreePid.Msisdn::class.java)
                 ?.forEach { buildPendingThreePid("p_msisdn ", it) }
 
+        /*
+        // TODO Support adding MSISDN
         genericButtonItem {
             id("addMsisdn")
             text(stringProvider.getString(R.string.settings_add_phone_number))
             textColor(colorProvider.getColor(R.color.riotx_accent))
             buttonClickAction(View.OnClickListener { interactionListener?.addMsisdn() })
+        }
+         */
+        // Avoid empty area
+        if (msisdn.isEmpty()) {
+            noResultItem {
+                id("no_msisdn")
+                text(stringProvider.getString(R.string.settings_phone_numbers_empty))
+            }
         }
     }
 
@@ -119,8 +131,8 @@ class ThreePidsSettingsController @Inject constructor(
         threePidItem {
             id(idPrefix + threePid.value)
             // TODO Add an icon for emails
-            iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
-            title(threePid.value)
+            // iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
+            title(threePid.getFormattedValue())
             deleteClickListener { interactionListener?.deleteThreePid(threePid) }
         }
     }
@@ -129,8 +141,8 @@ class ThreePidsSettingsController @Inject constructor(
         threePidItem {
             id(idPrefix + threePid.value)
             // TODO Add an icon for emails
-            iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
-            title(threePid.value)
+            // iconResId(if (threePid is ThreePid.Msisdn) R.drawable.ic_phone else null)
+            title(threePid.getFormattedValue())
         }
 
         if (threePid is ThreePid.Email) {
