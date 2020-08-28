@@ -68,7 +68,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        // SC-TODO: once we count unimportant unread messages, pass that as counter - for now, unreadIndentIndicator is enough, so pass 0 to the badge instead
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, 0))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)

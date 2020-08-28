@@ -33,6 +33,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     @EpoxyAttribute lateinit var title: CharSequence
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var unreadNotificationCount: Int = 0
+    @EpoxyAttribute var unreadMessages: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
@@ -43,7 +44,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages))
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }

@@ -30,22 +30,28 @@ class UnreadCounterBadgeView : AppCompatTextView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun render(state: State) {
-        if (state.count == 0) {
+        if (state.count == 0 && state.unread == 0) {
             visibility = View.INVISIBLE
         } else {
             visibility = View.VISIBLE
-            val bgRes = if (state.highlighted) {
-                R.drawable.bg_unread_highlight
+            val bgRes = if (state.count > 0) {
+                if (state.highlighted) {
+                    R.drawable.bg_unread_highlight
+                } else {
+                    R.drawable.bg_unread_notification
+                }
             } else {
-                R.drawable.bg_unread_notification
+                R.drawable.bg_unread_unimportant
             }
             setBackgroundResource(bgRes)
-            text = RoomSummaryFormatter.formatUnreadMessagesCounter(state.count)
+            text = RoomSummaryFormatter.formatUnreadMessagesCounter(if (state.count > 0) state.count else state.unread)
         }
     }
 
     data class State(
             val count: Int,
-            val highlighted: Boolean
+            val highlighted: Boolean,
+            // SC addition
+            val unread: Int
     )
 }

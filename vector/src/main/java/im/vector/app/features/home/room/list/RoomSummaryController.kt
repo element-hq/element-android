@@ -23,17 +23,20 @@ import im.vector.app.core.epoxy.helpFooterItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
                                                 private val roomListNameFilter: RoomListNameFilter,
-                                                private val userPreferencesProvider: UserPreferencesProvider
+                                                private val userPreferencesProvider: UserPreferencesProvider,
+                                                private val scSdkPreferences: ScSdkPreferences
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -133,12 +136,20 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         } else {
             summaries.map { it.notificationCount }.sumBy { i -> i }
         }
+        // SC addition
+        val unreadMessages = if (summaries.isEmpty()) {
+            0
+        } else {
+            // TODO actual sum of events instead of sum of chats?
+            summaries.map { it.scHasUnreadMessages(scSdkPreferences) }.sumBy { b -> if (b) 1 else 0 }
+        }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
             id(titleRes)
             title(stringProvider.getString(titleRes))
             expanded(isExpanded)
             unreadNotificationCount(unreadCount)
+            unreadMessages(unreadMessages)
             showHighlighted(showHighlighted)
             listener {
                 mutateExpandedState()
