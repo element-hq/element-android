@@ -35,7 +35,7 @@
     <!--android:title="@string/settings_labs_enable_send_voice" />-->
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 

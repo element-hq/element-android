@@ -279,7 +279,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun swipeToReplyIsEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, true)
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, false)
     }
 
     fun mergeUTDinTimeline(): Boolean {
