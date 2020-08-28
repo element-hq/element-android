@@ -220,7 +220,7 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
     fun sendRelation(@Path("roomId") roomId: String,
-                     @Path("parent_id") parent_id: String,
+                     @Path("parent_id") parentId: String,
                      @Path("relation_type") relationType: String,
                      @Path("event_type") eventType: String,
                      @Body content: Content?
@@ -296,16 +296,16 @@ internal interface RoomAPI {
      * This cannot be undone.
      * Users may redact their own events, and any user with a power level greater than or equal to the redact power level of the room may redact events there.
      *
-     * @param txId      the transaction Id
-     * @param roomId    the room id
-     * @param eventId   the event to delete
+     * @param txId     the transaction Id
+     * @param roomId   the room id
+     * @param eventId  the event to delete
      * @param reason   json containing reason key {"reason": "Indecent material"}
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}")
     fun redactEvent(
             @Path("txnId") txId: String,
             @Path("roomId") roomId: String,
-            @Path("eventId") parent_id: String,
+            @Path("eventId") eventId: String,
             @Body reason: Map<String, String>
     ): Call<SendResponse>
 
