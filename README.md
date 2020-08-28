@@ -18,7 +18,9 @@ Nightly build: [![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f6
 
 # New Android SDK
 
-Element is based on a new Android SDK fully written in Kotlin (like Element). In order to make the early development as fast as possible, Element and the new SDK currently share the same git repository. We will make separate repos once the SDK is stable enough.
+Element is based on a new Android SDK fully written in Kotlin (like Element). In order to make the early development as fast as possible, Element and the new SDK currently share the same git repository.
+
+The SDK module is copied to a dedicated repository: https://github.com/matrix-org/matrix-android-sdk2. That way, third party apps can add a regular gradle dependency to use it. So more details on how to do that here: https://github.com/matrix-org/matrix-android-sdk2.
 
 # Roadmap
 
