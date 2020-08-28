@@ -79,7 +79,7 @@ class DataAttachmentRoomProvider(
         val timeLineEvent = room?.getTimeLineEvent(item.eventId)
         if (timeLineEvent != null) {
             val dateString = timeLineEvent.root.localDateTime().let {
-                "${dateFormatter.formatMessageDay(it)} at ${dateFormatter.formatMessageHour(it)} "
+                "${dateFormatter.formatMessageDayWithMonth(it)} at ${dateFormatter.formatMessageHour(it)} "
             }
             overlayView?.updateWith("${position + 1} of ${attachments.size}", "${timeLineEvent.senderInfo.displayName} $dateString")
             overlayView?.videoControlsGroup?.isVisible = timeLineEvent.root.isVideoMessage()

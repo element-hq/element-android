@@ -18,12 +18,12 @@ package im.vector.app.features.roomprofile.uploads.files
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
-import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
+import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
 class UploadsFileController @Inject constructor(

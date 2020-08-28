@@ -21,7 +21,6 @@ import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.localDateTime
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
@@ -53,8 +52,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,
-                             changeMembershipState: ChangeMembershipState,
-                             listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+                                     changeMembershipState: ChangeMembershipState,
+                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -87,15 +86,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
-            val date = latestEvent.root.localDateTime()
-            val currentDate = DateProvider.currentLocalDateTime()
-            val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
-            latestEventTime = if (isSameDay) {
-                dateFormatter.formatMessageHour(date)
-            } else {
-                dateFormatter.formatMessageDay(date)
-            }
+            latestEventTime = dateFormatter.formatMessageDate(
+                    date = latestEvent.root.localDateTime(),
+                    useRelative = true,
+                    onlyTimeIfSameDay = true,
+                    abbrev = true
+            )
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()

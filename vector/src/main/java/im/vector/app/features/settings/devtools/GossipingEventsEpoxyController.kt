@@ -94,7 +94,7 @@ class GossipingEventsEpoxyController @Inject constructor(
                         )
                         description(
                                 span {
-                                    +vectorDateFormatter.formatMessageDay(DateProvider.toLocalDateTime(event.ageLocalTs))
+                                    +vectorDateFormatter.formatMessageDayWithMonth(DateProvider.toLocalDateTime(event.ageLocalTs))
                                     +" ${vectorDateFormatter.formatMessageHour(DateProvider.toLocalDateTime(event.ageLocalTs))}"
                                     span("\nfrom: ") {
                                         textStyle = "bold"

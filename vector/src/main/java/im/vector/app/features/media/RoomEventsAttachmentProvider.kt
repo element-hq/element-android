@@ -129,7 +129,7 @@ class RoomEventsAttachmentProvider(
         super.overlayViewAtPosition(context, position)
         val item = attachments[position]
         val dateString = item.root.localDateTime().let {
-            "${dateFormatter.formatMessageDay(it)} at ${dateFormatter.formatMessageHour(it)} "
+            "${dateFormatter.formatMessageDayWithMonth(it)} at ${dateFormatter.formatMessageHour(it)} "
         }
         overlayView?.updateWith("${position + 1} of ${attachments.size}", "${item.senderInfo.displayName} $dateString")
         overlayView?.videoControlsGroup?.isVisible = item.root.isVideoMessage()

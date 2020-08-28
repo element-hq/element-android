@@ -29,6 +29,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
+import im.vector.app.core.resources.DateProvider
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
@@ -53,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoCon
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
@@ -333,13 +333,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         ) {
             requestModelBuild()
         }
-        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
+        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, event.root.originServerTs)
         return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
     }
 
-    private fun buildDaySeparatorItem(addDaySeparator: Boolean, date: LocalDateTime): DaySeparatorItem? {
+    private fun buildDaySeparatorItem(addDaySeparator: Boolean, originServerTs: Long?): DaySeparatorItem? {
         return if (addDaySeparator) {
-            val formattedDay = dateFormatter.formatMessageDay(date)
+            val formattedDay = dateFormatter.formatMessageDate(
+                    date = DateProvider.toLocalDateTime(originServerTs),
+                    alwaysShowYear = true
+            )
             DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
         } else {
             null

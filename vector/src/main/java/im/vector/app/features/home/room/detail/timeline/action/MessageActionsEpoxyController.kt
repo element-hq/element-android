@@ -20,12 +20,14 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
 import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -40,13 +42,16 @@ import javax.inject.Inject
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val fontProvider: EmojiCompatFontProvider
+        private val fontProvider: EmojiCompatFontProvider,
+        private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
 
     override fun buildModels(state: MessageActionState) {
         // Message preview
+        val date = state.timelineEvent()?.root?.localDateTime()
+        val formattedDate = dateFormatter.formatMessageDate(date, showFullDate = true)
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(avatarRenderer)
@@ -54,7 +59,7 @@ class MessageActionsEpoxyController @Inject constructor(
             movementMethod(createLinkMovementMethod(listener))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
-            time(state.time())
+            time(formattedDate)
         }
 
         // Send state

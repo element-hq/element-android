@@ -19,8 +19,11 @@ package im.vector.app.core.date
 import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.toTimestamp
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
@@ -41,22 +44,77 @@ fun startOfDay(time: Long): Long {
 }
 
 class VectorDateFormatter @Inject constructor(private val context: Context,
-                                              private val localeProvider: LocaleProvider) {
+                                              private val localeProvider: LocaleProvider,
+                                              private val dateFormatterProviders: DateFormatterProviders) {
 
-    private val messageHourFormatter by lazy {
-        DateTimeFormatter.ofPattern("H:mm", localeProvider.current())
+    private val hourFormatter by lazy {
+        if (DateFormat.is24HourFormat(context)) {
+            DateTimeFormatter.ofPattern("H:mm", localeProvider.current())
+        } else {
+            DateTimeFormatter.ofPattern("h:mm a", localeProvider.current())
+        }
     }
 
-    private val messageDayFormatter by lazy {
-        DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE d MMM"))
+    private val dayFormatter by lazy {
+        DateTimeFormatter.ofPattern("EEE", localeProvider.current())
+    }
+
+    private val fullDateFormatter by lazy {
+        if (DateFormat.is24HourFormat(context)) {
+            DateTimeFormatter.ofPattern("EEE, d MMM yyyy H:mm", localeProvider.current())
+        } else {
+            DateTimeFormatter.ofPattern("EEE, d MMM yyyy h:mm a", localeProvider.current())
+        }
     }
 
     fun formatMessageHour(localDateTime: LocalDateTime): String {
-        return messageHourFormatter.format(localDateTime)
+        return hourFormatter.format(localDateTime)
     }
 
     fun formatMessageDay(localDateTime: LocalDateTime): String {
-        return messageDayFormatter.format(localDateTime)
+        return dayFormatter.format(localDateTime)
+    }
+
+    fun formatMessageDayWithMonth(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
+        return dateFormatterProviders.provide(abbrev).dateWithMonthFormatter.format(localDateTime)
+    }
+
+    fun formatMessageDayWithYear(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
+        return dateFormatterProviders.provide(abbrev).dateWithYearFormatter.format(localDateTime)
+    }
+
+    fun formatMessageDate(
+            date: LocalDateTime?,
+            showFullDate: Boolean = false,
+            onlyTimeIfSameDay: Boolean = false,
+            useRelative: Boolean = false,
+            alwaysShowYear: Boolean = false,
+            abbrev: Boolean = false
+    ): String {
+        if (date == null) {
+            return ""
+        }
+        if (showFullDate) {
+            return fullDateFormatter.format(date)
+        }
+        val currentDate = DateProvider.currentLocalDateTime()
+        val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
+        return if (onlyTimeIfSameDay && isSameDay) {
+            formatMessageHour(date)
+        } else {
+            val period = Period.between(date.toLocalDate(), currentDate.toLocalDate())
+            if (period.years >= 1 || alwaysShowYear) {
+                formatMessageDayWithYear(date, abbrev)
+            } else if (period.months >= 1) {
+                formatMessageDayWithMonth(date, abbrev)
+            } else if (useRelative && period.days < 2) {
+                getRelativeDay(date.toTimestamp())
+            } else if (useRelative && period.days < 7) {
+                formatMessageDay(date)
+            } else {
+                formatMessageDayWithMonth(date, abbrev)
+            }
+        }
     }
 
     /**
@@ -71,12 +129,22 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
             return ""
         }
         val now = System.currentTimeMillis()
+        var flags = DateUtils.FORMAT_SHOW_WEEKDAY
+
         return DateUtils.getRelativeDateTimeString(
                 context,
                 time,
                 DateUtils.DAY_IN_MILLIS,
                 now - startOfDay(now - 2 * DateUtils.DAY_IN_MILLIS),
-                DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_SHOW_TIME
+                flags
         ).toString()
+    }
+
+    private fun getRelativeDay(ts: Long): String {
+        return DateUtils.getRelativeTimeSpanString(
+                ts,
+                System.currentTimeMillis(),
+                DateUtils.DAY_IN_MILLIS,
+                DateUtils.FORMAT_SHOW_WEEKDAY).toString()
     }
 }

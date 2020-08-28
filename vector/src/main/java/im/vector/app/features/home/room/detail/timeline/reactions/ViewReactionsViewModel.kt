@@ -29,12 +29,12 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
+import io.reactivex.Observable
+import io.reactivex.Single
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.rx.RxRoom
 import org.matrix.android.sdk.rx.unwrap
-import io.reactivex.Observable
-import io.reactivex.Single
 
 data class DisplayReactionsViewState(
         val eventId: String,

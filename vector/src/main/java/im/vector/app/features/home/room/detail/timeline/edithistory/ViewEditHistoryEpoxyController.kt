@@ -83,7 +83,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
                     val dateString = if (DateUtils.isToday(evDate.timeInMillis)) context.getString(R.string.today)
-                    else dateFormatter.formatMessageDay(timelineEvent.localDateTime())
+                    else dateFormatter.formatMessageDayWithMonth(timelineEvent.localDateTime())
                     genericItemHeader {
                         id(evDate.hashCode())
                         text(dateString)
