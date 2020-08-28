@@ -84,8 +84,6 @@ User clicks on CONTINUE
 
 POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 
-TODO: Remove "identifier"?
-
 ```json
 {
   "sid": "bxyDHuJKsdkjMlTJ",
@@ -94,10 +92,6 @@ TODO: Remove "identifier"?
     "session": "ppvvnozXCQZFaggUBlHJYPjA",
     "type": "m.login.password",
     "user": "@benoitx:matrix.org",
-    "identifier": {
-      "type": "m.id.user",
-      "user": "@benoitx:matrix.org"
-    },
     "password": "weak_password"
   }
 }
