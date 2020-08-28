@@ -63,7 +63,7 @@ data class PushRule(
      * Add the default notification sound.
      */
     fun setNotificationSound(): PushRule {
-        return setNotificationSound(ACTION_VALUE_DEFAULT)
+        return setNotificationSound(Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT)
     }
 
     fun getNotificationSound(): String? {
@@ -109,13 +109,13 @@ data class PushRule(
     fun setNotify(notify: Boolean): PushRule {
         val mutableActions = actions.toMutableList()
 
-        mutableActions.remove(ACTION_DONT_NOTIFY)
-        mutableActions.remove(ACTION_NOTIFY)
+        mutableActions.remove(Action.ACTION_DONT_NOTIFY)
+        mutableActions.remove(Action.ACTION_NOTIFY)
 
         if (notify) {
-            mutableActions.add(ACTION_NOTIFY)
+            mutableActions.add(Action.ACTION_NOTIFY)
         } else {
-            mutableActions.add(ACTION_DONT_NOTIFY)
+            mutableActions.add(Action.ACTION_DONT_NOTIFY)
         }
 
         return copy(actions = mutableActions)
@@ -126,51 +126,12 @@ data class PushRule(
      *
      * @return true if the rule should play sound
      */
-    fun shouldNotify() = actions.contains(ACTION_NOTIFY)
+    fun shouldNotify() = actions.contains(Action.ACTION_NOTIFY)
 
     /**
      * Return true if the rule should not highlight the event.
      *
      * @return true if the rule should not play sound
      */
-    fun shouldNotNotify() = actions.contains(ACTION_DONT_NOTIFY)
-
-    companion object {
-        /* ==========================================================================================
-         * Rule id
-         * ========================================================================================== */
-
-        const val RULE_ID_DISABLE_ALL = ".m.rule.master"
-        const val RULE_ID_CONTAIN_USER_NAME = ".m.rule.contains_user_name"
-        const val RULE_ID_CONTAIN_DISPLAY_NAME = ".m.rule.contains_display_name"
-        const val RULE_ID_ONE_TO_ONE_ROOM = ".m.rule.room_one_to_one"
-        const val RULE_ID_INVITE_ME = ".m.rule.invite_for_me"
-        const val RULE_ID_PEOPLE_JOIN_LEAVE = ".m.rule.member_event"
-        const val RULE_ID_CALL = ".m.rule.call"
-        const val RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS = ".m.rule.suppress_notices"
-        const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = ".m.rule.message"
-        const val RULE_ID_AT_ROOMS = ".m.rule.roomnotif"
-        const val RULE_ID_TOMBSTONE = ".m.rule.tombstone"
-        const val RULE_ID_E2E_ONE_TO_ONE_ROOM = ".m.rule.encrypted_room_one_to_one"
-        const val RULE_ID_E2E_GROUP = ".m.rule.encrypted"
-        const val RULE_ID_REACTION = ".m.rule.reaction"
-        const val RULE_ID_FALLBACK = ".m.rule.fallback"
-
-        /* ==========================================================================================
-         * Actions
-         * ========================================================================================== */
-
-        const val ACTION_NOTIFY = "notify"
-        const val ACTION_DONT_NOTIFY = "dont_notify"
-        const val ACTION_COALESCE = "coalesce"
-
-        const val ACTION_SET_TWEAK_SOUND_VALUE = "sound"
-        const val ACTION_SET_TWEAK_HIGHLIGHT_VALUE = "highlight"
-
-        const val ACTION_PARAMETER_SET_TWEAK = "set_tweak"
-        const val ACTION_PARAMETER_VALUE = "value"
-
-        const val ACTION_VALUE_DEFAULT = "default"
-        const val ACTION_VALUE_RING = "ring"
-    }
+    fun shouldNotNotify() = actions.contains(Action.ACTION_DONT_NOTIFY)
 }

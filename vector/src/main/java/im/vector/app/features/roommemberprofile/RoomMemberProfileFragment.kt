@@ -35,6 +35,7 @@ import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
@@ -44,11 +45,11 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
-import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 @Parcelize
@@ -110,6 +111,12 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }.exhaustive
         }
+        setupLongClicks()
+    }
+
+    private fun setupLongClicks() {
+        memberProfileNameView.copyOnLongClick()
+        memberProfileIdView.copyOnLongClick()
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {

@@ -15,25 +15,26 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.call
+package org.matrix.android.sdk.internal.util
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
+internal fun String.hasSpecialGlobChar(): Boolean {
+    return contains("*") || contains("?")
+}
 
-interface CallSignalingService {
-
-    fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable
-
-    /**
-     * Create an outgoing call
-     */
-    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
-
-    fun addCallListener(listener: CallsListener)
-
-    fun removeCallListener(listener: CallsListener)
-
-    fun getCallWithId(callId: String) : MxCall?
-
-    fun isThereAnyActiveCall(): Boolean
+// Very simple glob to regexp converter
+internal fun String.simpleGlobToRegExp(): String {
+    val string = this
+    return buildString {
+        // append("^")
+        string.forEach { char ->
+            when (char) {
+                '*'  -> append(".*")
+                '?'  -> append(".")
+                '.'  -> append("\\.")
+                '\\' -> append("\\\\")
+                else -> append(char)
+            }
+        }
+        // append("$")
+    }
 }

@@ -5,9 +5,18 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - You can now join room through permalink and within room directory search
+ - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
 
 Bugfix 🐛:
+ - Display name not shown under Settings/General (#1926)
+ - Words containing my name should not trigger notifications (#1781)
+ - Fix changing language issue
+ - Fix FontSize issue (#1483, #1787)
+ - Fix bad color for settings icon on Android < 24 (#1786)
+ - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
+ - Fix uploads still don't work with room v6 (#1879)
+ - Can't handle ongoing call events in background (#1992)
  - Fix zero values for uploaded image dimmensions when uploaded as a File (#1628)
 
 Translations 🗣:
@@ -17,10 +26,11 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
 
 Other changes:
- -
+ - Use File extension functions to make code more concise (#1996)
+ - Create a script to import SAS strings (#1909)
 
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================

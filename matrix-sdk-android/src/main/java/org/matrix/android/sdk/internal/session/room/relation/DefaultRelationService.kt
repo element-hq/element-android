@@ -208,7 +208,7 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, event = event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return timeLineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
