@@ -91,6 +91,9 @@ class DefaultErrorFormatter @Inject constructor(
                             && throwable.error.message == "Email is already in use" -> {
                         stringProvider.getString(R.string.account_email_already_used_error)
                     }
+                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED      -> {
+                        stringProvider.getString(R.string.error_threepid_auth_failed)
+                    }
                     else                                                            -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
