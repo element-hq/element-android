@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 sealed class ThreePidsSettingsAction : VectorViewModelAction {
     data class AddThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
     data class ContinueThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
+    data class CancelThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
     data class AccountPassword(val password: String) : ThreePidsSettingsAction()
     data class DeleteThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
 }

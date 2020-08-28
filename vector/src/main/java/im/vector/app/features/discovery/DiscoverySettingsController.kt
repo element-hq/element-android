@@ -341,25 +341,22 @@ class DiscoverySettingsController @Inject constructor(
     private fun buildContinueCancel(threePid: ThreePid) {
         settingsContinueCancelItem {
             id("bottom${threePid.value}")
-            interactionListener(object : SettingsContinueCancelItem.Listener {
-                override fun onContinue() {
-                    when (threePid) {
-                        is ThreePid.Email  -> {
-                            listener?.checkEmailVerification(threePid)
-                        }
-                        is ThreePid.Msisdn -> {
-                            val code = codes[threePid]
-                            if (code != null) {
-                                listener?.sendMsisdnVerificationCode(threePid, code)
-                            }
+            continueOnClick {
+                when (threePid) {
+                    is ThreePid.Email  -> {
+                        listener?.checkEmailVerification(threePid)
+                    }
+                    is ThreePid.Msisdn -> {
+                        val code = codes[threePid]
+                        if (code != null) {
+                            listener?.sendMsisdnVerificationCode(threePid, code)
                         }
                     }
                 }
-
-                override fun onCancel() {
-                    listener?.cancelBinding(threePid)
-                }
-            })
+            }
+            cancelOnClick {
+                listener?.cancelBinding(threePid)
+            }
         }
     }
 

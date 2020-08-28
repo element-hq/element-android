@@ -125,6 +125,10 @@ class ThreePidsSettingsFragment @Inject constructor(
         viewModel.handle(ThreePidsSettingsAction.ContinueThreePid(threePid))
     }
 
+    override fun cancelThreePid(threePid: ThreePid) {
+        viewModel.handle(ThreePidsSettingsAction.CancelThreePid(threePid))
+    }
+
     override fun deleteThreePid(threePid: ThreePid) {
         AlertDialog.Builder(requireActivity())
                 .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.value))

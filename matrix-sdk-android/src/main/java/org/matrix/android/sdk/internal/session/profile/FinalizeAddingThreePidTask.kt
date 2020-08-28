@@ -36,7 +36,8 @@ internal abstract class FinalizeAddingThreePidTask : Task<FinalizeAddingThreePid
     data class Params(
             val threePid: ThreePid,
             val session: String?,
-            val accountPassword: String?
+            val accountPassword: String?,
+            val userWantsToCancel: Boolean
     )
 }
 
@@ -48,35 +49,41 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         private val eventBus: EventBus) : FinalizeAddingThreePidTask() {
 
     override suspend fun execute(params: Params) {
-        // Get the required pending data
-        val pendingThreePids = monarchy.fetchAllMappedSync(
-                { it.where(PendingThreePidEntity::class.java) },
-                { pendingThreePidMapper.map(it) }
-        )
-                .firstOrNull { it.threePid == params.threePid }
-                ?: throw IllegalArgumentException("unknown threepid")
+        if (params.userWantsToCancel.not()) {
+            // Get the required pending data
+            val pendingThreePids = monarchy.fetchAllMappedSync(
+                    { it.where(PendingThreePidEntity::class.java) },
+                    { pendingThreePidMapper.map(it) }
+            )
+                    .firstOrNull { it.threePid == params.threePid }
+                    ?: throw IllegalArgumentException("unknown threepid")
 
-        try {
-            executeRequest<Unit>(eventBus) {
-                val body = FinalizeAddThreePidBody(
-                        clientSecret = pendingThreePids.clientSecret,
-                        sid = pendingThreePids.sid,
-                        auth = if (params.session != null && params.accountPassword != null) {
-                            UserPasswordAuth(
-                                    session = params.session,
-                                    user = userId,
-                                    password = params.accountPassword
-                            )
-                        } else null
-                )
-                apiCall = profileAPI.finalizeAddThreePid(body)
+            try {
+                executeRequest<Unit>(eventBus) {
+                    val body = FinalizeAddThreePidBody(
+                            clientSecret = pendingThreePids.clientSecret,
+                            sid = pendingThreePids.sid,
+                            auth = if (params.session != null && params.accountPassword != null) {
+                                UserPasswordAuth(
+                                        session = params.session,
+                                        user = userId,
+                                        password = params.accountPassword
+                                )
+                            } else null
+                    )
+                    apiCall = profileAPI.finalizeAddThreePid(body)
+                }
+            } catch (throwable: Throwable) {
+                throw throwable.toRegistrationFlowResponse()
+                        ?.let { Failure.RegistrationFlowError(it) }
+                        ?: throwable
             }
-        } catch (throwable: Throwable) {
-            throw throwable.toRegistrationFlowResponse()
-                    ?.let { Failure.RegistrationFlowError(it) }
-                    ?: throwable
         }
 
+        cleanupDatabase(params)
+    }
+
+    private suspend fun cleanupDatabase(params: Params) {
         // Delete the pending three pid
         monarchy.awaitTransaction { realm ->
             realm.where(PendingThreePidEntity::class.java)

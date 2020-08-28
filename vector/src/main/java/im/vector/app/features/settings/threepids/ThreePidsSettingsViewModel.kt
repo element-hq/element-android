@@ -23,8 +23,10 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -35,7 +37,8 @@ import org.matrix.android.sdk.rx.rx
 
 class ThreePidsSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: ThreePidsSettingsViewState,
-        private val session: Session
+        private val session: Session,
+        private val stringProvider: StringProvider
 ) : VectorViewModel<ThreePidsSettingsViewState, ThreePidsSettingsAction, ThreePidsSettingsViewEvents>(initialState) {
 
     // UIA session
@@ -128,6 +131,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         when (action) {
             is ThreePidsSettingsAction.AddThreePid      -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
+            is ThreePidsSettingsAction.CancelThreePid   -> handleCancelThreePid(action)
             is ThreePidsSettingsAction.AccountPassword  -> handleAccountPassword(action)
             is ThreePidsSettingsAction.DeleteThreePid   -> handleDeleteThreePid(action)
         }.exhaustive
@@ -135,8 +139,16 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     private fun handleAddThreePid(action: ThreePidsSettingsAction.AddThreePid) {
         isLoading(true)
-        viewModelScope.launch {
-            session.addThreePid(action.threePid, loadingCallback)
+
+        withState { state ->
+            val allThreePids = state.threePids.invoke().orEmpty() + state.pendingThreePids.invoke().orEmpty()
+            if (allThreePids.any { it.value == action.threePid.value }) {
+                _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalArgumentException(stringProvider.getString(R.string.auth_email_already_defined))))
+            } else {
+                viewModelScope.launch {
+                    session.addThreePid(action.threePid, loadingCallback)
+                }
+            }
         }
     }
 
@@ -145,6 +157,13 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         pendingThreePid = action.threePid
         viewModelScope.launch {
             session.finalizeAddingThreePid(action.threePid, null, null, loadingCallback)
+        }
+    }
+
+    private fun handleCancelThreePid(action: ThreePidsSettingsAction.CancelThreePid) {
+        isLoading(true)
+        viewModelScope.launch {
+            session.cancelAddingThreePid(action.threePid, loadingCallback)
         }
     }
 

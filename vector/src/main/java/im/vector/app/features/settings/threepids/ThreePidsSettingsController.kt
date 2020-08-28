@@ -30,6 +30,8 @@ import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
+import im.vector.app.features.discovery.settingsContinueCancelItem
+import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
@@ -43,6 +45,7 @@ class ThreePidsSettingsController @Inject constructor(
         fun addEmail()
         fun addMsisdn()
         fun continueThreePid(threePid: ThreePid)
+        fun cancelThreePid(threePid: ThreePid)
         fun deleteThreePid(threePid: ThreePid)
     }
 
@@ -80,12 +83,12 @@ class ThreePidsSettingsController @Inject constructor(
             title(stringProvider.getString(R.string.settings_emails))
         }
 
-        emails.forEach { buildThreePid("email_", it) }
+        emails.forEach { buildThreePid("email ", it) }
 
         // Pending threePids
         pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Email::class.java)
-                ?.forEach { buildPendingThreePid("email_", it) }
+                ?.forEach { buildPendingThreePid("email ", it) }
 
         genericButtonItem {
             id("addEmail")
@@ -99,12 +102,12 @@ class ThreePidsSettingsController @Inject constructor(
             title(stringProvider.getString(R.string.settings_phone_numbers))
         }
 
-        msisdn.forEach { buildThreePid("msisdn_", it) }
+        msisdn.forEach { buildThreePid("msisdn ", it) }
 
         // Pending threePids
         pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Msisdn::class.java)
-                ?.forEach { buildPendingThreePid("msisdn_", it) }
+                ?.forEach { buildPendingThreePid("msisdn ", it) }
 
         genericButtonItem {
             id("addMsisdn")
@@ -131,15 +134,20 @@ class ThreePidsSettingsController @Inject constructor(
         genericItem {
             id(idPrefix + threePid.value)
             title(threePid.value)
-            if (threePid is ThreePid.Email) {
-                description(stringProvider.getString(R.string.account_email_validation_message))
+        }
+
+        if (threePid is ThreePid.Email) {
+            settingsInformationItem {
+                id("info" + idPrefix + threePid.value)
+                message(stringProvider.getString(R.string.account_email_validation_message))
+                colorProvider(colorProvider)
             }
-            buttonAction(
-                    GenericItem.Action(stringProvider.getString(R.string._continue))
-                            .apply {
-                                perform = Runnable { interactionListener?.continueThreePid(threePid) }
-                            }
-            )
+        }
+
+        settingsContinueCancelItem {
+            id("cont" + idPrefix + threePid.value)
+            continueOnClick { interactionListener?.continueThreePid(threePid) }
+            cancelOnClick { interactionListener?.cancelThreePid(threePid) }
         }
     }
 }

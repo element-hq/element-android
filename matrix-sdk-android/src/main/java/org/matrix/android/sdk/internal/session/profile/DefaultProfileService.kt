@@ -163,7 +163,25 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                                         accountPassword: String?,
                                         matrixCallback: MatrixCallback<Unit>): Cancelable {
         return finalizeAddingThreePidTask
-                .configureWith(FinalizeAddingThreePidTask.Params(threePid, uiaSession, accountPassword)) {
+                .configureWith(FinalizeAddingThreePidTask.Params(
+                        threePid = threePid,
+                        session = uiaSession,
+                        accountPassword = accountPassword,
+                        userWantsToCancel = false
+                )) {
+                    callback = alsoRefresh(matrixCallback)
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun cancelAddingThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return finalizeAddingThreePidTask
+                .configureWith(FinalizeAddingThreePidTask.Params(
+                        threePid = threePid,
+                        session = null,
+                        accountPassword = null,
+                        userWantsToCancel = true
+                )) {
                     callback = alsoRefresh(matrixCallback)
                 }
                 .executeBy(taskExecutor)
