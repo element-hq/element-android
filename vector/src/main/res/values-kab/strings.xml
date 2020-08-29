@@ -929,4 +929,5 @@
     <string name="settings_security_pin_code_title">Rmed PIN</string>
     <string name="settings_security_pin_code_summary">Ma yella tebɣiḍ ad twennzeḍ PIN-inek·inem, aru ttu PIN i wakken ad teffɣeḍ syen wennez.</string>
     <string name="auth_pin_confirm_to_disable_title">Sentem PIN i wakken ad tsenseḍ PIN</string>
-</resources>
+<string name="send_bug_report_logs_description">Iwakken ad d-naf uguren, iɣmisen n umsaɣ-a ad ttwaznen akked uneqqis-a n tuccḍa. Aneqqis-a n tuccḍa, akked yiɣmisen d tuṭṭfa n ugdil, ur d-ttbinen ara s wudem azayez. Ma tesmenyifeḍ tuzzna n uḍris-a kan seddaw, ttxil kkes acraḍ i:</string>
+    </resources>
