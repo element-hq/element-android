@@ -27,7 +27,7 @@
 
     <string name="message_failed_to_upload">Tegguma ad d-tali tugna</string>
 
-    <string name="medium_email">Tansa imayl</string>
+    <string name="medium_email">Tansa n yimayl</string>
     <string name="verification_emoji_dog">Aqjun</string>
     <string name="verification_emoji_cat">Amcic</string>
     <string name="verification_emoji_lion">Izem</string>
@@ -40,7 +40,7 @@
     <string name="verification_emoji_rooster">Ayaziḍ</string>
     <string name="verification_emoji_penguin">Awarfus</string>
     <string name="verification_emoji_turtle">Afekrun</string>
-    <string name="verification_emoji_fish">Aslem</string>
+    <string name="verification_emoji_fish">Lḥut</string>
     <string name="verification_emoji_octopus">Azayz</string>
     <string name="verification_emoji_butterfly">Aferteṭṭu</string>
     <string name="verification_emoji_flower">Ajeǧǧig</string>
@@ -72,13 +72,13 @@
     <string name="verification_emoji_lock">Sekkeṛ</string>
     <string name="verification_emoji_key">Tasarut</string>
     <string name="verification_emoji_hammer">Tafḍist</string>
-    <string name="verification_emoji_telephone">Tiliɣri</string>
+    <string name="verification_emoji_telephone">Tiliγri</string>
     <string name="verification_emoji_flag">Anay</string>
     <string name="verification_emoji_train">Tamacint</string>
     <string name="verification_emoji_bicycle">Azlalam</string>
     <string name="verification_emoji_rocket">Timeẓdit</string>
     <string name="verification_emoji_ball">Balles</string>
-    <string name="verification_emoji_guitar">Tagiṭart</string>
+    <string name="verification_emoji_guitar">Tagitaṛt</string>
     <string name="verification_emoji_trumpet">Lɣiḍa</string>
     <string name="verification_emoji_bell">Anayna</string>
     <string name="verification_emoji_anchor">Tamdeyt</string>
@@ -88,7 +88,7 @@
 
     <string name="call_notification_answer">Qbel</string>
     <string name="call_notification_reject">Agwi</string>
-    <string name="summary_user_sent_sticker">%1$s yuzen amenṭaḍ.</string>
+    <string name="summary_user_sent_sticker">%1$s azen astiker.</string>
     <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ.</string>
 
     <string name="notice_room_unban">%1$s yekkes agdal i %2$s</string>
@@ -103,35 +103,35 @@
     <string name="notice_display_name_changed_from">%1$s ibeddel isem-is i d-ittuseknen seg %2$s ɣer %3$s</string>
     <string name="notice_display_name_changed_from_by_you">Tbeddleḍ isem-ik•im i d-ittuseknen seg %1$s ɣer %2$s</string>
     <string name="notice_display_name_removed">%1$s yekkes isem-is i d-ittuseknen (yella %2$s)</string>
-    <string name="notice_display_name_removed_by_you">Tekkseḍ isem-ik•im i d-ittuseknen (yella %1$s)</string>
-    <string name="notice_room_topic_changed">%1$s ibeddel asentel ɣer: %2$s</string>
-    <string name="notice_room_topic_changed_by_you">Tbeddleḍ asentel ɣer: %1$s</string>
-    <string name="notice_room_avatar_changed">%1$s ibeddel avatar n texxamt</string>
-    <string name="notice_room_avatar_changed_by_you">Tbeddleḍ avatar n texxamt</string>
-    <string name="notice_room_name_changed">%1$s ibeddel isem n texxamt ɣer: %2$s</string>
-    <string name="notice_room_name_changed_by_you">Tbeddleḍ isem n texxamt ɣer: %1$s</string>
-    <string name="notice_placed_video_call">%s isɛedda asiwel s tvidyut.</string>
-    <string name="notice_placed_video_call_by_you">Tesɛeddaḍ asiwel s tvidyut.</string>
-    <string name="notice_placed_voice_call">%s isɛedda asiwel aɣectan.</string>
-    <string name="notice_placed_voice_call_by_you">Tesɛeddaḍ asiwel aɣectan.</string>
-    <string name="notice_call_candidates">%s yuzen isefka i twila n usiwel.</string>
-    <string name="notice_call_candidates_by_you">Tuzneḍ isefka i twila n usiwel.</string>
-    <string name="notice_answered_call">%s yerra i usiwel.</string>
-    <string name="notice_answered_call_by_you">Terriḍ i usiwel.</string>
-    <string name="notice_ended_call">%s ifukk asiwel.</string>
-    <string name="notice_ended_call_by_you">Tfukkeḍ asiwel.</string>
-    <string name="notice_room_visibility_invited">akk iɛeggalen n texxamt, segmi d-ttwanecden.</string>
-    <string name="notice_room_visibility_joined">akk iɛeggalen n texxamt, segmi d-rnan.</string>
-    <string name="notice_room_visibility_shared">akk iɛeggalen n texxamt.</string>
+    <string name="notice_display_name_removed_by_you">Tekkseḍ isem-ik·im yettwaskanen (d %1$s)</string>
+    <string name="notice_room_topic_changed">%1$S isnifel asentel s: %2$S</string>
+    <string name="notice_room_topic_changed_by_you">Tesnifleḍ asentel s: %2$S</string>
+    <string name="notice_room_avatar_changed">%1$s ibeddel avaṭar n texxamt</string>
+    <string name="notice_room_avatar_changed_by_you">Tbeddleḍ avaṭar n texxamt</string>
+    <string name="notice_room_name_changed">%1$s ibeddel isem n texxamt s: %2$s</string>
+    <string name="notice_room_name_changed_by_you">Tbeddleḍ isem n texxamt s: %2$s</string>
+    <string name="notice_placed_video_call">%s isɛedda siwel s tvidyut.</string>
+    <string name="notice_placed_video_call_by_you">Tesɛeddaḍ siwel s tvidyut.</string>
+    <string name="notice_placed_voice_call">%s isɛedda asiwel s taɣect.</string>
+    <string name="notice_placed_voice_call_by_you">Tesɛeddaḍ siwel s taɣect.</string>
+    <string name="notice_call_candidates">%s yuzen isefka i usbadu n usiwel.</string>
+    <string name="notice_call_candidates_by_you">Tuzneḍ isefka i usbadu n usiwel.</string>
+    <string name="notice_answered_call">%s yerra ɣef usiwel.</string>
+    <string name="notice_answered_call_by_you">Terriḍ ɣef usiwel.</string>
+    <string name="notice_ended_call">%s iḥbes asiwel.</string>
+    <string name="notice_ended_call_by_you">Tḥebseḍ asiwel.</string>
+    <string name="notice_room_visibility_invited">meṛṛa iɛeggalen n texxamt, segmi ara d-ttwanecden.</string>
+    <string name="notice_room_visibility_joined">meṛṛa iɛeggalen n texamt, segmi ara d-rnun.</string>
+    <string name="notice_room_visibility_shared">meṛṛa iɛeggalen n texxamt.</string>
     <string name="notice_room_visibility_world_readable">yal yiwen.</string>
     <string name="notice_room_visibility_unknown">arussin (%s).</string>
-    <string name="notice_end_to_end">%1$s irmed awgelhen seg yixef ɣer yixef (%2$s)</string>
-    <string name="notice_end_to_end_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (%1$s)</string>
+    <string name="notice_end_to_end">%1$s isermed awgelhen seg yixef ɣer yixef (%2$s)</string>
+    <string name="notice_end_to_end_by_you">Tesremdeḍ awgelhen seg yixef ɣer yixef (%2$s)</string>
     <string name="notice_room_update">%s ileqqem taxxamt-a.</string>
     <string name="notice_room_update_by_you">Tleqqmeḍ taxxamt-a.</string>
 
-    <string name="notice_requested_voip_conference">%1$s yessuter asarag VoIP</string>
-    <string name="notice_requested_voip_conference_by_you">Tessutreḍ asarag VoIP</string>
+    <string name="notice_requested_voip_conference">%1$s isuter-d asarag VoIP</string>
+    <string name="notice_requested_voip_conference_by_you">Tsutreḍ-d asarag VoIP</string>
     <string name="notice_voip_started">Asarag VoIP yebda</string>
     <string name="notice_voip_finished">Asarag VoIP yekfa</string>
 
@@ -168,11 +168,11 @@
 
     <string name="unable_to_send_message">Tuzna n yizen d tawezɣit</string>
 
-    <string name="network_error">Tuccḍa deg uzeṭṭa</string>
+    <string name="network_error">Tuccḍa deg uẓeṭṭa</string>
     <string name="matrix_error">Tuccḍa deg Matrix</string>
 
-    <string name="notice_made_future_room_visibility">%1$s yerra amazray i d-iteddun ṣer sdat n texxamt yettban i %2$s</string>
-    <string name="notice_made_future_room_visibility_by_you">Ad terreḍ amazray n texxamt i d-iteddun ɣer sdat yettban i %1$s</string>
+    <string name="notice_made_future_room_visibility">%1$s iga amazray n texxamyt i d-iteddun yettban i %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Tgiḍ amazray n texxamyt i d-iteddun yettban i %1$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s issefsax tinubga i %2$s i wakken ad d-yekcem ɣer texxamt</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Tesfesxeḍ tinubga i %1$s i wakken ad d-yernu ɣer texxamt</string>
     <string name="room_error_join_failed_empty_room">D awezɣi tura ad nales ad nuɣal ɣer texxamt tilemt.</string>
@@ -191,7 +191,7 @@
 	<item quantity="other">%1$s d %2$d wiyaḍ</item>
 </plurals>
 
-    <string name="verification_emoji_cactus">Akeṛmus</string>
+    <string name="verification_emoji_cactus">Akermus</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
 
     <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
@@ -289,5 +289,5 @@
 
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s issefsex tinubga n %2$s i tmerniwt ɣer texxamt. Tamentilt: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Tesfesxeḍ tinubga n %1$s i tmerna ɣer texxamt. Tamentilt: %2$s</string>
-    <string name="could_not_redact">Yegguma ad yesfeḍ</string>
+    <string name="could_not_redact">Yegguma ad yaru</string>
     </resources>
