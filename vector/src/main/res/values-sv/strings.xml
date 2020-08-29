@@ -140,7 +140,7 @@
     <string name="rooms_header">Rum</string>
     <string name="rooms_directory_header">Rumskatalog</string>
     <string name="no_room_placeholder">Inga rum</string>
-    <string name="no_public_room_placeholder">Inga publika rum tillgängliga</string>
+    <string name="no_public_room_placeholder">Inga offentliga rum tillgängliga</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">1 användare</item>
         <item quantity="other">%d användare</item>
@@ -458,7 +458,7 @@
 
     <string name="failed_to_load_timeline_position">%s försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.</string>
 
-    <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över publika rum från</string>
+    <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över offentliga rum från</string>
     <string name="directory_server_all_rooms_on_server">Alla rum på %s-servern</string>
     <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
 
