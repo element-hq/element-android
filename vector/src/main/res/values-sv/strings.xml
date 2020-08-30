@@ -829,8 +829,8 @@
     <string name="login_set_msisdn_notice">Sätt ett telefonnummer som valfritt kan användas för att vara upptäckbar av folk som känner dig.</string>
     <string name="login_signin_username_hint">Användarnamn eller e-postadress</string>
     <string name="login_wait_for_email_title">Vänligen kolla din e-post</string>
-    <string name="login_wait_for_email_notice">Vi skickade just ett e-brev till %1$s.
-\nKlicka på länken i det för att fortsätta med kontoskapningen.</string>
+    <string name="login_wait_for_email_notice">Vi skickade just ett e-brev till %1$s. 
+\nKlicka på länken i det för att fortsätta med kontoskapandet.</string>
     <string name="login_error_outdated_homeserver_content">Den här hemservern kör en för gammal version för att ansluta till. Be administratören för hemservern att uppdatera.</string>
 
     <string name="soft_logout_signin_e2e_warning_notice">Logga in för att återfå krypteringsnycklar som endast lagras på den här enheten. Du behöver dem för att läsa alla dina säkra meddelanden på andra enheter.</string>
@@ -1744,7 +1744,7 @@
     <string name="historical_placeholder">Sök efter historiska</string>
 
     <string name="widget_no_power_to_manage">Du behöver behörighet för att hantera widgets i det här rummet</string>
-    <string name="widget_creation_failure">Widgetskapning har misslyckats</string>
+    <string name="widget_creation_failure">Widgetskapande har misslyckats</string>
     <string name="settings_labs_create_conference_with_jitsi">Skapa gruppsamtal med Jitsi</string>
     <string name="widget_delete_message_confirmation">Är du säker på att du vill radera den här widgeten från det här rummet\?</string>
     <plurals name="active_widgets">
@@ -2066,8 +2066,8 @@
     <string name="send_attachment">Skicka bilaga</string>
 
     <string name="a11y_open_drawer">Öppna navigationslådan</string>
-    <string name="a11y_create_menu_open">Öppna rumskapningsmenyn</string>
-    <string name="a11y_create_menu_close">Stäng rumskapningsmenyn…</string>
+    <string name="a11y_create_menu_open">Öppna rumskapandemenyn</string>
+    <string name="a11y_create_menu_close">Stäng rumskapandemenyn…</string>
     <string name="a11y_close_keys_backup_banner">Stäng nyckelsäkerhetskopieringsbannern</string>
     <string name="a11y_jump_to_bottom">Hoppa till botten</string>
 
