@@ -19,6 +19,8 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.auth.registration.SuccessResult
+import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
@@ -26,6 +28,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Url
 
 internal interface ProfileAPI {
     /**
@@ -82,6 +85,13 @@ internal interface ProfileAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/msisdn/requestToken")
     fun addMsisdn(@Body body: AddMsisdnBody): Call<AddMsisdnResponse>
+
+    /**
+     * Validate Msisdn code (same model than for Identity server API)
+     */
+    @POST
+    fun validateMsisdn(@Url url: String,
+                       @Body params: ValidationCodeBody): Call<SuccessResult>
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add

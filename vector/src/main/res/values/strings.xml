@@ -281,6 +281,7 @@
     <string name="auth_invalid_email">"This doesn’t look like a valid email address"</string>
     <string name="auth_invalid_phone">"This doesn’t look like a valid phone number"</string>
     <string name="auth_email_already_defined">This email address is already defined.</string>
+    <string name="auth_msisdn_already_defined">This phone number is already defined.</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_missing_phone">Missing phone number</string>
     <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
@@ -1765,6 +1766,7 @@
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
     <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
+    <string name="settings_text_message_sent_hint">Code</string>
     <string name="settings_text_message_sent_wrong_code">The verification code is not correct.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>

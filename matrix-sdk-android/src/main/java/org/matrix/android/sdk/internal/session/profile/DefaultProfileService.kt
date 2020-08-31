@@ -46,6 +46,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                                                          private val setDisplayNameTask: SetDisplayNameTask,
                                                          private val setAvatarUrlTask: SetAvatarUrlTask,
                                                          private val addThreePidTask: AddThreePidTask,
+                                                         private val validateSmsCodeTask: ValidateSmsCodeTask,
                                                          private val finalizeAddingThreePidTask: FinalizeAddingThreePidTask,
                                                          private val deleteThreePidTask: DeleteThreePidTask,
                                                          private val pendingThreePidMapper: PendingThreePidMapper,
@@ -153,6 +154,14 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     override fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
         return addThreePidTask
                 .configureWith(AddThreePidTask.Params(threePid)) {
+                    callback = matrixCallback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return validateSmsCodeTask
+                .configureWith(ValidateSmsCodeTask.Params(threePid, code)) {
                     callback = matrixCallback
                 }
                 .executeBy(taskExecutor)

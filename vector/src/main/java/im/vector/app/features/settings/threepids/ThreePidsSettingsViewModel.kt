@@ -131,11 +131,33 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         when (action) {
             is ThreePidsSettingsAction.AddThreePid -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
+            is ThreePidsSettingsAction.SubmitCode -> handleSubmitCode(action)
             is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
             is ThreePidsSettingsAction.AccountPassword -> handleAccountPassword(action)
             is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
             is ThreePidsSettingsAction.ChangeState -> handleChangeState(action)
         }.exhaustive
+    }
+
+    private fun handleSubmitCode(action: ThreePidsSettingsAction.SubmitCode) {
+        isLoading(true)
+        viewModelScope.launch {
+            // First submit the code
+            session.submitSmsCode(action.threePid, action.code, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    // then finalize
+                    pendingThreePid = action.threePid
+                    session.finalizeAddingThreePid(action.threePid, null, null, loadingCallback)
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    // Wrong code?
+                    isLoading(false)
+                    _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))
+                }
+            })
+
+        }
     }
 
     private fun handleChangeState(action: ThreePidsSettingsAction.ChangeState) {
@@ -152,7 +174,12 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         withState { state ->
             val allThreePids = state.threePids.invoke().orEmpty() + state.pendingThreePids.invoke().orEmpty()
             if (allThreePids.any { it.value == action.threePid.value }) {
-                _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalArgumentException(stringProvider.getString(R.string.auth_email_already_defined))))
+                _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalArgumentException(stringProvider.getString(
+                        when (action.threePid) {
+                            is ThreePid.Email  -> R.string.auth_email_already_defined
+                            is ThreePid.Msisdn -> R.string.auth_msisdn_already_defined
+                        }
+                ))))
             } else {
                 viewModelScope.launch {
                     session.addThreePid(action.threePid, object : MatrixCallback<Unit> {

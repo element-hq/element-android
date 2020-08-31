@@ -132,6 +132,12 @@ class ThreePidsSettingsFragment @Inject constructor(
         viewModel.handle(ThreePidsSettingsAction.AddThreePid(ThreePid.Msisdn(safeMsisdn)))
     }
 
+    override fun submitCode(threePid: ThreePid.Msisdn, code: String) {
+        viewModel.handle(ThreePidsSettingsAction.SubmitCode(threePid, code))
+        // Hide the keyboard
+        view?.hideKeyboard()
+    }
+
     override fun cancelAdding() {
         viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.Idle))
         // Hide the keyboard

@@ -100,6 +100,11 @@ interface ProfileService {
     fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
+     * Validate a code received by text message
+     */
+    fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
      * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
      */
     fun finalizeAddingThreePid(threePid: ThreePid,

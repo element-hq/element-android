@@ -50,6 +50,7 @@ class ThreePidsSettingsController @Inject constructor(
         fun cancelAdding()
         fun doAddEmail(email: String)
         fun doAddMsisdn(msisdn: String)
+        fun submitCode(threePid: ThreePid.Msisdn, code: String)
         fun continueThreePid(threePid: ThreePid)
         fun cancelThreePid(threePid: ThreePid)
         fun deleteThreePid(threePid: ThreePid)
@@ -57,7 +58,11 @@ class ThreePidsSettingsController @Inject constructor(
 
     var interactionListener: InteractionListener? = null
 
+    // For phone number or email (exclusive)
     private var currentInputValue = ""
+
+    // For validation code
+    private val currentCodes = mutableMapOf<ThreePid, String>()
 
     override fun buildModels(data: ThreePidsSettingsViewState?) {
         if (data == null) return
@@ -210,18 +215,38 @@ class ThreePidsSettingsController @Inject constructor(
             title(threePid.getFormattedValue())
         }
 
-        if (threePid is ThreePid.Email) {
-            settingsInformationItem {
-                id("info" + idPrefix + threePid.value)
-                message(stringProvider.getString(R.string.account_email_validation_message))
-                colorProvider(colorProvider)
+        when (threePid) {
+            is ThreePid.Email -> {
+                settingsInformationItem {
+                    id("info" + idPrefix + threePid.value)
+                    message(stringProvider.getString(R.string.account_email_validation_message))
+                    colorProvider(colorProvider)
+                }
+                settingsContinueCancelItem {
+                    id("cont" + idPrefix + threePid.value)
+                    continueOnClick { interactionListener?.continueThreePid(threePid) }
+                    cancelOnClick { interactionListener?.cancelThreePid(threePid) }
+                }
             }
-        }
-
-        settingsContinueCancelItem {
-            id("cont" + idPrefix + threePid.value)
-            continueOnClick { interactionListener?.continueThreePid(threePid) }
-            cancelOnClick { interactionListener?.cancelThreePid(threePid) }
+            is ThreePid.Msisdn -> {
+                settingsInformationItem {
+                    id("info" + idPrefix + threePid.value)
+                    message(stringProvider.getString(R.string.settings_text_message_sent, threePid.getFormattedValue()))
+                    colorProvider(colorProvider)
+                }
+                formEditTextItem {
+                    id("msisdnVerification${threePid.value}")
+                    inputType(InputType.TYPE_CLASS_NUMBER)
+                    hint(stringProvider.getString(R.string.settings_text_message_sent_hint))
+                    showBottomSeparator(false)
+                    onTextChange { currentCodes[threePid] = it }
+                }
+                settingsContinueCancelItem {
+                    id("cont" + idPrefix + threePid.value)
+                    continueOnClick { interactionListener?.submitCode(threePid, currentCodes[threePid] ?: "") }
+                    cancelOnClick { interactionListener?.cancelThreePid(threePid) }
+                }
+            }
         }
     }
 }

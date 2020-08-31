@@ -63,6 +63,9 @@ internal abstract class ProfileModule {
     abstract fun bindAddThreePidTask(task: DefaultAddThreePidTask): AddThreePidTask
 
     @Binds
+    abstract fun bindValidateSmsCodeTask(task: DefaultValidateSmsCodeTask): ValidateSmsCodeTask
+
+    @Binds
     abstract fun bindFinalizeAddingThreePidTask(task: DefaultFinalizeAddingThreePidTask): FinalizeAddingThreePidTask
 
     @Binds
