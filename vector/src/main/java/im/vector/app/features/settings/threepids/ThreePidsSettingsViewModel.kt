@@ -18,7 +18,9 @@ package im.vector.app.features.settings.threepids
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -141,6 +143,14 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     private fun handleSubmitCode(action: ThreePidsSettingsAction.SubmitCode) {
         isLoading(true)
+        setState {
+            copy(
+                    msisdnValidationRequests = msisdnValidationRequests.toMutableMap().apply {
+                        put(action.threePid.value, Loading())
+                    }
+            )
+        }
+
         viewModelScope.launch {
             // First submit the code
             session.submitSmsCode(action.threePid, action.code, object : MatrixCallback<Unit> {
@@ -151,9 +161,14 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 }
 
                 override fun onFailure(failure: Throwable) {
-                    // Wrong code?
                     isLoading(false)
-                    _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))
+                    setState {
+                        copy(
+                                msisdnValidationRequests = msisdnValidationRequests.toMutableMap().apply {
+                                    put(action.threePid.value, Fail(failure))
+                                }
+                        )
+                    }
                 }
             })
         }

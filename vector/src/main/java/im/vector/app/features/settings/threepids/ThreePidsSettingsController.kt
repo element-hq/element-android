@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
@@ -37,12 +38,15 @@ import im.vector.app.features.discovery.settingsEditTextItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
 class ThreePidsSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<ThreePidsSettingsViewState>() {
 
     interface InteractionListener {
@@ -116,7 +120,7 @@ class ThreePidsSettingsController @Inject constructor(
                         }
                     }
 
-                    pendingList.forEach { buildPendingThreePid("p_email ", it) }
+                    pendingList.forEach { buildPendingThreePid(data, "p_email ", it) }
                 }
 
         when (data.state) {
@@ -171,7 +175,7 @@ class ThreePidsSettingsController @Inject constructor(
                         }
                     }
 
-                    pendingList.forEach { buildPendingThreePid("p_msisdn ", it) }
+                    pendingList.forEach { buildPendingThreePid(data, "p_msisdn ", it) }
                 }
 
         when (data.state) {
@@ -222,7 +226,7 @@ class ThreePidsSettingsController @Inject constructor(
         }
     }
 
-    private fun buildPendingThreePid(idPrefix: String, threePid: ThreePid) {
+    private fun buildPendingThreePid(data: ThreePidsSettingsViewState, idPrefix: String, threePid: ThreePid) {
         threePidItem {
             id(idPrefix + threePid.value)
             // TODO Add an icon for emails
@@ -253,6 +257,7 @@ class ThreePidsSettingsController @Inject constructor(
                     id("msisdnVerification${threePid.value}")
                     inputType(InputType.TYPE_CLASS_NUMBER)
                     hint(stringProvider.getString(R.string.settings_text_message_sent_hint))
+                    errorText(getCodeError(data, threePid))
                     interactionListener(object : SettingsEditTextItem.Listener {
                         override fun onValidate() {
                             interactionListener?.submitCode(threePid, currentCodes[threePid] ?: "")
@@ -269,6 +274,19 @@ class ThreePidsSettingsController @Inject constructor(
                     cancelOnClick { interactionListener?.cancelThreePid(threePid) }
                 }
             }
+        }
+    }
+
+    private fun getCodeError(data: ThreePidsSettingsViewState, threePid: ThreePid.Msisdn): String? {
+        val failure = (data.msisdnValidationRequests[threePid.value] as? Fail)?.error ?: return null
+        // Wrong code?
+        // See https://github.com/matrix-org/synapse/issues/8218
+        return if (failure is Failure.ServerError
+                && failure.httpCode == 400
+                && failure.error.code == MatrixError.M_UNKNOWN) {
+            stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
+        } else {
+            errorFormatter.toHumanReadable(failure)
         }
     }
 }

@@ -25,5 +25,6 @@ data class ThreePidsSettingsViewState(
         val state: ThreePidsSettingsState = ThreePidsSettingsState.Idle,
         val isLoading: Boolean = false,
         val threePids: Async<List<ThreePid>> = Uninitialized,
-        val pendingThreePids: Async<List<ThreePid>> = Uninitialized
+        val pendingThreePids: Async<List<ThreePid>> = Uninitialized,
+        val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap()
 ) : MvRxState
