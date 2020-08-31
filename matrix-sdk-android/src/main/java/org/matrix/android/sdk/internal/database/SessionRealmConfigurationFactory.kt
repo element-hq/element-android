@@ -21,6 +21,7 @@ import android.content.Context
 import androidx.core.content.edit
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.SessionId
@@ -52,10 +53,10 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
     fun create(): RealmConfiguration {
         val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
         if (shouldClearRealm) {
-            Timber.v("************************************************************")
-            Timber.v("The realm file session was corrupted and couldn't be loaded.")
-            Timber.v("The file has been deleted to recover.")
-            Timber.v("************************************************************")
+            Timber.e("************************************************************")
+            Timber.e("The realm file session was corrupted and couldn't be loaded.")
+            Timber.e("The file has been deleted to recover.")
+            Timber.e("************************************************************")
             deleteRealmFiles()
         }
         sharedPreferences.edit {
@@ -86,6 +87,11 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
 
     // Delete all the realm files of the session
     private fun deleteRealmFiles() {
+        if (BuildConfig.DEBUG) {
+            Timber.e("No op because it is a debug build")
+            return
+        }
+
         listOf(REALM_NAME, "$REALM_NAME.lock", "$REALM_NAME.note", "$REALM_NAME.management").forEach { file ->
             try {
                 File(directory, file).deleteRecursively()

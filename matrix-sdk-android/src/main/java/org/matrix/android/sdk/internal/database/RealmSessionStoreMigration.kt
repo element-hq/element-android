@@ -78,7 +78,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 .addField(PendingThreePidEntityFields.EMAIL, String::class.java)
                 .addField(PendingThreePidEntityFields.MSISDN, String::class.java)
                 .addField(PendingThreePidEntityFields.SEND_ATTEMPT, Int::class.java)
-                .setRequired(PendingThreePidEntityFields.SEND_ATTEMPT, true)
                 .addField(PendingThreePidEntityFields.SID, String::class.java)
                 .setRequired(PendingThreePidEntityFields.SID, true)
                 .addField(PendingThreePidEntityFields.SUBMIT_URL, String::class.java)
