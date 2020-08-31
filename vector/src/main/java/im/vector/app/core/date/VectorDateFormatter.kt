@@ -25,23 +25,8 @@ import im.vector.app.core.resources.toTimestamp
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
-
-/**
- * Returns the timestamp for the start of the day of the provided time.
- * For example, for the time "Jul 21, 11:11" the start of the day: "Jul 21, 00:00" is returned.
- */
-fun startOfDay(time: Long): Long {
-    val calendar = Calendar.getInstance()
-    calendar.time = Date(time)
-    calendar.set(Calendar.HOUR_OF_DAY, 0)
-    calendar.set(Calendar.MINUTE, 0)
-    calendar.set(Calendar.SECOND, 0)
-    calendar.set(Calendar.MILLISECOND, 0)
-    return calendar.time.time
-}
+import kotlin.math.absoluteValue
 
 class VectorDateFormatter @Inject constructor(private val context: Context,
                                               private val localeProvider: LocaleProvider,
@@ -55,38 +40,71 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         }
     }
 
-    private val dayFormatter by lazy {
-        DateTimeFormatter.ofPattern("EEE", localeProvider.current())
+    private val fullDateFormatter by lazy {
+        val pattern = if (DateFormat.is24HourFormat(context)) {
+            DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE, d MMM yyyy H:mm")
+        } else {
+            DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE, d MMM yyyy h:mm a")
+        }
+        DateTimeFormatter.ofPattern(pattern, localeProvider.current())
     }
 
-    private val fullDateFormatter by lazy {
-        if (DateFormat.is24HourFormat(context)) {
-            DateTimeFormatter.ofPattern("EEE, d MMM yyyy H:mm", localeProvider.current())
-        } else {
-            DateTimeFormatter.ofPattern("EEE, d MMM yyyy h:mm a", localeProvider.current())
+    /**
+     * This method is used to format some date in the app.
+     * It will be able to show only time, only date or both with some logic.
+     * @param ts the timestamp to format or null.
+     * @param dateFormatKind the kind of format to use
+     *
+     * @return the formatted date as string.
+     */
+    fun format(ts: Long?, dateFormatKind: DateFormatKind): String {
+        if (ts == null) return ""
+        val localDateTime = DateProvider.toLocalDateTime(ts)
+        return when (dateFormatKind) {
+            DateFormatKind.DEFAULT_DATE_AND_TIME -> formatDateAndTime(ts)
+            DateFormatKind.ROOM_LIST             -> formatTimeOrDate(
+                    date = localDateTime,
+                    showTimeIfSameDay = true,
+                    abbrev = true,
+                    useRelative = true
+            )
+            DateFormatKind.TIMELINE_DAY_DIVIDER  -> formatTimeOrDate(
+                    date = localDateTime,
+                    alwaysShowYear = true
+            )
+            DateFormatKind.MESSAGE_DETAIL        -> formatFullDate(localDateTime)
+            DateFormatKind.MESSAGE_SIMPLE        -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_ROW      -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_HEADER   -> formatTimeOrDate(
+                    date = localDateTime,
+                    abbrev = true,
+                    useRelative = true
+            )
         }
     }
 
-    fun formatMessageHour(localDateTime: LocalDateTime): String {
+    private fun formatFullDate(localDateTime: LocalDateTime): String {
+        return fullDateFormatter.format(localDateTime)
+    }
+
+    private fun formatHour(localDateTime: LocalDateTime): String {
         return hourFormatter.format(localDateTime)
     }
 
-    fun formatMessageDay(localDateTime: LocalDateTime): String {
-        return dayFormatter.format(localDateTime)
-    }
-
-    fun formatMessageDayWithMonth(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
+    private fun formatDateWithMonth(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
         return dateFormatterProviders.provide(abbrev).dateWithMonthFormatter.format(localDateTime)
     }
 
-    fun formatMessageDayWithYear(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
+    private fun formatDateWithYear(localDateTime: LocalDateTime, abbrev: Boolean = false): String {
         return dateFormatterProviders.provide(abbrev).dateWithYearFormatter.format(localDateTime)
     }
 
-    fun formatMessageDate(
+    /**
+     * This method will only show time or date following the parameters.
+     */
+    private fun formatTimeOrDate(
             date: LocalDateTime?,
-            showFullDate: Boolean = false,
-            onlyTimeIfSameDay: Boolean = false,
+            showTimeIfSameDay: Boolean = false,
             useRelative: Boolean = false,
             alwaysShowYear: Boolean = false,
             abbrev: Boolean = false
@@ -94,52 +112,49 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         if (date == null) {
             return ""
         }
-        if (showFullDate) {
-            return fullDateFormatter.format(date)
-        }
         val currentDate = DateProvider.currentLocalDateTime()
         val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
-        return if (onlyTimeIfSameDay && isSameDay) {
-            formatMessageHour(date)
+        return if (showTimeIfSameDay && isSameDay) {
+            formatHour(date)
         } else {
-            val period = Period.between(date.toLocalDate(), currentDate.toLocalDate())
-            if (period.years >= 1 || alwaysShowYear) {
-                formatMessageDayWithYear(date, abbrev)
-            } else if (period.months >= 1) {
-                formatMessageDayWithMonth(date, abbrev)
-            } else if (useRelative && period.days < 2) {
-                getRelativeDay(date.toTimestamp())
-            } else if (useRelative && period.days < 7) {
-                formatMessageDay(date)
-            } else {
-                formatMessageDayWithMonth(date, abbrev)
-            }
+            formatDate(date, currentDate, alwaysShowYear, abbrev, useRelative)
+        }
+    }
+
+    private fun formatDate(
+            date: LocalDateTime,
+            currentDate: LocalDateTime,
+            alwaysShowYear: Boolean,
+            abbrev: Boolean,
+            useRelative: Boolean
+    ): String {
+        val period = Period.between(date.toLocalDate(), currentDate.toLocalDate())
+        return if (period.years.absoluteValue >= 1 || alwaysShowYear) {
+            formatDateWithYear(date, abbrev)
+        } else if (useRelative && period.days.absoluteValue < 2 && period.months.absoluteValue < 1) {
+            getRelativeDay(date.toTimestamp())
+        } else {
+            formatDateWithMonth(date, abbrev)
         }
     }
 
     /**
-     * Formats a localized relative date time for the last 2 days, e.g, "Today, HH:MM", "Yesterday, HH:MM" or
-     * "2 days ago, HH:MM".
-     * For earlier timestamps the absolute date time is returned, e.g. "Month Day, HH:MM".
-     *
-     * @param time the absolute timestamp [ms] that should be formatted relative to now
+     * This method will show date and time with a preposition
      */
-    fun formatRelativeDateTime(time: Long?): String {
-        if (time == null) {
-            return ""
-        }
-        val now = System.currentTimeMillis()
-        var flags = DateUtils.FORMAT_SHOW_WEEKDAY
-
-        return DateUtils.getRelativeDateTimeString(
-                context,
-                time,
-                DateUtils.DAY_IN_MILLIS,
-                now - startOfDay(now - 2 * DateUtils.DAY_IN_MILLIS),
-                flags
-        ).toString()
+    private fun formatDateAndTime(ts: Long): String {
+        val date = DateProvider.toLocalDateTime(ts)
+        val currentDate = DateProvider.currentLocalDateTime()
+        // This fake date is created to be able to use getRelativeTimeSpanString so we can get a "at"
+        // preposition and the right am/pm management.
+        val fakeDate = LocalDateTime.of(currentDate.toLocalDate(), date.toLocalTime())
+        val formattedTime = DateUtils.getRelativeTimeSpanString(context, fakeDate.toTimestamp(), true).toString()
+        val formattedDate = formatDate(date, currentDate, alwaysShowYear = false, abbrev = true, useRelative = true)
+        return "$formattedDate $formattedTime"
     }
 
+    /**
+     * We are using this method for the keywords Today/Yesterday
+     */
     private fun getRelativeDay(ts: Long): String {
         return DateUtils.getRelativeTimeSpanString(
                 ts,

@@ -27,11 +27,12 @@ class DefaultDateFormatterProvider @Inject constructor(private val context: Cont
     : DateFormatterProvider {
 
     override val dateWithMonthFormatter: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(localeProvider.current(), "d MMMMM"))
+        val pattern = DateFormat.getBestDateTimePattern(localeProvider.current(), "d MMMMM")
+        DateTimeFormatter.ofPattern(pattern)
     }
 
     override val dateWithYearFormatter: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(localeProvider.current(), "d MMM y"))
+        val pattern = DateFormat.getBestDateTimePattern(localeProvider.current(), "d MMM y")
+        DateTimeFormatter.ofPattern(pattern)
     }
-
 }

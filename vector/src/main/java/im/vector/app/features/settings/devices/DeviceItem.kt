@@ -46,6 +46,9 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     lateinit var deviceInfo: DeviceInfo
 
     @EpoxyAttribute
+    var lastSeenFormatted: String? = null
+
+    @EpoxyAttribute
     var currentDevice = false
 
     @EpoxyAttribute
@@ -105,15 +108,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
 
             val lastSeenIp = deviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
 
-            val lastSeenTime = deviceInfo.lastSeenTs?.let { ts ->
-                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-                val date = Date(ts)
-
-                val time = dateFormatTime.format(date)
-                val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-
-                dateFormat.format(date) + ", " + time
-            } ?: "-"
+            val lastSeenTime = lastSeenFormatted ?: "-"
 
             holder.deviceLastSeenText.text = holder.root.context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
 

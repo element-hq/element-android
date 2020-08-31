@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -112,7 +113,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                 summary.key,
                                 event.root.senderId ?: "",
                                 event.senderInfo.disambiguatedDisplayName,
-                                dateFormatter.formatRelativeDateTime(event.root.originServerTs)
+                                dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
 
                         )
                     }

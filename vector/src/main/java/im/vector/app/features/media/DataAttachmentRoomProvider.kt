@@ -19,6 +19,7 @@ package im.vector.app.features.media
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
 import im.vector.lib.attachmentviewer.AttachmentInfo
@@ -78,9 +79,7 @@ class DataAttachmentRoomProvider(
         val item = attachments[position]
         val timeLineEvent = room?.getTimeLineEvent(item.eventId)
         if (timeLineEvent != null) {
-            val dateString = timeLineEvent.root.localDateTime().let {
-                "${dateFormatter.formatMessageDayWithMonth(it)} at ${dateFormatter.formatMessageHour(it)} "
-            }
+            val dateString = dateFormatter.format(timeLineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
             overlayView?.updateWith("${position + 1} of ${attachments.size}", "${timeLineEvent.senderInfo.displayName} $dateString")
             overlayView?.videoControlsGroup?.isVisible = timeLineEvent.root.isVideoMessage()
         } else {

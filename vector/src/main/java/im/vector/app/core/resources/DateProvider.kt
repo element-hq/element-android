@@ -19,12 +19,14 @@ package im.vector.app.core.resources
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
 
 object DateProvider {
 
     private val zoneId = ZoneId.systemDefault()
-    private val zoneOffset = ZoneOffset.UTC
+    private val zoneOffset by lazy {
+        val now = currentLocalDateTime()
+        zoneId.rules.getOffset(now)
+    }
 
     fun toLocalDateTime(timestamp: Long?): LocalDateTime {
         val instant = Instant.ofEpochMilli(timestamp ?: 0)

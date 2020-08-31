@@ -18,6 +18,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.ColorProvider
@@ -68,7 +69,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || isNextMessageReceivedMoreThanOneHourAgo
                         || isTileTypeMessage(nextEvent)
 
-        val time = dateFormatter.formatMessageHour(date)
+        val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
 
         return MessageInformationData(

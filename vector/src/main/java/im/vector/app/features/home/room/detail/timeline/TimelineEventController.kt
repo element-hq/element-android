@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
@@ -339,10 +340,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     private fun buildDaySeparatorItem(addDaySeparator: Boolean, originServerTs: Long?): DaySeparatorItem? {
         return if (addDaySeparator) {
-            val formattedDay = dateFormatter.formatMessageDate(
-                    date = DateProvider.toLocalDateTime(originServerTs),
-                    alwaysShowYear = true
-            )
+            val formattedDay = dateFormatter.format(originServerTs, DateFormatKind.TIMELINE_DAY_DIVIDER)
             DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
         } else {
             null
