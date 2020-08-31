@@ -75,7 +75,13 @@ internal interface ProfileAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/email/requestToken")
-    fun addEmail(@Body body: AddEmailBody): Call<AddThreePidResponse>
+    fun addEmail(@Body body: AddEmailBody): Call<AddEmailResponse>
+
+    /**
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-msisdn-requesttoken
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/msisdn/requestToken")
+    fun addMsisdn(@Body body: AddMsisdnBody): Call<AddMsisdnResponse>
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add

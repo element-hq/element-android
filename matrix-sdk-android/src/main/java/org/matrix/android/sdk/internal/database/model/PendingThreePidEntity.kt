@@ -27,5 +27,6 @@ internal open class PendingThreePidEntity(
         var msisdn: String? = null,
         var clientSecret: String = "",
         var sendAttempt: Int = 0,
-        var sid: String = ""
+        var sid: String = "",
+        var submitUrl: String? = null
 ) : RealmObject()

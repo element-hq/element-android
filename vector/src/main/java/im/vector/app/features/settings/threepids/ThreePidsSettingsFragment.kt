@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -120,6 +121,11 @@ class ThreePidsSettingsFragment @Inject constructor(
         // Check that phone number is valid
         if (!msisdn.startsWith("+")) {
             viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international))))
+            return
+        }
+
+        if (!msisdn.isMsisdn()) {
+            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other))))
             return
         }
 

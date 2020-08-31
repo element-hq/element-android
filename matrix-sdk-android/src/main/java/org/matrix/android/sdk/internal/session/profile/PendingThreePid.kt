@@ -22,6 +22,9 @@ internal data class PendingThreePid(
         val threePid: ThreePid,
         val clientSecret: String,
         val sendAttempt: Int,
-        val sid: String
+        // For Msisdn and Email
+        val sid: String,
+        // For Msisdn only
+        val submitUrl: String?
 )
 

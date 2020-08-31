@@ -29,7 +29,8 @@ internal class PendingThreePidMapper @Inject constructor() {
                         ?: error("Invalid data"),
                 clientSecret = entity.clientSecret,
                 sendAttempt = entity.sendAttempt,
-                sid = entity.sid
+                sid = entity.sid,
+                submitUrl = entity.submitUrl
         )
     }
 
@@ -39,7 +40,8 @@ internal class PendingThreePidMapper @Inject constructor() {
                 msisdn = domain.threePid.takeIf { it is ThreePid.Msisdn }?.value,
                 clientSecret = domain.clientSecret,
                 sendAttempt = domain.sendAttempt,
-                sid = domain.sid
+                sid = domain.sid,
+                submitUrl = domain.submitUrl
         )
     }
 }

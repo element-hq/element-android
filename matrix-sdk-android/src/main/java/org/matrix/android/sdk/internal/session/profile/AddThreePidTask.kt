@@ -17,6 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.zhuinden.monarchy.Monarchy
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -40,31 +41,76 @@ internal class DefaultAddThreePidTask @Inject constructor(
         private val eventBus: EventBus) : AddThreePidTask() {
 
     override suspend fun execute(params: Params) {
+        when (params.threePid) {
+            is ThreePid.Email -> addEmail(params.threePid)
+            is ThreePid.Msisdn -> addMsisdn(params.threePid)
+        }
+    }
+
+    private suspend fun addEmail(threePid: ThreePid.Email) {
         val clientSecret = UUID.randomUUID().toString()
         val sendAttempt = 1
-        val result = when (params.threePid) {
-            is ThreePid.Email ->
-                executeRequest<AddThreePidResponse>(eventBus) {
-                    val body = AddEmailBody(
-                            email = params.threePid.email,
-                            sendAttempt = sendAttempt,
-                            clientSecret = clientSecret
-                    )
-                    apiCall = profileAPI.addEmail(body)
-                }
-            is ThreePid.Msisdn -> TODO()
+
+        val result = executeRequest<AddEmailResponse>(eventBus) {
+            val body = AddEmailBody(
+                    clientSecret = clientSecret,
+                    email = threePid.email,
+                    sendAttempt = sendAttempt
+            )
+            apiCall = profileAPI.addEmail(body)
         }
 
         // Store as a pending three pid
         monarchy.awaitTransaction { realm ->
             PendingThreePid(
-                    threePid = params.threePid,
+                    threePid = threePid,
                     clientSecret = clientSecret,
                     sendAttempt = sendAttempt,
-                    sid = result.sid
+                    sid = result.sid,
+                    submitUrl = null
             )
                     .let { pendingThreePidMapper.map(it) }
                     .let { realm.copyToRealm(it) }
         }
     }
+
+    private suspend fun addMsisdn(threePid: ThreePid.Msisdn) {
+        val clientSecret = UUID.randomUUID().toString()
+        val sendAttempt = 1
+
+        // Get country code from the phone number
+        val phoneNumber = threePid.msisdn
+
+        val parsedNumber = PhoneNumberUtil.getInstance().parse(phoneNumber, null)
+        val countryCode = parsedNumber.countryCode
+
+        val result = executeRequest<AddMsisdnResponse>(eventBus) {
+            val body = AddMsisdnBody(
+                    clientSecret = clientSecret,
+                    country = countryCode.asString(), // TODO Convert to String,
+                    phoneNumber = parsedNumber.nationalNumber.toString(),
+                    sendAttempt = sendAttempt
+            )
+            apiCall = profileAPI.addMsisdn(body)
+        }
+
+        // Store as a pending three pid
+        monarchy.awaitTransaction { realm ->
+            PendingThreePid(
+                    threePid = threePid,
+                    clientSecret = clientSecret,
+                    sendAttempt = sendAttempt,
+                    sid = result.sid,
+                    submitUrl = result.submitUrl
+            )
+                    .let { pendingThreePidMapper.map(it) }
+                    .let { realm.copyToRealm(it) }
+        }
+    }
+
+    private fun Int.asString(): String {
+        // TODO
+        return ""
+    }
 }
+

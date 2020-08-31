@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class AddThreePidResponse(
+internal data class AddEmailResponse(
         /**
          * Required. The session ID. Session IDs are opaque strings that must consist entirely
          * of the characters [0-9a-zA-Z.=_-]. Their length must not exceed 255 characters and they must not be empty.
