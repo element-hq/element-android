@@ -109,9 +109,9 @@ internal class FileUploader @Inject constructor(@Authenticated
                               filename: String?,
                               mimeType: String?,
                               progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        return withContext(Dispatchers.IO) {
-            val inputStream = context.contentResolver.openInputStream(uri) ?: throw FileNotFoundException()
-
+        val inputStream =  withContext(Dispatchers.IO) {
+            context.contentResolver.openInputStream(uri)
+        } ?: throw FileNotFoundException()
         return uploadInputStream(inputStream, filename, mimeType, progressListener)
     }
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {

@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
-import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 /**

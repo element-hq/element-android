@@ -75,10 +75,10 @@ internal class SendEventWorker(context: Context,
                     .also { Timber.e("Work cancelled due to bad input data") }
         }
 
-        if (cancelSendTracker.isCancelRequestedFor(params.eventId, params.roomId)) {
+        if (cancelSendTracker.isCancelRequestedFor(params.eventId, event.roomId)) {
             return Result.success()
                     .also {
-                        cancelSendTracker.markCancelled(params.eventId, params.roomId)
+                        cancelSendTracker.markCancelled(event.eventId, event.roomId)
                         Timber.e("## SendEvent: Event sending has been cancelled ${params.eventId}")
                     }
         }
@@ -97,7 +97,7 @@ internal class SendEventWorker(context: Context,
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
-                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+                localEchoRepository.updateSendState(event.eventId, SendState.UNDELIVERED)
                 return Result.success()
             } else {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")
