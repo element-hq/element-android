@@ -78,16 +78,17 @@ internal class DefaultAddThreePidTask @Inject constructor(
         val clientSecret = UUID.randomUUID().toString()
         val sendAttempt = 1
 
-        // Get country code from the phone number
+        // Get country code and national number from the phone number
         val phoneNumber = threePid.msisdn
-
-        val parsedNumber = PhoneNumberUtil.getInstance().parse(phoneNumber, null)
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+        val parsedNumber = phoneNumberUtil.parse(phoneNumber, null)
         val countryCode = parsedNumber.countryCode
+        val country = phoneNumberUtil.getRegionCodeForCountryCode(countryCode)
 
         val result = executeRequest<AddMsisdnResponse>(eventBus) {
             val body = AddMsisdnBody(
                     clientSecret = clientSecret,
-                    country = countryCode.asString(), // TODO Convert to String,
+                    country = country,
                     phoneNumber = parsedNumber.nationalNumber.toString(),
                     sendAttempt = sendAttempt
             )
@@ -106,11 +107,6 @@ internal class DefaultAddThreePidTask @Inject constructor(
                     .let { pendingThreePidMapper.map(it) }
                     .let { realm.copyToRealm(it) }
         }
-    }
-
-    private fun Int.asString(): String {
-        // TODO
-        return ""
     }
 }
 

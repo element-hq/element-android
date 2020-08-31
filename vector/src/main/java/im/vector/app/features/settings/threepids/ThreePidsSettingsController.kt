@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
+import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
@@ -97,10 +98,20 @@ class ThreePidsSettingsController @Inject constructor(
 
         emails.forEach { buildThreePid("email ", it) }
 
-        // Pending threePids
+        // Pending emails
         data.pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Email::class.java)
-                ?.forEach { buildPendingThreePid("p_email ", it) }
+                .orEmpty()
+                .let { pendingList ->
+                    if (pendingList.isEmpty() && emails.isEmpty()) {
+                        noResultItem {
+                            id("noEmail")
+                            text(stringProvider.getString(R.string.settings_emails_empty))
+                        }
+                    }
+
+                    pendingList.forEach { buildPendingThreePid("p_email ", it) }
+                }
 
         when (data.state) {
             ThreePidsSettingsState.Idle ->
@@ -135,10 +146,20 @@ class ThreePidsSettingsController @Inject constructor(
 
         msisdn.forEach { buildThreePid("msisdn ", it) }
 
-        // Pending threePids
+        // Pending msisdn
         data.pendingThreePids.invoke()
                 ?.filterIsInstance(ThreePid.Msisdn::class.java)
-                ?.forEach { buildPendingThreePid("p_msisdn ", it) }
+                .orEmpty()
+                .let { pendingList ->
+                    if (pendingList.isEmpty() && msisdn.isEmpty()) {
+                        noResultItem {
+                            id("noMsisdn")
+                            text(stringProvider.getString(R.string.settings_phone_number_empty))
+                        }
+                    }
+
+                    pendingList.forEach { buildPendingThreePid("p_msisdn ", it) }
+                }
 
         when (data.state) {
             ThreePidsSettingsState.Idle ->

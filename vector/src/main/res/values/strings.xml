@@ -675,6 +675,7 @@
     <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone</string>
+    <string name="settings_phone_number_empty">No phone number has been added to your account</string>
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
@@ -683,6 +684,7 @@
     <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
     <string name="settings_emails">Email addresses</string>
+    <string name="settings_emails_empty">No email has been added to your account</string>
     <string name="settings_phone_numbers">Phone numbers</string>
     <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
     <string name="error_threepid_auth_failed">Ensure that you have clicked on the link in the email we have sent to you.</string>
