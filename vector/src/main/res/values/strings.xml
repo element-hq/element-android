@@ -684,7 +684,6 @@
 
     <string name="settings_emails">Email addresses</string>
     <string name="settings_phone_numbers">Phone numbers</string>
-    <string name="settings_phone_numbers_empty">No phone number has been added to your account</string>
     <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
     <string name="error_threepid_auth_failed">Ensure that you have clicked on the link in the email we have sent to you.</string>
 

@@ -16,14 +16,8 @@
 
 package im.vector.app.features.settings.threepids
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.identity.ThreePid
-
-data class ThreePidsSettingsViewState(
-        val state: ThreePidsSettingsState = ThreePidsSettingsState.Idle,
-        val isLoading: Boolean = false,
-        val threePids: Async<List<ThreePid>> = Uninitialized,
-        val pendingThreePids: Async<List<ThreePid>> = Uninitialized
-) : MvRxState
+sealed class ThreePidsSettingsState {
+    object Idle : ThreePidsSettingsState()
+    data class AddingEmail(val error: String?) : ThreePidsSettingsState()
+    data class AddingPhoneNumber(val error: String?) : ThreePidsSettingsState()
+}

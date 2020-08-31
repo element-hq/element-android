@@ -20,6 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
 sealed class ThreePidsSettingsAction : VectorViewModelAction {
+    data class ChangeState(val newState: ThreePidsSettingsState) : ThreePidsSettingsAction()
     data class AddThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
     data class ContinueThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
     data class CancelThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()

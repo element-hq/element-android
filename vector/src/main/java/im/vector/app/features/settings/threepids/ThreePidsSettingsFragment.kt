@@ -18,9 +18,7 @@ package im.vector.app.features.settings.threepids
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -30,10 +28,11 @@ import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.toast
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
@@ -43,6 +42,7 @@ class ThreePidsSettingsFragment @Inject constructor(
         private val epoxyController: ThreePidsSettingsController
 ) :
         VectorBaseFragment(),
+        OnBackPressed,
         ThreePidsSettingsViewModel.Factory by viewModelFactory,
         ThreePidsSettingsController.InteractionListener {
 
@@ -90,27 +90,15 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun addEmail() {
-        val inflater = requireActivity().layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
-
-        val input = layout.findViewById<EditText>(R.id.editText)
-        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.settings_add_email_address)
-                .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    val email = input.text.toString()
-                    doAddEmail(email)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(null)))
     }
 
-    private fun doAddEmail(email: String) {
+    override fun doAddEmail(email: String) {
+        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(null)))
+
         // Check that email is valid
         if (!email.isEmail()) {
-            requireActivity().toast(R.string.auth_invalid_email)
+            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(getString(R.string.auth_invalid_email))))
             return
         }
 
@@ -118,7 +106,19 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun addMsisdn() {
+        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(null)))
+    }
+
+    override fun doAddMsisdn(msisdn: String) {
+        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(null)))
+
         TODO("Not yet implemented")
+    }
+
+    override fun cancelAdding() {
+        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.Idle))
+        // Hide the keyboard
+        view?.hideKeyboard()
     }
 
     override fun continueThreePid(threePid: ThreePid) {
@@ -138,5 +138,16 @@ class ThreePidsSettingsFragment @Inject constructor(
                 .setNegativeButton(R.string.cancel, null)
                 .show()
                 .withColoredButton(DialogInterface.BUTTON_POSITIVE)
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        return withState(viewModel) {
+            if (it.state is ThreePidsSettingsState.Idle) {
+                false
+            } else {
+                cancelAdding()
+                true
+            }
+        }
     }
 }
