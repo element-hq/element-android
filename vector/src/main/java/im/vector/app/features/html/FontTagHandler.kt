@@ -34,12 +34,12 @@ class FontTagHandler : SimpleTagHandler() {
         return ForegroundColorSpan(colorString)
     }
 
-    private fun parseColor(color_name: String): Int {
+    private fun parseColor(colorName: String): Int {
         try {
-            return Color.parseColor(color_name)
+            return Color.parseColor(colorName)
         } catch (e: Exception) {
             // try other w3c colors?
-            return when (color_name) {
+            return when (colorName) {
                 "white"   -> Color.WHITE
                 "yellow"  -> Color.YELLOW
                 "fuchsia" -> Color.parseColor("#FF00FF")

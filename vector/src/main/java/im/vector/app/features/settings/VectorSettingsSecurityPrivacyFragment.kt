@@ -563,7 +563,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun refreshMyDevice() {
         session.cryptoService().getUserDevices(session.myUserId).map {
             DeviceInfo(
-                    user_id = session.myUserId,
+                    userId = session.myUserId,
                     deviceId = it.deviceId,
                     displayName = it.displayName()
             )

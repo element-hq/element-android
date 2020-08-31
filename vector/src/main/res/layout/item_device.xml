@@ -27,7 +27,7 @@
             tools:text="Riot X" />
 
         <!---
-            The following detailed informations are displayed in developper mode
+            The following detailed data are displayed in developer mode
         -->
         <TextView
             android:id="@+id/itemDeviceDisplayNameLabel"

@@ -84,7 +84,7 @@ class VerificationChooseMethodController @Inject constructor(
                 iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
                 listener { listener?.doVerifyBySas() }
             }
-        } else if (state.SASModeAvailable) {
+        } else if (state.sasModeAvailable) {
             bottomSheetVerificationActionItem {
                 id("openEmoji")
                 title(stringProvider.getString(R.string.verification_no_scan_emoji_title))

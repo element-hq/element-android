@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.dialogs.PromptPasswordDialog
@@ -37,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 /**
@@ -108,7 +108,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
-        DeviceVerificationInfoBottomSheet.newInstance(deviceInfo.user_id ?: "", deviceInfo.deviceId ?: "").show(
+        DeviceVerificationInfoBottomSheet.newInstance(deviceInfo.userId ?: "", deviceInfo.deviceId ?: "").show(
                 childFragmentManager,
                 "VERIF_INFO"
         )
