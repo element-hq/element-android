@@ -17,6 +17,7 @@ Bugfix 🐛:
  - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
+ - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
 
 Translations 🗣:
  -

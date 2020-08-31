@@ -27,4 +27,9 @@ class AnimatedImageViewHolder constructor(itemView: View) :
     val imageLoaderProgress: ProgressBar = itemView.findViewById(R.id.imageLoaderProgress)
 
     internal val target = DefaultImageLoaderTarget(this, this.touchImageView)
+
+    override fun onRecycled() {
+        super.onRecycled()
+        touchImageView.setImageDrawable(null)
+    }
 }

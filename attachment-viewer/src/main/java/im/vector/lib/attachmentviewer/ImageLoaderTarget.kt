@@ -50,6 +50,7 @@ internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, pri
     override fun onLoadFailed(uid: String, errorDrawable: Drawable?) {
         if (holder.boundResourceUid != uid) return
         holder.imageLoaderProgress.isVisible = false
+        holder.touchImageView.setImageDrawable(errorDrawable)
     }
 
     override fun onResourceCleared(uid: String, placeholder: Drawable?) {
@@ -77,11 +78,13 @@ internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, pri
         override fun onResourceLoading(uid: String, placeholder: Drawable?) {
             if (holder.boundResourceUid != uid) return
             holder.imageLoaderProgress.isVisible = true
+            holder.touchImageView.setImageDrawable(placeholder)
         }
 
         override fun onLoadFailed(uid: String, errorDrawable: Drawable?) {
             if (holder.boundResourceUid != uid) return
             holder.imageLoaderProgress.isVisible = false
+            holder.touchImageView.setImageDrawable(errorDrawable)
         }
 
         override fun onResourceCleared(uid: String, placeholder: Drawable?) {
