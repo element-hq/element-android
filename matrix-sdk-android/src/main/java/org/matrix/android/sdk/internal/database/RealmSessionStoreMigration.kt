@@ -27,6 +27,10 @@ import javax.inject.Inject
 
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
+    companion object {
+        const val SESSION_STORE_SCHEMA_VERSION = 4L
+    }
+
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
 

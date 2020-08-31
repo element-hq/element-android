@@ -19,13 +19,13 @@ package org.matrix.android.sdk.internal.database
 
 import android.content.Context
 import androidx.core.content.edit
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionModule
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -45,10 +45,6 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         @UserMd5 val userMd5: String,
         val migration: RealmSessionStoreMigration,
         context: Context) {
-
-    companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 3L
-    }
 
     // Keep legacy preferences name for compatibility reason
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
@@ -74,7 +70,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                     realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
                 .modules(SessionRealmModule())
-                .schemaVersion(SESSION_STORE_SCHEMA_VERSION)
+                .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
                 .migration(migration)
                 .build()
 
