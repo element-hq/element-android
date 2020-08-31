@@ -27,4 +27,3 @@ internal data class PendingThreePid(
         // For Msisdn only
         val submitUrl: String?
 )
-

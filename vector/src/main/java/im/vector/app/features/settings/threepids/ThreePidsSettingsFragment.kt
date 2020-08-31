@@ -120,12 +120,16 @@ class ThreePidsSettingsFragment @Inject constructor(
 
         // Check that phone number is valid
         if (!msisdn.startsWith("+")) {
-            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international))))
+            viewModel.handle(
+                    ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international)))
+            )
             return
         }
 
         if (!msisdn.isMsisdn()) {
-            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other))))
+            viewModel.handle(
+                    ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other)))
+            )
             return
         }
 

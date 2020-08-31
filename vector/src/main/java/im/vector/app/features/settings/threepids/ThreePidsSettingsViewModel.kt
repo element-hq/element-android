@@ -156,7 +156,6 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                     _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))
                 }
             })
-
         }
     }
 
