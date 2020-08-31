@@ -17,6 +17,7 @@
 package im.vector.app.core.extensions
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import org.matrix.android.sdk.api.extensions.ensurePrefix
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
@@ -25,7 +26,7 @@ fun ThreePid.getFormattedValue(): String {
         is ThreePid.Email  -> email
         is ThreePid.Msisdn -> {
             tryThis(message = "Unable to parse the phone number") {
-                PhoneNumberUtil.getInstance().parse("+$msisdn", null)
+                PhoneNumberUtil.getInstance().parse(msisdn.ensurePrefix("+"), null)
             }
                     ?.let {
                         PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)

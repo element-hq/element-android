@@ -267,8 +267,8 @@ class DiscoverySettingsController @Inject constructor(
                         }
                     }
 
-                    override fun onCodeChange(code: String) {
-                        codes[pidInfo.threePid] = code
+                    override fun onTextChange(text: String) {
+                        codes[pidInfo.threePid] = text
                     }
                 })
             }

@@ -28,6 +28,7 @@ import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
@@ -158,7 +159,7 @@ class ThreePidsSettingsFragment @Inject constructor(
 
     override fun deleteThreePid(threePid: ThreePid) {
         AlertDialog.Builder(requireActivity())
-                .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.value))
+                .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
                 .setPositiveButton(R.string.remove) { _, _ ->
                     viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
                 }

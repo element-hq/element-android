@@ -31,11 +31,12 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.features.discovery.SettingsEditTextItem
 import im.vector.app.features.discovery.settingsContinueCancelItem
+import im.vector.app.features.discovery.settingsEditTextItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
-import im.vector.app.features.form.formEditTextItem
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
@@ -127,13 +128,20 @@ class ThreePidsSettingsController @Inject constructor(
                     buttonClickAction(View.OnClickListener { interactionListener?.addEmail() })
                 }
             is ThreePidsSettingsState.AddingEmail -> {
-                formEditTextItem {
+                settingsEditTextItem {
                     id("addingEmail")
                     inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
                     hint(stringProvider.getString(R.string.medium_email))
-                    errorMessage(data.state.error)
-                    onTextChange { currentInputValue = it }
-                    showBottomSeparator(false)
+                    errorText(data.state.error)
+                    interactionListener(object : SettingsEditTextItem.Listener {
+                        override fun onValidate() {
+                            interactionListener?.doAddEmail(currentInputValue)
+                        }
+
+                        override fun onTextChange(text: String) {
+                            currentInputValue = text
+                        }
+                    })
                 }
                 settingsContinueCancelItem {
                     id("contAddingEmail")
@@ -180,13 +188,20 @@ class ThreePidsSettingsController @Inject constructor(
                     id("addingMsisdnInfo")
                     helperText(stringProvider.getString(R.string.login_msisdn_notice))
                 }
-                formEditTextItem {
+                settingsEditTextItem {
                     id("addingMsisdn")
                     inputType(InputType.TYPE_CLASS_PHONE)
                     hint(stringProvider.getString(R.string.medium_phone_number))
-                    errorMessage(data.state.error)
-                    onTextChange { currentInputValue = it }
-                    showBottomSeparator(false)
+                    errorText(data.state.error)
+                    interactionListener(object : SettingsEditTextItem.Listener {
+                        override fun onValidate() {
+                            interactionListener?.doAddMsisdn(currentInputValue)
+                        }
+
+                        override fun onTextChange(text: String) {
+                            currentInputValue = text
+                        }
+                    })
                 }
                 settingsContinueCancelItem {
                     id("contAddingMsisdn")
@@ -234,12 +249,19 @@ class ThreePidsSettingsController @Inject constructor(
                     message(stringProvider.getString(R.string.settings_text_message_sent, threePid.getFormattedValue()))
                     colorProvider(colorProvider)
                 }
-                formEditTextItem {
+                settingsEditTextItem {
                     id("msisdnVerification${threePid.value}")
                     inputType(InputType.TYPE_CLASS_NUMBER)
                     hint(stringProvider.getString(R.string.settings_text_message_sent_hint))
-                    showBottomSeparator(false)
-                    onTextChange { currentCodes[threePid] = it }
+                    interactionListener(object : SettingsEditTextItem.Listener {
+                        override fun onValidate() {
+                            interactionListener?.submitCode(threePid, currentCodes[threePid] ?: "")
+                        }
+
+                        override fun onTextChange(text: String) {
+                            currentCodes[threePid] = text
+                        }
+                    })
                 }
                 settingsContinueCancelItem {
                     id("cont" + idPrefix + threePid.value)
