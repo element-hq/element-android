@@ -1,6 +1,8 @@
-# Adding an email to an account
+# Adding and removing ThreePids to an account
 
-## User enter the email
+## Add email
+
+### User enter the email
 
 > POST https://homeserver.org/_matrix/client/r0/account/3pid/email/requestToken
 
@@ -12,7 +14,7 @@
 }
 ```
 
-### The email is already added to an account
+#### The email is already added to an account
 
 400
 
@@ -23,7 +25,7 @@
 }
 ```
 
-### The email is free
+#### The email is free
 
 Wording: "We've sent you an email to verify your address. Please follow the instructions there and then click the button below."
 
@@ -44,13 +46,13 @@ Wording: "We've sent you an email to verify your address. Please follow the inst
 >  
 >  If this was not you, you can safely ignore this email. Thank you.
 
-## User clicks on the link
+### User clicks on the link
 
 The browser displays the following message:
 
 > Your email has now been validated, please return to your client. You may now close this window.
 
-## User returns on Element
+### User returns on Element
 
 User clicks on CONTINUE
 
@@ -80,7 +82,7 @@ User clicks on CONTINUE
 }
 ```
 
-## User enters his password
+### User enters his password
 
 POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 
@@ -97,7 +99,7 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 }
 ```
 
-### The link has not been clicked
+#### The link has not been clicked
 
 400
 
@@ -108,7 +110,7 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 }
 ```
 
-### Wrong password
+#### Wrong password
 
 401
 
@@ -131,7 +133,7 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 }
 ```
 
-### The link has been clicked and the account password is correct
+#### The link has been clicked and the account password is correct
 
 200
 
@@ -139,9 +141,9 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 {}
 ```
 
-# Remove email
+## Remove email
 
-## User want to remove the email from his account
+### User want to remove the email from his account
 
 > POST https://homeserver.org/_matrix/client/r0/account/3pid/delete
 
@@ -152,7 +154,7 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 }
 ```
 
-### Email was not bound to an identity server
+#### Email was not bound to an identity server
 
 200
 
@@ -162,7 +164,7 @@ POST https://homeserver.org/_matrix/client/r0/account/3pid/add
 }
 ```
 
-### Email was bound to an identity server
+#### Email was bound to an identity server
 
 200
 
