@@ -9,6 +9,7 @@ Compared to the Element app, SchildiChat features following changes:
 - Further small usability improvements
 
 <a href="https://play.google.com/store/apps/details?id=de.spiritcroc.riotx" alt="Get it on Google Play" target="_blank"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="80"></a>
+<a href="https://f-droid.org/de/packages/de.spiritcroc.riotx/" alt="Get it on F-Droid" target="_blank"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">
 
 <a href="https://matrix.to/#/#schildichat-android:matrix.org" target="_blank">Join the discussion on matrix</a>
 
