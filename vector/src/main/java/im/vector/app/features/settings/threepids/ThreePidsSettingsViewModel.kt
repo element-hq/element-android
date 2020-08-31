@@ -155,7 +155,21 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalArgumentException(stringProvider.getString(R.string.auth_email_already_defined))))
             } else {
                 viewModelScope.launch {
-                    session.addThreePid(action.threePid, loadingCallback)
+                    session.addThreePid(action.threePid, object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            // Also reset the state
+                            setState {
+                                copy(
+                                        state = ThreePidsSettingsState.Idle
+                                )
+                            }
+                            loadingCallback.onSuccess(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            loadingCallback.onFailure(failure)
+                        }
+                    })
                 }
             }
         }

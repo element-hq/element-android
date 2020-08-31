@@ -1951,6 +1951,7 @@
     <string name="login_msisdn_confirm_send_again">Send again</string>
     <string name="login_msisdn_confirm_submit">Next</string>
 
+    <string name="login_msisdn_notice">"Please use the international format (phone number must start with '+')"</string>
     <string name="login_msisdn_error_not_international">"International phone numbers must start with '+'"</string>
     <string name="login_msisdn_error_other">"Phone number seems invalid. Please check it"</string>
 

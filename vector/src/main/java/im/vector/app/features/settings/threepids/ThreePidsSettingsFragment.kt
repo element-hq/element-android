@@ -94,15 +94,17 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun doAddEmail(email: String) {
+        // Sanity
+        val safeEmail = email.trim().replace(" ", "")
         viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(null)))
 
         // Check that email is valid
-        if (!email.isEmail()) {
+        if (!safeEmail.isEmail()) {
             viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(getString(R.string.auth_invalid_email))))
             return
         }
 
-        viewModel.handle(ThreePidsSettingsAction.AddThreePid(ThreePid.Email(email)))
+        viewModel.handle(ThreePidsSettingsAction.AddThreePid(ThreePid.Email(safeEmail)))
     }
 
     override fun addMsisdn() {
@@ -110,9 +112,18 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun doAddMsisdn(msisdn: String) {
+        // Sanity
+        val safeMsisdn = msisdn.trim().replace(" ", "")
+
         viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(null)))
 
-        TODO("Not yet implemented")
+        // Check that phone number is valid
+        if (!msisdn.startsWith("+")) {
+            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international))))
+            return
+        }
+
+        viewModel.handle(ThreePidsSettingsAction.AddThreePid(ThreePid.Msisdn(safeMsisdn)))
     }
 
     override fun cancelAdding() {

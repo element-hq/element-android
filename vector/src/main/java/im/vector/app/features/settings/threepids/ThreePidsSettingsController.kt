@@ -31,6 +31,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.discovery.settingsContinueCancelItem
+import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formEditTextItem
@@ -149,6 +150,10 @@ class ThreePidsSettingsController @Inject constructor(
                 }
             is ThreePidsSettingsState.AddingEmail -> Unit
             is ThreePidsSettingsState.AddingPhoneNumber -> {
+                settingsInfoItem {
+                    id("addingMsisdnInfo")
+                    helperText(stringProvider.getString(R.string.login_msisdn_notice))
+                }
                 formEditTextItem {
                     id("addingMsisdn")
                     inputType(InputType.TYPE_CLASS_PHONE)
