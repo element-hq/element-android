@@ -15,6 +15,7 @@ Bugfix 🐛:
  - Fix FontSize issue (#1483, #1787)
  - Fix bad color for settings icon on Android < 24 (#1786)
  - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
+ - Loudspeaker is always used (#1685)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
 
