@@ -152,7 +152,11 @@ class HomeDetailFragment @Inject constructor(
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
-                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                    if (vectorPreferences.singleOverview()) {
+                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.ALL))
+                    } else {
+                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                    }
                 }
             }
         }
