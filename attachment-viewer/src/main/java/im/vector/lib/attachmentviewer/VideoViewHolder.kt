@@ -123,7 +123,7 @@ class VideoViewHolder constructor(itemView: View) :
             videoView.setVideoPath(mVideoPath)
         } catch (failure: Throwable) {
             // Couldn't open
-            Log.v(VideoViewHolder::class.java.name, "Failed to start video ${failure.message}")
+            Log.v(VideoViewHolder::class.java.name, "Failed to start video")
         }
 
         if (!wasPaused) {
