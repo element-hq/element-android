@@ -29,6 +29,10 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
+ - Buildkite:
+    New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
+    New build location: https://buildkite.com/matrix-dot-org/element-android
+
 
 Other changes:
  - Use File extension functions to make code more concise (#1996)
