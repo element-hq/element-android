@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.setTextOrHide
 abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.Holder>() {
 
     @EpoxyAttribute var hint: String? = null
+    @EpoxyAttribute var value: String? = null
     @EpoxyAttribute var descriptionText: String? = null
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute var inProgress: Boolean = false
@@ -70,6 +71,9 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
 
         holder.editText.doOnTextChanged(textChangeListener)
         holder.editText.setOnEditorActionListener(editorActionListener)
+        if (value != null) {
+            holder.editText.setText(value)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {

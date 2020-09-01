@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.ReadOnceTrue
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -124,7 +125,15 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 .livePendingThreePIds()
                 .execute {
                     copy(
-                            pendingThreePids = it
+                            pendingThreePids = it,
+                            // Ensure the editText for code will be reset
+                            msisdnValidationReinitiator = msisdnValidationReinitiator.toMutableMap().apply {
+                                it.invoke()
+                                        ?.filterIsInstance(ThreePid.Msisdn::class.java)
+                                        ?.forEach { threePid ->
+                                            getOrPut(threePid) { ReadOnceTrue() }
+                                        }
+                            }
                     )
                 }
     }
@@ -177,7 +186,8 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     private fun handleChangeState(action: ThreePidsSettingsAction.ChangeState) {
         setState {
             copy(
-                    state = action.newState
+                    state = action.newState,
+                    editTextReinitiator = ReadOnceTrue()
             )
         }
     }

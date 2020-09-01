@@ -19,6 +19,7 @@ package im.vector.app.features.settings.threepids
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.core.utils.ReadOnceTrue
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
 data class ThreePidsSettingsViewState(
@@ -26,5 +27,7 @@ data class ThreePidsSettingsViewState(
         val isLoading: Boolean = false,
         val threePids: Async<List<ThreePid>> = Uninitialized,
         val pendingThreePids: Async<List<ThreePid>> = Uninitialized,
-        val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap()
+        val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap(),
+        val editTextReinitiator: ReadOnceTrue? = null,
+        val msisdnValidationReinitiator: Map<ThreePid, ReadOnceTrue> = emptyMap()
 ) : MvRxState
