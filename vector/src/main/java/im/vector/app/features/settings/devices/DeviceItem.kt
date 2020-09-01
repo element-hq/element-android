@@ -31,10 +31,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * A list item for Device.

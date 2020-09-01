@@ -30,7 +30,6 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState

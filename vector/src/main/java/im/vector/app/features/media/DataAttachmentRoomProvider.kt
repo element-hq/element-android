@@ -21,7 +21,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
-import im.vector.app.core.extensions.localDateTime
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage

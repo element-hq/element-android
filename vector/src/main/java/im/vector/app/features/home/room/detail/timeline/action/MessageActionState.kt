@@ -22,10 +22,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.canReact
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.Date
-import java.util.Locale
 
 /**
  * Quick reactions state

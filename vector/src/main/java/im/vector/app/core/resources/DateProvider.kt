@@ -44,4 +44,3 @@ object DateProvider {
 }
 
 fun LocalDateTime.toTimestamp(): Long = DateProvider.toTimestamp(this)
-

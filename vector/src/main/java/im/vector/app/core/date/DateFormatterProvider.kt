@@ -24,4 +24,3 @@ interface DateFormatterProvider {
 
     val dateWithYearFormatter: DateTimeFormatter
 }
-

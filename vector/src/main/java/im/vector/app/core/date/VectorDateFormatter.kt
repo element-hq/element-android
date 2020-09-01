@@ -34,7 +34,7 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
 
     private val hourFormatter by lazy {
         if (DateFormat.is24HourFormat(context)) {
-            DateTimeFormatter.ofPattern("H:mm", localeProvider.current())
+            DateTimeFormatter.ofPattern("HH:mm", localeProvider.current())
         } else {
             DateTimeFormatter.ofPattern("h:mm a", localeProvider.current())
         }
@@ -42,7 +42,7 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
 
     private val fullDateFormatter by lazy {
         val pattern = if (DateFormat.is24HourFormat(context)) {
-            DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE, d MMM yyyy H:mm")
+            DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE, d MMM yyyy HH:mm")
         } else {
             DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE, d MMM yyyy h:mm a")
         }
@@ -58,7 +58,7 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
      * @return the formatted date as string.
      */
     fun format(ts: Long?, dateFormatKind: DateFormatKind): String {
-        if (ts == null) return ""
+        if (ts == null) return "-"
         val localDateTime = DateProvider.toLocalDateTime(ts)
         return when (dateFormatKind) {
             DateFormatKind.DEFAULT_DATE_AND_TIME -> formatDateAndTime(ts)

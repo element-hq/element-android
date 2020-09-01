@@ -22,6 +22,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.resources.LocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -57,7 +58,7 @@ object VectorLocale {
     /**
      * Init this object
      */
-    fun init(context: Context) {
+    fun init(context: Context, localeProvider: LocaleProvider) {
         this.context = context
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 

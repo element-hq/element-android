@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Handle date formatting properly (show time am/pm if needed, display year when needed)
 
 Bugfix 🐛:
  -
