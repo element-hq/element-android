@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
         android:title="@string/settings_user_settings">
@@ -27,6 +26,12 @@
             android:summary="@string/settings_emails_and_phone_numbers_summary"
             android:title="@string/settings_emails_and_phone_numbers_title"
             app:fragment="im.vector.app.features.settings.threepids.ThreePidsSettingsFragment" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:persistent="false"
+            android:summary="@string/settings_discovery_manage"
+            android:title="@string/settings_discovery_category"
+            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
