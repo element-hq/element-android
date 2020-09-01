@@ -113,13 +113,13 @@ interface ProfileService {
                                matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * Cancel adding a threepid. It will remove data store locally about this ThreePid
+     * Cancel adding a threepid. It will remove locally stored data about this ThreePid
      */
     fun cancelAddingThreePid(threePid: ThreePid,
                              matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * Delete a 3Pids.
+     * Remove a 3Pid from the Matrix account.
      */
     fun deleteThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
 }
