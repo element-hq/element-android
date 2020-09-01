@@ -52,6 +52,7 @@ internal class MarkdownParser @Inject constructor(
         return if (isFormattedTextPertinent(text, cleanHtmlText)) {
             // According to https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
+            // But it caused too many problems so it has been removed in #2002
             TextContent(text, cleanHtmlText.trim())
         } else {
             TextContent(text)
