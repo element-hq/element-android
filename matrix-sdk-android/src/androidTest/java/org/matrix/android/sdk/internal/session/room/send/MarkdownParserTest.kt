@@ -17,15 +17,14 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.commonmark.renderer.text.TextContentRenderer
 import org.junit.Assert.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
 
 /**
  * It will not be possible to test all combinations. For the moment I add a few tests, then, depending on the problem discovered in the wild,
@@ -46,8 +45,7 @@ class MarkdownParserTest : InstrumentedTest {
      */
     private val markdownParser = MarkdownParser(
             Parser.builder().build(),
-            HtmlRenderer.builder().build(),
-            TextContentRenderer.builder().build()
+            HtmlRenderer.builder().build()
     )
 
     @Test

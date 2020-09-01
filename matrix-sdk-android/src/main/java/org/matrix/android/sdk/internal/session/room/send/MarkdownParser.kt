@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.commonmark.renderer.text.TextContentRenderer
 import javax.inject.Inject
 
 /**
@@ -29,8 +28,7 @@ import javax.inject.Inject
  */
 internal class MarkdownParser @Inject constructor(
         private val parser: Parser,
-        private val htmlRenderer: HtmlRenderer,
-        private val textContentRenderer: TextContentRenderer
+        private val htmlRenderer: HtmlRenderer
 ) {
 
     private val mdSpecialChars = "[`_\\-*>.\\[\\]#~]".toRegex()
