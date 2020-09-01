@@ -18,6 +18,7 @@ Bugfix 🐛:
  - Loudspeaker is always used (#1685)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
+ - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
 
 Translations 🗣:
