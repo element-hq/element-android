@@ -1592,7 +1592,7 @@
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрационный токен</string>
 
-    <string name="send_suggestion">Сделайте предложение</string>
+    <string name="send_suggestion">Оставить отзыв</string>
     <string name="send_suggestion_content">Пожалуйста, напишите ваше предложение ниже.</string>
     <string name="send_suggestion_report_placeholder">Опишите ваше предложение здесь</string>
     <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
