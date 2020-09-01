@@ -28,6 +28,6 @@ data class ThreePidsSettingsViewState(
         val threePids: Async<List<ThreePid>> = Uninitialized,
         val pendingThreePids: Async<List<ThreePid>> = Uninitialized,
         val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap(),
-        val editTextReinitiator: ReadOnceTrue? = null,
+        val editTextReinitiator: ReadOnceTrue = ReadOnceTrue(),
         val msisdnValidationReinitiator: Map<ThreePid, ReadOnceTrue> = emptyMap()
 ) : MvRxState

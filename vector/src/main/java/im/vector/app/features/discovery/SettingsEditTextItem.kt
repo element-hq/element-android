@@ -27,12 +27,14 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.extensions.showKeyboard
 
 @EpoxyModelClass(layout = R.layout.item_settings_edit_text)
 abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.Holder>() {
 
     @EpoxyAttribute var hint: String? = null
     @EpoxyAttribute var value: String? = null
+    @EpoxyAttribute var requestFocus = false
     @EpoxyAttribute var descriptionText: String? = null
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute var inProgress: Boolean = false
@@ -73,6 +75,9 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
         holder.editText.setOnEditorActionListener(editorActionListener)
         if (value != null) {
             holder.editText.setText(value)
+        }
+        if (requestFocus) {
+            holder.editText.showKeyboard(andRequestFocus = true)
         }
     }
 

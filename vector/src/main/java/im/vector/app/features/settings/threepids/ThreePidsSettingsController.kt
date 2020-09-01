@@ -136,8 +136,9 @@ class ThreePidsSettingsController @Inject constructor(
                     id("addingEmail")
                     inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
                     hint(stringProvider.getString(R.string.medium_email))
-                    if (data.editTextReinitiator?.isTrue() == true) {
+                    if (data.editTextReinitiator.isTrue()) {
                         value("")
+                        requestFocus(true)
                     }
                     errorText(data.uiState.error)
                     interactionListener(object : SettingsEditTextItem.Listener {
@@ -199,8 +200,9 @@ class ThreePidsSettingsController @Inject constructor(
                     id("addingMsisdn")
                     inputType(InputType.TYPE_CLASS_PHONE)
                     hint(stringProvider.getString(R.string.medium_phone_number))
-                    if (data.editTextReinitiator?.isTrue() == true) {
+                    if (data.editTextReinitiator.isTrue()) {
                         value("")
+                        requestFocus(true)
                     }
                     errorText(data.uiState.error)
                     interactionListener(object : SettingsEditTextItem.Listener {
