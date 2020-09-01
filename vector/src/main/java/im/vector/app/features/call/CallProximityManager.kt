@@ -39,14 +39,16 @@ class CallProximityManager @Inject constructor(val context: Context) : SensorEve
     private var wakeLock: PowerManager.WakeLock? = null
     private var sensor: Sensor? = null
 
+    init {
+        powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+    }
+
     /**
      * Start listening the proximity sensor. [stop] function should be called to release the sensor and the WakeLock.
      */
     fun start() {
-        powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
-
         if (sensor != null && powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
@@ -56,9 +58,7 @@ class CallProximityManager @Inject constructor(val context: Context) : SensorEve
      * Stop listening proximity sensor changes and release the WakeLock.
      */
     fun stop() {
-        if (this::sensorManager.isInitialized) {
-            sensorManager.unregisterListener(this)
-        }
+        sensorManager.unregisterListener(this)
         wakeLock?.release()
     }
 
