@@ -60,6 +60,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -75,14 +76,15 @@ import im.vector.app.features.rageshake.BugReportActivity
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.RageShake
 import im.vector.app.features.session.SessionListener
+import im.vector.app.features.settings.FontScale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
-import org.matrix.android.sdk.api.failure.GlobalError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
@@ -198,8 +200,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
-                startActivity(intent)
-                finish()
+                restart()
             }
         })
         pinLocker.getLiveState().observeNotNull(this) {
@@ -219,6 +220,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
         doBeforeSetContentView()
 
+        // Hack for font size
+        applyFontSize()
+
         if (getLayoutRes() != -1) {
             setContentView(getLayoutRes())
         }
@@ -237,6 +241,16 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 setTitle(titleRes)
             }
         }
+    }
+
+    /**
+     * This method has to be called for the font size setting be supported correctly.
+     */
+    private fun applyFontSize() {
+        resources.configuration.fontScale = FontScale.getFontScaleValue(this).scale
+
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
     }
 
     private fun handleGlobalError(globalError: GlobalError) {
@@ -302,10 +316,10 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PinActivity.PIN_REQUEST_CODE) {
             when (resultCode) {
-                Activity.RESULT_OK                 -> {
+                Activity.RESULT_OK -> {
                     pinLocker.unlock()
                 }
-                else                               -> {
+                else               -> {
                     pinLocker.block()
                     moveTaskToBack(true)
                 }

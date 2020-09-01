@@ -1,6 +1,6 @@
 ### Pull Request Checklist
 
-<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/riotX-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
+<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
 
 - [ ] Changes has been tested on an Android device or Android emulator with API 21
 - [ ] UI change has been tested on both light and dark themes

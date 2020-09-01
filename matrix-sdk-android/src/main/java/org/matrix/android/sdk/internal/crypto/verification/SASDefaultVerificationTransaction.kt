@@ -175,8 +175,8 @@ internal abstract class SASDefaultVerificationTransaction(
                 ?.unpaddedBase64PublicKey
                 ?.let { masterPublicKey ->
                     val crossSigningKeyId = "ed25519:$masterPublicKey"
-                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { MSKMacString ->
-                        keyMap[crossSigningKeyId] = MSKMacString
+                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { mskMacString ->
+                        keyMap[crossSigningKeyId] = mskMacString
                     }
                 }
 

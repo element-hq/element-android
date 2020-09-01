@@ -68,7 +68,7 @@ class DebugMenuActivity : VectorBaseActivity() {
     }
 
     private fun renderQrCode(text: String) {
-        debug_qr_code.setData(text, true)
+        debug_qr_code.setData(text)
     }
 
     @OnClick(R.id.debug_test_text_view_link)

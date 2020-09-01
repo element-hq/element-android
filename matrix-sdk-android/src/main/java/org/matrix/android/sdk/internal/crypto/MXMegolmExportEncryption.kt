@@ -145,7 +145,7 @@ object MXMegolmExportEncryption {
      */
     @Throws(Exception::class)
     @JvmOverloads
-    fun encryptMegolmKeyFile(data: String, password: String, kdf_rounds: Int = DEFAULT_ITERATION_COUNT): ByteArray {
+    fun encryptMegolmKeyFile(data: String, password: String, kdfRounds: Int = DEFAULT_ITERATION_COUNT): ByteArray {
         if (password.isEmpty()) {
             throw Exception("Empty password is not supported")
         }
@@ -163,7 +163,7 @@ object MXMegolmExportEncryption {
         // of a single bit of salt is a price we have to pay.
         iv[9] = iv[9] and 0x7f
 
-        val deriveKey = deriveKeys(salt, kdf_rounds, password)
+        val deriveKey = deriveKeys(salt, kdfRounds, password)
 
         val decryptCipher = Cipher.getInstance("AES/CTR/NoPadding")
 
@@ -188,10 +188,10 @@ object MXMegolmExportEncryption {
         System.arraycopy(iv, 0, resultBuffer, idx, iv.size)
         idx += iv.size
 
-        resultBuffer[idx++] = (kdf_rounds shr 24 and 0xff).toByte()
-        resultBuffer[idx++] = (kdf_rounds shr 16 and 0xff).toByte()
-        resultBuffer[idx++] = (kdf_rounds shr 8 and 0xff).toByte()
-        resultBuffer[idx++] = (kdf_rounds and 0xff).toByte()
+        resultBuffer[idx++] = (kdfRounds shr 24 and 0xff).toByte()
+        resultBuffer[idx++] = (kdfRounds shr 16 and 0xff).toByte()
+        resultBuffer[idx++] = (kdfRounds shr 8 and 0xff).toByte()
+        resultBuffer[idx++] = (kdfRounds and 0xff).toByte()
 
         System.arraycopy(cipherArray, 0, resultBuffer, idx, cipherArray.size)
         idx += cipherArray.size
@@ -320,26 +320,26 @@ object MXMegolmExportEncryption {
 
         // 512 bits key length
         val key = ByteArray(64)
-        val Uc = ByteArray(64)
+        val uc = ByteArray(64)
 
         // U1 = PRF(Password, Salt || INT_32_BE(i))
         prf.update(salt)
         val int32BE = ByteArray(4) { 0.toByte() }
         int32BE[3] = 1.toByte()
         prf.update(int32BE)
-        prf.doFinal(Uc, 0)
+        prf.doFinal(uc, 0)
 
         // copy to the key
-        System.arraycopy(Uc, 0, key, 0, Uc.size)
+        System.arraycopy(uc, 0, key, 0, uc.size)
 
         for (index in 2..iterations) {
             // Uc = PRF(Password, Uc-1)
-            prf.update(Uc)
-            prf.doFinal(Uc, 0)
+            prf.update(uc)
+            prf.doFinal(uc, 0)
 
             // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
-            for (byteIndex in Uc.indices) {
-                key[byteIndex] = key[byteIndex] xor Uc[byteIndex]
+            for (byteIndex in uc.indices) {
+                key[byteIndex] = key[byteIndex] xor uc[byteIndex]
             }
         }
 

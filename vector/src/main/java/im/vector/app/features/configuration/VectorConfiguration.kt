@@ -16,10 +16,11 @@
 
 package im.vector.app.features.configuration
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
+import android.os.LocaleList
+import androidx.annotation.RequiresApi
 import im.vector.app.features.settings.FontScale
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.themes.ThemeUtils
@@ -40,14 +41,9 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         }
     }
 
-    /**
-     * Init the configuration from the saved one
-     */
-    fun initConfiguration() {
-        VectorLocale.init(context)
+    fun applyToApplicationContext() {
         val locale = VectorLocale.applicationLocale
         val fontScale = FontScale.getFontScaleValue(context)
-        val theme = ThemeUtils.getApplicationTheme(context)
 
         Locale.setDefault(locale)
         val config = Configuration(context.resources.configuration)
@@ -56,9 +52,6 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         config.fontScale = fontScale.scale
         @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
-        // init the theme
-        ThemeUtils.setApplicationTheme(context, theme)
     }
 
     /**
@@ -67,31 +60,41 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      * @param context the context
      * @return the localised context
      */
-    @SuppressLint("NewApi")
     fun getLocalisedContext(context: Context): Context {
         try {
-            val resources = context.resources
             val locale = VectorLocale.applicationLocale
-            val configuration = resources.configuration
+
+            // create new configuration passing old configuration from original Context
+            val configuration = Configuration(context.resources.configuration)
+
             configuration.fontScale = FontScale.getFontScaleValue(context).scale
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                configuration.setLocale(locale)
-                configuration.setLayoutDirection(locale)
-                return context.createConfigurationContext(configuration)
+                setLocaleForApi24(configuration, locale)
             } else {
-                @Suppress("DEPRECATION")
-                configuration.locale = locale
-                configuration.setLayoutDirection(locale)
-                @Suppress("DEPRECATION")
-                resources.updateConfiguration(configuration, resources.displayMetrics)
-                return context
+                configuration.setLocale(locale)
             }
+            configuration.setLayoutDirection(locale)
+            return context.createConfigurationContext(configuration)
         } catch (e: Exception) {
             Timber.e(e, "## getLocalisedContext() failed")
         }
 
         return context
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun setLocaleForApi24(config: Configuration, locale: Locale) {
+        val set: MutableSet<Locale> = LinkedHashSet()
+        // bring the user locale to the front of the list
+        set.add(locale)
+        val all = LocaleList.getDefault()
+        for (i in 0 until all.size()) {
+            // append other locales supported by the user
+            set.add(all[i])
+        }
+        val locales = set.toTypedArray()
+        config.setLocales(LocaleList(*locales))
     }
 
     /**

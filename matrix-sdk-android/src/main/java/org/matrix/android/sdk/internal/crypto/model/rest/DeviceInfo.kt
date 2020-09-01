@@ -31,7 +31,7 @@ data class DeviceInfo(
          * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
          */
         @Json(name = "user_id")
-        val user_id: String? = null,
+        val userId: String? = null,
 
         /**
          * The device id

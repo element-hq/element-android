@@ -48,13 +48,15 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(roomPreviewNoPreviewToolbar)
+        val titleText = roomPreviewData.roomName ?: roomPreviewData.roomAlias ?: roomPreviewData.roomId
+
         // Toolbar
         avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewToolbarAvatar)
-        roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName ?: roomPreviewData.roomAlias
+        roomPreviewNoPreviewToolbarTitle.text = titleText
 
         // Screen
         avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewAvatar)
-        roomPreviewNoPreviewName.text = roomPreviewData.roomName ?: roomPreviewData.roomAlias
+        roomPreviewNoPreviewName.text = titleText
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 
         if (roomPreviewData.worldReadable) {
@@ -98,7 +100,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             // Quit this screen
             requireActivity().finish()
             // Open room
-            navigator.openRoom(requireActivity(), roomPreviewData.roomId)
+            navigator.openRoom(requireActivity(), roomPreviewData.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
         }
     }
 }

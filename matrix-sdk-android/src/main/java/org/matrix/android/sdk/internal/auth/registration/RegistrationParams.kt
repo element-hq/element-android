@@ -44,5 +44,6 @@ internal data class RegistrationParams(
 
         // Temporary flag to notify the server that we support msisdn flow. Used to prevent old app
         // versions to end up in fallback because the HS returns the msisdn flow which they don't support
-        val x_show_msisdn: Boolean? = null
+        @Json(name = "x_show_msisdn")
+        val xShowMsisdn: Boolean? = null
 )

@@ -120,7 +120,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                 localEchoRepository.updateEncryptedEcho(localEvent.eventId, safeResult.eventContent, decryptionLocalEcho)
             }
 
-            val nextWorkerParams = SendEventWorker.Params(params.sessionId, encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(sessionId = params.sessionId, event = encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {
             val sendState = when (error) {
@@ -129,8 +129,11 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             }
             localEchoRepository.updateSendState(localEvent.eventId, sendState)
             // always return success, or the chain will be stuck for ever!
-            val nextWorkerParams = SendEventWorker.Params(params.sessionId, localEvent, error?.localizedMessage
-                    ?: "Error")
+            val nextWorkerParams = SendEventWorker.Params(
+                    sessionId = params.sessionId,
+                    event = localEvent,
+                    lastFailureMessage = error?.localizedMessage ?: "Error"
+            )
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
     }

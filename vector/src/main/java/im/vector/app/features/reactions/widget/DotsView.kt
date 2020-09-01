@@ -186,12 +186,12 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         private const val OUTER_DOTS_POSITION_ANGLE = 360 / DOTS_COUNT
 
         val DOTS_PROGRESS: Property<DotsView, Float> = object : Property<DotsView, Float>(Float::class.java, "dotsProgress") {
-            override operator fun get(`object`: DotsView): Float? {
-                return `object`.currentProgress
+            override operator fun get(o: DotsView): Float? {
+                return o.currentProgress
             }
 
-            override operator fun set(`object`: DotsView, value: Float?) {
-                `object`.currentProgress = value!!
+            override operator fun set(o: DotsView, value: Float?) {
+                o.currentProgress = value!!
             }
         }
     }

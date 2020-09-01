@@ -17,8 +17,10 @@
 package im.vector.app.core.services
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import im.vector.app.core.extensions.vectorComponent
 import timber.log.Timber
 
 /**
@@ -30,6 +32,10 @@ abstract class VectorService : Service() {
      * Tells if the service self destroyed.
      */
     private var mIsSelfDestroyed = false
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(vectorComponent().vectorConfiguration().getLocalisedContext(base))
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -31,7 +31,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
@@ -97,7 +96,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
         Timber.v("Load data: $data")
         if (data.isLocalFile() && data.url != null) {
             val initialFile = File(data.url)
-            callback.onDataReady(FileInputStream(initialFile))
+            callback.onDataReady(initialFile.inputStream())
             return
         }
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()

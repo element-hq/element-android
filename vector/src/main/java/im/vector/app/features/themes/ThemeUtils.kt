@@ -44,6 +44,12 @@ object ThemeUtils {
 
     private val mColorByAttr = HashMap<Int, Int>()
 
+    // init the theme
+    fun init(context: Context) {
+        val theme = getApplicationTheme(context)
+        setApplicationTheme(context, theme)
+    }
+
     /**
      * @return true if current theme is Light or Status
      */

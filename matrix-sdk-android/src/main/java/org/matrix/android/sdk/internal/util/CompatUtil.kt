@@ -257,12 +257,11 @@ object CompatUtil {
 
     /**
      * Create a CipherInputStream instance.
-     * Before Kitkat, this method will return `in` because local storage encryption is not implemented for devices before KitKat.
-     * Warning, if `in` is not an encrypted stream, it's up to the caller to close and reopen `in`, because the stream has been read.
+     * Warning, if inputStream is not an encrypted stream, it's up to the caller to close and reopen inputStream, because the stream has been read.
      *
-     * @param in      the input stream
-     * @param context the context holding the application shared preferences
-     * @return in, or the created InputStream, or null if the InputStream `in`  does not contain encrypted data
+     * @param inputStream the input stream
+     * @param context     the context holding the application shared preferences
+     * @return inputStream, or the created InputStream, or null if the InputStream inputStream does not contain encrypted data
      */
     @Throws(NoSuchPaddingException::class,
             NoSuchAlgorithmException::class,
@@ -274,15 +273,15 @@ object CompatUtil {
             NoSuchProviderException::class,
             InvalidAlgorithmParameterException::class,
             IOException::class)
-    fun createCipherInputStream(`in`: InputStream, context: Context): InputStream? {
-        val iv_len = `in`.read()
-        if (iv_len != AES_GCM_IV_LENGTH) {
-            Timber.e(TAG, "Invalid IV length $iv_len")
+    fun createCipherInputStream(inputStream: InputStream, context: Context): InputStream? {
+        val ivLen = inputStream.read()
+        if (ivLen != AES_GCM_IV_LENGTH) {
+            Timber.e(TAG, "Invalid IV length $ivLen")
             return null
         }
 
         val iv = ByteArray(AES_GCM_IV_LENGTH)
-        `in`.read(iv)
+        inputStream.read(iv)
 
         val cipher = Cipher.getInstance(AES_GCM_CIPHER_TYPE)
 
@@ -296,6 +295,6 @@ object CompatUtil {
 
         cipher.init(Cipher.DECRYPT_MODE, keyAndVersion.secretKey, spec)
 
-        return CipherInputStream(`in`, cipher)
+        return CipherInputStream(inputStream, cipher)
     }
 }
