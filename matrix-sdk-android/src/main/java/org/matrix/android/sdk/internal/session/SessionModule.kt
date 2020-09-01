@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorage
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.DeviceId
@@ -342,6 +343,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindDatabaseCleaner(observer: DatabaseCleaner): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindRealmSessionProvider(observer: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService

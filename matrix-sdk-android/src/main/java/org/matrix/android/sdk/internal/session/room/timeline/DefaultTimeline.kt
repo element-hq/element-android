@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.CancelableBag
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -76,7 +77,8 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
         private val eventBus: EventBus,
-        private val eventDecryptor: TimelineEventDecryptor
+        private val eventDecryptor: TimelineEventDecryptor,
+        private val realmSessionProvider: RealmSessionProvider
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
@@ -136,13 +138,13 @@ internal class DefaultTimeline(
     }
 
     override fun pendingEventCount(): Int {
-        return Realm.getInstance(realmConfiguration).use {
+        return realmSessionProvider.withRealm {
             RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
         }
     }
 
     override fun failedToDeliverEventCount(): Int {
-        return Realm.getInstance(realmConfiguration).use {
+        return realmSessionProvider.withRealm {
             TimelineEventEntity.findAllInRoomWithSendStates(it, roomId, SendState.HAS_FAILED_STATES).count()
         }
     }
@@ -239,7 +241,7 @@ internal class DefaultTimeline(
             return eventId
         }
         // Otherwise, we should check if the event is in the db, but is hidden because of filters
-        return Realm.getInstance(realmConfiguration).use { localRealm ->
+        return realmSessionProvider.withRealm { localRealm ->
             val nonFilteredEvents = buildEventQuery(localRealm)
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                     .findAll()

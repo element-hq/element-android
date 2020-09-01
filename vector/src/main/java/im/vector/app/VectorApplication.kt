@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.StrictMode
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Lifecycle
@@ -92,6 +93,13 @@ class VectorApplication :
     private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyFlashScreen()
+                    .penaltyLog()
+                    .build())
+        }
         super.onCreate()
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)

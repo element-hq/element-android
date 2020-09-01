@@ -896,13 +896,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
-        if (action.event.root.sendState.isSent()) { // ignore pending/local events
-            visibleEventsObservable.accept(action)
-        }
-        // We need to update this with the related m.replace also (to move read receipt)
-        action.event.annotations?.editSummary?.sourceEvents?.forEach {
-            room.getTimeLineEvent(it)?.let { event ->
-                visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
+        viewModelScope.launch(Dispatchers.Default) {
+            if (action.event.root.sendState.isSent()) { // ignore pending/local events
+                visibleEventsObservable.accept(action)
+            }
+            // We need to update this with the related m.replace also (to move read receipt)
+            action.event.annotations?.editSummary?.sourceEvents?.forEach {
+                room.getTimeLineEvent(it)?.let { event ->
+                    visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
+                }
             }
         }
     }
