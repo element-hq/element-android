@@ -2427,6 +2427,8 @@
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
     <string name="mark_as_verified">Mark as Trusted</string>
 
+    <string name="error_sso_flow_not_supported_yet">Sorry, this operation is not possible yet for accounts connected using Single Sign-On.</string>
+
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
     <string name="error_empty_field_choose_password">Please choose a password.</string>
     <string name="external_link_confirmation_title">Double-check this link</string>

@@ -109,6 +109,7 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
+            is SsoFlowNotSupportedYet    -> stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
             else                         -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)

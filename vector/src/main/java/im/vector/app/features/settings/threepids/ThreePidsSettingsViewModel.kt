@@ -26,6 +26,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.error.SsoFlowNotSupportedYet
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -66,7 +67,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                     _viewEvents.post(ThreePidsSettingsViewEvents.RequestPassword)
                 } else {
                     // LoginFlowTypes.PASSWORD not supported, and this is the only one Element supports so far...
-                    _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))
+                    _viewEvents.post(ThreePidsSettingsViewEvents.Failure(SsoFlowNotSupportedYet()))
                 }
             } else {
                 _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))

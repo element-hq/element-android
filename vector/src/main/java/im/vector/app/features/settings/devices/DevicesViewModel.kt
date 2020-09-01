@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.error.SsoFlowNotSupportedYet
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -316,7 +317,7 @@ class DevicesViewModel @AssistedInject constructor(
                         )
                     }
 
-                    _viewEvents.post(DevicesViewEvents.Failure(failure))
+                    _viewEvents.post(DevicesViewEvents.Failure(SsoFlowNotSupportedYet()))
                 }
             }
 
