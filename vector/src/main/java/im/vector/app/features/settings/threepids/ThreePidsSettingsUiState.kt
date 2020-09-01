@@ -16,8 +16,8 @@
 
 package im.vector.app.features.settings.threepids
 
-sealed class ThreePidsSettingsState {
-    object Idle : ThreePidsSettingsState()
-    data class AddingEmail(val error: String?) : ThreePidsSettingsState()
-    data class AddingPhoneNumber(val error: String?) : ThreePidsSettingsState()
+sealed class ThreePidsSettingsUiState {
+    object Idle : ThreePidsSettingsUiState()
+    data class AddingEmail(val error: String?) : ThreePidsSettingsUiState()
+    data class AddingPhoneNumber(val error: String?) : ThreePidsSettingsUiState()
 }

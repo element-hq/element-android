@@ -146,7 +146,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
             is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
             is ThreePidsSettingsAction.AccountPassword -> handleAccountPassword(action)
             is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
-            is ThreePidsSettingsAction.ChangeState -> handleChangeState(action)
+            is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
         }.exhaustive
     }
 
@@ -183,10 +183,10 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleChangeState(action: ThreePidsSettingsAction.ChangeState) {
+    private fun handleChangeUiState(action: ThreePidsSettingsAction.ChangeUiState) {
         setState {
             copy(
-                    state = action.newState,
+                    uiState = action.newUiState,
                     editTextReinitiator = ReadOnceTrue()
             )
         }
@@ -211,7 +211,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                             // Also reset the state
                             setState {
                                 copy(
-                                        state = ThreePidsSettingsState.Idle
+                                        uiState = ThreePidsSettingsUiState.Idle
                                 )
                             }
                             loadingCallback.onSuccess(data)

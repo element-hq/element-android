@@ -92,17 +92,17 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun addEmail() {
-        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(null)))
+        viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingEmail(null)))
     }
 
     override fun doAddEmail(email: String) {
         // Sanity
         val safeEmail = email.trim().replace(" ", "")
-        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(null)))
+        viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingEmail(null)))
 
         // Check that email is valid
         if (!safeEmail.isEmail()) {
-            viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingEmail(getString(R.string.auth_invalid_email))))
+            viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingEmail(getString(R.string.auth_invalid_email))))
             return
         }
 
@@ -110,26 +110,26 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun addMsisdn() {
-        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(null)))
+        viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(null)))
     }
 
     override fun doAddMsisdn(msisdn: String) {
         // Sanity
         val safeMsisdn = msisdn.trim().replace(" ", "")
 
-        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(null)))
+        viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(null)))
 
         // Check that phone number is valid
         if (!msisdn.startsWith("+")) {
             viewModel.handle(
-                    ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international)))
+                    ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international)))
             )
             return
         }
 
         if (!msisdn.isMsisdn()) {
             viewModel.handle(
-                    ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other)))
+                    ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other)))
             )
             return
         }
@@ -144,7 +144,7 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun cancelAdding() {
-        viewModel.handle(ThreePidsSettingsAction.ChangeState(ThreePidsSettingsState.Idle))
+        viewModel.handle(ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.Idle))
         // Hide the keyboard
         view?.hideKeyboard()
     }
@@ -170,7 +170,7 @@ class ThreePidsSettingsFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return withState(viewModel) {
-            if (it.state is ThreePidsSettingsState.Idle) {
+            if (it.uiState is ThreePidsSettingsUiState.Idle) {
                 false
             } else {
                 cancelAdding()
