@@ -110,13 +110,13 @@ interface SendService {
      * Schedule this message to be resent
      * @param localEcho the unsent local echo
      */
-    fun resendTextMessage(localEcho: TimelineEvent): Cancelable?
+    fun resendTextMessage(localEcho: TimelineEvent): Cancelable
 
     /**
      * Schedule this message to be resent
      * @param localEcho the unsent local echo
      */
-    fun resendMediaMessage(localEcho: TimelineEvent): Cancelable?
+    fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
 
     /**
      * Remove this failed message from the timeline
