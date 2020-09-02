@@ -229,8 +229,8 @@ internal object MXEncryptedAttachments {
     /**
      * Decrypt an attachment
      *
-     * @param attachmentStream  the attachment stream. Will be closed after this method call.
-     * @param encryptedFileInfo the encryption file info
+     * @param attachmentStream the attachment stream. Will be closed after this method call.
+     * @param elementToDecrypt the element to decrypt the file
      * @return the decrypted attachment stream
      */
     fun decryptAttachment(attachmentStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
@@ -257,7 +257,8 @@ internal object MXEncryptedAttachments {
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
-     * @return the decrypted attachment stream
+     * @param outputStream     the outputStream where the decrypted attachment will be write.
+     * @return true in case of success, false in case of error
      */
     fun decryptAttachment(attachmentStream: InputStream?, elementToDecrypt: ElementToDecrypt?, outputStream: OutputStream): Boolean {
         // sanity checks
