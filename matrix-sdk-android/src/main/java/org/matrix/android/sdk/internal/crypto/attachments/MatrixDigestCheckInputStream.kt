@@ -22,9 +22,12 @@ import java.io.IOException
 import java.io.InputStream
 import java.security.MessageDigest
 
-class MatrixDigestCheckInputStream(`in`: InputStream?, val expectedDigest: String) : FilterInputStream(`in`) {
+class MatrixDigestCheckInputStream(
+        inputStream: InputStream?,
+        private val expectedDigest: String
+) : FilterInputStream(inputStream) {
 
-    val digest = MessageDigest.getInstance("SHA-256")
+    private val digest = MessageDigest.getInstance("SHA-256")
 
     @Throws(IOException::class)
     override fun read(): Int {

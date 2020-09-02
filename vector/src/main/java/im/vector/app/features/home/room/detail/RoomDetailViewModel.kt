@@ -1076,12 +1076,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
         val targetEventId = action.eventId
         room.getTimeLineEvent(targetEventId)?.let {
-            // State must be UNDELIVERED or Failed
+            // State must be in one of the sending states
             if (!it.root.sendState.isSending()) {
-                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                Timber.e("Cannot cancel message, it is not sending")
                 return
             }
-            room.cancelSend(action.eventId)
+            room.cancelSend(targetEventId)
         }
     }
 
