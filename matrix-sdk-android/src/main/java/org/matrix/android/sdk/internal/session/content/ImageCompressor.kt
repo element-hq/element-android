@@ -33,42 +33,40 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 internal class ImageCompressor @Inject constructor(
         @SessionDownloadsDirectory
         private val sessionCacheDirectory: File
 ) {
-
     private val cacheFolder = File(sessionCacheDirectory, "MF")
 
     suspend fun compress(
             context: Context,
             imageUri: Uri,
-            desiredWidth: Int = 612,
-            desiredHeight: Int = 816,
-            desiredQuality: Int = 80,
-            coroutineContext: CoroutineContext = Dispatchers.IO
-    ): Uri = withContext(coroutineContext) {
-        val compressedBitmap = BitmapFactory.Options().run {
-            inJustDecodeBounds = true
-            decodeBitmap(context, imageUri, this)
-            inSampleSize = calculateInSampleSize(outWidth, outHeight, desiredWidth, desiredHeight)
-            inJustDecodeBounds = false
-            decodeBitmap(context, imageUri, this)?.let {
-                rotateBitmap(context, imageUri, it)
-            }
-        } ?: return@withContext imageUri
+            desiredWidth: Int,
+            desiredHeight: Int,
+            desiredQuality: Int = 80): Uri {
+        return withContext(Dispatchers.IO) {
+            val compressedBitmap = BitmapFactory.Options().run {
+                inJustDecodeBounds = true
+                decodeBitmap(context, imageUri, this)
+                inSampleSize = calculateInSampleSize(outWidth, outHeight, desiredWidth, desiredHeight)
+                inJustDecodeBounds = false
+                decodeBitmap(context, imageUri, this)?.let {
+                    rotateBitmap(context, imageUri, it)
+                }
+            } ?: return@withContext imageUri
 
-        val destinationUri = createDestinationUri(context)
+            val destinationUri = createDestinationUri(context)
 
-        runCatching {
-            context.contentResolver.openOutputStream(destinationUri).use {
-                compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
+            runCatching {
+                context.contentResolver.openOutputStream(destinationUri).use {
+                    compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
+                }
             }
+
+            return@withContext destinationUri
         }
-
-        return@withContext destinationUri
     }
 
     private fun rotateBitmap(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
