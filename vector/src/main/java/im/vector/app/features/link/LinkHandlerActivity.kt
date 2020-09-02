@@ -24,10 +24,15 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.toast
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.permalink.PermalinkHandler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -37,6 +42,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var permalinkHandler: PermalinkHandler
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -62,9 +68,45 @@ class LinkHandlerActivity : VectorBaseActivity() {
                 startLoginActivity(uri)
             }
         } else {
-            // Other link are not yet handled, but should not comes here (manifest configuration error?)
-            Timber.w("Unable to handle this uir: $uri")
-            finish()
+            if (!sessionHolder.hasActiveSession()) {
+                startLoginActivity(uri)
+                finish()
+            } else {
+                convertUrlToPermalink(uri.toString())?.let { permalink ->
+                    startPermalinkHandler(permalink)
+                } ?: run {
+                    // Other link are not yet handled, but should not comes here (manifest configuration error?)
+                    Timber.w("Unable to handle this uir: $uri")
+                    finish()
+                }
+            }
+        }
+    }
+
+    private fun startPermalinkHandler(permalink: String) {
+        permalinkHandler.launch(this, permalink, buildTask = true)
+                .delay(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { isHandled ->
+                    if (!isHandled) {
+                        toast(R.string.permalink_malformed)
+                    }
+                    finish()
+                }
+                .disposeOnDestroy()
+    }
+
+    /**
+     * Converts domain urls to matrix.to urls
+     * @param url full url like https://app.element.io/#/room/#dummy_room:matrix.org
+     * @return matrix.to url like https://matrix.to/#/#dummy_room:matrix.org
+     */
+    private fun convertUrlToPermalink(url: String): String? {
+        return when {
+            url.startsWith(ROOM_BASE_URL)  -> url.replace(ROOM_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
+            url.startsWith(USER_BASE_URL)  -> url.replace(USER_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
+            url.startsWith(GROUP_BASE_URL) -> url.replace(GROUP_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
+            else                           -> null
         }
     }
 
@@ -114,5 +156,8 @@ class LinkHandlerActivity : VectorBaseActivity() {
 
     companion object {
         private const val PATH_CONFIG = "/config/config"
+        private const val ROOM_BASE_URL = "https://app.element.io/#/room/"
+        private const val USER_BASE_URL = "https://app.element.io/#/user/"
+        private const val GROUP_BASE_URL = "https://app.element.io/#/group/"
     }
 }
