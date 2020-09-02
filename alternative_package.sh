@@ -56,5 +56,7 @@ esac
 
 build_gradle="$mydir/vector/build.gradle"
 src_dir="$mydir/vector/src"
+fastlane_dir="$mydir/fastlane"
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
+sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
