@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - You can now join room through permalink and within room directory search
  - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
+ - Fix several issues when uploading bug files (#1889)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
