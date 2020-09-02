@@ -178,7 +178,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
             return try {
-                val streamToUpload: InputStream
+                val fileToUplaod: File
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
                     // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
@@ -200,9 +200,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             options.outHeight,
                             fileSize
                     )
-                    streamToUpload = compressedFile.inputStream()
+                    fileToUplaod = compressedFile
                 } else {
-                    streamToUpload = workingFile.inputStream()
+                    fileToUplaod = workingFile
                 }
 
                 val contentUploadResponse = if (params.isEncrypted) {
@@ -211,7 +211,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
 
                     uploadedFileEncryptedFileInfo =
-                            MXEncryptedAttachments.encrypt(streamToUpload, attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
+                            MXEncryptedAttachments.encrypt(fileToUplaod.inputStream(), attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
                                 notifyTracker(params) {
                                     contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
                                 }
@@ -228,7 +228,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 } else {
                     Timber.v("## FileService: Clear file")
                     fileUploader
-                            .uploadInputStream(streamToUpload, attachment.name, attachment.getSafeMimeType(), progressListener)
+                            .uploadFile(fileToUplaod, attachment.name, attachment.getSafeMimeType(), progressListener)
                 }
 
                 Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")

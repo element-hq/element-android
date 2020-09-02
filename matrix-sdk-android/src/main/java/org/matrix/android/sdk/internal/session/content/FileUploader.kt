@@ -32,6 +32,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
 import okio.source
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
@@ -40,7 +41,7 @@ import org.matrix.android.sdk.internal.network.toFailure
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
+import java.util.UUID
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
@@ -57,11 +58,11 @@ internal class FileUploader @Inject constructor(@Authenticated
                            filename: String?,
                            mimeType: String?,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody =  object : RequestBody() {
+        val uploadBody = object : RequestBody() {
             override fun contentLength() = file.length()
 
             // Disable okhttp auto resend for 'large files'
-            override fun isOneShot() =  contentLength() == 0L || contentLength() >= 1_000_000
+            override fun isOneShot() = contentLength() == 0L || contentLength() >= 1_000_000
 
             override fun contentType(): MediaType? {
                 return mimeType?.toMediaTypeOrNull()
@@ -83,37 +84,22 @@ internal class FileUploader @Inject constructor(@Authenticated
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadInputStream(inputStream: InputStream,
-                                filename: String?,
-                                mimeType: String?,
-                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val length = inputStream.available().toLong()
-        val uploadBody =  object : RequestBody() {
-            override fun contentLength() = length
-
-            // Disable okhttp auto resend for 'large files'
-            override fun isOneShot() =  contentLength() == 0L || contentLength() >= 1_000_000
-
-            override fun contentType(): MediaType? {
-               return mimeType?.toMediaTypeOrNull()
-            }
-
-            override fun writeTo(sink: BufferedSink) {
-               inputStream.source().use { sink.writeAll(it) }
-            }
-        }
-        return upload(uploadBody, filename, progressListener)
-    }
-
     suspend fun uploadFromUri(uri: Uri,
                               filename: String?,
                               mimeType: String?,
                               progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val inputStream =  withContext(Dispatchers.IO) {
+        val inputStream = withContext(Dispatchers.IO) {
             context.contentResolver.openInputStream(uri)
         } ?: throw FileNotFoundException()
-        return uploadInputStream(inputStream, filename, mimeType, progressListener)
+        val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+        workingFile.outputStream().use {
+            inputStream.copyTo(it)
+        }
+        return uploadFile(workingFile, filename, mimeType, progressListener).also {
+            tryThis { workingFile.delete() }
+        }
     }
+
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 

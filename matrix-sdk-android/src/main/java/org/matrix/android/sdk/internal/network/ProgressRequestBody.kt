@@ -24,6 +24,7 @@ import okio.BufferedSink
 import okio.ForwardingSink
 import okio.Sink
 import okio.buffer
+import org.matrix.android.sdk.api.extensions.tryThis
 import java.io.IOException
 
 internal class ProgressRequestBody(private val delegate: RequestBody,
@@ -39,15 +40,9 @@ internal class ProgressRequestBody(private val delegate: RequestBody,
 
     override fun isDuplex() = delegate.isDuplex()
 
-    override fun contentLength(): Long {
-        try {
-            return delegate.contentLength()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+    val length = tryThis { delegate.contentLength() } ?: -1
 
-        return -1
-    }
+    override fun contentLength() = length
 
     @Throws(IOException::class)
     override fun writeTo(sink: BufferedSink) {
