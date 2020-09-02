@@ -147,7 +147,6 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
         if (localEcho.root.sendState.hasFailed()) {
-            // TODO this need a refactoring of attachment sending
             val clearContent = localEcho.root.getClearContent()
             val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return null
 
