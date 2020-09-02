@@ -24,11 +24,21 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -44,16 +54,6 @@ import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.AlwaysSuccessfulWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.startChain
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -147,7 +147,7 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
         if (localEcho.root.sendState.hasFailed()) {
-            // TODO this need a refactoring of attachement sending
+            // TODO this need a refactoring of attachment sending
             val clearContent = localEcho.root.getClearContent()
             val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return null
 
