@@ -11,6 +11,15 @@ if [ -z "$package_add" ] || [ -z "$name_add" ]; then
     exit 1
 fi
 
+build_gradle="$mydir/vector/build.gradle"
+src_dir="$mydir/vector/src"
+fastlane_dir="$mydir/fastlane"
+
+if grep -q "de.spiritcroc.riotx.$package_add" "$build_gradle"; then
+    echo "Abort, $package_add already active"
+    exit 0
+fi
+
 logo_replace_color() {
     local file="$1"
     local color_shell="$2"
@@ -54,9 +63,6 @@ case "$package_add" in
     ;;
 esac
 
-build_gradle="$mydir/vector/build.gradle"
-src_dir="$mydir/vector/src"
-fastlane_dir="$mydir/fastlane"
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
