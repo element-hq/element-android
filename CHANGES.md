@@ -10,7 +10,6 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
- - Wrong markdown parsing (#350, #1375, #1939, #1982)
  - Words containing my name should not trigger notifications (#1781)
  - Fix changing language issue
  - Fix FontSize issue (#1483, #1787)

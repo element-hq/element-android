@@ -53,7 +53,7 @@ internal class MarkdownParser @Inject constructor(
             // According to https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
             // But it caused too many problems so it has been removed in #2002
-            TextContent(text, cleanHtmlText.trim())
+            TextContent(text, cleanHtmlText.postTreatment())
         } else {
             TextContent(text)
         }
@@ -61,4 +61,15 @@ internal class MarkdownParser @Inject constructor(
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
+
+    /**
+     * The parser makes some mistakes, so deal with it here
+     */
+    private fun String.postTreatment(): String {
+        return this
+                // Remove extra space before and after the content
+                .trim()
+                // There is no need to include new line in an html-like source
+                .replace("\n", "")
+    }
 }
