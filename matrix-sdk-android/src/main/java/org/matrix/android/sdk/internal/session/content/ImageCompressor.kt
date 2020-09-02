@@ -35,7 +35,7 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class ImageCompressor @Inject constructor(
+internal class ImageCompressor @Inject constructor(
         @SessionDownloadsDirectory
         private val sessionCacheDirectory: File
 ) {
@@ -62,8 +62,10 @@ class ImageCompressor @Inject constructor(
 
         val destinationUri = createDestinationUri(context)
 
-        context.contentResolver.openOutputStream(destinationUri).use {
-            compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
+        runCatching {
+            context.contentResolver.openOutputStream(destinationUri).use {
+                compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
+            }
         }
 
         return@withContext destinationUri
@@ -124,7 +126,7 @@ class ImageCompressor @Inject constructor(
                 BitmapFactory.decodeStream(inputStream, null, options)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Cannot decode Bitmap: %s", uri.toString())
+            Timber.e(e, "Cannot decode Bitmap")
             null
         }
     }
