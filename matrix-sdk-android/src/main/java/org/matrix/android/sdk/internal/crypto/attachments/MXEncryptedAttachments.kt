@@ -31,7 +31,6 @@ import java.io.OutputStream
 import java.security.MessageDigest
 import java.security.SecureRandom
 import javax.crypto.Cipher
-import javax.crypto.CipherInputStream
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
@@ -224,32 +223,6 @@ internal object MXEncryptedAttachments {
                 encryptedByteArray = byteArrayOutputStream.toByteArray()
         )
                 .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
-    }
-
-    /**
-     * Decrypt an attachment
-     *
-     * @param attachmentStream the attachment stream. Will be closed after this method call.
-     * @param elementToDecrypt the element to decrypt the file
-     * @return the decrypted attachment stream
-     */
-    fun decryptAttachment(attachmentStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
-        try {
-            val digestCheckInputStream = MatrixDigestCheckInputStream(attachmentStream, elementToDecrypt.sha256)
-
-            val key = Base64.decode(base64UrlToBase64(elementToDecrypt.k), Base64.DEFAULT)
-            val initVectorBytes = Base64.decode(elementToDecrypt.iv, Base64.DEFAULT)
-
-            val decryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
-            val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
-            val ivParameterSpec = IvParameterSpec(initVectorBytes)
-            decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
-
-            return CipherInputStream(digestCheckInputStream, decryptCipher)
-        } catch (failure: Throwable) {
-            Timber.e(failure, "## decryptAttachment() : failed to create stream")
-            return null
-        }
     }
 
     /**
