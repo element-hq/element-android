@@ -57,11 +57,11 @@ internal class FileUploader @Inject constructor(@Authenticated
                            filename: String?,
                            mimeType: String?,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody =  object : RequestBody() {
+        val uploadBody = object : RequestBody() {
             override fun contentLength() = file.length()
 
             // Disable okhttp auto resend for 'large files'
-            override fun isOneShot() =  contentLength() == 0L || contentLength() >= 1_000_000
+            override fun isOneShot() = contentLength() == 0L || contentLength() >= 1_000_000
 
             override fun contentType(): MediaType? {
                 return mimeType?.toMediaTypeOrNull()
@@ -84,22 +84,22 @@ internal class FileUploader @Inject constructor(@Authenticated
     }
 
     suspend fun uploadInputStream(inputStream: InputStream,
-                                filename: String?,
-                                mimeType: String?,
-                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+                                  filename: String?,
+                                  mimeType: String?,
+                                  progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         val length = inputStream.available().toLong()
-        val uploadBody =  object : RequestBody() {
+        val uploadBody = object : RequestBody() {
             override fun contentLength() = length
 
             // Disable okhttp auto resend for 'large files'
-            override fun isOneShot() =  contentLength() == 0L || contentLength() >= 1_000_000
+            override fun isOneShot() = contentLength() == 0L || contentLength() >= 1_000_000
 
             override fun contentType(): MediaType? {
-               return mimeType?.toMediaTypeOrNull()
+                return mimeType?.toMediaTypeOrNull()
             }
 
             override fun writeTo(sink: BufferedSink) {
-               inputStream.source().use { sink.writeAll(it) }
+                inputStream.source().use { sink.writeAll(it) }
             }
         }
         return upload(uploadBody, filename, progressListener)
@@ -109,11 +109,12 @@ internal class FileUploader @Inject constructor(@Authenticated
                               filename: String?,
                               mimeType: String?,
                               progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val inputStream =  withContext(Dispatchers.IO) {
+        val inputStream = withContext(Dispatchers.IO) {
             context.contentResolver.openInputStream(uri)
         } ?: throw FileNotFoundException()
         return uploadInputStream(inputStream, filename, mimeType, progressListener)
     }
+
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
