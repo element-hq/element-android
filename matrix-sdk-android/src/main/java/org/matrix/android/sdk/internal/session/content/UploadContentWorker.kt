@@ -19,11 +19,11 @@ package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.default
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -74,6 +74,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var contentUploadStateTracker: DefaultContentUploadStateTracker
     @Inject lateinit var fileService: DefaultFileService
     @Inject lateinit var cancelSendTracker: CancelSendTracker
+    @Inject lateinit var imageCompressor: ImageCompressor
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -180,26 +181,20 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 val fileToUplaod: File
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
-                    // Compressor library works with File instead of Uri for now. Since Scoped Storage doesn't allow us to access files directly, we should
-                    // copy it to a cache folder by using InputStream and OutputStream.
-                    // https://github.com/zetbaitsu/Compressor/pull/150
-                    // As soon as the above PR is merged, we can use attachment.queryUri instead of creating a cacheFile.
-                    val compressedFile = Compressor.compress(context, workingFile) {
-                        default(
-                                width = MAX_IMAGE_SIZE,
-                                height = MAX_IMAGE_SIZE
-                        )
-                    }
-
-                    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                    BitmapFactory.decodeFile(compressedFile.absolutePath, options)
-                    val fileSize = compressedFile.length().toInt()
-                    newImageAttributes = NewImageAttributes(
-                            options.outWidth,
-                            options.outHeight,
-                            fileSize
-                    )
-                    fileToUplaod = compressedFile
+                    fileToUplaod = imageCompressor.compress(context, workingFile.toUri(), MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                            .also { compressedUri ->
+                                context.contentResolver.openInputStream(compressedUri)?.use {
+                                    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                                    val bitmap = BitmapFactory.decodeStream(it, null, options)
+                                    val fileSize = bitmap?.byteCount ?: 0
+                                    newImageAttributes = NewImageAttributes(
+                                            options.outWidth,
+                                            options.outHeight,
+                                            fileSize
+                                    )
+                                }
+                            }
+                            .toFile()
                 } else {
                     fileToUplaod = workingFile
                 }
