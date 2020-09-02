@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
+import java.util.ArrayList
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -232,12 +233,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
                 add(EventSharedAction.Remove(eventId))
                 if (vectorPreferences.developerMode()) {
-                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
-                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
-                                ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                        add(EventSharedAction.ViewDecryptedSource(decryptedContent))
-                    }
+                    addViewSourceItems(timelineEvent)
                 }
             } else if (timelineEvent.root.sendState.isSending()) {
                 // TODO is uploading attachment?
@@ -307,13 +303,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                         }
                     }
-
-                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
-                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
-                                ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                        add(EventSharedAction.ViewDecryptedSource(decryptedContent))
-                    }
+                    addViewSourceItems(timelineEvent)
                 }
                 add(EventSharedAction.CopyPermalink(eventId))
                 if (session.myUserId != timelineEvent.root.senderId) {
@@ -326,6 +316,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
                 }
             }
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addViewSourceItems(timelineEvent: TimelineEvent) {
+        add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
+        if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
+            val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
+                    ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+            add(EventSharedAction.ViewDecryptedSource(decryptedContent))
         }
     }
 

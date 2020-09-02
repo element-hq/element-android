@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ import javax.inject.Inject
  * Known limitation, for now requests are not persisted
  */
 @SessionScope
-class CancelSendTracker @Inject constructor() {
+internal class CancelSendTracker @Inject constructor() {
 
     data class Request(
             val localId: String,

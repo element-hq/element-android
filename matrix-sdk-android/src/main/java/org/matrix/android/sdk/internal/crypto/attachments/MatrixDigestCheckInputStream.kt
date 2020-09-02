@@ -17,14 +17,18 @@
 package org.matrix.android.sdk.internal.crypto.attachments
 
 import android.util.Base64
+import org.matrix.android.sdk.internal.util.base64ToUnpaddedBase64
 import java.io.FilterInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.security.MessageDigest
 
-class MatrixDigestCheckInputStream(`in`: InputStream?, val expectedDigest: String) : FilterInputStream(`in`) {
+class MatrixDigestCheckInputStream(
+        inputStream: InputStream?,
+        private val expectedDigest: String
+) : FilterInputStream(inputStream) {
 
-    val digest = MessageDigest.getInstance("SHA-256")
+    private val digest = MessageDigest.getInstance("SHA-256")
 
     @Throws(IOException::class)
     override fun read(): Int {
@@ -57,7 +61,7 @@ class MatrixDigestCheckInputStream(`in`: InputStream?, val expectedDigest: Strin
 
     @Throws(IOException::class)
     private fun ensureDigest() {
-        val currentDigestValue = MXEncryptedAttachments.base64ToUnpaddedBase64(Base64.encodeToString(digest.digest(), Base64.DEFAULT))
+        val currentDigestValue = base64ToUnpaddedBase64(Base64.encodeToString(digest.digest(), Base64.DEFAULT))
         if (currentDigestValue != expectedDigest) {
             throw IOException("Bad digest")
         }

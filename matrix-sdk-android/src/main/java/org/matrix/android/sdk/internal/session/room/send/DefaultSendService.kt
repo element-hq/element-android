@@ -24,17 +24,28 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -44,16 +55,6 @@ import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.AlwaysSuccessfulWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.startChain
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -137,29 +138,28 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { timelineSendEventWorkCommon.postWork(roomId, it) }
     }
 
-    override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
+    override fun resendTextMessage(localEcho: TimelineEvent): Cancelable {
         if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
             localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
             return sendEvent(localEcho.root)
         }
-        return null
+        return NoOpCancellable
     }
 
-    override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
+    override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable {
         if (localEcho.root.sendState.hasFailed()) {
-            // TODO this need a refactoring of attachement sending
             val clearContent = localEcho.root.getClearContent()
-            val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return null
+            val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return NoOpCancellable
 
-            val url = messageContent.getFileUrl() ?: return null
+            val url = messageContent.getFileUrl() ?: return NoOpCancellable
             if (url.startsWith("mxc://")) {
                 // We need to resend only the message as the attachment is ok
                 localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
                 return sendEvent(localEcho.root)
             }
-            // we need to resend the media
 
-            when (messageContent) {
+            // we need to resend the media
+            return when (messageContent) {
                 is MessageImageContent -> {
                     // The image has not yet been sent
                     val attachmentData = ContentAttachmentData(
@@ -172,7 +172,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             type = ContentAttachmentData.Type.IMAGE
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
-                    return internalSendMedia(listOf(localEcho.root), attachmentData, true)
+                    internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageVideoContent -> {
                     val attachmentData = ContentAttachmentData(
@@ -186,9 +186,9 @@ internal class DefaultSendService @AssistedInject constructor(
                             type = ContentAttachmentData.Type.VIDEO
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
-                    return internalSendMedia(listOf(localEcho.root), attachmentData, true)
+                    internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                is MessageFileContent  -> {
+                is MessageFileContent -> {
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.info.mimeType!!,
@@ -197,7 +197,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             type = ContentAttachmentData.Type.FILE
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
-                    return internalSendMedia(listOf(localEcho.root), attachmentData, true)
+                    internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageAudioContent -> {
                     val attachmentData = ContentAttachmentData(
@@ -209,12 +209,12 @@ internal class DefaultSendService @AssistedInject constructor(
                             type = ContentAttachmentData.Type.AUDIO
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
-                    return internalSendMedia(listOf(localEcho.root), attachmentData, true)
+                    internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
+                else                   -> NoOpCancellable
             }
-            return null
         }
-        return null
+        return NoOpCancellable
     }
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
