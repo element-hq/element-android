@@ -20,4 +20,20 @@
     <string name="auth_password_placeholder">รหัสผ่าน</string>
     <string name="auth_new_password_placeholder">รหัสผ่านใหม่</string>
     <string name="permalink">ลิงก์ถาวร</string>
-</resources>
+<string name="title_activity_home">ข้อความ</string>
+    <string name="title_activity_room">ห้อง</string>
+    <string name="title_activity_settings">การตั้งค่า</string>
+    <string name="title_activity_member_details">ข้อมูลสมาชิก</string>
+    <string name="ok">ตกลง</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="save">บันทึก</string>
+    <string name="leave">ออก</string>
+    <string name="send">ส่ง</string>
+    <string name="copy">คัดลอก</string>
+    <string name="download">ดาวน์โหลด</string>
+    <string name="share">แชร์</string>
+    <string name="speak">พูด</string>
+    <string name="delete">ลบ</string>
+    <string name="rename">เปลี่ยนชื่อ</string>
+    <string name="skip">ข้าม</string>
+    </resources>
