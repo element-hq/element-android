@@ -1,4 +1,4 @@
-# SchildiChat Privacy Policy (last updated on July 28th, 2020)
+# SchildiChat Privacy Policy (last updated on September 3th, 2020)
 
 SchildiChat will be referenced in the later context as "the app".
 
@@ -47,7 +47,7 @@ Bots and Widgets have access to the messages and files in rooms in which they p
 
 # Firebase Cloud Messaging
 
-If you installed the app from the Google Play Store, it contains [Firebase Cloud Messaging](https://firebase.google.com/support/privacy/) services that comunicate with the server maintained by [The Matrix.org Foundation](https://matrix.org/legal/privacy-notice) and [Element](https://element.io/privacy) in order to provide efficient push notifications.
+The app contains [Firebase Cloud Messaging](https://firebase.google.com/support/privacy/) services that comunicate with the server maintained by [The Matrix.org Foundation](https://matrix.org/legal/privacy-notice) and [Element](https://element.io/privacy) in order to provide efficient push notifications.
 Please refer to their respective privacy policies for further details.
 
 
