@@ -317,12 +317,15 @@ internal class DefaultTimeline(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
         if (isLive && onLocalEchoCreated.roomId == roomId) {
-            listeners.forEach {
-                it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+            // do not add events that would have been filtered
+            if (listOf(onLocalEchoCreated.timelineEvent).filterEventsWithSettings().isNotEmpty()) {
+                listeners.forEach {
+                    it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+                }
+                Timber.v("On local echo created: $onLocalEchoCreated")
+                inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+                postSnapshot()
             }
-            Timber.v("On local echo created: $onLocalEchoCreated")
-            inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
-            postSnapshot()
         }
     }
 
@@ -778,7 +781,7 @@ internal class DefaultTimeline(
 
             val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
                 val messageContent = it.root.content.toModel<MessageContent>()
-                messageContent?.relatesTo?.type != RelationType.REPLACE
+                messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
                 true
             }
