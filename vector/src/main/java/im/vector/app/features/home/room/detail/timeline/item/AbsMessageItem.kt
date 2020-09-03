@@ -77,6 +77,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     override fun unbind(holder: H) {
+        attributes.avatarRenderer.clear(holder.avatarImageView)
         holder.avatarImageView.setOnClickListener(null)
         holder.avatarImageView.setOnLongClickListener(null)
         holder.memberNameView.setOnClickListener(null)

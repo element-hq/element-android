@@ -57,7 +57,7 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
         }
     }
 
-    fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
+    fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE): Cancelable {
         workManagerProvider.workManager
                 .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
                 .enqueue()

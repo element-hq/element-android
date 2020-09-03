@@ -1423,7 +1423,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
             }
             is MessageWithAttachmentContent      -> {
-                val action = RoomDetailAction.DownloadOrOpen(informationData.eventId, messageContent)
+                val action = RoomDetailAction.DownloadOrOpen(informationData.eventId, informationData.senderId, messageContent)
                 roomDetailViewModel.handle(action)
             }
             is EncryptedEventContent             -> {
@@ -1616,6 +1616,9 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.Remove                     -> {
                 roomDetailViewModel.handle(RoomDetailAction.RemoveFailedEcho(action.eventId))
+            }
+            is EventSharedAction.Cancel                     -> {
+                roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
             }
             is EventSharedAction.ReportContentSpam          -> {
                 roomDetailViewModel.handle(RoomDetailAction.ReportContent(
