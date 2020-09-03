@@ -10,6 +10,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Editing message forgets line breaks and markdown (#1939)
  - Words containing my name should not trigger notifications (#1781)
  - Fix changing language issue
  - Fix FontSize issue (#1483, #1787)

@@ -30,9 +30,9 @@ import org.matrix.android.sdk.InstrumentedTest
  * It will not be possible to test all combinations. For the moment I add a few tests, then, depending on the problem discovered in the wild,
  * we can add more tests to cover the edge cases.
  * Some tests are suffixed with `_not_passing`, maybe one day we will fix them...
- * Element Web should be used as a reference for expected results, but not always. Especially Element Web add lots of `\n` in the
- * formatted body, which is quite useless.
- * Also Element Web does not provide plain text body when formatted text is provided. The body contains what the user has entered.
+ * Element Web should be used as a reference for expected results, but not always.
+ * Also Element Web does not provide plain text body when formatted text is provided. The body contains what the user has entered. We are doing
+ * the same to be able to edit messages (See #1939)
  * See https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
  */
 @Suppress("SpellCheckingInspection")
@@ -82,8 +82,26 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
+    fun parseBoldNewLines() {
+        testTypeNewLines(
+                name = "bold",
+                markdownPattern = "**",
+                htmlExpectedTag = "strong"
+        )
+    }
+
+    @Test
     fun parseItalic() {
         testType(
+                name = "italic",
+                markdownPattern = "*",
+                htmlExpectedTag = "em"
+        )
+    }
+
+    @Test
+    fun parseItalicNewLines() {
+        testTypeNewLines(
                 name = "italic",
                 markdownPattern = "*",
                 htmlExpectedTag = "em"
@@ -109,8 +127,26 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
+    fun parseStrikeNewLines() {
+        testTypeNewLines(
+                name = "strike",
+                markdownPattern = "~~",
+                htmlExpectedTag = "del"
+        )
+    }
+
+    @Test
     fun parseCode() {
         testType(
+                name = "code",
+                markdownPattern = "`",
+                htmlExpectedTag = "code"
+        )
+    }
+
+    @Test
+    fun parseCodeNewLines() {
+        testTypeNewLines(
                 name = "code",
                 markdownPattern = "`",
                 htmlExpectedTag = "code"
@@ -127,8 +163,26 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
+    fun parseCode2NewLines() {
+        testTypeNewLines(
+                name = "code",
+                markdownPattern = "``",
+                htmlExpectedTag = "code"
+        )
+    }
+
+    @Test
     fun parseCode3() {
         testType(
+                name = "code",
+                markdownPattern = "```",
+                htmlExpectedTag = "code"
+        )
+    }
+
+    @Test
+    fun parseCode3NewLines() {
+        testTypeNewLines(
                 name = "code",
                 markdownPattern = "```",
                 htmlExpectedTag = "code"
@@ -164,7 +218,7 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseQuote_not_passing() {
-        "> quoted\nline2".let { markdownParser.parse(it).expect(it, "<blockquote><p>quoted<br/>line2</p></blockquote>") }
+        "> quoted\nline2".let { markdownParser.parse(it).expect(it, "<blockquote><p>quoted<br />line2</p></blockquote>") }
     }
 
     @Test
@@ -275,6 +329,26 @@ class MarkdownParserTest : InstrumentedTest {
                     markdownParser.parse(it)
                             .expect(expectedText = it,
                                     expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter")
+                }
+    }
+
+    private fun testTypeNewLines(name: String,
+                                 markdownPattern: String,
+                                 htmlExpectedTag: String) {
+        // With new line inside the block
+        "$markdownPattern$name\n$name$markdownPattern"
+                .let {
+                    markdownParser.parse(it)
+                            .expect(expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name<br />$name</$htmlExpectedTag>")
+                }
+
+        // With new line between two blocks
+        "$markdownPattern$name$markdownPattern\n$markdownPattern$name$markdownPattern"
+                .let {
+                    markdownParser.parse(it)
+                            .expect(expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><$htmlExpectedTag>$name</$htmlExpectedTag>")
                 }
     }
 

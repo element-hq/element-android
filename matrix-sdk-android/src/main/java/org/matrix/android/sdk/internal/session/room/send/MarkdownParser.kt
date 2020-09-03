@@ -70,6 +70,7 @@ internal class MarkdownParser @Inject constructor(
                 // Remove extra space before and after the content
                 .trim()
                 // There is no need to include new line in an html-like source
+                // But new line can be in embedded code block, so do not remove them
                 .replace("\n", "")
     }
 }
