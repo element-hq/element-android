@@ -20,6 +20,8 @@ package org.matrix.android.sdk.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
@@ -75,9 +77,6 @@ import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultGetUploadsTask
 import org.matrix.android.sdk.internal.session.room.uploads.GetUploadsTask
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
-import org.commonmark.renderer.text.TextContentRenderer
 import retrofit2.Retrofit
 
 @Module
@@ -102,14 +101,6 @@ internal abstract class RoomModule {
         @JvmStatic
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
-                    .builder()
-                    .build()
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesTextContentRenderer(): TextContentRenderer {
-            return TextContentRenderer
                     .builder()
                     .build()
         }

@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/formTextInputDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

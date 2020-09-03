@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.UserThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.content.FileUploader
@@ -44,6 +45,11 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                                                          private val getProfileInfoTask: GetProfileInfoTask,
                                                          private val setDisplayNameTask: SetDisplayNameTask,
                                                          private val setAvatarUrlTask: SetAvatarUrlTask,
+                                                         private val addThreePidTask: AddThreePidTask,
+                                                         private val validateSmsCodeTask: ValidateSmsCodeTask,
+                                                         private val finalizeAddingThreePidTask: FinalizeAddingThreePidTask,
+                                                         private val deleteThreePidTask: DeleteThreePidTask,
+                                                         private val pendingThreePidMapper: PendingThreePidMapper,
                                                          private val fileUploader: FileUploader) : ProfileService {
 
     override fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
@@ -116,15 +122,102 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     override fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>> {
         if (refreshData) {
             // Force a refresh of the values
-            refreshUserThreePidsTask
-                    .configureWith()
-                    .executeBy(taskExecutor)
+            refreshThreePids()
         }
 
         return monarchy.findAllMappedWithChanges(
                 { it.where<UserThreePidEntity>() },
                 { it.asDomain() }
         )
+    }
+
+    private fun refreshThreePids() {
+        refreshUserThreePidsTask
+                .configureWith()
+                .executeBy(taskExecutor)
+    }
+
+    override fun getPendingThreePids(): List<ThreePid> {
+        return monarchy.fetchAllMappedSync(
+                { it.where<PendingThreePidEntity>() },
+                { pendingThreePidMapper.map(it).threePid }
+        )
+    }
+
+    override fun getPendingThreePidsLive(): LiveData<List<ThreePid>> {
+        return monarchy.findAllMappedWithChanges(
+                { it.where<PendingThreePidEntity>() },
+                { pendingThreePidMapper.map(it).threePid }
+        )
+    }
+
+    override fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return addThreePidTask
+                .configureWith(AddThreePidTask.Params(threePid)) {
+                    callback = matrixCallback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return validateSmsCodeTask
+                .configureWith(ValidateSmsCodeTask.Params(threePid, code)) {
+                    callback = matrixCallback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun finalizeAddingThreePid(threePid: ThreePid,
+                                        uiaSession: String?,
+                                        accountPassword: String?,
+                                        matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return finalizeAddingThreePidTask
+                .configureWith(FinalizeAddingThreePidTask.Params(
+                        threePid = threePid,
+                        session = uiaSession,
+                        accountPassword = accountPassword,
+                        userWantsToCancel = false
+                )) {
+                    callback = alsoRefresh(matrixCallback)
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun cancelAddingThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return finalizeAddingThreePidTask
+                .configureWith(FinalizeAddingThreePidTask.Params(
+                        threePid = threePid,
+                        session = null,
+                        accountPassword = null,
+                        userWantsToCancel = true
+                )) {
+                    callback = alsoRefresh(matrixCallback)
+                }
+                .executeBy(taskExecutor)
+    }
+
+    /**
+     * Wrap the callback to fetch 3Pids from the server in case of success
+     */
+    private fun alsoRefresh(callback: MatrixCallback<Unit>): MatrixCallback<Unit> {
+        return object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                callback.onFailure(failure)
+            }
+
+            override fun onSuccess(data: Unit) {
+                refreshThreePids()
+                callback.onSuccess(data)
+            }
+        }
+    }
+
+    override fun deleteThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
+        return deleteThreePidTask
+                .configureWith(DeleteThreePidTask.Params(threePid)) {
+                    callback = alsoRefresh(matrixCallback)
+                }
+                .executeBy(taskExecutor)
     }
 }
 

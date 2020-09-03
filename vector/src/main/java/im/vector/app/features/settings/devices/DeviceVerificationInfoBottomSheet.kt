@@ -39,7 +39,7 @@ data class DeviceVerificationInfoArgs(
         val deviceId: String
 ) : Parcelable
 
-class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(), DeviceVerificationInfoEpoxyController.Callback {
+class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(), DeviceVerificationInfoBottomSheetController.Callback {
 
     private val viewModel: DeviceVerificationInfoBottomSheetViewModel by fragmentViewModel(DeviceVerificationInfoBottomSheetViewModel::class)
 
@@ -54,17 +54,17 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
         injector.inject(this)
     }
 
-    @Inject lateinit var epoxyController: DeviceVerificationInfoEpoxyController
+    @Inject lateinit var controller: DeviceVerificationInfoBottomSheetController
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.configureWith(
-                epoxyController,
+                controller,
                 showDivider = false,
                 hasFixedSize = false)
-        epoxyController.callback = this
+        controller.callback = this
         bottomSheetTitle.isVisible = false
     }
 
@@ -74,7 +74,7 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
     }
 
     override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+        controller.setData(it)
         super.invalidate()
     }
 

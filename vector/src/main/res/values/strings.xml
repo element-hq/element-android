@@ -281,6 +281,7 @@
     <string name="auth_invalid_email">"This doesn’t look like a valid email address"</string>
     <string name="auth_invalid_phone">"This doesn’t look like a valid phone number"</string>
     <string name="auth_email_already_defined">This email address is already defined.</string>
+    <string name="auth_msisdn_already_defined">This phone number is already defined.</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_missing_phone">Missing phone number</string>
     <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
@@ -675,6 +676,7 @@
     <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone</string>
+    <string name="settings_phone_number_empty">No phone number has been added to your account</string>
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
@@ -682,6 +684,11 @@
     <string name="settings_add_3pid_flow_not_supported">You can\'t do this from Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
+    <string name="settings_emails">Email addresses</string>
+    <string name="settings_emails_empty">No email has been added to your account</string>
+    <string name="settings_phone_numbers">Phone numbers</string>
+    <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
+    <string name="error_threepid_auth_failed">Ensure that you have clicked on the link in the email we have sent to you.</string>
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
@@ -926,6 +933,9 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="settings_emails_and_phone_numbers_title">Emails and phone numbers</string>
+    <string name="settings_emails_and_phone_numbers_summary">Manage emails and phone numbers linked to your Matrix account</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
@@ -1756,6 +1766,7 @@
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
     <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
+    <string name="settings_text_message_sent_hint">Code</string>
     <string name="settings_text_message_sent_wrong_code">The verification code is not correct.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
@@ -1944,6 +1955,7 @@
     <string name="login_msisdn_confirm_send_again">Send again</string>
     <string name="login_msisdn_confirm_submit">Next</string>
 
+    <string name="login_msisdn_notice">"Please use the international format (phone number must start with '+')"</string>
     <string name="login_msisdn_error_not_international">"International phone numbers must start with '+'"</string>
     <string name="login_msisdn_error_other">"Phone number seems invalid. Please check it"</string>
 
@@ -2413,7 +2425,10 @@
     <string name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
     <string name="mark_as_verified">Mark as Trusted</string>
+
+    <string name="error_sso_flow_not_supported_yet">Sorry, this operation is not possible yet for accounts connected using Single Sign-On.</string>
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
     <string name="error_empty_field_choose_password">Please choose a password.</string>

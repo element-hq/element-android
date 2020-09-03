@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
         android:title="@string/settings_user_settings">
@@ -22,29 +21,13 @@
             android:summary="@string/change_password_summary"
             android:title="@string/settings_password" />
 
-        <!-- Email will be added here -->
-
-        <!-- Note: inputType does not work, it is set also in code, as well as iconTint -->
-        <im.vector.app.core.preference.VectorEditTextPreference
-            android:icon="@drawable/ic_material_add"
-            android:inputType="textEmailAddress"
-            android:key="ADD_EMAIL_PREFERENCE_KEY"
-            android:order="100"
-            android:title="@string/settings_add_email_address"
-            app:iconTint="@color/riotx_accent" />
-
-        <!-- Phone will be added here -->
-
-        <!-- Note: iconTint does not work, it is also done in code -->
         <im.vector.app.core.preference.VectorPreference
-            android:icon="@drawable/ic_material_add"
-            android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
-            android:order="200"
-            android:title="@string/settings_add_phone_number"
-            app:iconTint="@color/riotx_accent" />
+            android:key="SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY"
+            android:summary="@string/settings_emails_and_phone_numbers_summary"
+            android:title="@string/settings_emails_and_phone_numbers_title"
+            app:fragment="im.vector.app.features.settings.threepids.ThreePidsSettingsFragment" />
 
         <im.vector.app.core.preference.VectorPreference
-            android:order="1000"
             android:persistent="false"
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category"

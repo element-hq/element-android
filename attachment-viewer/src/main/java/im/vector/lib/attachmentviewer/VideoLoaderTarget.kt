@@ -48,6 +48,8 @@ internal class DefaultVideoLoaderTarget(val holder: VideoViewHolder, private val
     }
 
     override fun onThumbnailResourceCleared(uid: String, placeholder: Drawable?) {
+        if (holder.boundResourceUid != uid) return
+        holder.thumbnailImage.setImageDrawable(placeholder)
     }
 
     override fun onThumbnailResourceReady(uid: String, resource: Drawable) {
