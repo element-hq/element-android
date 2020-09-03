@@ -89,14 +89,18 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     title(stringProvider.getString(R.string.encryption_information_verified))
                     description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
                 }
-            } else if (data.hasOtherSessions) {
-                // You need to complete security, only if there are other session(s) available
+            } else if (data.canVerifySession) {
+                // You need to complete security, only if there are other session(s) available, or if 4S contains secrets
                 genericItem {
                     id("trust${cryptoDeviceInfo.deviceId}")
                     style(GenericItem.STYLE.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(stringProvider.getString(R.string.crosssigning_verify_this_session))
-                    description(stringProvider.getString(R.string.confirm_your_identity))
+                    if (data.hasOtherSessions) {
+                        description(stringProvider.getString(R.string.confirm_your_identity))
+                    } else {
+                        description(stringProvider.getString(R.string.confirm_your_identity_quad_s))
+                    }
                 }
             }
         } else {
@@ -133,7 +137,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             description("(${cryptoDeviceInfo.deviceId})")
         }
 
-        if (isMine && !currentSessionIsTrusted && data.hasOtherSessions) {
+        if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
             // Add complete security
             dividerItem {
                 id("completeSecurityDiv")

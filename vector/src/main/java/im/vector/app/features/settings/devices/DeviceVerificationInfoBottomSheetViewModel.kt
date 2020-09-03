@@ -43,7 +43,8 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
         setState {
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
             )
         }
         session.rx().liveCrossSigningInfo(session.myUserId)

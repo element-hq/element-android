@@ -28,5 +28,10 @@ data class DeviceVerificationInfoBottomSheetViewState(
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false,
         val isMine: Boolean = false,
-        val hasOtherSessions: Boolean = false
-) : MvRxState
+        val hasOtherSessions: Boolean = false,
+        val isRecoverySetup: Boolean = false
+) : MvRxState {
+
+    val canVerifySession: Boolean
+        get() = hasOtherSessions || isRecoverySetup
+}

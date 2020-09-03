@@ -2413,6 +2413,7 @@
     <string name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
     <string name="mark_as_verified">Mark as Trusted</string>
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
