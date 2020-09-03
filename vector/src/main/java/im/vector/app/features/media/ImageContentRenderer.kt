@@ -126,7 +126,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
-                    ?: data.url.takeIf { data.allowNonMxcUrls }
             GlideApp
                     .with(contextView)
                     .load(resolvedUrl)
