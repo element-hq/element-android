@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.commonmark.renderer.text.TextContentRenderer
 import javax.inject.Inject
 
 /**
@@ -29,8 +28,7 @@ import javax.inject.Inject
  */
 internal class MarkdownParser @Inject constructor(
         private val parser: Parser,
-        private val htmlRenderer: HtmlRenderer,
-        private val textContentRenderer: TextContentRenderer
+        private val htmlRenderer: HtmlRenderer
 ) {
 
     private val mdSpecialChars = "[`_\\-*>.\\[\\]#~]".toRegex()
@@ -54,7 +52,8 @@ internal class MarkdownParser @Inject constructor(
         return if (isFormattedTextPertinent(text, cleanHtmlText)) {
             // According to https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
-            TextContent(text, cleanHtmlText.trim())
+            // But it caused too many problems so it has been removed in #2002
+            TextContent(text, cleanHtmlText.postTreatment())
         } else {
             TextContent(text)
         }
@@ -62,4 +61,16 @@ internal class MarkdownParser @Inject constructor(
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
+
+    /**
+     * The parser makes some mistakes, so deal with it here
+     */
+    private fun String.postTreatment(): String {
+        return this
+                // Remove extra space before and after the content
+                .trim()
+                // There is no need to include new line in an html-like source
+                // But new line can be in embedded code block, so do not remove them
+                // .replace("\n", "")
+    }
 }
