@@ -191,14 +191,14 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseUnorderedList() {
-        "- item1".let { markdownParser.parse(it).expect(it, "<ul><li>item1</li></ul>") }
-        "- item1\n- item2".let { markdownParser.parse(it).expect(it, "<ul><li>item1</li><li>item2</li></ul>") }
+        "- item1".let { markdownParser.parse(it).expect(it, "<ul>\n<li>item1</li>\n</ul>") }
+        "- item1\n- item2".let { markdownParser.parse(it).expect(it, "<ul>\n<li>item1</li>\n<li>item2</li>\n</ul>") }
     }
 
     @Test
     fun parseOrderedList() {
-        "1. item1".let { markdownParser.parse(it).expect(it, "<ol><li>item1</li></ol>") }
-        "1. item1\n2. item2".let { markdownParser.parse(it).expect(it, "<ol><li>item1</li><li>item2</li></ol>") }
+        "1. item1".let { markdownParser.parse(it).expect(it, "<ol>\n<li>item1</li>\n</ol>") }
+        "1. item1\n2. item2".let { markdownParser.parse(it).expect(it, "<ol>\n<li>item1</li>\n<li>item2</li>\n</ol>") }
     }
 
     @Test
@@ -208,12 +208,12 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseH2AndContent() {
-        "a\n---\nb".let { markdownParser.parse(it).expect(it, "<h2>a</h2><p>b</p>") }
+        "a\n---\nb".let { markdownParser.parse(it).expect(it, "<h2>a</h2>\n<p>b</p>") }
     }
 
     @Test
     fun parseQuote() {
-        "> quoted".let { markdownParser.parse(it).expect(it, "<blockquote><p>quoted</p></blockquote>") }
+        "> quoted".let { markdownParser.parse(it).expect(it, "<blockquote>\n<p>quoted</p>\n</blockquote>") }
     }
 
     @Test
@@ -239,7 +239,7 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseHeads() {
-        "# head1\n# head2".let { markdownParser.parse(it).expect(it, "<h1>head1</h1><h1>head2</h1>") }
+        "# head1\n# head2".let { markdownParser.parse(it).expect(it, "<h1>head1</h1>\n<h1>head2</h1>") }
     }
 
     @Test
@@ -254,7 +254,7 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseParagraph() {
-        "# head\ncontent".let { markdownParser.parse(it).expect(it, "<h1>head</h1><p>content</p>") }
+        "# head\ncontent".let { markdownParser.parse(it).expect(it, "<h1>head</h1>\n<p>content</p>") }
     }
 
     private fun testIdentity(text: String) {
