@@ -1,4 +1,4 @@
-[![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f66c690f7788bc6aa80a7628e37f3.svg?branch=develop)](https://buildkite.com/matrix-dot-org/riotx-android/builds?branch=develop)
+[![Buildkite](https://badge.buildkite.com/ad0065c1b70f557cd3b1d3d68f9c2154010f83c4d6f71706a9.svg?branch=develop)](https://buildkite.com/matrix-dot-org/element-android/builds?branch=develop)
 [![Weblate](https://translate.riot.im/widgets/element-android/-/svg-badge.svg)](https://translate.riot.im/engage/element-android/?utm_source=widget)
 [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=im.vector.app.android&metric=alert_status)](https://sonarcloud.io/dashboard?id=im.vector.app.android)
@@ -14,7 +14,7 @@ It is a total rewrite of [Riot-Android](https://github.com/vector-im/riot-androi
 [<img src="resources/img/google-play-badge.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=im.vector.app)
 [<img src="resources/img/f-droid-badge.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.app)
 
-Nightly build: [![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f66c690f7788bc6aa80a7628e37f3.svg?branch=develop)](https://buildkite.com/matrix-dot-org/riotx-android/builds?branch=develop)
+Nightly build: [![Buildkite](https://badge.buildkite.com/ad0065c1b70f557cd3b1d3d68f9c2154010f83c4d6f71706a9.svg?branch=develop)](https://buildkite.com/matrix-dot-org/element-android/builds?branch=develop)
 
 # New Android SDK
 

@@ -16,6 +16,7 @@
 
 package im.vector.lib.attachmentviewer
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -118,8 +119,13 @@ class VideoViewHolder constructor(itemView: View) :
                         eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                     }
         }
+        try {
+            videoView.setVideoPath(mVideoPath)
+        } catch (failure: Throwable) {
+            // Couldn't open
+            Log.v(VideoViewHolder::class.java.name, "Failed to start video")
+        }
 
-        videoView.setVideoPath(mVideoPath)
         if (!wasPaused) {
             videoView.start()
             if (progress > 0) {

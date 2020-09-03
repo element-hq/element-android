@@ -272,29 +272,29 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 
 /**
  * Helper method used in [.checkPermissions] to populate the list of the
- * permissions to be granted (permissionsListToBeGranted_out) and the list of the permissions already denied (permissionAlreadyDeniedList_out).
+ * permissions to be granted (permissionsListToBeGrantedOut) and the list of the permissions already denied (permissionAlreadyDeniedListOut).
  *
- * @param activity                        calling activity
- * @param permissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
- * @param permissionsListToBeGranted_out  list to be updated with the permissions to be granted
- * @param permissionType                  the permission to be checked
+ * @param activity                       calling activity
+ * @param permissionAlreadyDeniedListOut list to be updated with the permissions already denied by the user
+ * @param permissionsListToBeGrantedOut  list to be updated with the permissions to be granted
+ * @param permissionType                 the permission to be checked
  * @return true if the permission requires to be granted, false otherwise
  */
 private fun updatePermissionsToBeGranted(activity: Activity,
-                                         permissionAlreadyDeniedList_out: MutableList<String>,
-                                         permissionsListToBeGranted_out: MutableList<String>,
+                                         permissionAlreadyDeniedListOut: MutableList<String>,
+                                         permissionsListToBeGrantedOut: MutableList<String>,
                                          permissionType: String): Boolean {
     var isRequestPermissionRequested = false
 
     // add permission to be granted
-    permissionsListToBeGranted_out.add(permissionType)
+    permissionsListToBeGrantedOut.add(permissionType)
 
     if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.applicationContext, permissionType)) {
         isRequestPermissionRequested = true
 
         // add permission to the ones that were already asked to the user
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionType)) {
-            permissionAlreadyDeniedList_out.add(permissionType)
+            permissionAlreadyDeniedListOut.add(permissionType)
         }
     }
     return isRequestPermissionRequested

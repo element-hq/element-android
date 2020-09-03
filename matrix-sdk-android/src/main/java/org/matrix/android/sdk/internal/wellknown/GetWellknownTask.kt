@@ -97,7 +97,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
             // Success
             val homeServerBaseUrl = wellKnown.homeServer?.baseURL
             if (homeServerBaseUrl.isNullOrBlank()) {
-                WellknownResult.FailPrompt
+                WellknownResult.FailPrompt(null, null)
             } else {
                 if (homeServerBaseUrl.isValidUrl()) {
                     // Check that HS is a real one
@@ -120,11 +120,11 @@ internal class DefaultGetWellknownTask @Inject constructor(
                 is Failure.OtherServerError                -> {
                     when (throwable.httpCode) {
                         HttpsURLConnection.HTTP_NOT_FOUND -> WellknownResult.Ignore
-                        else                              -> WellknownResult.FailPrompt
+                        else                              -> WellknownResult.FailPrompt(null, null)
                     }
                 }
                 is MalformedJsonException, is EOFException -> {
-                    WellknownResult.FailPrompt
+                    WellknownResult.FailPrompt(null, null)
                 }
                 else                                       -> {
                     throw throwable
@@ -162,7 +162,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
                         // All is ok
                         WellknownResult.Prompt(homeServerBaseUrl, identityServerBaseUrl, wellKnown)
                     } else {
-                        WellknownResult.FailError
+                        WellknownResult.FailPrompt(homeServerBaseUrl, wellKnown)
                     }
                 } else {
                     WellknownResult.FailError

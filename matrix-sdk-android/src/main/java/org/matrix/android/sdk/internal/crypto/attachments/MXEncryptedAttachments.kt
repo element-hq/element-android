@@ -93,7 +93,7 @@ internal object MXEncryptedAttachments {
                             key = EncryptedFileKey(
                                     alg = "A256CTR",
                                     ext = true,
-                                    key_ops = listOf("encrypt", "decrypt"),
+                                    keyOps = listOf("encrypt", "decrypt"),
                                     kty = "oct",
                                     k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
                             ),

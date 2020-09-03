@@ -57,8 +57,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
 
                     invites.map {
                         ThreePidInviteBody(
-                                id_server = identityServerUrlWithoutProtocol,
-                                id_access_token = identityServerAccessToken,
+                                idServer = identityServerUrlWithoutProtocol,
+                                idAccessToken = identityServerAccessToken,
                                 medium = it.toMedium(),
                                 address = it.value
                         )

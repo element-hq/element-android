@@ -87,7 +87,7 @@ sonarqube {
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
-        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/riotx-android"
+        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/element-android"
         property "sonar.links.scm", "https://github.com/vector-im/element-android/"
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"

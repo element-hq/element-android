@@ -10,13 +10,17 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Wrong markdown parsing (#350, #1375, #1939, #1982)
  - Words containing my name should not trigger notifications (#1781)
  - Fix changing language issue
  - Fix FontSize issue (#1483, #1787)
  - Fix bad color for settings icon on Android < 24 (#1786)
  - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
+ - Loudspeaker is always used (#1685)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
+ - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
+ - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
  - Fix zero values for uploaded image dimmensions when uploaded as a File (#1628)
 
 Translations 🗣:
@@ -27,6 +31,10 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
+ - Buildkite:
+    New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
+    New build location: https://buildkite.com/matrix-dot-org/element-android
+
 
 Other changes:
  - Use File extension functions to make code more concise (#1996)

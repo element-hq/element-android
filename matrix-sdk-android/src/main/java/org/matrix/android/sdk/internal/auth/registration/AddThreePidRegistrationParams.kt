@@ -54,7 +54,7 @@ internal data class AddThreePidRegistrationParams(
          * This parameter is ignored when the homeserver handles 3PID verification.
          */
         @Json(name = "id_server")
-        val id_server: String? = null,
+        val idServer: String? = null,
 
         /* ==========================================================================================
          * For emails
