@@ -27,7 +27,6 @@ import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.file.FileService
 import java.io.File
 
@@ -117,8 +116,8 @@ abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRend
             }
         })
 
-        if (data.url?.startsWith("content://").orFalse() && data.allowNonMxcUrls) {
-            target.onVideoURLReady(info.uid, data.url!!)
+        if (data.url?.startsWith("content://") == true && data.allowNonMxcUrls) {
+            target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
             fileService.downloadFile(
@@ -130,7 +129,7 @@ abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRend
                     url = data.url,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
-                            target.onVideoURLReady(info.uid, data)
+                            target.onVideoFileReady(info.uid, data)
                         }
 
                         override fun onFailure(failure: Throwable) {

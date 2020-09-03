@@ -21,7 +21,6 @@ import android.util.Base64
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith

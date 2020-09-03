@@ -992,7 +992,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
         val mxcUrl = action.messageFileContent.getFileUrl()
         val isLocalSendingFile = action.senderId == session.myUserId
-                && action.messageFileContent.getFileUrl()?.startsWith("content://") ?: false
+                && mxcUrl?.startsWith("content://") ?: false
         val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
         if (isLocalSendingFile) {
             tryThis { Uri.parse(mxcUrl) }?.let {

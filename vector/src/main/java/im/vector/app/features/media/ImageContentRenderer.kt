@@ -51,7 +51,7 @@ interface AttachmentData : Parcelable {
     val mimeType: String?
     val url: String?
     val elementToDecrypt: ElementToDecrypt?
-    // If true will load non mxc url, be careful to set it only for images sent by you
+    // If true will load non mxc url, be careful to set it only for attachments sent by you
     val allowNonMxcUrls: Boolean
 }
 

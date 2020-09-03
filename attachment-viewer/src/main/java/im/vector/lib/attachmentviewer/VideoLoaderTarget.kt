@@ -34,7 +34,7 @@ interface VideoLoaderTarget {
 
     fun onVideoFileLoading(uid: String)
     fun onVideoFileLoadFailed(uid: String)
-    fun onVideoURLReady(uid: String, file: File)
+    fun onVideoFileReady(uid: String, file: File)
     fun onVideoURLReady(uid: String, path: String)
 }
 
@@ -67,16 +67,16 @@ internal class DefaultVideoLoaderTarget(val holder: VideoViewHolder, private val
         holder.videoFileLoadError()
     }
 
-    override fun onVideoURLReady(uid: String, file: File) {
+    override fun onVideoFileReady(uid: String, file: File) {
         if (holder.boundResourceUid != uid) return
         arrangeForVideoReady()
         holder.videoReady(file)
     }
 
-    override fun onVideoURLReady(uid: String, contentPath: String) {
+    override fun onVideoURLReady(uid: String, path: String) {
         if (holder.boundResourceUid != uid) return
         arrangeForVideoReady()
-        holder.videoReady(contentPath)
+        holder.videoReady(path)
     }
 
     private fun arrangeForVideoReady() {
