@@ -18,9 +18,13 @@
 package org.matrix.android.sdk.rx
 
 import androidx.paging.PagedList
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.Function3
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -43,10 +47,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.Function3
 
 class RxSession(private val session: Session) {
 
@@ -108,6 +108,11 @@ class RxSession(private val session: Session) {
     fun liveThreePIds(refreshData: Boolean): Observable<List<ThreePid>> {
         return session.getThreePidsLive(refreshData).asObservable()
                 .startWithCallable { session.getThreePids() }
+    }
+
+    fun livePendingThreePIds(): Observable<List<ThreePid>> {
+        return session.getPendingThreePidsLive().asObservable()
+                .startWithCallable { session.getPendingThreePids() }
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {

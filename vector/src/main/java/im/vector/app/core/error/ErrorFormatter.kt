@@ -59,35 +59,46 @@ class DefaultErrorFormatter @Inject constructor(
             }
             is Failure.ServerError       -> {
                 when {
-                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN  -> {
+                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN         -> {
                         // Special case for terms and conditions
                         stringProvider.getString(R.string.error_terms_not_accepted)
                     }
-                    throwable.isInvalidPassword()                            -> {
+                    throwable.isInvalidPassword()                                   -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
-                    throwable.error.code == MatrixError.M_USER_IN_USE        -> {
+                    throwable.error.code == MatrixError.M_USER_IN_USE               -> {
                         stringProvider.getString(R.string.login_signup_error_user_in_use)
                     }
-                    throwable.error.code == MatrixError.M_BAD_JSON           -> {
+                    throwable.error.code == MatrixError.M_BAD_JSON                  -> {
                         stringProvider.getString(R.string.login_error_bad_json)
                     }
-                    throwable.error.code == MatrixError.M_NOT_JSON           -> {
+                    throwable.error.code == MatrixError.M_NOT_JSON                  -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_DENIED    -> {
+                    throwable.error.code == MatrixError.M_THREEPID_DENIED           -> {
                         stringProvider.getString(R.string.login_error_threepid_denied)
                     }
-                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED     -> {
+                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED            -> {
                         limitExceededError(throwable.error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND -> {
+                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND        -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
                     }
-                    throwable.error.code == MatrixError.M_USER_DEACTIVATED   -> {
+                    throwable.error.code == MatrixError.M_USER_DEACTIVATED          -> {
                         stringProvider.getString(R.string.auth_invalid_login_deactivated_account)
                     }
-                    else                                                     -> {
+                    throwable.error.code == MatrixError.M_THREEPID_IN_USE
+                            && throwable.error.message == "Email is already in use" -> {
+                        stringProvider.getString(R.string.account_email_already_used_error)
+                    }
+                    throwable.error.code == MatrixError.M_THREEPID_IN_USE
+                            && throwable.error.message == "MSISDN is already in use" -> {
+                        stringProvider.getString(R.string.account_phone_number_already_used_error)
+                    }
+                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED      -> {
+                        stringProvider.getString(R.string.error_threepid_auth_failed)
+                    }
+                    else                                                            -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
                     }
@@ -102,6 +113,7 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
+            is SsoFlowNotSupportedYet    -> stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
             else                         -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
