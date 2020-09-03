@@ -1423,7 +1423,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
             }
             is MessageWithAttachmentContent      -> {
-                val action = RoomDetailAction.DownloadOrOpen(informationData.eventId, messageContent)
+                val action = RoomDetailAction.DownloadOrOpen(informationData.eventId, informationData.senderId, messageContent)
                 roomDetailViewModel.handle(action)
             }
             is EncryptedEventContent             -> {

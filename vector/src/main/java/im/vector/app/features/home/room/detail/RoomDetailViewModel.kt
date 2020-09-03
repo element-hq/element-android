@@ -57,6 +57,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -990,8 +991,18 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
         val mxcUrl = action.messageFileContent.getFileUrl()
+        val isLocalSendingFile = action.senderId == session.myUserId
+                && action.messageFileContent.getFileUrl()?.startsWith("content://") ?: false
         val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
-        if (isDownloaded) {
+        if (isLocalSendingFile) {
+            tryThis { Uri.parse(mxcUrl) }?.let {
+                _viewEvents.post(RoomDetailViewEvents.OpenFile(
+                        action.messageFileContent.mimeType,
+                        it,
+                        null
+                ))
+            }
+        } else if (isDownloaded) {
             // we can open it
             session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(

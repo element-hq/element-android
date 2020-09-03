@@ -27,6 +27,7 @@ import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.file.FileService
 import java.io.File
 
@@ -101,11 +102,7 @@ abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRend
 
     override fun loadVideo(target: VideoLoaderTarget, info: AttachmentInfo.Video) {
         val data = info.data as? VideoContentRenderer.Data ?: return
-//        videoContentRenderer.render(data,
-//                holder.thumbnailImage,
-//                holder.loaderProgressBar,
-//                holder.videoView,
-//                holder.errorTextView)
+
         imageContentRenderer.render(data.thumbnailMediaData, target.contextView(), object : CustomViewTarget<ImageView, Drawable>(target.contextView()) {
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 target.onThumbnailLoadFailed(info.uid, errorDrawable)
@@ -120,24 +117,28 @@ abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRend
             }
         })
 
-        target.onVideoFileLoading(info.uid)
-        fileService.downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                id = data.eventId,
-                mimeType = data.mimeType,
-                elementToDecrypt = data.elementToDecrypt,
-                fileName = data.filename,
-                url = data.url,
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        target.onVideoFileReady(info.uid, data)
-                    }
+        if (data.url?.startsWith("content://").orFalse() && data.allowNonMxcUrls) {
+            target.onVideoURLReady(info.uid, data.url!!)
+        } else {
+            target.onVideoFileLoading(info.uid)
+            fileService.downloadFile(
+                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
+                    id = data.eventId,
+                    mimeType = data.mimeType,
+                    elementToDecrypt = data.elementToDecrypt,
+                    fileName = data.filename,
+                    url = data.url,
+                    callback = object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            target.onVideoURLReady(info.uid, data)
+                        }
 
-                    override fun onFailure(failure: Throwable) {
-                        target.onVideoFileLoadFailed(info.uid)
+                        override fun onFailure(failure: Throwable) {
+                            target.onVideoFileLoadFailed(info.uid)
+                        }
                     }
-                }
-        )
+            )
+        }
     }
 
     override fun clear(id: String) {

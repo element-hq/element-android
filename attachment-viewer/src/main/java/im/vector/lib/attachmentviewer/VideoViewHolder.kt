@@ -65,6 +65,13 @@ class VideoViewHolder constructor(itemView: View) :
         }
     }
 
+    fun videoReady(path: String) {
+        mVideoPath = path
+        if (isSelected) {
+            startPlaying()
+        }
+    }
+
     fun videoFileLoadError() {
     }
 
