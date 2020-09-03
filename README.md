@@ -8,7 +8,7 @@ Compared to the Element app, SchildiChat features following changes:
 - Follows the system setting for dark/light mode
 - Further small usability improvements
 
-<a href="https://f-droid.org/de/packages/de.spiritcroc.riotx/" alt="Get it on F-Droid" target="_blank"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">
+<a href="https://f-droid.org/packages/de.spiritcroc.riotx/" alt="Get it on F-Droid" target="_blank"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">
 
 <a href="https://matrix.to/#/#schildichat-android:matrix.org" target="_blank">Join the discussion on matrix</a>
 
