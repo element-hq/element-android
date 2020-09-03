@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
 /**
@@ -53,17 +54,14 @@ class AttachmentEncryptionTest {
             memoryFile.inputStream
         }
 
-        val decryptedStream = MXEncryptedAttachments.decryptAttachment(inputStream, encryptedFileInfo.toElementToDecrypt()!!)
+        val decryptedStream = ByteArrayOutputStream()
+        val result = MXEncryptedAttachments.decryptAttachment(inputStream, encryptedFileInfo.toElementToDecrypt()!!, decryptedStream)
 
-        assertNotNull(decryptedStream)
+        assert(result)
 
-        val buffer = ByteArray(100)
+        val toByteArray = decryptedStream.toByteArray()
 
-        val len = decryptedStream!!.read(buffer)
-
-        decryptedStream.close()
-
-        return Base64.encodeToString(buffer, 0, len, Base64.DEFAULT).replace("\n".toRegex(), "").replace("=".toRegex(), "")
+        return Base64.encodeToString(toByteArray, 0, toByteArray.size, Base64.DEFAULT).replace("\n".toRegex(), "").replace("=".toRegex(), "")
     }
 
     @Test
