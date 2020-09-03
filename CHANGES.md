@@ -27,6 +27,8 @@ Bugfix 🐛:
  - Support for image compression on Android 10
  - Verification popup won't show
  - Android 6: App crash when read Contact permission is granted (#2064)
+ - JSON for verification events leaks in to the room list (#1246)
+ - Replies to poll appears in timeline as unsupported events during sending #1004
 
 Translations 🗣:
  - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
