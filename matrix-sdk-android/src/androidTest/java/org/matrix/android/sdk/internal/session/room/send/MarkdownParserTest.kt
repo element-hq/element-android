@@ -30,9 +30,9 @@ import org.matrix.android.sdk.InstrumentedTest
  * It will not be possible to test all combinations. For the moment I add a few tests, then, depending on the problem discovered in the wild,
  * we can add more tests to cover the edge cases.
  * Some tests are suffixed with `_not_passing`, maybe one day we will fix them...
- * Riot-Web should be used as a reference for expected results, but not always. Especially Riot-Web add lots of `\n` in the
+ * Element Web should be used as a reference for expected results, but not always. Especially Element Web add lots of `\n` in the
  * formatted body, which is quite useless.
- * Also Riot-Web does not provide plain text body when formatted text is provided. The body contains what the user has entered.
+ * Also Element Web does not provide plain text body when formatted text is provided. The body contains what the user has entered.
  * See https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
  */
 @Suppress("SpellCheckingInspection")
@@ -92,12 +92,12 @@ class MarkdownParserTest : InstrumentedTest {
 
     @Test
     fun parseItalic2() {
-        // Riot-Web format
+        // Element Web format
         "_italic_".let { markdownParser.parse(it).expect(it, "<em>italic</em>") }
     }
 
     /**
-     * Note: the test is not passing, it does not work on Riot-Web neither
+     * Note: the test is not passing, it does not work on Element Web neither
      */
     @Test
     fun parseStrike_not_passing() {
