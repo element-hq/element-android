@@ -123,8 +123,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
             // always use a temporary file, it guaranties that we could report progress on upload and simplifies the flows
             val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
-            workingFile.outputStream().use {
-                inputStream.copyTo(it)
+            workingFile.outputStream().use { outputStream ->
+                inputStream.use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
             }
 
             var uploadedThumbnailUrl: String? = null
