@@ -17,6 +17,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Incoming call continues to ring if call is answered on another device (#1921)
 
 Translations 🗣:
  -

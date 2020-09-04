@@ -702,6 +702,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         )
 
         callContext.offerSdp = callInviteContent.offer
+
+        currentSession?.startSync(true)
     }
 
     private fun createAnswer() {
