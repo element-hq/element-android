@@ -21,56 +21,46 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.net.Uri
-import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import timber.log.Timber
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
-internal class ImageCompressor @Inject constructor(
-        @SessionDownloadsDirectory
-        private val sessionCacheDirectory: File
-) {
-    private val cacheFolder = File(sessionCacheDirectory, "MF")
-
+internal class ImageCompressor @Inject constructor() {
     suspend fun compress(
             context: Context,
-            imageUri: Uri,
+            imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
-            desiredQuality: Int = 80): Uri {
+            desiredQuality: Int = 80): File {
         return withContext(Dispatchers.IO) {
             val compressedBitmap = BitmapFactory.Options().run {
                 inJustDecodeBounds = true
-                decodeBitmap(context, imageUri, this)
+                decodeBitmap(imageFile, this)
                 inSampleSize = calculateInSampleSize(outWidth, outHeight, desiredWidth, desiredHeight)
                 inJustDecodeBounds = false
-                decodeBitmap(context, imageUri, this)?.let {
-                    rotateBitmap(context, imageUri, it)
+                decodeBitmap(imageFile, this)?.let {
+                    rotateBitmap(imageFile, it)
                 }
-            } ?: return@withContext imageUri
+            } ?: return@withContext imageFile
 
-            val destinationUri = createDestinationUri(context)
+            val destinationFile = createDestinationFile(context)
 
             runCatching {
-                context.contentResolver.openOutputStream(destinationUri).use {
+                destinationFile.outputStream().use {
                     compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
                 }
             }
 
-            return@withContext destinationUri
+            return@withContext destinationFile
         }
     }
 
-    private fun rotateBitmap(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
-        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+    private fun rotateBitmap(file: File, bitmap: Bitmap): Bitmap {
+        file.inputStream().use { inputStream ->
             try {
                 ExifInterface(inputStream).let { exifInfo ->
                     val orientation = exifInfo.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
@@ -94,7 +84,7 @@ internal class ImageCompressor @Inject constructor(
                     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
                 }
             } catch (e: Exception) {
-                Timber.e(e, "Cannot read orientation: %s", uri.toString())
+                Timber.e(e, "Cannot read orientation")
             }
         }
         return bitmap
@@ -118,9 +108,9 @@ internal class ImageCompressor @Inject constructor(
         return inSampleSize
     }
 
-    private fun decodeBitmap(context: Context, uri: Uri, options: BitmapFactory.Options = BitmapFactory.Options()): Bitmap? {
+    private fun decodeBitmap(file: File, options: BitmapFactory.Options = BitmapFactory.Options()): Bitmap? {
         return try {
-            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            file.inputStream().use { inputStream ->
                 BitmapFactory.decodeStream(inputStream, null, options)
             }
         } catch (e: Exception) {
@@ -129,19 +119,7 @@ internal class ImageCompressor @Inject constructor(
         }
     }
 
-    private fun createDestinationUri(context: Context): Uri {
-        val file = createTempFile()
-        val authority = "${context.packageName}.mx-sdk.fileprovider"
-        return FileProvider.getUriForFile(context, authority, file)
-    }
-
-    private fun createTempFile(): File {
-        if (!cacheFolder.exists()) cacheFolder.mkdirs()
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return File.createTempFile(
-                "${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                cacheFolder /* directory */
-        )
+    private fun createDestinationFile(context: Context): File {
+        return File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
     }
 }

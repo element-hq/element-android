@@ -19,8 +19,6 @@ package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
@@ -129,7 +127,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 inputStream.copyTo(it)
             }
 
-//            inputStream.use {
             var uploadedThumbnailUrl: String? = null
             var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
@@ -181,9 +178,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 val fileToUpload: File
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
-                    fileToUpload = imageCompressor.compress(context, workingFile.toUri(), MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
-                            .also { compressedUri ->
-                                context.contentResolver.openInputStream(compressedUri)?.use {
+                    fileToUpload = imageCompressor.compress(context, workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                            .also { compressedFile ->
+                                // Get new Bitmap size
+                                compressedFile.inputStream().use {
                                     val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                                     val bitmap = BitmapFactory.decodeStream(it, null, options)
                                     val fileSize = bitmap?.byteCount ?: 0
@@ -194,7 +192,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     )
                                 }
                             }
-                            .toFile()
+
+                    // we can delete workingFile
+                    tryThis { workingFile.delete() }
                 } else {
                     fileToUpload = workingFile
                 }
@@ -232,7 +232,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     }
                     Timber.v("## FileService: cache storage updated")
                 } catch (failure: Throwable) {
-                    Timber.e(failure, "## FileService: Failed to update fileservice cache")
+                    Timber.e(failure, "## FileService: Failed to update file cache")
                 }
 
                 handleSuccess(params,
