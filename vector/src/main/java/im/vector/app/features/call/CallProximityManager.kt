@@ -23,6 +23,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.PowerManager
+import androidx.core.content.ContextCompat.getSystemService
 import im.vector.app.R
 import javax.inject.Inject
 
@@ -33,15 +34,13 @@ class CallProximityManager @Inject constructor(val context: Context) : SensorEve
 
     private val PROXIMITY_WAKE_LOCK_TAG = "PROXIMITY_WAKE_LOCK_TAG"
 
-    private lateinit var powerManager: PowerManager
-    private lateinit var sensorManager: SensorManager
+    private var powerManager: PowerManager = getSystemService(context, PowerManager::class.java)!!
+    private var sensorManager: SensorManager = getSystemService(context, SensorManager::class.java)!!
 
     private var wakeLock: PowerManager.WakeLock? = null
     private var sensor: Sensor? = null
 
     init {
-        powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
     }
 
