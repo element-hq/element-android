@@ -100,10 +100,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val attachment = params.attachment
-
-        var newImageAttributes: NewImageAttributes? = null
-
         val allCancelled = params.events.all { cancelSendTracker.isCancelRequestedFor(it.eventId, it.roomId) }
         if (allCancelled) {
             // there is no point in uploading the image!
@@ -111,6 +107,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     .also { Timber.e("## Send: Work cancelled by user") }
         }
 
+        val attachment = params.attachment
         val filesToDelete = mutableListOf<File>()
 
         try {
@@ -181,6 +178,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
             return try {
                 val fileToUpload: File
+                var newImageAttributes: NewImageAttributes? = null
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
                     fileToUpload = imageCompressor.compress(context, workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
