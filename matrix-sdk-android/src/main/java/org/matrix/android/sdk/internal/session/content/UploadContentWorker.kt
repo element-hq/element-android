@@ -275,7 +275,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         null
                     }
                 }
-                ?: null
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
