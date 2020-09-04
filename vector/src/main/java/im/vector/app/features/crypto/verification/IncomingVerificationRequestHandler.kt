@@ -69,7 +69,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         R.drawable.ic_shield_black,
                         shouldBeDisplayedIn = { activity ->
                             if (activity is VectorBaseActivity) {
-                                // TODO a bit too hugly :/
+                                // TODO a bit too ugly :/
                                 activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
                                     false.also {
                                         popupAlertManager.cancelAlert(uid)
