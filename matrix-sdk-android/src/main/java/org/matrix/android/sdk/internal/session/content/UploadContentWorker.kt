@@ -178,10 +178,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
             return try {
-                val fileToUplaod: File
+                val fileToUpload: File
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
-                    fileToUplaod = imageCompressor.compress(context, workingFile.toUri(), MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                    fileToUpload = imageCompressor.compress(context, workingFile.toUri(), MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
                             .also { compressedUri ->
                                 context.contentResolver.openInputStream(compressedUri)?.use {
                                     val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -196,7 +196,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             }
                             .toFile()
                 } else {
-                    fileToUplaod = workingFile
+                    fileToUpload = workingFile
                 }
 
                 val contentUploadResponse = if (params.isEncrypted) {
@@ -205,7 +205,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
 
                     uploadedFileEncryptedFileInfo =
-                            MXEncryptedAttachments.encrypt(fileToUplaod.inputStream(), attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
+                            MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
                                 notifyTracker(params) {
                                     contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
                                 }
@@ -222,7 +222,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 } else {
                     Timber.v("## FileService: Clear file")
                     fileUploader
-                            .uploadFile(fileToUplaod, attachment.name, attachment.getSafeMimeType(), progressListener)
+                            .uploadFile(fileToUpload, attachment.name, attachment.getSafeMimeType(), progressListener)
                 }
 
                 Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
