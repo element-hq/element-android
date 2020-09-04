@@ -301,7 +301,7 @@
     <string name="room_participants_create">Criar</string>
 
     <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Desconectada/o</string>
+    <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Ocioso</string>
 
     <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMINISTRAÇÃO</string>
@@ -1719,7 +1719,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_push_rules_no_rules">Nenhuma regra Push definida</string>
     <string name="settings_push_gateway_no_pushers">Nenhuma entrada Push registrada</string>
 
-    <string name="push_gateway_item_app_id">id_do_app:</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">chave_push:</string>
     <string name="push_gateway_item_app_display_name">nome_da_ tela_ do_app:</string>
     <string name="push_gateway_item_device_name">nome_da_sessão:</string>
