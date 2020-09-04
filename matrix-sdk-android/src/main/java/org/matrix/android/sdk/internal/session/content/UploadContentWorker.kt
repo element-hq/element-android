@@ -111,6 +111,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     .also { Timber.e("## Send: Work cancelled by user") }
         }
 
+        val filesToDelete = mutableListOf<File>()
+
         try {
             val inputStream = context.contentResolver.openInputStream(attachment.queryUri)
                     ?: return Result.success(
@@ -123,6 +125,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
             // always use a temporary file, it guaranties that we could report progress on upload and simplifies the flows
             val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                    .also { filesToDelete.add(it) }
             workingFile.outputStream().use { outputStream ->
                 inputStream.use { inputStream ->
                     inputStream.copyTo(outputStream)
@@ -194,9 +197,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     )
                                 }
                             }
-
-                    // we can delete workingFile
-                    tryThis { workingFile.delete() }
+                            .also { filesToDelete.add(it) }
                 } else {
                     fileToUpload = workingFile
                 }
@@ -205,6 +206,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.v("## FileService: Encrypt file")
 
                     val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                            .also { filesToDelete.add(it) }
 
                     uploadedFileEncryptedFileInfo =
                             MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
@@ -217,10 +219,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                     fileUploader
                             .uploadFile(tmpEncrypted, attachment.name, "application/octet-stream", progressListener)
-                            .also {
-                                // we can delete?
-                                tryThis { tmpEncrypted.delete() }
-                            }
                 } else {
                     Timber.v("## FileService: Clear file")
                     fileUploader
@@ -257,6 +255,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             )
                     )
             )
+        } finally {
+            // Delete all temporary files
+            filesToDelete.forEach {
+                tryThis { it.delete() }
+            }
         }
     }
 
