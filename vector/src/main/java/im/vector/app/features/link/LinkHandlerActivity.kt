@@ -30,7 +30,6 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -61,26 +60,41 @@ class LinkHandlerActivity : VectorBaseActivity() {
         }
 
         if (uri.path == PATH_CONFIG) {
-            if (sessionHolder.hasActiveSession()) {
-                displayAlreadyLoginPopup(uri)
-            } else {
-                // user is not yet logged in, this is the nominal case
-                startLoginActivity(uri)
-            }
+            handleConfigUrl(uri)
+        } else if (SUPPORTED_HOSTS.contains(uri.host)) {
+            handleSupportedHostUrl(uri)
+        }
+    }
+
+    private fun handleConfigUrl(uri: Uri) {
+        if (sessionHolder.hasActiveSession()) {
+            displayAlreadyLoginPopup(uri)
         } else {
-            if (!sessionHolder.hasActiveSession()) {
-                startLoginActivity(uri)
+            // user is not yet logged in, this is the nominal case
+            startLoginActivity(uri)
+        }
+    }
+
+    private fun handleSupportedHostUrl(uri: Uri) {
+        if (!sessionHolder.hasActiveSession()) {
+            startLoginActivity(uri)
+            finish()
+        } else {
+            convertUriToPermalink(uri)?.let { permalink ->
+                startPermalinkHandler(permalink)
+            } ?: run {
+                // Host is correct but we do not recognize path
+                Timber.w("Unable to handle this uri: $uri")
                 finish()
-            } else {
-                convertUrlToPermalink(uri.toString())?.let { permalink ->
-                    startPermalinkHandler(permalink)
-                } ?: run {
-                    // Other link are not yet handled, but should not comes here (manifest configuration error?)
-                    Timber.w("Unable to handle this uir: $uri")
-                    finish()
-                }
             }
         }
+    }
+
+    private fun convertUriToPermalink(uri: Uri): String? {
+        val path = SUPPORTED_PATHS.find { it in uri.toString() } ?: return null
+        return uri
+                .toString()
+                .replace(uri.host + path, "$MATRIX_TO_HOST/#")
     }
 
     private fun startPermalinkHandler(permalink: String) {
@@ -94,20 +108,6 @@ class LinkHandlerActivity : VectorBaseActivity() {
                     finish()
                 }
                 .disposeOnDestroy()
-    }
-
-    /**
-     * Converts domain urls to matrix.to urls
-     * @param url full url like https://app.element.io/#/room/#dummy_room:matrix.org
-     * @return matrix.to url like https://matrix.to/#/#dummy_room:matrix.org
-     */
-    private fun convertUrlToPermalink(url: String): String? {
-        return when {
-            url.startsWith(ROOM_BASE_URL)  -> url.replace(ROOM_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
-            url.startsWith(USER_BASE_URL)  -> url.replace(USER_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
-            url.startsWith(GROUP_BASE_URL) -> url.replace(GROUP_BASE_URL, PermalinkService.MATRIX_TO_URL_BASE)
-            else                           -> null
-        }
     }
 
     /**
@@ -156,8 +156,9 @@ class LinkHandlerActivity : VectorBaseActivity() {
 
     companion object {
         private const val PATH_CONFIG = "/config/config"
-        private const val ROOM_BASE_URL = "https://app.element.io/#/room/"
-        private const val USER_BASE_URL = "https://app.element.io/#/user/"
-        private const val GROUP_BASE_URL = "https://app.element.io/#/group/"
+
+        private val SUPPORTED_HOSTS = arrayOf("app.element.io", "riot.im")
+        private val SUPPORTED_PATHS = arrayOf("/#/room", "/#/user", "/#/group")
+        private const val MATRIX_TO_HOST = "matrix.to"
     }
 }
