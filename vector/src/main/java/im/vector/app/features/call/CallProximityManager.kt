@@ -46,13 +46,15 @@ class CallProximityManager @Inject constructor(
     private val sensorManager = context.getSystemService<SensorManager>()!!
 
     private var wakeLock: PowerManager.WakeLock? = null
-    private var sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+    private val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+
+    private val isSupported = sensor != null && powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
 
     /**
      * Start listening the proximity sensor. [stop] function should be called to release the sensor and the WakeLock.
      */
     fun start() {
-        if (sensor != null && powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) {
+        if (isSupported) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
@@ -61,10 +63,12 @@ class CallProximityManager @Inject constructor(
      * Stop listening proximity sensor changes and release the WakeLock.
      */
     fun stop() {
-        sensorManager.unregisterListener(this)
-        wakeLock
-                ?.takeIf { it.isHeld }
-                ?.release()
+        if (isSupported) {
+            sensorManager.unregisterListener(this)
+            wakeLock
+                    ?.takeIf { it.isHeld }
+                    ?.release()
+        }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
