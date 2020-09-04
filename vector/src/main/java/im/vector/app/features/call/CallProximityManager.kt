@@ -62,7 +62,9 @@ class CallProximityManager @Inject constructor(
      */
     fun stop() {
         sensorManager.unregisterListener(this)
-        wakeLock?.release()
+        wakeLock
+                ?.takeIf { it.isHeld }
+                ?.release()
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -91,6 +93,8 @@ class CallProximityManager @Inject constructor(
     }
 
     private fun onProximityFar() {
-        wakeLock?.release()
+        wakeLock
+                ?.takeIf { it.isHeld }
+                ?.release()
     }
 }
