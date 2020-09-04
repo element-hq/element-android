@@ -129,38 +129,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 }
             }
 
-            var uploadedThumbnailUrl: String? = null
-            var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
-
-            ThumbnailExtractor.extractThumbnail(context, params.attachment)?.let { thumbnailData ->
-                val thumbnailProgressListener = object : ProgressRequestBody.Listener {
-                    override fun onProgress(current: Long, total: Long) {
-                        notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
-                    }
-                }
-
-                try {
-                    val contentUploadResponse = if (params.isEncrypted) {
-                        Timber.v("Encrypt thumbnail")
-                        notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
-                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
-                        uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
-                        fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
-                                "thumb_${attachment.name}",
-                                "application/octet-stream",
-                                thumbnailProgressListener)
-                    } else {
-                        fileUploader.uploadByteArray(thumbnailData.bytes,
-                                "thumb_${attachment.name}",
-                                thumbnailData.mimeType,
-                                thumbnailProgressListener)
-                    }
-
-                    uploadedThumbnailUrl = contentUploadResponse.contentUri
-                } catch (t: Throwable) {
-                    Timber.e(t, "Thumbnail update failed")
-                }
-            }
+            val uploadThumbnailResult = dealWithThumbnail(params)
 
             val progressListener = object : ProgressRequestBody.Listener {
                 override fun onProgress(current: Long, total: Long) {
@@ -236,8 +205,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 handleSuccess(params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
-                        uploadedThumbnailUrl,
-                        uploadedThumbnailEncryptedFileInfo,
+                        uploadThumbnailResult?.uploadedThumbnailUrl,
+                        uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
                         newImageAttributes)
             } catch (t: Throwable) {
                 Timber.e(t, "## FileService: ERROR ${t.localizedMessage}")
@@ -259,6 +228,54 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 tryThis { it.delete() }
             }
         }
+    }
+
+    private data class UploadThumbnailResult(
+            val uploadedThumbnailUrl: String,
+            val uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo?
+    )
+
+    /**
+     * If appropriate, it will create and upload a thumbnail
+     */
+    private suspend fun dealWithThumbnail(params: Params): UploadThumbnailResult? {
+        return ThumbnailExtractor.extractThumbnail(context, params.attachment)
+                ?.let { thumbnailData ->
+                    val thumbnailProgressListener = object : ProgressRequestBody.Listener {
+                        override fun onProgress(current: Long, total: Long) {
+                            notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
+                        }
+                    }
+
+                    try {
+                        if (params.isEncrypted) {
+                            Timber.v("Encrypt thumbnail")
+                            notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
+                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
+                            val contentUploadResponse = fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
+                                    "thumb_${params.attachment.name}",
+                                    "application/octet-stream",
+                                    thumbnailProgressListener)
+                            UploadThumbnailResult(
+                                    contentUploadResponse.contentUri,
+                                    encryptionResult.encryptedFileInfo
+                            )
+                        } else {
+                            val contentUploadResponse = fileUploader.uploadByteArray(thumbnailData.bytes,
+                                    "thumb_${params.attachment.name}",
+                                    thumbnailData.mimeType,
+                                    thumbnailProgressListener)
+                            UploadThumbnailResult(
+                                    contentUploadResponse.contentUri,
+                                    null
+                            )
+                        }
+                    } catch (t: Throwable) {
+                        Timber.e(t, "Thumbnail upload failed")
+                        null
+                    }
+                }
+                ?: null
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
