@@ -35,7 +35,7 @@
             android:importantForAccessibility="no"
             android:src="@drawable/ic_shield_trusted"
             app:layout_constraintCircle="@+id/verificationRequestAvatar"
-            app:layout_constraintCircleAngle="135"
+            app:layout_constraintCircleAngle="225"
             app:layout_constraintCircleRadius="16dp"
             tools:ignore="MissingConstraints" />
 

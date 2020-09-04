@@ -25,8 +25,8 @@
         android:layout_height="24dp"
         android:src="@drawable/ic_shield_warning"
         app:layout_constraintCircle="@+id/ivUserAvatar"
-        app:layout_constraintCircleAngle="135"
-        app:layout_constraintCircleRadius="20dp"
+        app:layout_constraintCircleAngle="225"
+        app:layout_constraintCircleRadius="15dp"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 

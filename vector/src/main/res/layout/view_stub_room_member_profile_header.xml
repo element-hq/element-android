@@ -34,7 +34,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintCircle="@+id/memberProfileAvatarView"
-            app:layout_constraintCircleAngle="135"
+            app:layout_constraintCircleAngle="225"
             app:layout_constraintCircleRadius="64dp"
             tools:ignore="MissingConstraints"
             tools:src="@drawable/ic_shield_trusted" />

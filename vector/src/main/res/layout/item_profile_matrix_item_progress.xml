@@ -9,7 +9,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="64dp"
-    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingStart="0dp"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
@@ -20,6 +20,7 @@
         android:layout_height="32dp"
         android:layout_centerVertical="true"
         android:scaleType="centerInside"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +31,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintCircle="@+id/matrixItemAvatar"
-        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleAngle="225"
         app:layout_constraintCircleRadius="16dp"
         tools:ignore="MissingConstraints"
         tools:src="@drawable/ic_shield_trusted" />

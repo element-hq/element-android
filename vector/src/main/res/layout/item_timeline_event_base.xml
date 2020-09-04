@@ -69,7 +69,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_alignTop="@id/viewStubContainer"
-        android:layout_alignEnd="@id/decorationSpace"
+        android:layout_alignStart="@id/messageAvatarImageView"
         android:layout_marginTop="7dp"
         android:visibility="gone"
         tools:src="@drawable/ic_shield_warning"
