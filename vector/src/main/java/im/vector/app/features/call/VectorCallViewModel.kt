@@ -172,9 +172,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     init {
-
         initialState.callId?.let {
-
             webRtcPeerConnectionManager.addCurrentCallListener(currentCallListener)
 
             session.callSignalingService().getCallWithId(it)?.let { mxCall ->
