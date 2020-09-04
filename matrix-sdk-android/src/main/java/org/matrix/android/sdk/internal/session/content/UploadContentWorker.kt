@@ -140,22 +140,22 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     }
                 }
 
-                    try {
-                        val contentUploadResponse = if (params.isEncrypted) {
-                            Timber.v("Encrypt thumbnail")
-                            notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
-                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
-                            uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
-                            fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
-                                    "thumb_${attachment.name}",
-                                    "application/octet-stream",
-                                    thumbnailProgressListener)
-                        } else {
-                            fileUploader.uploadByteArray(thumbnailData.bytes,
-                                    "thumb_${attachment.name}",
-                                    thumbnailData.mimeType,
-                                    thumbnailProgressListener)
-                        }
+                try {
+                    val contentUploadResponse = if (params.isEncrypted) {
+                        Timber.v("Encrypt thumbnail")
+                        notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
+                        val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
+                        uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
+                        fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
+                                "thumb_${attachment.name}",
+                                "application/octet-stream",
+                                thumbnailProgressListener)
+                    } else {
+                        fileUploader.uploadByteArray(thumbnailData.bytes,
+                                "thumb_${attachment.name}",
+                                thumbnailData.mimeType,
+                                thumbnailProgressListener)
+                    }
 
                     uploadedThumbnailUrl = contentUploadResponse.contentUri
                 } catch (t: Throwable) {
