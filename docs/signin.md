@@ -78,7 +78,7 @@ We get credential (200)
 If the user has associated an email with its account, he can signin using the email.
 
 ```shell script
-curl -X POST --data $'{"identifier":{"type":"m.id.thirdparty","medium":"email","address":"alice@yopmail.com"},"password":"weak_password","type":"m.login.password","initial_device_display_name":"Portable"}' 'https://matrix.org/_matrix/client/r0/login'
+curl -X POST --data $'{"identifier":{"type":"m.id.thirdparty","medium":"email","address":"alice@email-provider.org"},"password":"weak_password","type":"m.login.password","initial_device_display_name":"Portable"}' 'https://matrix.org/_matrix/client/r0/login'
 ```
 
 ```json
@@ -86,7 +86,7 @@ curl -X POST --data $'{"identifier":{"type":"m.id.thirdparty","medium":"email","
   "identifier": {
     "type": "m.id.thirdparty",
     "medium": "email",
-    "address": "alice@yopmail.com"
+    "address": "alice@email-provider.org"
   },
   "password": "weak_password",
   "type": "m.login.password",
