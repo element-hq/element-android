@@ -50,11 +50,11 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
-import org.matrix.android.sdk.api.session.InitialSyncProgressService
-import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -239,9 +239,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         uid = "upgradeSecurity",
                         title = getString(titleRes),
                         description = getString(descRes),
-                        iconId = R.drawable.ic_shield_warning
+                        iconId = R.drawable.ic_shield_warning,
+                        matrixItem = userItem
                 ).apply {
-                    matrixItem = userItem
                     colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {

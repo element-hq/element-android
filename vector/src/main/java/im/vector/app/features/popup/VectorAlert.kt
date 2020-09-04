@@ -94,9 +94,8 @@ class VerificationVectorAlert(uid: String,
                               /**
                                * Alert are displayed by default, but let this lambda return false to prevent displaying
                                */
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true },
+                              val matrixItem: MatrixItem?
 ) : DefaultVectorAlert(
         uid, title, description, iconId, shouldBeDisplayedIn
-) {
-    var matrixItem: MatrixItem? = null
-}
+)
