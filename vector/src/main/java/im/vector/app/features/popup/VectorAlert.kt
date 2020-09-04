@@ -28,7 +28,7 @@ interface VectorAlert {
     val title: String
     val description: String
     val iconId: Int?
-    val shouldBeDisplayedIn: ((Activity) -> Boolean)?
+    val shouldBeDisplayedIn: ((Activity) -> Boolean)
 
     data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
 
@@ -59,7 +59,11 @@ open class DefaultVectorAlert(override val uid: String,
                               override val title: String,
                               override val description: String,
                               @DrawableRes override val iconId: Int?,
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean)? = null) : VectorAlert {
+                              /**
+                               * Alert are displayed by default, but let this lambda return false to prevent displaying
+                               */
+                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+) : VectorAlert {
 
     // will be set by manager, and accessible by actions at runtime
     override var weakCurrentActivity: WeakReference<Activity>? = null
@@ -87,7 +91,10 @@ class VerificationVectorAlert(uid: String,
                               title: String,
                               override val description: String,
                               @DrawableRes override val iconId: Int?,
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean)? = null
+                              /**
+                               * Alert are displayed by default, but let this lambda return false to prevent displaying
+                               */
+                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(
         uid, title, description, iconId, shouldBeDisplayedIn
 ) {
