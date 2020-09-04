@@ -25,12 +25,15 @@ import android.hardware.SensorManager
 import android.os.PowerManager
 import androidx.core.content.ContextCompat.getSystemService
 import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import javax.inject.Inject
 
 /**
  * Manages the proximity sensor and turns the screen off when the proximity sensor activates.
  */
-class CallProximityManager @Inject constructor(val context: Context) : SensorEventListener {
+class CallProximityManager @Inject constructor(val context: Context,
+                                               val stringProvider: StringProvider
+) : SensorEventListener {
 
     private val PROXIMITY_WAKE_LOCK_TAG = "PROXIMITY_WAKE_LOCK_TAG"
 
@@ -77,7 +80,7 @@ class CallProximityManager @Inject constructor(val context: Context) : SensorEve
     /**
      * Recommending naming convention for WakeLock tags is "app:tag"
      */
-    private fun generateWakeLockTag() = "${context.getString(R.string.app_name)}:$PROXIMITY_WAKE_LOCK_TAG"
+    private fun generateWakeLockTag() = "${stringProvider.getString(R.string.app_name)}:$PROXIMITY_WAKE_LOCK_TAG"
 
     @SuppressLint("WakelockTimeout")
     private fun onProximityNear() {
