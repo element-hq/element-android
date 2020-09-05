@@ -1,6 +1,6 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.app.core.ui.views.WrapWidthTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:drawableStart="@drawable/ic_trash_16"
     android:drawablePadding="8dp"
