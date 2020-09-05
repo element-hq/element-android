@@ -52,8 +52,15 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         if (searchForPills) {
             message?.findPillsAndProcess(coroutineScope) { it.bind(holder.messageView) }
         }
+        var m = message
+        if (m != null) {
+            // Remove last trailing newline: looks especially bad in message bubble
+            if (m.last() == '\n') {
+                m = m.subSequence(0, m.length-1)
+            }
+        }
         val textFuture = PrecomputedTextCompat.getTextFuture(
-                message ?: "",
+                m ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
         holder.messageView.setTextFuture(textFuture)
