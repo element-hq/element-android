@@ -345,6 +345,14 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 }
     }
 
+    protected var postResumeScheduledAction: Runnable? = null
+
+    override fun onPostResume() {
+        super.onPostResume()
+        postResumeScheduledAction?.run()
+        postResumeScheduledAction = null
+    }
+
     override fun onPause() {
         super.onPause()
         Timber.i("onPause Activity ${this.javaClass.simpleName}")

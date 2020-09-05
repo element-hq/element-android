@@ -49,8 +49,10 @@ import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
 import kotlinx.android.synthetic.main.activity.*
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import timber.log.Timber
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
@@ -113,7 +115,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+                try {
+                    addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+                } catch (throwable: Throwable) {
+                    Timber.w(throwable)
+                    // Bug on API23
+                    postResumeScheduledAction = Runnable { tryThis { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) } }
+                }
             }
         }
     }
