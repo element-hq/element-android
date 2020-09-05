@@ -9,6 +9,7 @@ import android.text.Layout
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import kotlin.math.ceil
+import kotlin.math.max
 
 class WrapWidthTextView @JvmOverloads constructor(
         context: Context,
@@ -28,9 +29,7 @@ class WrapWidthTextView @JvmOverloads constructor(
         var maxWidth = 0.0f
         val lines = layout.lineCount
         for (i in 0 until lines) {
-            if (layout.getLineWidth(i) > maxWidth) {
-                maxWidth = layout.getLineWidth(i)
-            }
+            maxWidth = max(maxWidth, layout.getLineWidth(i))
         }
         return maxWidth
     }
