@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
+import android.text.TextUtils
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -58,6 +59,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             if (m.last() == '\n') {
                 m = m.subSequence(0, m.length-1)
             }
+            // Add a narrow non-breakable space to work around wrap_content cutting italic text | https://stackoverflow.com/questions/4353836/italic-textview-with-wrap-contents-seems-to-clip-the-text-at-right-edge
+            // (interestingly, this seems to be only relevant for the last character even for multi-line messages)
+            m = TextUtils.concat(m, "\u202f")
         }
         val textFuture = PrecomputedTextCompat.getTextFuture(
                 m ?: "",
