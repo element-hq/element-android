@@ -56,9 +56,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         val darkThemePref = findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
         lightThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
-                // Restart the Activity
-                activity?.restart()
+                if (!ThemeUtils.shouldUseDarkTheme(requireContext())) {
+                    ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
+                    // Restart the Activity
+                    activity?.restart()
+                }
                 true
             } else {
                 false
@@ -68,12 +70,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             lightThemePref.title = getString(R.string.settings_light_theme)
             darkThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
-                    // Restart the Activity
-                    activity?.let {
-                        // Note: recreate does not apply the color correctly
-                        it.startActivity(it.intent)
-                        it.finish()
+                    if (ThemeUtils.shouldUseDarkTheme(requireContext())) {
+                        ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
+                        // Restart the Activity
+                        activity?.restart()
                     }
                     true
                 } else {
