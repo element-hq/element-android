@@ -9,7 +9,8 @@
     <string name="settings_room_unread_kind_content">Hide member changes</string>
     <string name="settings_room_unread_kind_original_content">Hide member changes and reactions</string>
 
-    <string name="settings_dark_theme">Night Theme</string>
+    <string name="settings_light_theme">Light theme</string>
+    <string name="settings_dark_theme">Dark theme</string>
     <string name="sc_light_theme">SC Light</string>
     <string name="sc_theme">SC Black</string>
     <string name="sc_dark_theme">SC Dark</string>

@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.TypedValue
 import android.view.Menu
 import androidx.annotation.AttrRes
@@ -55,7 +56,18 @@ object ThemeUtils {
     private var mUseDarkTheme = false
     private var mThemeInitialized = false
 
+    /**
+     * @return Whether a system-wide dark mode is available on this device
+     */
+    fun darkThemePossible(): Boolean {
+        // Available since Android 10: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    }
+
     fun shouldUseDarkTheme(context: Context): Boolean {
+        if (!darkThemePossible()) {
+            return false
+        }
         val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES
     }

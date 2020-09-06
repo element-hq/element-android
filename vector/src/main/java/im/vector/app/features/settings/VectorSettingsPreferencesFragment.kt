@@ -52,8 +52,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         setUserInterfacePreferences()
 
         // Themes
-        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+        val lightThemePref = findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
+        val darkThemePref = findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
+        lightThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
                 ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
                 // Restart the Activity
@@ -63,21 +64,27 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
-        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            if (newValue is String) {
-                ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
-                // Restart the Activity
-                activity?.let {
-                    // Note: recreate does not apply the color correctly
-                    it.startActivity(it.intent)
-                    it.finish()
+        if (ThemeUtils.darkThemePossible()) {
+            lightThemePref.title = getString(R.string.settings_light_theme)
+            darkThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                if (newValue is String) {
+                    ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
+                    // Restart the Activity
+                    activity?.let {
+                        // Note: recreate does not apply the color correctly
+                        it.startActivity(it.intent)
+                        it.finish()
+                    }
+                    true
+                } else {
+                    false
                 }
-                true
-            } else {
-                false
             }
+        } else {
+            lightThemePref.title = getString(R.string.settings_theme)
+            darkThemePref.parent?.removePreference(darkThemePref)
         }
+
         findPreference<VectorListPreference>(BubbleThemeUtils.BUBBLE_STYLE_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             BubbleThemeUtils.invalidateBubbleStyle()
