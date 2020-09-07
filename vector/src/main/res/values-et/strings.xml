@@ -2200,7 +2200,7 @@
 
     <string name="command_description_plain">Saadab sõnumi vormindamata tekstina ega tõlgenda seda markdown-vormindusena</string>
 
-<string name="no_permissions_to_start_conf_call">Sul ei ole õigusi siin jututoas rühmakõne algatamiseks</string>
+    <string name="no_permissions_to_start_conf_call">Sul ei ole õigusi siin jututoas rühmakõne algatamiseks</string>
     <string name="conference_call_in_progress">Rühmakõne on hetkel käimas!</string>
     <string name="video_meeting">Alusta videokoosolekut</string>
     <string name="audio_meeting">Alusta koosolekut</string>
@@ -2210,9 +2210,9 @@
     <string name="failed_to_add_widget">Vidina lisamine ei õnnestunud</string>
     <string name="failed_to_remove_widget">Vidina eemaldamine ei õnnestunud</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d võtme importimine õnnestus.</item>
-	<item quantity="other">%1$d/%2$d võtme importimine õnnestus.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d võtme importimine õnnestus.</item>
+        <item quantity="other">%1$d/%2$d võtme importimine õnnestus.</item>
+    </plurals>
 
     <string name="room_manage_integrations">Halda lõiminguid</string>
     <string name="room_no_active_widgets">Aktiivseid vidinaid ei leidu</string>
@@ -2238,16 +2238,16 @@
     <string name="a11y_jump_to_bottom">Mine lõppu</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s ja %3$d muu loevad</item>
-	<item quantity="other">%1$s, %2$s ja %3$d muud loevad</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s ja %3$d muu loevad</item>
+        <item quantity="other">%1$s, %2$s ja %3$d muud loevad</item>
+    </plurals>
     <string name="three_users_read">%1$s, %2$s ja %3$s lugesid</string>
     <string name="two_users_read">%1$s ja %2$s lugesid</string>
     <string name="one_user_read">%s luges</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 kasutaja luges</item>
-	<item quantity="other">%d kasutajat lugesid</item>
-</plurals>
+        <item quantity="one">1 kasutaja luges</item>
+        <item quantity="other">%d kasutajat lugesid</item>
+    </plurals>
 
     <string name="error_file_too_big">See fail „%1$s“ (%2$s) on üleslaadimiseks liiga suur. Failisuuruse ülempiir on %3$s.</string>
 
@@ -2333,9 +2333,6 @@
     <string name="sent_an_image">Pilt.</string>
     <string name="sent_an_audio_file">Helifail</string>
     <string name="sent_a_file">Fail</string>
-    <string name="verification_request_alert_description">Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes.
-\n
-\nLisaturvalisuse mõttes tehke seda omavahel kohtudes.</string>
     <string name="room_profile_not_encrypted_subtitle">Sõnumid siin jututoas on läbivalt krüptitud.</string>
     <string name="room_profile_encrypted_subtitle">Sõnumid siis jututoas kasutavad läbivat krüptimist.
 \n
@@ -2347,9 +2344,9 @@
     <string name="room_profile_section_more_settings">Jututubade seadistused</string>
     <string name="room_profile_section_more_notifications">Teavitused</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Üks inimene</item>
-	<item quantity="other">%1$d inimest</item>
-</plurals>
+        <item quantity="one">Üks inimene</item>
+        <item quantity="other">%1$d inimest</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Üleslaetud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
     <string name="room_profile_leaving_room">Lahkun jututoast…</string>
@@ -2363,13 +2360,17 @@
     <string name="room_member_power_level_admin_in">Peakasutaja jututoas %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderaator jututoas %1$s</string>
     <string name="room_member_power_level_default_in">Vaikimisi õigused jututoas %1$s</string>
-    <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$s) jututoas %2$s</string>
+    <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$d) jututoas %2$s</string>
 
     <string name="room_member_jump_to_read_receipt">Hüppa lugemisteatise juurde</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">Element ei oska käsitleda %1$s-tüüpi sündmusi</string>
     <string name="rendering_event_error_type_of_message_not_handled">Element ei oska käsitleda %1$s-tüüpi sünumeid</string>
     <string name="rendering_event_error_exception">Tekkis viga, kui Element üritas töödelda sõnumi %1$s sisu</string>
+
+    <string name="call_notification_answer">Võta vastu</string>
+    <string name="call_notification_reject">Keeldu</string>
+    <string name="call_notification_hangup">Lõpeta kõne</string>
 
     <string name="unignore">Lõpeta eiramine</string>
 
@@ -2395,13 +2396,13 @@
     <string name="settings_dev_tools">Arendaja töövahendid</string>
     <string name="settings_account_data">Kasutajakonto andmed</string>
     <plurals name="poll_info">
-	<item quantity="one">%d hääl</item>
-	<item quantity="other">%d häält</item>
-</plurals>
+        <item quantity="one">%d hääl</item>
+        <item quantity="other">%d häält</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d hääl - lõplikud tulemused</item>
-	<item quantity="other">%d häält - lõplikud tulemused</item>
-</plurals>
+        <item quantity="one">%d hääl - lõplikud tulemused</item>
+        <item quantity="other">%d häält - lõplikud tulemused</item>
+    </plurals>
     <string name="poll_item_selected_aria">Tehtud valik</string>
     <string name="command_description_poll">Loob lihtsa hääletuse</string>
     <string name="verification_cannot_access_other_session">Kasuta taastamiseks mõeldud paroolifraasi või võtit</string>
@@ -2417,9 +2418,9 @@
     <string name="message_action_item_redact">Eemalda…</string>
     <string name="share_confirm_room">Kas sa soovid seda manust saata kasutajale %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Saada pilt algupärases suuruses</item>
-	<item quantity="other">Saada pildid algupärases suuruses</item>
-</plurals>
+        <item quantity="one">Saada pilt algupärases suuruses</item>
+        <item quantity="other">Saada pildid algupärases suuruses</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Kinnita eemaldamine</string>
     <string name="delete_event_dialog_content">Kas sa oled kindel et soovid eemaldada (kustutada) seda sündmust\? Pane tähele, et see muutus võib tagasi pöörduda, kui muudad hiljem jututoa nime või teema nime.</string>
@@ -2520,9 +2521,9 @@
     <string name="command_description_discard_session_not_handled">Funktsionaalsus on toetatud ainult krüptitud jututubades</string>
     <string name="enter_secret_storage_passphrase_or_key">Jätkamiseks kasuta kas oma %1$s või %2$s.</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Vale PIN-kood, jäänud on %d katse</item>
-	<item quantity="other">Vale PIN-kood, jäänud on %d katset</item>
-</plurals>
+        <item quantity="one">Vale PIN-kood, jäänud on %d katse</item>
+        <item quantity="other">Vale PIN-kood, jäänud on %d katset</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Hoiatus! Viimane katse enne väljalogimist!</string>
     <string name="too_many_pin_failures">Liiga palju vigu PIN-koodi sisestamisel ning sa oled nüüd välja logitud</string>
-    </resources>
+</resources>

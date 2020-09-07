@@ -136,72 +136,6 @@
 
     <string name="room_displayname_empty_room">খালি কক্ষ</string>
 
-
-    <string name="verification_emoji_dog">কুকুর</string>
-    <string name="verification_emoji_cat">বেড়াল</string>
-    <string name="verification_emoji_lion">সিংহ</string>
-    <string name="verification_emoji_horse">ঘোড়া</string>
-    <string name="verification_emoji_unicorn">ইউনিকর্ন</string>
-    <string name="verification_emoji_pig">শূকর</string>
-    <string name="verification_emoji_elephant">হাতি</string>
-    <string name="verification_emoji_rabbit">খরগোশ</string>
-    <string name="verification_emoji_panda">পান্ডা</string>
-    <string name="verification_emoji_rooster">গৃহপালিত মোরগ</string>
-    <string name="verification_emoji_penguin">পেংগুইন</string>
-    <string name="verification_emoji_turtle">কচ্ছপ</string>
-    <string name="verification_emoji_fish">মাছ</string>
-    <string name="verification_emoji_octopus">অক্টোপাস</string>
-    <string name="verification_emoji_butterfly">প্রজাপতি</string>
-    <string name="verification_emoji_flower">ফুল</string>
-    <string name="verification_emoji_tree">গাছ</string>
-    <string name="verification_emoji_cactus">ফণীমনসা</string>
-    <string name="verification_emoji_mushroom">মাশরুম</string>
-    <string name="verification_emoji_globe">পৃথিবী</string>
-    <string name="verification_emoji_moon">চন্দ্র</string>
-    <string name="verification_emoji_cloud">মেঘ</string>
-    <string name="verification_emoji_fire">আগুন</string>
-    <string name="verification_emoji_banana">কলা</string>
-    <string name="verification_emoji_apple">আপেল</string>
-    <string name="verification_emoji_strawberry">স্ট্রবেরি</string>
-    <string name="verification_emoji_corn">ভূট্টা</string>
-    <string name="verification_emoji_pizza">পিজা</string>
-    <string name="verification_emoji_cake">কেক</string>
-    <string name="verification_emoji_heart">হৃদয়</string>
-    <string name="verification_emoji_smiley">স্মাইলি</string>
-    <string name="verification_emoji_robot">রোবট</string>
-    <string name="verification_emoji_hat">টুপি</string>
-    <string name="verification_emoji_glasses">চশমা</string>
-    <string name="verification_emoji_wrench">রেঞ্চ</string>
-    <string name="verification_emoji_santa">সান্তা</string>
-    <string name="verification_emoji_thumbsup">থাম্বস আপ</string>
-    <string name="verification_emoji_umbrella">ছাতা</string>
-    <string name="verification_emoji_hourglass">বালিঘড়ি</string>
-    <string name="verification_emoji_clock">ঘড়ি</string>
-    <string name="verification_emoji_gift">উপহার</string>
-    <string name="verification_emoji_lightbulb">আলো বালব</string>
-    <string name="verification_emoji_book">বই</string>
-    <string name="verification_emoji_pencil">পেন্সিল</string>
-    <string name="verification_emoji_paperclip">পেপার ক্লিপ</string>
-    <string name="verification_emoji_scissors">কাঁচি</string>
-    <string name="verification_emoji_lock">লক</string>
-    <string name="verification_emoji_key">চাবি</string>
-    <string name="verification_emoji_hammer">হাতুড়ি</string>
-    <string name="verification_emoji_telephone">টেলিফোন</string>
-    <string name="verification_emoji_flag">পতাকা</string>
-    <string name="verification_emoji_train">রেলগাড়ি</string>
-    <string name="verification_emoji_bicycle">সাইকেল</string>
-    <string name="verification_emoji_airplane">বিমান</string>
-    <string name="verification_emoji_rocket">রকেট</string>
-    <string name="verification_emoji_trophy">ট্রফি</string>
-    <string name="verification_emoji_ball">বল</string>
-    <string name="verification_emoji_guitar">গিটার</string>
-    <string name="verification_emoji_trumpet">ট্রাম্পেট</string>
-    <string name="verification_emoji_bell">ঘণ্টা</string>
-    <string name="verification_emoji_anchor">নোঙ্গর</string>
-    <string name="verification_emoji_headphone">হেডফোন</string>
-    <string name="verification_emoji_folder">ফোল্ডার</string>
-    <string name="verification_emoji_pin">পিন</string>
-
     <string name="initial_sync_start_importing_account">প্রাথমিক সিঙ্ক:
 \nঅ্যাকাউন্ট আমদানি করা হচ্ছে…</string>
     <string name="initial_sync_start_importing_account_crypto">প্রাথমিক সিঙ্ক:
@@ -287,9 +221,5 @@
     <string name="notice_end_to_end_unknown_algorithm_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (অজানা অ্যালগরিদম %1$s )।</string>
 
     <string name="key_verification_request_fallback_message">%s আপনার কীটি যাচাই করার জন্য অনুরোধ করছে, তবে আপনার ক্লায়েন্ট ইন-চ্যাট কী যাচাইকরণ সমর্থন করে না। কীগুলি যাচাই করতে আপনাকে লিগ্যাসি কী যাচাইকরণ ব্যবহার করতে হবে।</string>
-
-    <string name="call_notification_answer">গ্রহণ</string>
-    <string name="call_notification_reject">পতন</string>
-    <string name="call_notification_hangup">বন্ধ করুন</string>
 
 </resources>

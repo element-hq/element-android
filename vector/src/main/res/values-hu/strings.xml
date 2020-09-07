@@ -799,9 +799,9 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
         <item quantity="other">%d szoba</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s szoba található ehhez: %2$s</item>
-	<item quantity="other">%1$s szoba található ehhez: %2$s</item>
-</plurals>
+        <item quantity="one">%1$s szoba található ehhez: %2$s</item>
+        <item quantity="other">%1$s szoba található ehhez: %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 olvasatlan üzenet</item>
         <item quantity="other">%d olvasatlan üzenet</item>
@@ -2073,9 +2073,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_active_sessions_unverified_device_desc">A munkamenet megbízhatónak való jelöléséhez és a titkosított üzenetekhez való hozzáférés engedélyezéséhez hitelesítsd azt. Ha nem te jelentkeztél be ebbe a munkamenetbe akkor lehetséges, hogy a fiókodat feltörték:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d aktív munkamenet</item>
-	<item quantity="other">%d aktív munkamenet</item>
-</plurals>
+        <item quantity="one">%d aktív munkamenet</item>
+        <item quantity="other">%d aktív munkamenet</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Munkamenet ellenőrzése</string>
     <string name="crosssigning_other_user_not_trust">Más felhasználók lehet, hogy nem bíznak benne</string>
@@ -2116,9 +2116,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">%d szavazat</item>
     </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d szavazat – Végeredmény</item>
-	<item quantity="other">%d szavazat – Végeredmény</item>
-</plurals>
+        <item quantity="one">%d szavazat – Végeredmény</item>
+        <item quantity="other">%d szavazat – Végeredmény</item>
+    </plurals>
     <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
     <string name="verification_cannot_access_other_session">Használd a visszaállítási eljárást</string>
@@ -2416,7 +2416,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="reset_secure_backup_warning">A jelenlegi Kulcsod vagy Jelmondatod ki lesz cserélve erre.</string>
 
     <string name="disabled_integration_dialog_title">Az integrációk ki vannak kapcsolva</string>
-<string name="play_video">Lejátszás</string>
+    <string name="play_video">Lejátszás</string>
     <string name="dismiss">Eltüntetés</string>
 
 
@@ -2456,16 +2456,16 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="disabled_integration_dialog_content">Ehhez kapcsold be az „Integrációk engedélyezését” a Beállításokban.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d kitiltott felhasználó</item>
-	<item quantity="other">%d kitiltott felhasználó</item>
-</plurals>
+        <item quantity="one">%d kitiltott felhasználó</item>
+        <item quantity="other">%d kitiltott felhasználó</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Kulcsok sikeresen exportálva</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d kulcs sikeresen importálva.</item>
-	<item quantity="other">%1$d/%2$d kulcs sikeresen importálva.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d kulcs sikeresen importálva.</item>
+        <item quantity="other">%1$d/%2$d kulcs sikeresen importálva.</item>
+    </plurals>
 
     <string name="active_widget_view_action">MEGTEKINTÉS</string>
     <string name="active_widgets_title">Aktív kisalkalmazások</string>
@@ -2488,9 +2488,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_show_unread_notifications_as_tab">Külön lap hozzáadása az olvasatlan értesítések számára a főképernyőn.</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s és még %3$d felhasználó olvasta</item>
-	<item quantity="other">%1$s, %2$s és még %3$d felhasználó olvasta</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s és még %3$d felhasználó olvasta</item>
+        <item quantity="other">%1$s, %2$s és még %3$d felhasználó olvasta</item>
+    </plurals>
     <string name="room_list_quick_actions_favorite_add">Hozzáadás a kedvencekhez</string>
     <string name="room_list_quick_actions_favorite_remove">Eltávolítás a kedvencek közül</string>
     <string name="notice_member_no_changes_by_you">Nem változtattál semmit</string>
@@ -2585,9 +2585,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="alert_push_are_disabled_title">A leküldéses értesítések ki vannak kapcsolva</string>
     <string name="alert_push_are_disabled_description">A leküldéses értesítések bekapcsolásához tekintse át a beállításait</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Hibás kód, %d próbálkozás van hátra</item>
-	<item quantity="other">Hibás kód, %d próbálkozás van hátra</item>
-</plurals>
+        <item quantity="one">Hibás kód, %d próbálkozás van hátra</item>
+        <item quantity="other">Hibás kód, %d próbálkozás van hátra</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Figyelem! Utolsó próbálkozási lehetőség a kiléptetés előtt!</string>
     <string name="too_many_pin_failures">Túl sok hiba, kiléptettünk</string>
     <string name="create_pin_title">Válassz biztonsági PIN-kódot</string>

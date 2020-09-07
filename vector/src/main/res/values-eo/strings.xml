@@ -602,11 +602,11 @@
     <string name="dismiss">Eksigi</string>
 
 
-<string name="no_permissions_to_start_conf_call">Vi ne havas permeson ekigi grupan vokon en ĉi tiu ĉambro</string>
+    <string name="no_permissions_to_start_conf_call">Vi ne havas permeson ekigi grupan vokon en ĉi tiu ĉambro</string>
     <string name="conference_call_in_progress">Grupa voko jam daŭras!</string>
     <string name="video_meeting">Komenci grupan vidvokon</string>
     <string name="audio_meeting">Komenci grupan voĉvokon</string>
     <string name="audio_video_meeting_description">Grupaj vokoj uzas la politikon de Jitsi pri permesoj kaj sekureco. Ĉiuj personoj en la ĉambro vidos aliĝilon dum la voko daŭros.</string>
     <string name="cannot_call_yourself">Vi ne povas voki sola</string>
     <string name="cannot_call_yourself_with_invite">Vi ne povas voki sola; atendu aliajn partoprenantojn</string>
-    </resources>
+</resources>

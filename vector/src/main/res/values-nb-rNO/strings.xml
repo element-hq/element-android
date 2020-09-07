@@ -729,7 +729,7 @@
     <string name="start_new_chat_prompt_msg">Er du sikker på du vil starte en samtale med %s\?</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på du vil starte en lydsamtale\?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på du vil starte en videosamtale\?</string>
-<string name="play_video">Spill av</string>
+    <string name="play_video">Spill av</string>
     <string name="pause_video">Pause</string>
     <string name="dismiss">Avslå</string>
 
@@ -794,9 +794,9 @@
     <string name="attachment_cancel_upload">Vil du avbryte opplastingen\?</string>
     <string name="room_info_room_name">Rommets navn</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktivt medlem</item>
-	<item quantity="other">%d aktive medlemmer</item>
-</plurals>
+        <item quantity="one">1 aktivt medlem</item>
+        <item quantity="other">%d aktive medlemmer</item>
+    </plurals>
     <string name="room_participants_leave_prompt_title">Forlat rommet</string>
     <string name="room_participants_ago">%1$s for %2$s siden</string>
 
@@ -817,15 +817,15 @@
     <string name="room_many_users_are_typing">%1$s, %2$s og andre skriver …</string>
     <string name="room_prompt_cancel">Avbryt alle</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 ny melding</item>
-	<item quantity="other">%d nye meldinger</item>
-</plurals>
+        <item quantity="one">1 ny melding</item>
+        <item quantity="other">%d nye meldinger</item>
+    </plurals>
 
     <string name="room_details_title">Romdetaljer</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 valgt</item>
-	<item quantity="other">%d valgte</item>
-</plurals>
+        <item quantity="one">1 valgt</item>
+        <item quantity="other">%d valgte</item>
+    </plurals>
     <string name="room_details_people_invited_group_name">INVITERT</string>
     <string name="tab_title_search_messages">MELDINGER</string>
     <string name="tab_title_search_files">FILER</string>
@@ -1027,4 +1027,4 @@
     <string name="auth_pin_title">Skriv inn PIN-koden din</string>
     <string name="auth_pin_forgot">Glemt PIN-koden\?</string>
     <string name="settings_security_pin_code_title">Skru på PIN-kode</string>
-    </resources>
+</resources>
