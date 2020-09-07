@@ -126,7 +126,7 @@
     <string name="send_bug_report_description_in_english">Mümkünse, lütfen yapacağınız açıklamayı İngilizce yazın.</string>
     <string name="send_bug_report_placeholder">Sorununu buraya yaz</string>
     <string name="send_bug_report_logs_description">Sorunları teşhis etmek için bu istemciden gelen sistem günlüğü (log) hata raporu ile gönderilecek. Bu hata raporu -sistem günlüğü ve ekran görüntülere dahil- halka açık bir şekilde görünür olmayacaktır. Eğer sadece alttaki yazıları göndermek istiyorsanız, lütfen şunun işaretini kaldırın:</string>
-    <string name="send_bug_report_alert_message">Telefonunu öfkeyle ile sallıyor gibi görünüyorsun. Hata raporu göndermek ister misin\?</string>
+    <string name="send_bug_report_alert_message">Telefonunu yılgınlıkla sallıyor gibi görünüyorsun. Hata raporu göndermek ister misin\?</string>
     <string name="send_bug_report_app_crashed">Uygulama en son çökmüştü, hata raporu göndermek ister misiniz\?</string>
     <string name="send_bug_report_rage_shake">Hata bildirmek için öfkeyle salla</string>
 
