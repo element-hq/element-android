@@ -2,7 +2,6 @@
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_room_invite_no_invitee">%s님의 초대</string>
-    <string name="verification_emoji_headphone">헤드폰</string>
     <string name="summary_user_sent_image">%1$s님이 사진을 보냈습니다.</string>
     <string name="summary_user_sent_sticker">%1$s님이 스티커를 보냈습니다.</string>
 
@@ -77,71 +76,6 @@
     </plurals>
 
     <string name="room_displayname_empty_room">빈 방</string>
-
-
-    <string name="verification_emoji_dog">개</string>
-    <string name="verification_emoji_cat">고양이</string>
-    <string name="verification_emoji_lion">사자</string>
-    <string name="verification_emoji_horse">말</string>
-    <string name="verification_emoji_unicorn">유니콘</string>
-    <string name="verification_emoji_pig">돼지</string>
-    <string name="verification_emoji_elephant">코끼리</string>
-    <string name="verification_emoji_rabbit">토끼</string>
-    <string name="verification_emoji_panda">판다</string>
-    <string name="verification_emoji_rooster">수탉</string>
-    <string name="verification_emoji_penguin">펭귄</string>
-    <string name="verification_emoji_turtle">거북</string>
-    <string name="verification_emoji_fish">물고기</string>
-    <string name="verification_emoji_octopus">문어</string>
-    <string name="verification_emoji_butterfly">나비</string>
-    <string name="verification_emoji_flower">꽃</string>
-    <string name="verification_emoji_tree">나무</string>
-    <string name="verification_emoji_cactus">선인장</string>
-    <string name="verification_emoji_mushroom">버섯</string>
-    <string name="verification_emoji_globe">지구본</string>
-    <string name="verification_emoji_moon">달</string>
-    <string name="verification_emoji_cloud">구름</string>
-    <string name="verification_emoji_fire">불</string>
-    <string name="verification_emoji_banana">바나나</string>
-    <string name="verification_emoji_apple">사과</string>
-    <string name="verification_emoji_strawberry">딸기</string>
-    <string name="verification_emoji_corn">옥수수</string>
-    <string name="verification_emoji_pizza">피자</string>
-    <string name="verification_emoji_cake">케이크</string>
-    <string name="verification_emoji_heart">하트</string>
-    <string name="verification_emoji_smiley">웃음</string>
-    <string name="verification_emoji_robot">로봇</string>
-    <string name="verification_emoji_hat">모자</string>
-    <string name="verification_emoji_glasses">안경</string>
-    <string name="verification_emoji_wrench">스패너</string>
-    <string name="verification_emoji_santa">산타클로스</string>
-    <string name="verification_emoji_thumbsup">좋아요</string>
-    <string name="verification_emoji_umbrella">우산</string>
-    <string name="verification_emoji_hourglass">모래시계</string>
-    <string name="verification_emoji_clock">시계</string>
-    <string name="verification_emoji_gift">선물</string>
-    <string name="verification_emoji_lightbulb">전구</string>
-    <string name="verification_emoji_book">책</string>
-    <string name="verification_emoji_pencil">연필</string>
-    <string name="verification_emoji_paperclip">클립</string>
-    <string name="verification_emoji_scissors">가위</string>
-    <string name="verification_emoji_lock">자물쇠</string>
-    <string name="verification_emoji_key">열쇠</string>
-    <string name="verification_emoji_hammer">망치</string>
-    <string name="verification_emoji_telephone">전화기</string>
-    <string name="verification_emoji_flag">깃발</string>
-    <string name="verification_emoji_train">기차</string>
-    <string name="verification_emoji_bicycle">자전거</string>
-    <string name="verification_emoji_airplane">비행기</string>
-    <string name="verification_emoji_rocket">로켓</string>
-    <string name="verification_emoji_trophy">트로피</string>
-    <string name="verification_emoji_ball">공</string>
-    <string name="verification_emoji_guitar">기타</string>
-    <string name="verification_emoji_trumpet">트럼펫</string>
-    <string name="verification_emoji_bell">종</string>
-    <string name="verification_emoji_anchor">닻</string>
-    <string name="verification_emoji_folder">폴더</string>
-    <string name="verification_emoji_pin">핀</string>
 
     <string name="initial_sync_start_importing_account">초기 동기화:
 \n계정 가져오는 중…</string>

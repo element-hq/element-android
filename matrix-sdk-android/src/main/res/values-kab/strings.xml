@@ -29,63 +29,6 @@
     <string name="message_failed_to_upload">Tegguma ad d-tali tugna</string>
 
     <string name="medium_email">Tansa n yimayl</string>
-    <string name="verification_emoji_dog">Aqjun</string>
-    <string name="verification_emoji_cat">Amcic</string>
-    <string name="verification_emoji_lion">Izem</string>
-    <string name="verification_emoji_horse">Aεewdiw</string>
-    <string name="verification_emoji_unicorn">Azara</string>
-    <string name="verification_emoji_pig">Ilef</string>
-    <string name="verification_emoji_elephant">Ilu</string>
-    <string name="verification_emoji_rabbit">Awtul</string>
-    <string name="verification_emoji_panda">Apunda</string>
-    <string name="verification_emoji_rooster">Ayaziḍ</string>
-    <string name="verification_emoji_penguin">Awarfus</string>
-    <string name="verification_emoji_turtle">Afekrun</string>
-    <string name="verification_emoji_fish">Lḥut</string>
-    <string name="verification_emoji_octopus">Azayz</string>
-    <string name="verification_emoji_butterfly">Aferteṭṭu</string>
-    <string name="verification_emoji_flower">Ajeǧǧig</string>
-    <string name="verification_emoji_tree">Aseklu</string>
-    <string name="verification_emoji_mushroom">Agersal</string>
-    <string name="verification_emoji_globe">Amaḍal</string>
-    <string name="verification_emoji_moon">Ayyur</string>
-    <string name="verification_emoji_cloud">Agu</string>
-    <string name="verification_emoji_fire">Times</string>
-    <string name="verification_emoji_banana">Tabanant</string>
-    <string name="verification_emoji_apple">Tatteffaḥt</string>
-    <string name="verification_emoji_strawberry">Tazwelt</string>
-    <string name="verification_emoji_corn">Akbal</string>
-    <string name="verification_emoji_pizza">Tapizzat</string>
-    <string name="verification_emoji_cake">Angul</string>
-    <string name="verification_emoji_heart">Ul</string>
-    <string name="verification_emoji_smiley">Acmumeḥ</string>
-    <string name="verification_emoji_robot">Aṛubut</string>
-    <string name="verification_emoji_hat">Acapun</string>
-    <string name="verification_emoji_glasses">Tisekkadin</string>
-    <string name="verification_emoji_santa">Santa</string>
-    <string name="verification_emoji_umbrella">Tasiwant</string>
-    <string name="verification_emoji_hourglass">Amasrag</string>
-    <string name="verification_emoji_clock">Tamrint</string>
-    <string name="verification_emoji_gift">Asefk</string>
-    <string name="verification_emoji_book">Adlis</string>
-    <string name="verification_emoji_pencil">Akeryun</string>
-    <string name="verification_emoji_scissors">Timqestin</string>
-    <string name="verification_emoji_lock">Sekkeṛ</string>
-    <string name="verification_emoji_key">Tasarut</string>
-    <string name="verification_emoji_hammer">Tafḍist</string>
-    <string name="verification_emoji_telephone">Tiliγri</string>
-    <string name="verification_emoji_flag">Anay</string>
-    <string name="verification_emoji_train">Tamacint</string>
-    <string name="verification_emoji_bicycle">Azlalam</string>
-    <string name="verification_emoji_rocket">Timeẓdit</string>
-    <string name="verification_emoji_ball">Balles</string>
-    <string name="verification_emoji_guitar">Tagitaṛt</string>
-    <string name="verification_emoji_trumpet">Lɣiḍa</string>
-    <string name="verification_emoji_bell">Anayna</string>
-    <string name="verification_emoji_anchor">Tamdeyt</string>
-    <string name="verification_emoji_headphone">Wennez</string>
-    <string name="verification_emoji_folder">Akaram</string>
-    <string name="verification_emoji_pin">Amessak</string>
 
     <string name="summary_user_sent_sticker">%1$s azen astiker.</string>
     <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ.</string>
@@ -190,17 +133,12 @@
         <item quantity="other">%1$s d %2$d wiyaḍ</item>
     </plurals>
 
-    <string name="verification_emoji_cactus">Akermus</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
 
     <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
 
     <string name="room_displayname_empty_room">Taxxamt tilemt</string>
 
-
-    <string name="verification_emoji_thumbsup">Adebbuz d asawen</string>
-    <string name="verification_emoji_lightbulb">Taftilt</string>
-    <string name="verification_emoji_airplane">Asafag</string>
     <string name="initial_sync_start_importing_account">Amtawi n tazwara:
 \nAktar n umiḍan…</string>
     <string name="initial_sync_start_importing_account_crypto">Amtawi n tazwara:
@@ -279,9 +217,6 @@
     <string name="notice_end_to_end_ok">%1$s yermed awgelhen seg yixef ɣer yixef.</string>
     <string name="notice_end_to_end_ok_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s yermed awgelhen seg yixef ɣer yixef (alguritm %2$s ur yettwassen ara).</string>
-    <string name="verification_emoji_wrench">Tasarut</string>
-    <string name="verification_emoji_paperclip">Tamessakt n lkaɣeḍ</string>
-    <string name="verification_emoji_trophy">Tarrazt</string>
     <string name="clear_timeline_send_queue">Sfeḍ tabdart n uraǧu n tuzzna</string>
 
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s issefsex tinubga n %2$s i tmerniwt ɣer texxamt. Tamentilt: %2$s</string>
