@@ -23,6 +23,7 @@ Bugfix 🐛:
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
  - Handle room, user and group links by the Element app (#1795)
+ - Update associated site domain (#1833)
  - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
  - Support for image compression on Android 10
