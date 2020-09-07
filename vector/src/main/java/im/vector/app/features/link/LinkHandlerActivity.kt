@@ -92,9 +92,11 @@ class LinkHandlerActivity : VectorBaseActivity() {
 
     private fun convertUriToPermalink(uri: Uri): String? {
         val path = SUPPORTED_PATHS.find { it in uri.toString() } ?: return null
+        // https://riot.im/develop/#/room/#element-android:matrix.org ->  https://matrix.to/#/#element-android:matrix.org
+        // https://app.element.io/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
         return uri
                 .toString()
-                .replace(uri.host + path, "$MATRIX_TO_HOST/#")
+                .replace(uri.toString().substring(0, uri.toString().indexOf(path) + path.length), "https://$MATRIX_TO_HOST/#")
     }
 
     private fun startPermalinkHandler(permalink: String) {
