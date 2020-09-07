@@ -31,17 +31,21 @@ class FontTagHandler : SimpleTagHandler() {
     override fun supportedTags() = listOf("font")
 
     override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any? {
-        val colorString = tag.attributes()["color"]?.let { parseColor(it) } ?: Color.BLACK
-        val bgColor = tag.attributes()["data-mx-bg-color"]
-        if(bgColor == null) {
-            return ForegroundColorSpan(colorString)
-        }
-        else {
-            return arrayOf(ForegroundColorSpan(colorString), BackgroundColorSpan(bgColor.let { parseColor(it) }))
+        val mxColorString = tag.attributes()["data-mx-color"]
+        val colorString = tag.attributes()["color"]
+        val mxBgColorString = tag.attributes()["data-mx-bg-color"]
+
+        val foregroundColor = mxColorString?.let { parseColor(it, Color.BLACK) } ?: colorString?.let { parseColor(it, Color.BLACK) } ?: Color.BLACK
+
+        if (mxBgColorString != null) {
+            val backgroundColor = parseColor(mxBgColorString, Color.TRANSPARENT)
+            return arrayOf(ForegroundColorSpan(foregroundColor), BackgroundColorSpan(backgroundColor))
+        } else {
+            return ForegroundColorSpan(foregroundColor)
         }
     }
 
-    private fun parseColor(colorName: String): Int {
+    private fun parseColor(colorName: String, failResult: Int): Int {
         try {
             return Color.parseColor(colorName)
         } catch (e: Exception) {
@@ -63,7 +67,7 @@ class FontTagHandler : SimpleTagHandler() {
                 "blue"    -> Color.BLUE
                 "orange"  -> Color.parseColor("#FFA500")
                 "navy"    -> Color.parseColor("#000080")
-                else      -> Color.BLACK
+                else      -> failResult
             }
         }
     }

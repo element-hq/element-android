@@ -41,7 +41,7 @@ Build 🧱:
 Other changes:
  - Use File extension functions to make code more concise (#1996)
  - Create a script to import SAS strings (#1909)
- - Support `data-mx-bg-color` attribute on `<font>` tags.
+ - Support `data-mx-[bg-]color` attributes on `<font>` tags.
 
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================
