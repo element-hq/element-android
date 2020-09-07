@@ -24,6 +24,7 @@ Bugfix 🐛:
  - Can't handle ongoing call events in background (#1992)
  - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
+ - Support for image compression on Android 10
  - Verification popup won't show
 
 Translations 🗣:
