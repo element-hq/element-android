@@ -157,7 +157,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
     companion object {
         private const val CONFIG_PATH_HS_PARAMETER = "hs_url"
 
-        private val SUPPORTED_HOSTS = arrayOf("app.element.io", "riot.im")
+        private val SUPPORTED_HOSTS = arrayOf("app.element.io", "riot.im", "develop.element.io", "staging.element.io")
         private val SUPPORTED_PATHS = arrayOf("/#/room", "/#/user", "/#/group")
         private const val MATRIX_TO_HOST = "matrix.to"
     }
