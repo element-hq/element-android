@@ -250,7 +250,7 @@
     <string name="permissions_rationale_msg_camera">Element benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen."</string>
+\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
     <string name="permissions_rationale_msg_record_audio">Element benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
@@ -825,7 +825,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 
     <string name="settings_flair">Community Avatare</string>
 
-    <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
+    <string name="send_bug_report_rage_shake">Schütteln, um einen Fehler zu melden</string>
 
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
@@ -904,7 +904,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 \nMöchtest du welche hinzufügen\?</string>
 
     <string name="settings_deactivate_account_section">Account deaktivieren</string>
-    <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
+    <string name="settings_deactivate_my_account">Deaktiviere meinen Account</string>
 
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
     <string name="settings_opt_in_of_analytics_summary">Element sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
@@ -1191,7 +1191,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="settings_noisy_notifications_preferences">Laute Benachrichtigungen einstellen</string>
     <string name="settings_call_notifications_preferences">Anrufbenachrichtigung einstellen</string>
-    <string name="settings_silent_notifications_preferences">Stumme Benachrichtigungen einstellen</string>
+    <string name="settings_silent_notifications_preferences">Lautlose Benachrichtigungen einstellen</string>
     <string name="settings_system_preferences_summary">Wähle LED-Farbe, Vibration, Ton…</string>
 
 
@@ -1407,7 +1407,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
 
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
-    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungs-Schlüssel an. 
+    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungsschlüssel an. 
 \nSitzungsname: %1$s 
 \nZuletzt gesehen: %2$s 
 \nWenn du dich nicht mit einer anderen Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
@@ -1652,7 +1652,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="disconnect_identity_server">Verbindung zum Identitätsserver trennen</string>
     <string name="add_identity_server">Identitätsserver konfigurieren</string>
     <string name="change_identity_server">Identitätsserver ändern</string>
-    <string name="settings_discovery_emails_title">Erkennbare E-Mail-Adressen</string>
+    <string name="settings_discovery_emails_title">Auffindbare E-Mail-Adressen</string>
     <string name="settings_discovery_no_mails">Erkennungsoptionen werden angezeigt, sobald du eine E-Mail hinzugefügt hast.</string>
     <string name="settings_discovery_mail_pending">ausstehend</string>
 
@@ -1714,11 +1714,11 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
-    <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
-    <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
+    <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
+    <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
     <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzer!n des Dienstes vertraust</string>
-    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
+    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
@@ -2108,7 +2108,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
 
 
-    <string name="encryption_information_cross_signing_state">Kreuz-Signierung</string>
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
     <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
@@ -2624,9 +2624,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
-    <string name="labs_merge_e2e_in_timeline">Fasse \"unable to decrypt\"-Fehler im Chatverlauf zu Hinweisen zusammen</string>
-    <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
-    <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
+    <string name="labs_merge_e2e_in_timeline">Fasse \"Nicht entschlüsselbar\"-Fehler im Chatverlauf zu Hinweisen zusammen</string>
+    <string name="settings_call_show_confirmation_dialog_title">Verhindere versehentliche Anrufe</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
     <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
     <string name="conference_call_in_progress">Es ist bereits eine Konferenz aktiv!</string>
@@ -2658,4 +2658,22 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
     <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
+<string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
+    <string name="settings_phone_number_empty">Deinem Konto wurde keine Telefonnummer hinzugefügt</string>
+    <string name="settings_emails">E-mail-Adressen</string>
+    <string name="settings_emails_empty">Deinem Konto wurde keine E-Mail hinzugefügt</string>
+    <string name="settings_phone_numbers">Telefonnummern</string>
+    <string name="settings_remove_three_pid_confirmation_content">%s entfernen\?</string>
+    <string name="error_threepid_auth_failed">Stelle sicher, dass du auf den Link in der E-Mail geklickt hast, die wir dir gesendet haben.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">E-Mail-Adressen und Telefonnummern</string>
+    <string name="settings_emails_and_phone_numbers_summary">Verwalte E-Mails und Telefonnummern, die mit deinem Matrix-Konto verknüpft sind</string>
+
+    <string name="settings_text_message_sent_hint">Code</string>
+    <string name="login_msisdn_notice">Verwende das internationale Format (Telefonnummer muss mit \'+\' beginnen)</string>
+    <string name="confirm_your_identity_quad_s">Bestätige deine Identität, indem du dieses Login verifizierst, um Zugriff auf verschlüsselte Nachrichten zu erhalten.</string>
+    <string name="error_sso_flow_not_supported_yet">Leider ist dieser Vorgang für Konten, die über Single Sign-On verbunden sind, noch nicht möglich.</string>
+
+    <string name="error_opening_banned_room">Raum, indem du gebannt wurdest, kann nicht geöffnet werden.</string>
+    <string name="room_error_not_found">Raum kann nicht gefunden werden. Stelle sicher, dass er existiert.</string>
 </resources>
