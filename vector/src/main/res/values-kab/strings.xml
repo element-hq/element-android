@@ -1,0 +1,1328 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">kab</string>
+    <string name="resources_country_code">DZ</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Asentel aceɛlal</string>
+    <string name="dark_theme">Asentel n yiḍ</string>
+    <string name="black_them">Asentel aberkan</string>
+    <string name="notification_sync_init">Awennez n umeẓlu</string>
+    <string name="title_activity_home">Iznan</string>
+    <string name="title_activity_room">Taxxamt</string>
+    <string name="title_activity_settings">Iɣewwaren</string>
+    <string name="title_activity_historical">Amazray</string>
+    <string name="title_activity_verify_device">Asenqed n tɣimit</string>
+
+    <string name="are_you_sure">Tebɣiḍ s tidet\?</string>
+    <string name="loading">Asali…</string>
+
+    <string name="ok">IH</string>
+    <string name="cancel">Sefsex</string>
+    <string name="save">Sekles</string>
+    <string name="leave">Ffeɣ</string>
+    <string name="send">Azen</string>
+    <string name="copy">Nɣel</string>
+    <string name="resend">Ɛawed azen</string>
+    <string name="redact">Sfeḍ</string>
+    <string name="quote">Tanebdurt</string>
+    <string name="download">Sader</string>
+    <string name="share">Bḍu</string>
+    <string name="later">Ticki</string>
+    <string name="view_source">Wali aɣbalu</string>
+    <string name="delete">Kkes</string>
+    <string name="rename">Beddel isem</string>
+    <string name="none">Ula yiwen</string>
+    <string name="revoke">Ḥwi</string>
+    <string name="disconnect">Ffeɣ seg tuqqna</string>
+    <string name="active_call">Asiwel urmid</string>
+    <string name="play_video">Ɣeṛ</string>
+    <string name="dismiss">Agi</string>
+
+
+    <string name="no_permissions_to_start_conf_call">Ur tesεiḍ ara tisirag ad tebduḍ asireg s usiwel deg texxamt-a</string>
+    <string name="failed_to_remove_widget">Tukksa n uwiǧit ur teddi ara</string>
+    <string name="or">neɣ</string>
+    <string name="invite">Nced</string>
+    <string name="offline">Beṛṛa n tuqqna</string>
+    <string name="accept">Qbel</string>
+    <string name="skip">Zgel</string>
+    <string name="done">Immed</string>
+    <string name="abort">Sefsex</string>
+    <string name="ignore">Ttu</string>
+    <string name="review">Senqed</string>
+    <string name="decline">Agwi</string>
+
+    <string name="action_exit">Ffeɣ</string>
+    <string name="actions">Tigawin</string>
+    <string name="action_sign_out">Ffeɣ seg tuqqna</string>
+    <string name="action_mark_all_as_read">Creḍ kullec yettwaɣra</string>
+    <string name="action_historical">Amazray</string>
+    <string name="action_open">Ldi</string>
+    <string name="action_close">Mdel</string>
+    <string name="action_copy">Nɣel</string>
+    <string name="disable">Sens</string>
+
+    <string name="dialog_title_confirmation">Asentem</string>
+    <string name="dialog_title_warning">Asmigel</string>
+    <string name="dialog_title_error">Tuccḍa</string>
+    <string name="dialog_title_success">Yedda</string>
+
+    <string name="bottom_action_home">Agejdan</string>
+    <string name="bottom_action_notification">Ilɣa</string>
+    <string name="bottom_action_favourites">Ismenyifen</string>
+    <string name="bottom_action_people">Imdanen</string>
+    <string name="bottom_action_rooms">Timɣiwent</string>
+    <string name="bottom_action_groups">Timɣiwnin</string>
+
+    <string name="invitations_header">Inced-d</string>
+    <string name="low_priority_header">Tazwart taddayt</string>
+    <string name="system_alerts_header">Ilɣa n unagraw</string>
+
+    <string name="no_result_placeholder">Ulac igmad</string>
+    <string name="rooms_header">Timɣiwent</string>
+    <string name="rooms_directory_header">Akaram n texxamt</string>
+    <string name="groups_invite_header">Nced</string>
+    <string name="groups_header">Timɣiwnin</string>
+    <string name="send_bug_report_include_logs">Azen iɣmisen</string>
+    <string name="join_room">Rnu ɣer texxamt</string>
+    <string name="username">Isem n useqdac</string>
+    <string name="create_account">Rnu amiḍan</string>
+    <string name="logout">Ffeɣ seg tuqqna</string>
+    <string name="identity_url">URL n uqeddac n timagit</string>
+    <string name="search">Nadi</string>
+
+    <string name="call_failed_no_ice_title">Ur yeddi ara usiwel ssebba n uqeddac ur nettuswel ara akken iwata</string>
+    <string name="sound_device_phone">Tiliɣri</string>
+    <string name="call_camera_back">Uɣal ɣer deffir</string>
+    <string name="auth_login_sso">Qqen s unekcum asuf</string>
+    <string name="auth_register">Rnu amiḍan</string>
+    <string name="auth_submit">Azen</string>
+    <string name="auth_skip">Zgel</string>
+    <string name="auth_send_reset_email">Azen imayl n uwennez</string>
+    <string name="auth_return_to_login">Uɣal ɣer ugdil n tuqqna</string>
+    <string name="auth_password_placeholder">Awal uffir</string>
+    <string name="auth_new_password_placeholder">Awal uffir amaynut</string>
+    <string name="auth_email_placeholder">Tansa n yimayl</string>
+    <string name="auth_reset_password_next_step_button">Sneqdeɣ tansa-inu n yimayl</string>
+    <string name="auth_reset_password_missing_password">Awal uffir amaynut ilaq ad yettusekcem.</string>
+    <string name="auth_reset_password_error_unauthorized">Asenqed n tansa n yimayl ur yeddi ara: wali ma yella tsateḍ ɣef useɣwen yellan deg yimayl</string>
+    <string name="e2e_re_request_encryption_key_sent">Asuter n tsarut yettwazen.</string>
+
+    <string name="compression_opt_list_original">Aneẓli</string>
+    <string name="compression_opt_list_medium">Alemmas</string>
+    <string name="yesterday">Iḍelli</string>
+    <string name="today">Ass-a</string>
+
+    <string name="settings_call_category">Isawalen</string>
+    <string name="call_ended">Asiwel yekfa</string>
+    <string name="permissions_rationale_popup_title">Talɣut</string>
+    <string name="yes">IH</string>
+    <string name="_continue">Kemmel</string>
+
+    <string name="remove">Sfeḍ</string>
+    <string name="join">Rnu</string>
+    <string name="preview">Taskant</string>
+    <string name="reject">Agi</string>
+
+    <string name="room_participants_leave_prompt_title">Ffeɣ seg texxamt</string>
+    <string name="room_participants_create">Snulfu-d</string>
+
+    <string name="room_participants_online">Srid</string>
+    <string name="room_participants_offline">Beṛṛa n tuqqna</string>
+    <string name="room_participants_idle">Arurmid</string>
+    <string name="room_participants_header_direct_chats">Iznan usligen</string>
+    <string name="room_participants_action_invite">Nced</string>
+    <string name="room_participants_action_ban">Agi</string>
+    <string name="room_participants_action_unban">Asefsex n tigtin</string>
+    <string name="room_participants_action_kick">Suffeɣ</string>
+    <string name="room_participants_action_mention">Abder</string>
+    <string name="room_participants_power_level_demote_warning_title">Ṣubb deg usellun-ik·im\?</string>
+    <string name="room_participants_power_level_demote">Ṣubb deg usellun</string>
+
+
+    <string name="room_participants_action_ignore">Ttu</string>
+
+    <string name="reason_hint">Taɣẓint</string>
+
+    <string name="room_menu_search">Nadi</string>
+    <string name="room_message_placeholder_encrypted">Azen izen yettuwgelhen…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Azen tiririt yettuwgelhen…</string>
+    <string name="room_do_not_have_permission_to_post">Ur tesεiḍ ara tasiregt ad d-tsuffɣeḍ deg texxamt-a</string>
+    <string name="ssl_trust">Ittkel</string>
+    <string name="ssl_logout_account">Tuffɣa</string>
+    <string name="ssl_remain_offline">Ttu</string>
+    <string name="room_details_people">Imdanen</string>
+    <string name="room_details_files">Ifuyla</string>
+    <string name="room_details_settings">Iɣewwaren</string>
+    <string name="search_hint">Nadi</string>
+    <string name="search_members_hint">Sizdeg iɛeggalen n texxamt</string>
+    <string name="search_no_results">Ulac igmad</string>
+    <string name="room_recents_start_chat">Bdu adiwenni</string>
+    <string name="room_recents_create_room">Rnu taxxamt</string>
+    <string name="room_settings_all_messages_noisy">Iznan i meṛṛa (sɛan ṣṣut)</string>
+    <string name="room_settings_all_messages">Iznan i meṛṛa</string>
+    <string name="room_settings_mute">Sens imesli</string>
+    <string name="room_settings_favourite">Asmenyif</string>
+    <string name="room_settings_direct_chat">Adiwenni uslig</string>
+    <string name="room_sliding_menu_messages">Iznan</string>
+    <string name="room_sliding_menu_settings">Iɣewwaren</string>
+    <string name="room_sliding_menu_version">Lqem</string>
+    <string name="room_sliding_menu_version_x">Lqem %s</string>
+    <string name="room_sliding_menu_copyright">Izerfan ttwaḥerzen</string>
+    <string name="settings_display_name">Sken isem</string>
+    <string name="settings_email_address">Imayl</string>
+    <string name="settings_phone_number">Tiliɣri</string>
+    <string name="settings_add_phone_number">Rnu uṭṭun n tiliɣri</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Rmed</string>
+
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Rmed</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Rnu amiḍan</string>
+
+    <string name="settings_notification_privacy_normal">Amagnu</string>
+    <string name="settings_notification_ringtone">Imesli i yilɣa</string>
+    <string name="settings_enable_all_notif">Sens ilɣa i umiḍan-a</string>
+    <string name="settings_messages_sent_by_bot">Iznan yettwaznen s Bot</string>
+
+    <string name="settings_version">Lqem</string>
+    <string name="settings_copyright">Izerfan ttwaḥerzen</string>
+    <string name="settings_notifications">Ilɣa</string>
+    <string name="settings_ignored_users">Iseqdacen yettunfen</string>
+    <string name="settings_other">Nniḍen</string>
+    <string name="settings_advanced">Talqayt</string>
+    <string name="settings_cryptography">Awgelhan</string>
+    <string name="settings_send_typing_notifs">Azen ilɣa yettuszemlen</string>
+    <string name="settings_secure_backup_manage">Sefrek</string>
+    <string name="settings_deactivate_account_section">Sens amiḍan</string>
+    <string name="settings_discovery_category">Tagrut</string>
+    <string name="settings_analytics">Tiselḍin</string>
+    <string name="settings_opt_in_of_analytics">Azen isefka n tesleḍt</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Isem azayez</string>
+    <string name="devices_details_last_seen_title">Timeẓri taneggarut</string>
+    <string name="devices_delete_dialog_title">Asesteb</string>
+    <string name="devices_delete_pswd">Awal uffir:</string>
+    <string name="devices_delete_submit_button_label">Azen</string>
+
+    <string name="settings_logged_in">Iqqen am</string>
+    <string name="settings_identity_server">Aqeddac n timagit</string>
+    <string name="settings_integration_manager">Amsefrak n umsidef</string>
+
+    <string name="disabled_integration_dialog_title">Imsidaf ttwasensen</string>
+    <string name="settings_user_interface">Agrudem n useqdac</string>
+    <string name="settings_interface_language">Tutlayt</string>
+    <string name="account_email_validation_title">Asenqed yettṛaǧu</string>
+    <string name="account_email_validation_message">Ma ulac aɣilif, senqed imayl-ik/im syen sit ɣef useɣwen i yellan. Akken ara yemmed waya, sit ad tkemmleḍ.</string>
+    <string name="settings_password">Awal uffir</string>
+    <string name="settings_change_password">Beddel awal n uffir</string>
+    <string name="settings_old_password">Awal uffir amiran</string>
+    <string name="settings_new_password">Awal uffir amaynut</string>
+    <string name="settings_phone_number_code">Tangalt</string>
+    <string name="compression_opt_list_choose">Fren</string>
+    <string name="media_source_choose">Fren</string>
+    <string name="settings_flair">Lbenna</string>
+    <string name="media_saving_period_forever">Yal tikkelt</string>
+
+    <string name="room_settings_room_name">Isem n texxamt</string>
+    <string name="room_settings_tag_pref_entry_favourite">Asmenyif</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Tazwart taddayt</string>
+    <string name="room_settings_tag_pref_entry_none">Ula yiwen</string>
+
+    <string name="room_settings_room_notifications_title">Ilɣa</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Anwa i izemren ad d-iɣer amazray\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Anwa i izemren ad d-yernu ɣer texxamt-a\?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Yal yiwen</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Iɛeggalen kan (segmi yebda ufran n textiṛit-a)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Iɛeggalen kan (segmi ara d-ttwanecden)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Iɛeggalen kan (segmi ara d-ttwarnun)</string>
+
+    <string name="room_settings_room_access_entry_only_invited">Ala imdanen i d-yettusnubegten</string>
+    <string name="room_settings_banned_users_title">Iseqdacen i yettwagin</string>
+    <string name="room_settings_category_advanced_title">Talqayt</string>
+    <string name="room_settings_labs_pref_title">Tinarimin</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Asulay n temɣiwent d arussin</string>
+    <string name="settings_theme">Asentel</string>
+
+    <string name="encryption_information_session_id">Asulay n tqimit</string>
+    <string name="encryption_information_device_id">Asulay n tqimit</string>
+    <string name="encryption_information_device_key">Tasarut n tɣimit</string>
+    <string name="encryption_information_verification">Asenqed</string>
+    <string name="encryption_export_e2e_room_keys">Sifeḍ tisura n texxamt E2E</string>
+    <string name="encryption_export_room_keys">Sifeḍ tisura n texxamt</string>
+    <string name="encryption_export_export">Sifeḍ</string>
+    <string name="encryption_import_e2e_room_keys">Kter tisura n texxamt E2E</string>
+    <string name="encryption_import_room_keys">Kter tisura n texxamt</string>
+    <string name="encryption_import_import">Kter</string>
+    <string name="encryption_information_verified">Yettwasenqed</string>
+    <string name="encryption_information_none">ulac</string>
+
+    <string name="encryption_information_verify">Senqed</string>
+    <string name="encryption_information_block">Tabdart taberkant</string>
+    <string name="encryption_information_verify_device">Asenqed n tɣimit</string>
+    <string name="directory_server_placeholder">URL n uqeddac agejdan</string>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d n ulɣu</item>
+        <item quantity="other">%d n ilɣa</item>
+    </plurals>
+
+    <string name="notification_unknown_room_name">Taxxamt</string>
+    <string name="notification_sender_me">Nek</string>
+    <string name="font_size">Tuɣzi n tsefsit</string>
+    <string name="normal">Amagnu</string>
+    <string name="room_widget_permission_display_name">Isem-ik·im yettwaskanen</string>
+    <string name="room_widget_permission_avatar_url">URL n avatar-inek·inem</string>
+    <string name="room_widget_permission_user_id">Asulay-ik·m n useqdac</string>
+    <string name="room_widget_permission_theme">Asentel-inek·inem</string>
+    <string name="room_widget_permission_widget_id">Asulay n yiwiǧit</string>
+    <string name="room_widget_permission_room_id">Asulay n texxamt</string>
+
+
+    <string name="room_widget_resource_grant_permission">Sireg</string>
+    <string name="widget_integration_unable_to_create">Timerna n uwiǧit ulamek.</string>
+    <string name="widget_integration_failed_to_send_request">Tuzna n usuter ur teddi ara.</string>
+    <string name="widget_integration_positive_power_level">Ilaq ad yili uswir n tezmert d ummid ufrir.</string>
+    <string name="widget_integration_must_be_in_room">Ulac-ik/ikem deg texxamt-a.</string>
+    <string name="widget_integration_no_permission_in_room">Ur tesεiḍ ara tasiregt ad tgeḍ ayagi deg texxamt-a.</string>
+    <string name="room_manage_integrations">Sefrek imsidaf</string>
+    <string name="start_verification_short_label">Senqed</string>
+    <string name="share_without_verifying_short_label">Bḍu</string>
+    <string name="ignore_request_short_label">Ttu</string>
+
+    <string name="conference_call_warning_title">Ɣur-k·m!</string>
+    <string name="command_error">Tuccḍa n tladna</string>
+    <string name="command_description_emote">Yeskan tigawt</string>
+    <string name="command_description_ban_user">Agi aseqdac s usulay i d-yettunefken</string>
+    <string name="command_description_op_user">Sbadu aswir iǧehden n useqdac</string>
+    <string name="command_description_deop_user">Aseqdac Deops s usulay i d-yettunefken</string>
+    <string name="command_description_invite_user">Inced iseqdacen s tikci n usulay i texxamt tamirant</string>
+    <string name="command_description_part_room">Ffeɣ seg texxamt</string>
+    <string name="command_description_kick_user">Suffeɣ aseqdac s usulay i d-yettunefken</string>
+    <string name="command_description_nick">Ibeddel isem-inek·inem yettwaskanen</string>
+    <string name="notification_off">Insa</string>
+    <string name="create">Snulfu-d</string>
+    <string name="create_community">Rnu tamɣiwent</string>
+    <string name="community_name_hint">Amedya</string>
+    <string name="community_id_hint">amedya</string>
+
+    <string name="group_details_home">Agejdan</string>
+    <string name="group_details_people">Imdanen</string>
+    <string name="group_details_rooms">Timɣiwent</string>
+    <string name="rooms">Timɣiwent</string>
+    <string name="invited">Yettwancad</string>
+    <string name="forget_room">Tettuḍ taxxamt</string>
+
+    <string name="deactivate_account_title">Sens amiḍan</string>
+    <string name="deactivate_account_submit">Sens amiḍan</string>
+
+    <string name="resource_limit_hard_default">Aqeddac-a agejdan iɛedda yiwet seg tlisa-ines tiɣbula.</string>
+
+    <string name="resource_limit_hard_mau">Aqeddac-a agejdan yewweḍ ɣer talast n useqdac urmid n wayyur.</string>
+
+    <string name="merged_events_expand">snefli</string>
+    <string name="merged_events_collapse">fneẓ</string>
+
+    <string name="show_info_area_always">Yal ass</string>
+    <string name="passphrase_confirm_passphrase">Sentem tafyirt tuffirt</string>
+    <string name="passphrase_enter_passphrase">Sekcem tafyirt tuffirt</string>
+    <string name="keys_backup_setup">Bdu aseqdec n uḥraz n tsarut</string>
+    <string name="keys_backup_setup_step1_manual_export">Sifeḍ s ufus tisura</string>
+
+    <string name="keys_backup_setup_step3_button_title">Immed</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Bḍu</string>
+    <string name="keys_backup_setup_override_replace">Semselsi</string>
+    <string name="keys_backup_setup_skip_title">Tebɣiḍ s tidet\?</string>
+    <string name="keys_backup_settings_restore_backup_button">Tiririt seg uḥraz</string>
+    <string name="keys_backup_settings_delete_backup_button">Kkes aḥraz</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Kkes aḥraz</string>
+    <string name="keys_backup_banner_setup_line2">Bdu aseqdec n uḥraz n tsarut</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Akk tisura ttwaḥerzent</string>
+    <string name="keys_backup_info_title_version">Lqem</string>
+    <string name="sas_incoming_request_title">Tuttra n usenqed i d-ikecmen</string>
+    <string name="sas_verified">Yettwasenqed!</string>
+    <string name="sas_verified_successful_description">Iznan iɣellsanen akked useqdac-a ttwawgelhen seg yixef ɣer yixef yerna yiwen ur yezmir ad ten-iɣeṛ.</string>
+    <string name="sas_got_it">Awi-t</string>
+
+    <string name="sas_incoming_request_notif_title">Asuter n usenqed</string>
+    <string name="edit">Ẓreg</string>
+    <string name="reply">Err</string>
+
+    <string name="global_retry">Ɛreḍ tikkelt-nniḍen</string>
+    <string name="room_list_rooms_empty_title">Timɣiwent</string>
+    <string name="event_redacted">Izen yettwakksen</string>
+    <string name="settings_show_redacted_summary">Sken-d iznan yettwakksen</string>
+    <string name="action_change">Beddel</string>
+    <string name="fab_menu_create_room">Timɣiwent</string>
+    <string name="fab_menu_create_chat">Iznan usligen</string>
+
+    <string name="create_room_directory_title">Akaram n texxamt</string>
+    <string name="settings_general_title">Amatu</string>
+    <string name="settings_preferences">Ismenyifen</string>
+    <string name="settings_security_and_privacy">Taɣellist &amp; tbaḍnit</string>
+    <string name="preference_voice_and_video">Ameslaw &amp; Tavidyut</string>
+    <string name="preference_root_help_about">Tallalt &amp; Ɣef</string>
+
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Sken-d ineḍruyen yeffren deg uzray</string>
+
+    <string name="bottom_action_people_x">Iznan usligen</string>
+
+    <string name="terms_of_service">Tiwtilin n useqdec</string>
+    <string name="change_identity_server">Snifel aqeddac n timagit</string>
+    <string name="attachment_type_file">Afaylu</string>
+    <string name="attachment_type_contact">Anermis</string>
+    <string name="attachment_type_camera">Takamiṛatt</string>
+    <string name="attachment_type_gallery">Timidelt</string>
+    <string name="room_list_quick_actions_notifications_all_noisy">Iznan i meṛṛa (sɛan ṣṣut)</string>
+    <string name="room_list_quick_actions_notifications_all">Iznan i meṛṛa</string>
+    <string name="room_list_quick_actions_notifications_mute">Sens imesli</string>
+    <string name="room_list_quick_actions_settings">Iɣewwaren</string>
+    <string name="room_list_quick_actions_favorite_add">Rnu inurifen</string>
+    <string name="room_list_quick_actions_favorite_remove">Kkes seg yinuraf</string>
+    <string name="login_splash_submit">Aha bdu tura</string>
+
+    <string name="login_server_other_title">Nniḍen</string>
+    <string name="login_continue">Kemmel</string>
+    <string name="login_signup">Jerred</string>
+    <string name="login_signin">Kcem</string>
+    <string name="login_reset_password_submit">Γer sdat</string>
+    <string name="login_reset_password_email_hint">Imayl</string>
+    <string name="login_reset_password_password_hint">Awal uffir amaynut</string>
+
+    <string name="login_reset_password_warning_title">Ɣur-k·m!</string>
+    <string name="login_reset_password_warning_submit">Kemmel</string>
+
+    <string name="login_reset_password_mail_confirmation_submit">Sneqdeɣ tansa-inu n yimayl</string>
+
+    <string name="login_reset_password_success_title">Tammug akken iwata!</string>
+    <string name="login_reset_password_success_notice">Awal uffir-inek/inem yettuwennez.</string>
+    <string name="login_reset_password_cancel_confirmation_title">Asmigel</string>
+    <string name="login_set_email_mandatory_hint">Imayl</string>
+    <string name="login_set_email_optional_hint">Imayl (Afrayan)</string>
+    <string name="login_set_email_submit">Γer sdat</string>
+
+    <string name="login_set_msisdn_submit">Γer sdat</string>
+
+    <string name="login_msisdn_confirm_submit">Γer sdat</string>
+
+    <string name="login_signup_username_hint">Isem n useqdac</string>
+    <string name="login_signup_password_hint">Awal uffir</string>
+    <string name="login_signup_submit">Γer sdat</string>
+    <string name="login_signup_cancel_confirmation_title">Asmigel</string>
+    <string name="login_signin_matrix_id_hint">Asulay n Matrix</string>
+    <string name="soft_logout_signin_title">Qqen</string>
+    <string name="soft_logout_signin_submit">Qqen</string>
+    <string name="soft_logout_signin_password_hint">Awal uffir</string>
+    <string name="soft_logout_clear_data_title">Sfeḍ isefka udmawanen</string>
+    <string name="soft_logout_clear_data_submit">Sfeḍ meṛṛa isefka</string>
+
+    <string name="settings">Iɣewwaren</string>
+    <string name="command_description_shrug">Yerna ¯\\_(ツ)_/¯ ɣer yizen n uḍris arewway</string>
+
+    <string name="verification_sas_match">Msaḍan</string>
+    <string name="verification_sas_do_not_match">Ur msaḍan ara</string>
+    <string name="sent_a_file">Afaylu</string>
+    <string name="verification_request_you_cancelled">Tesfesxeḍ</string>
+    <string name="verification_request_you_accepted">Tqebleḍ</string>
+    <string name="verification_request">Asuter n usenqed</string>
+    <string name="verification_verify_device">Asenqed n tɣimit</string>
+    <string name="room_profile_section_security">Taɣellist</string>
+    <string name="room_profile_section_more_notifications">Ilɣa</string>
+    <string name="room_profile_section_more_leave">Ffeɣ seg texxamt</string>
+    <string name="room_member_power_level_admins">Inedbalen</string>
+    <string name="room_member_power_level_custom">Sagen</string>
+    <string name="room_member_power_level_invites">Inced-d</string>
+    <string name="room_member_power_level_users">Iseqdacen</string>
+
+    <string name="room_member_jump_to_read_receipt">Ɛeddi ɣer tɣuri n wawwaḍ</string>
+
+    <string name="settings_category_timeline">Amazray</string>
+
+    <string name="room_settings_enable_encryption">Awgelhen seg yixef ɣer yixef ur yeddi ara</string>
+    <string name="room_settings_enable_encryption_dialog_title">Rmed awgelhen\?</string>
+    <string name="crosssigning_verify_this_session">Senqed anekcam-a</string>
+    <string name="crosssigning_other_user_not_trust">Iseqdacen-nniḍen yezmer ur tettamnen ara</string>
+    <string name="verification_profile_verify">Senqed</string>
+    <string name="verification_profile_verified">Yettwasenqed</string>
+    <string name="verification_profile_warning">Asmigel</string>
+
+    <string name="trusted">Yettwattkal</string>
+    <string name="not_trusted">Ur yettwattkal ara</string>
+
+    <string name="reset_cross_signing">Ales awennez n tsura</string>
+
+    <string name="qr_code_scanned_by_other_yes">Ih</string>
+    <string name="qr_code_scanned_by_other_no">Uhu</string>
+
+    <string name="delete_event_dialog_title">Sentem tukksa</string>
+    <string name="refresh">Smiren</string>
+
+    <string name="new_session">Anekcam amaynut. D kečč/kemm\?</string>
+    <string name="your_recovery_key">Tasarut-ik·im n uɛeddi</string>
+    <string name="finish">Fakk</string>
+
+    <string name="encryption_enabled">Awgelhen ur yeddi ara</string>
+    <string name="encryption_not_enabled">Awgelhen ur yermid ara</string>
+    <string name="settings_messages_at_room">Iznan ideg yella @taxxamt</string>
+    <string name="settings_messages_in_e2e_one_to_one">Iznan yettwawgelhen deg yidiwenniyen usriden</string>
+    <string name="settings_messages_in_e2e_group_chat">Iznan yettwawgelhen deg yidiwenniyen n ugraw</string>
+    <string name="settings_when_rooms_are_upgraded">Mi ara ttwaleqqment texxamin</string>
+    <string name="command_description_plain">Yuzen izen d aḍris aččuran war ma isegza-t s tukksa n tecreḍt</string>
+
+    <string name="auth_invalid_login_deactivated_account">Amiḍan-a yettuḥbes.</string>
+
+    <string name="upgrade_security">Yella uleqqem n uwgelhen</string>
+    <string name="security_prompt_text">Senqed iman-ik•im d wiyaḍ akken ad qqimen yidiwenniyen-ik•im d iɣellsanen</string>
+
+    <string name="use_recovery_key">Seqdec tasarut n uɛeddi</string>
+    <string name="unencrypted">Ur yettwawgelhen ara</string>
+    <string name="review_logins">Senqed ansi i d-tkecmeḍ</string>
+    <string name="verify_other_sessions">Senqed akk tiqimiyin-ik·im i wakken ad tḍemneḍ amiḍan-ik·m &amp; yiznan d iɣelsanen</string>
+    <string name="cross_signing_verify_by_text">Senqed s ufus s ttawil n uḍris</string>
+    <string name="identity_server_set_alternative_submit">Azen</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Sbadu</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">Sekles tasarut-ik·im n tɣellist</string>
+    <string name="set_a_security_phrase_title">Sbadu tafyirt taɣelsant</string>
+    <string name="save_your_security_key_title">Sekles tasarut-ik·im n tɣellist</string>
+    <string name="room_settings_name_hint">Isem n texxamt</string>
+    <string name="element_disclaimer_title">Tura, Riot d aferdis!</string>
+    <string name="three_pid_revoke_invite_dialog_title">Sefesex tinnubga</string>
+    <string name="status_theme">Asent status.iml</string>
+
+    <string name="notification_sync_in_progress">Amtawi…</string>
+    <string name="notification_listening_for_events">Timesliwt i yineḍruyen</string>
+    <string name="notification_silent_notifications">Ilɣa s tsusmi</string>
+
+    <string name="title_activity_member_details">Talqayt n uɛeggal</string>
+    <string name="title_activity_bug_report">Aneqqis n wabug</string>
+    <string name="title_activity_group_details">Talqayt n temɣiwent</string>
+    <string name="title_activity_choose_sticker">Azen astiker</string>
+    <string name="title_activity_keys_backup_setup">Aḥraz n tsarut</string>
+    <string name="title_activity_keys_backup_restore">Aḥraz n tsarut n useqdac</string>
+    <string name="keys_backup_is_not_finished_please_wait">Aḥraz n tsura ur yemmid ara, ttxil-k·m ṛǧu…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ad tesruḥeḍ iznan-ik•im yettwawgelhen ma teffɣeḍ tura</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Akles n tsura yetteddu. Ma teffɣeḍ tura, ad tesruḥeḍ anekcum ɣer yiznan-ik•im yettwawgelhen.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Akles aɣellsan n tsura ilaq ad yermed deg tɣimiyin-ik•im akk akken ur tesruḥuḍ ara anekcum ɣer yiznan-ik•im yettwawgelhen.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ur bɣiɣ ara iznan-iw yettwawgelhen</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Akles n tsura…</string>
+    <string name="keys_backup_activate">Aḥraz n tsarut n useqdac</string>
+    <string name="backup">Aḥraz</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ad tesruḥeḍ anekcum ɣer yiznan-ik•im yettwawgelhen anagar ma tkelseḍ tisura-inek•inem send tuffɣa.</string>
+    <string name="stay">Qqim</string>
+    <string name="speak">Mmeslay</string>
+    <string name="clear">Sfeḍ</string>
+    <string name="forward">Ɣer sdat</string>
+    <string name="permalink">Aseɣwen imezgi</string>
+    <string name="view_decrypted_source">Senqed taɣbalut tawgelhent</string>
+    <string name="report_content">Agbur n uneqqis</string>
+    <string name="ongoing_conference_call_voice">Taɣect</string>
+    <string name="ongoing_conference_call_video">Ividyuten</string>
+    <string name="cannot_start_call">Ulamek ad yebdu usiwel, ttxil ɛreḍ ticki</string>
+    <string name="conference_call_in_progress">Asarag ha-t-an itteddu!</string>
+    <string name="video_meeting">Bdu timlilit s tvidyut</string>
+    <string name="audio_meeting">Bdu timlilit tameslawt</string>
+    <string name="audio_video_meeting_description">Timlilit s useqdec n tsertiyin n tɣellist d tsiregt n Jitsi. Medden akk i yellan deg texxamt ad ẓren tinubga i tmerniwt mi ara d-teḍru temlilit.</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ulamek ad yebdu usiwel</string>
+    <string name="cannot_call_yourself">Ur tezmireḍ ara ad tesɛeddiḍ asiwel i yima-ik•im</string>
+    <string name="cannot_call_yourself_with_invite">Ur tezmireḍ ara ad tesɛeddiḍ asiwel i yiman-ik•im, rǧu ad qeblen yimettekkiyen tinubga</string>
+    <string name="device_information">Talɣut ɣef tɣimit</string>
+    <string name="failed_to_add_widget">Timerniwt n uwiǧit ur teddi ara</string>
+    <string name="encrypted_message">Izen yettwawgelhen</string>
+
+    <string name="missing_permissions_warning">Imi xuṣṣent tsirag, izmer ur ttilint ara kra n tmahilin…</string>
+    <string name="missing_permissions_to_start_conf_call">Tesriḍ tisirag akken ad tebduḍ asarag deg texxamt-a</string>
+    <string name="missing_permissions_error">Imi llant tsirag i ixuṣṣen, tigawt-a ur tezmir ara ad tili.</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Isiwlen isaragen ur ttwasefraken ara deg texxamin yettwawgelhen</string>
+    <string name="call_anyway">Ɣas siwel kan</string>
+    <string name="send_anyway">Ɣas azen kan</string>
+    <string name="action_sign_out_confirmation_simple">D tidet tebɣiḍ ad teffɣeḍ\?</string>
+    <string name="action_voice_call">Asiwel aɣectan</string>
+    <string name="action_video_call">Asiwel s tvidyut</string>
+    <string name="action_global_search">Anadi amatu</string>
+    <string name="action_quick_reply">Tiririt taruradt</string>
+    <string name="action_mark_room_read">Creḍ yettwaɣṛa</string>
+    <string name="copied_to_clipboard">Nɣel deg \"ɣef ufus\"</string>
+    <string name="home_filter_placeholder_home">Sizdeg ismawen n texxamin</string>
+    <string name="notification_noisy_notifications">Ilɣa s ṣṣut</string>
+    <string name="dialog_title_third_party_licences">Turagin n wis tlata</string>
+
+    <string name="pause_video">Sgunfu</string>
+    <string name="ongoing_conference_call">Asarag s usiwel iteddu
+\nRnu-d ɣer-s s %1$s neɣ s %2$s</string>
+    <string name="home_filter_placeholder_favorites">Sizdeg ismenyifen</string>
+    <string name="home_filter_placeholder_people">Sizdeg imttekkiyen</string>
+    <string name="home_filter_placeholder_rooms">Sizdeg ismawen n texxxamin</string>
+    <string name="home_filter_placeholder_groups">Sizdeg ismawen n temɣiwnin</string>
+
+    <string name="direct_chats_header">Idiwenniyen</string>
+    <string name="local_address_book_header">Adlis n tansiwin adigan</string>
+    <string name="user_directory_header">Akaram n useqdac</string>
+    <string name="matrix_only_filter">Inermisen kan n Matrix</string>
+    <string name="no_conversation_placeholder">Ulac idiwenniyen</string>
+    <string name="no_contact_access_placeholder">Ur teǧǧiḍ ara Element ad yekcem ɣer yinermisen-ik·im idiganen</string>
+    <string name="people_no_identity_server">Ulac aqeddac n timagit yettusiwlen.</string>
+
+    <string name="no_room_placeholder">Ulac tixxamin</string>
+    <string name="no_public_room_placeholder">Ulac tixxamin tizuyaz yellan</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 useqdac</item>
+        <item quantity="other">%d yiseqdacen</item>
+    </plurals>
+
+    <string name="no_group_placeholder">Ulac igrawen</string>
+
+    <string name="send_bug_report_include_crash_logs">Azen iɣmisen n tuccḍa</string>
+    <string name="send_bug_report_include_screenshot">Azen tuṭṭfa n ugdil</string>
+    <string name="send_bug_report">Ini ɣef wabug</string>
+    <string name="send_bug_report_description">Ttxil-k·m glem-d abug. Acu i txedmeḍ\? Acu i terǧiḍ\? Acu yeḍran\?</string>
+    <string name="send_bug_report_description_in_english">Ma yella wamek, ttxil-k·m aru aglam s teglizit.</string>
+    <string name="send_bug_report_placeholder">Glem-d ugur-ik·im da</string>
+    <string name="send_bug_report_rage_shake">Zelzel reffu i tuzna n wabug</string>
+
+    <string name="send_bug_report_sent">Yettwazen uneqqis n wabug akken iwata</string>
+    <string name="send_bug_report_failed">Ur nessaweḍ ara ad nazen aneqqis n wabug (%s)</string>
+    <string name="send_bug_report_progress">Asfari (%s%%)</string>
+
+    <string name="send_files_in">Azen deg</string>
+    <string name="read_receipt">Ɣeṛ</string>
+
+    <string name="login">Qqen</string>
+    <string name="hs_url">URL n uqeddac agejdan</string>
+    <string name="start_new_chat">Yebda udiwenni amaynut</string>
+    <string name="start_voice_call">Yebda usiwel s taɣect</string>
+    <string name="start_video_call">Yebda usiwel s tvidyut</string>
+
+    <string name="option_send_voice">Azen s taɣuct</string>
+
+    <string name="start_new_chat_prompt_msg">Tebɣiḍ s tidet ad tebduḍ adiwenni amaynut d %s\?</string>
+    <string name="start_voice_call_prompt_msg">Tebɣiḍ s tidet ad tebduḍ asiwel s taɣect\?</string>
+    <string name="start_video_call_prompt_msg">Tebɣiḍ s tidet ad tebduḍ asiwel s tvidyut\?</string>
+    <string name="call_failed_no_ice_description">Ttxil-k·m suter anedbal n uqeddac-ik·im agejdan (%1$s) ad iswel aqeddac i wakken isawalen TURN i wakken isawalen ad ddun akken iwata.
+\n
+\nDeg wadeg n wayen, tzemreḍ ad tesqedceḍ aqeddac azayez ɣef %2$s, maca aya ur yettettkal ara fell-as, ad yebḍu tansa-ik·im IP d uqeddac-a. Tzemreḍ ad tesferkeḍ aya deg yiɣewwaren.</string>
+    <string name="call_failed_no_ice_use_alt">Ɛreḍ aseqdec n %s</string>
+    <string name="call_failed_dont_ask_again">Ur iyi-d-ssutur ara tikkelt-nniḍen</string>
+
+    <string name="call_failed_no_connection">Asiwel s Element ur yeddi ara</string>
+    <string name="call_select_sound_device">Fren ibenk n yimesli</string>
+    <string name="sound_device_speaker">Amennay</string>
+    <string name="sound_device_headset">Kask</string>
+    <string name="call_switch_camera">Beddel takamiṛat</string>
+    <string name="call_camera_front">N sdat</string>
+    <string name="call_format_turn_hd_off">Sens HD</string>
+    <string name="call_format_turn_hd_on">Rmed HD</string>
+
+    <string name="option_send_files">Azen ifuyla</string>
+    <string name="option_send_sticker">Azen astiker</string>
+    <string name="option_take_photo_video">Ṭṭef-d tawlaft neɣ tavidyut</string>
+    <string name="option_take_photo">Ṭṭef-d tawlaft</string>
+    <string name="option_take_video">Ṭṭef-d tavidyut</string>
+
+    <string name="go_on_with">kemmel s…</string>
+    <string name="error_no_external_application_found">Suref-aɣ, ulac asnas yeffɣen yettwafen i wakken ad temmed tigawt-a.</string>
+
+    <string name="auth_login">Qqen</string>
+    <string name="auth_user_id_placeholder">Imayl neɣ isem n useqdac</string>
+    <string name="auth_user_name_placeholder">Isem n useqdac</string>
+    <string name="auth_opt_email_placeholder">Tansa n yimayl (d tafrayan)</string>
+    <string name="auth_phone_number_placeholder">Uṭṭun n tiliɣri</string>
+    <string name="auth_opt_phone_number_placeholder">Uṭṭun n tiliɣri (d afrayan)</string>
+    <string name="auth_repeat_password_placeholder">Ales i wawal uffir</string>
+    <string name="auth_repeat_new_password_placeholder">Sentem awal-ik·im uffir amaynut</string>
+    <string name="auth_invalid_login_param">Isem n uqeddac d/neɣ awal uffir d arameɣtu</string>
+    <string name="auth_invalid_user_name">Ismawen n yiseqdacen ilaq ad sɛun kan isekkilen, imḍanen, agazen, ijerriden n tuqqna d yidduren n uderrer</string>
+    <string name="auth_invalid_password">Awal uffir wezzil aṭas (ma drus 6)</string>
+    <string name="auth_missing_password">Ixuṣ wawal uffir</string>
+    <string name="auth_invalid_phone">Wagi ur d-yettban ara d uṭṭun n tilifun ameɣtu</string>
+    <string name="auth_email_already_defined">Tansa-a n yimayl tettuseqdec yakan.</string>
+    <string name="auth_missing_email">Txuṣṣ tansa n yimayl</string>
+    <string name="auth_missing_phone">Ixuṣṣ wuṭṭun n tiliɣri</string>
+    <string name="auth_missing_email_or_phone">Txuṣṣ tansa n yimayl neɣ uṭṭun n tiliɣri</string>
+    <string name="auth_invalid_token">Ajuṭu d arameɣtu</string>
+    <string name="auth_password_dont_match">Awal uffir ur imṣada ara</string>
+    <string name="auth_forgot_password">Tettuḍ awal uffir\?</string>
+    <string name="auth_use_server_options">Seqdec tixtiṛiyin n uqeddac udmawan (leqqayen)</string>
+    <string name="auth_email_validation_message">Ttxil-k·m seqdec imayl-ik·im i wakken ad tkemmleḍ ajerred</string>
+    <string name="auth_recaptcha_message">Aqeddac-a agejdan yesra ad iẓer ma mačči d aṛubut i telliḍ</string>
+    <string name="auth_username_in_use">Isem n useqdac yettuseqdac</string>
+    <string name="auth_home_server">Aqeddac agejdan:</string>
+    <string name="auth_identity_server">Aqeddac n timagit:</string>
+    <string name="auth_reset_password_message">I uwennez n wawal-ik·im uffir, sekcem tansa n yimayl i icudden ɣer umiḍan-ik·im:</string>
+    <string name="auth_reset_password_missing_email">Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.</string>
+    <string name="auth_reset_password_email_validation_message">Yettwazen yimayl ɣer %s: Akken ara tḍefreḍ aseɣwen-nni yellan deg-s, sit ddaw.</string>
+    <string name="auth_accept_policies">Ttxil-k·m senqed syen qbel tisertiyin n uqeddac-a agejdan:</string>
+
+    <string name="login_error_must_start_http">Ilaq ad yebdu URL s http[s]://</string>
+    <string name="login_error_network_error">D awezɣi ad tkecmeḍ: tuccḍa deg uzeṭṭa</string>
+    <string name="login_error_unable_login">Anekcum d awezɣi</string>
+    <string name="login_error_registration_network_error">D awezɣi ad tjerrdeḍ: tuccḍa deg uzeṭṭa</string>
+    <string name="login_error_unable_register">Ajerred d awezɣi</string>
+    <string name="login_error_unable_register_mail_ownership">D awezɣi ad tjerrdeḍ: tuccḍa deg bab n tansa</string>
+    <string name="login_error_invalid_home_server">Ttxil-k·m sekcem URL ameɣtu</string>
+    <string name="login_error_unknown_host">URL-a ulac awwaḍ ɣur-s, ttxil-k·m senqed-it</string>
+    <string name="login_error_no_homeserver_found">Tagi mačči d tansa n uqeddac n Matrix ameɣtu</string>
+    <string name="login_error_homeserver_not_found">Ur tezmireḍ ara ad tawḍeḍ ɣer uqeddac agejdan n URL-a, ttxil-k·m senqed-it</string>
+    <string name="login_error_ssl_peer_unverified">Tuccḍa deg SSL: ayugan n timagit ur yettwasenqed ara.</string>
+    <string name="login_error_ssl_other">Tuccḍa n SSL.</string>
+    <string name="groups_list">Tabdart n yigrawen</string>
+
+    <string name="compression_options">Azen-aɣ-d</string>
+    <string name="compression_opt_list_large">Hraw</string>
+    <string name="compression_opt_list_small">Meẓẓiy</string>
+
+    <string name="attachment_cancel_download">Sefsex asider\?</string>
+    <string name="attachment_cancel_upload">Sefsex asali\?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="room_info_room_name">Isem n texxamt</string>
+    <string name="room_info_room_topic">Asentel n texxamt</string>
+
+    <string name="call">Siwel</string>
+    <string name="call_connected">Yeqqen asiwel</string>
+    <string name="call_connecting">Asiwel yetteqqen…</string>
+    <string name="call_ring">Asiwel…</string>
+    <string name="incoming_call">Asiwel i d-ikecmen</string>
+    <string name="incoming_video_call">Asiwel s tvidyut i d-ikecmen</string>
+    <string name="incoming_voice_call">Asiwel s taɣect i d-ikecmen</string>
+    <string name="call_in_progress">Asiwel la iteddu…</string>
+    <string name="video_call_in_progress">Asiwel s tvidyut la iteddu…</string>
+    <string name="active_call_with_duration">Rmed asiwel (%s)</string>
+    <string name="return_to_call">Uɣal ɣer usiwel</string>
+
+    <string name="media_slider_saved">Yettwasekles</string>
+    <string name="no">UHU</string>
+    <string name="list_members">Tabdart n yiɛeggalen</string>
+    <string name="room_sync_in_progress">Amtawi…</string>
+    <string name="room_jump_to_first_unread">Ɛeddi ɣer yizen amezwaru ur nettwaɣra ara.</string>
+
+    <string name="room_preview_invitation_format">Tettwanecdeḍ ad ternuḍ ɣer %s</string>
+    <string name="room_preview_try_join_an_unknown_room_default">taxxamt</string>
+    <string name="room_creation_title">Adiwenni amaynut</string>
+    <string name="room_creation_add_member">Rnu aɛeggal</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 uɛeggal urmid</item>
+        <item quantity="other">%d yiɛeggalen urmiden</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 uɛeggal</item>
+        <item quantity="other">%d yiɛeggalen</item>
+    </plurals>
+    <string name="room_title_one_member">1 uɛeggal</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">1tasint</item>
+        <item quantity="other">%dtsinin</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1tesdidt</item>
+        <item quantity="other">%dtesdidin</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1usrag</item>
+        <item quantity="other">%dyisragen</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1wass</item>
+        <item quantity="other">%dwussan</item>
+    </plurals>
+
+    <string name="room_participants_now">%1$S tura</string>
+    <string name="room_participants_ago">Seg %1$S %2$S</string>
+
+    <string name="room_participants_header_admin_tools">IFECKA N UNEDBAL</string>
+    <string name="room_participants_header_call">SIWEL</string>
+    <string name="room_participants_header_devices">TIƔIMIYIN</string>
+
+    <string name="room_participants_action_cancel_invite">Sefsex tinubga</string>
+    <string name="room_participants_action_leave">Ffeɣ si texxamt-a</string>
+    <string name="room_participants_action_remove">Kkes si texxamt-a</string>
+    <string name="room_participants_action_set_default_power_level">Wennez aseqdac amagnu</string>
+    <string name="room_participants_action_set_moderator">Eg amaẓrag</string>
+    <string name="room_participants_action_set_admin">Eg anebdal</string>
+    <string name="room_participants_invite_search_another_user">Asulay n useqdac, Isem neɣ imayl</string>
+    <string name="room_participants_action_devices_list">Sken tabdart n tɣimiyin</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Ur tettizmireḍ ara ad tesfesxeḍ asnifel-a acku tettṣubbuḍ deg usellun-unek·inem, ma yella d kečč·kemm i d aseqdac aneglam n texxamt-a, d awezɣi ad d-terreḍ ula d yiwet n tseglut.</string>
+    <string name="room_participants_action_ignore_title">Zgel aseqdac</string>
+    <string name="room_participants_action_unignore">Ur yettwazgel ara</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s d %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="people_search_invite_by_id"><u>Snubget s usaulay</u></string>
+    <string name="people_search_local_contacts">INERMISEN IDIGANEN (%d)</string>
+    <string name="people_search_user_directory">AKARAM N USEQDAC (%s)</string>
+    <string name="people_search_filter_text">Iseqdacen kan n Matrix</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Snubget-d iseqdacen s usulay</string>
+    <string name="people_search_invite_by_id_dialog_hint">Imayl neɣ asulay n Matrix</string>
+
+    <string name="room_one_user_is_typing">%s la yettaru…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s la ttarun…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s d wiyaḍ la ttarun…</string>
+    <string name="room_message_placeholder_not_encrypted">Azen izen (ur yettwawgelhen ara)…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Azen tiririt (ur yettwawgelhen ara)…</string>
+    <string name="room_offline_notification">Tṛuḥ tuqqna ɣer uqeddac.</string>
+    <string name="room_unsent_messages_notification">Iznan ur ttwaznen ara. %1$s neɣ %2$s tura\?</string>
+    <string name="room_unknown_devices_messages_notification">Iznan ur ttwaznen ara ssebba n tiltin n tɣimiyin tarussinin . %1$s neɣ %2$s tura\?</string>
+    <string name="room_prompt_resend">Wennez kullec</string>
+    <string name="room_prompt_cancel">Sefsex kullec</string>
+    <string name="room_resend_unsent_messages">Wennez iznan ur yettwaznen ara</string>
+    <string name="room_delete_unsent_messages">Kkes iznan ur yettwaznen ara</string>
+    <string name="room_message_file_not_found">Ur yettwaf ara ufaylu</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 yizen amaynut</item>
+        <item quantity="other">%d yiznan imaynuten</item>
+    </plurals>
+
+    <string name="ssl_do_not_trust">Ur ttkal ara</string>
+    <string name="ssl_fingerprint_hash">Adsil umḍin (%s):</string>
+    <string name="ssl_could_not_verify">D awezɣi ad nsenqed timagit n uqeddac agemmaḍ.</string>
+    <string name="room_details_people_invited_group_name">YETTWANCED</string>
+    <string name="room_details_people_present_group_name">YERNA</string>
+
+    <string name="tab_title_search_rooms">TIXXAMIN</string>
+    <string name="tab_title_search_messages">IZNAN</string>
+    <string name="tab_title_search_people">IMDANEN</string>
+    <string name="tab_title_search_files">IFUYLA</string>
+
+    <string name="room_recents_join">RNU</string>
+    <string name="room_recents_directory">AKARAM</string>
+    <string name="room_recents_favourites">INURIFEN</string>
+    <string name="room_recents_conversations">TIXXAMIN</string>
+    <string name="room_recents_low_priority">TAZWART TADDAYT</string>
+    <string name="room_recents_invites">INEBGAWEN</string>
+    <string name="room_recents_join_room">Rnu ɣer texxamt</string>
+    <string name="room_recents_join_room_title">Rnu ɣer texxamt</string>
+    <string name="room_recents_join_room_prompt">Aru asulay n texxamt neɣ isem yettunefken i texxamt</string>
+
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 texxamt</item>
+        <item quantity="other">%d texxamin</item>
+    </plurals>
+    <string name="room_settings_leave_conversation">Ffeɣ seg udiwenni</string>
+    <string name="room_settings_forget">Ttu</string>
+    <string name="room_sliding_menu_privacy_policy">Tasertit tabaḍnit</string>
+
+    <string name="settings_profile_picture">Tawlaft n umaɣnu</string>
+    <string name="settings_add_email_address">Rnu tansa n yimayl</string>
+    <string name="settings_app_info_link_title">Talɣut n usnas</string>
+    <string name="settings_troubleshoot_diagnostic">Tasleḍt n usellek</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Seddu isekyaden</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Aselkem… (%1$d of %2$d)</string>
+    <string name="open_settings">Ldi iɣewwaren</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Iɣewwaren n umiḍan.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Iɣewwaren n tɣimit.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Iɣewwaren udmawanen.</string>
+    <string name="settings_privacy_policy">Tasertit tabaḍnit</string>
+    <string name="settings_devices_list">Tiɣimiyin</string>
+    <string name="settings_secure_backup_setup">Sebadu aḥraz aɣelsan</string>
+    <string name="settings_secure_backup_section_info">Seḥbiber iman-ik·im ɣef uḍegger n unekcum ɣer yiznann &amp; yisefka yettwawgelhe s uḥraz n tsura n uwgelhen ɣef uqeddac-inek·inem.</string>
+    <string name="settings_confirm_password">Sentem awal uffir amaynut</string>
+    <string name="settings_media">Amidya</string>
+    <string name="media_saving_period_1_week">1 umalas</string>
+    <string name="room_settings_addresses_no_local_addresses">Taxxamt-a ur tesɛi ara tansiwin tidiganin</string>
+    <string name="room_settings_no_flair">Taxxamt-a ur d-teskin ara tasakezt ula i yiwet n temɣiwent</string>
+    <string name="device_name_warning">Isem n tiɣimit tazayezt yettban i yimdanen wukud tettmeslayeḍ</string>
+    <string name="encryption_information_verify_device_warning">Sentem s userwes gar wayen i d-iteddun d yiɣewwaren n useqdac deg tɣimit-ik·im tayeḍ:</string>
+    <string name="encryption_information_verify_device_warning2">Ma yella ur mṣadan ara, taɣellist n teywalt-ik·im tezmer ad tettwaker.</string>
+    <string name="directory_server_fail_to_retrieve_server">Aqeddac yezmer ad yili ulac-it neɣ iɛedda nnig uɛebbi</string>
+    <string name="notification_noisy">Sɛan ṣṣut</string>
+
+    <string name="joined">Ikcemed deg</string>
+    <string name="avatar">Tugna n umaɣnu</string>
+
+    <string name="deactivate_account_prompt_password">I wakken ad tkemmle, ttxil-k·m sekcem awal uffir n umiḍan-ik·im:</string>
+    <string name="keys_backup_setup_step1_title">Ur ttamdal ara akk iznan iwgelhanen</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Aḥraz ue yezmir ara ad yekkes awgelhen s tsarut-a n uɛeddi: ttxil-k·m sefqed ma d tasarut n uɛeddi tameɣtut i teskecmeḍ.</string>
+
+    <string name="keys_backup_banner_setup_line1">Ur ttamdal ara akk iznan iwgelhanen</string>
+    <string name="keys_backup_banner_recover_line1">Ur ttamdal ara akk iznan iwgelhanen</string>
+    <string name="keys_backup_banner_recover_line2">Aḥraz n tsarut n useqdac</string>
+
+    <string name="autodiscover_invalid_response">Tiririt n usnirem n uqeddac agejdan d tarameɣtut</string>
+    <string name="room_list_people_empty_title">Idiwenniyen</string>
+    <string name="title_activity_emoji_reaction_picker">Tisedmirin</string>
+    <string name="reactions">Tisedmirin</string>
+
+    <string name="create_room_public_title">Azayez</string>
+    <string name="quick_reactions">Tisedmirin tiruradin</string>
+
+    <string name="disconnect_identity_server">Ffeɣ seg tuqqna n uqeddac n timagit</string>
+    <string name="settings_discovery_mail_pending">Yettraǧu</string>
+
+    <string name="login_server_modular_learn_more">Issin ugar</string>
+    <string name="login_server_url_form_other_hint">Tansa</string>
+    <string name="login_reset_password_notice">Imayl n usenqed ad yettwazen ɣer tbewwaḍt-ik·im n yimayl i usentem n yiɣewwaren n wawal-ik·im uffir.</string>
+    <string name="login_reset_password_warning_content">Asnifel n wawal-ik·im uffir ad iwennez akk tisura n uwgelhen seg yixef ɣer yixef deg meṛṛa n tɣimiyin-ik·im, s tririt n umazray n udiwenni awgelhan ur yettwaɣra ara. Sbadu aḥraz n tsarut neɣ sifeḍ tisura n texxamt-ik·im seg texxamt-nniḍen send awennez n wawal-ik·im uffir.</string>
+    <string name="login_reset_password_success_notice_2">Aql-ak·akem teffɣeḍ seg meṛṛa tiɣimiyin syen ur d-teṭṭifeḍ ara akk ilɣa n Push. I wakken ad talseḍ armad n yilɣa, kcem tikkelt-nniḍen ɣef yal ibenk.</string>
+    <string name="devices_current_device">Tiγimit tamirant</string>
+    <string name="create_room_encryption_description">Akken ara yettwarmad, awgelhen ur yettizmir ara ad yens.</string>
+
+    <string name="you">Kečč / kem</string>
+
+    <string name="room_profile_not_encrypted_subtitle">Iznan deg texxamt-a ur ttwawgelhen ara seg yixef ɣer yixef.</string>
+    <string name="room_profile_section_security_learn_more">Issin ugar</string>
+    <string name="room_profile_section_more">Ugar</string>
+    <string name="unignore">Ur yettwazgel ara</string>
+
+    <string name="room_settings_enable_encryption_warning">Akken ara yettwarmad, awgelhen ur yettizmir ara ad yens.</string>
+
+    <string name="verification_conclusion_ok_self_notice">Tiɣimit-ik·im tamaynut dayen tettwasenqed tura. Ɣur-s anekcum ɣer yiznan yettwawgelhen, iseqdac-nniḍen daɣen ad asen-d-tban tettwattkal.</string>
+
+    <string name="settings_hs_admin_e2e_disabled">Anedbal-ik·im n uqeddac issens awgelhen seg yixef ɣer yixef s wudem amezwer deg texxamin tusligin &amp; yiznan usriden.</string>
+    <string name="room_member_profile_sessions_section_title">Tiɣimiyin</string>
+    <string name="delete_event_dialog_content">S tidet tebɣiḍ ad tekkseḍ aneḍru-a\? Err deg uqerru-k·m ma yella tekkseḍ asnifel n yisem neɣ asentel n texxamt, yemzer asnifel-a ad yettusefsex.</string>
+    <string name="or_other_mx_capabale_client">neɣ amsaɣ-nniḍen n Matrix yemṣadan d uzmul amdigan</string>
+    <string name="command_description_discard_session">Ḥettem tiɣimit n ugraw ara d-yeffɣen akka tura deg texxamt tawgelhant ad tettwakkes</string>
+    <string name="confirm_your_identity">Sentem timagit-ik·im s usenqed n yinekcam-a seg yiwet gar tɣimiyin-inek·inem-nniḍen, serreḥ-as ad tekcem ɣer yiznan yettwawgelhen.</string>
+    <string name="create_room_dm_failure">D awezɣi ad ternuḍ izen-inek·inem uslig. Ttxil-k·m senqed iseqdacen i tebɣiḍ ad d-tnecdeḍ syen ɛreḍ tikkelt-nniḍen.</string>
+
+    <string name="choose_locale_current_locale_title">Tutlayt tamirant</string>
+    <string name="settings_setup_secure_backup">Sebadu aḥraz aɣelsan</string>
+
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Seḥbiber iman-ik·im ɣef uḍegger n unekcum ɣer yiznann &amp; yisefka yettwawgelhe s uḥraz n tsura n uwgelhen ɣef uqeddac-inek·inem.</string>
+    <string name="set_a_security_phrase_hint">Tafyirt n tɣellist</string>
+    <string name="room_settings_topic_hint">Asentel</string>
+    <string name="crypto_utd">Ur yezmir ara ad yekkes awgelhen</string>
+    <string name="element_disclaimer_negative_button">AWI-T</string>
+    <string name="element_disclaimer_positive_button">ISSIN UGAR</string>
+
+    <string name="element_login_splash_brand">aferdis</string>
+
+
+    <string name="save_recovery_key_chooser_hint">Sekles tasarut n tririt deg</string>
+
+    <string name="add_from_phone_book">Rnu seg yidles n tiliɣri</string>
+    <string name="empty_phone_book">Idles-ik·im n tiliɣri d ilem</string>
+    <string name="phone_book_title">Adlis n tiliri</string>
+    <string name="search_in_my_contacts">Nadi deg yinermisen-inu</string>
+    <string name="loading_contact_book">Tiririt n yinermisen-ik·im…</string>
+    <string name="empty_contact_book">Adlis-ik·im n yinermisen d ilem</string>
+    <string name="contacts_book_title">Adlis n yinermisen</string>
+
+    <string name="three_pid_revoke_invite_dialog_content">Sefsex tinubga n %1$s\?</string>
+
+    <string name="member_banned_by">Yettwagi sɣur %1$s</string>
+    <string name="failed_to_unban">Asemmet n useqdac ur yeddi ara</string>
+
+    <string name="alert_push_are_disabled_title">Ilɣa push nsan</string>
+    <string name="alert_push_are_disabled_description">Senqed iɣewwaren-ik·im i wakken ad tremdeḍ ilɣa push</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Tuccḍa deg tengalt, %d uneɛruḍ i d-yeqqimen</item>
+        <item quantity="other">Tuccḍa deg tengalt, %d ineɛruḍen i d-yeqqimen</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Ɣur-k·m! Aneɛruḍ aneggaru send tuffɣa!</string>
+    <string name="too_many_pin_failures">Aṭas n tuccḍiwin, telliḍ teffɣeḍ seg tuqqna</string>
+    <string name="create_pin_title">Fren PIN i tɣellist</string>
+    <string name="create_pin_confirm_title">Sentem PIN</string>
+    <string name="create_pin_confirm_failure">Asentem n tebzimt ur yeddi ara, ttxil-k·m aru yiwet.</string>
+    <string name="auth_pin_title">Sekcem PIN inek·inem</string>
+    <string name="auth_pin_forgot">Ttu PIN\?</string>
+    <string name="auth_pin_reset_title">"Wennez tabzimt "</string>
+    <string name="auth_pin_new_pin_action">Tabzimt tamaynut n</string>
+    <string name="auth_pin_reset_content">I uwennez n PIN-inek·inem, tesriḍ ad talseḍ anekcum syen rnu yiwen.</string>
+    <string name="settings_security_pin_code_title">Rmed PIN</string>
+    <string name="settings_security_pin_code_summary">Ma yella tebɣiḍ ad twennzeḍ PIN-inek·inem, aru ttu PIN i wakken ad teffɣeḍ syen wennez.</string>
+    <string name="auth_pin_confirm_to_disable_title">Sentem PIN i wakken ad tsenseḍ PIN</string>
+    <string name="send_bug_report_logs_description">Iwakken ad d-naf uguren, iɣmisen n umsaɣ-a ad ttwaznen akked uneqqis-a n tuccḍa. Aneqqis-a n tuccḍa, akked yiɣmisen d tuṭṭfa n ugdil, ur d-ttbinen ara s wudem azayez. Ma tesmenyifeḍ tuzzna n uḍris-a kan seddaw, ttxil kkes acraḍ i:</string>
+    <string name="sound_device_wireless_headset">Kask war tinelwa</string>
+    <string name="auth_invalid_email">Ur tettban ara d tansa n yimayl tameɣtut</string>
+    <string name="login_error_forbidden">Isem n uqeddac/awal uffir d arameɣtu</string>
+    <string name="login_error_not_json">Ulac deg-s JSON ameɣtu</string>
+    <string name="login_error_user_in_use">Isem n useqdac-a yettwaseqdac yakan</string>
+    <string name="login_error_login_email_not_yet">Aseɣwen n yimayl iɣef mazal ur yettusit ara fell-as</string>
+
+    <string name="e2e_re_request_encryption_key">Ales asuter n tsura n uwgelhen seg tɣimiyin-ik·im tiyaḍ.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Asuter yettwazen</string>
+    <string name="read_receipts_list">Ɣeṛ tabdart n wawwaḍ</string>
+
+    <plurals name="membership_changes">
+        <item quantity="one">1 usnifel deg umulteɣ</item>
+        <item quantity="other">%d yisnifal deg umulteɣ</item>
+    </plurals>
+
+    <string name="settings_call_show_confirmation_dialog_title">Sewḥel isawalen iɣef ur tebniḍ</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Suter i usentem send beddu n usiwel</string>
+    <string name="settings_call_ringtone_use_default_stun">"Sireg aqeddac n tallalt n yisawalen "</string>
+    <string name="room_participants_kick_title">Suffeɣ aseqdac</string>
+    <string name="room_participants_kick_reason">Ssebba n usuffeɣ</string>
+    <string name="room_participants_ban_title">Agi aseqdac</string>
+    <string name="room_participants_ban_reason">Ssebba n tigtin</string>
+    <string name="room_participants_unban_title">Asefsex n useqdac</string>
+    <string name="room_details_title">Talqayt n texxamt</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">1 i yettufernen</item>
+        <item quantity="other">%d i yettufernen</item>
+    </plurals>
+    <string name="room_event_action_cancel_upload">Sefsex Asali</string>
+    <string name="room_event_action_cancel_download">Sefsex Asider</string>
+
+    <string name="directory_search_results_title">Nadi akaram</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s taxxamt yettwafen i %2$s</item>
+        <item quantity="other">%1$s taxxamin yettwafen i %2$s</item>
+    </plurals>
+    <string name="directory_searching_title">Anadi n ukaram…</string>
+
+    <string name="room_settings_mention_only">Ibdaren kan</string>
+    <string name="settings_notification_privacy">Tabaḍnit n yilɣa</string>
+    <string name="settings_notification_troubleshoot">Ilɣa n usellek</string>
+    <string name="settings_notification_privacy_reduced">Tabaḍnit tettwasemẓẓi</string>
+    <string name="settings_notification_privacy_need_permission">Asnas yesra asireg i wakken ad iseddu tafelwit n ugilal</string>
+    <string name="settings_call_invitations">Tinubgiwin i usiwel</string>
+    <string name="settings_labs_native_camera">Seqdec takamiṛat tadigant</string>
+    <string name="settings_labs_enable_send_voice">Azen iznan n taɣuct</string>
+    <string name="start_verification">Bdu asenqed</string>
+    <string name="share_without_verifying">Bḍu war asenqed</string>
+    <string name="key_share_request">Asuter n beṭṭu n tsarut</string>
+    <string name="ignore_request">Anef i tuttra</string>
+    <string name="command_description_topic">Sbadu asentel n texxamt</string>
+    <string name="notification_silent">Tasusmi</string>
+    <string name="community_name">Isem n temɣiwent</string>
+    <string name="community_id">Asulay n temɣiwent</string>
+    <string name="no_users_placeholder">Ulac iseqdacen</string>
+
+    <string name="filter_group_members">Sizdeg iɛeggalen n ugraw</string>
+    <string name="filter_group_rooms">Sizdeg tixxamin n yigrawen</string>
+
+    <plurals name="group_members">
+        <item quantity="one">1 uɛeggal</item>
+        <item quantity="other">%d yiɛaggalen</item>
+    </plurals>
+
+    <plurals name="group_rooms">
+        <item quantity="one">1 texxamt</item>
+        <item quantity="other">%d texxamin</item>
+    </plurals>
+    <string name="reason_colon">Taɣzint: %1$s</string>
+    <string name="rejoin">Rnu</string>
+    <string name="receipt_avatar">Avaṭar n wawwaḍ</string>
+    <string name="notice_avatar">Avaṭar n ulɣu</string>
+    <string name="dialog_user_consent_submit">Senqed tura</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="keys_backup_setup_override_stop">Ḥbes</string>
+
+    <string name="recovery_key">Tasarut tririt</string>
+    <string name="new_recovery_method_popup_was_me">D nekk</string>
+
+    <string name="keys_backup_info_title_algorithm">Alguritm</string>
+    <string name="keys_backup_info_title_signature">Azmul</string>
+
+    <string name="sas_view_request_action">Wali asuter</string>
+    <string name="sas_verification_request_notification_channel_title">Asenqed n tsarut</string>
+    <string name="sas_cancelled_dialog_title">Asuter yettwasefsex</string>
+    <string name="sas_error_unknown">Tuccḍa tarussint</string>
+
+    <string name="invited_by">Yettwanced-d sɣur %s</string>
+
+    <string name="reactions_agree">Qbel</string>
+    <string name="reactions_like">Ḥemmel</string>
+    <string name="create_new_room">Rnu taxxamt tamaynut</string>
+    <string name="change_room_directory_network">Snifel azeṭṭa</string>
+    <string name="group_all_communities">Meṛṛa timɣiwnin</string>
+
+    <string name="create_room_title">Taxxamt tamaynut</string>
+    <string name="create_room_action_create">RNU</string>
+    <string name="create_room_name_hint">Isem n texxamt</string>
+    <string name="create_room_public_description">Yal yiwen yezmer ad yernu ɣer texxamt-a</string>
+    <string name="settings_sdk_version">Lqem SDK n Matrix</string>
+    <string name="settings_expert">Amussnaw</string>
+    <string name="settings_push_rules">Ilugan n push</string>
+    <string name="push_gateway_item_app_id">asnas_id:</string>
+    <string name="push_gateway_item_push_key">push_tasarut:</string>
+    <string name="push_gateway_item_app_display_name">asnas_sken_isem:</string>
+    <string name="push_gateway_item_device_name">tiɣimit_isem:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Amasal:</string>
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Sekles ajuṭu</string>
+
+    <string name="send_suggestion">Eg asumer</string>
+    <string name="send_suggestion_content">Ttxil-k·m aru asumer-ik·im ddaw.</string>
+    <string name="send_file_step_idle">Yettaru…</string>
+    <string name="edited_suffix">(yettwaẓreg)</string>
+
+    <string name="message_edits">Tiẓrigin n yizen</string>
+    <string name="no_message_edits_found">Ulac tiẓrigin yettwafen</string>
+
+    <string name="room_filtering_filter_hint">Sizdeg idiwenniyen…</string>
+    <string name="room_directory_search_hint">Isem neɣ asulay (#example:matrix.org)</string>
+
+    <string name="add_by_matrix_id">Rnu s usulay n Matrix</string>
+    <string name="creating_direct_room">Timerna n texamt…</string>
+    <string name="read_at">Ɣeṛ deg</string>
+
+
+    <string name="identity_server">Aqeddac n timagit</string>
+    <string name="a11y_show_password">Sken awal uffir</string>
+    <string name="a11y_hide_password">Ffer awal uffir</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s d %3$d d tɣuri-nniḍen</item>
+        <item quantity="other">%1$s, %2$s d %3$d d tɣuriyin-nniḍen</item>
+    </plurals>
+    <string name="three_users_read">Taɣuri n %1$s, %2$s d %3$s</string>
+    <string name="two_users_read">Taɣuri n %1$s d %2$s</string>
+    <string name="one_user_read">Taɣuri n %s</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 useqdac yeɣra</item>
+        <item quantity="other">%d yiseqdacen ɣran</item>
+    </plurals>
+
+    <string name="error_file_too_big">Afaylu \'%1$s\' (%2$s) ɣezzif aṭas i usali. Talast d %3$s.</string>
+
+    <string name="error_attachment">Tuccḍa deg tuqqna lawan n uneɛruḍ n uceqquf yeddan.</string>
+    <string name="attachment_type_audio">Ameslaw</string>
+    <string name="attachment_type_sticker">Astiker</string>
+    <string name="error_handling_incoming_share">Ur yezmir ara ad ttusqedcen deg yisefka n beṭṭu</string>
+
+    <string name="uploads_media_title">AMIDYA</string>
+    <string name="uploads_media_no_result">Ulac amidya deg texxamt-a</string>
+    <string name="uploads_files_title">IFUYLA</string>
+    <string name="uploads_files_subtitle">%1$s ɣer %2$s</string>
+    <string name="uploads_files_no_result">Ulac ifuyla deg texxxamt-a</string>
+
+    <string name="report_content_spam">D aspam</string>
+    <string name="report_content_custom">Aneqqis udmawan…</string>
+    <string name="report_content_custom_hint">Taɣzint i tuzna n ugbur-a</string>
+    <string name="report_content_custom_submit">ANEQQIS</string>
+    <string name="block_user">ZGEL ASEQDAC</string>
+
+    <string name="content_reported_title">Agbur yettwazen</string>
+    <string name="content_reported_as_spam_title">Yettwazen d aspam</string>
+    <string name="message_ignore_user">Zgel aseqdac</string>
+
+    <string name="room_list_quick_actions_notifications_mentions">Ibdaren kan</string>
+    <string name="room_list_quick_actions_leave">Ffeɣ si texxamt</string>
+    <string name="notice_member_no_changes">%1$s ur iga ara akk isnifal</string>
+    <string name="notice_member_no_changes_by_you">Ur tgiḍ ara akk isnifal</string>
+    <string name="reaction_search_type_hint">Aru n wawalen ufranen i tifin n tsedmirt.</string>
+
+    <string name="no_ignored_users">Ur tezgileṣ ula d yiwen useqdac</string>
+
+    <string name="room_join_rules_public">%1$s yerra taxxamt d tazayazt i kra n win yessnen aseɣwen.</string>
+    <string name="room_join_rules_public_by_you">Terriḍ taxxamt d tazayazt i kra n win yessnen aseɣwen.</string>
+    <string name="room_join_rules_invite">%1$s yerra taxxamt s tinubga kan.</string>
+    <string name="room_join_rules_invite_by_you">Terriḍ taxxamt s tinubga kan.</string>
+    <string name="timeline_unread_messages">Iznan ur nettwaɣra ara</string>
+
+    <string name="login_splash_title">D adiwenni-inek·inem. Ṭṭef-itt.</string>
+    <string name="login_splash_text1">Mmeslay d yimdanen srid neɣ deg ugraw</string>
+    <string name="login_splash_text2">Eǧǧ idiwenniyen d usligen s uwgelhen</string>
+    <string name="login_server_title">Fren aqeddac</string>
+    <string name="login_connect_to">Qqen ɣer %1$s</string>
+    <string name="login_signin_to">Kcem ɣer %1$s</string>
+    <string name="login_signin_sso">Kemmel s SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n Element Matrix</string>
+    <string name="login_server_url_form_common_notice">Sekcem tansa n uqeddac i tebɣiḍ ad tesqedceḍ</string>
+
+    <string name="login_login_with_email_error">Imayl-a ur iqqin ula ɣer yiwen n umiḍan.</string>
+
+    <string name="login_reset_password_on">Wennez awal uffir ɣef %1$s</string>
+    <string name="login_reset_password_error_not_found">Ulac amiḍan akk amiḍan wuɣur yeqqen yimayl-a</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Senqed tabewwaḍt-ik·im n yimayl</string>
+    <string name="login_reset_password_mail_confirmation_notice">Imayl n usenqed yettwazen ɣer %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Sit ɣef useɣwen i usentem n wawal-ik·im uffir. Akken ara tḍefreḍ aseɣwen i yellan deg-s, sit ddaw.</string>
+    <string name="login_reset_password_success_submit">Tuɣalin ɣer unekcum</string>
+
+    <string name="login_set_email_title">Sbadu tansa n yimayl</string>
+    <string name="login_set_msisdn_title">Sbadu uṭṭun n tiliɣri</string>
+    <string name="login_set_msisdn_mandatory_hint">Uṭṭun n tiliɣri</string>
+    <string name="login_set_msisdn_optional_hint">Uṭṭun n tiliɣri (d afrayan)</string>
+    <string name="login_msisdn_confirm_title">Sentem uṭṭun n tilifun</string>
+    <string name="login_msisdn_confirm_hint">Sekcem tangalt</string>
+    <string name="login_msisdn_confirm_send_again">Azen tikkelt-nniḍen</string>
+    <string name="login_signup_to">Ffeɣ seg %1$s</string>
+    <string name="login_signin_username_hint">Isem n useqdac neɣ imayl</string>
+    <string name="login_signup_error_user_in_use">Isem-a n useqdac yettwamudd</string>
+    <string name="login_a11y_choose_matrix_org">Fren matrix.org</string>
+    <string name="login_a11y_choose_modular">Fren imeẓla n Element Matrix</string>
+    <string name="login_a11y_choose_other">Fren aqeddac agejdan udmawan</string>
+    <string name="login_terms_title">Qbel tiwtilin i wakken ad tkemmleḍ</string>
+
+    <string name="login_wait_for_email_title">Ttxil-k·m senqed imayl-ik·im</string>
+    <string name="login_connect_using_matrix_id_submit">Kcem s usulay n Matrix</string>
+    <string name="login_signin_matrix_id_title">Kcem s usulay n Matrix</string>
+    <string name="seen_by">Yemmẓer sɣur</string>
+
+    <string name="signed_out_title">Aql-ak·akem teffɣeḍ</string>
+    <string name="signed_out_submit">Kcem tikkelt-nniḍen</string>
+
+    <string name="soft_logout_title">Aql-ak·akem teffɣeḍ</string>
+    <string name="soft_logout_clear_data_dialog_title">Sfeḍ isefka</string>
+    <string name="soft_logout_clear_data_dialog_submit">Sfeḍ isefka</string>
+    <string name="bug_report_error_too_short">Aglam wezzil aṭas</string>
+
+    <string name="notification_initial_sync">Amtawi amezwaru…</string>
+
+    <string name="settings_show_devices_list">Ẓer meṛṛa tiɣimiyin-inu</string>
+    <string name="settings_advanced_settings">Iɣewwaren leqqayen</string>
+    <string name="settings_developer_mode">Askar aneflay</string>
+    <string name="rageshake_detected">Azlaz yettwaf-d!</string>
+    <string name="devices_other_devices">Tiɣimiyin tiyaḍ</string>
+
+    <string name="create_room_encryption_title">Rmed awgelhen</string>
+    <string name="verification_conclusion_not_secure">Mačči d aɣelsan</string>
+    <string name="sent_a_video">Tavidyut.</string>
+    <string name="sent_an_image">Tugna.</string>
+    <string name="sent_an_audio_file">Ameslaw</string>
+    <string name="send_a_sticker">Astiker</string>
+
+    <string name="verification_request_waiting">Yettṛaǧu…</string>
+    <string name="verification_request_other_cancelled">%s yettwasefsex</string>
+    <string name="verification_request_other_accepted">%s yettwaqbal</string>
+    <string name="verification_sent">Asenqed yettwazen</string>
+    <string name="verification_verify_device_manually">Yettwasenqed s ufus</string>
+
+    <string name="verification_scan_their_code">Siggez tangalt-a</string>
+    <string name="recovery_key_empty_error_message">Ttxil-k·m sekcem tasarut n tririt</string>
+
+    <string name="bootstrap_progress_generating_ssss">Asirew n tsarut SSSS seg tefyirt tuffirt</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Asirew n tsarut SSSS seg tefyirt tuffirt (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Asirew n tsarut SSSS seg tsarut n tririt</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="error_saving_media_file">Ur yezmir ara ad isekles afaylu n umidya</string>
+    <string name="change_password_summary">Sbadu awal uffir amaynut n umiḍan…</string>
+
+    <string name="app_desktop_web">Element Web
+\nElement Desktop</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
+    <string name="use_latest_app">Seqdec aferdis aneggaru ɣef yibenkan-nniḍen:</string>
+    <string name="command_description_discard_session_not_handled">Yettusefrak kan deg texxamin yettwawgelhen</string>
+    <string name="enter_secret_storage_passphrase_or_key">Seqdec %1$s-inek·inem neɣ seqdec %2$s-inek.inem i wakken ad tkemmleḍ.</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Aḥraz ur yezmir ara ad yekkes awgelhen s tsarut-a n tririt: ttxil-k·m sefqed ma d tasarut n tririt tameɣtut i teskecmeḍ.</string>
+    <string name="failed_to_access_secure_storage">Anekcum ɣer uklas aɣelsan ur yeddi ara</string>
+
+    <string name="encrypted_unverified">Yettuwgelhen s yibenk ur nettwasenqed ara</string>
+    <string name="verify_this_session">Senqed anekcam amaynut i ikecmen ɣer umiḍan-ik/im: %1$s</string>
+
+    <string name="crosssigning_verify_session">Senqed anekcam</string>
+    <string name="mark_as_verified">Creḍ yettwaḍman</string>
+
+    <string name="call_notification_answer">Qbel</string>
+    <string name="call_notification_reject">Agwi</string>
+    <string name="call_notification_hangup">Ɛelleq</string>
+
+    <string name="error_empty_field_choose_user_name">Ttxil-ik·im fren isem n useqdac.</string>
+    <string name="error_empty_field_choose_password">Ttxil-ik·im fren awal uffir.</string>
+    <string name="add_members_to_room">Rnu iɛeggalen</string>
+    <string name="invite_users_to_room_action_invite">NCED</string>
+    <string name="inviting_users_to_room">Ancad n yiseqdacen…</string>
+    <string name="invite_users_to_room_title">Nced-d iseqdacen</string>
+    <string name="invitation_sent_to_one_user">Tinubga tettwazen i %1$s</string>
+    <string name="invitations_sent_to_two_users">Tinubga tettwazen i %1$s d %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Tinubga tettwazen i %1$s d wayeḍ-nniḍen</item>
+        <item quantity="other">Tinubga tettwazen i %1$s d %2$d d wiyeḍ</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Ur nezmir ara ad d-nesnubget iseqdacen. Ttxil-k·m wali iseqdac i tebɣiḍ ad d-tesnubegteḍ syen ɛreḍ tikkelt-nniḍen.</string>
+
+    <string name="choose_locale_other_locales_title">Tutlayin-nniḍen yellan</string>
+    <string name="choose_locale_loading_locales">Sali-d tutlayin yellan…</string>
+
+    <string name="open_terms_of">Ldi tiwtilin n %s</string>
+    <string name="identity_server_set_default_submit">Seqdec %1$s</string>
+    <string name="power_level_edit_title">Sbadu tamlilt</string>
+    <string name="power_level_title">Tamlilt</string>
+    <string name="a11y_open_chat">Ldi adiwenni</string>
+    <string name="a11y_mute_microphone">Sgugem asawaḍ</string>
+    <string name="a11y_unmute_microphone">Kkes asgugem i usawaḍ</string>
+    <string name="a11y_stop_camera">Seḥbes takamiṛat</string>
+    <string name="a11y_start_camera">Senker takamiṛat</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Aḥraz aɣelsan</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Seqdec tasarut n tɣellist</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Sirew tasarut n tɣellist ara tḥerzeḍ deg wadeg yettwaḍemnen, am yimsefrak n wawalen uufiren neɣ deg usenduq.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Sbadu tafyirt taɣelsant</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Kles tasarut-ik·im n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ neɣ usenduq.</string>
+
+    <string name="save_your_security_key_notice">Kles tasarut-ik·im n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ neɣ usenduq.</string>
+
+    <string name="room_settings_save_success">Tbeddleḍ iɣewwaren n texxamt akken iwata</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">Ur tezmireḍ ara ad tkecmeḍ ɣer izen-a</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Aṛaǧu i umazray n uwgelhen</string>
+
+    <string name="send_bug_report_app_crashed">Asnas yerreẓ tikkelt-nni taneggarut. Tebɣiḍ ad teldiḍ agdil n uneqqis n truẓi\?</string>
+    <string name="no_sticker_application_dialog_content">Akka tura ur tesɛiḍ ara akemmus n yistiker yettwaremden.
+\n
+\nRnu yiwen tura\?</string>
+
+    <string name="room_participants_action_cancel_invite_title">Sefsex tinubga</string>
+    <string name="room_event_action_report_prompt_reason">Taɣzint i tuzna n ugbur-a</string>
+    <string name="devices_details_dialog_title">Talɣut ɣef tɣimit</string>
+    <string name="settings_select_country">Fren tamurt</string>
+
+    <string name="settings_phone_number_country_error">Ttxil-k·m fren tamurt</string>
+    <string name="settings_phone_number_label">Uṭṭun n tiliɣri</string>
+    <string name="settings_phone_number_error">Uṭṭun n tiliɣri d arameɣtu i ufran n tmurt</string>
+    <string name="settings_phone_number_verification">Asenqed n wuṭṭun n tilifun</string>
+    <string name="settings_phone_number_verification_instruction">Ad naze-n SMS deg-s tangalt n usenqed. Ttxil-k·m sekcem tangalt-a ddaw.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Sekcem tangalt n usenqed</string>
+    <string name="settings_phone_number_verification_error">Tuccḍa mi ara nessentam uṭṭun-ik·im n tilifun</string>
+    <string name="account_phone_number_error">Tella-d tuccḍa mi ara nessenqad uṭṭun-ik·im n tilifun.</string>
+    <string name="account_additional_info">Talut-nnien: %s</string>
+
+    <string name="settings_default_compression">Asekkussem amezwer</string>
+    <string name="settings_default_media_source">Taɣbalut n umidyat amezwer</string>
+    <string name="room_settings_topic">Asentel</string>
+    <string name="encryption_information_algorithm">Alguritm</string>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 texxamt</item>
+        <item quantity="other">%d texxamin</item>
+    </plurals>
+
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="small">Meẓẓiy</string>
+    <string name="large">Hraw</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Ttxil-k·m sekcem tasarut n tririt</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Rmed awgelhen</string>
+
+    <string name="bootstrap_loading_text">Ayagi yezmer ad yeṭṭef kra n wakud, ttxil-k·m ṣṣber.</string>
+    <string name="bootstrap_loading_title">Asbadu n tririt.</string>
+    <string name="bootstrap_finish_title">Tsuliḍ!</string>
+    <string name="keep_it_safe">Eǧǧ-it d aɣelasn</string>
+    <string name="bootstrap_save_key_description">Seqdec wa %1$s d azeṭṭa aɣelsan mi ara tettuḍ %2$s-inek·inem.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Asuffeɣ n tsura n timagit yettwarnan</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Asirew n tsarut n tɣellist seg tefyirt tuffirt</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Asbadu n tsarut s wudem amezwar n SSSS</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Amtawi n tsarut tagejdant</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Amtawi n tsarut n useqdac</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Amtawi n tsarut n uzmul asuf</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Asbadu n uḥraz n tsarut</string>
+
+
+    <string name="bootstrap_cross_signing_success">%2$s &amp; %1$s inek·inem ttusbadun tura.
+\n
+\nEǧǧ-iten d iɣelsanen! Ad ten-teḥwiǧeḍ ad teldiḍ iznan yettwawgelhen d telɣut n tɣellist ma yella tesruḥeḍ akk tiɣimiyin-ik·im yettwaremden.</string>
+
+    <string name="bootstrap_crosssigning_print_it">&lt;b&gt;Siggez-itt syen kles-itt deg wadeg aɣelsan</string>
+    <string name="bootstrap_crosssigning_save_usb">Sekles-itt ɣef tsarut USB neɣ deg yibenk n uḥraz</string>
+    <string name="bootstrap_crosssigning_save_cloud">Nɣel-itt ɣer uklas-ik·im n usigna udmawan</string>
+
+    <string name="auth_flow_not_supported">Ur tezmireḍ ara ad tgeḍ aya seg uziraz</string>
+
+    <string name="bootstrap_skip_text">Asbadu n tefyirt tuffirt n tririt ad ak·am-teḍmen taɣellist &amp; tawaledyawt n yiznan yettwawgelhen, yettwattkalen.
+\n
+\nMa yella ur tebɣiḍ ara ad tesbaduḍ awal uffir n yizen, sirew deg wadeg-is tasarut n yizen.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Imi yella uwgelhen seg yixef er yixef, ilaq-ak·am ad terǧuḍ i yizen n walbaɛḍ ad ak·am-id-yaweḍ acku ur ak·am-d-ttwaznent ara tsura akken iwata.</string>
+    <string name="crypto_error_withheld_blacklisted">Ur tezmireḍ ara ad tkecmeḍ ɣer yizen-a acku tettusweḥleḍ sɣur amazan</string>
+    <string name="crypto_error_withheld_unverified">Ur tezmireḍ ara ad tkecmeḍ ɣer yizen-a acku tiɣimit-ik·im ur tt-yeḍmin ara umazan</string>
+    <string name="crypto_error_withheld_generic">Ur tezmire ara ad tkecmeḍ ɣer yizen-a acku amazan iɛemmed ur d-yuzin ara tisura</string>
+    <string name="element_disclaimer_content">S tumert meqqren ara ak-d-nini nbeddel isem! Asnas-ik·im yettwaleqqem, ha-t-an tkecmeḍ ɣer umiḍan-ik·im.</string>
+</resources>

@@ -69,17 +69,17 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         R.drawable.ic_shield_black,
                         shouldBeDisplayedIn = { activity ->
                             if (activity is VectorBaseActivity) {
-                                // TODO a bit too hugly :/
+                                // TODO a bit too ugly :/
                                 activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
                                     false.also {
                                         popupAlertManager.cancelAlert(uid)
                                     }
                                 } ?: true
                             } else true
-                        })
+                        },
+                        matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
+                )
                         .apply {
-                            matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
-
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -132,10 +132,10 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true
-                    })
+                    },
+                    matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
+            )
                     .apply {
-                        matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
-
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 val roomId = pr.roomId

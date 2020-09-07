@@ -79,68 +79,7 @@
     <string name="notice_event_redacted_with_reason">Zpráva byla smazána [důvod: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Zpráva smazána uživatelem %1$s [důvod: %2$s]</string>
     <string name="notice_room_third_party_revoked_invite">Uživatel %1$s obnovil pozvánku do místnosti pro uživatele %2$s</string>
-    <string name="verification_emoji_cat">Kočka</string>
-    <string name="verification_emoji_lion">Lev</string>
-    <string name="verification_emoji_horse">Kůň</string>
-    <string name="verification_emoji_unicorn">Jednorožec</string>
-    <string name="verification_emoji_pig">Prase</string>
-    <string name="verification_emoji_elephant">Slon</string>
-    <string name="verification_emoji_rabbit">Králík</string>
-    <string name="verification_emoji_panda">Panda</string>
-    <string name="verification_emoji_rooster">Kohout</string>
-    <string name="verification_emoji_penguin">Tučňák</string>
-    <string name="verification_emoji_turtle">Želva</string>
-    <string name="verification_emoji_fish">Ryba</string>
-    <string name="verification_emoji_octopus">Chobotnice</string>
-    <string name="verification_emoji_butterfly">Motýl</string>
-    <string name="verification_emoji_flower">Květina</string>
-    <string name="verification_emoji_tree">Strom</string>
-    <string name="verification_emoji_cactus">Kaktus</string>
-    <string name="verification_emoji_mushroom">Houba</string>
-    <string name="verification_emoji_globe">Zeměkoule</string>
-    <string name="verification_emoji_moon">Měsíc</string>
-    <string name="verification_emoji_cloud">Mrak</string>
-    <string name="verification_emoji_fire">Oheň</string>
-    <string name="verification_emoji_banana">Banán</string>
-    <string name="verification_emoji_apple">Jablko</string>
-    <string name="verification_emoji_strawberry">Jahoda</string>
-    <string name="verification_emoji_corn">Kukuřice</string>
-    <string name="verification_emoji_pizza">Pizza</string>
-    <string name="verification_emoji_cake">Dort</string>
-    <string name="verification_emoji_heart">Srdce</string>
-    <string name="verification_emoji_smiley">Smajlík</string>
-    <string name="verification_emoji_robot">Robot</string>
-    <string name="verification_emoji_hat">Klobouk</string>
-    <string name="verification_emoji_glasses">Brýle</string>
-    <string name="verification_emoji_santa">Santa Klaus</string>
-    <string name="verification_emoji_thumbsup">Zvednutý palec</string>
-    <string name="verification_emoji_umbrella">Deštník</string>
-    <string name="verification_emoji_hourglass">Přesípací hodiny</string>
-    <string name="verification_emoji_clock">Hodiny</string>
-    <string name="verification_emoji_gift">Dárek</string>
-    <string name="verification_emoji_lightbulb">Žárovka</string>
-    <string name="verification_emoji_book">Kniha</string>
-    <string name="verification_emoji_pencil">Tužka</string>
-    <string name="verification_emoji_paperclip">Sponka</string>
-    <string name="verification_emoji_scissors">Nůžky</string>
-    <string name="verification_emoji_lock">Zámek</string>
-    <string name="verification_emoji_key">Klíč</string>
-    <string name="verification_emoji_hammer">Kladivo</string>
-    <string name="verification_emoji_telephone">Telefon</string>
-    <string name="verification_emoji_flag">Vlajka</string>
-    <string name="verification_emoji_train">Vlak</string>
-    <string name="verification_emoji_bicycle">Jízdní kolo</string>
-    <string name="verification_emoji_airplane">Letadlo</string>
-    <string name="verification_emoji_rocket">Raketa</string>
-    <string name="verification_emoji_trophy">Trofej</string>
-    <string name="verification_emoji_ball">Míč</string>
-    <string name="verification_emoji_guitar">Kytara</string>
-    <string name="verification_emoji_trumpet">Trumpeta</string>
-    <string name="verification_emoji_bell">Zvon</string>
-    <string name="verification_emoji_anchor">Kotva</string>
-    <string name="verification_emoji_headphone">Sluchátka</string>
-    <string name="verification_emoji_folder">Desky</string>
-    <string name="initial_sync_start_importing_account">Úvodní synchronizace: 
+    <string name="initial_sync_start_importing_account">Úvodní synchronizace:
 \nImport účtu…</string>
     <string name="initial_sync_start_importing_account_crypto">Úvodní synchronizace: 
 \nImport klíčů</string>
@@ -156,8 +95,6 @@
 \nImport dat účtu</string>
 
     <string name="event_status_sending_message">Odesílání zprávy…</string>
-    <string name="verification_emoji_wrench">Maticový klíč</string>
-    <string name="verification_emoji_pin">Připínáček</string>
 
     <string name="initial_sync_start_importing_account_invited_rooms">Úvodní synchronizace:
 \nImport pozvánek</string>

@@ -42,7 +42,7 @@
     <string name="view_source">Vidi fonton</string>
     <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
     <string name="delete">Forigi</string>
-    <string name="rename">Renomi</string>
+    <string name="rename">Alinomi</string>
     <string name="title_activity_member_details">Detaloj pri ano</string>
     <string name="title_activity_historical">Historia</string>
     <string name="report_content">Raporti enhavon</string>
@@ -105,14 +105,14 @@
 
     <string name="keys_backup_is_not_finished_please_wait">Savkopio de ŝlosiloj ne finiĝis; bonvolu atendi…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Vi perdos viajn ĉifritajn mesaĝojn se vi nun adiaŭos</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Savkopio de ŝlosiloj progresas. Se vi nun adiaŭos, vi perdos aliron al viaj ĉifritaj mesaĝoj.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Progresas savkopio de ŝlosiloj. Se vi nun adiaŭos, vi perdos aliron al viaj ĉifritaj mesaĝoj.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Sekura savkopiado de ŝlosiloj devus esti aktiva en ĉiuj viaj salutaĵoj por eviti perdon de aliro al viaj ĉifritaj mesaĝoj.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Mi ne volas miajn ĉifritajn mesaĝojn</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Savkopiante ŝlosilojn…</string>
     <string name="keys_backup_activate">Uzi savkopiadon de ŝolsiloj</string>
     <string name="are_you_sure">Ĉu vi certas\?</string>
     <string name="backup">Savkopii</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vi perdos aliron al viaj ĉifritaj mesaĝoj malse vi savkopios viajn ŝlosilojn antaŭ adiaŭo.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vi perdos aliron al viaj ĉifritaj mesaĝoj, se vi ne savkopios viajn ŝlosilojn antaŭ adiaŭo.</string>
 
     <string name="stay">Resti</string>
     <string name="none">Neniu</string>
@@ -598,8 +598,15 @@
     <string name="settings_troubleshoot_test_account_settings_title">Agordoj de konto.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Sciigoj estas ŝaltitaj por via konto.</string>
     <string name="play_video">Ludi</string>
-    <string name="pause_video">Paûzi</string>
+    <string name="pause_video">Paŭzi</string>
     <string name="dismiss">Eksigi</string>
 
 
+    <string name="no_permissions_to_start_conf_call">Vi ne havas permeson ekigi grupan vokon en ĉi tiu ĉambro</string>
+    <string name="conference_call_in_progress">Grupa voko jam daŭras!</string>
+    <string name="video_meeting">Komenci grupan vidvokon</string>
+    <string name="audio_meeting">Komenci grupan voĉvokon</string>
+    <string name="audio_video_meeting_description">Grupaj vokoj uzas la politikon de Jitsi pri permesoj kaj sekureco. Ĉiuj personoj en la ĉambro vidos aliĝilon dum la voko daŭros.</string>
+    <string name="cannot_call_yourself">Vi ne povas voki sola</string>
+    <string name="cannot_call_yourself_with_invite">Vi ne povas voki sola; atendu aliajn partoprenantojn</string>
 </resources>

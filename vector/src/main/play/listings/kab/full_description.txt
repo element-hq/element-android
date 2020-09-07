@@ -1,0 +1,30 @@
+Element d anaw amaynut n usnas n tirawt d uttekki ara:
+
+1. Ad ak•am-yefken tazmert n usenqed akken ad tḥerzeḍ tabaḍnit-ik•im
+2. Ad k•kem-yeǧǧ ad temmeslayeḍ d yal yiwen deg neɣ akkin i uẓeṭṭa n Matrix s usekcem n yisnasen am Slack
+3. Ad k•kem-immesten seg udellel, asekyed n yisefka d tebḥirin tufrigin
+4. Ad k•kem-iɣelles s uwgelhen seg yixef ɣer yixef, s uzmal anmidag i usenqed n wiyaḍ
+
+Element yemgarad aṭas ɣef yisnasen-nniḍen n tirawt d uttekki acku mačči d aslammas yerna d aɣbalu yeldin.
+
+Element ad k•kem-yeǧǧ ad tsennefɣeḍ iman-ik•im - neɣ ad tferneḍ asenneftaɣ - akken ad tesɛuḍ tabaḍnit, ad tesneqdeḍ isefka-k•m d yidiwenniyen-ik•im. Ad ak•am-yefk tasiregt ad tkecmeḍ ɣer uẓeṭṭa yeldin, akken ur tettɣimiḍ ara tettmeslayeḍ d yiseqdacen n Element kan. Yerna d aɣellsan nezzeh.
+
+Element yezmer ad yeg akk aya acku yetteddu deg Matrix - alugen i teɣwalt yeldin ur nelli d taslammast.
+
+Element ad ak•am-yefk tazmert ad tferneḍ asenneftaɣ i yidiwenniyen-ik•im. Seg usnas n Element, tzemreḍ ad tferneḍ ad tsennefɣeḍ s yiberdan yemgaraden:
+
+1. Ldi amiḍan baṭel deg uqeddac azayez n Matrix.org
+2. Sennefteɣ amiḍan-ik•im s yiman-ik•im s usenker n uqeddac deg warrum-ik•im
+3. Jerred i umiḍan deg uqeddac yugnen s umulteɣ ɣer tɣerɣert n usennefteɣ n Element Matrix Services
+
+<b>Iwacu ara tferneḍ Element?</b>
+
+<b>SƐU ISEFKA-INEK•INEM</b>: D kečč/kemm ara ifernen anda ara tḥerzeḍ isefka-k•m d yiznan-ik•im. D ayla-k•m, d kečč/kemm ara t-isneqden, mačči d kra n MEGACORP ara yamden isefka-k•m neɣ ara yefken tasiregt n unekcum i wis tlata.
+
+<b>TIRAWT YELDIN D UTTEKKI</b>: Tzemreḍ ad temmeslayeḍ d yal yiwen deg uẓeṭṭa n Matrix, ɣas seqdacen Element neɣ asnas-nniḍen n Matrix, ulamma daɣen seqdacen anagraw n tirawt yemgaraden am Slack, IRC neɣ XMPP.
+
+<b>D AƔELLSAN NEZZEH</b>: Awgelhen seg yixef ɣer yixef n tidet (anagar wid/tid i yellan deg udiwenni i izemren ad zemken iznan), d uzmal anmidag i usenqed n yibenken n yimettekkiyen deg udiwenni.
+
+<b>TAƔWALT TUMMIDT</b>: Tirawt, isawalen s taɣect neɣ s tvidyut, beṭṭu n yifuyla, beṭṭu n ugdil d waṭas n yimsidaf, ibuṭen d yiwiǧiten. Bnu tixxamin, timezdagnutin, ḍfer amaynut tfakkeḍ timahilin.
+
+<b>ANDA TEBƔUḌ TILIḌ</b>: Ḍfer amaynut anda tebɣuḍ tiliḍ s umazray ummid n yiznan yemtawan deg akk ibenken-ik•im, daɣen deg web deg https://app.element.io.

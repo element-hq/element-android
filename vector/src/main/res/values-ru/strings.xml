@@ -12,6 +12,10 @@
     <string name="title_activity_member_details">Информация о собеседнике</string>
     <string name="title_activity_historical">Исторические</string>
 
+    <string name="call_notification_answer">Принять</string>
+    <string name="call_notification_reject">Отклонить</string>
+    <string name="call_notification_hangup">Завершить звонок</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
@@ -611,7 +615,7 @@
     <string name="encryption_information_sender_device_information">Информация о сессии отправителя</string>
     <string name="encryption_information_device_name">Публичное имя</string>
     <string name="encryption_information_name">Публичное имя</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
@@ -1592,7 +1596,7 @@
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрационный токен</string>
 
-    <string name="send_suggestion">Сделайте предложение</string>
+    <string name="send_suggestion">Оставить отзыв</string>
     <string name="send_suggestion_content">Пожалуйста, напишите ваше предложение ниже.</string>
     <string name="send_suggestion_report_placeholder">Опишите ваше предложение здесь</string>
     <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
@@ -1774,7 +1778,7 @@
     <string name="attachment_type_audio">Звук</string>
     <string name="attachment_type_gallery">Галерея</string>
     <string name="report_content_spam">Это спам</string>
-    <string name="message_ignore_user">Заблокировать пользователя</string>
+    <string name="message_ignore_user">Игнорировать пользователя</string>
 
     <string name="room_list_quick_actions_notifications_all">Все сообщения</string>
     <string name="room_list_quick_actions_notifications_mentions">Только при упоминаниях</string>
@@ -1792,7 +1796,7 @@
     <string name="attachment_type_sticker">Стикер</string>
     <string name="report_content_custom_hint">Причина жалобы на контент</string>
     <string name="report_content_custom_submit">Пожаловаться</string>
-    <string name="block_user">Заблокировать пользователя</string>
+    <string name="block_user">ИГНОРИРОВАТЬ ПОЛЬЗОВАТЕЛЯ</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Все сообщения (громко)</string>
     <string name="room_list_quick_actions_notifications_mute">Без звука</string>
@@ -2664,4 +2668,37 @@
     <string name="auth_pin_confirm_to_disable_title">Подтвердите PIN-код, чтобы отключить PIN-код</string>
     <string name="settings_call_show_confirmation_dialog_title">Предотвращение случайных звонков</string>
     <string name="settings_call_show_confirmation_dialog_summary">Спрашивать подтверждение перед звонком</string>
+    <string name="no_permissions_to_start_conf_call">У вас нет разрешения на запуск конференции в этой комнате</string>
+    <string name="conference_call_in_progress">Конференция уже идет!</string>
+    <string name="video_meeting">Начать видеовстречу</string>
+    <string name="audio_meeting">Начать аудиовстречу</string>
+    <string name="audio_video_meeting_description">На встречах используются политики безопасности и разрешения Jitsi. Все люди, находящиеся в данный момент в комнате, увидят приглашение присоединиться во время вашей встречи.</string>
+    <string name="cannot_call_yourself">Вы не можете позвонить самому себе</string>
+    <string name="cannot_call_yourself_with_invite">Вы не можете позвонить самому себе, дождитесь, пока участники примут приглашение</string>
+    <string name="failed_to_add_widget">Не удалось добавить виджет</string>
+    <string name="failed_to_remove_widget">Не удалось удалить виджет</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d ключ успешно импортирован.</item>
+        <item quantity="few">%1$d/%2$d ключа успешно импортированы.</item>
+        <item quantity="many">%1$d/%2$d ключей успешно импортировано.</item>
+    </plurals>
+
+    <string name="room_manage_integrations">Управление интеграциями</string>
+    <string name="room_no_active_widgets">Нет активных виджетов</string>
+    <string name="create_room_federation_error">Комната создана, но некоторые приглашения не отправлены по следующей причине:
+\n
+\n%s</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s и %3$d читает</item>
+        <item quantity="few">%1$s, %2$s и %3$d других читают</item>
+        <item quantity="many">%1$s, %2$s и %3$d других читают</item>
+    </plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Неверный код, осталась %d попытка</item>
+        <item quantity="few">Неверный код, осталось %d попытки</item>
+        <item quantity="many">Неверный код, осталось %d попыток</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Предупреждение! Последняя оставшаяся попытка перед выходом из системы!</string>
+    <string name="too_many_pin_failures">Слишком много ошибок, вы вышли из системы</string>
 </resources>

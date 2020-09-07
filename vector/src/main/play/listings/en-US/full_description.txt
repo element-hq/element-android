@@ -13,7 +13,7 @@ Element is able to do all this because it operates on Matrix - the standard for 
 
 Element puts you in control by letting you choose who hosts your conversations. From the Element app, you can choose to host in different ways:
 
-1. Get a free account on the matrix.org public server
+1. Get a free account on the matrix.org public server hosted by the Matrix developers, or choose from thousands of public servers hosted by volunteers
 2. Self-host your account by running a server on your own hardware
 3. Sign up for an account on a custom server by simply subscribing to the Element Matrix Services hosting platform
 

@@ -77,73 +77,7 @@
 
     <string name="room_displayname_empty_room">Leeg gesprek</string>
 
-
-    <string name="verification_emoji_dog">Hound</string>
-    <string name="verification_emoji_cat">Katte</string>
-    <string name="verification_emoji_lion">Leeuw</string>
-    <string name="verification_emoji_horse">Peird</string>
-    <string name="verification_emoji_unicorn">Eenhoorn</string>
-    <string name="verification_emoji_pig">Zwyn</string>
-    <string name="verification_emoji_elephant">Olifant</string>
-    <string name="verification_emoji_rabbit">Keun</string>
-    <string name="verification_emoji_panda">Panda</string>
-    <string name="verification_emoji_rooster">Hoane</string>
-    <string name="verification_emoji_penguin">Pinguin</string>
-    <string name="verification_emoji_turtle">Schildpadde</string>
-    <string name="verification_emoji_fish">Vis</string>
-    <string name="verification_emoji_octopus">Octopus</string>
-    <string name="verification_emoji_butterfly">Beutervlieg</string>
-    <string name="verification_emoji_flower">Bloem</string>
-    <string name="verification_emoji_tree">Boom</string>
-    <string name="verification_emoji_cactus">Cactus</string>
-    <string name="verification_emoji_mushroom">Paddestoel</string>
-    <string name="verification_emoji_globe">Eirdbol</string>
-    <string name="verification_emoji_moon">Moane</string>
-    <string name="verification_emoji_cloud">Wolk</string>
-    <string name="verification_emoji_fire">Vier</string>
-    <string name="verification_emoji_banana">Banoan</string>
-    <string name="verification_emoji_apple">Appel</string>
-    <string name="verification_emoji_strawberry">Freize</string>
-    <string name="verification_emoji_corn">Mais</string>
-    <string name="verification_emoji_pizza">Pizza</string>
-    <string name="verification_emoji_cake">Toarte</string>
-    <string name="verification_emoji_heart">Erte</string>
-    <string name="verification_emoji_smiley">Smiley</string>
-    <string name="verification_emoji_robot">Robot</string>
-    <string name="verification_emoji_hat">Hoed</string>
-    <string name="verification_emoji_glasses">Bril</string>
-    <string name="verification_emoji_wrench">Moersleutel</string>
-    <string name="verification_emoji_santa">Kestman</string>
-    <string name="verification_emoji_thumbsup">Duum omhooge</string>
-    <string name="verification_emoji_umbrella">Paraplu</string>
-    <string name="verification_emoji_hourglass">Zandloper</string>
-    <string name="verification_emoji_clock">Klok</string>
-    <string name="verification_emoji_gift">Cadeau</string>
-    <string name="verification_emoji_lightbulb">Gloeilampe</string>
-    <string name="verification_emoji_book">Boek</string>
-    <string name="verification_emoji_pencil">Potlood</string>
-    <string name="verification_emoji_paperclip">Paperclip</string>
-    <string name="verification_emoji_scissors">Schoar</string>
-    <string name="verification_emoji_lock">Hangslot</string>
-    <string name="verification_emoji_key">Sleutel</string>
-    <string name="verification_emoji_hammer">Oamer</string>
-    <string name="verification_emoji_telephone">Telefong</string>
-    <string name="verification_emoji_flag">Vlagge</string>
-    <string name="verification_emoji_train">Tring</string>
-    <string name="verification_emoji_bicycle">Veloo</string>
-    <string name="verification_emoji_airplane">Vlieger</string>
-    <string name="verification_emoji_rocket">Rakette</string>
-    <string name="verification_emoji_trophy">Trofee</string>
-    <string name="verification_emoji_ball">Bolle</string>
-    <string name="verification_emoji_guitar">Gitoar</string>
-    <string name="verification_emoji_trumpet">Trompette</string>
-    <string name="verification_emoji_bell">Belle</string>
-    <string name="verification_emoji_anchor">Anker</string>
-    <string name="verification_emoji_headphone">Koptelefong</string>
-    <string name="verification_emoji_folder">Mappe</string>
-    <string name="verification_emoji_pin">Pinne</string>
-
-    <string name="initial_sync_start_importing_account">Initiële synchronisoasje: 
+    <string name="initial_sync_start_importing_account">Initiële synchronisoasje:
 \nAccount wor geïmporteerd…</string>
     <string name="initial_sync_start_importing_account_crypto">Initiële synchronisoasje: 
 \nCrypto wor geïmporteerd</string>

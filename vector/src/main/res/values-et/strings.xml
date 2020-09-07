@@ -842,7 +842,7 @@
     <string name="encryption_information_device_name_with_warning">Avalik nimi (nähtav neile, kellega sa suhtled)</string>
     <string name="device_name_warning">Sessiooni avalik nimi on nähtav neile, kellega sa suhtled</string>
     <string name="encryption_information_name">Avalik nimi</string>
-    <string name="encryption_information_device_id">Seadme tunnus</string>
+    <string name="encryption_information_device_id">Sessiooni tunnus</string>
     <string name="encryption_information_device_key">Sessiooni võti</string>
     <string name="encryption_information_verification">Verifitseerimine</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 sõrmejälg</string>
@@ -2200,4 +2200,330 @@
 
     <string name="command_description_plain">Saadab sõnumi vormindamata tekstina ega tõlgenda seda markdown-vormindusena</string>
 
+    <string name="no_permissions_to_start_conf_call">Sul ei ole õigusi siin jututoas rühmakõne algatamiseks</string>
+    <string name="conference_call_in_progress">Rühmakõne on hetkel käimas!</string>
+    <string name="video_meeting">Alusta videokoosolekut</string>
+    <string name="audio_meeting">Alusta koosolekut</string>
+    <string name="audio_video_meeting_description">Koosolekud kasutavad Jitsi turvaloogikat ja õigusi. Kõik hetkel jututoas olijad näevad kutset koosolekuga liitumiseks.</string>
+    <string name="cannot_call_yourself">Sa ei saa iseendale helistada</string>
+    <string name="cannot_call_yourself_with_invite">Sa ei saa iseendale helistada, palun oota ei teised osalejad kutsele vastaksid</string>
+    <string name="failed_to_add_widget">Vidina lisamine ei õnnestunud</string>
+    <string name="failed_to_remove_widget">Vidina eemaldamine ei õnnestunud</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d võtme importimine õnnestus.</item>
+        <item quantity="other">%1$d/%2$d võtme importimine õnnestus.</item>
+    </plurals>
+
+    <string name="room_manage_integrations">Halda lõiminguid</string>
+    <string name="room_no_active_widgets">Aktiivseid vidinaid ei leidu</string>
+    <string name="create_room_federation_error">Jututuba on loodud, kuid mõned kutsed on saatmata järgmistel põhjustel:
+\n
+\n%s</string>
+
+    <string name="labs_merge_e2e_in_timeline">Ei õnnestunud dekrüptida ajajoonel leiduvat sõnumit</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Sa parasjagu jagad oma e-posti aadressi ja telefoninumbrit isikutuvastusserveriga %1$s. Selleks, et lõpetada see jagamine, pead uuesti looma ühenduse isikutuvastusserveriga %2$s.</string>
+    <string name="labs_allow_extended_logging_summary">Detailne logimine võimaldab arendajatel saada rohkem teadet kui sa peale nutiseadme tõsist raputamist saadad veateate. Kui ka detailne logimine on kasutusel, siis rakendus ei logi sõnumite sisu ega isiklikke andmeid.</string>
+
+
+    <string name="error_terms_not_accepted">Kui sa oled nõustunud koduserveri kasutustingimustega, siis palun proovi uuesti.</string>
+
+    <string name="error_network_timeout">Tundub, et server ei suuda päringule mõistliku ajaga vastata ning see võib olla seotud kas vigase ühendusega või serveri veaga. Palun proovi mõne aja pärast uuesti.</string>
+
+    <string name="a11y_open_drawer">Ava navigatsioonivalik</string>
+    <string name="a11y_create_menu_open">Ava menüüvalik jututoa loomiseks</string>
+    <string name="a11y_create_menu_close">Sulge menüüvalik jututoa loomiseks…</string>
+    <string name="a11y_close_keys_backup_banner">Sulge võtmete varunduse teade</string>
+    <string name="a11y_show_password">Näita salasõna</string>
+    <string name="a11y_hide_password">Peida salasõna</string>
+    <string name="a11y_jump_to_bottom">Mine lõppu</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s ja %3$d muu loevad</item>
+        <item quantity="other">%1$s, %2$s ja %3$d muud loevad</item>
+    </plurals>
+    <string name="three_users_read">%1$s, %2$s ja %3$s lugesid</string>
+    <string name="two_users_read">%1$s ja %2$s lugesid</string>
+    <string name="one_user_read">%s luges</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 kasutaja luges</item>
+        <item quantity="other">%d kasutajat lugesid</item>
+    </plurals>
+
+    <string name="error_file_too_big">See fail „%1$s“ (%2$s) on üleslaadimiseks liiga suur. Failisuuruse ülempiir on %3$s.</string>
+
+    <string name="error_attachment">Manuse laadimisel tekkis viga.</string>
+    <string name="attachment_type_file">Fail</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Kaamera</string>
+    <string name="attachment_type_audio">Heli</string>
+    <string name="attachment_type_gallery">Meediagalerii</string>
+    <string name="attachment_type_sticker">Kleeps</string>
+    <string name="error_handling_incoming_share">Jagatud andmete töötlemine ei õnnestunud</string>
+
+    <string name="uploads_media_title">MEEDIA</string>
+    <string name="block_user">EIRA KASUTAJAT</string>
+
+    <string name="content_reported_title">Teatasin sisust</string>
+    <string name="content_reported_content">Selle sisu kohta on nüüd teade saadetud.
+\n
+\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutaja blokeerida</string>
+    <string name="content_reported_as_spam_title">See on rämpssõnum</string>
+    <string name="content_reported_as_spam_content">Haldaja sai nüüd teate, et see sisu on rämpssõnum.
+\n
+\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutaja blokeerida</string>
+    <string name="content_reported_as_inappropriate_title">See sõnum ei ole sobilik</string>
+    <string name="content_reported_as_inappropriate_content">Haldaja sai nüüd teate, et see sisu ei ole sobilik.
+\n
+\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutaja blokeerida</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Läbiva krüptograafia jaoks vajalike võtmete salvestamiseks kohalikule andmekandjale vaajab Element sinu luba.
+\n
+\nSelleks et saaksid võtmed käsitsi eksportida, siis palun anna selleks järgmises vaates luba.</string>
+
+    <string name="no_network_indicator">Hetkel puudub võrguühendus</string>
+
+    <string name="message_ignore_user">Eira kasutajat</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Kõik sõnumid (lärmakas)</string>
+    <string name="room_list_quick_actions_notifications_all">Kõik sõnumid</string>
+    <string name="room_list_quick_actions_notifications_mentions">Ainult mainimised</string>
+    <string name="room_list_quick_actions_notifications_mute">Summuta</string>
+    <string name="room_list_quick_actions_settings">Seadistused</string>
+    <string name="room_list_quick_actions_favorite_add">Lisa lemmikuks</string>
+    <string name="room_list_quick_actions_favorite_remove">Eemalda lemmikute hulgast</string>
+    <string name="room_list_quick_actions_leave">Lahku sellest jututoast</string>
+    <string name="notice_member_no_changes">%1$s ei teinud muudatusi</string>
+    <string name="notice_member_no_changes_by_you">Sina ei teinud muudatusi</string>
+    <string name="command_description_spoiler">Saadab selle sõnumi rõõmurikkujana</string>
+    <string name="spoiler">Rõõmurikkuja</string>
+    <string name="reaction_search_type_hint">Reageerimiste leidmiseks sisesta otsingusõnad.</string>
+
+    <string name="login_splash_title">See on sinu vestlus, mida sa ka tegelikult kontrollid.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Salasõna kinnitamiseks klõpsi kirjas olnud linki. Kui oled avanud selles kirjas leidunud lingi, siis palun vajuta järgnevat nuppu.</string>
+    <string name="login_connect_using_matrix_id_notice">Kui sul juba on kasutajakonto ning sa tead oma Matrix\'i kasutajatunnust ja salasõna, siis alternatiivina sa võid kasutada seda meetodit:</string>
+    <string name="login_connect_using_matrix_id_submit">Logi sisse Matrix\'i kasutajatunnusega</string>
+    <string name="login_signin_matrix_id_title">Logi sisse oma Matrix\'i kasutajatunnusega</string>
+    <string name="login_signin_matrix_id_notice">Kui sa võtad kasutusele konto koduserveris, siis sisesta alljärgnevalt oma Matrix\'i kasutajatunnus (näiteks @torekasutaja:domeen.ee) ja salasõna.</string>
+    <string name="login_signin_matrix_id_hint">Matrix\'i kasutajatunnus</string>
+    <string name="login_signin_matrix_id_password_notice">Kui sa ei tea oma salasṍna, siis mine tagasi ja loo uus salasõna.</string>
+    <string name="seen_by">Nähtud kasutaja poolt</string>
+
+    <string name="signed_out_title">Sa oled loginud välja</string>
+    <string name="signed_out_notice">See võib juhtuda eri põhjustel:
+\n
+\n• Sa oled muutnud oma salasõna mõnes teises sessioonis.
+\n
+\n• Sa oled selle sessiooni kustutanud mõnest teisest sessioonist.
+\n
+\n• Sinu koduserveri haldaja on turvakaalutlustel keelanud sinu ligipääsu.</string>
+    <string name="signed_out_submit">Logi uuesti sisse</string>
+
+    <string name="soft_logout_title">Sa oled loginud välja</string>
+    <string name="soft_logout_sso_not_same_user_error">Praegune sessioon kuulub kasutajale %1$s, kuid sina üritad siseneda kasutaajaga %2$s. Sellist võimalust Element hetkel ei toeta.
+\nPalun eemalda kõik andmed ning siis logi sisse muu kontoga.</string>
+
+    <string name="verification_conclusion_compromised">Mõni järgnevatest võib olla sattunud valedesse kätesse:
+\n 
+\n - Sinu koduserver
+\n - Selle osapoole koduserver, keda sa üritad verifitseerida
+\n - Sinu või teise osapoole internetiühendus
+\n - Sinu või teise osapoole seade</string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Pilt.</string>
+    <string name="sent_an_audio_file">Helifail</string>
+    <string name="sent_a_file">Fail</string>
+    <string name="room_profile_not_encrypted_subtitle">Sõnumid siin jututoas on läbivalt krüptitud.</string>
+    <string name="room_profile_encrypted_subtitle">Sõnumid siis jututoas kasutavad läbivat krüptimist.
+\n
+\nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.</string>
+    <string name="room_profile_section_security">Turvalisus</string>
+    <string name="room_profile_section_security_learn_more">Lisateave</string>
+    <string name="room_profile_section_more">Veel</string>
+    <string name="room_profile_section_admin">Haldustegevused</string>
+    <string name="room_profile_section_more_settings">Jututubade seadistused</string>
+    <string name="room_profile_section_more_notifications">Teavitused</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Üks inimene</item>
+        <item quantity="other">%1$d inimest</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Üleslaetud failid</string>
+    <string name="room_profile_section_more_leave">Lahku jututoast</string>
+    <string name="room_profile_leaving_room">Lahkun jututoast…</string>
+
+    <string name="room_member_power_level_admins">Haldajad</string>
+    <string name="room_member_power_level_moderators">Moderaatorid</string>
+    <string name="room_member_power_level_custom">Kohandatud õigused</string>
+    <string name="room_member_power_level_invites">Kutsed</string>
+    <string name="room_member_power_level_users">Kasutajad</string>
+
+    <string name="room_member_power_level_admin_in">Peakasutaja jututoas %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderaator jututoas %1$s</string>
+    <string name="room_member_power_level_default_in">Vaikimisi õigused jututoas %1$s</string>
+    <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$d) jututoas %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Hüppa lugemisteatise juurde</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">Element ei oska käsitleda %1$s-tüüpi sündmusi</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element ei oska käsitleda %1$s-tüüpi sünumeid</string>
+    <string name="rendering_event_error_exception">Tekkis viga, kui Element üritas töödelda sõnumi %1$s sisu</string>
+
+    <string name="call_notification_answer">Võta vastu</string>
+    <string name="call_notification_reject">Keeldu</string>
+    <string name="call_notification_hangup">Lõpeta kõne</string>
+
+    <string name="unignore">Lõpeta eiramine</string>
+
+    <string name="verify_cannot_cross_sign">See sessioon ei oska jagada verifitseerimisteavet sinu teiste sessioonidega.
+\nSeni salvestatakse verifitseerimisteave kohalikus seadmes ja jagatakse rakenduse tulevases versioonis.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Hiljutised jututoad</string>
+    <string name="verification_profile_device_untrust_info">Kuni antud kasutaja seda sessiooni ei usalda, on ta märgitud hoiatussildiga. Alternatiivina on sul võimalus verifiseerimist ka käsitsi teha.</string>
+
+
+    <string name="initialize_cross_signing">Käivita risttunnustamine</string>
+    <string name="reset_cross_signing">Lähtesta krüptovõtmed</string>
+
+    <string name="a11y_qr_code_for_verification">QR-kood</string>
+
+    <string name="qr_code_scanned_by_other_notice">Peaaegu valmis! Kas %s kuvab sama kilpi\?</string>
+    <string name="qr_code_scanned_by_other_yes">Jah</string>
+    <string name="qr_code_scanned_by_other_no">Ei</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Ühendus sinu serveriga on katkenud</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Lennurežiim on kasutusel</string>
+
+    <string name="settings_dev_tools">Arendaja töövahendid</string>
+    <string name="settings_account_data">Kasutajakonto andmed</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d hääl</item>
+        <item quantity="other">%d häält</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d hääl - lõplikud tulemused</item>
+        <item quantity="other">%d häält - lõplikud tulemused</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Tehtud valik</string>
+    <string name="command_description_poll">Loob lihtsa hääletuse</string>
+    <string name="verification_cannot_access_other_session">Kasuta taastamiseks mõeldud paroolifraasi või võtit</string>
+    <string name="verification_use_passphrase">Kui sa ei pääse ligi olemasolevale sessioonile</string>
+
+    <string name="new_signin">Uus sisselogimine</string>
+
+    <string name="enter_secret_storage_invalid">Ei leia turvahoidlast vajalikke andmeid</string>
+    <string name="enter_secret_storage_passphrase">Sisesta turvahoidla paroolifraas</string>
+    <string name="enter_secret_storage_passphrase_warning">Hoiatus:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Sa peaksid turvahoidlat kasutama vaid usaldusväärsest seadmest</string>
+
+    <string name="message_action_item_redact">Eemalda…</string>
+    <string name="share_confirm_room">Kas sa soovid seda manust saata kasutajale %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Saada pilt algupärases suuruses</item>
+        <item quantity="other">Saada pildid algupärases suuruses</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Kinnita eemaldamine</string>
+    <string name="delete_event_dialog_content">Kas sa oled kindel et soovid eemaldada (kustutada) seda sündmust\? Pane tähele, et see muutus võib tagasi pöörduda, kui muudad hiljem jututoa nime või teema nime.</string>
+    <string name="delete_event_dialog_reason_checkbox">Lisa põhjus</string>
+    <string name="delete_event_dialog_reason_hint">Kustutamise põhjus</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Kasutaja kustutas sündmuse, põhjusena %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Jututoa haldur on sündmust modereerinud, põhjusena %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Krüptovõtmed on juba uuendatud!</string>
+
+    <string name="login_default_session_public_name">Element Android</string>
+
+    <string name="settings_key_requests">Päringud võtmete laadimiseks</string>
+
+    <string name="e2e_use_keybackup">Võta krüptitud sõnumite ajalugu lukust lahti</string>
+
+    <string name="refresh">Värskenda</string>
+
+    <string name="new_session">Uus sisselogimine. Kas see olid sina\?</string>
+    <string name="new_session_review">Kontrollimiseks ja verifitseerimiseks klõpsi</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Kui sa katkestad, siis sa ei saa selles seadmes lugeda krüptitud sõnumeid ning muud kasutajad ei usalda seda</string>
+    <string name="verify_cancel_self_verification_from_trusted">Kui sa katkestad, siis sa ei saa oma uues seadmes lugeda krüptitud sõnumeid ning muud kasutajad ei usalda seda</string>
+    <string name="verify_cancel_other">Kui sa nüüd katkestad, siis sa ei verifitseeri seadet %1$s (%2$s). Alusta uuesti sealsest profiilist.</string>
+
+    <string name="verify_not_me_self_verification">Mõni järgnevatest võib olla sattunud valedesse kätesse:
+\n 
+\n - Sinu salasõna
+\n - Sinu koduserver
+\n - Sinu või teise osapoole seade
+\n - Sinu või teise osapoole internetiühendus
+\n
+\nPalun vaheta seadistuste lehelt koheselt oma kasutajakonto salasõna ja taastevõti.</string>
+
+    <string name="verify_cancelled_notice">Seadistuste lehelt verifitseeri oma seade.</string>
+    <string name="verification_cancelled">Verifitseerimine on tühistatud</string>
+
+    <string name="recovery_passphrase">Taastamiseks mõeldud paroolifraas</string>
+    <string name="message_key">Sõnumite krüptovõti</string>
+    <string name="account_password">Kasutajakonto salasõna</string>
+
+    <string name="set_recovery_passphrase">Seadista %s</string>
+    <string name="generate_message_key">Loo sõnumite krüptovõti</string>
+
+    <string name="confirm_recovery_passphrase">Kinnita %s</string>
+
+    <string name="bootstrap_cross_signing_success">Sinu %2$s ja %1$s on seadistatud.
+\n
+\nHoia neid turvaliselt! Kui sa oled oma rakendustes kõik sessioonid sulgenud, siis sa vajad neid ligipääsu taastamiseks oma krüptitud sõnumitele ja turvalistele andmetele.</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Vigane salasõna ja/või kasutajanimi. Palun vaata, kas mitte sisestatud salasõna ei alga või lõppe tühikutega.</string>
+    <string name="auth_invalid_login_deactivated_account">See kasutajakonto on deaktiveeritud.</string>
+
+    <string name="room_message_placeholder">Sõnum…</string>
+
+    <string name="upgrade_security">Krüptimise uuendus on saadaval</string>
+    <string name="setup_cross_signing">Võta risttunnustamine kasutusele</string>
+    <string name="security_prompt_text">Selleks et sinu vestlused oleks turvatud, verifitseeri end ja teisi</string>
+
+    <string name="bootstrap_enter_recovery">Jätkamaks sisesta oma %s</string>
+    <string name="use_file">Kasuta faili</string>
+
+    <string name="enter_backup_passphrase">Sisesta %s</string>
+    <string name="backup_recovery_passphrase">Taastamiseks mõeldud paroolifraas</string>
+    <string name="bootstrap_invalid_recovery_key">See ei ole sobilik taastevõti</string>
+    <string name="recovery_key_empty_error_message">Palun sisesta taastevõti</string>
+
+    <string name="bootstrap_progress_checking_backup">Kontrollin varukoopia võtmeid</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Kontrollin varukoopia võtit (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Arvutan elliptilise joone võtit</string>
+    <string name="bootstrap_progress_generating_ssss">Loon paroolifraasi alusel SSSS\'i</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Loon paroolifraasi alusel SSSS\'i (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Loon taastevõtme alusel SSSS\'i</string>
+    <string name="bootstrap_progress_storing_in_sss">Salvestan võtmete varunduse andmed SSSS\'is</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Jätkamiseks sisesta oma võtmete varunduse paroolifraas.</string>
+    <string name="bootstrap_migration_use_recovery_key">või kasuta oma võtmete varukoopia taastevõtit</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Kui sa ei tea oma võtmete varunduse paroolifraasi, siis sa võid %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Võtmete varukoopia taastevõti</string>
+
+    <string name="settings_security_prevent_screenshots_title">Ära luba sel rakendusel teha ekraanitõmmiseid</string>
+    <string name="settings_security_prevent_screenshots_summary">Selle seadistusega määratakse FLAG_SECURE märge kõikidele tegevustele. Muutuse jõustamiseks vajab rakendus uuesti käivitamist.</string>
+
+    <string name="media_file_added_to_gallery">Lisasime meediafaili galeriisse</string>
+    <string name="error_adding_media_file_to_gallery">Meediafaili galeriisse lisamine ei õnnestunud</string>
+    <string name="error_saving_media_file">Meediafaili salvestamine ei õnnestunud</string>
+    <string name="change_password_summary">Määra kontole uus salasõna…</string>
+
+    <string name="use_other_session_content_description">Kasuta kõige uuemat Element\'i versioon mõnes muus seadmes, nagu näiteks Element Web, Element Desktop, Element iOS, Element Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist</string>
+    <string name="app_desktop_web">Element Web
+\nElement Desktop</string>
+    <string name="app_ios_android">Element iOS
+\nElement Android</string>
+    <string name="or_other_mx_capabale_client">või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist</string>
+    <string name="use_latest_app">Kasuta oma muus seadmes kõige uuemat Element\'i versiooni:</string>
+    <string name="command_description_discard_session">Sunnib loobuma praeguse krüptitud jututoa rühmavestluse seansist</string>
+    <string name="command_description_discard_session_not_handled">Funktsionaalsus on toetatud ainult krüptitud jututubades</string>
+    <string name="enter_secret_storage_passphrase_or_key">Jätkamiseks kasuta kas oma %1$s või %2$s.</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Vale PIN-kood, jäänud on %d katse</item>
+        <item quantity="other">Vale PIN-kood, jäänud on %d katset</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Hoiatus! Viimane katse enne väljalogimist!</string>
+    <string name="too_many_pin_failures">Liiga palju vigu PIN-koodi sisestamisel ning sa oled nüüd välja logitud</string>
 </resources>

@@ -9,6 +9,7 @@ Improvements 🙌:
  - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
  - Fix several issues when uploading bug files (#1889)
  - Do not propose to verify session if there is only one session and 4S is not configured (#1901)
+ - Call screen does not use proximity sensor (#1735)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
@@ -24,9 +25,10 @@ Bugfix 🐛:
  - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
  - Support for image compression on Android 10
+ - Verification popup won't show
 
 Translations 🗣:
- -
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
 
 SDK API changes ⚠️:
  - 
