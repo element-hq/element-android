@@ -1229,4 +1229,5 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
         <item quantity="other">元の大きさのまま画像を送信する</item>
     </plurals>
 
+    <string name="cannot_call_yourself">自分自身には通話できません</string>
 </resources>

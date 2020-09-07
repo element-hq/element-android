@@ -35,6 +35,7 @@ import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -50,6 +51,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
+import java.util.ArrayList
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -230,6 +232,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     add(EventSharedAction.Resend(eventId))
                 }
                 add(EventSharedAction.Remove(eventId))
+                if (vectorPreferences.developerMode()) {
+                    addViewSourceItems(timelineEvent)
+                }
             } else if (timelineEvent.root.sendState.isSending()) {
                 // TODO is uploading attachment?
                 if (canCancel(timelineEvent)) {
@@ -298,13 +303,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                         }
                     }
-
-                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
-                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
-                                ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                        add(EventSharedAction.ViewDecryptedSource(decryptedContent))
-                    }
+                    addViewSourceItems(timelineEvent)
                 }
                 add(EventSharedAction.CopyPermalink(eventId))
                 if (session.myUserId != timelineEvent.root.senderId) {
@@ -320,8 +319,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
+    private fun ArrayList<EventSharedAction>.addViewSourceItems(timelineEvent: TimelineEvent) {
+        add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
+        if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
+            val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
+                    ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+            add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+        }
+    }
+
     private fun canCancel(@Suppress("UNUSED_PARAMETER") event: TimelineEvent): Boolean {
-        return false
+        return true
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
@@ -365,7 +373,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.sendState.hasFailed() && event.root.isTextMessage() && actionPermissions.canSendMessage
+        return event.root.sendState.hasFailed()
+                && actionPermissions.canSendMessage
+                && (event.root.isAttachmentMessage() || event.root.isTextMessage())
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {

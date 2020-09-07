@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generated file, do not edit -->
+    <string name="verification_emoji_dog">Perro</string>
+    <string name="verification_emoji_cat">Gato</string>
+    <string name="verification_emoji_lion">León</string>
+    <string name="verification_emoji_horse">Caballo</string>
+    <string name="verification_emoji_unicorn">Unicornio</string>
+    <string name="verification_emoji_pig">Cerdo</string>
+    <string name="verification_emoji_elephant">Elefante</string>
+    <string name="verification_emoji_rabbit">Conejo</string>
+    <string name="verification_emoji_panda">Panda</string>
+    <string name="verification_emoji_rooster">Gallo</string>
+    <string name="verification_emoji_penguin">Pingüino</string>
+    <string name="verification_emoji_turtle">Tortuga</string>
+    <string name="verification_emoji_fish">Pez</string>
+    <string name="verification_emoji_octopus">Pulpo</string>
+    <string name="verification_emoji_butterfly">Mariposa</string>
+    <string name="verification_emoji_flower">Flor</string>
+    <string name="verification_emoji_tree">Árbol</string>
+    <string name="verification_emoji_cactus">Cactus</string>
+    <string name="verification_emoji_mushroom">Seta</string>
+    <string name="verification_emoji_globe">Globo</string>
+    <string name="verification_emoji_moon">Luna</string>
+    <string name="verification_emoji_cloud">Nube</string>
+    <string name="verification_emoji_fire">Fuego</string>
+    <string name="verification_emoji_banana">Plátano</string>
+    <string name="verification_emoji_apple">Manzana</string>
+    <string name="verification_emoji_strawberry">Fresa</string>
+    <string name="verification_emoji_corn">Maíz</string>
+    <string name="verification_emoji_pizza">Pizza</string>
+    <string name="verification_emoji_cake">Tarta</string>
+    <string name="verification_emoji_heart">Corazón</string>
+    <string name="verification_emoji_smiley">Emoticono</string>
+    <string name="verification_emoji_robot">Robot</string>
+    <string name="verification_emoji_hat">Sombrero</string>
+    <string name="verification_emoji_glasses">Gafas</string>
+    <string name="verification_emoji_spanner">Llave inglesa</string>
+    <string name="verification_emoji_clock">Reloj</string>
+    <string name="verification_emoji_gift">Regalo</string>
+    <string name="verification_emoji_book">Libro</string>
+    <string name="verification_emoji_pencil">Lápiz</string>
+    <string name="verification_emoji_key">Llave</string>
+    <string name="verification_emoji_hammer">Martillo</string>
+    <string name="verification_emoji_telephone">Telefono</string>
+    <string name="verification_emoji_train">Tren</string>
+    <string name="verification_emoji_bicycle">Bicicleta</string>
+    <string name="verification_emoji_ball">Bola</string>
+    <string name="verification_emoji_guitar">Guitarra</string>
+    <string name="verification_emoji_trumpet">Trompeta</string>
+    <string name="verification_emoji_bell">Campana</string>
+    <string name="verification_emoji_pin">Alfiler</string>
+</resources>

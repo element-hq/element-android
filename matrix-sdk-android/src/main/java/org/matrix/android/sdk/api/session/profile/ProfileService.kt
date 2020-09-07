@@ -83,4 +83,43 @@ interface ProfileService {
      * @param refreshData set to true to fetch data from the homeserver
      */
     fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>>
+
+    /**
+     * Get the pending 3Pids, i.e. ThreePids that have requested a token, but not yet validated by the user.
+     */
+    fun getPendingThreePids(): List<ThreePid>
+
+    /**
+     * Get the pending 3Pids Live
+     */
+    fun getPendingThreePidsLive(): LiveData<List<ThreePid>>
+
+    /**
+     * Add a 3Pids. This is the first step to add a ThreePid to an account. Then the threePid will be added to the pending threePid list.
+     */
+    fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Validate a code received by text message
+     */
+    fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
+     */
+    fun finalizeAddingThreePid(threePid: ThreePid,
+                               uiaSession: String?,
+                               accountPassword: String?,
+                               matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Cancel adding a threepid. It will remove locally stored data about this ThreePid
+     */
+    fun cancelAddingThreePid(threePid: ThreePid,
+                             matrixCallback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Remove a 3Pid from the Matrix account.
+     */
+    fun deleteThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
 }

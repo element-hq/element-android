@@ -91,7 +91,7 @@
         app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
         tools:visibility="visible" />
 
-    <!-- Set a maw width because the text can be long -->
+    <!-- Set a max width because the text can be long -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_generic_action_button"
         style="@style/VectorButtonStyle"
@@ -102,10 +102,26 @@
         android:layout_marginBottom="16dp"
         android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/item_generic_destructive_action_button"
         app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
         app:layout_constraintTop_toBottomOf="@+id/item_generic_description_text"
         tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/item_generic_destructive_action_button"
+        style="@style/VectorButtonStyleDestructive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:maxWidth="@dimen/button_max_width"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintTop_toBottomOf="@+id/item_generic_action_button"
+        tools:text="@string/delete"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,11 +30,11 @@
     <string name="active_call">Aktív hívás</string>
     <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás.
 \nCsatlakozás: %1$s vagy %2$s</string>
-    <string name="ongoing_conference_call_voice">hanghívás</string>
-    <string name="ongoing_conference_call_video">videóhívás</string>
+    <string name="ongoing_conference_call_voice">Hang</string>
+    <string name="ongoing_conference_call_video">Videó</string>
     <string name="cannot_start_call">Nem sikerült hívást indítani, próbáld meg később</string>
-    <string name="missing_permissions_warning">A hiányzó engedélyek miatt egyes funkciók lehet, hogy nem érhetőek el…</string>
-    <string name="missing_permissions_to_start_conf_call">Engedély szükséges, hogy a szobában konferenciahívást indíthasson</string>
+    <string name="missing_permissions_warning">A hiányzó engedélyek miatt egyes funkciók lehet, hogy nem érhetők el…</string>
+    <string name="missing_permissions_to_start_conf_call">Engedély szükséges, hogy a szobában konferenciahívást indíthass</string>
     <string name="missing_permissions_title_to_start_conf_call">Nem sikerült hívást indítani</string>
     <string name="device_information">Munkamenet információk</string>
     <string name="room_no_conference_call_in_encrypted_rooms">A titkosított szobákban nem támogatott a konferenciahívás</string>
@@ -44,9 +44,9 @@
 
     <string name="action_sign_out">Kijelentkezés</string>
     <string name="action_voice_call">Hanghívás</string>
-    <string name="action_video_call">Videóhívás</string>
+    <string name="action_video_call">Videohívás</string>
     <string name="action_global_search">Globális keresés</string>
-    <string name="action_mark_all_as_read">Mindent olvasottnak jelöl</string>
+    <string name="action_mark_all_as_read">Mind olvasottnak jelölése</string>
     <string name="action_historical">Előzmények</string>
     <string name="action_quick_reply">Gyors válasz</string>
     <string name="action_open">Megnyitás</string>
@@ -74,7 +74,7 @@
     <string name="local_address_book_header">Helyi címjegyzék</string>
     <string name="matrix_only_filter">Csak Matrix névjegyek</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
-    <string name="no_contact_access_placeholder">Nem adtál hozzáférést a Elementnak a helyi névjegyeidhez</string>
+    <string name="no_contact_access_placeholder">Nem adtál hozzáférést a Elementnek a helyi névjegyeidhez</string>
     <string name="no_result_placeholder">Nincs találat</string>
 
     <string name="rooms_header">Szobák</string>
@@ -86,13 +86,13 @@
         <item quantity="other">%d felhasználó</item>
     </plurals>
 
-    <string name="send_bug_report_include_logs">Naplófájl küldése</string>
-    <string name="send_bug_report_include_crash_logs">Hibanapló küldése</string>
+    <string name="send_bug_report_include_logs">Naplófájlok küldése</string>
+    <string name="send_bug_report_include_crash_logs">Összeomlásnaplók küldése</string>
     <string name="send_bug_report_include_screenshot">Képernyőkép küldése</string>
     <string name="send_bug_report">Hibajelentés</string>
-    <string name="send_bug_report_description">Kérünk, írd le a hibát! Mit csináltál? Mit vártál, hogy történni fog? Mi történt valójában?</string>
-    <string name="send_bug_report_placeholder">Írd le itt a problémádat</string>
-    <string name="send_bug_report_logs_description">A problémák kielemzése érdekében a naplók erről a kliensről a hibabejelentővel elküldésre kerülnek. Ha inkább csak a fenti szöveget szeretnéd elküldeni, szedd ki a pipát:</string>
+    <string name="send_bug_report_description">Íd le a hibát! Mit csináltál\? Mit vártál, hogy mi fog történni\? Mi történt valójában\?</string>
+    <string name="send_bug_report_placeholder">Ide írd le a problémádat</string>
+    <string name="send_bug_report_logs_description">A problémák elemzése érdekében a kliens naplói is elküldésre kerülnek a hibajelentéssel. A hibajelentés, beleértve a naplókat és a képernyőképek nem lesznek nyilvánosan láthatók. Ha inkább csak a fenti szöveget szeretnéd elküldeni, szedd ki a pipát:</string>
     <string name="send_bug_report_alert_message">Úgy tűnik, mintha mérgedben ráznád a telefont. Szeretnél hibajelentést beküldeni?</string>
     <string name="send_bug_report_app_crashed">Az alkalmazás legutóbb összeomlott. Megnyitod a hibabejelentő képernyőt?</string>
 
@@ -103,20 +103,20 @@
     <string name="send_files_in">Küldés ide:</string>
     <string name="read_receipt">Elolvasta</string>
 
-    <string name="join_room">Belépés a szobába</string>
+    <string name="join_room">Csatlakozás a szobához</string>
     <string name="username">Felhasználónév</string>
-    <string name="create_account">Fiók készítés</string>
+    <string name="create_account">Fiók létrehozása</string>
     <string name="login">Bejelentkezés</string>
     <string name="logout">Kijelentkezés</string>
-    <string name="hs_url">Matrix szerver URL</string>
-    <string name="identity_url">Identitás szerver URL</string>
+    <string name="hs_url">Matrix-kiszolgáló URL-je</string>
+    <string name="identity_url">Azonosítási kiszolgáló URL-je</string>
     <string name="search">Keresés</string>
 
     <string name="start_new_chat">Új csevegés indítása</string>
     <string name="start_voice_call">Hanghívás indítása</string>
-    <string name="start_video_call">Videóhívás indítása</string>
+    <string name="start_video_call">Videohívás indítása</string>
 
-    <string name="option_send_files">Fájlküldés</string>
+    <string name="option_send_files">Fájlok küldése</string>
     <string name="option_take_photo_video">Kép- vagy videókészítés</string>
 
     <string name="auth_login">Bejelentkezés</string>
@@ -135,7 +135,7 @@
     <string name="auth_opt_phone_number_placeholder">Telefonszám (nem kötelező)</string>
     <string name="auth_repeat_password_placeholder">Jelszó ismétlése</string>
     <string name="auth_repeat_new_password_placeholder">Erősítsd meg az új jelszavadat</string>
-    <string name="auth_invalid_login_param">Hibás felhasználónév és/vagy jelszó</string>
+    <string name="auth_invalid_login_param">Hibás felhasználónév vagy jelszó</string>
     <string name="auth_invalid_user_name">A felhasználónévben csak betűk, számok, pontok, kötőjelek és aláhúzásjelek lehetnek</string>
     <string name="auth_invalid_password">A jelszó túl rövid (min. 6)</string>
     <string name="auth_missing_password">Hiányzó jelszó</string>
@@ -145,43 +145,45 @@
     <string name="auth_missing_email">Hiányzó e-mail cím</string>
     <string name="auth_missing_phone">Hiányzó telefonszám</string>
     <string name="auth_missing_email_or_phone">Hiányzó e-mail cím vagy telefonszám</string>
-    <string name="auth_invalid_token">Érvénytelen kód</string>
+    <string name="auth_invalid_token">Érvénytelen token</string>
     <string name="auth_password_dont_match">A jelszók nem egyeznek</string>
     <string name="auth_forgot_password">Elfelejtetted a jelszavad?</string>
-    <string name="auth_use_server_options">Személyre szabott szerver beállítások (haladó)</string>
+    <string name="auth_use_server_options">Egyéni kiszolgálóbeállítások (haladó)</string>
     <string name="auth_email_validation_message">A regisztráció folytatásához nézd meg az e-mailjeidet</string>
-    <string name="auth_threepid_warning_message">Nem támogatott a regisztráció e-mail címmel és telefonszámmal egyszerre, amíg az api el nem készül. Most csak a telefonszámot használjuk.
-
-Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
-    <string name="auth_recaptcha_message">A Matrix szerver szeretné ellenőrizni, hogy nem vagy robot</string>
+    <string name="auth_threepid_warning_message">Az egyszerre e-mail-címmel és telefonszámmal történő regisztráció még nem támogatott, amíg az API el nem készül. Csak a telefonszám lesz figyelembe véve.
+\n
+\nAz e-mail-címedet a beállításokban adhatod hozzá a profilodhoz.</string>
+    <string name="auth_recaptcha_message">A Matrix-kiszolgáló szeretné ellenőrizni, hogy nem vagy robot</string>
     <string name="auth_username_in_use">A felhasználónév foglalt</string>
-    <string name="auth_home_server">Matrix szerver:</string>
-    <string name="auth_identity_server">Identitásszerver:</string>
+    <string name="auth_home_server">Matrix-kiszolgáló:</string>
+    <string name="auth_identity_server">Azonosítási kiszolgáló:</string>
     <string name="auth_reset_password_next_step_button">Ellenőriztem az e-mail címemet</string>
-    <string name="auth_reset_password_message">A jelszavad visszaállításához add meg a fiókodhoz tartozó e-mail címet:</string>
-    <string name="auth_reset_password_missing_email">Meg kell adnod a fiókodhoz tartozó e-mail címet.</string>
+    <string name="auth_reset_password_message">A jelszavad visszaállításához add meg a fiókodhoz tartozó e-mail-címet:</string>
+    <string name="auth_reset_password_missing_email">Meg kell adnod a fiókodhoz tartozó e-mail-címet.</string>
     <string name="auth_reset_password_missing_password">Meg kell adnod egy új jelszót.</string>
-    <string name="auth_reset_password_email_validation_message">Küldtünk egy e-mailt erre a címre: %s . A benne lévő link használata után kattints.</string>
-    <string name="auth_reset_password_error_unauthorized">Nem sikerült az e-mail címet ellenőrizni: rákattintottál az e-mailben található linkre</string>
-    <string name="auth_reset_password_success_message">A jelszavad visszaállítottuk. Kiléptettünk az összes munkamenetedből, nem érkezik rájuk új értesítés. Az értesítések visszakapcsolásához minden készüléken lépj be újra.</string>
+    <string name="auth_reset_password_email_validation_message">Küldtünk egy e-mailt erre a címre: %s. A benne lévő hivatkozás használata után kattints lentebb.</string>
+    <string name="auth_reset_password_error_unauthorized">Az e-mail-címed ellenőrzés sikertelen: győződj meg róla, hogy rákattintottál az e-mailben található hivatkozásra</string>
+    <string name="auth_reset_password_success_message">A jelszavad visszaállítottuk.
+\n
+\nKiléptettünk az összes munkamenetedből, nem és többé nem fogsz leküldéses értesítéseket kapni. Az értesítések visszakapcsolásához lépj be újra az összes eszközön.</string>
 
     <string name="login_error_must_start_http">Az URL így kezdődjön: http[s]://</string>
     <string name="login_error_network_error">Sikertelen bejelentkezés: Hálózati hiba</string>
-    <string name="login_error_unable_login">Sikertelen belépés</string>
+    <string name="login_error_unable_login">Sikertelen bejelentkezés</string>
     <string name="login_error_registration_network_error">Sikertelen regisztráció: Hálózati hiba</string>
-    <string name="login_error_unable_register">Regisztráció sikertelen</string>
-    <string name="login_error_unable_register_mail_ownership">Regisztráció sikertelen: e-mail tulajdonjog hiba</string>
-    <string name="login_error_invalid_home_server">Kérlek adj meg érvényes URL-t</string>
+    <string name="login_error_unable_register">Sikertelen regisztráció</string>
+    <string name="login_error_unable_register_mail_ownership">Sikertelen regisztráció: e-mail tulajdonjogi hiba</string>
+    <string name="login_error_invalid_home_server">Adj meg egy érvényes URL-t</string>
 
     <string name="login_error_forbidden">Helytelen felhasználónév/jelszó</string>
-    <string name="login_error_unknown_token">A megadott hozzáférési kódot nem sikerült felismerni</string>
+    <string name="login_error_unknown_token">A megadott hozzáférési tokent nem sikerült felismerni</string>
     <string name="login_error_bad_json">Hibás JSON</string>
     <string name="login_error_not_json">Nem tartalmazott érvényes JSON-t</string>
     <string name="login_error_limit_exceeded">Túl sok kérés lett elküldve</string>
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
-    <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem kattintottak</string>
+    <string name="login_error_login_email_not_yet">Az e-mailban található hivatkozásra még nem kattintottak</string>
 
-    <string name="read_receipts_list">Lista azokról akik elolvasták</string>
+    <string name="read_receipts_list">Lista azokról, akik elolvasták</string>
 
     <string name="compression_options">Küldés mint</string>
     <string name="compression_opt_list_original">Eredeti</string>
@@ -205,33 +207,33 @@ Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
     <string name="call_ended">Hívás vége</string>
     <string name="call_ring">Hívás…</string>
     <string name="incoming_call">Bejövő hívás</string>
-    <string name="incoming_video_call">Bejövő videóhívás</string>
+    <string name="incoming_video_call">Bejövő videohívás</string>
     <string name="incoming_voice_call">Bejövő hanghívás</string>
     <string name="call_in_progress">Hívás folyamatban…</string>
 
     <string name="call_error_user_not_responding">A hívott fél nem vette fel.</string>
-    <string name="call_error_ice_failed">A médiacsatlakozás nem sikerült</string>
-    <string name="call_error_camera_init_failed">A kamera nem használható</string>
-    <string name="call_error_answered_elsewhere">hívást máshol vették fel</string>
+    <string name="call_error_ice_failed">Médiacsatlakozás sikertelen</string>
+    <string name="call_error_camera_init_failed">A kamera nem készíthető elő</string>
+    <string name="call_error_answered_elsewhere">a hívást máshol vették fel</string>
 
-    <string name="media_picker_both_capture_title">Készíts képet vagy videót</string>
-    <string name="media_picker_cannot_record_video">Videórögzítés sikertelen</string>
+    <string name="media_picker_both_capture_title">Kép vagy videó készítése</string>
+    <string name="media_picker_cannot_record_video">Videorögzítés sikertelen</string>
 
     <string name="permissions_rationale_popup_title">Információ</string>
-    <string name="permissions_rationale_msg_storage">A Element-nak szüksége van a fotó és videó könyvtáradnak elérési engedélyéhez a csatolmányok küldéséhez.
+    <string name="permissions_rationale_msg_storage">A Elementnek szüksége van a fénykép- és videótárad elérési engedélyéhez a mellékletek küldéséhez és mentéséhez.
 \n
-\nKérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj fájlokat küldeni a telefonodról.</string>
-    <string name="permissions_rationale_msg_camera">Element-nak engedély szükséges a kamerád eléréséhez, hogy tudj képeket készíteni és videó hívásokat.</string>
+\nEngedélyezd a hozzáférést a következő felugró ablakon, hogy fájlokat tudj küldeni a telefonodról.</string>
+    <string name="permissions_rationale_msg_camera">Az Elementnek engedélyre van szüksége a kamera eléréséhez, hogy képeket tudj készítsen és videóhívást tudj indítani.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani."</string>
-    <string name="permissions_rationale_msg_record_audio">A Element-nak engedély szükséges a mikrofonod eléréséhez, hogy tudj hanghívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_record_audio">A Elementnek engedélyre van szüksége a mikrofon eléréséhez, hogy hanghívás tudjon indítani.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">"A Element-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
-
-Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">A Elementnek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.
+\n
+\nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani.</string>
     <string name="permissions_rationale_msg_contacts">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
     <string name="permissions_msg_contacts_warning_other_androids">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar.
 \n
@@ -553,7 +555,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="encryption_information_sender_device_information">A küldő munkamenet információi</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
     <string name="encryption_information_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Azonosító</string>
+    <string name="encryption_information_device_id">Munkamenet-azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_information_verification">Hitelesítés</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
@@ -642,7 +644,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="huge">Óriási</string>
     <string name="offline">Offline</string>
 
-    <string name="user_directory_header">Felhasználójegyzék</string>
+    <string name="user_directory_header">Felhasználói címjegyzék</string>
     <string name="light_theme">Világos téma</string>
     <string name="dark_theme">Sötét téma</string>
     <string name="black_them">Fekete téma</string>
@@ -681,7 +683,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="notification_silent_notifications">Csendes értesítések</string>
 
     <string name="option_take_photo">Fényképezés</string>
-    <string name="option_take_video">Videófelvétel</string>
+    <string name="option_take_video">Videofelvétel</string>
 
     <string name="settings_analytics">Elemzés</string>
 
@@ -703,7 +705,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
 
     <string name="encrypted_message">Titkosított üzenet</string>
 
-    <string name="title_activity_group_details">A közösség adatai</string>
+    <string name="title_activity_group_details">Közösség adatai</string>
 
     <string name="loading">Betöltés…</string>
 
@@ -717,12 +719,12 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="no_group_placeholder">Nincsenek csoportok</string>
 
     <string name="start_new_chat_prompt_msg">Biztos, hogy új beszélgetést akarsz kezdeni vele: %s?</string>
-    <string name="start_voice_call_prompt_msg">Biztos, hogy hanghívást akarsz kezdeményezni?</string>
-    <string name="start_video_call_prompt_msg">Biztos, hogy videóhívást akarsz kezdeményezni?</string>
+    <string name="start_voice_call_prompt_msg">Biztos, hogy hanghívást akarsz indítani\?</string>
+    <string name="start_video_call_prompt_msg">Biztos, hogy videóhívást akarsz indítani\?</string>
 
     <string name="groups_list">Csoportok listája</string>
 
-    <string name="room_participants_ban_prompt_msg">Biztos, hogy ki akarod tiltani ezt az illetőt ebből a beszélgetésből?</string>
+    <string name="room_participants_ban_prompt_msg">A felhasználó kitiltása kirúgja őt a szobából, és megakadályozza, hogy újra csatlakozhasson.</string>
 
     <string name="room_settings_all_messages_noisy">Összes üzenet (hangos)</string>
     <string name="room_settings_all_messages">Összes üzenet</string>
@@ -769,7 +771,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="room_settings_no_flair">"Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
     <string name="group_details_home">Kezdőlap</string>
     <string name="actions">Műveletek</string>
-    <string name="send_bug_report_rage_shake">Rázd meg ha hibát szeretnél bejelenteni</string>
+    <string name="send_bug_report_rage_shake">Rázd meg az eszközt, ha hibát szeretnél bejelenteni</string>
 
     <plurals name="membership_changes">
         <item quantity="one">1 tagság változás</item>
@@ -797,8 +799,8 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
         <item quantity="other">%d szoba</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-        <item quantity="one">%1$s szoba találat ehhez: %2$s</item>
-        <item quantity="other">%1$s szoba találat ehhez: %2$s</item>
+        <item quantity="one">%1$s szoba található ehhez: %2$s</item>
+        <item quantity="other">%1$s szoba található ehhez: %2$s</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 olvasatlan üzenet</item>
@@ -842,12 +844,12 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="title_activity_choose_sticker">Matrica küldése</string>
 
     <string name="option_send_sticker">Matrica küldése</string>
-    <string name="no_sticker_application_dialog_content">Nincs semmilyen matrica csomagod.
+    <string name="no_sticker_application_dialog_content">Jelenleg nincs matricacsomag bekapcsolva.
 \n
-\nHozzáadsz párat most\?</string>
+\nHozzáadsz most párat\?</string>
 
     <string name="settings_deactivate_account_section">Fiók felfüggesztése</string>
-    <string name="settings_deactivate_my_account">Függessze fel a fiókomat</string>
+    <string name="settings_deactivate_my_account">Saját fiók felfüggesztése</string>
 
     <string name="settings_opt_in_of_analytics">Analitikai adatok küldése</string>
     <string name="settings_opt_in_of_analytics_summary">Element anonim analitikai adatokat gyűjt, hogy javítani tudjuk az alkalmazást.</string>
@@ -872,27 +874,27 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="dialog_title_third_party_licences">Harmadik felektől származó licencek</string>
 
     <string name="download">Letöltés</string>
-    <string name="speak">Beszélj</string>
+    <string name="speak">Beszéd</string>
     <string name="clear">Törlés</string>
     <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Kérés elküldve</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Kérlek indítsd el a Elementot egy olyan eszközön ami ezt az üzenetet vissza tudja fejteni, hogy elküldhesse a kulcsot erre a munkamenetre.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Índítsd el a Elementet egy olyan eszközön, amely vissza tudja fejteni az üzenetet, hogy elküldhesse a kulcsot ennek a munkamenetnek.</string>
 
     <string name="lock_screen_hint">Ide írj…</string>
 
-    <string name="option_send_voice">Hang üzenet küldése</string>
+    <string name="option_send_voice">Hangüzenet küldése</string>
 
     <string name="go_on_with">tovább ezzel…</string>
-    <string name="error_no_external_application_found">Sajnálom, nem található külső alkalmazás a művelethez.</string>
+    <string name="error_no_external_application_found">Nem található külső alkalmazás a művelet befejezéséhez.</string>
 
     <string name="settings_labs_enable_send_voice">Hang üzenet küldése</string>
 
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
-    <string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
+    <string name="send_bug_report_description_in_english">Ha lehetséges, a leírást angolul írd.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Titkosított válasz küldése…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Válasz küldése (titkosítás nélkül)…</string>
     <string name="settings_preview_media_before_sending">Média előnézete küldés előtt</string>
@@ -1026,11 +1028,11 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_call_category">Hívások</string>
     <string name="settings_call_ringtone_use_app_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
     <string name="settings_call_ringtone_title">Bejövő hívás csengőhangja</string>
-    <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása hívásokhoz:</string>
+    <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása a hívásokhoz:</string>
 
     <string name="accept">Elfogadás</string>
 
-    <string name="auth_accept_policies">Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:</string>
+    <string name="auth_accept_policies">Nézd át és fogadd el a Matrix-kiszolgáló házirendjét:</string>
 
     <string name="settings_notification_troubleshoot">Értesítéshibák felderítése</string>
     <string name="settings_troubleshoot_diagnostic">Hibakereső diagnosztika</string>
@@ -1063,16 +1065,16 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
 \n%1$s"</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play Services javítása</string>
 
-    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_title">Firebase token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token fogadása sikeres:
 %1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM token fogadása sikertelen:
 %1$s</string>
 
-    <string name="settings_troubleshoot_test_token_registration_title">Token Regisztráció</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix szerveren.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix szerveren:
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Token regisztráció</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix-kiszolgálón.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix-kiszolgálón:
+\n%1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Értesítés Szolgáltatás</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Értesítés Szolgáltatás fut.</string>
@@ -1114,11 +1116,11 @@ A következő képernyőn el kell fogadnod, hogy a Element folyamatosan fusson a
 
     <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
 
-    <string name="video_call_in_progress">Videóhívás folyamatban…</string>
+    <string name="video_call_in_progress">Videohívás folyamatban…</string>
 
     <string name="title_activity_keys_backup_setup">Kulcsmentés</string>
     <string name="title_activity_keys_backup_restore">Kulcsmentés használata</string>
-    <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kérlek várj…</string>
+    <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kis türelmet…</string>
 
     <string name="skip">Kihagyás</string>
     <string name="done">Kész</string>
@@ -1304,8 +1306,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="ignore">Figyelmen kívül hagyás</string>
 
     <string name="auth_login_sso">Belépés egyszeri bejelelentkezéssel</string>
-    <string name="login_error_unknown_host">Ez az URL elérhetetlen, kérlek ellenőrizd</string>
-    <string name="login_error_ssl_handshake">Az eszközöd elavult TLS biztonsági protokollt használ ami támadható, a biztonságod érdekében nem csatlakozhatsz</string>
+    <string name="login_error_unknown_host">Ez az URL nem érhető el, ellenőrizd</string>
+    <string name="login_error_ssl_handshake">Az eszközöd elavult TLS biztonsági protokollt használ, amely támadható, a biztonságod érdekében nem csatlakozhatsz</string>
     <string name="settings_send_message_with_enter">Üzenet küldése Enter billentyűvel</string>
     <string name="settings_send_message_with_enter_summary">Az Enter billentyű a virtuális billentyűzeten elküldi az üzenetet és nem új sort szúr be</string>
 
@@ -1498,7 +1500,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="preference_root_help_about">Segítség &amp; Névjegy</string>
 
 
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">„Token” regisztrálás</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Token regisztrálása</string>
 
     <string name="send_suggestion">Javaslat tétel</string>
     <string name="send_suggestion_content">A javaslatodat kérlek ír le alulra.</string>
@@ -1567,20 +1569,20 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="disconnect">Bontás</string>
     <string name="people_no_identity_server">Nincs beállítva azonosítási kiszolgáló.</string>
 
-    <string name="call_failed_no_ice_title">A hívás sikertelen a hibásan beállított szerver miatt</string>
-    <string name="call_failed_no_ice_description">Kérd meg a matrix szervered (%1$s) adminisztrátorát, hogy állítson be egy TURN szervert, hogy a hívások megbízhatóan működjenek.
+    <string name="call_failed_no_ice_title">A hívás a hibásan beállított kiszolgáló miatt sikertelen</string>
+    <string name="call_failed_no_ice_description">Kérd meg a Matrix-kiszolgálód (%1$s) rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.
 \n
-\nAlternatív megoldásként használhatod a nyilvános szervert itt: %2$s, de ez lehet, hogy nem lesz annyira megbízható és az IP címedet megosztja a szerverrel. Ezt a Beállításokban tudod megadni.</string>
+\nAlternatív megoldásként használhatod az itteni nyilvános kiszolgálót: %2$s, de ez lehet, hogy nem lesz annyira megbízható és megosztja az IP-címedet a kiszolgálóval. Ezt a Beállításokban is meg tudod adni.</string>
     <string name="call_failed_no_ice_use_alt">Próbáld ki ezt: %s</string>
-    <string name="call_failed_dont_ask_again">Ne kérdezz újra</string>
+    <string name="call_failed_dont_ask_again">Ne kérdezze újra</string>
 
-    <string name="auth_add_email_message_2">Fiók visszaállításhoz e-mail beállítása, később esetleg megtalálhatnak akik ismernek téged.</string>
-    <string name="auth_add_phone_message_2">Telefonszám beállítása, és később esetleg megtalálhatnak akik ismernek téged.</string>
-    <string name="auth_add_email_phone_message_2">Fiók visszaállításhoz e-mail beállítás. Később esetleg e-mail vagy telefonszám alapján megtalálhatnak akik ismernek téged.</string>
-    <string name="auth_add_email_and_phone_message_2">Fiók visszaállításhoz e-mail beállítás. Később esetleg e-mail vagy telefonszám alapján megtalálhatnak akik ismernek téged.</string>
-    <string name="login_error_homeserver_not_found">A matrix szerver elérhetetlen ezen a címen, kérlek ellenőrizd</string>
-    <string name="settings_call_ringtone_use_default_stun">Tartalék hívás segítő szerver engedélyezése</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Segítségként %s lesz használatban ha a matrix szervered nem ajánl fel egyet (a hívás ideje alatt az IP címed megosztásra kerül)</string>
+    <string name="auth_add_email_message_2">Állíts be egy e-mail címet fiók visszaállításhoz, és hogy később megtalálhassanak akik ismernek.</string>
+    <string name="auth_add_phone_message_2">Állíts be egy telefonszámot, hogy megtalálhassanak akik ismernek.</string>
+    <string name="auth_add_email_phone_message_2">Állíts be egy e-mail címet fiók visszaállításhoz. E-mail vagy telefonszám alapján megtalálhatnak akik ismernek.</string>
+    <string name="auth_add_email_and_phone_message_2">Állíts be egy e-mail címet fiók visszaállításhoz. Később e-mail vagy telefonszám alapján megtalálhatnak akik ismernek.</string>
+    <string name="login_error_homeserver_not_found">Nem érhető el Matrix-kiszolgáló ezen a címen, ellenőrizd</string>
+    <string name="settings_call_ringtone_use_default_stun">Tartalék hívássegítő kiszolgáló engedélyezése</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Segítőként a(z) %s lesz használatban ha a Matrix-kiszolgálója nem biztosít egyet (a hívás ideje alatt az IP-címed megosztásra kerül)</string>
     <string name="invite_no_identity_server_error">A beállításokban adj hozzá egy azonosítási szervert ehhez a művelethez.</string>
     <string name="settings_background_fdroid_sync_mode">Háttér Szinkronizálási Mód (Kísérleti)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizált akkumulátor használat</string>
@@ -1676,7 +1678,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="report_content_custom_title">Tartalom bejelentése</string>
     <string name="report_content_custom_hint">A tartalom bejelentésének oka</string>
     <string name="report_content_custom_submit">JELENTÉS</string>
-    <string name="block_user">FELHASZNÁLÓ BLOKKOLÁSA</string>
+    <string name="block_user">FELHASZNÁLÓ FIGYELMEN KÍVÜL HAGYÁSA</string>
 
     <string name="content_reported_title">Tartalom bejelentve</string>
     <string name="content_reported_content">Ez a tartalom bejelentve.
@@ -1722,7 +1724,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_widget_permission_avatar_url">Profilképed URL-je</string>
     <string name="room_widget_permission_user_id">Felhasználói azonosítód</string>
     <string name="room_widget_permission_theme">Témád</string>
-    <string name="room_widget_permission_widget_id">Kisalkalmazás azon.</string>
+    <string name="room_widget_permission_widget_id">Kisalkalmazás-azonosító</string>
     <string name="room_widget_permission_room_id">Szoba azonosító</string>
 
 
@@ -1733,8 +1735,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_widget_webview_access_microphone">Mikrofon használata</string>
     <string name="room_widget_webview_read_protected_media">DRM-mel védett média olvasása</string>
 
-    <string name="login_error_no_homeserver_found">Ez nem egy érvényes Matrix szerver cím</string>
-    <string name="message_ignore_user">Felhasználó tiltása</string>
+    <string name="login_error_no_homeserver_found">Ez nem egy érvényes Matrix-kiszolgáló címe</string>
+    <string name="message_ignore_user">Felhasználó figyelmen kívül hagyása</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Minden üzenet (hangos)</string>
     <string name="room_list_quick_actions_notifications_all">Minden üzenet</string>
@@ -1756,7 +1758,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_join_rules_invite">%1$s beállította, hogy a szobába csak meghívóval lehessen belépni.</string>
     <string name="timeline_unread_messages">Olvasatlan üzenetek</string>
 
-    <string name="login_splash_title">Szabadítsd fel a kommunikációdat</string>
+    <string name="login_splash_title">Szabadítsd fel a kommunikációdat.</string>
     <string name="login_splash_text1">Beszélgess másokkal közvetlenül vagy csoportosan</string>
     <string name="login_splash_text2">Beszélgess bizalmasan, titkosítást használva</string>
     <string name="login_splash_text3">Bővítsd és szabd testre a élményt</string>
@@ -1914,7 +1916,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_advanced_settings">Haladó beállítások</string>
     <string name="settings_developer_mode">Fejlesztői mód</string>
     <string name="settings_developer_mode_summary">A fejlesztői móddal rejtett lehetőségeket kapcsolsz be amitől az alkalmazás instabilabb lehet. Csak fejlesztőknek!</string>
-    <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake">Dühös rázás</string>
     <string name="settings_rageshake_detection_threshold">Észlelési határ</string>
     <string name="settings_rageshake_detection_threshold_summary">Az észlelési határ kipróbálásához rázd meg a telefonodat</string>
     <string name="rageshake_detected">Rázás észlelése sikeres!</string>
@@ -2050,13 +2052,13 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
 
     <string name="encryption_information_cross_signing_state">Eszközök közti hitelesítés</string>
-    <string name="encryption_information_dg_xsigning_complete">Az eszközök közötti hitelesítés engedélyezve van
-\nPrivát Kulcsok az eszközön.</string>
-    <string name="encryption_information_dg_xsigning_trusted">Az eszközök közötti hitelesítés engedélyezve van
+    <string name="encryption_information_dg_xsigning_complete">Az eszközök közötti hitelesítés engedélyezett.
+\nPrivát kulcsok az eszközön.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Az eszközök közötti hitelesítés engedélyezett
 \nA kulcsok megbízhatók.
 \nA privát kulcsok ismeretlenek</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Az eszközök közötti hitelesítés engedélyezve van.
-\nA kulcsok megbízhatatlanok</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Az eszközök közötti hitelesítés engedélyezett.
+\nA kulcsok nem megbízhatóak</string>
     <string name="encryption_information_dg_xsigning_disabled">Eszközök közti hitelesítés nincs engedélyezve</string>
 
 
@@ -2071,8 +2073,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_active_sessions_unverified_device_desc">A munkamenet megbízhatónak való jelöléséhez és a titkosított üzenetekhez való hozzáférés engedélyezéséhez hitelesítsd azt. Ha nem te jelentkeztél be ebbe a munkamenetbe akkor lehetséges, hogy a fiókodat feltörték:</string>
 
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">%d munkamenet használatban</item>
-        <item quantity="other">%d munkamenet használatban</item>
+        <item quantity="one">%d aktív munkamenet</item>
+        <item quantity="other">%d aktív munkamenet</item>
     </plurals>
 
     <string name="crosssigning_verify_this_session">Munkamenet ellenőrzése</string>
@@ -2114,8 +2116,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">%d szavazat</item>
     </plurals>
     <plurals name="poll_info_final">
-        <item quantity="one">Végeredmény - %d szavazat</item>
-        <item quantity="other">Végeredmény - %d szavazat</item>
+        <item quantity="one">%d szavazat – Végeredmény</item>
+        <item quantity="other">%d szavazat – Végeredmény</item>
     </plurals>
     <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
@@ -2289,8 +2291,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
 \nElement Android</string>
-    <string name="or_other_mx_capabale_client">vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre</string>
-    <string name="use_latest_app">A Element legújabb kliensét használd a többi eszközödön:</string>
+    <string name="or_other_mx_capabale_client">"vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
+    <string name="use_latest_app">Az Element legújabb kliensét használd a többi eszközödön:</string>
     <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
     <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
     <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>
@@ -2314,7 +2316,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
     <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
     <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
-    <string name="use_other_session_content_description">Használd a legújabb Elementot a másik eszközödön, úgy mint Element Web, Asztali Element, Element for Android vagy más eszközök közötti hitelesítést támogató másik Matrix klienst</string>
+    <string name="use_other_session_content_description">"Használd a legújabb Elementet a többi eszközödön, azaz az Element Webet, az Element Desktopot, az Element for Androidot vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
     <string name="confirm_your_identity">Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.</string>
     <string name="external_link_confirmation_message">%1$s hivatkozás egy másik oldalra visz: %2$s.
 \n
@@ -2341,7 +2343,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_files_title">FÁJLOK</string>
     <string name="uploads_files_subtitle">%1$s itt: %2$s</string>
-    <string name="login_signin_matrix_id_title">Bejelentkezés</string>
+    <string name="login_signin_matrix_id_title">Bejelentkezés Matrix-azonosítóval</string>
     <string name="disconnect_identity_server_dialog_content">Lecsatlakozol erről az azonosítási szerverről: %s\?</string>
     <string name="identity_server_set_alternative_submit">Küldés</string>
 
@@ -2353,7 +2355,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="login_connect_using_matrix_id_notice">Vagy, ha már rendelkezel egy fiókkal és tudod a Matrix azonosítódat és jelszavadat használhatod ezt is:</string>
     <string name="login_connect_using_matrix_id_submit">Belépés a Matrix azonosítómmal</string>
-    <string name="login_signin_matrix_id_notice">Add meg az azonosítódat és jelszavadat</string>
+    <string name="login_signin_matrix_id_notice">Ha van fiókod egy Matrix-kiszolgálón, akkor meg a Matrix-azonosítódat (például @felhasznalo:domain.com) és jelszavadat lent.</string>
     <string name="login_signin_matrix_id_hint">Felhasználói azonosító</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Ez nem egy valós felhasználó azonosító. A helyes formátum: „@felhasznalo:matrixszerver.org”</string>
     <string name="autodiscover_well_known_error">Nem található a Matrix szerver. Ellenőrizd az azonosítódat</string>
@@ -2378,16 +2380,16 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_set_alternative_notice">Vagy beírhatsz más azonosítási szerver URL-t</string>
     <string name="identity_server_set_alternative_notice_no_default">Add meg az azonosítási szerver URL-jét</string>
     <string name="pause_video">Szünet</string>
-    <string name="action_copy">Másol</string>
+    <string name="action_copy">Másolás</string>
     <string name="dialog_title_success">Siker</string>
 
     <string name="bottom_action_notification">Értesítések</string>
     <string name="call_select_sound_device">Hangeszköz kiválasztása</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Hangszóró</string>
-    <string name="sound_device_headset">Headset</string>
-    <string name="sound_device_wireless_headset">Vezeték nélküli headset</string>
-    <string name="call_switch_camera">Kamera váltás</string>
+    <string name="sound_device_headset">Fejhallgató</string>
+    <string name="sound_device_wireless_headset">Vezeték nélküli fejhallgató</string>
+    <string name="call_switch_camera">Kameraváltás</string>
     <string name="call_camera_front">Első</string>
     <string name="call_camera_back">Hátsó</string>
     <string name="call_format_turn_hd_off">HD kikapcsolása</string>
@@ -2414,4 +2416,189 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="reset_secure_backup_warning">A jelenlegi Kulcsod vagy Jelmondatod ki lesz cserélve erre.</string>
 
     <string name="disabled_integration_dialog_title">Az integrációk ki vannak kapcsolva</string>
+    <string name="play_video">Lejátszás</string>
+    <string name="dismiss">Eltüntetés</string>
+
+
+    <string name="no_permissions_to_start_conf_call">Nincs engedélyed konferenciahívást indítani ebben a szobában</string>
+    <string name="conference_call_in_progress">Már folyamatban van egy konferencia!</string>
+    <string name="video_meeting">Videomegbeszélés indítása</string>
+    <string name="audio_meeting">Megbeszélés indítása (csak hang)</string>
+    <string name="audio_video_meeting_description">A megbeszélések a Jitsi biztonsági és jogosultsági házirendjét használják. A szobában szereplő összes ember meghívást fog kapni, ha elkezdődik a megbeszélés.</string>
+    <string name="cannot_call_yourself">Nem hívhatod fel saját magad</string>
+    <string name="cannot_call_yourself_with_invite">Nem hívhatod fel saját magad, várj amíg a résztvevők elfogadják a meghívást</string>
+    <string name="failed_to_add_widget">Kisalkalmazás hozzáadása sikertelen</string>
+    <string name="failed_to_remove_widget">Kisalkalmazás eltávolítása sikertelen</string>
+    <string name="call_failed_no_connection">Element hívás sikertelen</string>
+    <string name="call_failed_no_connection_description">Nem sikerült felépíteni a valós idejű kapcsolatot.
+\nKérd meg a Matrix-kiszolgálód rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.</string>
+
+    <string name="login_error_ssl_peer_unverified">SSL hiba: a partner személyazonossága nem lett megerősítve.</string>
+    <string name="settings_call_show_confirmation_dialog_title">Véletlen hívás megakadályozása</string>
+    <string name="room_participants_action_cancel_invite">Meghívás visszavonása</string>
+    <string name="room_participants_power_level_demote_warning_title">Lefokozza magát\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Nem fogja tudni visszavonni ezt a változtatást, mert lefokozza magát, ha Ön az utolsó privilegizált felhasználó a szobában, akkor lehetetlen lesz a jogosultságok visszanyerése.</string>
+    <string name="room_participants_power_level_demote">Lefokozás</string>
+
+
+    <string name="room_participants_action_ignore_prompt_msg">A felhasználó figyelmen kívül hagyása törli az üzeneteit a közös szobáikban.
+\n
+\nEzt a műveletet bármikor visszavonhatja az általános beállításokban.</string>
+    <string name="room_participants_action_unignore_title">Felhasználó figyelembe vétele</string>
+    <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.</string>
+    <string name="room_participants_action_cancel_invite_title">Meghívás visszavonása</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Biztos, hogy visszavonja a felhasználó meghívását\?</string>
+    <string name="room_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
+\n
+\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
+    <string name="room_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra csatlakozzon a szobához.</string>
+
+    <string name="disabled_integration_dialog_content">Ehhez kapcsold be az „Integrációk engedélyezését” a Beállításokban.</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d kitiltott felhasználó</item>
+        <item quantity="other">%d kitiltott felhasználó</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">Kulcsok sikeresen exportálva</string>
+
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d kulcs sikeresen importálva.</item>
+        <item quantity="other">%1$d/%2$d kulcs sikeresen importálva.</item>
+    </plurals>
+
+    <string name="active_widget_view_action">MEGTEKINTÉS</string>
+    <string name="active_widgets_title">Aktív kisalkalmazások</string>
+
+
+    <string name="room_manage_integrations">Integrációk kezelése</string>
+    <string name="room_no_active_widgets">Nincs aktív kisalkalmazás</string>
+    <string name="recovery_key_export_saved">A visszaállítási kulcs mentve lett.</string>
+
+    <string name="secure_backup_banner_setup_line1">Biztonságos mentés</string>
+    <string name="secure_backup_banner_setup_line2">Biztosíték a titkosított üzenetekhez és adatokhoz hozzáférés elvesztése ellen</string>
+
+    <string name="secure_backup_setup">Biztonságos mentés beállítása</string>
+
+    <string name="create_room_federation_error">A szoba létrejött, de néhány meghívó nem lett elküldve, a következő ok miatt:
+\n
+\n%s</string>
+
+    <string name="labs_merge_e2e_in_timeline">Az egyesítésnek nem sikerült visszafejtenie egy üzenetet az idővonalon</string>
+    <string name="labs_show_unread_notifications_as_tab">Külön lap hozzáadása az olvasatlan értesítések számára a főképernyőn.</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s és még %3$d felhasználó olvasta</item>
+        <item quantity="other">%1$s, %2$s és még %3$d felhasználó olvasta</item>
+    </plurals>
+    <string name="room_list_quick_actions_favorite_add">Hozzáadás a kedvencekhez</string>
+    <string name="room_list_quick_actions_favorite_remove">Eltávolítás a kedvencek közül</string>
+    <string name="notice_member_no_changes_by_you">Nem változtattál semmit</string>
+    <string name="room_join_rules_public_by_you">Nyilvánossá tetted a szobát azok számára, akik ismerik a hivatkozást.</string>
+    <string name="room_join_rules_invite_by_you">Meghívásossá tetted a szobát.</string>
+    <string name="login_server_url_form_common_notice">Add meg a használandó kiszolgáló címét</string>
+
+    <string name="login_signin_matrix_id_password_notice">Ha nem tudod a jelszavad, akkor lépj vissza és állítsd helyre.</string>
+    <string name="send_a_sticker">Matrica</string>
+
+    <string name="room_profile_section_admin">Rendszergazdai műveletek</string>
+    <string name="room_member_power_level_default_in">Alapértelmezett itt: %1$s</string>
+    <string name="settings_hs_admin_e2e_disabled">A kiszolgáló rendszergazdája alapértelmezetten letiltotta a végpontok közti titkosítást a privát szobákban és közvetlen üzenetekben.</string>
+    <string name="bootstrap_info_text_2">Adj meg egy csak általad ismert biztonsági kifejezést a kiszolgálón található titkok védelméhez.</string>
+
+    <string name="bootstrap_cancel_text">Ha most megszakítod, akkor elvesztheted a titkosított üzeneteid és adataid, ha elveszted a bejelentkezési adataid.
+\n
+\nA Beállításokban állíthatsz be biztonságos mentést és kezelheted a kulcsaidat.</string>
+
+    <string name="room_created_summary_item_by_you">Létrehoztad és beállítottad a szobát.</string>
+
+    <string name="auth_invalid_login_deactivated_account">Ez a fiók letiltásra került.</string>
+
+    <string name="setup_cross_signing">Eszközök közti hitelesítés engedélyezése</string>
+    <string name="error_saving_media_file">A médiafájl mentése sikertelen</string>
+    <string name="power_level_edit_title">Szerepkör megadása</string>
+    <string name="power_level_title">Szerepkör</string>
+    <string name="a11y_open_chat">Csevegés megnyitása</string>
+    <string name="a11y_mute_microphone">Mikrofon némítása</string>
+    <string name="a11y_unmute_microphone">Mikrofon némításának megszüntetése</string>
+    <string name="a11y_stop_camera">Kamera leállítása</string>
+    <string name="a11y_start_camera">Kamera indítása</string>
+
+    <string name="settings_setup_secure_backup">Biztonságos mentés beállítása</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Biztonságos mentés</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">A titkosított üzenetekhez és adatokhoz való hozzáférés elvesztésének megakadályozása a titkosítási kulcsok kiszolgálóra mentésével.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Beállítás</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Biztonsági kulcs használata</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Állíts elő egy biztonsági kulcsot jelszókezelőben vagy széfben történő biztonságos tároláshoz.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Biztonsági kifejezés használata</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Adj meg egy csak általad ismert kifejezést, és készíts egy kulcsot biztonsági mentéshez.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Biztonsági kulcs mentése</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">A biztonsági kulcsot tárold biztonságosan, például egy jelszókezelőben vagy széfben.</string>
+
+    <string name="set_a_security_phrase_title">Biztonsági kifejezés beállítása</string>
+    <string name="set_a_security_phrase_notice">Adj meg egy csak általad ismert biztonsági kifejezést a kiszolgálón található titkok védelméhez.</string>
+    <string name="set_a_security_phrase_hint">Biztonsági kifejezés</string>
+    <string name="set_a_security_phrase_again_notice">Add meg a biztonsági kifejezést a megerősítéshez.</string>
+
+    <string name="save_your_security_key_title">Biztonsági kulcs mentése</string>
+    <string name="save_your_security_key_notice">A biztonsági kulcsot tárold biztonságosan, például egy jelszókezelőben vagy széfben.</string>
+
+    <string name="room_settings_name_hint">Szoba neve</string>
+    <string name="room_settings_topic_hint">Téma</string>
+    <string name="room_settings_save_success">Szoba beállításainak módosítása sikeres</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">Nem érheted el ezt az üzenetet</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Várakozás erre az üzenetre, ez eltarthat egy darabig</string>
+    <string name="crypto_utd">Nem fejthető vissza</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">A végpontok közötti titkosítás miatt lehet hogy várnod kell, hogy valaki üzenet megérkezzen, mert a titkosítási kulcsok nem lettek megfelelően elküldve neked.</string>
+    <string name="crypto_error_withheld_blacklisted">Nem érheted el ezt az üzenetet, mert a küldő letiltott</string>
+    <string name="crypto_error_withheld_unverified">Nem érheted el ezt az üzenetet, mert a feladó nem bízik a munkamenetedben</string>
+    <string name="crypto_error_withheld_generic">Nem érheted el ezt az üzenetet, mert a feladó szándékosan nem küldte el a kulcsokat</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Várakozás a titkosítási előzményekre</string>
+
+    <string name="element_disclaimer_title">A Riot mostantól Element!</string>
+    <string name="element_disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
+    <string name="element_disclaimer_negative_button">ÉRTEM</string>
+    <string name="element_disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
+
+    <string name="element_login_splash_brand">element</string>
+
+
+    <string name="save_recovery_key_chooser_hint">Helyreállítási kulcs mentése ide:</string>
+
+    <string name="add_from_phone_book">Hozzáadás a telefonkönyvemből</string>
+    <string name="empty_phone_book">A telefonkönyved üres</string>
+    <string name="phone_book_title">Telefonkönyv</string>
+    <string name="search_in_my_contacts">Keresés a névjegyeimben</string>
+    <string name="loading_contact_book">Névjegyek lekérése…</string>
+    <string name="empty_contact_book">A névjegyzéked üres</string>
+    <string name="contacts_book_title">Névjegyzék</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">Meghívás visszavonása</string>
+    <string name="three_pid_revoke_invite_dialog_content">Visszavonod a meghívást ide: %1$s\?</string>
+
+    <string name="member_banned_by">%1$s kitiltotta</string>
+    <string name="failed_to_unban">Felhasználó visszaengedése sikertelen</string>
+
+    <string name="alert_push_are_disabled_title">A leküldéses értesítések ki vannak kapcsolva</string>
+    <string name="alert_push_are_disabled_description">A leküldéses értesítések bekapcsolásához tekintse át a beállításait</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Hibás kód, %d próbálkozás van hátra</item>
+        <item quantity="other">Hibás kód, %d próbálkozás van hátra</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Figyelem! Utolsó próbálkozási lehetőség a kiléptetés előtt!</string>
+    <string name="too_many_pin_failures">Túl sok hiba, kiléptettünk</string>
+    <string name="create_pin_title">Válassz biztonsági PIN-kódot</string>
+    <string name="create_pin_confirm_title">PIN-kód megerősítése</string>
+    <string name="create_pin_confirm_failure">Nem sikerült a PIN-kó ellenőrzése, írj be egy újat.</string>
+    <string name="auth_pin_title">Add meg a PIN-kódot</string>
+    <string name="auth_pin_forgot">Elfelejtetted a PIN-kódot\?</string>
+    <string name="auth_pin_reset_title">PIN-kód helyreállítása</string>
+    <string name="auth_pin_new_pin_action">Új PIN-kód</string>
+    <string name="auth_pin_reset_content">A PIN-kód helyreállításához újra be kell jelentkezned, és létre kell hoznod egy újat.</string>
+    <string name="settings_security_pin_code_title">PIN-kód bekapcsolása</string>
+    <string name="settings_security_pin_code_summary">Ha helyre akarod állítani a PIN-kódod, koppints az Elfelejtettem a PIN-kódot feliratra a kijelentkezéshez és helyreállításhoz.</string>
+    <string name="auth_pin_confirm_to_disable_title">Erősítsd meg a PIN-kódot a PIN-kód kikapcsolásához</string>
 </resources>

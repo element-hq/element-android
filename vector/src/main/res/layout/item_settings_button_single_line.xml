@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/settings_item_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -87,7 +87,8 @@ class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
         @Assisted val args: CallArgs,
         val session: Session,
-        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        val proximityManager: CallProximityManager
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
     var call: MxCall? = null
@@ -145,10 +146,17 @@ class VectorCallViewModel @AssistedInject constructor(
         }
 
         override fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {
+            val currentSoundDevice = mgr.audioManager.getCurrentSoundDevice()
+            if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
+                proximityManager.start()
+            } else {
+                proximityManager.stop()
+            }
+
             setState {
                 copy(
                         availableSoundDevices = mgr.audioManager.getAvailableSoundDevices(),
-                        soundDevice = mgr.audioManager.getCurrentSoundDevice()
+                        soundDevice = currentSoundDevice
                 )
             }
         }
@@ -164,9 +172,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     init {
-
         initialState.callId?.let {
-
             webRtcPeerConnectionManager.addCurrentCallListener(currentCallListener)
 
             session.callSignalingService().getCallWithId(it)?.let { mxCall ->
@@ -175,12 +181,18 @@ class VectorCallViewModel @AssistedInject constructor(
                 val item: MatrixItem? = session.getUser(mxCall.otherUserId)?.toMatrixItem()
 
                 mxCall.addListener(callStateListener)
+
+                val currentSoundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
+                    proximityManager.start()
+                }
+
                 setState {
                     copy(
                             isVideoCall = mxCall.isVideoCall,
                             callState = Success(mxCall.state),
                             otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
-                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice(),
+                            soundDevice = currentSoundDevice,
                             availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices(),
                             isFrontCamera = webRtcPeerConnectionManager.currentCameraType() == CameraType.FRONT,
                             canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera(),
@@ -201,6 +213,7 @@ class VectorCallViewModel @AssistedInject constructor(
         // session.callService().removeCallListener(callServiceListener)
         webRtcPeerConnectionManager.removeCurrentCallListener(currentCallListener)
         this.call?.removeListener(callStateListener)
+        proximityManager.stop()
         super.onCleared()
     }
 

@@ -40,7 +40,7 @@
     <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
-    <string name="device_information">Información de la sesión</string>
+    <string name="device_information">Detalles de la sesión</string>
     <string name="room_no_conference_call_in_encrypted_rooms">No se admiten llamadas de conferencia en salas cifradas</string>
     <string name="send_anyway">Enviar de Todos Modos</string>
     <string name="or">o</string>
@@ -1916,4 +1916,217 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
     <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
     <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>
+    <string name="no_permissions_to_start_conf_call">No posee permisos para iniciar una conferencia en esta sala</string>
+    <string name="conference_call_in_progress">Conferencia en progreso!</string>
+    <string name="video_meeting">Iniciar Video Conferencia</string>
+    <string name="audio_meeting">Iniciar Audio Conferencia</string>
+    <string name="cannot_call_yourself">No puedes hacer una llamada contigo mismo</string>
+    <string name="cannot_call_yourself_with_invite">No puedes hacer una llamada contigo mismo, espera a que los participantes acepten la invitación</string>
+    <string name="failed_to_add_widget">Fallo al adicionar Widget</string>
+    <string name="failed_to_remove_widget">Fallo al eliminar Widget</string>
+    <string name="settings_call_show_confirmation_dialog_title">Prevenir llamadas por accidente</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Pedir confirmacion antes de iniciar una llamda</string>
+    <string name="room_participants_kick_reason">Rason de expulsion</string>
+    <string name="room_participants_ban_title">Banear usuario</string>
+    <string name="room_participants_ban_reason">Rason de baneo</string>
+    <string name="room_participants_unban_title">Desbanear usuario</string>
+    <string name="room_participants_unban_prompt_msg">Desbanear usuario y permitir entrar a la sala nuevamente.</string>
+
+    <string name="push_gateway_item_device_name">nombre_session:</string>
+    <string name="labs_merge_e2e_in_timeline">Error al descifrar el mensaje en la línea de tiempo</string>
+    <string name="labs_show_unread_notifications_as_tab">Adicionar pestaña dedicada para notificaciones no leidas en la pantalla principal.</string>
+
+    <string name="bug_report_error_too_short">Descripcion muy corta</string>
+
+    <string name="notification_initial_sync">Sincronización inicial…</string>
+
+    <string name="settings_show_devices_list">Mostrar todas mis sessiones</string>
+    <string name="settings_advanced_settings">Opciones Avanzadas</string>
+    <string name="settings_developer_mode">Modo Desarrollador</string>
+    <string name="settings_rageshake">Agitar</string>
+    <string name="settings_rageshake_detection_threshold">Sensibilidad</string>
+    <string name="settings_rageshake_detection_threshold_summary">Agite su dispositivo para probar la sensibilidad</string>
+    <string name="rageshake_detected">Sacudida detectada!</string>
+    <string name="settings">Ajustes</string>
+    <string name="devices_current_device">Sesión Actual</string>
+    <string name="devices_other_devices">Otras Sesiones</string>
+
+    <string name="autocomplete_limited_results">Mostrando solo el primer resultado, agregue mas letras…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Fallar rapido (Test)</string>
+    <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
+
+    <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
+
+    <string name="create_room_encryption_title">Habilitar encriptacion</string>
+    <string name="create_room_encryption_description">Una vez habilitada, el cifrado no se puede deshabilitar.</string>
+
+    <string name="login_error_threepid_denied">Su dominio de correo electrónico no está autorizado para registrarse en este servidor</string>
+
+    <string name="verification_conclusion_warning">Inicio de sesión no confiable</string>
+    <string name="verification_sas_match">Coinciden</string>
+    <string name="verification_sas_do_not_match">No coinciden</string>
+    <string name="verify_user_sas_emoji_help_text">Verifique a este usuario confirmando que el siguiente emoji único aparece en su pantalla, en el mismo orden.</string>
+    <string name="verify_user_sas_emoji_security_tip">Para mayor seguridad, use otro medio de comunicación confiable o hágalo en persona.</string>
+    <string name="verification_green_shield">Busque el escudo verde para asegurarse de que se confía en un usuario. Confíe en todos los usuarios de una sala para asegurarse de que la sala sea segura.</string>
+
+    <string name="verification_conclusion_not_secure">No seguro</string>
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Imagen.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">Archivo</string>
+    <string name="send_a_sticker">Sticker</string>
+
+    <string name="verification_request_waiting">Esperando…</string>
+    <string name="verification_request_other_cancelled">%s cancelada</string>
+    <string name="verification_request_you_cancelled">Cancelado por usted</string>
+    <string name="verification_request_other_accepted">%s aceptada</string>
+    <string name="verification_request_you_accepted">Aceptado por usted</string>
+    <string name="verification_sent">Verificacion enviada</string>
+    <string name="verification_request">Solicitud de verificación</string>
+    <string name="verification_verify_device">Verifica esta Sesion</string>
+    <string name="verification_verify_device_manually">Verificar manualmente</string>
+
+    <string name="you">Usted</string>
+
+    <string name="verification_scan_notice">Escanee el código con el dispositivo del otro usuario para verificarse mutuamente de forma segura</string>
+    <string name="verification_scan_their_code">Escanear código</string>
+    <string name="verification_scan_emoji_title">Error al escanear</string>
+    <string name="verification_scan_emoji_subtitle">Si no estás en persona, compara los emojis</string>
+
+    <string name="verification_no_scan_emoji_title">Verificar comparando emojis</string>
+
+    <string name="verify_by_emoji_title">Verificar por emojis</string>
+    <string name="verify_by_emoji_description">Si no puede escanear el código anterior, verifique comparando una selección breve y única de emoji.</string>
+
+    <string name="a13n_qr_code_description">Imagen de código QR</string>
+
+    <string name="verification_verify_user">Verificar %s</string>
+    <string name="verification_verified_user">Verificado %s</string>
+    <string name="verification_request_waiting_for">Esperando por %s…</string>
+    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no estan encriptados punto a punto.</string>
+    <string name="room_profile_section_security">Seguridad</string>
+    <string name="room_profile_section_security_learn_more">Saber mas</string>
+    <string name="room_profile_section_more">Mas</string>
+    <string name="room_profile_section_admin">Acciones Administrativas</string>
+    <string name="room_profile_section_more_settings">Ajustes de Sala</string>
+    <string name="room_profile_section_more_notifications">Notificaciones</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Una persona</item>
+        <item quantity="other">%1$d personas</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Archivos, Medias y Documentos</string>
+    <string name="room_profile_section_more_leave">Abandonar Sala</string>
+    <string name="room_profile_leaving_room">Saliendo de la sala…</string>
+
+    <string name="room_member_power_level_admins">Administradores</string>
+    <string name="room_member_power_level_moderators">Moderadores</string>
+    <string name="room_member_power_level_custom">Nivel Personalizado</string>
+    <string name="room_member_power_level_invites">Invitados</string>
+    <string name="room_member_power_level_users">Usuarios</string>
+
+    <string name="room_member_power_level_admin_in">Administrador en %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderador en %1$s</string>
+    <string name="room_member_power_level_default_in">Nivel Personalizado en %1$s</string>
+    <string name="room_member_power_level_custom_in">Nivel Personalizado (%1$d) en %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Saltar para leer el recibo</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">Element no maneja eventos de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element no maneja el mensaje de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_exception">Element encontró un problema al representar el contenido del evento con el ID \'%1$s\'</string>
+
+    <string name="unignore">Dejar de ignorar</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Salas recientes</string>
+    <string name="room_list_sharing_header_other_rooms">Otras salas</string>
+
+    <string name="command_description_rainbow">Envía el mensaje dado en colores</string>
+    <string name="settings_category_timeline">Linea de tiempo</string>
+
+    <string name="settings_category_composer">Editor de mensage</string>
+
+    <string name="room_settings_enable_encryption">Encriptar (end-to-end)</string>
+    <string name="room_settings_enable_encryption_warning">Una vez habilitado, el cifrado no se puede deshabilitar.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Encriptar \?</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Habilitar el cifrado</string>
+
+    <string name="encryption_information_cross_signing_state">Firma cruzada</string>
+    <string name="encryption_information_dg_xsigning_disabled">Firma cruzada no habilitada</string>
+
+    <string name="settings_active_sessions_list">Sesiones Activas</string>
+    <string name="settings_active_sessions_show_all">Mostrar todas las Sesiones</string>
+    <string name="settings_active_sessions_manage">Administrar Sesiones</string>
+    <string name="settings_active_sessions_signout_device">Cerrar Sesión</string>
+
+    <string name="crosssigning_verify_this_session">Verificar este inicio de sesión</string>
+    <string name="crosssigning_other_user_not_trust">Otros usuarios pueden no confiar en la sesion</string>
+    <string name="complete_security">Completar Seguridad</string>
+
+    <string name="verification_profile_verify">Verificar</string>
+    <string name="verification_profile_verified">Verificada</string>
+    <string name="verification_profile_warning">Precaucion</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Error al obtener sesiones</string>
+    <string name="room_member_profile_sessions_section_title">Sesiones</string>
+    <string name="trusted">Confirmado</string>
+    <string name="not_trusted">No es confiable</string>
+
+    <string name="initialize_cross_signing">Inicializar Firmas Cruzadas</string>
+    <string name="reset_cross_signing">Restablecer claves</string>
+
+    <string name="a11y_qr_code_for_verification">Codigo QR</string>
+
+    <string name="qr_code_scanned_by_other_yes">Correcto</string>
+    <string name="qr_code_scanned_by_other_no">No</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Sin conexión</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avion Activado</string>
+
+    <string name="settings_dev_tools">Herramientas de desarrollo</string>
+    <string name="settings_account_data">Datos de cuenta</string>
+    <string name="poll_item_selected_aria">Seleccionar Opcion</string>
+    <string name="new_signin">Nuevo inicio de sesión</string>
+
+    <string name="enter_secret_storage_passphrase_warning">Advertencia:</string>
+    <string name="message_action_item_redact">Remover…</string>
+    <string name="delete_event_dialog_reason_checkbox">Razón</string>
+    <string name="delete_event_dialog_reason_hint">Razón para redactar</string>
+
+    <string name="login_default_session_public_name">Element Android</string>
+
+    <string name="refresh">Refrescar</string>
+
+    <string name="new_session">Nuevo inicio de sesión detectado . ¿Fue usted\?</string>
+    <string name="new_session_review">Toca para revisar y verificar</string>
+    <string name="verify_new_session_was_not_me">Este no era yo</string>
+    <string name="verify_new_session_compromized">Su cuenta puede estar comprometida</string>
+
+    <string name="verification_cancelled">Verificación cancelada</string>
+
+    <string name="recovery_passphrase">Frase de contraseña de recuperación</string>
+    <string name="message_key">Clave de mensaje</string>
+    <string name="account_password">Contraseña de la cuenta</string>
+
+    <string name="bootstrap_finish_title">¡Listo!</string>
+    <string name="encryption_enabled">Cifrado habilitado</string>
+    <string name="room_created_summary_item_by_you">Sala creada y configurada por usted.</string>
+
+    <string name="qr_code_scanned_verif_waiting">Esperando por %s…</string>
+
+    <string name="settings_notification_configuration">Ajuste de Notificaciones</string>
+    <string name="room_message_placeholder">Mensaje…</string>
+
+    <string name="bootstrap_enter_recovery">Introduza su %s para continuar</string>
+    <string name="use_file">Usar archivo</string>
+
+    <string name="error_saving_media_file">No se pudo guardar el archivo multimedia</string>
+    <string name="crosssigning_verify_session">Verificar Sesión</string>
+    <string name="create_pin_confirm_title">Confirmar PIN</string>
+    <string name="auth_pin_reset_title">Resetear PIN</string>
+    <string name="auth_pin_new_pin_action">Nuevo PIN</string>
+    <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar seccion y crear uno nuevo</string>
+    <string name="settings_security_pin_code_title">Establecer PIN</string>
+    <string name="settings_security_pin_code_summary">Si decea resetear su PIN, toque Olvidé PIN para cerrar sesión y restablecer.</string>
 </resources>

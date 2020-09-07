@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 class UserAvatarPreference : Preference {
@@ -33,6 +34,8 @@ class UserAvatarPreference : Preference {
     private var mLoadingProgressBar: ProgressBar? = null
 
     private var avatarRenderer: AvatarRenderer = context.vectorComponent().avatarRenderer()
+
+    private var userItem: MatrixItem.UserItem? = null
 
     constructor(context: Context) : super(context)
 
@@ -50,9 +53,16 @@ class UserAvatarPreference : Preference {
         super.onBindViewHolder(holder)
         mAvatarView = holder.itemView.findViewById(R.id.settings_avatar)
         mLoadingProgressBar = holder.itemView.findViewById(R.id.avatar_update_progress_bar)
+        refreshUi()
     }
 
     fun refreshAvatar(user: User) {
-        mAvatarView?.let { avatarRenderer.render(user.toMatrixItem(), it) }
+        userItem = user.toMatrixItem()
+        refreshUi()
+    }
+
+    private fun refreshUi() {
+        val safeUserItem = userItem ?: return
+        mAvatarView?.let { avatarRenderer.render(safeUserItem, it) }
     }
 }

@@ -2,31 +2,44 @@ Changes in Element 1.0.6 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - List phone numbers and emails added to the Matrix account, and add emails and phone numbers to account (#44, #45)
 
 Improvements 🙌:
  - You can now join room through permalink and within room directory search
  - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
+ - Fix several issues when uploading bug files (#1889)
+ - Do not propose to verify session if there is only one session and 4S is not configured (#1901)
+ - Call screen does not use proximity sensor (#1735)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
+ - Editing message forgets line breaks and markdown (#1939)
  - Words containing my name should not trigger notifications (#1781)
  - Fix changing language issue
  - Fix FontSize issue (#1483, #1787)
  - Fix bad color for settings icon on Android < 24 (#1786)
  - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
+ - Loudspeaker is always used (#1685)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
  - Handle room, user and group links by the Element app (#1795)
+ - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
+ - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
+ - Support for image compression on Android 10
+ - Verification popup won't show
 
 Translations 🗣:
- -
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
 
 SDK API changes ⚠️:
  - 
 
 Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
+ - Buildkite:
+    New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
+    New build location: https://buildkite.com/matrix-dot-org/element-android
+
 
 Other changes:
  - Use File extension functions to make code more concise (#1996)

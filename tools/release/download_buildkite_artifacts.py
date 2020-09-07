@@ -25,9 +25,9 @@ import requests
 # This script downloads artifacts from buildkite.
 # Ref: https://buildkite.com/docs/apis/rest-api/artifacts#download-an-artifact
 
-# Those two variable are specific to the RiotX project
+# Those two variables are specific to the Element Android project
 ORG_SLUG = "matrix-dot-org"
-PIPELINE_SLUG = "riotx-android"
+PIPELINE_SLUG = "element-android"
 
 ### Arguments
 

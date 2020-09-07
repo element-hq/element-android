@@ -20,4 +20,90 @@
     <string name="auth_password_placeholder">รหัสผ่าน</string>
     <string name="auth_new_password_placeholder">รหัสผ่านใหม่</string>
     <string name="permalink">ลิงก์ถาวร</string>
+    <string name="title_activity_home">ข้อความ</string>
+    <string name="title_activity_room">ห้อง</string>
+    <string name="title_activity_settings">การตั้งค่า</string>
+    <string name="title_activity_member_details">ข้อมูลสมาชิก</string>
+    <string name="ok">ตกลง</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="save">บันทึก</string>
+    <string name="leave">ออก</string>
+    <string name="send">ส่ง</string>
+    <string name="copy">คัดลอก</string>
+    <string name="download">ดาวน์โหลด</string>
+    <string name="share">แชร์</string>
+    <string name="speak">พูด</string>
+    <string name="delete">ลบ</string>
+    <string name="rename">เปลี่ยนชื่อ</string>
+    <string name="skip">ข้าม</string>
+    <string name="resources_script">Thai</string>
+
+    <string name="title_activity_choose_sticker">ส่งสติกเกอร์</string>
+    <string name="loading">กำลังโหลด…</string>
+
+    <string name="forward">ส่งต่อ</string>
+    <string name="none">ไม่มี</string>
+    <string name="report_content">รายงานเนื้อหา</string>
+    <string name="play_video">เล่น</string>
+    <string name="pause_video">หยุดชั่วคราว</string>
+    <string name="ongoing_conference_call_voice">เสียง</string>
+    <string name="ongoing_conference_call_video">วิดีโอ</string>
+    <string name="bottom_action_home">หน้าหลัก</string>
+    <string name="bottom_action_notification">การแจ้งเตือน</string>
+    <string name="bottom_action_people">ผู้คน</string>
+    <string name="bottom_action_rooms">ห้อง</string>
+    <string name="bottom_action_groups">ชุมชน</string>
+
+    <string name="invitations_header">การเชิญ</string>
+    <string name="system_alerts_header">การแจ้งเตือนจากระบบ</string>
+
+    <string name="no_contact_access_placeholder">คุณไม่ได้อนุญาตให้ Element เข้าถึงรายชื่อผู้ติดต่อในเครื่อง</string>
+    <string name="no_result_placeholder">ไม่มีผลลัพธ์</string>
+    <string name="no_room_placeholder">ไม่มีห้อง</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="other">ผู้ใช้ %d คน</item>
+    </plurals>
+
+    <string name="groups_invite_header">เชิญ</string>
+    <string name="groups_header">ชุมชน</string>
+    <string name="no_group_placeholder">ไม่มีกลุ่ม</string>
+
+    <string name="send_bug_report_description_in_english">ถ้าเป็นไปได้ โปรดเขียนคำอธิบายเป็นภาษาอังกฤษ</string>
+    <string name="send_bug_report_placeholder">อธิบายปัญหาของคุณที่นี่</string>
+    <string name="send_files_in">ส่งไปยัง</string>
+    <string name="join_room">เข้าห้อง</string>
+    <string name="username">ชื่อผู้ใช้</string>
+    <string name="create_account">สร้างบัญชี</string>
+    <string name="login">เข้าสู่ระบบ</string>
+    <string name="logout">ออกจากระบบ</string>
+    <string name="search">ค้นหา</string>
+
+    <string name="start_new_chat">เริ่มแชทใหม่</string>
+    <string name="call_failed_no_ice_use_alt">ลองโดยใช้ %s</string>
+    <string name="call_failed_dont_ask_again">ไม่ต้องถามฉันอีก</string>
+
+    <string name="call_select_sound_device">เลือกอุปกรณ์เสียง</string>
+    <string name="sound_device_phone">โทรศัพท์</string>
+    <string name="sound_device_speaker">ลำโพง</string>
+    <string name="sound_device_headset">หูฟัง</string>
+    <string name="sound_device_wireless_headset">หูฟังไร้สาย</string>
+    <string name="call_switch_camera">สลับกล้อง</string>
+    <string name="call_camera_front">หน้า</string>
+    <string name="call_camera_back">หลัง</string>
+    <string name="call_format_turn_hd_off">ปิด HD</string>
+    <string name="call_format_turn_hd_on">เปิด HD</string>
+
+    <string name="option_send_sticker">ส่งสติกเกอร์</string>
+    <string name="auth_login">เข้าสู่ระบบ</string>
+    <string name="auth_register">สร้างบัญชี</string>
+    <string name="auth_submit">ส่ง</string>
+    <string name="auth_send_reset_email">ส่งอีเมลรีเซ็ต</string>
+    <string name="auth_return_to_login">กลับไปที่หน้าเข้าสู่ระบบ</string>
+    <string name="auth_user_id_placeholder">อีเมลหรือชื่อผู้ใช้</string>
+    <string name="auth_user_name_placeholder">ชื่อผู้ใช้</string>
+    <string name="auth_email_placeholder">ที่อยู่อีเมล</string>
+    <string name="auth_opt_email_placeholder">ที่อยู่อีเมล (ไม่จำเป็น)</string>
+    <string name="auth_phone_number_placeholder">หมายเลขโทรศัพท์</string>
+    <string name="auth_opt_phone_number_placeholder">หมายเลขโทรศัพท์ (ไม่จำเป็น)</string>
+    <string name="auth_invalid_password">รหัสผ่านสั้นเกินไป (อย่างน้อย 6 ตัว)</string>
 </resources>

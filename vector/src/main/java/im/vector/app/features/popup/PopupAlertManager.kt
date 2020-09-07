@@ -254,6 +254,6 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         return alert != null
                 && activity !is PinActivity
                 && activity is VectorBaseActivity
-                && alert.shouldBeDisplayedIn?.invoke(activity) == true
+                && alert.shouldBeDisplayedIn.invoke(activity)
     }
 }

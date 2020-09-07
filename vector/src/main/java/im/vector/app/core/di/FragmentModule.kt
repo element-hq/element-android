@@ -103,6 +103,7 @@ import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragmen
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
 import im.vector.app.features.settings.push.PushRulesFragment
+import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.terms.ReviewTermsFragment
@@ -312,6 +313,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsDevicesFragment::class)
     fun bindVectorSettingsDevicesFragment(fragment: VectorSettingsDevicesFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ThreePidsSettingsFragment::class)
+    fun bindThreePidsSettingsFragment(fragment: ThreePidsSettingsFragment): Fragment
 
     @Binds
     @IntoMap

@@ -1406,4 +1406,8 @@
     <string name="keys_backup_restore_is_getting_backup_version">ব্যাকআপ সংস্করণ আনছে…</string>
     <string name="keys_backup_restore_with_passphrase">আপনার এনক্রিপ্ট করা বার্তাগুলির ইতিহাস আনলক করতে আপনার পুনরুদ্ধার পাসফ্রেজটি ব্যবহার করুন</string>
     <string name="keys_backup_restore_use_recovery_key">আপনার পুনরুদ্ধার কী ব্যবহার করুন</string>
+
+    <string name="call_notification_answer">গ্রহণ</string>
+    <string name="call_notification_reject">পতন</string>
+    <string name="call_notification_hangup">বন্ধ করুন</string>
 </resources>

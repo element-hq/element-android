@@ -23,15 +23,12 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.common.DaggerTestMatrixComponent
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.common.DaggerTestMatrixComponent
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
-import java.io.InputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -95,10 +92,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
         fun getSdkVersion(): String {
             return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
-        }
-
-        fun decryptStream(inputStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
-            return MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
         }
     }
 }

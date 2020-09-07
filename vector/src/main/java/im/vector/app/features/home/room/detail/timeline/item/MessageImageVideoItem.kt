@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -27,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.session.room.send.SendState
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
@@ -60,10 +62,18 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         // The sending state color will be apply to the progress text
         renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
+
+        holder.eventSendingIndicator.isVisible = when (attributes.informationData.sendState) {
+            SendState.UNSENT,
+            SendState.ENCRYPTING,
+            SendState.SENDING -> true
+            else              -> false
+        }
     }
 
     override fun unbind(holder: Holder) {
         GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
+        imageContentRenderer.clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         holder.imageView.setOnClickListener(null)
         holder.imageView.setOnLongClickListener(null)
@@ -79,6 +89,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
         val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
+        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     companion object {

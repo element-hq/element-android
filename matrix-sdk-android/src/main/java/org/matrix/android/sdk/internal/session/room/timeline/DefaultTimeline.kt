@@ -115,6 +115,7 @@ internal class DefaultTimeline(
         if (!results.isLoaded || !results.isValid) {
             return@OrderedRealmCollectionChangeListener
         }
+        Timber.v("## SendEvent: [${System.currentTimeMillis()}] DB update for room $roomId")
         handleUpdates(results, changeSet)
     }
 
