@@ -58,7 +58,7 @@ object VectorLocale {
     /**
      * Init this object
      */
-    fun init(context: Context, localeProvider: LocaleProvider) {
+    fun init(context: Context) {
         this.context = context
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 

@@ -83,7 +83,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                     // need to display header with day
                     genericItemHeader {
                         id(evDate.hashCode())
-                        text(dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_ROW))
+                        text(dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                     }
                 }
                 lastDate = evDate
