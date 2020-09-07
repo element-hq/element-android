@@ -361,8 +361,4 @@
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
 
-    <string name="call_notification_answer">Accept</string>
-    <string name="call_notification_reject">Decline</string>
-    <string name="call_notification_hangup">Hang Up</string>
-
 </resources>

@@ -289,8 +289,4 @@
     <string name="notice_end_to_end_ok_by_you">您已开启端到端加密。</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">您已开启端到端加密（无法识别的算法 %1$s）。</string>
 
-    <string name="call_notification_answer">接受</string>
-    <string name="call_notification_reject">拒绝</string>
-    <string name="call_notification_hangup">挂断</string>
-
 </resources>

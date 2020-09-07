@@ -10,6 +10,10 @@
     <string name="notification_sync_in_progress">Prebieha synchronizácia…</string>
     <string name="notification_listening_for_events">Spracovanie udalostí</string>
 
+    <string name="call_notification_answer">Prijať</string>
+    <string name="call_notification_reject">Odmietnuť</string>
+    <string name="call_notification_hangup">Zavesiť</string>
+
     <string name="title_activity_home">Správy</string>
     <string name="title_activity_room">Miestnosť</string>
     <string name="title_activity_settings">Nastavenia</string>

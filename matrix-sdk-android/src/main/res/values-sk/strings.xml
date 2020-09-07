@@ -299,8 +299,4 @@
 
     <string name="key_verification_request_fallback_message">%s požaduje overenie vašich šifrovacích kľúčov, ale váš klient nepodporuje overenie kľúčov v konverzácii. Budete musieť použiť zastaralú metódu overenia.</string>
 
-    <string name="call_notification_answer">Prijať</string>
-    <string name="call_notification_reject">Odmietnuť</string>
-    <string name="call_notification_hangup">Zavesiť</string>
-
 </resources>

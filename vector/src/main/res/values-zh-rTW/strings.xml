@@ -10,6 +10,10 @@
     <string name="notification_sync_in_progress">正在同步……</string>
     <string name="notification_listening_for_events">聆聽事件</string>
 
+    <string name="call_notification_answer">接受</string>
+    <string name="call_notification_reject">拒絕</string>
+    <string name="call_notification_hangup">掛斷</string>
+
     <string name="title_activity_home">訊息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">設定</string>

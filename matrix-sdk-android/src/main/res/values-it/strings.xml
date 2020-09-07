@@ -296,8 +296,4 @@
     <string name="notice_end_to_end_ok_by_you">Hai attivato la crittografia end-to-end.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Hai attivato la crittografia end-to-end (algoritmo %1$s sconosciuto).</string>
 
-    <string name="call_notification_answer">Accetta</string>
-    <string name="call_notification_reject">Rifiuta</string>
-    <string name="call_notification_hangup">Riaggancia</string>
-
 </resources>

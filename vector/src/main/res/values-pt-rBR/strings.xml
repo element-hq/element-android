@@ -12,6 +12,10 @@
     <string name="title_activity_member_details">Detalhes do participante</string>
     <string name="title_activity_historical">Histórico</string>
 
+    <string name="call_notification_answer">Aceitar</string>
+    <string name="call_notification_reject">Recusar</string>
+    <string name="call_notification_hangup">Encerrar</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>

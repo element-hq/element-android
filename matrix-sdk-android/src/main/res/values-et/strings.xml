@@ -295,8 +295,4 @@
     <string name="notice_end_to_end_ok_by_you">Sa lülitasid sisse läbiva krüptimise.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Sa lülitasid sisse läbiva krüptimise (kasutusel on tundmatu algoritm %1$s).</string>
 
-    <string name="call_notification_answer">Võta vastu</string>
-    <string name="call_notification_reject">Keeldu</string>
-    <string name="call_notification_hangup">Lõpeta kõne</string>
-
 </resources>

@@ -287,8 +287,4 @@
 
     <string name="key_verification_request_fallback_message">%s begär att verifiera din nyckel, men din klient stöder inte nyckelverifiering i chatten. Du behöver använda legacynyckelverifiering för att verifiera nycklar.</string>
 
-    <string name="call_notification_answer">Godkänn</string>
-    <string name="call_notification_reject">Avslå</string>
-    <string name="call_notification_hangup">Lägg på</string>
-
 </resources>

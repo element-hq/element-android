@@ -2286,6 +2286,10 @@
 
     <string name="command_description_rainbow_emote">Skickar den givna emoten i regnbågsfärg</string>
 
+    <string name="call_notification_answer">Godkänn</string>
+    <string name="call_notification_reject">Avslå</string>
+    <string name="call_notification_hangup">Lägg på</string>
+
     <string name="room_settings_enable_encryption_dialog_title">Aktivera kryptering\?</string>
     <string name="room_settings_enable_encryption_dialog_submit">Aktivera kryptering</string>
 

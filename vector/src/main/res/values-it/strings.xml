@@ -133,6 +133,10 @@
     <string name="option_send_files">Invia file</string>
     <string name="option_take_photo_video">Fai una foto o un video</string>
 
+    <string name="call_notification_answer">Accetta</string>
+    <string name="call_notification_reject">Rifiuta</string>
+    <string name="call_notification_hangup">Riaggancia</string>
+
     <!-- Authentication -->
     <string name="auth_login">Accedi</string>
     <string name="auth_register">Crea account</string>

@@ -1213,6 +1213,10 @@
     <string name="crosssigning_verify_session">Senqed anekcam</string>
     <string name="mark_as_verified">Creḍ yettwaḍman</string>
 
+    <string name="call_notification_answer">Qbel</string>
+    <string name="call_notification_reject">Agwi</string>
+    <string name="call_notification_hangup">Ɛelleq</string>
+
     <string name="error_empty_field_choose_user_name">Ttxil-ik·im fren isem n useqdac.</string>
     <string name="error_empty_field_choose_password">Ttxil-ik·im fren awal uffir.</string>
     <string name="add_members_to_room">Rnu iɛeggalen</string>

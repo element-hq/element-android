@@ -12,6 +12,10 @@
     <string name="title_activity_member_details">Benutzerdetails</string>
     <string name="title_activity_historical">Historisch</string>
 
+    <string name="call_notification_answer">Akzeptiere</string>
+    <string name="call_notification_reject">Ablehnen</string>
+    <string name="call_notification_hangup">Anruf beenden</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>

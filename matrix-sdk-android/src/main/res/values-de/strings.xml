@@ -297,10 +297,6 @@
     <string name="notice_end_to_end_ok_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert (unbekannter Algorithmus %1$s).</string>
 
-    <string name="call_notification_answer">Akzeptiere</string>
-    <string name="call_notification_reject">Ablehnen</string>
-    <string name="call_notification_hangup">Anruf beenden</string>
-
     <string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
     <string name="notice_call_candidates_by_you">Du hast Daten geschickt, um eine Anruf zu starten.</string>
 </resources>

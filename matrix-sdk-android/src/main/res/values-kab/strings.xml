@@ -87,8 +87,6 @@
     <string name="verification_emoji_folder">Akaram</string>
     <string name="verification_emoji_pin">Amessak</string>
 
-    <string name="call_notification_answer">Qbel</string>
-    <string name="call_notification_reject">Agwi</string>
     <string name="summary_user_sent_sticker">%1$s azen astiker.</string>
     <string name="summary_you_sent_sticker">Tuzneḍ amenṭaḍ.</string>
 
@@ -196,8 +194,6 @@
     <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
 
     <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
-
-    <string name="call_notification_hangup">Ɛelleq</string>
 
     <string name="room_displayname_empty_room">Taxxamt tilemt</string>
 

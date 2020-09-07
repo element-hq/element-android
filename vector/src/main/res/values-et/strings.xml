@@ -2368,6 +2368,10 @@
     <string name="rendering_event_error_type_of_message_not_handled">Element ei oska käsitleda %1$s-tüüpi sünumeid</string>
     <string name="rendering_event_error_exception">Tekkis viga, kui Element üritas töödelda sõnumi %1$s sisu</string>
 
+    <string name="call_notification_answer">Võta vastu</string>
+    <string name="call_notification_reject">Keeldu</string>
+    <string name="call_notification_hangup">Lõpeta kõne</string>
+
     <string name="unignore">Lõpeta eiramine</string>
 
     <string name="verify_cannot_cross_sign">See sessioon ei oska jagada verifitseerimisteavet sinu teiste sessioonidega.

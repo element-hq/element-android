@@ -302,8 +302,4 @@
 
     <string name="key_verification_request_fallback_message">%s deseja confirmar a sua chave, mas o seu aplicativo não suporta a confirmação da chave da conversa. Você precisará usar a confirmação tradicional de chaves para confirmar chaves.</string>
 
-    <string name="call_notification_answer">Aceitar</string>
-    <string name="call_notification_reject">Recusar</string>
-    <string name="call_notification_hangup">Encerrar</string>
-
 </resources>

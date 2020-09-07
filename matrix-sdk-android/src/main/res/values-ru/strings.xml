@@ -313,8 +313,5 @@
     <string name="notice_call_candidates_by_you">Вы отправили данные для начала звонка.</string>
     <string name="notice_room_avatar_removed">%1$s удалил(а) аватар комнаты</string>
     <string name="notice_room_avatar_removed_by_you">Вы удалили аватар комнаты</string>
-    <string name="call_notification_answer">Принять</string>
-    <string name="call_notification_reject">Отклонить</string>
-    <string name="call_notification_hangup">Завершить звонок</string>
 
 </resources>

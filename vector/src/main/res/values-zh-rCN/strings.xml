@@ -5,6 +5,10 @@
     <string name="resources_language">zh</string>
     <string name="resources_country_code">CN</string>
 
+    <string name="call_notification_answer">接受</string>
+    <string name="call_notification_reject">拒绝</string>
+    <string name="call_notification_hangup">挂断</string>
+
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>

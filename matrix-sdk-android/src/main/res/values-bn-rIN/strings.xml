@@ -288,8 +288,4 @@
 
     <string name="key_verification_request_fallback_message">%s আপনার কীটি যাচাই করার জন্য অনুরোধ করছে, তবে আপনার ক্লায়েন্ট ইন-চ্যাট কী যাচাইকরণ সমর্থন করে না। কীগুলি যাচাই করতে আপনাকে লিগ্যাসি কী যাচাইকরণ ব্যবহার করতে হবে।</string>
 
-    <string name="call_notification_answer">গ্রহণ</string>
-    <string name="call_notification_reject">পতন</string>
-    <string name="call_notification_hangup">বন্ধ করুন</string>
-
 </resources>

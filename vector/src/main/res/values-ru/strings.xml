@@ -12,6 +12,10 @@
     <string name="title_activity_member_details">Информация о собеседнике</string>
     <string name="title_activity_historical">Исторические</string>
 
+    <string name="call_notification_answer">Принять</string>
+    <string name="call_notification_reject">Отклонить</string>
+    <string name="call_notification_hangup">Завершить звонок</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
