@@ -2516,7 +2516,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="auth_pin_confirm_to_disable_title">確認 PIN 碼以停用 PIN 碼</string>
     <string name="settings_call_show_confirmation_dialog_title">避免意外的通話</string>
     <string name="settings_call_show_confirmation_dialog_summary">開始通話前要求確認</string>
-<string name="no_permissions_to_start_conf_call">您沒有在此聊天室中開始會議通話的權限</string>
+    <string name="no_permissions_to_start_conf_call">您沒有在此聊天室中開始會議通話的權限</string>
     <string name="conference_call_in_progress">會議已在進行中！</string>
     <string name="video_meeting">開始視訊會議</string>
     <string name="audio_meeting">開始音訊會議</string>
@@ -2526,8 +2526,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="failed_to_add_widget">新增小工具失敗</string>
     <string name="failed_to_remove_widget">移除小工具失敗</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="other">%1$d/%2$d 金鑰匯入成功。</item>
-</plurals>
+        <item quantity="other">%1$d/%2$d 金鑰匯入成功。</item>
+    </plurals>
 
     <string name="room_manage_integrations">管理整合</string>
     <string name="room_no_active_widgets">無作用中的小工具</string>
@@ -2536,11 +2536,11 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="other">%1$s, %2$s 與 %3$d 個其他人已讀取</item>
-</plurals>
+        <item quantity="other">%1$s, %2$s 與 %3$d 個其他人已讀取</item>
+    </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="other">錯誤的代碼，還可以嘗試 %d 次</item>
-</plurals>
+        <item quantity="other">錯誤的代碼，還可以嘗試 %d 次</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
     <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
-    </resources>
+</resources>

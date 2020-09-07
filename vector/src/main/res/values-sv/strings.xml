@@ -1105,7 +1105,7 @@
     <string name="crypto_error_withheld_generic">Du kan inte komma åt det här meddelandet för att avsändaren avsiktligt inte skickade nycklarna</string>
     <string name="search_in_my_contacts">Sök i mina kontakter</string>
     <string name="empty_contact_book">Din kontaktbok är tom</string>
-<string name="no_permissions_to_start_conf_call">Du har inte behörighet att starta ett gruppsamtal i det här rummet</string>
+    <string name="no_permissions_to_start_conf_call">Du har inte behörighet att starta ett gruppsamtal i det här rummet</string>
     <string name="conference_call_in_progress">Ett gruppsamtal pågår redan!</string>
     <string name="video_meeting">Starta videomöte</string>
     <string name="audio_meeting">Starta ljudmöte</string>
@@ -1197,9 +1197,9 @@
     <string name="ssl_only_accept">Acceptera endast certifikatet om serveradministratören har publicerat ett fingeravtryck som matchar det ovan.</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 valt</item>
-	<item quantity="other">%d valda</item>
-</plurals>
+        <item quantity="one">1 valt</item>
+        <item quantity="other">%d valda</item>
+    </plurals>
     <string name="room_details_people_invited_group_name">INBJUDNA</string>
     <string name="room_details_people_present_group_name">ANSLUTNA</string>
 
@@ -1366,13 +1366,13 @@
     <string name="keys_backup_recovery_code_error_decrypt">Säkerhetskopieringen kunde inte avkrypteras med den här återställningsnyckeln: vänligen verifiera att du skrev in rätt återställningsnyckel.</string>
 
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Återställde en säkerhetskopia med %d nyckel.</item>
-	<item quantity="other">Återställde en säkerhetskopia med %d nycklar.</item>
-</plurals>
+        <item quantity="one">Återställde en säkerhetskopia med %d nyckel.</item>
+        <item quantity="other">Återställde en säkerhetskopia med %d nycklar.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d ny nyckel har lagts till till den här sessionen.</item>
-	<item quantity="other">%d nya nycklar har lagts till till den här sessionen.</item>
-</plurals>
+        <item quantity="one">%d ny nyckel har lagts till till den här sessionen.</item>
+        <item quantity="other">%d nya nycklar har lagts till till den här sessionen.</item>
+    </plurals>
 
     <string name="keys_backup_no_keysbackup_sdk_error">Sessionskrypto är inte aktiverats</string>
 
@@ -1433,9 +1433,9 @@
     <string name="error_terms_not_accepted">Vänligen försök igen när du har godkänt användarvillkoren för din hemserver.</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s och %3$d annan har läst</item>
-	<item quantity="other">%1$s, %2$s och %3$d andra har läst</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s och %3$d annan har läst</item>
+        <item quantity="other">%1$s, %2$s och %3$d andra har läst</item>
+    </plurals>
     <string name="permissions_rationale_msg_keys_backup_export">Element behöver behörighet för att spara dina nycklar för totalsträckskryptering i lagringen.
 \n
 \nVänligen ge tillstånd i nästa popup för att kunna manuellt exportera dina nycklar.</string>
@@ -1496,9 +1496,9 @@
 
     <string name="settings_active_sessions_verified_device_desc">Den här sessionen är betrodd för säker kommunikation för att du verifierade den:</string>
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d aktiv session</item>
-	<item quantity="other">%d aktiva sessioner</item>
-</plurals>
+        <item quantity="one">%d aktiv session</item>
+        <item quantity="other">%d aktiva sessioner</item>
+    </plurals>
 
     <string name="crosssigning_other_user_not_trust">Andra användare kanske inte litar på den</string>
     <string name="room_member_profile_failed_to_get_devices">Misslyckades att hämta sessioner</string>
@@ -1664,9 +1664,9 @@
 
     <string name="room_settings_banned_users_title">Bannade användare</string>
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d bannad användare</item>
-	<item quantity="other">%d bannade användare</item>
-</plurals>
+        <item quantity="one">%d bannad användare</item>
+        <item quantity="other">%d bannade användare</item>
+    </plurals>
 
     <string name="room_settings_room_internal_id">Rummets interna ID</string>
     <string name="room_settings_addresses_pref_title">Adresser</string>
@@ -1708,9 +1708,9 @@
     <string name="encryption_exported_successfully">Nycklar framgångsrikt importerade</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d nyckel importerad framgångsrikt.</item>
-	<item quantity="other">%1$d/%2$d nycklar importerade framgångsrikt.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d nyckel importerad framgångsrikt.</item>
+        <item quantity="other">%1$d/%2$d nycklar importerade framgångsrikt.</item>
+    </plurals>
 
     <string name="encryption_information_not_verified">Inte verifierad</string>
     <string name="encryption_information_verified">Verifierad</string>
@@ -1748,9 +1748,9 @@
     <string name="settings_labs_create_conference_with_jitsi">Skapa gruppsamtal med Jitsi</string>
     <string name="widget_delete_message_confirmation">Är du säker på att du vill radera den här widgeten från det här rummet\?</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktiv widget</item>
-	<item quantity="other">%d aktiva widgets</item>
-</plurals>
+        <item quantity="one">1 aktiv widget</item>
+        <item quantity="other">%d aktiva widgets</item>
+    </plurals>
     <string name="active_widget_view_action">VISA</string>
     <string name="active_widgets_title">Aktiva widgets</string>
 
@@ -1831,9 +1831,9 @@
     <string name="joined">Gick med</string>
     <string name="invited">Bjöd in</string>
     <plurals name="group_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlemmar</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemmar</item>
+    </plurals>
 
     <string name="group_no_long_description">Gemenskapsadministratören har inte försett en lång beskrivning för den här gemenskapen.</string>
 
@@ -1936,9 +1936,9 @@
 
 
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Säkerhetskopierar %d nyckel…</item>
-	<item quantity="other">Säkerhetskopierar %d nycklar…</item>
-</plurals>
+        <item quantity="one">Säkerhetskopierar %d nyckel…</item>
+        <item quantity="other">Säkerhetskopierar %d nycklar…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_signature">Signatur</string>
 
@@ -2075,9 +2075,9 @@
     <string name="two_users_read">%1$s och %2$s läste</string>
     <string name="one_user_read">%s läste</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 användare läste</item>
-	<item quantity="other">%d användare läste</item>
-</plurals>
+        <item quantity="one">1 användare läste</item>
+        <item quantity="other">%d användare läste</item>
+    </plurals>
 
     <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
@@ -2192,9 +2192,9 @@
     <string name="login_validation_code_is_not_correct">Den inskrivna koden är felaktig. Vänligen kolla den.</string>
     <string name="login_error_outdated_homeserver_title">Utdaterad hemserver</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekund…</item>
-	<item quantity="other">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekunder…</item>
-</plurals>
+        <item quantity="one">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekund…</item>
+        <item quantity="other">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekunder…</item>
+    </plurals>
 
     <string name="login_connect_using_matrix_id_notice">Alternativt, om du redan har ett konto och du kan ditt Matrix-ID och ditt lösenord, så kan du använda den här metoden:</string>
     <string name="login_connect_using_matrix_id_submit">Logga in med ditt Matrix-ID</string>
@@ -2319,13 +2319,13 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">Flygplansläge är på</string>
 
     <plurals name="poll_info">
-	<item quantity="one">%d röst</item>
-	<item quantity="other">%d röster</item>
-</plurals>
+        <item quantity="one">%d röst</item>
+        <item quantity="other">%d röster</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d röst - Slutgiltigt resultat</item>
-	<item quantity="other">%d röster - Slutgiltigt resultat</item>
-</plurals>
+        <item quantity="one">%d röst - Slutgiltigt resultat</item>
+        <item quantity="other">%d röster - Slutgiltigt resultat</item>
+    </plurals>
     <string name="poll_item_selected_aria">Valt alternativ</string>
     <string name="command_description_poll">Skapar en enkel omröstning</string>
     <string name="verification_cannot_access_other_session">Använd en återställningslösenfras eller -nyckel</string>
@@ -2338,9 +2338,9 @@
     <string name="message_action_item_redact">Ta bort…</string>
     <string name="share_confirm_room">Vill du skicka den här bilagan till %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Skicka bild i originalstorlek</item>
-	<item quantity="other">Skicka bilder i originalstorlek</item>
-</plurals>
+        <item quantity="one">Skicka bild i originalstorlek</item>
+        <item quantity="other">Skicka bilder i originalstorlek</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Bekräfta borttagning</string>
     <string name="delete_event_dialog_content">Är du säker på att du vill ta bort (radera) den här händelsen\? Observera att om du raderar ett rumsnamn eller ämnesändring så kan det upphäva ändringen.</string>
@@ -2512,9 +2512,9 @@
     <string name="alert_push_are_disabled_title">Pushnotiser är inaktiverade</string>
     <string name="alert_push_are_disabled_description">Granska dina inställningar för att aktivera pushnotiser</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Fel kod, %d försök kvar</item>
-	<item quantity="other">Fel kod, %d försök kvar</item>
-</plurals>
+        <item quantity="one">Fel kod, %d försök kvar</item>
+        <item quantity="other">Fel kod, %d försök kvar</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Varning! Sista försöket innan du loggas ut!</string>
     <string name="too_many_pin_failures">För många fel, du har blivit utloggad</string>
     <string name="create_pin_title">Välj en PIN-kod för säkerhet</string>

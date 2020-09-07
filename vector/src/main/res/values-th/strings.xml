@@ -20,7 +20,7 @@
     <string name="auth_password_placeholder">รหัสผ่าน</string>
     <string name="auth_new_password_placeholder">รหัสผ่านใหม่</string>
     <string name="permalink">ลิงก์ถาวร</string>
-<string name="title_activity_home">ข้อความ</string>
+    <string name="title_activity_home">ข้อความ</string>
     <string name="title_activity_room">ห้อง</string>
     <string name="title_activity_settings">การตั้งค่า</string>
     <string name="title_activity_member_details">ข้อมูลสมาชิก</string>
@@ -61,8 +61,8 @@
     <string name="no_result_placeholder">ไม่มีผลลัพธ์</string>
     <string name="no_room_placeholder">ไม่มีห้อง</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">ผู้ใช้ %d คน</item>
-</plurals>
+        <item quantity="other">ผู้ใช้ %d คน</item>
+    </plurals>
 
     <string name="groups_invite_header">เชิญ</string>
     <string name="groups_header">ชุมชน</string>
@@ -106,4 +106,4 @@
     <string name="auth_phone_number_placeholder">หมายเลขโทรศัพท์</string>
     <string name="auth_opt_phone_number_placeholder">หมายเลขโทรศัพท์ (ไม่จำเป็น)</string>
     <string name="auth_invalid_password">รหัสผ่านสั้นเกินไป (อย่างน้อย 6 ตัว)</string>
-    </resources>
+</resources>

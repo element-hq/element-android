@@ -830,13 +830,13 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="open_chat_header">Abrir cabeçalho</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d participante ativo</item>
-	<item quantity="other">%d participantes ativos</item>
-</plurals>
+        <item quantity="one">%d participante ativo</item>
+        <item quantity="other">%d participantes ativos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d participante</item>
-	<item quantity="other">%d participantes</item>
-</plurals>
+        <item quantity="one">%d participante</item>
+        <item quantity="other">%d participantes</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nova mensagem</item>
         <item quantity="other">%d novas mensagens</item>
@@ -2304,9 +2304,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="message_action_item_redact">Apagar</string>
     <string name="share_confirm_room">Deseja enviar este anexo para %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Enviar imagem no tamanho original</item>
-	<item quantity="other">Enviar imagens no tamanho original</item>
-</plurals>
+        <item quantity="one">Enviar imagem no tamanho original</item>
+        <item quantity="other">Enviar imagens no tamanho original</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Confirmar a exclusão</string>
     <string name="delete_event_dialog_content">Tem certeza de que deseja apagar este evento\? Observe que, se você apagar a alteração do nome ou descrição de uma sala, isso reverterá a alteração.</string>
@@ -2612,7 +2612,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="auth_pin_confirm_to_disable_title">Confirme o PIN para desativar o PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">Evitar chamadas acidentais</string>
     <string name="settings_call_show_confirmation_dialog_summary">Confirmarei a intenção de iniciar uma chamada</string>
-<string name="no_permissions_to_start_conf_call">Você não tem permissão para iniciar uma chamada em grupo nesta sala</string>
+    <string name="no_permissions_to_start_conf_call">Você não tem permissão para iniciar uma chamada em grupo nesta sala</string>
     <string name="conference_call_in_progress">Uma chamada em grupo já está em andamento!</string>
     <string name="video_meeting">Iniciar chamada de vídeo</string>
     <string name="audio_meeting">Iniciar chamada de voz</string>
@@ -2622,9 +2622,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="failed_to_add_widget">Falha ao adicionar o widget</string>
     <string name="failed_to_remove_widget">Falha ao remover o widget</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d chave importada com êxito.</item>
-	<item quantity="other">%1$d/%2$d chaves importadas com êxito.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d chave importada com êxito.</item>
+        <item quantity="other">%1$d/%2$d chaves importadas com êxito.</item>
+    </plurals>
 
     <string name="room_manage_integrations">Gerenciar integrações</string>
     <string name="room_no_active_widgets">Nenhum widget ativo</string>
@@ -2633,13 +2633,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s e %3$d outro leu</item>
-	<item quantity="other">%1$s, %2$s e %3$d outros leram</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s e %3$d outro leu</item>
+        <item quantity="other">%1$s, %2$s e %3$d outros leram</item>
+    </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Código errado, %d tentativa restante</item>
-	<item quantity="other">Código errado, %d tentativas restantes</item>
-</plurals>
+        <item quantity="one">Código errado, %d tentativa restante</item>
+        <item quantity="other">Código errado, %d tentativas restantes</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Atenção! Última tentativa restante antes de você ser desconectada/o!</string>
     <string name="too_many_pin_failures">Muitos erros, você foi desconectada/o</string>
-    </resources>
+</resources>

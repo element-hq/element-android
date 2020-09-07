@@ -2624,7 +2624,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
-<string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
+    <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
     <string name="conference_call_in_progress">Es ist bereits eine Konferenz aktiv!</string>
     <string name="video_meeting">Starte eine Videokonferenz</string>
     <string name="audio_meeting">Starte eine Audiokonferenz</string>
@@ -2634,9 +2634,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="failed_to_add_widget">Hinzufügen des Widgets fehlgeschlagen</string>
     <string name="failed_to_remove_widget">Entfernen des Widgets fehlgeschlagen</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
-	<item quantity="other">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+        <item quantity="other">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+    </plurals>
 
     <string name="room_manage_integrations">Verwalte Integrationen</string>
     <string name="room_no_active_widgets">Keine aktiven Widgets</string>
@@ -2645,13 +2645,13 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">Von %1$s, %2$s und %3$d anderem gelesen</item>
-	<item quantity="other">Von %1$s, %2$s und %3$d anderen gelesen</item>
-</plurals>
+        <item quantity="one">Von %1$s, %2$s und %3$d anderem gelesen</item>
+        <item quantity="other">Von %1$s, %2$s und %3$d anderen gelesen</item>
+    </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Falscher code, %d verbleibender Versuch</item>
-	<item quantity="other">Falscher code, %d verbleibende Versuche</item>
-</plurals>
+        <item quantity="one">Falscher code, %d verbleibender Versuch</item>
+        <item quantity="other">Falscher code, %d verbleibende Versuche</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
     <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
-    </resources>
+</resources>

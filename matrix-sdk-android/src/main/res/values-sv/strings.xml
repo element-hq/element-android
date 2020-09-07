@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_message">%1$s: %2$s</string>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s skickade en bild.</string>
     <string name="summary_you_sent_image">Du skickade en bild.</string>
     <string name="summary_user_sent_sticker">%1$s skickade en dekal.</string>
@@ -128,9 +129,9 @@
     <string name="room_displayname_two_members">%1$s och %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s och en till</item>
-	<item quantity="other">%1$s och %2$d till</item>
-</plurals>
+        <item quantity="one">%1$s och en till</item>
+        <item quantity="other">%1$s och %2$d till</item>
+    </plurals>
 
     <string name="room_displayname_empty_room">Tomt rum</string>
 
@@ -247,24 +248,24 @@
     <string name="notice_room_withdraw_with_reason_by_you">Du drog tillbaka inbjudan för %1$s. Anledning: %2$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s lade till %2$s som en adress för det här rummet.</item>
-	<item quantity="other">%1$s lade till %2$s som adresser för det här rummet.</item>
-</plurals>
+        <item quantity="one">%1$s lade till %2$s som en adress för det här rummet.</item>
+        <item quantity="other">%1$s lade till %2$s som adresser för det här rummet.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Du lade till %1$s som en adress för det här rummet.</item>
-	<item quantity="other">Du lade till %1$s som adresser för det här rummet.</item>
-</plurals>
+        <item quantity="one">Du lade till %1$s som en adress för det här rummet.</item>
+        <item quantity="other">Du lade till %1$s som adresser för det här rummet.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s tog bort %2$s som en adress för det här rummet.</item>
-	<item quantity="other">%1$s tog bort %2$s som adresser för det här rummet.</item>
-</plurals>
+        <item quantity="one">%1$s tog bort %2$s som en adress för det här rummet.</item>
+        <item quantity="other">%1$s tog bort %2$s som adresser för det här rummet.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Du tog bort %1$s som en adress för det här rummet.</item>
-	<item quantity="other">Du tog bort %2$s som adresser för det här rummet.</item>
-</plurals>
+        <item quantity="one">Du tog bort %1$s som en adress för det här rummet.</item>
+        <item quantity="other">Du tog bort %2$s som adresser för det här rummet.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s lade till %2$s och tog bort %3$s som adresser för det här rummet.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Du lade till %1$s och tog bort %2$s som adresser för det här rummet.</string>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_message">%1$s: %2$s</string>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s t.yuzen tugna.</string>
     <string name="summary_you_sent_image">Tuzneḍ tugna.</string>
     <string name="notice_room_invite_no_invitee">Tinubga n %s</string>
@@ -187,9 +188,9 @@
     <string name="room_displayname_two_members">%1$s d %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s d 1 wayeḍ</item>
-	<item quantity="other">%1$s d %2$d wiyaḍ</item>
-</plurals>
+        <item quantity="one">%1$s d 1 wayeḍ</item>
+        <item quantity="other">%1$s d %2$d wiyaḍ</item>
+    </plurals>
 
     <string name="verification_emoji_cactus">Akermus</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
@@ -198,7 +199,7 @@
 
     <string name="call_notification_hangup">Ɛelleq</string>
 
-<string name="room_displayname_empty_room">Taxxamt tilemt</string>
+    <string name="room_displayname_empty_room">Taxxamt tilemt</string>
 
 
     <string name="verification_emoji_thumbsup">Adebbuz d asawen</string>
@@ -247,24 +248,24 @@
     <string name="notice_room_withdraw_with_reason_by_you">Tesfesxeḍ tinubga n %1$s. Tamentilt: %2$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s yerna %2$s d tansa i texxamt-a.</item>
-	<item quantity="other">%1$s yerna %2$s d tansiwin i texxamt-a.</item>
-</plurals>
+        <item quantity="one">%1$s yerna %2$s d tansa i texxamt-a.</item>
+        <item quantity="other">%1$s yerna %2$s d tansiwin i texxamt-a.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Terniḍ %1$s d tansa i texxamt-a.</item>
-	<item quantity="other">Terniḍ %1$s d tansiwin i texxamt-a.</item>
-</plurals>
+        <item quantity="one">Terniḍ %1$s d tansa i texxamt-a.</item>
+        <item quantity="other">Terniḍ %1$s d tansiwin i texxamt-a.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s yekkes %2$s am tansa i texxamt-a.</item>
-	<item quantity="other">%1$s yekkes %3$s am tansiwin i texxamt-a.</item>
-</plurals>
+        <item quantity="one">%1$s yekkes %2$s am tansa i texxamt-a.</item>
+        <item quantity="other">%1$s yekkes %3$s am tansiwin i texxamt-a.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Tekkseḍ %1$s am tansa i texxamt-a.</item>
-	<item quantity="other">Tekkseḍ %2$s am tansiwin i texxamt-a.</item>
-</plurals>
+        <item quantity="one">Tekkseḍ %1$s am tansa i texxamt-a.</item>
+        <item quantity="other">Tekkseḍ %2$s am tansiwin i texxamt-a.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s yerna %2$s terniḍ tekkseḍ %3s am tansiwin i texxamt-a.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Terniḍ %1$s terniḍ tekkseḍ %2$s am tansiwin i texxamt-a.</string>
@@ -290,4 +291,4 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s issefsex tinubga n %2$s i tmerniwt ɣer texxamt. Tamentilt: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Tesfesxeḍ tinubga n %1$s i tmerna ɣer texxamt. Tamentilt: %2$s</string>
     <string name="could_not_redact">Yegguma ad yaru</string>
-    </resources>
+</resources>

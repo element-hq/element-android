@@ -2620,7 +2620,7 @@
     <string name="auth_pin_confirm_to_disable_title">Conferma il PIN per disattivarlo</string>
     <string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
     <string name="settings_call_show_confirmation_dialog_summary">Chiedi conferma prima di iniziare una chiamata</string>
-<string name="no_permissions_to_start_conf_call">Non hai il permesso di avviare una chiamata di gruppo in questa stanza</string>
+    <string name="no_permissions_to_start_conf_call">Non hai il permesso di avviare una chiamata di gruppo in questa stanza</string>
     <string name="conference_call_in_progress">Una chiamata di gruppo è già in corso!</string>
     <string name="video_meeting">Avvia conferenza video</string>
     <string name="audio_meeting">Avvia conferenza audio</string>
@@ -2630,9 +2630,9 @@
     <string name="failed_to_add_widget">Aggiunta del widget fallita</string>
     <string name="failed_to_remove_widget">Rimozione del widget fallita</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d chiave importata correttamente.</item>
-	<item quantity="other">%1$d/%2$d chiavi importate correttamente.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d chiave importata correttamente.</item>
+        <item quantity="other">%1$d/%2$d chiavi importate correttamente.</item>
+    </plurals>
 
     <string name="room_manage_integrations">Gestisci integrazioni</string>
     <string name="room_no_active_widgets">Nessun widget attivo</string>
@@ -2641,13 +2641,13 @@
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s e %3$d altro hanno letto</item>
-	<item quantity="other">%1$s, %2$s e altri %3$d hanno letto</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s e %3$d altro hanno letto</item>
+        <item quantity="other">%1$s, %2$s e altri %3$d hanno letto</item>
+    </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Codice sbagliato, %d tentativo rimasto</item>
-	<item quantity="other">Codice sbagliato, %d tentativi rimasti</item>
-</plurals>
+        <item quantity="one">Codice sbagliato, %d tentativo rimasto</item>
+        <item quantity="other">Codice sbagliato, %d tentativi rimasti</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Attenzione! Ultimo tentativo rimasto prima di venire disconnesso!</string>
     <string name="too_many_pin_failures">Troppi errori, sei stato disconnesso</string>
-    </resources>
+</resources>

@@ -2532,7 +2532,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="auth_pin_confirm_to_disable_title">确认 PIN 并禁用 PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
     <string name="settings_call_show_confirmation_dialog_summary">发起通话之前要求确认</string>
-<string name="no_permissions_to_start_conf_call">您没有权限在此聊天室发起会议通话</string>
+    <string name="no_permissions_to_start_conf_call">您没有权限在此聊天室发起会议通话</string>
     <string name="conference_call_in_progress">会议正在进行！</string>
     <string name="video_meeting">发起视频会议</string>
     <string name="audio_meeting">发起音频会议</string>
@@ -2542,8 +2542,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="failed_to_add_widget">添加小部件失败</string>
     <string name="failed_to_remove_widget">移除小部件失败</string>
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="other">成功导入 %1$d/%2$d 个密钥。</item>
-</plurals>
+        <item quantity="other">成功导入 %1$d/%2$d 个密钥。</item>
+    </plurals>
 
     <string name="room_manage_integrations">管理集成</string>
     <string name="room_no_active_widgets">无活动小部件</string>
@@ -2552,11 +2552,11 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 \n%s</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="other">%1$s，%2$s 和其他 %3$d 人已读</item>
-</plurals>
+        <item quantity="other">%1$s，%2$s 和其他 %3$d 人已读</item>
+    </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="other">错误代码，剩余 %d 次尝试</item>
-</plurals>
+        <item quantity="other">错误代码，剩余 %d 次尝试</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">注意！登出前最后一次尝试！</string>
     <string name="too_many_pin_failures">错误次数过多，您已被登出</string>
-    </resources>
+</resources>

@@ -1916,7 +1916,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
     <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
     <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>
-<string name="no_permissions_to_start_conf_call">No posee permisos para iniciar una conferencia en esta sala</string>
+    <string name="no_permissions_to_start_conf_call">No posee permisos para iniciar una conferencia en esta sala</string>
     <string name="conference_call_in_progress">Conferencia en progreso!</string>
     <string name="video_meeting">Iniciar Video Conferencia</string>
     <string name="audio_meeting">Iniciar Audio Conferencia</string>
@@ -2012,9 +2012,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_profile_section_more_settings">Ajustes de Sala</string>
     <string name="room_profile_section_more_notifications">Notificaciones</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Una persona</item>
-	<item quantity="other">%1$d personas</item>
-</plurals>
+        <item quantity="one">Una persona</item>
+        <item quantity="other">%1$d personas</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Archivos, Medias y Documentos</string>
     <string name="room_profile_section_more_leave">Abandonar Sala</string>
     <string name="room_profile_leaving_room">Saliendo de la sala…</string>
@@ -2129,4 +2129,4 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar seccion y crear uno nuevo</string>
     <string name="settings_security_pin_code_title">Establecer PIN</string>
     <string name="settings_security_pin_code_summary">Si decea resetear su PIN, toque Olvidé PIN para cerrar sesión y restablecer.</string>
-    </resources>
+</resources>

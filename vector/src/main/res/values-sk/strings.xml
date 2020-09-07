@@ -1251,7 +1251,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Domovský server je nedostupný na tejto URL adrese, preverte to prosím</string>
     <string name="room_member_profile_sessions_section_title">Relácie</string>
-<string name="play_video">Prehrať</string>
+    <string name="play_video">Prehrať</string>
     <string name="pause_video">Pozastaviť</string>
     <string name="dismiss">Odmietnuť</string>
 
@@ -1358,20 +1358,20 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="disabled_integration_dialog_content">Na vykonanie tejto akcie zaškrtnite \'Povoliť integrácie\' v nastaveniach zisťovania.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">Zakázať vstupovať %d používateľ</item>
-	<item quantity="few">Zakázať vstupovať %d používatelia</item>
-	<item quantity="other">Zakázať vstupovať %d používateľov</item>
-</plurals>
+        <item quantity="one">Zakázať vstupovať %d používateľ</item>
+        <item quantity="few">Zakázať vstupovať %d používatelia</item>
+        <item quantity="other">Zakázať vstupovať %d používateľov</item>
+    </plurals>
 
     <string name="encryption_information_device_name_with_warning">Verejný názov (viditeľný pre ľudí, s ktorými komunikujete)</string>
     <string name="device_name_warning">Verejný názov relácie je viditeľný všetkým používateľom, s ktorými komunikujete</string>
     <string name="encryption_exported_successfully">Kľúče exportované úspešne</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d z %2$d kľúč úspešne importovaný.</item>
-	<item quantity="few">%1$d z %2$d kľúčov úspešne importovaných.</item>
-	<item quantity="other">%1$d z %2$d kľúčov úspešne importovaných.</item>
-</plurals>
+        <item quantity="one">%1$d z %2$d kľúč úspešne importovaný.</item>
+        <item quantity="few">%1$d z %2$d kľúčov úspešne importovaných.</item>
+        <item quantity="other">%1$d z %2$d kľúčov úspešne importovaných.</item>
+    </plurals>
 
     <string name="encryption_information_unknown_ip">neznáma ip</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
@@ -1505,15 +1505,15 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 
     <string name="keys_backup_restore_success_title">Záloha obnovená %s !</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Záloha s %d kľúčom obnovená.</item>
-	<item quantity="few">Záloha s %d kľúčmi obnovená.</item>
-	<item quantity="other">Záloha s %d kľúčami obnovená.</item>
-</plurals>
+        <item quantity="one">Záloha s %d kľúčom obnovená.</item>
+        <item quantity="few">Záloha s %d kľúčmi obnovená.</item>
+        <item quantity="other">Záloha s %d kľúčami obnovená.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d nový kľúč bol pridaný do tejto relácie.</item>
-	<item quantity="few">%d nové kľúče boli pridané do tejto relácie.</item>
-	<item quantity="other">%d nových kľúčov bolo pridaných do tejto relácie.</item>
-</plurals>
+        <item quantity="one">%d nový kľúč bol pridaný do tejto relácie.</item>
+        <item quantity="few">%d nové kľúče boli pridané do tejto relácie.</item>
+        <item quantity="other">%d nových kľúčov bolo pridaných do tejto relácie.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Nepodarilo sa získať poslednú verziu kľúčov na obnovenie (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Šifrovanie nie je v tejto relácii aktivované</string>
@@ -1567,10 +1567,10 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 
     <string name="keys_backup_info_keys_all_backup_up">Všetky kľúče sú zálohované</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Zálohovanie %d kľúča…</item>
-	<item quantity="few">Zálohovanie %d kľúčov…</item>
-	<item quantity="other">Zálohovanie %d kľúčov…</item>
-</plurals>
+        <item quantity="one">Zálohovanie %d kľúča…</item>
+        <item quantity="few">Zálohovanie %d kľúčov…</item>
+        <item quantity="other">Zálohovanie %d kľúčov…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Verzia</string>
     <string name="keys_backup_info_title_algorithm">Algoritmus</string>
@@ -1809,4 +1809,4 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomôžu vývojárom poskytnúť viac detailov, keď posielate hlásenie o chybe. Aj keď je toto zapnuté, aplikácia nezaznamenáva obsah správ ani žiadne iné súkromné údaje.</string>
 
 
-    </resources>
+</resources>
