@@ -27,7 +27,7 @@ Bugfix 🐛:
  - Verification popup won't show
 
 Translations 🗣:
- -
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
 
 SDK API changes ⚠️:
  - 
