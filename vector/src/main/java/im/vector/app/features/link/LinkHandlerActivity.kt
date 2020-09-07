@@ -59,7 +59,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
             return
         }
 
-        if (uri.path == PATH_CONFIG) {
+        if (uri.getQueryParameter(CONFIG_PATH_HS_PARAMETER) != null) {
             handleConfigUrl(uri)
         } else if (SUPPORTED_HOSTS.contains(uri.host)) {
             handleSupportedHostUrl(uri)
@@ -155,7 +155,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
     }
 
     companion object {
-        private const val PATH_CONFIG = "/config/config"
+        private const val CONFIG_PATH_HS_PARAMETER = "hs_url"
 
         private val SUPPORTED_HOSTS = arrayOf("app.element.io", "riot.im")
         private val SUPPORTED_PATHS = arrayOf("/#/room", "/#/user", "/#/group")

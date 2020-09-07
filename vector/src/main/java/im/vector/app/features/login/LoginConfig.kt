@@ -22,7 +22,7 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * Parameters extracted from a configuration url
- * Ex: https://riot.im/config/config?hs_url=https%3A%2F%2Fexample.modular.im&is_url=https%3A%2F%2Fcustom.identity.org
+ * Ex: https://mobile.element.io?hs_url=https%3A%2F%2Fexample.modular.im&is_url=https%3A%2F%2Fcustom.identity.org
  *
  * Note: On RiotX, identityServerUrl will never be used, so is declared private. Keep it for compatibility reason.
  */

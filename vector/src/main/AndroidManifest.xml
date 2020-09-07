@@ -145,6 +145,7 @@
                 <data android:scheme="https" />
                 <data android:host="riot.im" />
                 <data android:host="app.element.io" />
+                <data android:host="mobile.element.io" />
             </intent-filter>
         </activity>
 
