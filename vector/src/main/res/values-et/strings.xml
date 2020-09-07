@@ -2333,9 +2333,6 @@
     <string name="sent_an_image">Pilt.</string>
     <string name="sent_an_audio_file">Helifail</string>
     <string name="sent_a_file">Fail</string>
-    <string name="verification_request_alert_description">Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes.
-\n
-\nLisaturvalisuse mõttes tehke seda omavahel kohtudes.</string>
     <string name="room_profile_not_encrypted_subtitle">Sõnumid siin jututoas on läbivalt krüptitud.</string>
     <string name="room_profile_encrypted_subtitle">Sõnumid siis jututoas kasutavad läbivat krüptimist.
 \n
@@ -2363,7 +2360,7 @@
     <string name="room_member_power_level_admin_in">Peakasutaja jututoas %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderaator jututoas %1$s</string>
     <string name="room_member_power_level_default_in">Vaikimisi õigused jututoas %1$s</string>
-    <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$s) jututoas %2$s</string>
+    <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$d) jututoas %2$s</string>
 
     <string name="room_member_jump_to_read_receipt">Hüppa lugemisteatise juurde</string>
 

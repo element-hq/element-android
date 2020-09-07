@@ -1220,7 +1220,7 @@
     <string name="inviting_users_to_room">Ancad n yiseqdacen…</string>
     <string name="invite_users_to_room_title">Nced-d iseqdacen</string>
     <string name="invitation_sent_to_one_user">Tinubga tettwazen i %1$s</string>
-    <string name="invitations_sent_to_two_users">Tinubga tettwazen i %1$s d %2$d</string>
+    <string name="invitations_sent_to_two_users">Tinubga tettwazen i %1$s d %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Tinubga tettwazen i %1$s d wayeḍ-nniḍen</item>
         <item quantity="other">Tinubga tettwazen i %1$s d %2$d d wiyeḍ</item>
