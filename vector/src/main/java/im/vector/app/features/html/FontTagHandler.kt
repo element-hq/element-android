@@ -17,6 +17,7 @@ package im.vector.app.features.html
 
 import android.graphics.Color
 import android.text.style.ForegroundColorSpan
+import android.text.style.BackgroundColorSpan
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.RenderProps
 import io.noties.markwon.html.HtmlTag
@@ -31,7 +32,13 @@ class FontTagHandler : SimpleTagHandler() {
 
     override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any? {
         val colorString = tag.attributes()["color"]?.let { parseColor(it) } ?: Color.BLACK
-        return ForegroundColorSpan(colorString)
+        val bgColor = tag.attributes()["data-mx-bg-color"]
+        if(bgColor == null) {
+            return ForegroundColorSpan(colorString)
+        }
+        else {
+            return arrayOf(ForegroundColorSpan(colorString), BackgroundColorSpan(bgColor.let { parseColor(it) }))
+        }
     }
 
     private fun parseColor(colorName: String): Int {
