@@ -100,7 +100,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         return rules.firstOrNull { rule ->
             // All conditions must hold true for an event in order to apply the action for the event.
             rule.enabled && rule.conditions?.all {
-                it.asExecutableCondition()?.isSatisfied(event, conditionResolver) ?: false
+                it.asExecutableCondition(rule)?.isSatisfied(event, conditionResolver) ?: false
             } ?: false
         }
     }

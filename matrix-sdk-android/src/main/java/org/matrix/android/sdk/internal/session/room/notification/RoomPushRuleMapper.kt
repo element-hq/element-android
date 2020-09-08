@@ -18,7 +18,7 @@
 package org.matrix.android.sdk.internal.session.room.notification
 
 import org.matrix.android.sdk.api.pushrules.Action
-import org.matrix.android.sdk.api.pushrules.Condition
+import org.matrix.android.sdk.api.pushrules.Kind
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushCondition
@@ -59,7 +59,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
         }
         else                                             -> {
             val condition = PushCondition(
-                    kind = Condition.Kind.EventMatch.value,
+                    kind = Kind.EventMatch.value,
                     key = "room_id",
                     pattern = roomId
             )

@@ -85,6 +85,13 @@ object ThemeUtils {
         setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context))
     }
 
+    // init the theme
+    fun init(context: Context) {
+        val lightTheme = getApplicationLightTheme(context)
+        val darkTheme = getApplicationDarkTheme(context)
+        setApplicationTheme(context, lightTheme, darkTheme)
+    }
+
     /**
      * @return true if current theme is Light or Status
      */

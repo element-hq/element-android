@@ -19,13 +19,12 @@ package org.matrix.android.sdk.internal.network
 
 import com.squareup.moshi.Moshi
 import dagger.Lazy
-import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Inject
 
 internal class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
@@ -50,7 +49,6 @@ internal class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
                         return okHttpClient.get().newCall(request)
                     }
                 })
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(UnitConverterFactory)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()

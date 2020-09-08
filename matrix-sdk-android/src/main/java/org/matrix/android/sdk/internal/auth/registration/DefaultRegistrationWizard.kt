@@ -17,6 +17,9 @@
 
 package org.matrix.android.sdk.internal.auth.registration
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -33,9 +36,6 @@ import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import okhttp3.OkHttpClient
 
 /**
  * This class execute the registration request and is responsible to keep the session of interactive authentication
@@ -193,7 +193,7 @@ internal class DefaultRegistrationWizard(
         val registrationParams = pendingSessionData.currentThreePidData?.registrationParams
                 ?: throw IllegalStateException("developer error, no pending three pid")
         val safeCurrentData = pendingSessionData.currentThreePidData ?: throw IllegalStateException("developer error, call createAccount() method first")
-        val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: throw IllegalStateException("Missing url the send the code")
+        val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: throw IllegalStateException("Missing url to send the code")
         val validationBody = ValidationCodeBody(
                 clientSecret = pendingSessionData.clientSecret,
                 sid = safeCurrentData.addThreePidRegistrationResponse.sid,

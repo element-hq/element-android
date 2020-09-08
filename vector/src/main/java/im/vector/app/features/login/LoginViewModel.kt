@@ -522,6 +522,13 @@ class LoginViewModel @AssistedInject constructor(
                 when (data) {
                     is WellknownResult.Prompt          ->
                         onWellknownSuccess(action, data, homeServerConnectionConfig)
+                    is WellknownResult.FailPrompt      ->
+                        // Relax on IS discovery if home server is valid
+                        if (data.homeServerUrl != null && data.wellKnown != null) {
+                            onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
+                        } else {
+                            onWellKnownError()
+                        }
                     is WellknownResult.InvalidMatrixId -> {
                         setState {
                             copy(
@@ -531,12 +538,7 @@ class LoginViewModel @AssistedInject constructor(
                         _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
                     }
                     else                               -> {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Uninitialized
-                            )
-                        }
-                        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
+                        onWellKnownError()
                     }
                 }.exhaustive
             }
@@ -545,6 +547,15 @@ class LoginViewModel @AssistedInject constructor(
                 onDirectLoginError(failure)
             }
         })
+    }
+
+    private fun onWellKnownError() {
+        setState {
+            copy(
+                    asyncLoginAction = Uninitialized
+            )
+        }
+        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
     private fun onWellknownSuccess(action: LoginAction.LoginOrRegister,

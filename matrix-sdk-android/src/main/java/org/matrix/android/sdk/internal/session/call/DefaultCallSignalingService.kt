@@ -17,6 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.call
 
+import android.os.SystemClock
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.call.CallSignalingService
@@ -48,6 +49,7 @@ import javax.inject.Inject
 internal class DefaultCallSignalingService @Inject constructor(
         @UserId
         private val userId: String,
+        private val activeCallHandler: ActiveCallHandler,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val roomEventSender: RoomEventSender,
         private val taskExecutor: TaskExecutor,
@@ -56,13 +58,11 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private val callListeners = mutableSetOf<CallsListener>()
 
-    private val activeCalls = mutableListOf<MxCall>()
-
     private val cachedTurnServerResponse = object {
-
+        // Keep one minute safe to avoid considering the data is valid and then actually it is not when effectively using it.
         private val MIN_TTL = 60
 
-        private val now = { System.currentTimeMillis() / 1000 }
+        private val now = { SystemClock.elapsedRealtime() / 1000 }
 
         private var expiresAt: Long = 0
 
@@ -96,7 +96,7 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     override fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {
-        return MxCallImpl(
+        val call = MxCallImpl(
                 callId = UUID.randomUUID().toString(),
                 isOutgoing = true,
                 roomId = roomId,
@@ -105,8 +105,9 @@ internal class DefaultCallSignalingService @Inject constructor(
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 roomEventSender = roomEventSender
-        ).also {
-            activeCalls.add(it)
+        )
+        activeCallHandler.addCall(call).also {
+            return call
         }
     }
 
@@ -119,8 +120,12 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     override fun getCallWithId(callId: String): MxCall? {
-        Timber.v("## VOIP getCallWithId $callId all calls ${activeCalls.map { it.callId }}")
-        return activeCalls.find { it.callId == callId }
+        Timber.v("## VOIP getCallWithId $callId all calls ${activeCallHandler.getActiveCallsLiveData().value?.map { it.callId }}")
+        return activeCallHandler.getCallWithId(callId)
+    }
+
+    override fun isThereAnyActiveCall(): Boolean {
+        return activeCallHandler.getActiveCallsLiveData().value?.isNotEmpty() == true
     }
 
     internal fun onCallEvent(event: Event) {
@@ -151,6 +156,7 @@ internal class DefaultCallSignalingService @Inject constructor(
                     // Always ignore local echos of invite
                     return
                 }
+
                 event.getClearContent().toModel<CallInviteContent>()?.let { content ->
                     val incomingCall = MxCallImpl(
                             callId = content.callId ?: return@let,
@@ -162,7 +168,7 @@ internal class DefaultCallSignalingService @Inject constructor(
                             localEchoEventFactory = localEchoEventFactory,
                             roomEventSender = roomEventSender
                     )
-                    activeCalls.add(incomingCall)
+                    activeCallHandler.addCall(incomingCall)
                     onCallInvite(incomingCall, content)
                 }
             }
@@ -184,8 +190,8 @@ internal class DefaultCallSignalingService @Inject constructor(
                         return
                     }
 
+                    activeCallHandler.removeCall(content.callId)
                     onCallHangup(content)
-                    activeCalls.removeAll { it.callId == content.callId }
                 }
             }
             EventType.CALL_CANDIDATES -> {
@@ -194,7 +200,7 @@ internal class DefaultCallSignalingService @Inject constructor(
                     return
                 }
                 event.getClearContent().toModel<CallCandidatesContent>()?.let { content ->
-                    activeCalls.firstOrNull { it.callId == content.callId }?.let {
+                    activeCallHandler.getCallWithId(content.callId)?.let {
                         onCallIceCandidate(it, content)
                     }
                 }

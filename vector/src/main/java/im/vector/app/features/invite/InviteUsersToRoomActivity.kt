@@ -45,9 +45,9 @@ import im.vector.app.features.userdirectory.UserDirectoryFragment
 import im.vector.app.features.userdirectory.UserDirectorySharedAction
 import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
 import im.vector.app.features.userdirectory.UserDirectoryViewModel
-import org.matrix.android.sdk.api.failure.Failure
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
+import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
@@ -114,7 +114,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+                doOnPostResume {  addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
             }
         }
     }

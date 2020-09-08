@@ -19,13 +19,23 @@ package org.matrix.android.sdk.internal.worker
 
 import androidx.work.Data
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 
-object WorkerParamsFactory {
+internal object WorkerParamsFactory {
+
+    val moshi by lazy {
+        // We are adding the CheckNumberType as we are serializing/deserializing multiple time in a row
+        // and we lost typing information doing so.
+        // We don't want this check to be done on all adapters, so we just add it here.
+        MoshiProvider.providesMoshi()
+                .newBuilder()
+                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                .build()
+    }
 
     const val KEY = "WORKER_PARAMS_JSON"
 
     inline fun <reified T> toData(params: T): Data {
-        val moshi = MoshiProvider.providesMoshi()
         val adapter = moshi.adapter(T::class.java)
         val json = adapter.toJson(params)
         return Data.Builder().putString(KEY, json).build()
@@ -36,7 +46,6 @@ object WorkerParamsFactory {
         return if (json == null) {
             null
         } else {
-            val moshi = MoshiProvider.providesMoshi()
             val adapter = moshi.adapter(T::class.java)
             adapter.fromJson(json)
         }

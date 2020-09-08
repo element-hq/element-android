@@ -39,13 +39,16 @@ internal class RoomEventSender @Inject constructor(
 ) {
     fun sendEvent(event: Event): Cancelable {
         // Encrypted room handling
-        return if (cryptoService.isRoomEncrypted(event.roomId ?: "")) {
-            Timber.v("Send event in encrypted room")
+        return if (cryptoService.isRoomEncrypted(event.roomId ?: "")
+                && !event.isEncrypted() // In case of resend where it's already encrypted so skip to send
+        ) {
+            Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule encrypt and send event ${event.eventId}")
             val encryptWork = createEncryptEventWork(event, true)
             // Note that event will be replaced by the result of the previous work
             val sendWork = createSendEventWork(event, false)
             timelineSendEventWorkCommon.postSequentialWorks(event.roomId ?: "", encryptWork, sendWork)
         } else {
+            Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event ${event.eventId}")
             val sendWork = createSendEventWork(event, true)
             timelineSendEventWorkCommon.postWork(event.roomId ?: "", sendWork)
         }
@@ -65,7 +68,7 @@ internal class RoomEventSender @Inject constructor(
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, event = event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)

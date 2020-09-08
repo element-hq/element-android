@@ -26,11 +26,13 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.settings.VectorLocale
 import kotlinx.coroutines.launch
 
 class LocalePickerViewModel @AssistedInject constructor(
-        @Assisted initialState: LocalePickerViewState
+        @Assisted initialState: LocalePickerViewState,
+        private val vectorConfiguration: VectorConfiguration
 ) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -70,6 +72,7 @@ class LocalePickerViewModel @AssistedInject constructor(
 
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {
         VectorLocale.saveApplicationLocale(action.locale)
+        vectorConfiguration.applyToApplicationContext()
         _viewEvents.post(LocalePickerViewEvents.RestartActivity)
     }
 }

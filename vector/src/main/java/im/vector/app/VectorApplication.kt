@@ -32,10 +32,6 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
@@ -50,16 +46,21 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
 import javax.inject.Inject
-
 import androidx.work.Configuration as WorkConfiguration
 
 class VectorApplication :
@@ -119,7 +120,9 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        vectorConfiguration.initConfiguration()
+        VectorLocale.init(this)
+        ThemeUtils.init(this)
+        vectorConfiguration.applyToApplicationContext()
 
         emojiCompatWrapper.init(fontRequest)
 

@@ -16,6 +16,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.model.event
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
@@ -27,27 +28,32 @@ data class OlmPayloadContent(
         /**
          * The room id
          */
-        var room_id: String? = null,
+        @Json(name = "room_id")
+        val roomId: String? = null,
 
         /**
          * The sender
          */
-        var sender: String? = null,
+        @Json(name = "sender")
+        val sender: String? = null,
 
         /**
          * The recipient
          */
-        var recipient: String? = null,
+        @Json(name = "recipient")
+        val recipient: String? = null,
 
         /**
          * the recipient keys
          */
-        var recipient_keys: Map<String, String>? = null,
+        @Json(name = "recipient_keys")
+        val recipientKeys: Map<String, String>? = null,
 
         /**
          * The keys
          */
-        var keys: Map<String, String>? = null
+        @Json(name = "keys")
+        val keys: Map<String, String>? = null
 ) {
     fun toJsonString(): String {
         return MoshiProvider.providesMoshi().adapter(OlmPayloadContent::class.java).toJson(this)

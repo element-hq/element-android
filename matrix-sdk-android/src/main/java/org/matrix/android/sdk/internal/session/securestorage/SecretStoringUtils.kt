@@ -219,7 +219,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun decryptStringM(encryptedChunk: ByteArray, keyAlias: String): String {
-        val (iv, encryptedText) = formatMExtract(ByteArrayInputStream(encryptedChunk))
+        val (iv, encryptedText) = formatMExtract(encryptedChunk.inputStream())
 
         val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
 

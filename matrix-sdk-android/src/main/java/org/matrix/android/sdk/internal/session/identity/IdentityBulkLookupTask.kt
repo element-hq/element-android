@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments.base64ToBase64Url
 import org.matrix.android.sdk.internal.crypto.tools.withOlmUtility
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -32,6 +31,7 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityHashDetail
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpParams
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpResponse
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.base64ToBase64Url
 import java.util.Locale
 import javax.inject.Inject
 

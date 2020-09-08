@@ -63,7 +63,9 @@ class RoomEventsAttachmentProvider(
                         maxHeight = -1,
                         maxWidth = -1,
                         width = null,
-                        height = null
+                        height = null,
+                        allowNonMxcUrls = it.root.sendState.isSending()
+
                 )
                 if (content.mimeType == "image/gif") {
                     AttachmentInfo.AnimatedImage(
@@ -89,7 +91,8 @@ class RoomEventsAttachmentProvider(
                         height = content.videoInfo?.height,
                         maxHeight = -1,
                         width = content.videoInfo?.width,
-                        maxWidth = -1
+                        maxWidth = -1,
+                        allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 val data = VideoContentRenderer.Data(
                         eventId = it.eventId,
@@ -97,7 +100,8 @@ class RoomEventsAttachmentProvider(
                         mimeType = content.mimeType,
                         url = content.getFileUrl(),
                         elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                        thumbnailMediaData = thumbnailData
+                        thumbnailMediaData = thumbnailData,
+                        allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 AttachmentInfo.Video(
                         uid = it.eventId,

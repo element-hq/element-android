@@ -52,7 +52,7 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
-    lateinit var context: Context
+    private lateinit var context: Context
 
     /**
      * Init this object

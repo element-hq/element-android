@@ -28,15 +28,13 @@ class SenderNotificationPermissionCondition(
          * type from the notifications object in the power level event content.
          */
         val key: String
-) : Condition(Kind.SenderNotificationPermission) {
+) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveSenderNotificationPermissionCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "User power level <$key>"
-    }
+    override fun technicalDescription() = "User power level <$key>"
 
     fun isSatisfied(event: Event, powerLevels: PowerLevelsContent): Boolean {
         val powerLevelsHelper = PowerLevelsHelper(powerLevels)

@@ -40,7 +40,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailAction()
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailAction()
     object MarkAllAsRead : RoomDetailAction()
-    data class DownloadOrOpen(val eventId: String, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
+    data class DownloadOrOpen(val eventId: String, val senderId: String?, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
     data class HandleTombstoneEvent(val event: Event) : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
@@ -55,6 +55,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
+    data class CancelSend(val eventId: String) : RoomDetailAction()
 
     data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
 

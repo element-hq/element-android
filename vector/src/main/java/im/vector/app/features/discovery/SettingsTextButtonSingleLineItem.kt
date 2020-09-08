@@ -18,7 +18,6 @@ package im.vector.app.features.discovery
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.ProgressBar
-import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
@@ -27,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -160,7 +160,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
     class Holder : VectorEpoxyHolder() {
         val textView by bind<TextView>(R.id.settings_item_text)
         val mainButton by bind<Button>(R.id.settings_item_button)
-        val switchButton by bind<Switch>(R.id.settings_item_switch)
+        val switchButton by bind<SwitchMaterial>(R.id.settings_item_switch)
         val progress by bind<ProgressBar>(R.id.settings_item_progress)
     }
 }

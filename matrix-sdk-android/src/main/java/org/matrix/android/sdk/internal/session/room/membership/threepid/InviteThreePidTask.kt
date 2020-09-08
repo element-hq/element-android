@@ -17,6 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.room.membership.threepid
 
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
@@ -28,7 +29,6 @@ import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.identity.data.getIdentityServerUrlWithoutProtocol
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface InviteThreePidTask : Task<InviteThreePidTask.Params, Unit> {
@@ -55,8 +55,8 @@ internal class DefaultInviteThreePidTask @Inject constructor(
 
         return executeRequest(eventBus) {
             val body = ThreePidInviteBody(
-                    id_server = identityServerUrlWithoutProtocol,
-                    id_access_token = identityServerAccessToken,
+                    idServer = identityServerUrlWithoutProtocol,
+                    idAccessToken = identityServerAccessToken,
                     medium = params.threePid.toMedium(),
                     address = params.threePid.value
             )

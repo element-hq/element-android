@@ -257,7 +257,7 @@
     <string name="encryption_information_algorithm">Algoritme</string>
     <string name="encryption_information_session_id">Økt-ID</string>
     <string name="device_name_warning">Det offentlige navnet til en økt er synlig for folkene du kommuniserer med</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Økt-ID</string>
     <string name="encryption_information_device_key">Øktnøkkel</string>
     <string name="encryption_information_verification">Verifisering</string>
     <string name="encryption_export_export">Eksporter</string>
@@ -345,7 +345,7 @@
     <string name="invited_by">Invitert av %s</string>
 
     <string name="title_activity_emoji_reaction_picker">Reaksjoner</string>
-    <string name="reactions_like">Like</string>
+    <string name="reactions_like">Liker</string>
     <string name="reactions">Reaksjoner</string>
 
     <string name="action_change">Endre</string>
@@ -671,7 +671,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Kan ikke starte samtale</string>
     <string name="device_information">Informasjon om Økten</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferansesamtaler er ikke støttet i enkrypterte rom</string>
-    <string name="call_anyway">Ring likevel.</string>
+    <string name="call_anyway">Ring likevel</string>
     <string name="send_anyway">Send likevel</string>
     <string name="action_sign_out_confirmation_simple">Er du sikker på at vil logge ut\?</string>
     <string name="action_voice_call">Telefonsamtale</string>
@@ -729,4 +729,302 @@
     <string name="start_new_chat_prompt_msg">Er du sikker på du vil starte en samtale med %s\?</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på du vil starte en lydsamtale\?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på du vil starte en videosamtale\?</string>
+    <string name="play_video">Spill av</string>
+    <string name="pause_video">Pause</string>
+    <string name="dismiss">Avslå</string>
+
+
+    <string name="no_permissions_to_start_conf_call">Du har ikke rettigheter til å starte en konferansesamtale i dette rommet</string>
+    <string name="conference_call_in_progress">Det pågår allerede en konferanse!</string>
+    <string name="video_meeting">Start videomøte</string>
+    <string name="audio_meeting">Start lydmøte</string>
+    <string name="audio_video_meeting_description">Møter bruker sikkerhets- og tilgangsregler fra Jitsi. Alle i rommet vil kunne se en invitasjon til møtet mens det pågår.</string>
+    <string name="cannot_call_yourself">Du kan ikke ringe deg selv</string>
+    <string name="cannot_call_yourself_with_invite">Du kan ikke ringe deg selv. Vent til inviterte deltakere godtar invitasjonen</string>
+    <string name="failed_to_add_widget">Kunne ikke legge til utvidelse</string>
+    <string name="failed_to_remove_widget">Kunne ikke fjerne utvidelse</string>
+    <string name="action_copy">Kopier</string>
+    <string name="dialog_title_success">Suksess</string>
+
+    <string name="bottom_action_notification">Varsler</string>
+    <string name="call_failed_no_ice_title">Oppringing feilet som følge av feilkonfigurert tjener</string>
+    <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
+    <string name="call_failed_dont_ask_again">Ikke spør meg igjen</string>
+
+    <string name="call_failed_no_connection">Element samtale feilet</string>
+    <string name="call_select_sound_device">Velg lydenhet</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Høytaler</string>
+    <string name="sound_device_headset">Hodesett</string>
+    <string name="sound_device_wireless_headset">Trådløst hodesett</string>
+    <string name="call_switch_camera">Bytt kamera</string>
+    <string name="call_camera_front">Foran</string>
+    <string name="call_camera_back">Bak</string>
+    <string name="call_format_turn_hd_off">Slå HD av</string>
+    <string name="call_format_turn_hd_on">Slå HD på</string>
+
+    <string name="option_send_files">Send filer</string>
+    <string name="option_send_sticker">Send klistremerke</string>
+    <string name="option_take_photo_video">Ta bilde eller video</string>
+    <string name="no_sticker_application_dialog_content">Du har ingen pakker med klistremerker slått på.
+\n
+\nLegge til noen nå\?</string>
+
+    <string name="go_on_with">fortsett med…</string>
+    <string name="error_no_external_application_found">Dessverre, kunne ikke finne en passende ekstern applikasjon for å utføre denne handlingen.</string>
+
+    <string name="auth_login_sso">Logg på med single sign-on</string>
+    <string name="auth_user_id_placeholder">E-post eller brukernavn</string>
+    <string name="auth_user_name_placeholder">Brukernavn</string>
+    <string name="auth_opt_email_placeholder">E-postadresse (valgfritt)</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonnummer (valgfritt)</string>
+    <string name="auth_repeat_password_placeholder">Gjenta passord</string>
+    <string name="auth_repeat_new_password_placeholder">Bekreft ditt nye passord</string>
+    <string name="auth_missing_password">Manglende passord</string>
+    <string name="auth_invalid_email">Dette ser ikke ut som en gyldig E-postadresse</string>
+    <string name="auth_invalid_phone">Dette ser ikke ut som et gyldig telefonnummer</string>
+    <string name="auth_missing_email">Manglende E-postadresse</string>
+    <string name="auth_missing_phone">Manglende telefonnummer</string>
+    <string name="auth_missing_email_or_phone">Manglende E-postadresse eller telefonnummer</string>
+    <string name="auth_password_dont_match">Passordene samsvarer ikke</string>
+    <string name="login_error_ssl_other">SSL-feil.</string>
+    <string name="login_error_limit_exceeded">For mange forespørsler har blitt sendt</string>
+    <string name="compression_options">Send som</string>
+    <string name="attachment_cancel_download">Vil du avbryte nedlastingen\?</string>
+    <string name="attachment_cancel_upload">Vil du avbryte opplastingen\?</string>
+    <string name="room_info_room_name">Rommets navn</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 aktivt medlem</item>
+        <item quantity="other">%d aktive medlemmer</item>
+    </plurals>
+    <string name="room_participants_leave_prompt_title">Forlat rommet</string>
+    <string name="room_participants_ago">%1$s for %2$s siden</string>
+
+    <string name="room_participants_header_direct_chats">Direktemeldinger</string>
+    <string name="room_participants_action_leave">Forlat dette rommet</string>
+    <string name="room_participants_action_remove">Fjern fra dette rommet</string>
+    <string name="room_participants_action_set_moderator">Utnevn til moderator</string>
+    <string name="room_participants_action_set_admin">Utnevn til admin</string>
+    <string name="room_participants_action_ignore_title">Ignorer bruker</string>
+    <string name="room_participants_action_ignore">Ignorer</string>
+
+    <string name="room_participants_action_unignore">Opphev ignorering</string>
+
+    <string name="room_participants_ban_title">Bannlys bruker</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s og %2$s</string>
+    <string name="room_two_users_are_typing">%1$s og %2$s skriver …</string>
+    <string name="room_many_users_are_typing">%1$s, %2$s og andre skriver …</string>
+    <string name="room_prompt_cancel">Avbryt alle</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 ny melding</item>
+        <item quantity="other">%d nye meldinger</item>
+    </plurals>
+
+    <string name="room_details_title">Romdetaljer</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">1 valgt</item>
+        <item quantity="other">%d valgte</item>
+    </plurals>
+    <string name="room_details_people_invited_group_name">INVITERT</string>
+    <string name="tab_title_search_messages">MELDINGER</string>
+    <string name="tab_title_search_files">FILER</string>
+
+    <string name="room_recents_create_room">Opprett et rom</string>
+    <string name="room_recents_join_room">Bli med i rommet</string>
+    <string name="room_recents_join_room_title">Bli med i et rom</string>
+    <string name="room_sliding_menu_term_and_conditions">Betingelser og vilkår</string>
+    <string name="room_sliding_menu_privacy_policy">Personvernregler</string>
+
+    <string name="settings_add_email_address">Legg til E-postadresse</string>
+    <string name="settings_add_phone_number">Legg til telefonnummer</string>
+    <string name="settings_notification_advanced">Avanserte varselsinnstillinger</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Systeminnstillinger.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">Kontoinnstillinger.</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Start ved systemoppstart</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Skru av restriksjoner</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Batterioptimalisering</string>
+    <string name="settings_notification_privacy_reduced">Redusert privatliv</string>
+    <string name="settings_enable_all_notif">Skru på varsler for denne kontoen</string>
+    <string name="settings_enable_this_device">Skru på varsler for denne økten</string>
+    <string name="settings_turn_screen_on">Skru på skjermen i 3 sekunder</string>
+    <string name="settings_start_on_boot">Start ved systemoppstart</string>
+    <string name="settings_app_term_conditions">Betingelser og vilkår</string>
+    <string name="settings_clear_media_cache">Tøm mediemellomlager</string>
+
+    <string name="settings_user_settings">Brukerinnstillinger</string>
+    <string name="settings_ignored_users">Ignorerte brukere</string>
+    <string name="settings_integrations">Integreringer</string>
+    <string name="settings_show_read_receipts">Vis lesekvitteringer</string>
+    <string name="settings_send_message_with_enter">Send melding med Enter</string>
+    <string name="settings_secure_backup_manage">Administrer</string>
+    <string name="settings_secure_backup_enter_to_setup">Sett opp på denne enheten</string>
+    <string name="settings_deactivate_my_account">Deaktiver kontoen min</string>
+    <string name="settings_discovery_category">Oppdag</string>
+    <string name="settings_discovery_manage">Behandle dine oppdagelsesinnstillinger.</string>
+    <string name="startup_notification_privacy_button_grant">Gi tillatelse</string>
+    <string name="startup_notification_privacy_button_other">Velg et annet alternativ</string>
+
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Gi tillatelse</string>
+
+    <string name="settings_data_save_mode">Datasparingsmodus</string>
+    <string name="devices_details_dialog_title">Øktinformasjon</string>
+    <string name="settings_home_server">Hjemmetjener</string>
+    <string name="settings_integration_allow">Tillat integreringer</string>
+    <string name="disabled_integration_dialog_title">Integreringer er skrudd av</string>
+    <string name="settings_select_language">Velg språk</string>
+
+    <string name="account_email_validation_title">Verifisering avventer</string>
+    <string name="account_email_not_found_error">Denne E-postadressen ble ikke funnet.</string>
+    <string name="settings_change_password_submit">Oppdater passord</string>
+    <string name="settings_phone_number_verification">Telefonverifisering</string>
+    <string name="settings_default_compression">Standardkomprimering</string>
+    <string name="room_settings_tag_pref_dialog_title">Merket som:</string>
+
+    <string name="room_settings_category_access_visibility_title">Tilgang og synlighet</string>
+    <string name="room_settings_room_access_rules_pref_title">Romtilgang</string>
+    <string name="room_settings_labs_end_to_end">Punkt-til-punkt-kryptering</string>
+    <string name="room_settings_labs_end_to_end_is_active">Punkt-til-punkt-kryptering er skrudd på</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ugyldig samfunns-ID</string>
+    <string name="encryption_information_device_name">Offentlig navn</string>
+    <string name="encryption_information_name">Offentlig navn</string>
+    <string name="encryption_information_unknown_device">ukjent økt</string>
+    <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widgets_title">Aktive moduler</string>
+
+
+    <string name="room_widget_reload">Last inn modulen på nytt</string>
+    <string name="room_widget_webview_access_camera">Bruk kameraet</string>
+    <string name="room_widget_webview_access_microphone">Bruk mikrofonen</string>
+    <string name="room_manage_integrations">Behandle integreringer</string>
+    <string name="room_no_active_widgets">Ingen aktive moduler</string>
+    <string name="error_empty_field_your_password">Vennligst skriv inn passordet ditt.</string>
+    <string name="room_tombstone_continuation_link">Samtalen fortsetter her</string>
+    <string name="resource_limit_contact_action">Kontakt administrator</string>
+
+    <string name="unknown_error">Beklager, det oppstod en feil</string>
+
+    <string name="passphrase_create_passphrase">Opprett en passordfrase</string>
+    <string name="passphrase_confirm_passphrase">Bekreft passordfrasen</string>
+    <string name="passphrase_enter_passphrase">Skriv inn passordfrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passordfrasen samsvarer ikke</string>
+    <string name="passphrase_empty_error_message">Vennligst skriv inn en passordfrase</string>
+    <string name="passphrase_passphrase_too_weak">Passordfrasen er for svak</string>
+
+    <string name="keys_backup_setup_step1_advanced">(Avansert)</string>
+    <string name="keys_backup_setup_step2_button_title">Velg passordfrase</string>
+    <string name="keys_backup_setup_step3_success_title">Suksess!</string>
+    <string name="recovery_key">Gjenopprettingsnøkkel</string>
+    <string name="keys_backup_restore_key_enter_hint">Skriv inn gjenopprettingsnøkkelen</string>
+
+    <string name="keys_backup_settings_restore_backup_button">Gjenopprett fra sikkerhetskopi</string>
+    <string name="keys_backup_settings_delete_backup_button">Slett sikkerhetskopien</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Slett sikkerhetskopien</string>
+    <string name="sas_verify_start_button_title">Begynn verifisering</string>
+    <string name="identity_server_not_defined">Du bruker ikke noen identitetstjenere</string>
+    <string name="room_list_people_empty_title">Samtaler</string>
+    <string name="message_add_reaction">Legg til reaksjon</string>
+    <string name="event_redacted">Meldingen ble slettet</string>
+    <string name="settings_show_redacted">Vis fjernede meldinger</string>
+    <string name="settings_show_redacted_summary">Vis en stattholder for fjernede meldinger</string>
+    <string name="group_all_communities">Alle samfunn</string>
+
+    <string name="create_room_directory_title">Rom-arkiv</string>
+    <string name="settings_sdk_version">Matrix SDK-versjon</string>
+    <string name="quick_reactions">Hurtigreaksjoner</string>
+
+    <string name="send_suggestion">Send inn et forslag</string>
+    <string name="send_file_step_encrypting_file">Krypterer filen …</string>
+    <string name="room_directory_search_hint">Navn eller ID (#example:matrix.org)</string>
+
+    <string name="direct_room_filter_hint">Filtrer etter brukernavn eller ID …</string>
+
+    <string name="message_view_edit_history">Vis redigeringshistorikk</string>
+
+    <string name="uploads_media_title">MEDIA</string>
+    <string name="uploads_files_title">FILER</string>
+    <string name="uploads_files_subtitle">%1$s, kl. %2$s</string>
+    <string name="report_content_inappropriate">Det er upassende</string>
+    <string name="block_user">IGNORER BRUKER</string>
+
+    <string name="message_ignore_user">Ignorer bruker</string>
+
+    <string name="spoiler">Spoiler</string>
+    <string name="no_ignored_users">Du ignorerer ikke noen brukere</string>
+
+    <string name="help_long_click_on_room_for_more_options">Langklikk på et rom for å se flere innstillinger</string>
+
+
+    <string name="login_server_other_text">Tilpassede og avanserte innstillinger</string>
+
+    <string name="login_connect_to">Koble til %1$s</string>
+    <string name="login_server_url_form_other_hint">Adresse</string>
+    <string name="login_reset_password_mail_confirmation_title">Sjekk innboksen din</string>
+    <string name="login_set_msisdn_optional_hint">Telefonnummer (valgfritt)</string>
+    <string name="login_msisdn_confirm_title">Bekreft telefonnummer</string>
+    <string name="login_signup_to">Registrer deg på %1$s</string>
+    <string name="login_signin_username_hint">Brukernavn eller E-postadresse</string>
+    <string name="login_signup_error_user_in_use">Det brukernavnet har blitt tatt</string>
+    <string name="login_signin_matrix_id_hint">Matrix-ID</string>
+    <string name="signed_out_title">Du er logget av</string>
+    <string name="soft_logout_title">Du er logget av</string>
+    <string name="soft_logout_clear_data_submit">Tøm alle data</string>
+
+    <string name="settings_show_devices_list">Se alle mine økter</string>
+    <string name="create_room_encryption_title">Skru på kryptering</string>
+    <string name="verification_sas_do_not_match">De samsvarer ikke</string>
+    <string name="send_a_sticker">Klistremerke</string>
+
+    <string name="room_settings_enable_encryption_dialog_submit">Skru på kryptering</string>
+
+    <string name="refresh">Oppdater</string>
+
+    <string name="your_recovery_key">Din gjenopprettingsnøkkel</string>
+    <string name="finish">Avslutt</string>
+
+    <string name="encryption_enabled">Kryptering er skrudd på</string>
+    <string name="encryption_not_enabled">Kryptering er ikke skrudd på</string>
+    <string name="settings_messages_at_room">Medlinger som inneholder @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Krypterte meldinger i samtaler under fire øyne</string>
+    <string name="settings_messages_in_e2e_group_chat">Krypterte meldinger i gruppesamtaler</string>
+    <string name="settings_when_rooms_are_upgraded">Når rom blir oppgradert</string>
+    <string name="settings_troubleshoot_title">Feilsøk</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="change_password_summary">Velg et nytt kontopassord …</string>
+
+    <string name="unencrypted">Ukryptert</string>
+    <string name="add_members_to_room">Legg til medlemmer</string>
+    <string name="inviting_users_to_room">Inviterer brukere …</string>
+    <string name="invite_users_to_room_title">Inviter brukere</string>
+    <string name="choose_locale_current_locale_title">Nåværende språk</string>
+    <string name="choose_locale_other_locales_title">Andre tilgjengelige språk</string>
+    <string name="identity_server_set_default_submit">Bruk %1$s</string>
+    <string name="identity_server_set_alternative_submit">Send</string>
+    <string name="power_level_title">Rolle</string>
+    <string name="a11y_mute_microphone">Demp mikrofonen</string>
+    <string name="a11y_unmute_microphone">Opphev demping av mikrofonen</string>
+    <string name="a11y_stop_camera">Stopp kameraet</string>
+    <string name="a11y_start_camera">Start kameraet</string>
+
+    <string name="bottom_sheet_setup_secure_backup_submit">Sett opp</string>
+    <string name="room_settings_name_hint">Rommets navn</string>
+    <string name="room_settings_topic_hint">Emne</string>
+    <string name="crypto_utd">Kan ikke dekryptere</string>
+    <string name="element_disclaimer_negative_button">SKJØNNER</string>
+    <string name="element_disclaimer_positive_button">LÆR MER</string>
+
+    <string name="empty_phone_book">Telefonkatalogen din er tom</string>
+    <string name="phone_book_title">Telefonkatalog</string>
+    <string name="search_in_my_contacts">Søk i mine kontakter</string>
+    <string name="member_banned_by">Bannlyst av %1$s</string>
+    <string name="create_pin_confirm_title">Bekreft PIN-kode</string>
+    <string name="auth_pin_title">Skriv inn PIN-koden din</string>
+    <string name="auth_pin_forgot">Glemt PIN-koden\?</string>
+    <string name="settings_security_pin_code_title">Skru på PIN-kode</string>
 </resources>

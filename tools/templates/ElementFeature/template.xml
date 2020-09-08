@@ -2,7 +2,7 @@
 <template
     format="5"
     revision="1"
-    name="RiotX Feature"
+    name="Element Feature"
     minApi="19"
     minBuildApi="19"
     description="Creates a new activity and a fragment with view model, view state and actions">

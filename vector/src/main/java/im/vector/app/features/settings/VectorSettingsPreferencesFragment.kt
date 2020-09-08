@@ -196,6 +196,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 v.setOnClickListener {
                     dialog.dismiss()
                     FontScale.updateFontScale(activity, i)
+                    vectorConfiguration.applyToApplicationContext()
                     activity.restart()
                 }
             }
