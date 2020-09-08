@@ -82,7 +82,7 @@
     <string name="user_directory_header">Bruger katalog</string>
     <string name="matrix_only_filter">Kun Matrix kontakter</string>
     <string name="no_conversation_placeholder">Ingen samtaler</string>
-    <string name="no_contact_access_placeholder">Du gav ikke SchildiChat tilladelse til at se dine lokale kontakter</string>
+    <string name="no_contact_access_placeholder">Du gav ikke Element tilladelse til at se dine lokale kontakter</string>
     <string name="no_result_placeholder">Ingen resultater</string>
 
     <string name="rooms_header">Rum</string>
@@ -233,25 +233,25 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="media_picker_cannot_record_video">Kan ikke optage video</string>
 
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">SchildiChat skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
+    <string name="permissions_rationale_msg_storage">Element skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
 Giv venligst tilladelse ved næste pop-up for at kunne sende filer fra din telefon.</string>
-    <string name="permissions_rationale_msg_camera">SchildiChat skal bruge tilladelse til at bruge dit kamera for at billeder og lave videoopkald.</string>
+    <string name="permissions_rationale_msg_camera">Element skal bruge tilladelse til at bruge dit kamera for at billeder og lave videoopkald.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Giv venligst tilladelse ved næste pop-up for at kunne lave opkald.</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChat skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
+    <string name="permissions_rationale_msg_record_audio">Element skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Giv venligst tilladelse ved næste pop-up for at kunne lave opkaldet.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
+    <string name="permissions_rationale_msg_camera_and_audio">Element skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
 
 Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
-    <string name="permissions_rationale_msg_contacts">SchildiChat skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+    <string name="permissions_rationale_msg_contacts">Element skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
 
-Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på SchildiChat.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på Element.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
 
-Vil du give SchildiChat adgang til dine kontakter?</string>
+Vil du give Element adgang til dine kontakter?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Beklager… Handlingen blev ikke udført fordi der mangler tilladelser</string>
 
