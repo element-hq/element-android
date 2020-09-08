@@ -17,6 +17,7 @@
 package im.vector.app.features.settings
 
 import im.vector.app.R
+import im.vector.app.core.preference.VectorSwitchPreference
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
