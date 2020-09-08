@@ -25,6 +25,7 @@ import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.terms.ReviewTermsActivity
@@ -50,9 +51,9 @@ interface Navigator {
 
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
-    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)
-
     fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
+
+    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData)
 
     fun openCreateRoom(context: Context, initialName: String = "")
 

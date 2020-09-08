@@ -5,6 +5,10 @@
     <string name="resources_language">zh</string>
     <string name="resources_country_code">CN</string>
 
+    <string name="call_notification_answer">接受</string>
+    <string name="call_notification_reject">拒绝</string>
+    <string name="call_notification_hangup">挂断</string>
+
     <string name="resend">重新发送</string>
     <string name="quote">引用</string>
     <string name="share">分享</string>
@@ -179,7 +183,7 @@
 
     <string name="encryption_information_sender_device_information">发送者的会话信息</string>
     <string name="encryption_information_device_name">公开名称</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">会话 ID</string>
     <string name="encryption_information_device_key">会话密钥</string>
     <string name="encryption_information_verification">验证</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指纹</string>
@@ -1794,7 +1798,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="report_content_custom_title">报告此内容</string>
     <string name="report_content_custom_hint">报告此内容的理由</string>
     <string name="report_content_custom_submit">报告</string>
-    <string name="block_user">屏蔽用户</string>
+    <string name="block_user">忽略用户</string>
 
     <string name="content_reported_title">内容已报告</string>
     <string name="content_reported_content">此内容已报告。
@@ -1815,7 +1819,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 
     <string name="no_network_indicator">目前没有网络连接</string>
 
-    <string name="message_ignore_user">屏蔽用户</string>
+    <string name="message_ignore_user">忽略用户</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">全部消息（嘈杂）</string>
     <string name="room_list_quick_actions_notifications_all">全部消息</string>
@@ -2532,4 +2536,31 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="auth_pin_confirm_to_disable_title">确认 PIN 并禁用 PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
     <string name="settings_call_show_confirmation_dialog_summary">发起通话之前要求确认</string>
+    <string name="no_permissions_to_start_conf_call">您没有权限在此聊天室发起会议通话</string>
+    <string name="conference_call_in_progress">会议正在进行！</string>
+    <string name="video_meeting">发起视频会议</string>
+    <string name="audio_meeting">发起音频会议</string>
+    <string name="audio_video_meeting_description">会议使用 Jitsi 安全与许可政策。您的会议进行期间当前聊天室内的所有人将看到加入邀请。</string>
+    <string name="cannot_call_yourself">您无法呼叫您自己</string>
+    <string name="cannot_call_yourself_with_invite">您无法呼叫您自己，请等待参与者接受邀请</string>
+    <string name="failed_to_add_widget">添加小部件失败</string>
+    <string name="failed_to_remove_widget">移除小部件失败</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="other">成功导入 %1$d/%2$d 个密钥。</item>
+    </plurals>
+
+    <string name="room_manage_integrations">管理集成</string>
+    <string name="room_no_active_widgets">无活动小部件</string>
+    <string name="create_room_federation_error">聊天室已创建，但由于以下原因一些邀请尚未发送：
+\n
+\n%s</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="other">%1$s，%2$s 和其他 %3$d 人已读</item>
+    </plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="other">错误代码，剩余 %d 次尝试</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">注意！登出前最后一次尝试！</string>
+    <string name="too_many_pin_failures">错误次数过多，您已被登出</string>
 </resources>

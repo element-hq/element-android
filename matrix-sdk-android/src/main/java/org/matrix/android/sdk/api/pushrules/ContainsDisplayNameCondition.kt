@@ -20,17 +20,15 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import timber.log.Timber
+import org.matrix.android.sdk.internal.util.caseInsensitiveFind
 
-class ContainsDisplayNameCondition : Condition(Kind.ContainsDisplayName) {
+class ContainsDisplayNameCondition : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveContainsDisplayNameCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "User is mentioned"
-    }
+    override fun technicalDescription() = "User is mentioned"
 
     fun isSatisfied(event: Event, displayName: String): Boolean {
         val message = when (event.type) {
@@ -45,31 +43,6 @@ class ContainsDisplayNameCondition : Condition(Kind.ContainsDisplayName) {
             else              -> null
         } ?: return false
 
-        return caseInsensitiveFind(displayName, message.body)
-    }
-
-    companion object {
-        /**
-         * Returns whether a string contains an occurrence of another, as a standalone word, regardless of case.
-         *
-         * @param subString  the string to search for
-         * @param longString the string to search in
-         * @return whether a match was found
-         */
-        fun caseInsensitiveFind(subString: String, longString: String): Boolean {
-            // add sanity checks
-            if (subString.isEmpty() || longString.isEmpty()) {
-                return false
-            }
-
-            try {
-                val regex = Regex("(\\W|^)" + Regex.escape(subString) + "(\\W|$)", RegexOption.IGNORE_CASE)
-                return regex.containsMatchIn(longString)
-            } catch (e: Exception) {
-                Timber.e(e, "## caseInsensitiveFind() : failed")
-            }
-
-            return false
-        }
+        return message.body.caseInsensitiveFind(displayName)
     }
 }

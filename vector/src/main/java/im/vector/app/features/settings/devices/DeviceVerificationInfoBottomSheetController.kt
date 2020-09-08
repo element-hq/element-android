@@ -16,9 +16,6 @@
 package im.vector.app.features.settings.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem
@@ -28,12 +25,14 @@ import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
-class DeviceVerificationInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                                private val colorProvider: ColorProvider,
-                                                                private val session: Session)
+class DeviceVerificationInfoBottomSheetController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider)
     : TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
@@ -67,16 +66,18 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
 
         if (data.hasAccountCrossSigning) {
             // Cross Signing is enabled
-            handleE2EWithCrossSigning(data.isMine, data.accountCrossSigningIsTrusted, cryptoDeviceInfo, shield)
+            handleE2EWithCrossSigning(data, cryptoDeviceInfo, shield)
         } else {
-            handleE2EInLegacy(data.isMine, cryptoDeviceInfo, shield)
+            handleE2EInLegacy(data, cryptoDeviceInfo, shield)
         }
 
         // COMMON ACTIONS (Rename / signout)
         addGenericDeviceManageActions(data, cryptoDeviceInfo.deviceId)
     }
 
-    private fun handleE2EWithCrossSigning(isMine: Boolean, currentSessionIsTrusted: Boolean, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
+    private fun handleE2EWithCrossSigning(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
+        val isMine = data.isMine
+        val currentSessionIsTrusted = data.accountCrossSigningIsTrusted
         Timber.v("handleE2EWithCrossSigning $isMine, $cryptoDeviceInfo, $shield")
 
         if (isMine) {
@@ -88,14 +89,18 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
                     title(stringProvider.getString(R.string.encryption_information_verified))
                     description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
                 }
-            } else {
-                // You need to complete security
+            } else if (data.canVerifySession) {
+                // You need to complete security, only if there are other session(s) available, or if 4S contains secrets
                 genericItem {
                     id("trust${cryptoDeviceInfo.deviceId}")
                     style(GenericItem.STYLE.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(stringProvider.getString(R.string.crosssigning_verify_this_session))
-                    description(stringProvider.getString(R.string.confirm_your_identity))
+                    if (data.hasOtherSessions) {
+                        description(stringProvider.getString(R.string.confirm_your_identity))
+                    } else {
+                        description(stringProvider.getString(R.string.confirm_your_identity_quad_s))
+                    }
                 }
             }
         } else {
@@ -132,7 +137,7 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
             description("(${cryptoDeviceInfo.deviceId})")
         }
 
-        if (isMine && !currentSessionIsTrusted) {
+        if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
             // Add complete security
             dividerItem {
                 id("completeSecurityDiv")
@@ -158,8 +163,9 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
         }
     }
 
-    private fun handleE2EInLegacy(isMine: Boolean, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
+    private fun handleE2EInLegacy(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
         // ==== Legacy
+        val isMine = data.isMine
 
         // TRUST INFO SECTION
         if (cryptoDeviceInfo.trustLevel?.isLocallyVerified() == true) {

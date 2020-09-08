@@ -113,7 +113,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+                doOnPostResume {  addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
             }
         }
     }

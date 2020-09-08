@@ -15,30 +15,18 @@
  */
 package im.vector.app.features.settings.devices
 
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.rx.rx
-
-data class DeviceVerificationInfoBottomSheetViewState(
-        val cryptoDeviceInfo: Async<CryptoDeviceInfo?> = Uninitialized,
-        val deviceInfo: Async<DeviceInfo> = Uninitialized,
-        val hasAccountCrossSigning: Boolean = false,
-        val accountCrossSigningIsTrusted: Boolean = false,
-        val isMine: Boolean = false
-) : MvRxState
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
                                                                              @Assisted val deviceId: String,
@@ -55,7 +43,8 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
         setState {
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
             )
         }
         session.rx().liveCrossSigningInfo(session.myUserId)
@@ -74,6 +63,14 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     copy(
                             cryptoDeviceInfo = it,
                             isMine = it.invoke()?.deviceId == session.sessionParams.deviceId
+                    )
+                }
+
+        session.rx().liveUserCryptoDevices(session.myUserId)
+                .map { it.size }
+                .execute {
+                    copy(
+                            hasOtherSessions = it.invoke() ?: 0 > 1
                     )
                 }
 

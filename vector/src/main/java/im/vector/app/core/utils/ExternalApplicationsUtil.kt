@@ -518,8 +518,8 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
     var outputStream: FileOutputStream? = null
     try {
         dstFile.createNewFile()
-        inputStream = FileInputStream(sourceFile)
-        outputStream = FileOutputStream(dstFile)
+        inputStream = sourceFile.inputStream()
+        outputStream = dstFile.outputStream()
         val buffer = ByteArray(1024 * 10)
         var len: Int
         while (inputStream.read(buffer).also { len = it } != -1) {

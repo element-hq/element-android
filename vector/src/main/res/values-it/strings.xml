@@ -133,6 +133,10 @@
     <string name="option_send_files">Invia file</string>
     <string name="option_take_photo_video">Fai una foto o un video</string>
 
+    <string name="call_notification_answer">Accetta</string>
+    <string name="call_notification_reject">Rifiuta</string>
+    <string name="call_notification_hangup">Riaggancia</string>
+
     <!-- Authentication -->
     <string name="auth_login">Accedi</string>
     <string name="auth_register">Crea account</string>
@@ -630,7 +634,7 @@
     <string name="encryption_information_sender_device_information">Informazioni sessione del mittente</string>
     <string name="encryption_information_device_name">Nome pubblico</string>
     <string name="encryption_information_name">Nome pubblico</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">ID sessione</string>
     <string name="encryption_information_device_key">Chiave sessione</string>
     <string name="encryption_information_verification">Verifica</string>
     <string name="encryption_information_ed25519_fingerprint">Impronta digitale Ed25519</string>
@@ -1728,7 +1732,7 @@
     <string name="report_content_custom_title">Segnala questo contenuto</string>
     <string name="report_content_custom_hint">Motivo della segnalazione</string>
     <string name="report_content_custom_submit">SEGNALA</string>
-    <string name="block_user">BLOCCA UTENTE</string>
+    <string name="block_user">IGNORA UTENTE</string>
 
     <string name="content_reported_title">Contenuto segnalato</string>
     <string name="content_reported_content">Questo contenuto è stato segnalato.
@@ -1785,7 +1789,7 @@
     <string name="room_widget_webview_read_protected_media">Leggi media protetti da DRM</string>
 
     <string name="login_error_no_homeserver_found">Questo non è un indirizzo di server Matrix valido</string>
-    <string name="message_ignore_user">Blocca utente</string>
+    <string name="message_ignore_user">Ignora utente</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Tutti i messaggi (rumoroso)</string>
     <string name="room_list_quick_actions_notifications_all">Tutti i messaggi</string>
@@ -2620,4 +2624,34 @@
     <string name="auth_pin_confirm_to_disable_title">Conferma il PIN per disattivarlo</string>
     <string name="settings_call_show_confirmation_dialog_title">Impedisci chiamate accidentali</string>
     <string name="settings_call_show_confirmation_dialog_summary">Chiedi conferma prima di iniziare una chiamata</string>
+    <string name="no_permissions_to_start_conf_call">Non hai il permesso di avviare una chiamata di gruppo in questa stanza</string>
+    <string name="conference_call_in_progress">Una chiamata di gruppo è già in corso!</string>
+    <string name="video_meeting">Avvia conferenza video</string>
+    <string name="audio_meeting">Avvia conferenza audio</string>
+    <string name="audio_video_meeting_description">Le conferenze usano la sicurezza di Jitsi e le sua politica sui permessi. Tutte le persone attualmente nella stanza vedranno un invito per unirsi quando la conferenza è in corso.</string>
+    <string name="cannot_call_yourself">Non puoi chiamare te stesso</string>
+    <string name="cannot_call_yourself_with_invite">Non puoi chiamare te stesso, attendi che i partecipanti accettino l\'invito</string>
+    <string name="failed_to_add_widget">Aggiunta del widget fallita</string>
+    <string name="failed_to_remove_widget">Rimozione del widget fallita</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d chiave importata correttamente.</item>
+        <item quantity="other">%1$d/%2$d chiavi importate correttamente.</item>
+    </plurals>
+
+    <string name="room_manage_integrations">Gestisci integrazioni</string>
+    <string name="room_no_active_widgets">Nessun widget attivo</string>
+    <string name="create_room_federation_error">La stanza è stata creata, ma alcuni inviti non sono stati spediti per il seguente motivo:
+\n
+\n%s</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s e %3$d altro hanno letto</item>
+        <item quantity="other">%1$s, %2$s e altri %3$d hanno letto</item>
+    </plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Codice sbagliato, %d tentativo rimasto</item>
+        <item quantity="other">Codice sbagliato, %d tentativi rimasti</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Attenzione! Ultimo tentativo rimasto prima di venire disconnesso!</string>
+    <string name="too_many_pin_failures">Troppi errori, sei stato disconnesso</string>
 </resources>

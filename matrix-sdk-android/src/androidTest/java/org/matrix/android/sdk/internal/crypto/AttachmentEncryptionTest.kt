@@ -19,17 +19,17 @@ package org.matrix.android.sdk.internal.crypto
 import android.os.MemoryFile
 import android.util.Base64
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.io.ByteArrayInputStream
+import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
+import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
 /**
@@ -41,29 +41,26 @@ import java.io.InputStream
 class AttachmentEncryptionTest {
 
     private fun checkDecryption(input: String, encryptedFileInfo: EncryptedFileInfo): String {
-        val `in` = Base64.decode(input, Base64.DEFAULT)
+        val inputAsByteArray = Base64.decode(input, Base64.DEFAULT)
 
         val inputStream: InputStream
 
-        inputStream = if (`in`.isEmpty()) {
-            ByteArrayInputStream(`in`)
+        inputStream = if (inputAsByteArray.isEmpty()) {
+            inputAsByteArray.inputStream()
         } else {
-            val memoryFile = MemoryFile("file" + System.currentTimeMillis(), `in`.size)
-            memoryFile.outputStream.write(`in`)
+            val memoryFile = MemoryFile("file" + System.currentTimeMillis(), inputAsByteArray.size)
+            memoryFile.outputStream.write(inputAsByteArray)
             memoryFile.inputStream
         }
 
-        val decryptedStream = MXEncryptedAttachments.decryptAttachment(inputStream, encryptedFileInfo)
+        val decryptedStream = ByteArrayOutputStream()
+        val result = MXEncryptedAttachments.decryptAttachment(inputStream, encryptedFileInfo.toElementToDecrypt()!!, decryptedStream)
 
-        assertNotNull(decryptedStream)
+        assert(result)
 
-        val buffer = ByteArray(100)
+        val toByteArray = decryptedStream.toByteArray()
 
-        val len = decryptedStream!!.read(buffer)
-
-        decryptedStream.close()
-
-        return Base64.encodeToString(buffer, 0, len, Base64.DEFAULT).replace("\n".toRegex(), "").replace("=".toRegex(), "")
+        return Base64.encodeToString(toByteArray, 0, toByteArray.size, Base64.DEFAULT).replace("\n".toRegex(), "").replace("=".toRegex(), "")
     }
 
     @Test
@@ -74,7 +71,7 @@ class AttachmentEncryptionTest {
                 key = EncryptedFileKey(
                         alg = "A256CTR",
                         k = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                        key_ops = listOf("encrypt", "decrypt"),
+                        keyOps = listOf("encrypt", "decrypt"),
                         kty = "oct",
                         ext = true
                 ),
@@ -93,7 +90,7 @@ class AttachmentEncryptionTest {
                 key = EncryptedFileKey(
                         alg = "A256CTR",
                         k = "__________________________________________8",
-                        key_ops = listOf("encrypt", "decrypt"),
+                        keyOps = listOf("encrypt", "decrypt"),
                         kty = "oct",
                         ext = true
                 ),
@@ -112,7 +109,7 @@ class AttachmentEncryptionTest {
                 key = EncryptedFileKey(
                         alg = "A256CTR",
                         k = "__________________________________________8",
-                        key_ops = listOf("encrypt", "decrypt"),
+                        keyOps = listOf("encrypt", "decrypt"),
                         kty = "oct",
                         ext = true
                 ),
@@ -133,7 +130,7 @@ class AttachmentEncryptionTest {
                 key = EncryptedFileKey(
                         alg = "A256CTR",
                         k = "__________________________________________8",
-                        key_ops = listOf("encrypt", "decrypt"),
+                        keyOps = listOf("encrypt", "decrypt"),
                         kty = "oct",
                         ext = true
                 ),

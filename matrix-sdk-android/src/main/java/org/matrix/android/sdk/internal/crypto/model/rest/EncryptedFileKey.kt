@@ -37,7 +37,7 @@ data class EncryptedFileKey(
          * Required. Key operations. Must at least contain "encrypt" and "decrypt".
          */
         @Json(name = "key_ops")
-        val key_ops: List<String>? = null,
+        val keyOps: List<String>? = null,
 
         /**
          * Required. Key type. Must be "oct".
@@ -63,7 +63,7 @@ data class EncryptedFileKey(
             return false
         }
 
-        if (key_ops?.contains("encrypt") != true || !key_ops.contains("decrypt")) {
+        if (keyOps?.contains("encrypt") != true || !keyOps.contains("decrypt")) {
             return false
         }
 

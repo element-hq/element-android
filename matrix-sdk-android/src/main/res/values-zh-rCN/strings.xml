@@ -75,69 +75,6 @@
     <string name="notice_event_redacted_by">消息已被 %1$s 移除</string>
     <string name="notice_event_redacted_with_reason">消息已被移除 [原因: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">消息已被 %1$s 移除 [原因: %2$s]</string>
-    <string name="verification_emoji_dog">狗</string>
-    <string name="verification_emoji_cat">猫</string>
-    <string name="verification_emoji_lion">狮子</string>
-    <string name="verification_emoji_horse">马</string>
-    <string name="verification_emoji_unicorn">独角兽</string>
-    <string name="verification_emoji_pig">猪</string>
-    <string name="verification_emoji_elephant">大象</string>
-    <string name="verification_emoji_rabbit">兔子</string>
-    <string name="verification_emoji_panda">熊猫</string>
-    <string name="verification_emoji_rooster">公鸡</string>
-    <string name="verification_emoji_penguin">企鹅</string>
-    <string name="verification_emoji_turtle">乌龟</string>
-    <string name="verification_emoji_fish">鱼</string>
-    <string name="verification_emoji_octopus">章鱼</string>
-    <string name="verification_emoji_butterfly">蝴蝶</string>
-    <string name="verification_emoji_flower">花</string>
-    <string name="verification_emoji_tree">树</string>
-    <string name="verification_emoji_cactus">仙人掌</string>
-    <string name="verification_emoji_mushroom">蘑菇</string>
-    <string name="verification_emoji_globe">地球</string>
-    <string name="verification_emoji_moon">月亮</string>
-    <string name="verification_emoji_cloud">云</string>
-    <string name="verification_emoji_fire">火</string>
-    <string name="verification_emoji_banana">香蕉</string>
-    <string name="verification_emoji_apple">苹果</string>
-    <string name="verification_emoji_strawberry">草莓</string>
-    <string name="verification_emoji_corn">玉米</string>
-    <string name="verification_emoji_pizza">披萨</string>
-    <string name="verification_emoji_cake">蛋糕</string>
-    <string name="verification_emoji_heart">心</string>
-    <string name="verification_emoji_smiley">微笑</string>
-    <string name="verification_emoji_robot">机器人</string>
-    <string name="verification_emoji_hat">帽子</string>
-    <string name="verification_emoji_glasses">眼镜</string>
-    <string name="verification_emoji_wrench">扳手</string>
-    <string name="verification_emoji_santa">圣诞老人</string>
-    <string name="verification_emoji_thumbsup">点赞</string>
-    <string name="verification_emoji_umbrella">雨伞</string>
-    <string name="verification_emoji_hourglass">沙漏</string>
-    <string name="verification_emoji_clock">钟</string>
-    <string name="verification_emoji_gift">礼物</string>
-    <string name="verification_emoji_lightbulb">灯泡</string>
-    <string name="verification_emoji_book">书</string>
-    <string name="verification_emoji_pencil">铅笔</string>
-    <string name="verification_emoji_paperclip">回形针</string>
-    <string name="verification_emoji_scissors">剪刀</string>
-    <string name="verification_emoji_lock">锁</string>
-    <string name="verification_emoji_key">钥匙</string>
-    <string name="verification_emoji_hammer">锤子</string>
-    <string name="verification_emoji_telephone">电话</string>
-    <string name="verification_emoji_flag">旗子</string>
-    <string name="verification_emoji_train">火车</string>
-    <string name="verification_emoji_bicycle">自行车</string>
-    <string name="verification_emoji_airplane">飞机</string>
-    <string name="verification_emoji_rocket">火箭</string>
-    <string name="verification_emoji_trophy">奖杯</string>
-    <string name="verification_emoji_ball">球</string>
-    <string name="verification_emoji_guitar">吉他</string>
-    <string name="verification_emoji_trumpet">喇叭</string>
-    <string name="verification_emoji_bell">铃铛</string>
-    <string name="verification_emoji_anchor">锚</string>
-    <string name="verification_emoji_headphone">耳机</string>
-    <string name="verification_emoji_folder">文件夹</string>
     <string name="initial_sync_start_importing_account">初始化同步：
 \n正在导入账号…</string>
     <string name="initial_sync_start_importing_account_crypto">初始化同步：
@@ -161,7 +98,6 @@
     <string name="clear_timeline_send_queue">清除正在发送队列</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s 撤回了对 %2$s 加入聊天室的邀请</string>
-    <string name="verification_emoji_pin">置顶</string>
 
     <string name="notice_room_invite_no_invitee_with_reason">%1$s 的邀请。理由：%2$s</string>
     <string name="notice_room_invite_with_reason">%1$s 邀请了 %2$s。理由：%3$s</string>
@@ -288,9 +224,5 @@
 
     <string name="notice_end_to_end_ok_by_you">您已开启端到端加密。</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">您已开启端到端加密（无法识别的算法 %1$s）。</string>
-
-    <string name="call_notification_answer">接受</string>
-    <string name="call_notification_reject">拒绝</string>
-    <string name="call_notification_hangup">挂断</string>
 
 </resources>

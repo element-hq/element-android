@@ -108,25 +108,25 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     companion object {
 
         val INNER_CIRCLE_RADIUS_PROGRESS: Property<CircleView, Float> = object : Property<CircleView, Float>(Float::class.java, "innerCircleRadiusProgress") {
-            override operator fun get(`object`: CircleView): Float? {
-                return `object`.innerCircleRadiusProgress
+            override operator fun get(o: CircleView): Float? {
+                return o.innerCircleRadiusProgress
             }
 
-            override operator fun set(`object`: CircleView, value: Float?) {
+            override operator fun set(o: CircleView, value: Float?) {
                 value?.let {
-                    `object`.innerCircleRadiusProgress = it
+                    o.innerCircleRadiusProgress = it
                 }
             }
         }
 
         val OUTER_CIRCLE_RADIUS_PROGRESS: Property<CircleView, Float> = object : Property<CircleView, Float>(Float::class.java, "outerCircleRadiusProgress") {
-            override operator fun get(`object`: CircleView): Float? {
-                return `object`.outerCircleRadiusProgress
+            override operator fun get(o: CircleView): Float? {
+                return o.outerCircleRadiusProgress
             }
 
-            override operator fun set(`object`: CircleView, value: Float?) {
+            override operator fun set(o: CircleView, value: Float?) {
                 value?.let {
-                    `object`.outerCircleRadiusProgress = it
+                    o.outerCircleRadiusProgress = it
                 }
             }
         }

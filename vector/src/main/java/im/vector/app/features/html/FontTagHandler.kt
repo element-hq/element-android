@@ -17,6 +17,7 @@ package im.vector.app.features.html
 
 import android.graphics.Color
 import android.text.style.ForegroundColorSpan
+import android.text.style.BackgroundColorSpan
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.RenderProps
 import io.noties.markwon.html.HtmlTag
@@ -30,16 +31,26 @@ class FontTagHandler : SimpleTagHandler() {
     override fun supportedTags() = listOf("font")
 
     override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any? {
-        val colorString = tag.attributes()["color"]?.let { parseColor(it) } ?: Color.BLACK
-        return ForegroundColorSpan(colorString)
+        val mxColorString = tag.attributes()["data-mx-color"]
+        val colorString = tag.attributes()["color"]
+        val mxBgColorString = tag.attributes()["data-mx-bg-color"]
+
+        val foregroundColor = mxColorString?.let { parseColor(it, Color.BLACK) } ?: colorString?.let { parseColor(it, Color.BLACK) } ?: Color.BLACK
+
+        if (mxBgColorString != null) {
+            val backgroundColor = parseColor(mxBgColorString, Color.TRANSPARENT)
+            return arrayOf(ForegroundColorSpan(foregroundColor), BackgroundColorSpan(backgroundColor))
+        } else {
+            return ForegroundColorSpan(foregroundColor)
+        }
     }
 
-    private fun parseColor(color_name: String): Int {
+    private fun parseColor(colorName: String, failResult: Int): Int {
         try {
-            return Color.parseColor(color_name)
+            return Color.parseColor(colorName)
         } catch (e: Exception) {
             // try other w3c colors?
-            return when (color_name) {
+            return when (colorName) {
                 "white"   -> Color.WHITE
                 "yellow"  -> Color.YELLOW
                 "fuchsia" -> Color.parseColor("#FF00FF")
@@ -56,7 +67,7 @@ class FontTagHandler : SimpleTagHandler() {
                 "blue"    -> Color.BLUE
                 "orange"  -> Color.parseColor("#FFA500")
                 "navy"    -> Color.parseColor("#000080")
-                else      -> Color.BLACK
+                else      -> failResult
             }
         }
     }

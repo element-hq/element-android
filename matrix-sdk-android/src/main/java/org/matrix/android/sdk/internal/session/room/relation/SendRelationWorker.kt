@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -31,7 +32,6 @@ import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -92,7 +92,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
         executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.sendRelation(
                     roomId = roomId,
-                    parent_id = relatedEventId,
+                    parentId = relatedEventId,
                     relationType = relationType,
                     eventType = localEvent.type,
                     content = localEvent.content

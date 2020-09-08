@@ -125,7 +125,7 @@ class CallAudioManager(
             } else {
                 // if a wired headset is plugged, sound will be directed to it
                 // (can't really force earpiece when headset is plugged)
-                if (isBluetoothHeadsetOn()) {
+                if (isBluetoothHeadsetConnected(audioManager)) {
                     Timber.v("##VOIP: AudioManager default to WIRELESS_HEADSET ")
                     setCurrentSoundDevice(SoundDevice.WIRELESS_HEADSET)
                     // try now in case already connected?
@@ -246,7 +246,7 @@ class CallAudioManager(
     }
 
     private fun isHeadsetOn(): Boolean {
-        return isWiredHeadsetOn() || isBluetoothHeadsetOn()
+        return isWiredHeadsetOn() || (audioManager?.let { isBluetoothHeadsetConnected(it) } ?: false)
     }
 
     private fun isWiredHeadsetOn(): Boolean {

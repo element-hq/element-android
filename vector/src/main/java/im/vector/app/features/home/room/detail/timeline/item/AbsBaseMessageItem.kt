@@ -110,7 +110,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     override fun unbind(holder: H) {
         holder.reactionsContainer.setOnLongClickListener(null)
-        holder.readReceiptsView.unbind()
+        holder.readReceiptsView.unbind(baseAttributes.avatarRenderer)
         super.unbind(holder)
     }
 

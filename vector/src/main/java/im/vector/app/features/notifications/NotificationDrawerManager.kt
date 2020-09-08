@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import me.gujun.android.span.span
 import timber.log.Timber
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -494,7 +493,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
-                FileInputStream(file).use {
+                file.inputStream().use {
                     val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
                         return events.toMutableList()

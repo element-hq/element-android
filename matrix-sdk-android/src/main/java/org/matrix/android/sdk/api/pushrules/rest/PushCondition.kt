@@ -21,7 +21,9 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.pushrules.Condition
 import org.matrix.android.sdk.api.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.pushrules.EventMatchCondition
+import org.matrix.android.sdk.api.pushrules.Kind
 import org.matrix.android.sdk.api.pushrules.RoomMemberCountCondition
+import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
@@ -58,20 +60,20 @@ data class PushCondition(
         val iz: String? = null
 ) {
 
-    fun asExecutableCondition(): Condition? {
-        return when (Condition.Kind.fromString(kind)) {
-            Condition.Kind.EventMatch                   -> {
+    fun asExecutableCondition(rule: PushRule): Condition? {
+        return when (Kind.fromString(kind)) {
+            Kind.EventMatch                   -> {
                 if (key != null && pattern != null) {
-                    EventMatchCondition(key, pattern)
+                    EventMatchCondition(key, pattern, rule.ruleId == RuleIds.RULE_ID_CONTAIN_USER_NAME)
                 } else {
                     Timber.e("Malformed Event match condition")
                     null
                 }
             }
-            Condition.Kind.ContainsDisplayName          -> {
+            Kind.ContainsDisplayName          -> {
                 ContainsDisplayNameCondition()
             }
-            Condition.Kind.RoomMemberCount              -> {
+            Kind.RoomMemberCount              -> {
                 if (iz.isNullOrEmpty()) {
                     Timber.e("Malformed ROOM_MEMBER_COUNT condition")
                     null
@@ -79,7 +81,7 @@ data class PushCondition(
                     RoomMemberCountCondition(iz)
                 }
             }
-            Condition.Kind.SenderNotificationPermission -> {
+            Kind.SenderNotificationPermission -> {
                 if (key == null) {
                     Timber.e("Malformed Sender Notification Permission condition")
                     null
@@ -87,7 +89,7 @@ data class PushCondition(
                     SenderNotificationPermissionCondition(key)
                 }
             }
-            Condition.Kind.Unrecognised                 -> {
+            Kind.Unrecognised                 -> {
                 Timber.e("Unknown kind $kind")
                 null
             }

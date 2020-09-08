@@ -45,7 +45,7 @@ sealed class WellknownResult {
     /**
      * Inform the user that auto-discovery failed due to invalid/empty data and PROMPT for the parameter.
      */
-    object FailPrompt : WellknownResult()
+    data class FailPrompt(val homeServerUrl: String?, val wellKnown: WellKnown?) : WellknownResult()
 
     /**
      * Inform the user that auto-discovery did not return any usable URLs. Do not continue further with the current login process.

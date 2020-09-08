@@ -58,7 +58,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override suspend fun doWork(): Result {
-        Timber.v("Start dispatch sending multiple event work")
+        Timber.v("## SendEvent: Start dispatch sending multiple event work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
                         .also { Timber.e("Unable to parse work parameters") }
@@ -72,18 +72,21 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
             }
             // Transmit the error if needed?
             return Result.success(inputData)
-                    .also { Timber.e("Work cancelled due to input error from parent") }
+                    .also { Timber.e("## SendEvent: Work cancelled due to input error from parent ${params.lastFailureMessage}") }
         }
 
         // Create a work for every event
         params.events.forEach { event ->
             if (params.isEncrypted) {
-                Timber.v("Send event in encrypted room")
+                localEchoRepository.updateSendState(event.eventId ?: "", SendState.ENCRYPTING)
+                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule encrypt and send event ${event.eventId}")
                 val encryptWork = createEncryptEventWork(params.sessionId, event, true)
                 // Note that event will be replaced by the result of the previous work
                 val sendWork = createSendEventWork(params.sessionId, event, false)
                 timelineSendEventWorkCommon.postSequentialWorks(event.roomId!!, encryptWork, sendWork)
             } else {
+                localEchoRepository.updateSendState(event.eventId ?: "", SendState.SENDING)
+                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event ${event.eventId}")
                 val sendWork = createSendEventWork(params.sessionId, event, true)
                 timelineSendEventWorkCommon.postWork(event.roomId!!, sendWork)
             }
@@ -105,7 +108,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     }
 
     private fun createSendEventWork(sessionId: String, event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, event = event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)

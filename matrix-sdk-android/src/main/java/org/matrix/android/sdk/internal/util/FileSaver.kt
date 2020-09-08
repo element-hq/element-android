@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.util
 
 import androidx.annotation.WorkerThread
 import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
 
 /**
@@ -27,7 +26,7 @@ import java.io.InputStream
  */
 @WorkerThread
 fun writeToFile(inputStream: InputStream, outputFile: File) {
-    FileOutputStream(outputFile).use {
+    outputFile.outputStream().use {
         inputStream.copyTo(it)
     }
 }

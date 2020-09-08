@@ -16,6 +16,7 @@
  */
 package org.matrix.android.sdk.internal.session.sync.model
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
@@ -26,26 +27,30 @@ internal data class DeviceInfo(
         /**
          * The owner user id
          */
-        val user_id: String? = null,
+        @Json(name = "user_id")
+        val userId: String? = null,
 
         /**
          * The device id
          */
-        val device_id: String? = null,
+        @Json(name = "device_id")
+        val deviceId: String? = null,
 
         /**
          * The device display name
          */
-        val display_name: String? = null,
+        @Json(name = "display_name")
+        val displayName: String? = null,
 
         /**
          * The last time this device has been seen.
          */
-        val last_seen_ts: Long = 0,
+        @Json(name = "last_seen_ts")
+        val lastSeenTs: Long = 0,
 
         /**
          * The last ip address
          */
-        val last_seen_ip: String? = null
-
+        @Json(name = "last_seen_ip")
+        val lastSeenIp: String? = null
 )

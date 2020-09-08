@@ -102,7 +102,7 @@ internal class MXOlmDecryption(
                     String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient))
         }
 
-        val recipientKeys = olmPayloadContent.recipient_keys ?: run {
+        val recipientKeys = olmPayloadContent.recipientKeys ?: run {
             Timber.e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'recipient_keys'" +
                     " property; cannot prevent unknown-key attack")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
@@ -129,10 +129,10 @@ internal class MXOlmDecryption(
                     String.format(MXCryptoError.FORWARDED_MESSAGE_REASON, olmPayloadContent.sender))
         }
 
-        if (olmPayloadContent.room_id != event.roomId) {
-            Timber.e("## decryptEvent() : Event ${event.eventId}: original room ${olmPayloadContent.room_id} does not match reported room ${event.roomId}")
+        if (olmPayloadContent.roomId != event.roomId) {
+            Timber.e("## decryptEvent() : Event ${event.eventId}: original room ${olmPayloadContent.roomId} does not match reported room ${event.roomId}")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ROOM,
-                    String.format(MXCryptoError.BAD_ROOM_REASON, olmPayloadContent.room_id))
+                    String.format(MXCryptoError.BAD_ROOM_REASON, olmPayloadContent.roomId))
         }
 
         val keys = olmPayloadContent.keys ?: run {

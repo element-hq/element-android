@@ -10,6 +10,10 @@
     <string name="notification_sync_in_progress">正在同步……</string>
     <string name="notification_listening_for_events">聆聽事件</string>
 
+    <string name="call_notification_answer">接受</string>
+    <string name="call_notification_reject">拒絕</string>
+    <string name="call_notification_hangup">掛斷</string>
+
     <string name="title_activity_home">訊息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">設定</string>
@@ -698,7 +702,7 @@
     <string name="encryption_information_sender_device_information">發送者的工作階段訊息</string>
     <string name="encryption_information_device_name">公開名稱</string>
     <string name="encryption_information_name">公開名稱</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">工作階段 ID</string>
     <string name="encryption_information_device_key">工作階段金鑰</string>
     <string name="encryption_information_verification">驗證</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指紋</string>
@@ -1630,7 +1634,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="report_content_custom_title">回報此內容</string>
     <string name="report_content_custom_hint">回報此內容的理由</string>
     <string name="report_content_custom_submit">回報</string>
-    <string name="block_user">封鎖使用者</string>
+    <string name="block_user">忽略使用者</string>
 
     <string name="content_reported_title">內容已回報</string>
     <string name="content_reported_content">此內容已回報。
@@ -1689,7 +1693,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
 
     <string name="login_error_no_homeserver_found">這不是有效的 Matrix 伺服器位置</string>
-    <string name="message_ignore_user">封鎖使用者</string>
+    <string name="message_ignore_user">忽略使用者</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">所有訊息（吵雜）</string>
     <string name="room_list_quick_actions_notifications_all">所有訊息</string>
@@ -2516,4 +2520,31 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="auth_pin_confirm_to_disable_title">確認 PIN 碼以停用 PIN 碼</string>
     <string name="settings_call_show_confirmation_dialog_title">避免意外的通話</string>
     <string name="settings_call_show_confirmation_dialog_summary">開始通話前要求確認</string>
+    <string name="no_permissions_to_start_conf_call">您沒有在此聊天室中開始會議通話的權限</string>
+    <string name="conference_call_in_progress">會議已在進行中！</string>
+    <string name="video_meeting">開始視訊會議</string>
+    <string name="audio_meeting">開始音訊會議</string>
+    <string name="audio_video_meeting_description">會議使用 Jitsi 安全與權限策略。目前在聊天室中的所有人在您的會議開始時都會看到加入的邀請。</string>
+    <string name="cannot_call_yourself">您無法與自己通話</string>
+    <string name="cannot_call_yourself_with_invite">您無法與自己進行通話，請等候參與者接受邀請</string>
+    <string name="failed_to_add_widget">新增小工具失敗</string>
+    <string name="failed_to_remove_widget">移除小工具失敗</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="other">%1$d/%2$d 金鑰匯入成功。</item>
+    </plurals>
+
+    <string name="room_manage_integrations">管理整合</string>
+    <string name="room_no_active_widgets">無作用中的小工具</string>
+    <string name="create_room_federation_error">已建立聊天室，但因為以下理由而未傳送某些邀請：
+\n
+\n%s</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="other">%1$s, %2$s 與 %3$d 個其他人已讀取</item>
+    </plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="other">錯誤的代碼，還可以嘗試 %d 次</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
+    <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
 </resources>

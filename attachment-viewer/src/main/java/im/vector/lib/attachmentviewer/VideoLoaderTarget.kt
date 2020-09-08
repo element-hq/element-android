@@ -35,6 +35,7 @@ interface VideoLoaderTarget {
     fun onVideoFileLoading(uid: String)
     fun onVideoFileLoadFailed(uid: String)
     fun onVideoFileReady(uid: String, file: File)
+    fun onVideoURLReady(uid: String, path: String)
 }
 
 internal class DefaultVideoLoaderTarget(val holder: VideoViewHolder, private val contextView: ImageView) : VideoLoaderTarget {
@@ -47,6 +48,8 @@ internal class DefaultVideoLoaderTarget(val holder: VideoViewHolder, private val
     }
 
     override fun onThumbnailResourceCleared(uid: String, placeholder: Drawable?) {
+        if (holder.boundResourceUid != uid) return
+        holder.thumbnailImage.setImageDrawable(placeholder)
     }
 
     override fun onThumbnailResourceReady(uid: String, resource: Drawable) {
@@ -68,9 +71,19 @@ internal class DefaultVideoLoaderTarget(val holder: VideoViewHolder, private val
 
     override fun onVideoFileReady(uid: String, file: File) {
         if (holder.boundResourceUid != uid) return
+        arrangeForVideoReady()
+        holder.videoReady(file)
+    }
+
+    override fun onVideoURLReady(uid: String, path: String) {
+        if (holder.boundResourceUid != uid) return
+        arrangeForVideoReady()
+        holder.videoReady(path)
+    }
+
+    private fun arrangeForVideoReady() {
         holder.thumbnailImage.isVisible = false
         holder.loaderProgressBar.isVisible = false
         holder.videoView.isVisible = true
-        holder.videoReady(file)
     }
 }

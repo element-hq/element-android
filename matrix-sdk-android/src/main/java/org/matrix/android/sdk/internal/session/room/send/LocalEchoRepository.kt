@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.nextId
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
-import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -88,7 +87,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     fun updateSendState(eventId: String, sendState: SendState) {
-        Timber.v("Update local state of $eventId to ${sendState.name}")
+        Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
         monarchy.writeAsync { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
@@ -114,9 +113,13 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     suspend fun deleteFailedEcho(roomId: String, localEcho: TimelineEvent) {
+        deleteFailedEcho(roomId, localEcho.eventId)
+    }
+
+    suspend fun deleteFailedEcho(roomId: String, eventId: String?) {
         monarchy.awaitTransaction { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
-            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
@@ -142,45 +145,47 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
     }
 
-    fun getAllFailedEventsToResend(roomId: String): List<Event> {
+    fun getAllFailedEventsToResend(roomId: String): List<TimelineEvent> {
+        return getAllEventsWithStates(roomId, SendState.HAS_FAILED_STATES)
+    }
+
+    fun getAllEventsWithStates(roomId: String, states : List<SendState>): List<TimelineEvent> {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES)
+                    .findAllInRoomWithSendStates(realm, roomId, states)
                     .sortedByDescending { it.displayIndex }
-                    .mapNotNull { it.root?.asDomain() }
+                    .mapNotNull { it?.let { timelineEventMapper.map(it) } }
                     .filter { event ->
-                        when (event.getClearType()) {
+                        when (event.root.getClearType()) {
                             EventType.MESSAGE,
                             EventType.REDACTION,
                             EventType.REACTION -> {
-                                val content = event.getClearContent().toModel<MessageContent>()
+                                val content = event.root.getClearContent().toModel<MessageContent>()
                                 if (content != null) {
                                     when (content.msgType) {
                                         MessageType.MSGTYPE_EMOTE,
                                         MessageType.MSGTYPE_NOTICE,
                                         MessageType.MSGTYPE_LOCATION,
-                                        MessageType.MSGTYPE_TEXT  -> {
-                                            true
-                                        }
+                                        MessageType.MSGTYPE_TEXT,
                                         MessageType.MSGTYPE_FILE,
                                         MessageType.MSGTYPE_VIDEO,
                                         MessageType.MSGTYPE_IMAGE,
                                         MessageType.MSGTYPE_AUDIO -> {
                                             // need to resend the attachment
-                                            false
+                                            true
                                         }
                                         else                      -> {
-                                            Timber.e("Cannot resend message ${event.type} / ${content.msgType}")
+                                            Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
                                             false
                                         }
                                     }
                                 } else {
-                                    Timber.e("Unsupported message to resend ${event.type}")
+                                    Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                     false
                                 }
                             }
                             else               -> {
-                                Timber.e("Unsupported message to resend ${event.type}")
+                                Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                 false
                             }
                         }

@@ -45,4 +45,6 @@ object RuleIds {
 
     // Not documented
     const val RULE_ID_FALLBACK = ".m.rule.fallback"
+
+    const val RULE_ID_REACTION = ".m.rule.reaction"
 }

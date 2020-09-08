@@ -20,33 +20,28 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_settings_continue_cancel)
 abstract class SettingsContinueCancelItem : EpoxyModelWithHolder<SettingsContinueCancelItem.Holder>() {
 
     @EpoxyAttribute
-    var interactionListener: Listener? = null
+    var continueOnClick: ClickListener? = null
+
+    @EpoxyAttribute
+    var cancelOnClick: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.cancelButton.setOnClickListener {
-            interactionListener?.onCancel()
-        }
-
-        holder.continueButton.setOnClickListener {
-            interactionListener?.onContinue()
-        }
+        holder.cancelButton.onClick(cancelOnClick)
+        holder.continueButton.onClick(continueOnClick)
     }
 
     class Holder : VectorEpoxyHolder() {
         val cancelButton by bind<Button>(R.id.settings_item_cancel_button)
         val continueButton by bind<Button>(R.id.settings_item_continue_button)
-    }
-
-    interface Listener {
-        fun onContinue()
-        fun onCancel()
     }
 }

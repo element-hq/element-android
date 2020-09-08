@@ -81,15 +81,15 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.projectName", "RiotX-Android"
-        property "sonar.projectKey", "vector.android.riotx"
+        property "sonar.projectName", "Element-Android"
+        property "sonar.projectKey", "im.vector.app.android"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.links.homepage", "https://github.com/vector-im/riotX-android/"
-        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/riotx-android"
-        property "sonar.links.scm", "https://github.com/vector-im/riotX-android/"
-        property "sonar.links.issue", "https://github.com/vector-im/riotX-android/issues"
+        property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
+        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/element-android"
+        property "sonar.links.scm", "https://github.com/vector-im/element-android/"
+        property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
@@ -100,8 +100,15 @@ project(":vector") {
         properties {
             property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
             // exclude source code from analyses separated by a colon (:)
-            // property "sonar.exclusions", "**/*.*"
+            // Exclude Java source
+            property "sonar.exclusions", "**/BugReporterMultipartBody.java"
         }
+    }
+}
+
+project(":diff-match-patch") {
+    sonarqube {
+        skipProject = true
     }
 }
 

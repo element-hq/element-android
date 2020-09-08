@@ -27,19 +27,24 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.extensions.showKeyboard
 
 @EpoxyModelClass(layout = R.layout.item_settings_edit_text)
 abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.Holder>() {
 
+    @EpoxyAttribute var hint: String? = null
+    @EpoxyAttribute var value: String? = null
+    @EpoxyAttribute var requestFocus = false
     @EpoxyAttribute var descriptionText: String? = null
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute var inProgress: Boolean = false
+    @EpoxyAttribute var inputType: Int? = null
 
     @EpoxyAttribute
     var interactionListener: Listener? = null
 
-    private val textChangeListener: (text: CharSequence?, start: Int, count: Int, after: Int) -> Unit = { code, _, _, _ ->
-        code?.let { interactionListener?.onCodeChange(it.toString()) }
+    private val textChangeListener: (text: CharSequence?, start: Int, count: Int, after: Int) -> Unit = { text, _, _, _ ->
+        text?.let { interactionListener?.onTextChange(it.toString()) }
     }
 
     private val editorActionListener = object : TextView.OnEditorActionListener {
@@ -63,9 +68,17 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
         } else {
             holder.textInputLayout.error = errorText
         }
+        holder.textInputLayout.hint = hint
+        inputType?.let { holder.editText.inputType = it }
 
         holder.editText.doOnTextChanged(textChangeListener)
         holder.editText.setOnEditorActionListener(editorActionListener)
+        if (value != null) {
+            holder.editText.setText(value)
+        }
+        if (requestFocus) {
+            holder.editText.showKeyboard(andRequestFocus = true)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -76,6 +89,6 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
 
     interface Listener {
         fun onValidate()
-        fun onCodeChange(code: String)
+        fun onTextChange(text: String)
     }
 }

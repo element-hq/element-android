@@ -187,10 +187,18 @@ class MessageItemFactory @Inject constructor(
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       attributes: AbsMessageItem.Attributes): MessageFileItem? {
+        val fileUrl = messageContent.getFileUrl()?.let {
+            if (informationData.sentByMe && !informationData.sendState.isSent()) {
+                it
+            } else {
+                it.takeIf { it.startsWith("mxc://") }
+            }
+        } ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
-                .izLocalFile(messageContent.getFileUrl().isLocalFile())
-                .mxcUrl(messageContent.getFileUrl() ?: "")
+                .izLocalFile(fileUrl.isLocalFile())
+                .izDownloaded(session.fileService().isFileInCache(fileUrl, messageContent.mimeType))
+                .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)

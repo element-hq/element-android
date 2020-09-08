@@ -17,6 +17,16 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -44,16 +54,6 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.createUIHandler
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -115,6 +115,7 @@ internal class DefaultTimeline(
         if (!results.isLoaded || !results.isValid) {
             return@OrderedRealmCollectionChangeListener
         }
+        Timber.v("## SendEvent: [${System.currentTimeMillis()}] DB update for room $roomId")
         handleUpdates(results, changeSet)
     }
 
@@ -316,12 +317,15 @@ internal class DefaultTimeline(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
         if (isLive && onLocalEchoCreated.roomId == roomId) {
-            listeners.forEach {
-                it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+            // do not add events that would have been filtered
+            if (listOf(onLocalEchoCreated.timelineEvent).filterEventsWithSettings().isNotEmpty()) {
+                listeners.forEach {
+                    it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+                }
+                Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId}")
+                inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+                postSnapshot()
             }
-            Timber.v("On local echo created: $onLocalEchoCreated")
-            inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
-            postSnapshot()
         }
     }
 
@@ -777,7 +781,7 @@ internal class DefaultTimeline(
 
             val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
                 val messageContent = it.root.content.toModel<MessageContent>()
-                messageContent?.relatesTo?.type != RelationType.REPLACE
+                messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
                 true
             }
