@@ -30,6 +30,7 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -59,10 +60,14 @@ class LinkHandlerActivity : VectorBaseActivity() {
             return
         }
 
-        if (uri.getQueryParameter(CONFIG_PATH_HS_PARAMETER) != null) {
+        if (uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null) {
             handleConfigUrl(uri)
         } else if (SUPPORTED_HOSTS.contains(uri.host)) {
             handleSupportedHostUrl(uri)
+        } else {
+            // Other links are not yet handled, but should not come here (manifest configuration error?)
+            toast(R.string.universal_link_malformed)
+            finish()
         }
     }
 
@@ -90,11 +95,16 @@ class LinkHandlerActivity : VectorBaseActivity() {
         }
     }
 
+    /**
+     * Convert a URL of element web instance to a matrix.to url
+     * Examples:
+     * - https://riot.im/develop/#/room/#element-android:matrix.org ->  https://matrix.to/#/#element-android:matrix.org
+     * - https://app.element.io/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
+     */
     private fun convertUriToPermalink(uri: Uri): String? {
-        val path = SUPPORTED_PATHS.find { it in uri.toString() } ?: return null
-        // https://riot.im/develop/#/room/#element-android:matrix.org ->  https://matrix.to/#/#element-android:matrix.org
-        // https://app.element.io/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
-        return "https://$MATRIX_TO_HOST/#" + uri.toString().substringAfter(path)
+        val uriString = uri.toString()
+        val path = SUPPORTED_PATHS.find { it in uriString } ?: return null
+        return PermalinkService.MATRIX_TO_URL_BASE + uriString.substringAfter(path)
     }
 
     private fun startPermalinkHandler(permalink: String) {
@@ -155,10 +165,19 @@ class LinkHandlerActivity : VectorBaseActivity() {
     }
 
     companion object {
-        private const val CONFIG_PATH_HS_PARAMETER = "hs_url"
-
-        private val SUPPORTED_HOSTS = arrayOf("app.element.io", "riot.im", "develop.element.io", "staging.element.io")
-        private val SUPPORTED_PATHS = arrayOf("/#/room", "/#/user", "/#/group")
-        private const val MATRIX_TO_HOST = "matrix.to"
+        private val SUPPORTED_HOSTS = listOf(
+                // Regular Element Web instance
+                "app.element.io",
+                // Other known instances of Element Web
+                "develop.element.io",
+                "staging.element.io",
+                // Previous Web instance, kept for compatibility reason
+                "riot.im"
+        )
+        private val SUPPORTED_PATHS = listOf(
+                "/#/room/",
+                "/#/user/",
+                "/#/group/"
+        )
     }
 }
