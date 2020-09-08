@@ -84,6 +84,7 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
@@ -343,6 +344,28 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                     debugReceiver = DebugReceiver()
                     registerReceiver(debugReceiver, it)
                 }
+    }
+
+    private val postResumeScheduledActions = mutableListOf<() -> Unit>()
+
+    /**
+     * Schedule action to be done in the next call of onPostResume()
+     * It fixes bug observed on Android 6 (API 23)
+     */
+    protected fun doOnPostResume(action: () -> Unit) {
+        synchronized(postResumeScheduledActions) {
+            postResumeScheduledActions.add(action)
+        }
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        synchronized(postResumeScheduledActions) {
+            postResumeScheduledActions.forEach {
+                tryThis { it.invoke() }
+            }
+            postResumeScheduledActions.clear()
+        }
     }
 
     override fun onPause() {

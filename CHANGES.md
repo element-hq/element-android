@@ -26,6 +26,7 @@ Bugfix 🐛:
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
  - Support for image compression on Android 10
  - Verification popup won't show
+ - Android 6: App crash when read Contact permission is granted (#2064)
 
 Translations 🗣:
  - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
