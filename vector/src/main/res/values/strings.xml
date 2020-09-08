@@ -2560,4 +2560,7 @@
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>
+
+    <!-- Universal link -->
+    <string name="universal_link_malformed">The link was malformed</string>
 </resources>

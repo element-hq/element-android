@@ -94,9 +94,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
         val path = SUPPORTED_PATHS.find { it in uri.toString() } ?: return null
         // https://riot.im/develop/#/room/#element-android:matrix.org ->  https://matrix.to/#/#element-android:matrix.org
         // https://app.element.io/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
-        return uri
-                .toString()
-                .replace(uri.toString().substring(0, uri.toString().indexOf(path) + path.length), "https://$MATRIX_TO_HOST/#")
+        return "https://$MATRIX_TO_HOST/#" + uri.toString().substringAfter(path)
     }
 
     private fun startPermalinkHandler(permalink: String) {
@@ -105,7 +103,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { isHandled ->
                     if (!isHandled) {
-                        toast(R.string.permalink_malformed)
+                        toast(R.string.universal_link_malformed)
                     }
                     finish()
                 }
