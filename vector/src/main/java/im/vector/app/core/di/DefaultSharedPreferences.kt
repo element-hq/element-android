@@ -26,6 +26,6 @@ object DefaultSharedPreferences {
 
     fun getInstance(context: Context): SharedPreferences =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: PreferenceManager.getDefaultSharedPreferences(context).also { INSTANCE = it }
+                INSTANCE ?: PreferenceManager.getDefaultSharedPreferences(context.applicationContext).also { INSTANCE = it }
             }
 }
