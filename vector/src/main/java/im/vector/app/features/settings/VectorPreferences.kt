@@ -55,6 +55,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
         const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_FDROID_BACKGROUND_SYNC_MODE = "SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
@@ -181,6 +182,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val MEDIA_SAVING_FOREVER = 3
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
+
+        // Background sync modes
 
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
@@ -829,5 +832,54 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useFlagPinCode(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
+    }
+
+    fun backgroundSyncTimeOut(): Int {
+        return tryThis {
+            // The xml pref is saved as a string so use getString and parse
+            defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, "6")?.toInt()
+        } ?: 6
+    }
+
+    fun setBackgroundSyncTimeout(timeInSecond: Int) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeInSecond.toString())
+                .apply()
+    }
+
+    fun backgroundSyncDelay(): Int {
+        return tryThis {
+            // The xml pref is saved as a string so use getString and parse
+            defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, "60")?.toInt()
+        } ?: 60
+    }
+
+    fun setBackgroundSyncDelay(timeInSecond: Int) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, timeInSecond.toString())
+                .apply()
+    }
+
+    fun isBackgroundSyncEnabled(): Boolean {
+        return getFdroidSyncBackgroundMode() != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+    }
+
+    fun setFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, mode.name)
+                .apply()
+    }
+
+    fun getFdroidSyncBackgroundMode(): BackgroundSyncMode {
+        return try {
+            val strPref = defaultPrefs
+                    .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.name)
+            BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        } catch (e: Throwable) {
+            BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        }
     }
 }

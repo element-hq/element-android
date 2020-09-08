@@ -31,9 +31,26 @@ class VectorSyncService : SyncService() {
 
     companion object {
 
-        fun newIntent(context: Context, sessionId: String): Intent {
+        fun newOneShotIntent(context: Context, sessionId: String, timeoutSeconds: Int): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
+                it.putExtra(EXTRA_TIMEOUT_SECONDS, timeoutSeconds)
+                it.putExtra(EXTRA_PERIODIC, false)
+            }
+        }
+
+        fun newPeriodicIntent(context: Context, sessionId: String, timeoutSeconds: Int, delayInSeconds: Int): Intent {
+            return Intent(context, VectorSyncService::class.java).also {
+                it.putExtra(EXTRA_SESSION_ID, sessionId)
+                it.putExtra(EXTRA_TIMEOUT_SECONDS, timeoutSeconds)
+                it.putExtra(EXTRA_PERIODIC, true)
+                it.putExtra(EXTRA_DELAY_SECONDS, delayInSeconds)
+            }
+        }
+
+        fun stopIntent(context: Context): Intent {
+            return Intent(context, VectorSyncService::class.java).also {
+                it.action = ACTION_STOP
             }
         }
     }
@@ -55,8 +72,8 @@ class VectorSyncService : SyncService() {
         startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
-    override fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, delay: Long) {
-        reschedule(sessionId, delay)
+    override fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int) {
+        reschedule(sessionId, timeout, delay)
     }
 
     override fun onDestroy() {
@@ -69,13 +86,13 @@ class VectorSyncService : SyncService() {
         notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
-    private fun reschedule(sessionId: String, delay: Long) {
+    private fun reschedule(sessionId: String, timeout: Int, delay: Int) {
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PendingIntent.getForegroundService(this, 0, newIntent(this, sessionId), 0)
+            PendingIntent.getForegroundService(this, 0, newPeriodicIntent(this, sessionId, timeout, delay), 0)
         } else {
-            PendingIntent.getService(this, 0, newIntent(this, sessionId), 0)
+            PendingIntent.getService(this, 0, newPeriodicIntent(this, sessionId, timeout, delay), 0)
         }
-        val firstMillis = System.currentTimeMillis() + delay
+        val firstMillis = System.currentTimeMillis() + delay * 1000L
         val alarmMgr = getSystemService<AlarmManager>()!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)

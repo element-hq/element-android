@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
 
-    data class Params(var timeout: Long = 30_000L)
+    data class Params(var timeout: Long = 6_000L)
 }
 
 internal class DefaultSyncTask @Inject constructor(

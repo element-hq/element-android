@@ -146,7 +146,7 @@ class VectorApplication :
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext)
+                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }

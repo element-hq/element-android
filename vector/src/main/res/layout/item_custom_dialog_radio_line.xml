@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/colorBackground"
+    android:minHeight="50dp">
+
+    <TextView
+        android:id="@+id/item_generic_title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="2dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_radio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Item Title"
+        tools:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/item_generic_description_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="4dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_radio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
+        tools:text="At totam delectus et aliquid dolorem. Consectetur voluptas tempore et non blanditiis id optio. Dolorum impedit quidem minus nihil. "
+        tools:visibility="visible" />
+
+    <RadioButton
+        android:id="@+id/item_generic_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

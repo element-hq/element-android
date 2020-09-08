@@ -797,7 +797,7 @@
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
     <string name="settings_background_sync">Background synchronization</string>
-    <string name="settings_background_fdroid_sync_mode">Background Sync Mode (Experimental)</string>
+    <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
