@@ -1,4 +1,4 @@
-Changes in Element 1.0.6 (2020-XX-XX)
+Changes in Element 1.0.6 (2020-09-08)
 ===================================================
 
 Features ✨:
@@ -34,16 +34,13 @@ Bugfix 🐛:
 
 Translations 🗣:
  - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
-
-SDK API changes ⚠️:
- - 
+ - New translation to kabyle
 
 Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
  - Buildkite:
     New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
     New build location: https://buildkite.com/matrix-dot-org/element-android
-
 
 Other changes:
  - Use File extension functions to make code more concise (#1996)
