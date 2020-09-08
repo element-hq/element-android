@@ -562,7 +562,7 @@
     <string name="user_directory_header">Akaram n useqdac</string>
     <string name="matrix_only_filter">Inermisen kan n Matrix</string>
     <string name="no_conversation_placeholder">Ulac idiwenniyen</string>
-    <string name="no_contact_access_placeholder">Ur teǧǧiḍ ara Element ad yekcem ɣer yinermisen-ik·im idiganen</string>
+    <string name="no_contact_access_placeholder">Ur teǧǧiḍ ara SchildiChat ad yekcem ɣer yinermisen-ik·im idiganen</string>
     <string name="people_no_identity_server">Ulac aqeddac n timagit yettusiwlen.</string>
 
     <string name="no_room_placeholder">Ulac tixxamin</string>
@@ -606,7 +606,7 @@
     <string name="call_failed_no_ice_use_alt">Ɛreḍ aseqdec n %s</string>
     <string name="call_failed_dont_ask_again">Ur iyi-d-ssutur ara tikkelt-nniḍen</string>
 
-    <string name="call_failed_no_connection">Asiwel s Element ur yeddi ara</string>
+    <string name="call_failed_no_connection">Asiwel s SchildiChat ur yeddi ara</string>
     <string name="call_select_sound_device">Fren ibenk n yimesli</string>
     <string name="sound_device_speaker">Amennay</string>
     <string name="sound_device_headset">Kask</string>
@@ -1124,7 +1124,7 @@
     <string name="login_signin_to">Kcem ɣer %1$s</string>
     <string name="login_signin_sso">Kemmel s SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n Element Matrix</string>
+    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n SchildiChat Matrix</string>
     <string name="login_server_url_form_common_notice">Sekcem tansa n uqeddac i tebɣiḍ ad tesqedceḍ</string>
 
     <string name="login_login_with_email_error">Imayl-a ur iqqin ula ɣer yiwen n umiḍan.</string>
@@ -1148,7 +1148,7 @@
     <string name="login_signin_username_hint">Isem n useqdac neɣ imayl</string>
     <string name="login_signup_error_user_in_use">Isem-a n useqdac yettwamudd</string>
     <string name="login_a11y_choose_matrix_org">Fren matrix.org</string>
-    <string name="login_a11y_choose_modular">Fren imeẓla n Element Matrix</string>
+    <string name="login_a11y_choose_modular">Fren imeẓla n SchildiChat Matrix</string>
     <string name="login_a11y_choose_other">Fren aqeddac agejdan udmawan</string>
     <string name="login_terms_title">Qbel tiwtilin i wakken ad tkemmleḍ</string>
 
@@ -1200,7 +1200,7 @@
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="use_latest_app">Seqdec aferdis aneggaru ɣef yibenkan-nniḍen:</string>
     <string name="command_description_discard_session_not_handled">Yettusefrak kan deg texxamin yettwawgelhen</string>
     <string name="enter_secret_storage_passphrase_or_key">Seqdec %1$s-inek·inem neɣ seqdec %2$s-inek.inem i wakken ad tkemmleḍ.</string>
