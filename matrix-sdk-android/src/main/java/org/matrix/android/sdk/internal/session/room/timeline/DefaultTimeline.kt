@@ -17,6 +17,16 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -44,16 +54,6 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.createUIHandler
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -322,7 +322,7 @@ internal class DefaultTimeline(
                 listeners.forEach {
                     it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
                 }
-                Timber.v("On local echo created: $onLocalEchoCreated")
+                Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId}")
                 inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
                 postSnapshot()
             }
