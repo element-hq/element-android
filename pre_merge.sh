@@ -2,23 +2,13 @@
 
 set -e
 
+mydir="$(dirname "$(realpath "$0")")"
+source "$mydir/merge_helpers.sh"
+
 # Require clean git state
-uncommitted=`git status --porcelain`
-if [ ! -z "$uncommitted" ]; then
-    echo "Uncommitted changes are present, please commit first!"
-    exit 1
-fi
+require_clean_git
 
-find_last_commit_for_title() {
-    local title="$1"
-    git log --oneline --author=SpiritCroc | grep "$title" | head -n 1 | sed 's| .*||'
-}
-
-revert_last() {
-    local title="$1"
-    git revert --no-edit `find_last_commit_for_title "$title"`
-}
-
+# Oposite of restore_sc in post_merge.sh
 restore_upstream() {
     local f="$(basename "$1")"
     local path="$(dirname "$1")"
@@ -33,7 +23,9 @@ restore_upstream() {
 revert_last 'Resolve required manual intervention in german strings'
 revert_last 'Automatic SchildiChat string correction'
 
+# Keep in sync with post_merge.sh!
 restore_upstream fastlane
 restore_upstream README.md
+
 git add -A
 git commit -m "[TMP] Automatic upstream merge preparation"
