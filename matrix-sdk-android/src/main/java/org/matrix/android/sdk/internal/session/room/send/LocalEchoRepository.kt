@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.helper.nextId
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -43,12 +45,11 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                       private val realmSessionProvider: RealmSessionProvider,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
                                                        private val timelineEventMapper: TimelineEventMapper) {
@@ -59,7 +60,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
-        val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
@@ -150,7 +151,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     fun getAllEventsWithStates(roomId: String, states : List<SendState>): List<TimelineEvent> {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        return realmSessionProvider.withRealm { realm ->
             TimelineEventEntity
                     .findAllInRoomWithSendStates(realm, roomId, states)
                     .sortedByDescending { it.displayIndex }
