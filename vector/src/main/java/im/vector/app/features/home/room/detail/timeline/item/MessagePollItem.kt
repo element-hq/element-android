@@ -75,6 +75,8 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
             optionsContent?.options?.forEachIndexed { index, item ->
                 if (index < buttons.size) {
                     buttons[index].let {
+                        // current limitation, have to wait for event to be sent in order to reply
+                        it.isEnabled = informationData?.sendState?.isSent() ?: false
                         it.text = item.label
                         it.isVisible = true
                     }

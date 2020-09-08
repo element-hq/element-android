@@ -63,6 +63,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
+import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -1218,6 +1219,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
+        // Do not allow to reply to unsent local echo
+        if (LocalEcho.isLocalEchoId(action.eventId)) return
         room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
     }
 

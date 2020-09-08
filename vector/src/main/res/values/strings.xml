@@ -2067,6 +2067,10 @@
     <string name="sent_an_audio_file">Audio</string>
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
+    <string name="sent_a_poll">Poll</string>
+    <string name="sent_a_bot_buttons">Bot Buttons</string>
+    <string name="sent_a_reaction">Reacted with: %s</string>
+    <string name="sent_verification_conclusion">Verification Conclusion</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
