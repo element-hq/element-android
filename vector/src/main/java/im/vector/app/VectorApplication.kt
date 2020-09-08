@@ -93,13 +93,7 @@ class VectorApplication :
     private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyFlashScreen()
-                    .penaltyLog()
-                    .build())
-        }
+        enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
@@ -169,6 +163,15 @@ class VectorApplication :
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
+    }
+
+    private fun enableStrictModeIfNeeded() {
+        if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+        }
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
