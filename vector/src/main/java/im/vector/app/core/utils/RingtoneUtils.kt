@@ -21,7 +21,7 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.settings.VectorPreferences
 
 /**
@@ -40,7 +40,7 @@ import im.vector.app.features.settings.VectorPreferences
  * @see Ringtone
  */
 fun getCallRingtoneUri(context: Context): Uri? {
-    val callRingtone: String? = PreferenceManager.getDefaultSharedPreferences(context)
+    val callRingtone: String? = DefaultSharedPreferences.getInstance(context)
             .getString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
 
     callRingtone?.let {
@@ -94,7 +94,7 @@ fun getCallRingtoneName(context: Context): String? {
  * @see Ringtone
  */
 fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
-    PreferenceManager.getDefaultSharedPreferences(context)
+    DefaultSharedPreferences.getInstance(context)
             .edit {
                 putString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, ringtoneUri.toString())
             }
@@ -104,14 +104,14 @@ fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
  * Set using Riot default ringtone
  */
 fun useRiotDefaultRingtone(context: Context): Boolean {
-    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, true)
+    return DefaultSharedPreferences.getInstance(context).getBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, true)
 }
 
 /**
  * Ask if default Riot ringtone has to be used
  */
 fun setUseRiotDefaultRingtone(context: Context, useRiotDefault: Boolean) {
-    PreferenceManager.getDefaultSharedPreferences(context)
+    DefaultSharedPreferences.getInstance(context)
             .edit {
                 putBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
             }

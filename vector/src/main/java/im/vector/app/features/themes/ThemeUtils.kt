@@ -25,8 +25,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
@@ -73,8 +73,7 @@ object ThemeUtils {
     fun getApplicationTheme(context: Context): String {
         val currentTheme = this.currentTheme.get()
         return if (currentTheme == null) {
-            val themeFromPref = PreferenceManager
-                    .getDefaultSharedPreferences(context)
+            val themeFromPref = DefaultSharedPreferences.getInstance(context)
                     .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) ?: THEME_LIGHT_VALUE
             this.currentTheme.set(themeFromPref)
             themeFromPref

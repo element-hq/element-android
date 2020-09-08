@@ -22,10 +22,10 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryThis
@@ -227,7 +227,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         )
     }
 
-    private val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
      * Clear the preferences.
