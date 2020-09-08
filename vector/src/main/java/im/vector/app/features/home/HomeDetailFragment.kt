@@ -25,6 +25,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
+import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -38,6 +39,7 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.WebRtcPeerConnectionManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
+import im.vector.app.features.home.room.list.tabs.RoomListTabsFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
@@ -95,9 +97,6 @@ class HomeDetailFragment @Inject constructor(
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
             onGroupChange(groupSummary.orNull())
         }
-        viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
-            switchDisplayMode(displayMode)
-        }
 
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
@@ -123,6 +122,8 @@ class HomeDetailFragment @Inject constructor(
                     activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
                     invalidateOptionsMenu()
                 })
+
+        addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
     }
 
     override fun onResume() {

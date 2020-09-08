@@ -150,6 +150,8 @@
     <string name="bottom_action_rooms">Rooms</string>
     <string name="bottom_action_groups">Communities</string>
 
+    <string name="room_list_tabs_all">All</string>
+
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>
     <string name="home_filter_placeholder_favorites">Filter favourites</string>

@@ -104,6 +104,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:background="?riotx_background"

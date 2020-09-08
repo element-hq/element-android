@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.home.room.list.tabs
 
-import androidx.annotation.StringRes
-import im.vector.app.R
+import im.vector.app.core.platform.VectorViewModelAction
 
-enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
-        ALL(R.string.room_list_tabs_all),
-        NOTIFICATIONS(R.string.bottom_action_notification),
-        PEOPLE(R.string.bottom_action_people_x),
-        ROOMS(R.string.bottom_action_rooms),
-        FILTERED(/* Not used */ 0)
-    }
+sealed class RoomListTabsAction : VectorViewModelAction
