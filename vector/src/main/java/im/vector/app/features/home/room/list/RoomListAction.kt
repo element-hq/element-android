@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.room.notification.RoomNotificationStat
 
 sealed class RoomListAction : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListAction()
-    data class ToggleCategory(val category: RoomCategory) : RoomListAction()
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListAction()
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListAction()
     data class FilterWith(val filter: String) : RoomListAction()

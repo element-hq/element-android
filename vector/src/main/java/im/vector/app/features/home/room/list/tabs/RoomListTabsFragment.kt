@@ -42,7 +42,7 @@ class RoomListTabsFragment @Inject constructor(
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             val item = RoomListTabsPagerAdapter.TABS[position]
-            tab.text = getString(item.titleRes)
+            tab.text = getString(item.titleRes).toLowerCase().capitalize()
         }.attach()
     }
 

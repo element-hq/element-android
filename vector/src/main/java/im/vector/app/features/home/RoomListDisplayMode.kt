@@ -22,6 +22,9 @@ import im.vector.app.R
 enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
         ALL(R.string.room_list_tabs_all),
         NOTIFICATIONS(R.string.bottom_action_notification),
+        FAVORITES(R.string.room_recents_favourites),
+        LOW_PRIORITY(R.string.room_recents_low_priority),
+        INVITES(R.string.invitations_header),
         PEOPLE(R.string.bottom_action_people_x),
         ROOMS(R.string.bottom_action_rooms),
         FILTERED(/* Not used */ 0)

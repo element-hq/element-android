@@ -198,7 +198,7 @@
         android:background="?riotx_header_panel_border_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

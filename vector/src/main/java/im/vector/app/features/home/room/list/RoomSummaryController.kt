@@ -86,18 +86,12 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             if (summaries.isEmpty()) {
                 return@forEach
             } else {
-                val isExpanded = viewState.isCategoryExpanded(category)
-                buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
-                    listener?.onToggleRoomCategory(category)
-                }
-                if (isExpanded) {
-                    buildRoomModels(summaries,
-                            viewState.roomMembershipChanges,
-                            emptySet())
-                    // Never set showHelp to true for invitation
-                    if (category != RoomCategory.INVITE) {
-                        showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
-                    }
+                buildRoomModels(summaries,
+                        viewState.roomMembershipChanges,
+                        emptySet())
+                // Never set showHelp to true for invitation
+                if (category != RoomCategory.INVITE) {
+                    showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
                 }
             }
         }
@@ -161,7 +155,6 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     }
 
     interface Listener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
-        fun onToggleRoomCategory(roomCategory: RoomCategory)
         fun onRoomClicked(room: RoomSummary)
         fun onRoomLongClicked(room: RoomSummary): Boolean
         fun onRejectRoomInvitation(room: RoomSummary)

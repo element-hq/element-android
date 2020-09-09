@@ -30,16 +30,20 @@
 
             <TextView
                 android:id="@+id/groupToolbarTitleView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:gravity="center_vertical"
                 android:textColor="?riotx_text_primary"
-                android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="@tools:sample/lorem/random" />
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                tools:text="@tools:sample/full_names" />
 
         </LinearLayout>
 
@@ -60,10 +64,10 @@
         android:background="?riotx_keys_backup_banner_accent_color"
         android:minHeight="67dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
 
     <im.vector.app.core.ui.views.ActiveCallView
         android:id="@+id/activeCallView"
@@ -104,10 +108,10 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:background="?riotx_background"
+        android:visibility="gone"
         app:itemIconSize="20dp"
         app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
         app:labelVisibilityMode="unlabeled"

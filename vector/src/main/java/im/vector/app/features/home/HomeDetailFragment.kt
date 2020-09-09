@@ -206,6 +206,7 @@ class HomeDetailFragment @Inject constructor(
         groupSummary?.let {
             // Use GlideApp with activity context to avoid the glideRequests to be paused
             avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            groupToolbarTitleView.text = it.displayName
         }
     }
 

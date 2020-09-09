@@ -32,9 +32,12 @@ class RoomListTabsPagerAdapter(private val fragment: Fragment,
     companion object {
         val TABS = listOf(
                 RoomListDisplayMode.ALL,
+                RoomListDisplayMode.NOTIFICATIONS,
+                RoomListDisplayMode.FAVORITES,
                 RoomListDisplayMode.ROOMS,
                 RoomListDisplayMode.PEOPLE,
-                RoomListDisplayMode.NOTIFICATIONS
+                RoomListDisplayMode.INVITES,
+                RoomListDisplayMode.LOW_PRIORITY
         )
     }
 
