@@ -326,27 +326,27 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindIntegrationManager(observer: IntegrationManager): SessionLifecycleObserver
+    abstract fun bindIntegrationManager(manager: IntegrationManager): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindWidgetUrlFormatter(observer: DefaultWidgetURLFormatter): SessionLifecycleObserver
+    abstract fun bindWidgetUrlFormatter(formatter: DefaultWidgetURLFormatter): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindShieldTrustUpdated(observer: ShieldTrustUpdater): SessionLifecycleObserver
+    abstract fun bindShieldTrustUpdated(updater: ShieldTrustUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
+    abstract fun bindIdentityService(service: DefaultIdentityService): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindDatabaseCleaner(observer: DatabaseCleaner): SessionLifecycleObserver
+    abstract fun bindDatabaseCleaner(cleaner: DatabaseCleaner): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRealmSessionProvider(observer: RealmSessionProvider): SessionLifecycleObserver
+    abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService

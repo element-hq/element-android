@@ -31,7 +31,7 @@ import kotlin.concurrent.getOrSet
  * instance. This does check each time if you are on the main thread or not and returns the appropriate realm instance.
  */
 @SessionScope
-class RealmSessionProvider @Inject constructor(@SessionDatabase private val monarchy: Monarchy)
+internal class RealmSessionProvider @Inject constructor(@SessionDatabase private val monarchy: Monarchy)
     : SessionLifecycleObserver {
 
     private val realmThreadLocal = ThreadLocal<Realm>()

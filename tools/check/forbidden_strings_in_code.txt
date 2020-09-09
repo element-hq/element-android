@@ -172,3 +172,6 @@ import org.matrix.androidsdk.crypto.data===2
 
 ### Use `Context#getSystemService` extension function provided by `core-ktx`
 getSystemService\(Context
+
+### Use DefaultSharedPreferences.getInstance() instead for better performance
+PreferenceManager\.getDefaultSharedPreferences==2
