@@ -26,6 +26,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -86,17 +87,26 @@ abstract class SyncService : Service() {
                 val isInit = initialize(intent)
                 if (isInit) {
                     periodic = intent?.getBooleanExtra(EXTRA_PERIODIC, false) ?: false
-                    Timber.i("## Sync: command received, periodic: $periodic")
-                    // default is syncing
-                    doSyncIfNotAlreadyRunning()
+                    val onNetworkBack = intent?.getBooleanExtra(EXTRA_NETWORK_BACK_RESTART, false) ?: false
+                    Timber.d("## Sync: command received, periodic: $periodic  networkBack: $onNetworkBack")
+                    if (onNetworkBack && !backgroundDetectionObserver.isInBackground) {
+                        // the restart after network occurs while the app is in foreground
+                        // so just stop. It will be restarted when entering background
+                        preventReschedule = true
+                        stopMe()
+                    } else {
+                        // default is syncing
+                        doSyncIfNotAlreadyRunning()
+                    }
                 } else {
-                    Timber.i("## Sync: Failed to initialize service")
+                    Timber.d("## Sync: Failed to initialize service")
                     stopMe()
                 }
             }
         }
 
-        return START_STICKY
+        // It's ok to be not sticky because we will explicitly start it again on the next alarm?
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
@@ -107,7 +117,7 @@ abstract class SyncService : Service() {
         isRunning.set(false)
         // Cancelling the context will trigger the catch close the doSync try
         serviceScope.coroutineContext.cancelChildren()
-        if (!preventReschedule && periodic && sessionId != null) {
+        if (!preventReschedule && periodic && sessionId != null && backgroundDetectionObserver.isInBackground) {
             Timber.d("## Sync: Reschedule service in $syncDelaySeconds sec")
             onRescheduleAsked(sessionId ?: "", false, syncTimeoutSeconds, syncDelaySeconds)
         }
@@ -140,6 +150,7 @@ abstract class SyncService : Service() {
         Timber.v("## Sync: Execute sync request with timeout $syncTimeoutSeconds seconds")
         val params = SyncTask.Params(syncTimeoutSeconds * 1000L)
         try {
+            // never do that in foreground, let the syncThread work
             syncTask.execute(params)
             // Start sync if we were doing an initial sync and the syncThread is not launched yet
             if (isInitialSync && session.getSyncState() == SyncState.Idle) {
@@ -152,6 +163,12 @@ abstract class SyncService : Service() {
             if (throwable.isTokenError()) {
                 // no need to retry
                 preventReschedule = true
+            }
+            if (throwable is Failure.NetworkConnection) {
+                // Network is off, no need to reschedule endless alarms :/
+                preventReschedule = true
+                // Instead start a work to restart background sync when network is back
+                onNetworkError(sessionId ?: "", isInitialSync, syncTimeoutSeconds, syncDelaySeconds)
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
             if (isRunning.get()) stopMe()
@@ -189,6 +206,8 @@ abstract class SyncService : Service() {
 
     abstract fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
 
+    abstract fun onNetworkError(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -198,6 +217,7 @@ abstract class SyncService : Service() {
         const val EXTRA_TIMEOUT_SECONDS = "EXTRA_TIMEOUT_SECONDS"
         const val EXTRA_DELAY_SECONDS = "EXTRA_DELAY_SECONDS"
         const val EXTRA_PERIODIC = "EXTRA_PERIODIC"
+        const val EXTRA_NETWORK_BACK_RESTART = "EXTRA_NETWORK_BACK_RESTART"
 
         const val ACTION_STOP = "ACTION_STOP"
     }

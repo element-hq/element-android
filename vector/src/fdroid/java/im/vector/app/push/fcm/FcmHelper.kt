@@ -74,7 +74,7 @@ object FcmHelper {
             when (vectorPreferences.getFdroidSyncBackgroundMode()) {
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
                     // we rely on periodic worker
-                    Timber.i("## Sync: Work scheduled to periodically sync")
+                    Timber.i("## Sync: Work scheduled to periodically sync in ${vectorPreferences.backgroundSyncDelay()} sec")
                     activeSessionHolder
                             .getSafeActiveSession()
                             ?.startAutomaticBackgroundSync(
