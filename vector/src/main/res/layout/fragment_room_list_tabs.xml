@@ -8,6 +8,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         app:tabMode="scrollable"
+        app:tabBackground="?attr/riotx_background"
         style="@style/Vector.Widget.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
