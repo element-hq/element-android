@@ -22,7 +22,6 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.resources.LocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
