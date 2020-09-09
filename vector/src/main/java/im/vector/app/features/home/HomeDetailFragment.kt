@@ -18,12 +18,15 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.commitTransaction
@@ -40,6 +43,7 @@ import im.vector.app.features.call.WebRtcPeerConnectionManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.tabs.RoomListTabsFragment
+import im.vector.app.features.home.room.list.widget.FabMenuView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
@@ -66,7 +70,7 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
         private val vectorPreferences: VectorPreferences
-) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory {
+) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory, FabMenuView.Listener {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -83,7 +87,7 @@ class HomeDetailFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
-
+        setupCreateRoomButton()
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
@@ -116,6 +120,14 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
+        sharedActionViewModel.observe()
+                .subscribe {
+                    when (it) {
+                        is HomeActivitySharedAction.OnDisplayModeSelected -> renderDisplayMode(it.displayMode)
+                    }
+                }
+                .disposeOnDestroyView()
+
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
@@ -124,6 +136,55 @@ class HomeDetailFragment @Inject constructor(
                 })
 
         addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        createChatFabMenu.listener = null
+    }
+
+    private fun renderDisplayMode(displayMode: RoomListDisplayMode) {
+        when (displayMode) {
+            RoomListDisplayMode.ALL,
+            RoomListDisplayMode.NOTIFICATIONS,
+            RoomListDisplayMode.FAVORITES,
+            RoomListDisplayMode.LOW_PRIORITY,
+            RoomListDisplayMode.INVITES -> {
+                createChatFabMenu.getHideBottomViewOnScrollBehavior().slideUp(createChatFabMenu)
+                createChatFabMenu.show()
+                createChatRoomButton.isVisible = false
+                createGroupRoomButton.isVisible = false
+            }
+            RoomListDisplayMode.PEOPLE  -> {
+                createChatFabMenu.isVisible = false
+                createChatRoomButton.isVisible = true
+                createChatRoomButton.getHideBottomViewOnScrollBehavior().slideUp(createChatRoomButton)
+                createChatRoomButton.show()
+                createGroupRoomButton.isVisible = false
+            }
+            RoomListDisplayMode.ROOMS   -> {
+                createChatFabMenu.isVisible = false
+                createChatRoomButton.isVisible = false
+                createGroupRoomButton.isVisible = true
+                createGroupRoomButton.getHideBottomViewOnScrollBehavior().slideUp(createGroupRoomButton)
+                createGroupRoomButton.show()
+            }
+            else                        -> {
+                createChatFabMenu.isVisible = false
+                createChatRoomButton.isVisible = false
+                createGroupRoomButton.isVisible = false
+            }
+        }
+    }
+
+    private fun setupCreateRoomButton() {
+        createChatFabMenu.listener = this
+        createChatRoomButton.debouncedClicks {
+            createDirectChat()
+        }
+        createGroupRoomButton.debouncedClicks {
+            openRoomDirectory()
+        }
     }
 
     override fun onResume() {
@@ -344,7 +405,19 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
+    override fun openRoomDirectory(initialFilter: String) {
+        navigator.openRoomDirectory(requireActivity(), initialFilter)
+    }
+
+    override fun createDirectChat() {
+        navigator.openCreateDirectRoom(requireActivity())
+    }
+
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupStatusViewModelFactory.create(initialState)
+    }
+
+    private fun View.getHideBottomViewOnScrollBehavior(): HideBottomViewOnScrollBehavior<View> {
+        return (layoutParams as CoordinatorLayout.LayoutParams).behavior as HideBottomViewOnScrollBehavior
     }
 }

@@ -1,123 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinatorLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/groupToolbar"
-        style="@style/VectorToolbarStyle"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/groupToolbar"
+            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-            <ImageView
-                android:id="@+id/groupToolbarAvatarImageView"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:contentDescription="@string/a11y_open_drawer"
-                tools:src="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/groupToolbarTitleView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textColor="?riotx_text_primary"
-                android:textStyle="bold"
-                app:autoSizeMaxTextSize="16sp"
-                app:autoSizeMinTextSize="10sp"
-                app:autoSizeStepGranularity="1sp"
-                app:autoSizeTextType="uniform"
-                tools:text="@tools:sample/full_names" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/groupToolbarAvatarImageView"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/a11y_open_drawer"
+                    tools:src="@tools:sample/avatars" />
 
-    </androidx.appcompat.widget.Toolbar>
+                <TextView
+                    android:id="@+id/groupToolbarTitleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:textColor="?riotx_text_primary"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="@tools:sample/full_names" />
 
-    <im.vector.app.features.sync.widget.SyncStateView
-        android:id="@+id/syncStateView"
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/groupToolbar" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <im.vector.app.core.ui.views.KeysBackupBanner
-        android:id="@+id/homeKeysBackupBanner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?riotx_keys_backup_banner_accent_color"
-        android:minHeight="67dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView"
-        tools:visibility="visible" />
+        <im.vector.app.features.sync.widget.SyncStateView
+            android:id="@+id/syncStateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <im.vector.app.core.ui.views.ActiveCallView
-        android:id="@+id/activeCallView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
-        tools:visibility="visible" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/roomListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="?riotx_header_panel_background"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/activeCallPiPWrap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeCallView">
-
-        <org.webrtc.SurfaceViewRenderer
-            android:id="@+id/activeCallPiP"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+        <im.vector.app.core.ui.views.KeysBackupBanner
+            android:id="@+id/homeKeysBackupBanner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?riotx_keys_backup_banner_accent_color"
+            android:minHeight="67dp"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syncStateView"
             tools:visibility="visible" />
 
-    </androidx.cardview.widget.CardView>
+        <im.vector.app.core.ui.views.ActiveCallView
+            android:id="@+id/activeCallView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
+            tools:visibility="visible" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="?riotx_background"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/roomListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="?riotx_header_panel_background"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/activeCallPiPWrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activeCallView">
+
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/activeCallPiP"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="?riotx_background"
+            android:visibility="gone"
+            app:itemIconSize="20dp"
+            app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/home_bottom_navigation" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <im.vector.app.features.home.room.list.widget.FabMenuView
+        android:id="@+id/createChatFabMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
-        app:itemIconSize="20dp"
-        app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/home_bottom_navigation" />
+        app:layoutDescription="@xml/motion_scene_fab_menu"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        tools:showPaths="true"
+        tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createChatRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        android:accessibilityTraversalBefore="@+id/roomListView"
+        android:contentDescription="@string/a11y_create_direct_message"
+        android:scaleType="center"
+        android:src="@drawable/ic_fab_add_chat"
+        android:visibility="gone"
+        app:maxImageSize="34dp"
+        tools:layout_marginEnd="80dp"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createGroupRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        android:accessibilityTraversalBefore="@+id/roomListView"
+        android:contentDescription="@string/a11y_create_room"
+        android:src="@drawable/ic_fab_add_room"
+        android:visibility="gone"
+        app:maxImageSize="32dp"
+        tools:layout_marginEnd="144dp"
+        tools:visibility="visible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

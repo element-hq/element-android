@@ -18,11 +18,15 @@ package im.vector.app.features.home.room.list.tabs
 
 import android.os.Bundle
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.features.home.HomeActivitySharedAction
+import im.vector.app.features.home.HomeSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_room_list_tabs.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,17 +37,27 @@ class RoomListTabsFragment @Inject constructor(
 
     private val viewModel: RoomListTabsViewModel by fragmentViewModel()
     private lateinit var pagerAdapter: RoomListTabsPagerAdapter
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_room_list_tabs
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         pagerAdapter = RoomListTabsPagerAdapter(this, requireContext())
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             val item = RoomListTabsPagerAdapter.TABS[position]
             tab.text = getString(item.titleRes).toLowerCase().capitalize()
         }.attach()
+
+        val onPageChangeListener: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                val item = RoomListTabsPagerAdapter.TABS[position]
+                sharedActionViewModel.post(HomeActivitySharedAction.OnDisplayModeSelected(item))
+            }
+        }
+        viewPager.registerOnPageChangeCallback(onPageChangeListener)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
