@@ -11,7 +11,7 @@ Bugfix 🐛:
  -
 
 Translations 🗣:
- -
+ - Fix zh-rCN string's typo
 
 SDK API changes ⚠️:
  - 

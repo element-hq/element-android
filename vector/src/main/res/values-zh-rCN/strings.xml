@@ -1877,7 +1877,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 \n
 \n您想要通过网页客户端登录吗？</string>
     <string name="login_registration_disabled">抱歉，此服务器不接受新账户。</string>
-    <string name="login_registration_not_supported">应用无法再次服务器上创建账户。
+    <string name="login_registration_not_supported">应用无法在此服务器上创建账户。
 \n
 \n您想要通过网页客户端注册吗？</string>
 
