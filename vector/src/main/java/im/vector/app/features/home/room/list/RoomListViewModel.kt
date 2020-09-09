@@ -64,6 +64,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         when (action) {
             is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
             is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
+            is RoomListAction.ChangeCategoryMode          -> handleChangeCategoryMode(action)
             is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
             is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
             is RoomListAction.FilterWith                  -> handleFilter(action)
@@ -82,6 +83,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
         this.toggle(action.category)
+    }
+
+    private fun handleChangeCategoryMode(action: RoomListAction.ChangeCategoryMode) = setState {
+        this.setMode(action.category, action.newCategoryMode)
     }
 
     private fun handleFilter(action: RoomListAction.FilterWith) {

@@ -5,7 +5,7 @@
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_header_panel_background">
+    android:background="?riotx_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomListView"

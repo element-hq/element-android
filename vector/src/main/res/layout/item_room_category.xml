@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/roomCategoryRootView"
     android:layout_width="match_parent"
@@ -8,8 +9,6 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:paddingStart="8dp"
     android:paddingTop="12dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
@@ -19,8 +18,6 @@
         android:id="@+id/roomCategoryTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        tools:drawableEnd="@drawable/ic_expand_more_white"
         android:drawableTint="?riotx_text_secondary"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -28,12 +25,17 @@
         android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:drawableEnd="@drawable/ic_expand_more_white"
         tools:text="@string/room_participants_header_direct_chats" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:minWidth="16dp"
         android:minHeight="16dp"
@@ -41,7 +43,18 @@
         android:paddingEnd="4dp"
         android:textColor="@android:color/white"
         android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/roomCategoryTitleView"
+        app:layout_constraintTop_toTopOf="parent"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 
-</LinearLayout>
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/roomCategorySwitchMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

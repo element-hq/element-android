@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -32,8 +33,10 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     @EpoxyAttribute lateinit var title: CharSequence
     @EpoxyAttribute var expanded: Boolean = false
+    @EpoxyAttribute var mode: RoomListViewState.CategoryMode = RoomListViewState.CategoryMode.List
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var changeModeListener: ((RoomListViewState.CategoryMode) -> Unit)? = null
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
@@ -47,11 +50,24 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }
+
+        holder.modeSwitch.setOnCheckedChangeListener(null)
+        holder.modeSwitch.isChecked = mode == RoomListViewState.CategoryMode.Grid
+        holder.modeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            changeModeListener?.invoke(
+                    if (isChecked) {
+                        RoomListViewState.CategoryMode.Grid
+                    } else {
+                        RoomListViewState.CategoryMode.List
+                    }
+            )
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
+        val modeSwitch by bind<SwitchMaterial>(R.id.roomCategorySwitchMode)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
     }
 }
