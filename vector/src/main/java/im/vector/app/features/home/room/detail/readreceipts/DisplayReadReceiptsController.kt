@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.readreceipts
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
@@ -36,7 +37,7 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
 
     override fun buildModels(readReceipts: List<ReadReceiptData>) {
         readReceipts.forEach {
-            val timestamp = dateFormatter.formatRelativeDateTime(it.timestamp)
+            val timestamp = dateFormatter.format(it.timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
             DisplayReadReceiptItem_()
                     .id(it.userId)
                     .matrixItem(it.toMatrixItem())
