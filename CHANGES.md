@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
 
 Changes in Element 1.0.6 (2020-09-08)
 ===================================================
