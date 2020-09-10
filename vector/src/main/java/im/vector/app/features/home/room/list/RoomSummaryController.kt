@@ -97,8 +97,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 val mode = viewState.getCategoryMode(category)
                 buildRoomCategory(
                         viewState,
+                        category,
                         summaries,
-                        category.titleRes,
                         isExpanded,
                         mode,
                         { newMode ->
@@ -144,8 +144,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     }
 
     private fun buildRoomCategory(viewState: RoomListViewState,
+                                  category: RoomCategory,
                                   summaries: List<RoomSummary>,
-                                  @StringRes titleRes: Int,
                                   isExpanded: Boolean,
                                   mode: RoomListViewState.CategoryMode,
                                   changeModeListener: (RoomListViewState.CategoryMode) -> Unit,
@@ -158,11 +158,12 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
-            id(titleRes)
-            title(stringProvider.getString(titleRes))
+            id(category.titleRes)
+            title(stringProvider.getString(category.titleRes))
             expanded(isExpanded)
             unreadNotificationCount(unreadCount)
             showHighlighted(showHighlighted)
+            showSwitchMode(category != RoomCategory.INVITE)
             mode(mode)
             listener {
                 mutateExpandedState()

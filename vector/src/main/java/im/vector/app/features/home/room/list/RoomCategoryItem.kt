@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -36,6 +37,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     @EpoxyAttribute var mode: RoomListViewState.CategoryMode = RoomListViewState.CategoryMode.List
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var showSwitchMode: Boolean = true
     @EpoxyAttribute var changeModeListener: ((RoomListViewState.CategoryMode) -> Unit)? = null
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
@@ -51,16 +53,21 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }
 
-        holder.modeSwitch.setOnCheckedChangeListener(null)
-        holder.modeSwitch.isChecked = mode == RoomListViewState.CategoryMode.Grid
-        holder.modeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            changeModeListener?.invoke(
-                    if (isChecked) {
-                        RoomListViewState.CategoryMode.Grid
-                    } else {
-                        RoomListViewState.CategoryMode.List
-                    }
-            )
+        if (showSwitchMode && expanded) {
+            holder.modeSwitch.isVisible = true
+            holder.modeSwitch.setOnCheckedChangeListener(null)
+            holder.modeSwitch.isChecked = mode == RoomListViewState.CategoryMode.Grid
+            holder.modeSwitch.setOnCheckedChangeListener { _, isChecked ->
+                changeModeListener?.invoke(
+                        if (isChecked) {
+                            RoomListViewState.CategoryMode.Grid
+                        } else {
+                            RoomListViewState.CategoryMode.List
+                        }
+                )
+            }
+        } else {
+            holder.modeSwitch.isVisible = false
         }
     }
 
