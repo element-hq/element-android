@@ -1,0 +1,9 @@
+- Fix bubble size for message deletions
+- Hide deleted messages from the overview except for the "show all events" setting
+- Hide trailing newlines in messages
+- Fix italic text being cut
+- Hide dark theme setting on devices older than Q
+- Don't restart if inactive theme setting is changed
+- Merge upstream v1.0.6
+- Overview: display the year and hide the day of the week for old chats
+- Make unread-counter in the overview for non-notifications a setting
