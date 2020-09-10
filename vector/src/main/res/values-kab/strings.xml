@@ -627,7 +627,7 @@
     <string name="auth_login">Qqen</string>
     <string name="auth_user_id_placeholder">Imayl neɣ isem n useqdac</string>
     <string name="auth_user_name_placeholder">Isem n useqdac</string>
-    <string name="auth_opt_email_placeholder">Tansa n yimayl (d tafrayan)</string>
+    <string name="auth_opt_email_placeholder">Tansa imayl (d tafrayant)</string>
     <string name="auth_phone_number_placeholder">Uṭṭun n tiliɣri</string>
     <string name="auth_opt_phone_number_placeholder">Uṭṭun n tiliɣri (d afrayan)</string>
     <string name="auth_repeat_password_placeholder">Ales i wawal uffir</string>
