@@ -161,11 +161,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
      * @return the text
      */
     private fun secondsToText(seconds: Int): String {
-        return if (seconds > 1) {
-            seconds.toString() + " " + getString(R.string.settings_seconds)
-        } else {
-            seconds.toString() + " " + getString(R.string.settings_second)
-        }
+        return resources.getQuantityString(R.plurals.seconds, seconds, seconds)
     }
 
     private fun handleSystemPreference() {
