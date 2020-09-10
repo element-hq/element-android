@@ -9,15 +9,14 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingStart="8dp"
-    android:paddingTop="12dp"
-    android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="4dp">
+    android:paddingStart="8dp">
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp"
         android:drawableTint="?riotx_text_secondary"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -43,18 +42,21 @@
         android:paddingEnd="4dp"
         android:textColor="@android:color/white"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/roomCategoryTitleView"
         app:layout_constraintStart_toEndOf="@+id/roomCategoryTitleView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roomCategoryTitleView"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/roomCategorySwitchMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/roomCategoryMode"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:scaleType="center"
+        android:tint="?riotx_text_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_mode_list_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

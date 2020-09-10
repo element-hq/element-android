@@ -17,13 +17,13 @@
 package im.vector.app.features.home.room.list
 
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -55,14 +55,17 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
         if (showSwitchMode && expanded) {
             holder.modeSwitch.isVisible = true
-            holder.modeSwitch.setOnCheckedChangeListener(null)
-            holder.modeSwitch.isChecked = mode == RoomListViewState.CategoryMode.Grid
-            holder.modeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            holder.modeSwitch.setImageResource(
+                    when (mode) {
+                        RoomListViewState.CategoryMode.Grid -> R.drawable.ic_mode_grid_24dp
+                        RoomListViewState.CategoryMode.List -> R.drawable.ic_mode_list_24dp
+                    }
+            )
+            holder.modeSwitch.setOnClickListener {
                 changeModeListener?.invoke(
-                        if (isChecked) {
-                            RoomListViewState.CategoryMode.Grid
-                        } else {
-                            RoomListViewState.CategoryMode.List
+                        when (mode) {
+                            RoomListViewState.CategoryMode.Grid -> RoomListViewState.CategoryMode.List
+                            RoomListViewState.CategoryMode.List -> RoomListViewState.CategoryMode.Grid
                         }
                 )
             }
@@ -74,7 +77,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
-        val modeSwitch by bind<SwitchMaterial>(R.id.roomCategorySwitchMode)
+        val modeSwitch by bind<ImageView>(R.id.roomCategoryMode)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
     }
 }
