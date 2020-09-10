@@ -19,13 +19,22 @@ require_clean_git() {
 }
 
 upstream_latest_tag() {
-    git describe upstream/master --tags
+    git describe --abbrev=0 upstream/master --tags
 }
 upstream_previous_tag() {
-    git describe `upstream_latest_tag`~1 --tags
+    git describe --abbrev=0 `upstream_latest_tag`~1 --tags
 }
 downstream_latest_tag() {
-    git describe sc --tags
+    local commit="sc"
+    while true; do
+        local tag=`git describe --abbrev=0 "$commit" --tags`
+        if [[ "$tag" =~ "sc_" ]]; then
+            echo "$tag"
+            break
+        else
+            commit="$commit^1"
+        fi
+    done
 }
 
 upstream_diff() {
