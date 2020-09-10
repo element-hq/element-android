@@ -51,12 +51,20 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(localeProvider.current(), "EEE d MMM"))
     }
 
+    private val messageDayWithYearFormatter by lazy {
+        DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(localeProvider.current(), "d MMM YYYY"))
+    }
+
     fun formatMessageHour(localDateTime: LocalDateTime): String {
         return messageHourFormatter.format(localDateTime)
     }
 
     fun formatMessageDay(localDateTime: LocalDateTime): String {
         return messageDayFormatter.format(localDateTime)
+    }
+
+    fun formatMessageDayWithYear(localDateTime: LocalDateTime): String {
+        return messageDayWithYearFormatter.format(localDateTime)
     }
 
     /**
