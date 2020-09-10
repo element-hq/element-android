@@ -16,6 +16,7 @@
 
 package im.vector.app.core.platform
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.Fail
@@ -26,6 +27,9 @@ import im.vector.app.core.utils.DataSource
 import im.vector.app.core.utils.PublishDataSource
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
@@ -37,6 +41,27 @@ abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : V
     // Used to post transient events to the View
     protected val _viewEvents = PublishDataSource<VE>()
     val viewEvents: DataSource<VE> = _viewEvents
+    private val isStarted = AtomicBoolean(false)
+
+    /**
+     * Call this method when you are ready to grab data for your ViewModel.
+     * Mostly to be used at the end of onCreateView from fragment.
+     * It's safe to be called multiple time.
+     */
+    fun start() {
+        if (!isStarted.getAndSet(true)) {
+            Timber.v("Start viewModel ${this.javaClass.name}")
+            viewModelScope.launch {
+                onStarted()
+            }
+        }
+    }
+
+    /**
+     * This is the method where you want to start observing rx data, subscribe to state...
+     * Will be called only once. It's bound the viewModelScope and is launched on Main thread
+     */
+    protected open suspend fun onStarted() = Unit
 
     /**
      * This method does the same thing as the execute function, but it doesn't subscribe to the stream

@@ -56,6 +56,7 @@ class GroupListFragment @Inject constructor(
                 is GroupListViewEvents.OpenGroupSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
             }.exhaustive
         }
+        viewModel.start()
     }
 
     override fun onDestroyView() {

@@ -43,6 +43,7 @@ class BreadcrumbsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
+        breadcrumbsViewModel.start()
     }
 
     override fun onDestroyView() {

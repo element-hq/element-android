@@ -116,6 +116,8 @@ class RoomListFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+
+        roomListViewModel.start()
     }
 
     override fun showFailure(throwable: Throwable) {

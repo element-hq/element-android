@@ -27,9 +27,9 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
+import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
-import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.rx.rx
 
 /**
@@ -65,7 +65,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    init {
+    override suspend fun onStarted() {
         observeSyncState()
         observeSelectedGroupStore()
         observeRoomSummaries()

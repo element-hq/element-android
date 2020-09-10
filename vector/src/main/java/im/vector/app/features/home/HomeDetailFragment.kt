@@ -53,10 +53,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val INDEX_PEOPLE = 0
-private const val INDEX_ROOMS = 1
-private const val INDEX_CATCHUP = 2
-
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
@@ -123,6 +119,8 @@ class HomeDetailFragment @Inject constructor(
                     activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
                     invalidateOptionsMenu()
                 })
+
+        viewModel.start()
     }
 
     override fun onResume() {

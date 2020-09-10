@@ -49,7 +49,7 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
         }
     }
 
-    init {
+    override suspend fun onStarted() {
         observeBreadcrumbs()
     }
 

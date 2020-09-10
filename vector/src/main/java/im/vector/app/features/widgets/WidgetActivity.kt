@@ -128,6 +128,7 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
         viewModel.selectSubscribe(this, WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
+        viewModel.start()
     }
 
     override fun create(initialState: WidgetViewState): WidgetViewModel {

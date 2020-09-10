@@ -365,6 +365,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
             }.exhaustive
         }
+        roomDetailViewModel.start()
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {

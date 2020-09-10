@@ -170,7 +170,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    init {
+    override suspend fun onStarted() {
         timeline.start()
         timeline.addListener(this)
         observeRoomSummary()

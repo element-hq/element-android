@@ -55,7 +55,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     private val displayMode = initialState.displayMode
     private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
 
-    init {
+    override suspend fun onStarted() {
         observeRoomSummaries()
         observeMembershipChanges()
     }

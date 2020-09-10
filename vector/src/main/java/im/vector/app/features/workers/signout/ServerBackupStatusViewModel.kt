@@ -92,7 +92,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     private val keyBackupPublishSubject: PublishSubject<KeysBackupState> = PublishSubject.create()
 
-    init {
+    override suspend fun onStarted() {
         session.cryptoService().keysBackupService().addListener(this)
 
         keysBackupState.value = session.cryptoService().keysBackupService().state

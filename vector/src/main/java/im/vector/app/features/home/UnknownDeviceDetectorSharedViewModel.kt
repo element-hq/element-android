@@ -30,6 +30,10 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.settings.VectorPreferences
+import io.reactivex.Observable
+import io.reactivex.functions.Function3
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -39,8 +43,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -57,7 +59,7 @@ data class DeviceDetectionInfo(
 )
 
 class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
-                                                                       session: Session,
+                                                                       private val session: Session,
                                                                        private val vectorPreferences: VectorPreferences)
     : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
@@ -84,12 +86,13 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
 
     private val ignoredDeviceList = ArrayList<String>()
 
-    init {
-
-        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
-                .firstOrNull { it.deviceId == session.sessionParams.deviceId }
-                ?.firstTimeSeenLocalTs
-                ?: System.currentTimeMillis()
+    override suspend fun onStarted() {
+        val currentSessionTs = withContext(Dispatchers.Default) {
+            session.cryptoService().getCryptoDeviceInfo(session.myUserId)
+                    .firstOrNull { it.deviceId == session.sessionParams.deviceId }
+                    ?.firstTimeSeenLocalTs
+                    ?: System.currentTimeMillis()
+        }
         Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(
