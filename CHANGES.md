@@ -8,7 +8,7 @@ Improvements 🙌:
  - Handle date formatting properly (show time am/pm if needed, display year when needed)
 
 Bugfix 🐛:
- -
+ - Clear the notification when the event is read elsewhere (#1822)
 
 Translations 🗣:
  -
