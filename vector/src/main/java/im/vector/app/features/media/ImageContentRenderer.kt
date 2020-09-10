@@ -36,9 +36,9 @@ import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.isLocalFile
+import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.extensions.tryThis
 import timber.log.Timber
 import java.io.File
@@ -69,12 +69,10 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int,
+            val isLocalFile: Boolean = url.isLocalFile(),
             // If true will load non mxc url, be careful to set it only for images sent by you
             override val allowNonMxcUrls: Boolean = false
-    ) : AttachmentData {
-
-        fun isLocalFile() = url.isLocalFile()
-    }
+    ) : AttachmentData
 
     enum class Mode {
         FULL_SIZE,
@@ -268,7 +266,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     private fun resolveUrl(data: Data) =
             (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.isLocalFile() && data.allowNonMxcUrls })
+                    ?: data.url?.takeIf { data.isLocalFile && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth

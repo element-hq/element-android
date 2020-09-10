@@ -190,6 +190,8 @@ android {
 
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            // Set to true if you want to enable strict mode in debug
+            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             signingConfig signingConfigs.debug
         }
@@ -199,6 +201,7 @@ android {
 
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             postprocessing {
                 removeUnusedCode true

@@ -20,18 +20,20 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmQuery
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.AccountDataMapper
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import io.realm.Realm
-import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class AccountDataDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                         private val realmSessionProvider: RealmSessionProvider,
                                                          private val accountDataMapper: AccountDataMapper) {
 
     fun getAccountDataEvent(type: String): UserAccountDataEvent? {
@@ -45,10 +47,9 @@ internal class AccountDataDataSource @Inject constructor(@SessionDatabase privat
     }
 
     fun getAccountDataEvents(types: Set<String>): List<UserAccountDataEvent> {
-        return monarchy.fetchAllMappedSync(
-                { accountDataEventsQuery(it, types) },
-                accountDataMapper::map
-        )
+        return realmSessionProvider.withRealm {
+            accountDataEventsQuery(it, types).findAll().map(accountDataMapper::map)
+        }
     }
 
     fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>> {

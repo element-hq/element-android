@@ -19,8 +19,8 @@ package im.vector.app.features.settings
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 
 /**
  * Object to manage the Font Scale choice of the user
@@ -56,7 +56,7 @@ object FontScale {
      * @return the font scale value
      */
     fun getFontScaleValue(context: Context): FontScaleValue {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val preferences = DefaultSharedPreferences.getInstance(context)
 
         return if (APPLICATION_FONT_SCALE_KEY !in preferences) {
             val fontScale = context.resources.configuration.fontScale
@@ -81,7 +81,7 @@ object FontScale {
      * @param fontScaleValue the font scale value to store
      */
     private fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {
-        PreferenceManager.getDefaultSharedPreferences(context)
+        DefaultSharedPreferences.getInstance(context)
                 .edit { putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue) }
     }
 }

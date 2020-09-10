@@ -23,11 +23,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.preference.PreferenceManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import timber.log.Timber
 
 /**
@@ -57,7 +57,7 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     init {
         setupView()
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)
             putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, "")
         }
@@ -105,17 +105,17 @@ class KeysBackupBanner @JvmOverloads constructor(
         state.let {
             when (it) {
                 is State.Setup   -> {
-                    PreferenceManager.getDefaultSharedPreferences(context).edit {
+                    DefaultSharedPreferences.getInstance(context).edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
                 }
                 is State.Recover -> {
-                    PreferenceManager.getDefaultSharedPreferences(context).edit {
+                    DefaultSharedPreferences.getInstance(context).edit {
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
                 is State.Update  -> {
-                    PreferenceManager.getDefaultSharedPreferences(context).edit {
+                    DefaultSharedPreferences.getInstance(context).edit {
                         putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
@@ -150,7 +150,7 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     private fun renderSetup(nbOfKeys: Int) {
         if (nbOfKeys == 0
-                || PreferenceManager.getDefaultSharedPreferences(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+                || DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
             // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {
@@ -164,7 +164,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderRecover(version: String) {
-        if (version == PreferenceManager.getDefaultSharedPreferences(context).getString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, null)) {
+        if (version == DefaultSharedPreferences.getInstance(context).getString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, null)) {
             isVisible = false
         } else {
             isVisible = true
@@ -177,7 +177,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderUpdate(version: String) {
-        if (version == PreferenceManager.getDefaultSharedPreferences(context).getString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, null)) {
+        if (version == DefaultSharedPreferences.getInstance(context).getString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, null)) {
             isVisible = false
         } else {
             isVisible = true
@@ -258,7 +258,7 @@ class KeysBackupBanner @JvmOverloads constructor(
          * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version
          */
         fun onRecoverDoneForVersion(context: Context, version: String) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit {
+            DefaultSharedPreferences.getInstance(context).edit {
                 putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, version)
             }
         }
