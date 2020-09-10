@@ -39,6 +39,18 @@
             android:title="@string/bubble_style"
             app:iconSpaceReserved="false" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:dialogTitle="@string/font_size"
+            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+            android:persistent="false"
+            android:title="@string/font_size" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_HOME_OVERVIEW_KEY"
+        android:title="@string/settings_home_overview">
+
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SINGLE_OVERVIEW"
@@ -53,11 +65,11 @@
             android:summary="%s"
             android:title="@string/settings_room_unread_kind" />
 
-        <im.vector.app.core.preference.VectorPreference
-            android:dialogTitle="@string/font_size"
-            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
-            android:persistent="false"
-            android:title="@string/font_size" />
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_UNIMPORTANT_COUNTER_BADGE"
+            android:summary="@string/settings_unimportant_counter_badge_summary"
+            android:title="@string/settings_unimportant_counter_badge" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

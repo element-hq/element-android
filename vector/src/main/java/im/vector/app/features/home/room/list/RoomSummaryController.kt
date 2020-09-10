@@ -137,7 +137,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             summaries.map { it.notificationCount }.sumBy { i -> i }
         }
         // SC addition
-        val unreadMessages = if (summaries.isEmpty()) {
+        val unreadMessages = if (summaries.isEmpty() || !userPreferencesProvider.shouldShowUnimportantCounterBadge()) {
             0
         } else {
             // TODO actual sum of events instead of sum of chats?

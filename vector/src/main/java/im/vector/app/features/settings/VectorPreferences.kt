@@ -177,6 +177,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // SC additions
         private const val SETTINGS_SINGLE_OVERVIEW = "SETTINGS_SINGLE_OVERVIEW"
         private const val SETTINGS_ROOM_UNREAD_KIND = "SETTINGS_ROOM_UNREAD_KIND"
+        private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -842,6 +843,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         } catch (e: Exception) {
             RoomSummary.UNREAD_KIND_CONTENT
         }
+    }
+
+    // SC addition
+    fun shouldShowUnimportantCounterBadge(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_UNIMPORTANT_COUNTER_BADGE, true)
     }
 
     /**

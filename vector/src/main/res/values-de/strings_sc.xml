@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="settings_home_overview">Übersicht</string>
+
     <string name="settings_single_overview">Vereinte Chat-Übersicht</string>
     <string name="settings_single_overview_summary">Zeige sowohl Direktnachrichten als auch Gruppenchats in einer gemeinsamen Übersicht</string>
 
@@ -21,6 +23,9 @@
     <string name="bubble_style_none">Keine</string>
     <string name="bubble_style_start">Selbe Seite</string>
     <string name="bubble_style_both">Beide Seiten</string>
+
+    <string name="settings_unimportant_counter_badge">Zähle unwichtige Chat-Ereignisse</string>
+    <string name="settings_unimportant_counter_badge_summary">Betrachte auch Chats ohne Benachrichtigung beim Zählen der ungelesenen Nachrichten pro Kategorie</string>
 
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Übersicht</string>

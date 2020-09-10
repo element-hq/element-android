@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="settings_home_overview">Overview</string>
+
     <string name="settings_single_overview">Combined chat overview</string>
     <string name="settings_single_overview_summary">View both direct messages and rooms on one page</string>
 
@@ -21,6 +23,9 @@
     <string name="bubble_style_none">None</string>
     <string name="bubble_style_start">Same side</string>
     <string name="bubble_style_both">Both sides</string>
+
+    <string name="settings_unimportant_counter_badge">Count unimportant chat events</string>
+    <string name="settings_unimportant_counter_badge_summary">Include chats without notifications in the category unread counter</string>
 
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Overview</string>
