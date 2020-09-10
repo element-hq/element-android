@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Clear the notification when the event is read elsewhere (#1822)
 
 Translations 🗣:
  -
