@@ -65,12 +65,12 @@ abstract class RoomGridItem : VectorEpoxyModel<RoomGridItem.Holder>() {
     }
 
     class Holder : VectorEpoxyHolder() {
-        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.breadcrumbsUnreadCounterBadgeView)
-        val unreadIndentIndicator by bind<View>(R.id.breadcrumbsUnreadIndicator)
-        val draftIndentIndicator by bind<View>(R.id.breadcrumbsDraftBadge)
-        val typingIndicator by bind<View>(R.id.breadcrumbsTypingView)
-        val avatarImageView by bind<ImageView>(R.id.breadcrumbsImageView)
-        val roomName by bind<TextView>(R.id.breadcrumbsRoomName)
-        val rootView by bind<ViewGroup>(R.id.breadcrumbsRoot)
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.itemRoomGridUnreadCounterBadgeView)
+        val unreadIndentIndicator by bind<View>(R.id.itemRoomGridUnreadIndicator)
+        val draftIndentIndicator by bind<View>(R.id.itemRoomGridDraftBadge)
+        val typingIndicator by bind<View>(R.id.itemRoomGridTypingView)
+        val avatarImageView by bind<ImageView>(R.id.itemRoomGridImageView)
+        val roomName by bind<TextView>(R.id.itemRoomGridRoomName)
+        val rootView by bind<ViewGroup>(R.id.itemRoomGridRoot)
     }
 }

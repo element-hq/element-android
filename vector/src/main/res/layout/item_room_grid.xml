@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/breadcrumbsRoot"
+    android:id="@+id/itemRoomGridRoot"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?riotx_background"
@@ -11,20 +11,20 @@
     android:foreground="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/breadcrumbsUnreadIndicator"
+        android:id="@+id/itemRoomGridUnreadIndicator"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/circle"
         android:tint="?attr/colorAccent"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/breadcrumbsImageView"
-        app:layout_constraintEnd_toEndOf="@+id/breadcrumbsImageView"
-        app:layout_constraintStart_toStartOf="@+id/breadcrumbsImageView"
-        app:layout_constraintTop_toTopOf="@+id/breadcrumbsImageView"
+        app:layout_constraintBottom_toBottomOf="@+id/itemRoomGridImageView"
+        app:layout_constraintEnd_toEndOf="@+id/itemRoomGridImageView"
+        app:layout_constraintStart_toStartOf="@+id/itemRoomGridImageView"
+        app:layout_constraintTop_toTopOf="@+id/itemRoomGridImageView"
         tools:visibility="visible" />
 
     <ImageView
-        android:id="@+id/breadcrumbsImageView"
+        android:id="@+id/itemRoomGridImageView"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="12dp"
@@ -37,7 +37,7 @@
         tools:src="@tools:sample/avatars" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
-        android:id="@+id/breadcrumbsUnreadCounterBadgeView"
+        android:id="@+id/itemRoomGridUnreadCounterBadgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -46,7 +46,7 @@
         android:textColor="@android:color/white"
         android:textSize="11sp"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@+id/itemRoomGridImageView"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="28dp"
         tools:background="@drawable/bg_unread_highlight"
@@ -55,7 +55,7 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/breadcrumbsTypingView"
+        android:id="@+id/itemRoomGridTypingView"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/bg_breadcrumbs_typing"
@@ -65,29 +65,28 @@
         android:textSize="11sp"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@+id/itemRoomGridImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
     <ImageView
-        android:id="@+id/breadcrumbsDraftBadge"
+        android:id="@+id/itemRoomGridDraftBadge"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/circle"
         android:padding="3dp"
         android:src="@drawable/ic_edit"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@+id/itemRoomGridImageView"
         app:layout_constraintCircleAngle="225"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
-    <!-- TODO Rename all the ids -->
     <TextView
-        android:id="@+id/breadcrumbsRoomName"
+        android:id="@+id/itemRoomGridRoomName"
         android:layout_width="76dp"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -98,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/breadcrumbsImageView"
+        app:layout_constraintTop_toBottomOf="@+id/itemRoomGridImageView"
         tools:text="@sample/matrix.json/data/roomName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
