@@ -62,15 +62,6 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_troubleshoot_title">
-
-        <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
-            android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
-
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         android:title="@string/settings_background_sync"
@@ -98,6 +89,15 @@
             android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
             android:title="@string/settings_start_on_boot" />
 
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_troubleshoot_title">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:title="@string/settings_notification_troubleshoot"
+            app:fragment="im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
