@@ -37,7 +37,8 @@ fun Session.configureAndStart(context: Context) {
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
     if (!hasAlreadySynced()) {
-        VectorSyncService.newIntent(applicationContext, sessionId).also {
+        // initial sync is done as a service so it can continue below app lifecycle
+        VectorSyncService.newOneShotIntent(applicationContext, sessionId, 0).also {
             try {
                 ContextCompat.startForegroundService(applicationContext, it)
             } catch (ex: Throwable) {

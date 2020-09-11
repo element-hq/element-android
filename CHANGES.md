@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Handle date formatting properly (show time am/pm if needed, display year when needed)
+ - Improve F-Droid Notification (#2055)
 
 Bugfix 🐛:
  - Clear the notification when the event is read elsewhere (#1822)

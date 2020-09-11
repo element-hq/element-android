@@ -102,7 +102,7 @@ object FcmHelper {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onEnterForeground(context: Context) {
+    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         // No op
     }
 
