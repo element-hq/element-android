@@ -16,10 +16,8 @@
 
 package im.vector.app.features.call
 
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -27,9 +25,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
@@ -40,48 +36,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.webrtc.PeerConnection
 import java.util.Timer
 import java.util.TimerTask
-
-data class VectorCallViewState(
-        val callId: String? = null,
-        val roomId: String = "",
-        val isVideoCall: Boolean,
-        val isAudioMuted: Boolean = false,
-        val isVideoEnabled: Boolean = true,
-        val isVideoCaptureInError: Boolean = false,
-        val isHD: Boolean = false,
-        val isFrontCamera: Boolean = true,
-        val canSwitchCamera: Boolean = true,
-        val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
-        val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
-        val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
-        val callState: Async<CallState> = Uninitialized
-) : MvRxState
-
-sealed class VectorCallViewActions : VectorViewModelAction {
-    object EndCall : VectorCallViewActions()
-    object AcceptCall : VectorCallViewActions()
-    object DeclineCall : VectorCallViewActions()
-    object ToggleMute : VectorCallViewActions()
-    object ToggleVideo : VectorCallViewActions()
-    data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
-    object SwitchSoundDevice : VectorCallViewActions()
-    object HeadSetButtonPressed : VectorCallViewActions()
-    object ToggleCamera : VectorCallViewActions()
-    object ToggleHDSD : VectorCallViewActions()
-}
-
-sealed class VectorCallViewEvents : VectorViewEvents {
-
-    object DismissNoCall : VectorCallViewEvents()
-    data class ConnectionTimeout(val turn: TurnServerResponse?) : VectorCallViewEvents()
-    data class ShowSoundDeviceChooser(
-            val available: List<CallAudioManager.SoundDevice>,
-            val current: CallAudioManager.SoundDevice
-    ) : VectorCallViewEvents()
-//    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
-//    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
-//    object CallAccepted : VectorCallViewEvents()
-}
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
