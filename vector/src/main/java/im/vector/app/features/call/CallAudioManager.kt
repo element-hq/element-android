@@ -24,6 +24,7 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -116,10 +117,19 @@ class CallAudioManager(
         // Always disable microphone mute during a WebRTC call.
         setMicrophoneMute(false)
 
+        adjustCurrentSoundDevice(mxCall)
+    }
+
+    private fun adjustCurrentSoundDevice(mxCall: MxCall) {
+        val audioManager = audioManager ?: return
         executor.execute {
-            // If there are no headset, start video output in speaker
-            // (you can't watch the video and have the phone close to your ear)
-            if (mxCall.isVideoCall && !isHeadsetOn()) {
+            if (mxCall.state == CallState.LocalRinging && !isHeadsetOn()) {
+                // Always use speaker if incoming call is in ringing state and a headset is not connected
+                Timber.v("##VOIP: AudioManager default to SPEAKER (it is ringing)")
+                setCurrentSoundDevice(SoundDevice.SPEAKER)
+            } else if (mxCall.isVideoCall && !isHeadsetOn()) {
+                // If there are no headset, start video output in speaker
+                // (you can't watch the video and have the phone close to your ear)
                 Timber.v("##VOIP: AudioManager default to speaker ")
                 setCurrentSoundDevice(SoundDevice.SPEAKER)
             } else {
@@ -136,6 +146,11 @@ class CallAudioManager(
                 }
             }
         }
+    }
+
+    fun onCallConnected(mxCall: MxCall) {
+        Timber.v("##VOIP: AudioManager call answered, adjusting current sound device")
+        adjustCurrentSoundDevice(mxCall)
     }
 
     fun getAvailableSoundDevices(): List<SoundDevice> {

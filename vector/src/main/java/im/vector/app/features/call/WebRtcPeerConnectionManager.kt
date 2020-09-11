@@ -858,6 +858,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  */
                 PeerConnection.PeerConnectionState.CONNECTED    -> {
                     callContext.mxCall.state = CallState.Connected(newState)
+                    audioManager.onCallConnected(callContext.mxCall)
                 }
                 /**
                  * One or more of the ICE transports on the connection is in the "failed" state.
