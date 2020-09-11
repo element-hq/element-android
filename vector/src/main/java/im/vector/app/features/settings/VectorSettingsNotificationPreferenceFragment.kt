@@ -76,7 +76,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 val initialMode = vectorPreferences.getFdroidSyncBackgroundMode()
                 val dialogFragment = BackgroundSyncModeChooserDialog.newInstance(initialMode)
                 dialogFragment.interactionListener = this
-                activity?.supportFragmentManager?.let {fm ->
+                activity?.supportFragmentManager?.let { fm ->
                     dialogFragment.show(fm, "syncDialog")
                 }
                 true
