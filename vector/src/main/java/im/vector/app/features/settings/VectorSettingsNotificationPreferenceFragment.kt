@@ -88,7 +88,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncTimeout =  tryThis { Integer.parseInt(newValue) } ?: 6
+                    val syncTimeout = tryThis { Integer.parseInt(newValue) } ?: 6
                     vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
                     refreshBackgroundSyncPrefs()
                 }
@@ -101,7 +101,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncDelay =  tryThis { Integer.parseInt(newValue) } ?: 6
+                    val syncDelay = tryThis { Integer.parseInt(newValue) } ?: 6
                     vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
                     refreshBackgroundSyncPrefs()
                 }
@@ -243,6 +243,16 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             interactionListener?.requestHighlightPreferenceKeyOnResume(null)
             val preference = findPreference<VectorSwitchPreference>(key)
             preference?.isHighlighted = true
+        }
+
+        refreshPref()
+    }
+
+    private fun refreshPref() {
+        // This pref may have change from troubleshoot pref fragment
+        if (!FcmHelper.isPushSupported()) {
+            findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
+                    ?.isChecked = vectorPreferences.autoStartOnBoot()
         }
     }
 
