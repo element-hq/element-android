@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings_home_overview">Обзор</string>
+
+    <string name="settings_single_overview">Комбинированный обзор чатов</string>
+    <string name="settings_single_overview_summary">Просмотр личных сообщений и комнат на одной странице</string>
+
+    <string name="settings_room_unread_kind">Предварительный просмотр содержимого чата</string>
+    <string name="settings_room_unread_kind_default">Показать все события</string>
+    <string name="settings_room_unread_kind_content">Скрыть изменения участников</string>
+    <string name="settings_room_unread_kind_original_content">Скрыть изменения и реакции участников</string>
+
+    <string name="settings_light_theme">Светлая тема</string>
+    <string name="settings_dark_theme">Тёмная тема</string>
+    <string name="sc_light_theme">SC светлая</string>
+    <string name="sc_theme">SC чёрная</string>
+    <string name="sc_dark_theme">SC тёмная</string>
+    <string name="sc_colored_theme">SC чёрная, цветные пузыри</string>
+    <string name="sc_dark_colored_theme">SC тёмная, цветные пузыри</string>
+
+    <string name="bubble_style">Пузыри сообщений</string>
+    <string name="bubble_style_none">Нет</string>
+    <string name="bubble_style_start">На той же стороне</string>
+    <string name="bubble_style_both">С обеих сторон</string>
+
+    <string name="settings_unimportant_counter_badge">Счётчик неважных событий чата</string>
+    <string name="settings_unimportant_counter_badge_summary">Отобразить чаты без уведомлений в счётчике непрочитанных сообщений</string>
+
+    <string name="login_mobile_device_sc">SchildiChat Android</string>
+    <string name="bottom_action_all">Обзор</string>
+    <string name="all_list_rooms_empty_title">SchildiChat</string>
+    <string name="all_list_rooms_empty_body">Здесь будут отображаться чаты</string>
+
+    <!-- Login screen -->
+    <string name="login_a11y_connect_using_matrix_id_sc">@string/login_connect_using_matrix_id_submit</string>
+    <string name="login_connect_using_matrix_id_title_sc">@string/login_connect_using_matrix_id_submit</string>
+    <string name="login_connect_using_matrix_id_text_sc">например @user:domain.com</string>
+    <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
+    <string name="login_server_other_title_sc">Пользовательский сервер</string>
+    <string name="login_server_other_text_sc">Введите адрес сервера для входа или регистрации</string>
+
+    <string name="show_room_info_sc">Подробности комнаты</string>
+    <string name="show_participants_sc">Участники</string>
+
+</resources>
