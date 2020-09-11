@@ -146,7 +146,7 @@ class VectorCallViewModel @AssistedInject constructor(
         }
 
         override fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {
-            val currentSoundDevice = mgr.audioManager.getCurrentSoundDevice()
+            val currentSoundDevice = mgr.callAudioManager.getCurrentSoundDevice()
             if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
                 proximityManager.start()
             } else {
@@ -155,7 +155,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        availableSoundDevices = mgr.audioManager.getAvailableSoundDevices(),
+                        availableSoundDevices = mgr.callAudioManager.getAvailableSoundDevices(),
                         soundDevice = currentSoundDevice
                 )
             }
@@ -182,7 +182,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
                 mxCall.addListener(callStateListener)
 
-                val currentSoundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                val currentSoundDevice = webRtcPeerConnectionManager.callAudioManager.getCurrentSoundDevice()
                 if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
                     proximityManager.start()
                 }
@@ -193,7 +193,7 @@ class VectorCallViewModel @AssistedInject constructor(
                             callState = Success(mxCall.state),
                             otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
                             soundDevice = currentSoundDevice,
-                            availableSoundDevices = webRtcPeerConnectionManager.audioManager.getAvailableSoundDevices(),
+                            availableSoundDevices = webRtcPeerConnectionManager.callAudioManager.getAvailableSoundDevices(),
                             isFrontCamera = webRtcPeerConnectionManager.currentCameraType() == CameraType.FRONT,
                             canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera(),
                             isHD = mxCall.isVideoCall && webRtcPeerConnectionManager.currentCaptureFormat() is CaptureFormat.HD
@@ -250,10 +250,10 @@ class VectorCallViewModel @AssistedInject constructor(
                 Unit
             }
             is VectorCallViewActions.ChangeAudioDevice -> {
-                webRtcPeerConnectionManager.audioManager.setCurrentSoundDevice(action.device)
+                webRtcPeerConnectionManager.callAudioManager.setCurrentSoundDevice(action.device)
                 setState {
                     copy(
-                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                            soundDevice = webRtcPeerConnectionManager.callAudioManager.getCurrentSoundDevice()
                     )
                 }
             }
