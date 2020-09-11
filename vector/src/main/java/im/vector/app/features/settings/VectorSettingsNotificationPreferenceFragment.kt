@@ -47,7 +47,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         private val pushManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+) : VectorSettingsBaseFragment(),
+        BackgroundSyncModeChooserDialog.InteractionListener {
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -73,28 +74,10 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val initialMode = vectorPreferences.getFdroidSyncBackgroundMode()
-                val dialogFragment = BackgroundSyncModeChooserDialog.newInstance(
-                        initialMode,
-                        object : BackgroundSyncModeChooserDialog.InteractionListener {
-                            override fun onOptionSelected(mode: BackgroundSyncMode) {
-                                // option has change, need to act
-                                if (mode == BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME) {
-                                    // Important, Battery optim white listing is needed in this mode;
-                                    // Even if using foreground service with foreground notif, it stops to work
-                                    // in doze mode for certain devices :/
-                                    if (!isIgnoringBatteryOptimizations(requireContext())) {
-                                        requestDisablingBatteryOptimization(requireActivity(),
-                                                this@VectorSettingsNotificationPreferenceFragment,
-                                                REQUEST_BATTERY_OPTIMIZATION)
-                                    }
-                                }
-                                vectorPreferences.setFdroidSyncBackgroundMode(mode)
-                                refreshBackgroundSyncPrefs()
-                            }
-                        }
-                )
-                activity?.supportFragmentManager?.let {
-                    dialogFragment.show(it, "syncDialog")
+                val dialogFragment = BackgroundSyncModeChooserDialog.newInstance(initialMode)
+                dialogFragment.interactionListener = this
+                activity?.supportFragmentManager?.let {fm ->
+                    dialogFragment.show(fm, "syncDialog")
                 }
                 true
             }
@@ -129,6 +112,23 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
+    }
+
+    // BackgroundSyncModeChooserDialog.InteractionListener
+    override fun onOptionSelected(mode: BackgroundSyncMode) {
+        // option has change, need to act
+        if (mode == BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME) {
+            // Important, Battery optim white listing is needed in this mode;
+            // Even if using foreground service with foreground notif, it stops to work
+            // in doze mode for certain devices :/
+            if (!isIgnoringBatteryOptimizations(requireContext())) {
+                requestDisablingBatteryOptimization(requireActivity(),
+                        this@VectorSettingsNotificationPreferenceFragment,
+                        REQUEST_BATTERY_OPTIMIZATION)
+            }
+        }
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        refreshBackgroundSyncPrefs()
     }
 
     private fun refreshBackgroundSyncPrefs() {
@@ -251,6 +251,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         if (context is VectorSettingsFragmentInteractionListener) {
             interactionListener = context
         }
+        (activity?.supportFragmentManager
+                ?.findFragmentByTag("syncDialog") as BackgroundSyncModeChooserDialog?)
+                ?.interactionListener = this
     }
 
     override fun onDetach() {

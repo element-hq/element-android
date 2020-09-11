@@ -25,7 +25,7 @@ import im.vector.app.R
 
 class BackgroundSyncModeChooserDialog : DialogFragment() {
 
-    private var interactionListener: InteractionListener? = null
+    var interactionListener: InteractionListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val initialMode = BackgroundSyncMode.fromString(arguments?.getString(ARG_INITIAL_MODE))
@@ -65,9 +65,8 @@ class BackgroundSyncModeChooserDialog : DialogFragment() {
     companion object {
         private const val ARG_INITIAL_MODE = "ARG_INITIAL_MODE"
 
-        fun newInstance(selectedMode: BackgroundSyncMode, interactionListener: InteractionListener): BackgroundSyncModeChooserDialog {
+        fun newInstance(selectedMode: BackgroundSyncMode): BackgroundSyncModeChooserDialog {
             val frag = BackgroundSyncModeChooserDialog()
-            frag.interactionListener = interactionListener
             val args = Bundle()
             args.putString(ARG_INITIAL_MODE, selectedMode.name)
             frag.arguments = args
