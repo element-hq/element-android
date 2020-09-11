@@ -91,23 +91,23 @@ class VectorCallViewModel @AssistedInject constructor(
         val proximityManager: CallProximityManager
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
-    var call: MxCall? = null
+    private var call: MxCall? = null
 
-    var connectionTimoutTimer: Timer? = null
-    var hasBeenConnectedOnce = false
+    private var connectionTimeoutTimer: Timer? = null
+    private var hasBeenConnectedOnce = false
 
     private val callStateListener = object : MxCall.StateListener {
         override fun onStateUpdate(call: MxCall) {
             val callState = call.state
             if (callState is CallState.Connected && callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
                 hasBeenConnectedOnce = true
-                connectionTimoutTimer?.cancel()
-                connectionTimoutTimer = null
+                connectionTimeoutTimer?.cancel()
+                connectionTimeoutTimer = null
             } else {
                 // do we reset as long as it's moving?
-                connectionTimoutTimer?.cancel()
+                connectionTimeoutTimer?.cancel()
                 if (hasBeenConnectedOnce) {
-                    connectionTimoutTimer = Timer().apply {
+                    connectionTimeoutTimer = Timer().apply {
                         schedule(object : TimerTask() {
                             override fun run() {
                                 session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
