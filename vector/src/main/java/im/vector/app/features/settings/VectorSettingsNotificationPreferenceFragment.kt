@@ -88,7 +88,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncTimeout = tryThis { Integer.parseInt(newValue) } ?: 6
+                    val syncTimeout = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
                     vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
                     refreshBackgroundSyncPrefs()
                 }
@@ -101,7 +101,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncDelay = tryThis { Integer.parseInt(newValue) } ?: 6
+                    val syncDelay = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
                     vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
                     refreshBackgroundSyncPrefs()
                 }

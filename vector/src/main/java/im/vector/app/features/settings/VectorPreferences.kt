@@ -837,8 +837,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun backgroundSyncTimeOut(): Int {
         return tryThis {
             // The xml pref is saved as a string so use getString and parse
-            defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, "6")?.toInt()
-        } ?: 6
+            defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, null)?.toInt()
+        } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
     }
 
     fun setBackgroundSyncTimeout(timeInSecond: Int) {
@@ -851,8 +851,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun backgroundSyncDelay(): Int {
         return tryThis {
             // The xml pref is saved as a string so use getString and parse
-            defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, "60")?.toInt()
-        } ?: 60
+            defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, null)?.toInt()
+        } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
     }
 
     fun setBackgroundSyncDelay(timeInSecond: Int) {
