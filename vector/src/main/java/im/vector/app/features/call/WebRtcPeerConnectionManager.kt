@@ -79,9 +79,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
-        fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {}
-        fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
-        fun onCameraChange(mgr: WebRtcPeerConnectionManager) {}
+        fun onCaptureStateChanged() {}
+        fun onAudioDevicesChange() {}
+        fun onCameraChange() {}
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -95,7 +95,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     val callAudioManager = CallAudioManager(context.applicationContext) {
         currentCallsListeners.forEach {
-            tryThis { it.onAudioDevicesChange(this) }
+            tryThis { it.onAudioDevicesChange() }
         }
     }
 
@@ -174,7 +174,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCaptureStateChanged(this) }
+                tryThis { it.onCaptureStateChanged() }
             }
         }
 
@@ -741,7 +741,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
                     cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
                     currentCallsListeners.forEach {
-                        tryThis { it.onCameraChange(this@WebRtcPeerConnectionManager) }
+                        tryThis { it.onCameraChange() }
                     }
                 }
 
@@ -767,7 +767,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             // videoCapturer?.stopCapture()
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureMode = format
-            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged(this) } }
+            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged() } }
         }
     }
 

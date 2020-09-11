@@ -90,17 +90,17 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onCurrentCallChange(call: MxCall?) {
         }
 
-        override fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {
+        override fun onCaptureStateChanged() {
             setState {
                 copy(
-                        isVideoCaptureInError = mgr.capturerIsInError,
-                        isHD = mgr.currentCaptureFormat() is CaptureFormat.HD
+                        isVideoCaptureInError = webRtcPeerConnectionManager.capturerIsInError,
+                        isHD = webRtcPeerConnectionManager.currentCaptureFormat() is CaptureFormat.HD
                 )
             }
         }
 
-        override fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {
-            val currentSoundDevice = mgr.callAudioManager.getCurrentSoundDevice()
+        override fun onAudioDevicesChange() {
+            val currentSoundDevice = webRtcPeerConnectionManager.callAudioManager.getCurrentSoundDevice()
             if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
                 proximityManager.start()
             } else {
@@ -109,17 +109,17 @@ class VectorCallViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        availableSoundDevices = mgr.callAudioManager.getAvailableSoundDevices(),
+                        availableSoundDevices = webRtcPeerConnectionManager.callAudioManager.getAvailableSoundDevices(),
                         soundDevice = currentSoundDevice
                 )
             }
         }
 
-        override fun onCameraChange(mgr: WebRtcPeerConnectionManager) {
+        override fun onCameraChange() {
             setState {
                 copy(
-                        canSwitchCamera = mgr.canSwitchCamera(),
-                        isFrontCamera = mgr.currentCameraType() == CameraType.FRONT
+                        canSwitchCamera = webRtcPeerConnectionManager.canSwitchCamera(),
+                        isFrontCamera = webRtcPeerConnectionManager.currentCameraType() == CameraType.FRONT
                 )
             }
         }
