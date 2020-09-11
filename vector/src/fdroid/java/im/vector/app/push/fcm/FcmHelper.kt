@@ -22,10 +22,9 @@ import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.fdroid.BackgroundSyncStarter
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
-import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
-import timber.log.Timber
 
 /**
  * This class has an alter ego in the gplay variant.
@@ -69,28 +68,6 @@ object FcmHelper {
     }
 
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        // We need to use alarm in this mode
-        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
-                    // we rely on periodic worker
-                    Timber.i("## Sync: Work scheduled to periodically sync in ${vectorPreferences.backgroundSyncDelay()} sec")
-                    activeSessionHolder
-                            .getSafeActiveSession()
-                            ?.startAutomaticBackgroundSync(
-                                    vectorPreferences.backgroundSyncTimeOut().toLong(),
-                                    vectorPreferences.backgroundSyncDelay().toLong()
-                            )
-                }
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> {
-                    val currentSession = activeSessionHolder.getActiveSession()
-                    AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.sessionId, vectorPreferences.backgroundSyncDelay())
-                    Timber.i("## Sync: Alarm scheduled to start syncing")
-                }
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {
-                    // we do nothing
-                }
-            }
-        }
+        BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder)
     }
 }

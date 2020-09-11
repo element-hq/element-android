@@ -22,7 +22,7 @@ import android.content.Context
 import android.content.Intent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.app.features.settings.BackgroundSyncMode
+import im.vector.app.fdroid.BackgroundSyncStarter
 import timber.log.Timber
 
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
@@ -31,25 +31,11 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
         Timber.v("## onReceive() ${intent.action}")
         val appContext = context.applicationContext
         if (appContext is HasVectorInjector) {
-            val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
-            val preferences = appContext.vectorComponent().vectorPreferences()
-            if (activeSession != null) {
-                when (preferences.getFdroidSyncBackgroundMode()) {
-                    BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
-                        Timber.i("## Sync: OnBoot Work scheduled to periodically sync")
-                        activeSession.startAutomaticBackgroundSync(
-                                preferences.backgroundSyncTimeOut().toLong(),
-                                preferences.backgroundSyncDelay().toLong()
-                        )
-                    }
-                    BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> {
-                        AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.sessionId, preferences.backgroundSyncDelay())
-                    }
-                    BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {
-                        // nop
-                    }
-                }
-            }
+            BackgroundSyncStarter.start(
+                    context,
+                    appContext.vectorComponent().vectorPreferences(),
+                    appContext.injector().activeSessionHolder()
+            )
         }
     }
 }
