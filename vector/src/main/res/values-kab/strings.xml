@@ -1563,7 +1563,7 @@
     <string name="encryption_information_device_info">Talɣut n uneḍru</string>
     <string name="encryption_information_user_id">Asulay n useqdac</string>
     <string name="encryption_information_curve25519_identity_key">Tasarut n timagit Curve25519</string>
-    <string name="encryption_information_sender_device_information">Talɣut n umazan n tɣimit</string>
+    <string name="encryption_information_sender_device_information">"Talɣut  ɣef tɣimit n umazan"</string>
     <string name="encryption_information_device_name">Isem azayez</string>
     <string name="encryption_information_device_name_with_warning">Isem azayez (yettban i yimdanen wukud tettmeslayeḍ)</string>
     <string name="encryption_information_name">Isem azayez</string>
@@ -1596,11 +1596,11 @@
     <string name="encryption_information_unblock">Kkes seg tebdart taberkant</string>
 
     <string name="unknown_devices_alert_title">Taxxamt ideg llant tɣimiyin tarussanin</string>
-    <string name="unknown_devices_alert_message">"Taxxamt-a deg-s tiɣimiyin tarussinin ur nettwaselken ara.
-\nAya yebɣa ad d-yini ur ttwaḍmanent ara tɣimiyin-a yerzan iseqdac i keččmen ɣer-sent.
-\nAd ak·akem-nwelleh ad tuɣaleḍ ɣer ukala n uselken n yal tiɣimit send akemmel, maca tzemreḍ ad talseḍ tuzna n yizen war aselken ma yella tebɣiḍ.
+    <string name="unknown_devices_alert_message">Taxxamt-a deg-s tiɣimiyin tarussinin ur nettwasenqed ara.
+\nAya yebɣa ad d-yini ulac aḍman belli tɣimiyin-a d tidet n yiseqdacen i d-temmal.
+\nAd ak·akem-nwelleh ad tuɣaleḍ ɣer ukala n usenqed n yal tiɣimit send akemmel, maca tzemreḍ ad talseḍ tuzna n yizen war asenqed ma yella tebɣiḍ.
 \n
-\nTiɣimiyin tarussinin:         "</string>
+\nTiɣimiyin tarussinin:</string>
 
     <string name="select_room_directory">Fren akaram n texxamt</string>
     <string name="directory_server_type_homeserver">Aru aqeddac agejdan i wakken ad d-tbedreḍ tixxamin tizuyaz seg-s</string>
@@ -1623,25 +1623,25 @@
 	<item quantity="one">1 uwiǧit i yettwaremden</item>
 	<item quantity="other">%d n yiwiǧiten i yettwaremden</item>
 </plurals>
-    <string name="error_jitsi_not_supported_on_old_device">"Nesḥassef, asarag s usiwel s Jitsi ur yettusefrak ara ɣef yibenkan iqburen (ibenkan s Android OS ddaw 5.0) "</string>
+    <string name="error_jitsi_not_supported_on_old_device">Nesḥassef, asarag s usiwel s Jitsi ur yettusefrak ara ɣef yibenkan iqburen (ibenkan s Android OS ddaw 5.0)</string>
     <string name="room_widget_resource_permission_title">Iwiǧit-a yebɣa ad isseqdec tiɣbula-a:</string>
     <string name="room_widget_webview_access_camera">Seqdec takamiṛat</string>
     <string name="room_widget_webview_access_microphone">Seqdec asawaḍ</string>
-    <string name="settings_labs_keyboard_options_to_send_message">"Seqdec anasiw sekcem tasarut i tuzna n yizen  "</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Seqdec taqeffalt n unasiw Kcem i tuzna n yizen</string>
     <string name="settings_labs_enable_send_voice_summary">Taxtiṛit-a tesra asnas n wis tlata i usekles n yiznan.</string>
     <string name="widget_integration_review_terms">I wakken ad tkemmleḍ tesriḍ ad tqebleḍ tiwtilin n umeẓlu-a.</string>
 
-    <string name="you_added_a_new_device">"Terniḍ tiɣimit tamaynut \'%s\', i yessuturen tisura n uwgelhen.  "</string>
-    <string name="you_added_a_new_device_with_info">"Tiɣimit tamaynut tessutur isem n key.ession n uwgelhen: %1$s
+    <string name="you_added_a_new_device">Terniḍ tiɣimit tamaynut \'%s\', i yessuturen tisura n uwgelhen.</string>
+    <string name="you_added_a_new_device_with_info">Tiɣimit tamaynut tessutur tisura n uwgelhen. Isem n tɣimit: %1$s
 \nTimeẓriwt taneggarut: %2$s
-\nMa yella ur tekcimeḍ ara ɣer tqimit-nniḍen, ttu asuter-a.  "</string>
-    <string name="your_unverified_device_requesting">"Terniḍ tiɣimit tamaynut \'%s\', i yessuturen tisura n uwgelhen.  "</string>
-    <string name="your_unverified_device_requesting_with_info">"Tiɣimit tamaynut tessutur tisura n uwgelhen.
+\nMa yella ur tekcimeḍ ara ɣer tɣimit-nniḍen, ttu asuter-a.</string>
+    <string name="your_unverified_device_requesting">Tiɣimit-inek·inem ur tettwasenqed ara \'%s\', tessutur tisura n uwgelhen.</string>
+    <string name="your_unverified_device_requesting_with_info">Tiɣimit ur nettwasenqed ara tessutur tisura n uwgelhen.
 \nIsem n tɣimit: %1$s
 \nTimeẓriwt taneggarut: %2$s
-\nMa yella ur tekcimeḍ ara ɣer tqimit-nniḍen, ttu asuter-a.  "</string>
+\nMa yella ur tekcimeḍ ara ɣer tɣimit-nniḍen, ttu asuter-a.</string>
 
-    <string name="command_description_clear_scalar_token">"I uṣeggem n usefrek n yisnasen n Matrix  "</string>
+    <string name="command_description_clear_scalar_token">I uṣeggem n usefrek n yisnasen n Matrix</string>
 
     <string name="send_bug_report_alert_message">Akka d-yettban tetthuzzuḍ tiliɣri s lxiq. Tebɣiḍ ad teldiḍ agdil i tuzna n wabug\?</string>
     <string name="auth_add_email_message_2">Sbadu imayl i tririt n umiḍan, syen ɣer sdat ad yishil ad tt-afen yimdanen i ak·akem-yessnen.</string>
@@ -1655,10 +1655,10 @@
 
     <string name="e2e_re_request_encryption_key_dialog_content">Ma ulac aɣilif err Element deg yibenk-nniḍen i izemren ad yekkes awgelhen i yiznan, akken ad yizmir ad yazen tisura ɣer tɣimit-a.</string>
 
-    <string name="settings_call_ringtone_use_app_ringtone">"Seqdec taṣunit n Element tamezwert i yisawalin ara d-ikecmen  "</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Seqdec taṭenṭunt n Element tamezwert i yisawalin ara d-ikecmen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Ad isseqdec %s d tallalt mi ara yili uqeddac-ik·im agejdan ur d-imudd ara yiwen (tansa-inek·inem IP ad tettwabḍu ayen akk ara yeqqim usiwel)</string>
-    <string name="settings_call_ringtone_title">"Taṣunit n usiwel i d-ikecmen "</string>
-    <string name="settings_call_ringtone_dialog_title">"Fren taṣunit i yisawalen "</string>
+    <string name="settings_call_ringtone_title">Taṭenṭunt n usiwel i d-ikecmen</string>
+    <string name="settings_call_ringtone_dialog_title">Fren taṭenṭunt i yisawalen</string>
 
     <string name="call_error_user_not_responding">Agalis anmeggag ur yessaweḍ ara ad yerfed.</string>
     <string name="permissions_rationale_msg_contacts">Matrix yezmer ad isenqed adlis-ik·im n tansiwin i wakken ad yaf iseqdacen-nniḍen n Matrix s ttawil n yimaylen d wuṭṭunen n tiliɣri nsen. Ma yella tqebleḍ ad tebduḍ adlis-ik·im n tansiwin i waya, ma ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun.</string>
@@ -1853,7 +1853,7 @@
     <string name="room_settings_room_access_warning">Aseɣwen ɣer texxamt ilaq ad yesɛu tansa.</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Amasal n yismawen yettwamudden d arameɣtu</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' mačči d amasal ameɣtu i yisem yettwamudden</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Tasarut n udsil umḍin Ed25519</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Tasarut n udsil umḍin Ed25519 tettusra</string>
     <string name="encryption_information_verify_key_match">La ssenqadeɣ tisura-a ma mṣadant</string>
 
     <string name="directory_server_native_rooms">Tixxamin meṛṛa tidiganin %s</string>
@@ -1866,52 +1866,52 @@
 	<item quantity="one">1 yizen i d-yettwalɣu ur yettwaɣra ara</item>
 	<item quantity="other">%d yiznan i d-yettwalɣun ur ttwaɣran ara</item>
 </plurals>
-    <string name="settings_labs_create_conference_with_jitsi">"Rnu isaragen n usiwel s jitsi "</string>
-    <string name="room_widget_webview_read_protected_media">"Ɣer DRM yemmestnen amidyat   "</string>
+    <string name="settings_labs_create_conference_with_jitsi">Rnu isaragen s usiwel s jitsi</string>
+    <string name="room_widget_webview_read_protected_media">Ɣer amidyat yemmestnen s DRM</string>
 
-    <string name="settings_labs_native_camera_summary">"Bdu s tkamiṛat n unagraw deg ubdil n ugdil n tkamiṛat tudmawant  "</string>
-    <string name="conference_call_warning_message">"Asarag s usiwel ha-t-an yettusnernay, ur yettizmir ara ad             "</string>
+    <string name="settings_labs_native_camera_summary">Bdu s tkamiṛat n unagraw deg ubdil n ugdil n tkamiṛat tudmawant.</string>
+    <string name="conference_call_warning_message">Asarag s usiwel ha-t-an iteddu, ur yezmir ad yettwattkal fell-as.</string>
 
-    <string name="unrecognized_command">"Taladna ur nettwaṣeggem ara: %s       "</string>
-    <string name="command_problem_with_parameters">"Taladna \"%s\" tesra ugar n yiɣewwaren, neɣ kra n yiɣewwaren d arimeɣta. "</string>
+    <string name="unrecognized_command">Taladna tarussint: %s</string>
+    <string name="command_problem_with_parameters">Taladna \"%s\" tesra ugar n yiɣewwaren, neɣ kra n yiɣewwaren d arimeɣta.</string>
     <string name="command_description_unban_user">Kkes azgal i useqdac s usulay i d-yettunefkan</string>
-    <string name="command_description_markdown">"Rmed/Sens tacreḍt yeɣlin  "</string>
+    <string name="command_description_markdown">Rmed/Sens Markdown</string>
     <string name="markdown_has_been_enabled">Tacreḍt yeɣlin tettwarmed.</string>
     <string name="markdown_has_been_disabled">Tacreḍt yeɣlin tettusens.</string>
 
-    <string name="group_no_long_description">"Anedbal n temɣiwent ur igi ara aglam ɣezzifen i temɣiwent-a  "</string>
+    <string name="group_no_long_description">Anedbal n temɣiwent ur d-imudd ara aglam ɣezzifen i temɣiwent-a.</string>
 
     <string name="has_been_kicked">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
     <string name="has_been_banned">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
-    <string name="dialog_user_consent_content">"I wakken ad tkemmleḍ aseqdec n uqeddac agejdan %1$s ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata. "</string>
+    <string name="dialog_user_consent_content">I wakken ad tkemmleḍ aseqdec n uqeddac agejdan %1$s, ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata.</string>
     <string name="deactivate_account_delete_checkbox">Ttxil-k·m ttu akk iznan i yuzneɣ mi ara senseɣ amiḍan-iw (Ɣur-k·m: aya ad yerr iseqdacen ara d-yernun ad walin idiwenniyen ur nemmid ara)</string>
-    <string name="room_tombstone_versioned_description">"Taxxamt-a ad tettusmelsi, dayen d tarurmidt "</string>
+    <string name="room_tombstone_versioned_description">Taxxamt-a tettusmelsi, dayen d tarurmidt</string>
     <string name="room_tombstone_continuation_description">Taxxamt-a d akemmel n udiwenni-nniḍen</string>
-    <string name="resource_limit_contact_admin">"nermes anedbal-inek·inem n umeẓlu "</string>
+    <string name="resource_limit_contact_admin">nermes anedbal n umeẓlu-inek·inem</string>
 
-    <string name="resource_limit_soft_default">Aqeddac-a agejdan yessaweḍ yiwet seg tlisa-ines n teɣbalut ɣef waya <b>kra n yiseqdacen ur ttizmiren ara ad kecmen</b>".  "</string>
+    <string name="resource_limit_soft_default">Aqeddac-a agejdan iɛedda yiwet seg tlisa-ines n teɣbalut ɣef waya <b>kra n yiseqdacen ur ttizmiren ara ad kecmen</b>.</string>
     <string name="resource_limit_soft_mau"> Aqeddac-a agejdan yessaweḍ talast-is n useqdac n wayyur urmid ɣef waya <b>kra n yiseqdacen ur ttizmiren ara ad kecmen</b>.</string>
-    <string name="resource_limit_soft_contact">"Ma ulac aɣilif %s ad yaweḍ ɣer talast-a        "</string>
-    <string name="settings_lazy_loading_title">"Ur yeddi ara usali n yiɛeggalen n ugraw  "</string>
+    <string name="resource_limit_soft_contact">Ma ulac aɣilif %s i usnerni n talast-a.</string>
+    <string name="settings_lazy_loading_title">Asali n yiɛeggalen n texxamin ẓẓayen</string>
     <string name="show_info_area_messages_and_errors">I yiznan d tuccḍiwin</string>
-    <string name="no_valid_google_play_services_apk">"Ulac imeẓla APK imeɣta n Google Play i yettwafen. Ilɣa ur zmiren ara ad ddun akken iwata. "</string>
+    <string name="no_valid_google_play_services_apk">Ulac APK imeɣta n yimeẓla n Google Play i yettwafen. Ilɣa ur zmiren ara ad ddun akken iwata.</string>
 
-    <string name="keys_backup_setup_step1_description">"Iznan deg texxamt yettwawgelhen, ttusɣelsen s uwgelhen n yixef ɣer yixef. Ala kečč·kemm d useɣyad (yiseɣyaden) i yesɛan tisura i tɣuri n yiznan-a.
+    <string name="keys_backup_setup_step1_description">Iznan deg texxamt yettwawgelhen, ttusɣelsen s uwgelhen n yixef ɣer yixef. Ala kečč·kemm d uɣerwaḍ (yiɣeryaḍen) i yesɛan tisura i tɣuri n yiznan-a.
 \n
-\nAḥraz aɣelsan n tsura-inek·inem i akken tḍemneḍ ur ak·am-ttruḥun ara "</string>
+\nAḥraz aɣelsan n tsura-inek·inem i akken tḍemneḍ ur ak·am-ttruḥun ara</string>
     <string name="keys_backup_setup_step2_text_title">Ḍmen aḥrazen-inek·inem s tefyirt tuffirt.</string>
     <string name="keys_backup_setup_step3_success_title">Yedda!</string>
-    <string name="keys_backup_setup_step3_text_line1">"Tisura-inek·inem la ttwaḥrazent. "</string>
-    <string name="keys_backup_setup_step3_text_line2">"Tasarut-ik·im n tririt d azeṭṭa yettwaḍmanen - tzemreḍ ad tt-tesqedceḍ i wakken ad d-terreḍ anekcum ɣer yiznan-inek·inem yettwawgelhen ma yella tettuḍ tafyirt-ik·im tuffirt.
-\nErr tasarut-ik·im n tririt deg wadeg aɣelsan aṭas, am umsefrak n wawalen uffire (neɣ deg usenduq)   "</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">"Err tasarut-ik·im n tririt deg wadeg aɣelsan s waṭas, am umsefrak n wawalen uffiren (neɣ deg usenduq)  "</string>
-    <string name="recovery_key_export_saved_as_warning">"Tasarut n tririt tettwasekles deg \'%s\'.
+    <string name="keys_backup_setup_step3_text_line1">Tisura-inek·inem ha-tent-an la ttwaḥrazent.</string>
+    <string name="keys_backup_setup_step3_text_line2">Tasarut-ik·im n tririt d azeṭṭa n tɣellist - tzemreḍ ad tt-tesqedceḍ i wakken ad d-terreḍ anekcum ɣer yiznan-inek·inem yettwawgelhen ma yella tettuḍ tafyirt-ik·im tuffirt.
+\nErr tasarut-ik·im n tririt deg wadeg aɣelsan s waṭas, am umsefrak n wawalen uffire (neɣ deg usenduq).</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Err tasarut-ik·im n tririt deg wadeg aɣelsan s waṭas, am umsefrak n wawalen uffiren (neɣ deg usenduq).</string>
+    <string name="recovery_key_export_saved_as_warning">Tasarut n tririt tettwasekles deg \'%s\'.
 \n
-\nƔur-k·m: afaylu-a yezmer ad yettwakkes ma yella ur yettusebded ara usnas. "</string>
+\nƔur-k·m: afaylu-a yezmer ad yettwakkes ma yella yettusefsax usebded n usnas.</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Yettban am wakken tesbaduḍ yakan aḥraz n tsarut seg tɣimit-nniḍen. Tebɣiḍ ad tt-tesmesliḍ s yiwet ara d-ternuḍ\?</string>
-    <string name="keys_backup_setup_step3_generating_key_status">"Asirew n tsarut n tririt s useqdec n tefyirt tuffirt, aya yezmer ad yeṭṭef ddeqs n tesdidin.  "</string>
-    <string name="unexpected_error">"Tuccḍa u nettwarǧa ara "</string>
-    <string name="keys_backup_setup_backup_started_message">"Tisura-inek·inem n uwgelhen ha-tent-an tura ttwaḥrazent ɣef ugilal ɣef uqeddac-ik·im agejdan. Aḥraz agejdan yezmer ad yeṭṭaf ddeqs n tsinin    "</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Asirew n tsarut n tririt s useqdec n tefyirt tuffirt, akal-a yezmer ad yeṭṭef ddeqs n tsinin.</string>
+    <string name="unexpected_error">Tuccḍa u nettwarǧa ara</string>
+    <string name="keys_backup_setup_backup_started_message">Tisura-inek·inem n uwgelhen ha-tent-an tura ttwaḥrazent deg ugilal ɣef uqeddac-ik·im agejdan. Aḥraz agejdan yezmer ad yeṭṭaf ddeqs n tesdidin.</string>
 
 
     <string name="keys_backup_setup_skip_msg">Yezmer tesruḥeḍ anekcum ɣer yiznan-ik·im ma yella teffɣeḍ neɣ tesruḥeḍ ibenk-a.</string>
@@ -1930,7 +1930,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Askazal n tsarut n tririt...</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Asali n tsura...</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Aktar n tsura...</string>
-    <string name="keys_backup_restore_success_title">"Aḥraz yettwarr-d %s! "</string>
+    <string name="keys_backup_restore_success_title">Aḥraz yettwarr-d %s!</string>
     <plurals name="keys_backup_restore_success_description_part1">
 	<item quantity="one">Yerra-d aḥraz s tsarut %d.</item>
 	<item quantity="other">Yerra-d aḥraz s tsura %d.</item>
@@ -1941,7 +1941,7 @@
 </plurals>
 
     <string name="keys_backup_get_version_error">Tiririt n lqem akk aneggaru n tsura (%s) ur teddi ara.</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">"Awgelhen n tɣimit ur yettwarmed ara  "</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Awgelhan n tɣimit ur yettwarmed ara</string>
 
 
     <string name="keys_backup_settings_status_ok">Aḥraz n tsarut yettusbadu akken iwata i tɣimit-a.</string>
@@ -1956,19 +1956,19 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Aḥraz ɣer-s azmul arameɣtu seg tɣimit ur yettusneqden ara %s</string>
     <string name="keys_backup_get_trust_error">Awway n telɣut yettwattkalen i uḥraz (%s) ur yeddi ara.</string>
 
-    <string name="keys_backup_settings_untrusted_backup">"I useqdec n uḥraz n tsarut deg tɣimit-a, err-d s tefyir-ik·im tuffirt neɣ s tsarut n tririt tura "</string>
+    <string name="keys_backup_settings_untrusted_backup">I useqdec n uḥraz n tsura deg tɣimit-a, err-d s tefyir-ik·im tuffirt neɣ s tsarut n tririt tura.</string>
     <string name="keys_backup_settings_delete_backup_error">Tukksa n uḥraz (%s) ur teddi ara</string>
 
     <string name="keys_backup_settings_checking_backup_state">Asenqed n waddad n uḥraz</string>
-    <string name="keys_backup_settings_delete_confirm_message">"Kkes tisura-inek·inem n uwgelhen yettwaḥerzen seg uqeddac\? Ur tettuɣaleḍ ara ad tizmireḍ ad tesqedceḍ tasarut-ik·im n tririt i tɣuri n umazray n yiznan yettwawgelhen.  "</string>
+    <string name="keys_backup_settings_delete_confirm_message">Kkes tisura-inek·inem n uwgelhen yettwaḥerzen ɣef uqeddac\? Ur tettuɣaleḍ ara ad tizmireḍ ad tesqedceḍ tasarut-ik·im n tririt i tɣuri n umazray n yiznan yettwawgelhen.</string>
 
     <string name="new_recovery_method_popup_description">Aḥraz n tsarut amaynut n yizen aɣelsan tettwaf-d.
 \n
 \nMa yella ur tesbaduḍ ara tarrayt n tririt tamaynut, amker yezmer ad yeɛreḍ ad yekcem ɣer umiḍan-ik·im. Snifel awal uffir n umiḍan-ik·im syen sbadu tarrayt n tririt tamaynut din din deg yiɣewwaren.</string>
     <string name="secure_backup_banner_setup_line1">Aḥraz aɣelsan</string>
-    <string name="secure_backup_banner_setup_line2">"Seḥbiber iman-ik·im ɣef usruḥ n unekcum ɣer yiznann &amp; yisefka yettwawgelhe  "</string>
+    <string name="secure_backup_banner_setup_line2">Seḥbiber iman-ik·im mgal asruḥu n unekcum ɣer yiznann &amp; yisefka yettwawgelhen</string>
 
-    <string name="keys_backup_banner_update_line1">"Tisura n yizenaɣelsan timaynutin "</string>
+    <string name="keys_backup_banner_update_line1">Tisura timaynutin n yizen aɣelsan</string>
     <string name="keys_backup_banner_update_line2">Sefrek deg uḥraz n tsarut</string>
 
     <string name="keys_backup_banner_in_progress">Aḥraz n tsura-inek·inem. Aya yezmer ad yeṭṭef aṭas n tesdidin...</string>
@@ -1981,9 +1981,9 @@
 	<item quantity="other">Aḥraz n tsura %d</item>
 </plurals>
 
-    <string name="autodiscover_well_known_autofill_dialog_title">"Iɣewwaren n uqeddac uwurman ummid    "</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">"Element yufa-d tawila n uqeddac udmawan i taɣult-inek·inem usulay n uqeddac \"%1$s\":
-\n%2$s   "</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Iɣewwaren n uqeddac ummid awurman</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Element yufa-d tawila n uqeddac udmawan i taɣult usulay--inek·inem n uqeddac \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Seqdec tawila</string>
 
     <string name="invalid_or_expired_credentials">"Tettuseffɣeḍ ssebba n credentials arimeɣta neɣ yekfan  "</string>
