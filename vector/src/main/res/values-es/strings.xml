@@ -1626,7 +1626,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="quick_reactions">Reacciones rápidas</string>
 
-    <string name="settings_general_title">General</string>
+    <string name="settings_general_title">Cuenta</string>
     <string name="settings_expert">Experto</string>
     <string name="settings_push_rules">Reglas Push</string>
     <string name="settings_push_rules_no_rules">No hay reglas push definidas</string>
@@ -1924,7 +1924,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="cannot_call_yourself_with_invite">No puedes hacer una llamada contigo mismo, espera a que los participantes acepten la invitación</string>
     <string name="failed_to_add_widget">Fallo al adicionar Widget</string>
     <string name="failed_to_remove_widget">Fallo al eliminar Widget</string>
-    <string name="settings_call_show_confirmation_dialog_title">Prevenir llamadas por accidente</string>
+    <string name="settings_call_show_confirmation_dialog_title">Confirmar llamada</string>
     <string name="settings_call_show_confirmation_dialog_summary">Pedir confirmacion antes de iniciar una llamda</string>
     <string name="room_participants_kick_reason">Rason de expulsion</string>
     <string name="room_participants_ban_title">Banear usuario</string>
@@ -2129,4 +2129,17 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar seccion y crear uno nuevo</string>
     <string name="settings_security_pin_code_title">Establecer PIN</string>
     <string name="settings_security_pin_code_summary">Si decea resetear su PIN, toque Olvidé PIN para cerrar sesión y restablecer.</string>
-</resources>
+<string name="settings_phone_numbers">Numeros telefonicos</string>
+    <string name="settings_emails_and_phone_numbers_title">Correos y numeros telefonicos</string>
+    <string name="settings_emails_and_phone_numbers_summary">Administre el correo y numero telefonico de su cuenta</string>
+
+    <string name="settings_show_redacted">Mostrar mensages eliminados</string>
+    <string name="settings_show_redacted_summary">Indicar marca de mensaje eliminado</string>
+    <string name="uploads_files_title">ARCHIVOS</string>
+    <string name="uploads_files_no_result">No se han subido archivos a la sala</string>
+
+    <string name="settings_notification_advanced_summary">Establecer notificaciones por eventos</string>
+
+    <string name="change_password_summary">Establecer una nueva contraseña…</string>
+
+    </resources>
