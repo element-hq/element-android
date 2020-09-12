@@ -1563,7 +1563,7 @@
     <string name="encryption_information_device_info">Talɣut n uneḍru</string>
     <string name="encryption_information_user_id">Asulay n useqdac</string>
     <string name="encryption_information_curve25519_identity_key">Tasarut n timagit Curve25519</string>
-    <string name="encryption_information_sender_device_information">"Talɣut n umesgal n tɣimit     "</string>
+    <string name="encryption_information_sender_device_information">Talɣut n umazan n tɣimit</string>
     <string name="encryption_information_device_name">Isem azayez</string>
     <string name="encryption_information_device_name_with_warning">Isem azayez (yettban i yimdanen wukud tettmeslayeḍ)</string>
     <string name="encryption_information_name">Isem azayez</string>
@@ -1576,8 +1576,8 @@
 \nƔur-k·m: afaylu-a yezmer ad yettwakkes ma yella asnas ur yettusebded ara.</string>
     <string name="encryption_exported_successfully">Asifeḍ n tsura yedda akken iwata</string>
 
-    <string name="encryption_message_recovery">"Iznan yettwawgelhen n tririt "</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Sefrek aḥraz n tsarut</string>
+    <string name="encryption_message_recovery">Tiririt n yiznan yettwawgelhen</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Sefrek aklas n tsura</string>
 
     <string name="encryption_import_room_keys_summary">Kter tisura n ufaylu adigan</string>
     <string name="encryption_never_send_to_unverified_devices_title">Wgelhen i usenqed n tɣimiyinkan</string>
@@ -1853,7 +1853,7 @@
     <string name="room_settings_room_access_warning">Aseɣwen ɣer texxamt ilaq ad yesɛu tansa.</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Amasal n yismawen yettwamudden d arameɣtu</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' mačči d amasal ameɣtu i yisem yettwamudden</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">"Tasarut n udsil umḍin Ed25519         "</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Tasarut n udsil umḍin Ed25519</string>
     <string name="encryption_information_verify_key_match">La ssenqadeɣ tisura-a ma mṣadant</string>
 
     <string name="directory_server_native_rooms">Tixxamin meṛṛa tidiganin %s</string>
@@ -1937,7 +1937,7 @@
 </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
 	<item quantity="one">Tisura timaynutin %d ttwarnant ɣer tɣimit.</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
 
     <string name="keys_backup_get_version_error">Tiririt n lqem akk aneggaru n tsura (%s) ur teddi ara.</string>
