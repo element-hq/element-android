@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="normal_priority_header">Normal priority</string>
+
     <string name="settings_home_overview">Overview</string>
 
     <string name="settings_single_overview">Combined chat overview</string>

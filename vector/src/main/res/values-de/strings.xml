@@ -82,7 +82,6 @@
     <!-- Home fragment -->
     <string name="invitations_header">Einladungen</string>
     <string name="low_priority_header">Niedrige Priorität</string>
-    <string name="normal_priority_header">Normale Priorität</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Konversationen</string>
