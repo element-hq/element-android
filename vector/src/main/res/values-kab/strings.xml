@@ -1986,26 +1986,26 @@
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Seqdec tawila</string>
 
-    <string name="invalid_or_expired_credentials">"Tettuseffɣeḍ ssebba n credentials arimeɣta neɣ yekfan  "</string>
+    <string name="invalid_or_expired_credentials">Tettuseffɣeḍ ssebba n credentials arimeɣta neɣ yekfan.</string>
 
-    <string name="sas_verify_title">"Senqed s userwes n yiḍrisen imeẓẓyanen  "</string>
-    <string name="sas_verify_start_button_title">"Bdu asenqed "</string>
-    <string name="sas_incoming_request_description_2">"Aselken n tɣimit-a ad yettucreḍ fell-as tettwattkal, yerna ad tettucreḍ ula d tiɣimit-ik·im tettwattkal i bab-is. "</string>
+    <string name="sas_verify_title">Senqed s userwes n yiḍrisen imeẓẓyanen.</string>
+    <string name="sas_verify_start_button_title">Bdu asenqed</string>
+    <string name="sas_incoming_request_description_2">Aselken n tɣimit-a ad yettucreḍ fell-as tettwattkal, yerna ad tettucreḍ ula d tiɣimit-ik·im tettwattkal i bab-is.</string>
 
-    <string name="sas_emoji_description">"Selkem tiɣimit-a s usentem n yimujiten-a i d-yettbanen ɣef ugdil n baba-is "</string>
-    <string name="sas_decimal_description">"Selkem tiɣimit-a s usentem n wuṭṭunen-a i d-yettbanen ɣef ugdil n baba-is "</string>
+    <string name="sas_emoji_description">Selkem tiɣimit-a s usentem n yimujiten-a i d-yettbanen ɣef ugdil n baba-is</string>
+    <string name="sas_decimal_description">Selkem tiɣimit-a s usentem n wuṭṭunen-a i d-yettbanen ɣef ugdil n baba-is</string>
 
     <string name="sas_incoming_verification_request_dialog">Tremseḍ-d asuter n uselken i d-iteddun...</string>
     <string name="sas_waiting_for_partner">"Aṛaǧu n bab-is i usentem  ..."</string>
 
     <string name="sas_verified_successful">Teslekneḍ taxxamt-a akken iwata.</string>
-    <string name="sas_verifying_keys">"Ulac acu i d-yettwabnen\? Mačči akkimsaɣen ssefraken aselken amyigew ar tura. Seqdec aselken  "</string>
-    <string name="sas_legacy_verification_button_title">"Seqdec aselken   "</string>
+    <string name="sas_verifying_keys">Ulac acu i d-yettwabnen\? Mačči akkimsaɣen ssefraken aselken amyigew ar tura. Seqdec aselken.</string>
+    <string name="sas_legacy_verification_button_title">Seqdec aselken.</string>
 
     <string name="sas_cancelled_by_other">Tama-nniḍen tessefsax aselken.
 \n%s</string>
-    <string name="sas_cancelled_by_me">"Aselken yettusefsax.
-\nTaɣzint: %s "</string>
+    <string name="sas_cancelled_by_me">Aselken yettusefsax.
+\nTaɣzint: %s</string>
 
     <string name="sas_verification_request_notification_channel">"Aselken amyigaw n tɣimit "</string>
     <string name="sas_incoming_request_notif_content">%s yebɣa ad issenqed tiɣimit-inek·inem</string>
