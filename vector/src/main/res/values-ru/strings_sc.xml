@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="normal_priority_header">Нормальный приоритет</string>
+
     <string name="settings_home_overview">Обзор</string>
 
     <string name="settings_single_overview">Комбинированный обзор чатов</string>
