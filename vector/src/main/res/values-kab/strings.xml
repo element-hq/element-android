@@ -2007,16 +2007,16 @@
     <string name="sas_cancelled_by_me">Aselken yettusefsax.
 \nTaɣzint: %s</string>
 
-    <string name="sas_verification_request_notification_channel">"Aselken amyigaw n tɣimit "</string>
+    <string name="sas_verification_request_notification_channel">Aselken amyigaw n tɣimit</string>
     <string name="sas_incoming_request_notif_content">%s yebɣa ad issenqed tiɣimit-inek·inem</string>
 
     <string name="sas_error_m_user">Aseqdac issefsax asenqed</string>
-    <string name="sas_error_m_timeout">"Akud n usenqed yemmed  "</string>
-    <string name="sas_error_m_unknown_transaction">"Tiɣimit ur teẓri ara ɣef tnigawt-a  "</string>
-    <string name="sas_error_m_mismatched_commitment">"SAS ur imsaḍa ara    "</string>
+    <string name="sas_error_m_timeout">Akud n usenqed yemmed</string>
+    <string name="sas_error_m_unknown_transaction">Tiɣimit ur teẓri ara ɣef tnigawt-a</string>
+    <string name="sas_error_m_mismatched_commitment">SAS ur imsaḍa ara</string>
     <string name="sas_error_m_mismatched_sas">SAS ur imsaḍa ara</string>
-    <string name="sas_error_m_unexpected_message">"Tiɣimit termes-d izen ideg yella ccekk   "</string>
-    <string name="sas_error_m_invalid_message">"Yettwarmes-d yizen arameɣtu "</string>
+    <string name="sas_error_m_unexpected_message">Tiɣimit termes-d izen ideg yella ccekk</string>
+    <string name="sas_error_m_invalid_message">Yettwarmes-d yizen arameɣtu</string>
     <string name="sas_error_m_key_mismatch">"Tasarut temṣada swaswa  "</string>
     <string name="sas_error_m_user_error">"Aseqdac yemṣada swaswa         "</string>
     <string name="identity_server_not_defined">Ur tesseqdaceḍ ara ula d yiwen n uqeddac n timagit</string>
