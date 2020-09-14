@@ -503,7 +503,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // render local video in pip view
         localSurfaceRenderer.forEach {
             it.get()?.let { pipSurface ->
-                pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT);
+                pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT)
                 // no need to check if already added, addSink is checking that
                 currentCall?.localVideoTrack?.addSink(pipSurface)
             }
