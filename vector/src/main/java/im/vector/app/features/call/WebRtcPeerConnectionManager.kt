@@ -503,7 +503,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // render local video in pip view
         localSurfaceRenderer.forEach {
             it.get()?.let { pipSurface ->
-                pipSurface.setMirror(true)
+                pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT)
                 // no need to check if already added, addSink is checking that
                 currentCall?.localVideoTrack?.addSink(pipSurface)
             }
@@ -740,6 +740,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 override fun onCameraSwitchDone(isFrontCamera: Boolean) {
                     Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
                     cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
+                    localSurfaceRenderer.forEach {
+                        it.get()?.setMirror(isFrontCamera)
+                    }
+
                     currentCallsListeners.forEach {
                         tryThis { it.onCameraChange(this@WebRtcPeerConnectionManager) }
                     }
