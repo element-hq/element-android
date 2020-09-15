@@ -27,6 +27,11 @@ inline fun androidx.fragment.app.FragmentManager.commitTransactionNow(func: Frag
     }
 }
 
-inline fun androidx.fragment.app.FragmentManager.commitTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-    beginTransaction().func().commit()
+inline fun androidx.fragment.app.FragmentManager.commitTransaction(allowStateLoss: Boolean = false, func: FragmentTransaction.() -> FragmentTransaction) {
+    val transaction = beginTransaction().func()
+    if (allowStateLoss) {
+        transaction.commitAllowingStateLoss()
+    } else {
+        transaction.commit()
+    }
 }
