@@ -62,8 +62,8 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -86,6 +86,7 @@ import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -122,19 +123,23 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
-        TimelineSettings(30,
-                filterEdits = false,
-                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
-                filterUseless = false,
-                filterTypes = false,
+        TimelineSettings(
+                initialSize = 30,
+                filters = TimelineEventFilters(
+                        filterEdits = false,
+                        filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                        filterUseless = false,
+                        filterTypes = false),
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
-        TimelineSettings(30,
-                filterEdits = true,
-                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
-                filterUseless = true,
-                filterTypes = true,
-                allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
+        TimelineSettings(
+                initialSize = 30,
+                filters = TimelineEventFilters(
+                        filterEdits = true,
+                        filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                        filterUseless = true,
+                        filterTypes = true,
+                        allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES),
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     }
 

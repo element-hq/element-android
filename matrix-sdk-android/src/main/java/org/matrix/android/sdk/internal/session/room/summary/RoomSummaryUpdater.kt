@@ -18,6 +18,8 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import dagger.Lazy
+import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -40,7 +42,6 @@ import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendState
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.isEventRead
-import org.matrix.android.sdk.internal.database.query.latestEvent
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
@@ -49,8 +50,6 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
-import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,28 +59,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
         private val eventBus: EventBus) {
-
-    companion object {
-        // TODO: maybe allow user of SDK to give that list
-        val PREVIEWABLE_TYPES = listOf(
-                // TODO filter message type (KEY_VERIFICATION_READY, etc.)
-                EventType.MESSAGE,
-                EventType.STATE_ROOM_NAME,
-                EventType.STATE_ROOM_TOPIC,
-                EventType.STATE_ROOM_AVATAR,
-                EventType.STATE_ROOM_MEMBER,
-                EventType.STATE_ROOM_HISTORY_VISIBILITY,
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER,
-                EventType.ENCRYPTED,
-                EventType.STATE_ROOM_ENCRYPTION,
-                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER,
-                EventType.REACTION,
-                EventType.STATE_ROOM_CREATE
-        )
-    }
 
     fun update(realm: Realm,
                roomId: String,
@@ -110,9 +87,6 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.membership = membership
         }
 
-        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
-                filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
-
         val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
         val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
@@ -122,6 +96,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         val encryptionEvent = EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
                 .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
                 .findFirst()
+
+        val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
@@ -178,8 +154,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     fun updateSendingInformation(realm: Realm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         roomSummaryEntity.updateHasFailedSending()
-        roomSummaryEntity.latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
-                filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
+        roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
     }
 
     fun updateShieldTrust(realm: Realm,

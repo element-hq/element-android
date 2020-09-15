@@ -151,23 +151,23 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private fun RealmQuery<ReadReceiptsSummaryEntity>.filterReceiptsWithSettings(): RealmQuery<ReadReceiptsSummaryEntity> {
         beginGroup()
         var needOr = false
-        if (settings.filterTypes) {
-            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.allowedTypes.toTypedArray())
+        if (settings.filters.filterTypes) {
+            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.filters.allowedTypes.toTypedArray())
             needOr = true
         }
-        if (settings.filterUseless) {
+        if (settings.filters.filterUseless) {
             if (needOr) or()
             equalTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.IS_USELESS}", true)
             needOr = true
         }
-        if (settings.filterEdits) {
+        if (settings.filters.filterEdits) {
             if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.EDIT)
             or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.RESPONSE)
             needOr = true
         }
-        if (settings.filterRedacted) {
+        if (settings.filters.filterRedacted) {
             if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.UNSIGNED_DATA}", TimelineEventFilter.Unsigned.REDACTED)
         }
