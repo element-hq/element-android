@@ -15,15 +15,19 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.room.search.response
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-/**
- * Represents the order in which to search for results.
- */
-@JsonClass(generateAdapter = false)
-enum class Order(val value: String) {
-    RANK("rank"),
-    RECENT("recent")
-}
+@JsonClass(generateAdapter = true)
+class SearchResponseRoomEvents(
+        // List of results in the requested order.
+        @Json(name = "results")
+        val results: List<SearchResponseItem>? = null,
+        @Json(name = "count")
+        val count: Int? = null,
+        // List of words which should be highlighted, useful for stemming which may change the query terms.
+        @Json(name = "highlights")
+        val highlights: List<String>? = null
+)

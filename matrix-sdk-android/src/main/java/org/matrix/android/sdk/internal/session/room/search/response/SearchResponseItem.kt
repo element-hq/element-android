@@ -15,13 +15,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.room.search.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-data class SearchBody(
-        @Json(name = "search_categories")
-        val searchCategories: SearchCategories
+data class SearchResponseItem(
+        // A number that describes how closely this result matches the search. Higher is closer.
+        @Json(name = "rank")
+        val rank: Int? = null,
+        // The event that matched.
+        @Json(name = "result")
+        val event: Event
 )

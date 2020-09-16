@@ -15,22 +15,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.room.search.request
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-data class RoomEvents(
-        // Required. The string to search events for.
-        @Json(name = "search_term")
-        val searchTerm: String,
-        @Json(name = "filter")
-        val filter: Filter? = null,
-        // By default, this is "rank". One of: ["recent", "rank"]
-        @Json(name = "order_by")
-        val orderBy: Order? = null,
-        // Configures whether any context for the events returned are included in the response.
-        @Json(name = "event_context")
-        val eventContext: EventContext? = null
-)
+/**
+ * Represents the order in which to search for results.
+ */
+@JsonClass(generateAdapter = false)
+enum class SearchRequestOrder(val value: String) {
+    RANK("rank"),
+    RECENT("recent")
+}

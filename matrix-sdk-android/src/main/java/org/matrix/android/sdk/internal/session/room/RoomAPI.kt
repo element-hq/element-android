@@ -365,4 +365,7 @@ internal interface RoomAPI {
     fun deleteTag(@Path("userId") userId: String,
                   @Path("roomId") roomId: String,
                   @Path("tag") tag: String): Call<Unit>
+
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "search")
+    fun search()
 }

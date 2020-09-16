@@ -15,20 +15,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.room.search.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class EventContext(
-        // How many events before the result are returned.
-        @Json(name = "before_limit")
-        val beforeLimit: Int? = null,
-        // How many events after the result are returned.
-        @Json(name = "after_limit")
-        val afterLimit: Int? = null,
-        // Requests that the server returns the historic profile information
-        @Json(name = "include_profile")
-        val includeProfile: Boolean? = null
+data class SearchRequestFilter(
+        // The maximum number of events to return.
+        @Json(name = "limit")
+        val limit: Int? = null,
+        // A list of room IDs to include. If this list is absent then all rooms are included.
+        @Json(name = "rooms")
+        val rooms: List<String>? = null
 )
