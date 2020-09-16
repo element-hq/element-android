@@ -1982,7 +1982,7 @@
     </plurals>
 
     <string name="autodiscover_well_known_autofill_dialog_title">Iɣewwaren n uqeddac ummid awurman</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element yufa-d tawila n uqeddac udmawan i taɣult usulay--inek·inem n uqeddac \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Element yufa-d tawila n uqeddac udmawan i taɣult usulay—inek·inem n uqeddac \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Seqdec tawila</string>
 
@@ -2204,7 +2204,7 @@
 
     <string name="settings_developer_mode_fail_fast_summary">Element yezmer ad yewḥel ugar n tikkal mi ara d-tili tuccḍa ur nettwaṛǧa ara</string>
 
-    <string name="login_error_threepid_denied">Taɣult n yimayl--ik·im ur tesɛi ara azref i wakken ad tettwasekles ɣef uqeddac-a</string>
+    <string name="login_error_threepid_denied">Taɣult n yimayl—ik·im ur tesɛi ara azref i wakken ad tettwasekles ɣef uqeddac-a</string>
 
     <string name="verification_conclusion_warning">Tuqqna ur nettwattkal ara</string>
     <string name="verify_user_sas_emoji_help_text">Senqed aseqdac-a s usentem n yimujit-a asuf i d-yettbanen ɣef ugdil-ines, deg yiwem umsizwer.</string>
