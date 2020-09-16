@@ -46,7 +46,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
+import org.matrix.android.sdk.internal.database.query.filterEvents
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
@@ -184,7 +184,7 @@ internal class DefaultTimeline(
     }
 
     private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {
-        return buildReadReceipts && (filterEdits || filterTypes)
+        return buildReadReceipts && (filters.filterEdits || filters.filterTypes)
     }
 
     override fun dispose() {
@@ -759,29 +759,15 @@ internal class DefaultTimeline(
     }
 
     private fun RealmQuery<TimelineEventEntity>.filterEventsWithSettings(): RealmQuery<TimelineEventEntity> {
-        if (settings.filterTypes) {
-            `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
-        }
-        if (settings.filterUseless) {
-            not()
-                    .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
-        }
-        if (settings.filterEdits) {
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
-        }
-        if (settings.filterRedacted) {
-            not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)
-        }
-        return this
+        return filterEvents(settings.filters)
     }
 
     private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
         return filter {
-            val filterType = !settings.filterTypes || settings.allowedTypes.contains(it.root.type)
+            val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.contains(it.root.type)
             if (!filterType) return@filter false
 
-            val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
+            val filterEdits = if (settings.filters.filterEdits && it.root.type == EventType.MESSAGE) {
                 val messageContent = it.root.content.toModel<MessageContent>()
                 messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
@@ -789,7 +775,7 @@ internal class DefaultTimeline(
             }
             if (!filterEdits) return@filter false
 
-            val filterRedacted = !settings.filterRedacted || it.root.isRedacted()
+            val filterRedacted = !settings.filters.filterRedacted || it.root.isRedacted()
 
             filterRedacted
         }

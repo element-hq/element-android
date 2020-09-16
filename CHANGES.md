@@ -13,6 +13,8 @@ Bugfix 🐛:
  - Speakerphone is not used for ringback tone (#1644, #1645)
  - Back camera preview is not mirrored anymore (#1776)
  - Various report of people that cannot play video (#2107)
+ - Rooms incorrectly marked as unread (#588)
+ - Allow users to show/hide room member state events (#1231) 
  - Fix stuck on loader when launching home
 
 Translations 🗣:

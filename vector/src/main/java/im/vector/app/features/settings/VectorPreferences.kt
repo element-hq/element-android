@@ -93,6 +93,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
         private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
         private const val SETTINGS_SHOW_REDACTED_KEY = "SETTINGS_SHOW_REDACTED_KEY"
+        private const val SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY = "SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
         private const val SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
         private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
@@ -195,6 +196,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
                 SETTINGS_12_24_TIMESTAMPS_KEY,
                 SETTINGS_SHOW_READ_RECEIPTS_KEY,
+                SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY,
                 SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
                 SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
                 SETTINGS_MEDIA_SAVING_PERIOD_KEY,
@@ -341,6 +343,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun displayTimeIn12hFormat(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false)
+    }
+
+    /**
+     * Tells if all room member state events should be shown in the messages list.
+     *
+     * @return true all room member state events should be shown in the messages list.
+     */
+    fun showRoomMemberStateEvents(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY, true)
     }
 
     /**
