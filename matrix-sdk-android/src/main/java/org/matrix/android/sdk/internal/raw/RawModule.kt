@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.GlobalDatabase
+import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 
@@ -50,6 +51,7 @@ internal abstract class RawModule {
         @JvmStatic
         @Provides
         @GlobalDatabase
+        @MatrixScope
         fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .apply {
