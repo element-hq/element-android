@@ -29,5 +29,8 @@ class SearchResponseRoomEvents(
         val count: Int? = null,
         // List of words which should be highlighted, useful for stemming which may change the query terms.
         @Json(name = "highlights")
-        val highlights: List<String>? = null
+        val highlights: List<String>? = null,
+        // Token that can be used to get the next batch of results, by passing as the next_batch parameter to the next call. If this field is absent, there are no more results.
+        @Json(name = "next_batch")
+        val nextBatch: String? = null
 )

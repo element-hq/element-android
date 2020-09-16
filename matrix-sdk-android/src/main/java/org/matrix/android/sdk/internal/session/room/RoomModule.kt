@@ -61,6 +61,8 @@ import org.matrix.android.sdk.internal.session.room.relation.FindReactionEventFo
 import org.matrix.android.sdk.internal.session.room.relation.UpdateQuickReactionTask
 import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportContentTask
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentTask
+import org.matrix.android.sdk.internal.session.room.search.DefaultSearchTask
+import org.matrix.android.sdk.internal.session.room.search.SearchTask
 import org.matrix.android.sdk.internal.session.room.state.DefaultSendStateTask
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.tags.AddTagToRoomTask
@@ -195,4 +197,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
+
+    @Binds
+    abstract fun bindSearchTask(task: DefaultSearchTask): SearchTask
 }
