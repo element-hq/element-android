@@ -71,15 +71,15 @@
     <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="zero"></item>
-	<item quantity="one"></item>
-	<item quantity="two"></item>
-	<item quantity="few"></item>
-	<item quantity="many"></item>
-	<item quantity="other"></item>
-</plurals>
+        <item quantity="zero"></item>
+        <item quantity="one"></item>
+        <item quantity="two"></item>
+        <item quantity="few"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
 
-<string name="summary_you_sent_image">أرسلت صورة.</string>
+    <string name="summary_you_sent_image">أرسلت صورة.</string>
     <string name="summary_you_sent_sticker">أرسلت ملصقًا.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">دعوة منك أنت</string>
@@ -144,4 +144,4 @@
 
     <string name="initial_sync_start_importing_account">المزامنة الأولية:
 \nيستورد الحساب…</string>
-    </resources>
+</resources>

@@ -2658,7 +2658,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
     <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
-<string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
+    <string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
     <string name="settings_phone_number_empty">Deinem Konto wurde keine Telefonnummer hinzugefügt</string>
     <string name="settings_emails">E-mail-Adressen</string>
     <string name="settings_emails_empty">Deinem Konto wurde keine E-Mail hinzugefügt</string>

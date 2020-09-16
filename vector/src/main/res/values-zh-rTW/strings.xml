@@ -2547,7 +2547,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
     <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
-<string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
+    <string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
     <string name="settings_phone_number_empty">未新增電話號碼到您的帳號</string>
     <string name="settings_emails">電子郵件地址</string>
     <string name="settings_emails_empty">未傳送電子郵件到您的帳號</string>

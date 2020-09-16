@@ -349,10 +349,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="few">%ds</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="few">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1 min</item>
         <item quantity="few">%d min</item>
@@ -1043,10 +1043,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Stahuji klíče…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importuji klíče…</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Obnovena záloha s %d klíčem.</item>
-	<item quantity="few">Obnovena záloha se %d klíči.</item>
-	<item quantity="other">Obnovena záloha s %d klíči.</item>
-</plurals>
+        <item quantity="one">Obnovena záloha s %d klíčem.</item>
+        <item quantity="few">Obnovena záloha se %d klíči.</item>
+        <item quantity="other">Obnovena záloha s %d klíči.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">Do této relace byl přidán %d nový klíč.</item>
         <item quantity="few">Do této relace byly přidány %d nové klíče.</item>
@@ -1105,10 +1105,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="other">%1$s: %2$d zpráv</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d oznámení</item>
-	<item quantity="few">%d oznámení</item>
-	<item quantity="other">%d oznámeních</item>
-</plurals>
+        <item quantity="one">%d oznámení</item>
+        <item quantity="few">%d oznámení</item>
+        <item quantity="other">%d oznámeních</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
     <string name="notification_unknown_new_event">Nová událost</string>
@@ -2364,7 +2364,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="identity_server_set_alternative_notice_no_default">Zadejte URL serveru identit</string>
     <string name="identity_server_set_alternative_submit">Odeslat</string>
 
-<string name="play_video">Přehrát</string>
+    <string name="play_video">Přehrát</string>
     <string name="pause_video">Pozastavit</string>
     <string name="dismiss">Zavrhnout</string>
 
@@ -2456,18 +2456,18 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_emails_and_phone_numbers_summary">Správa emailových adres a telefonních čísel spojených s Vaším účtem v Matrix</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d vykázaný uživatel</item>
-	<item quantity="few">%d vykázaní uživatelé</item>
-	<item quantity="other">%d vykázaných uživatelů</item>
-</plurals>
+        <item quantity="one">%d vykázaný uživatel</item>
+        <item quantity="few">%d vykázaní uživatelé</item>
+        <item quantity="other">%d vykázaných uživatelů</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Klíče úspěšně exportovány</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d klíč úspěšně importován.</item>
-	<item quantity="few">%1$d/%2$d klíče úspěšně importovány.</item>
-	<item quantity="other">%1$d/%2$d klíčů úspěšně importováno.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d klíč úspěšně importován.</item>
+        <item quantity="few">%1$d/%2$d klíče úspěšně importovány.</item>
+        <item quantity="other">%1$d/%2$d klíčů úspěšně importováno.</item>
+    </plurals>
 
     <string name="active_widget_view_action">NÁHLED</string>
     <string name="active_widgets_title">Aktivní widgety</string>
@@ -2491,10 +2491,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="settings_text_message_sent_hint">Kód</string>
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s a %3$d další přečtena</item>
-	<item quantity="few">%1$s, %2$s a %3$d další přečteny</item>
-	<item quantity="other">%1$s, %2$s a %3$d dalších přečteno</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s a %3$d další přečtena</item>
+        <item quantity="few">%1$s, %2$s a %3$d další přečteny</item>
+        <item quantity="other">%1$s, %2$s a %3$d dalších přečteno</item>
+    </plurals>
     <string name="room_list_quick_actions_favorite_add">Přidat k oblíbeným</string>
     <string name="room_list_quick_actions_favorite_remove">Odstranit z oblíbených</string>
     <string name="notice_member_no_changes_by_you">Neučinili jste žádné změny</string>
@@ -2593,10 +2593,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="alert_push_are_disabled_title">Push oznámení jsou vypnuta</string>
     <string name="alert_push_are_disabled_description">Projděte svá nastavení, abyste zapnuli push oznámení</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">"Nesprávný kód, zbývá %d  pokus"</item>
-	<item quantity="few">"Nesprávný kód, zbývají %d  pokusy"</item>
-	<item quantity="other">"Nesprávný kód, zbývá %d  pokusů"</item>
-</plurals>
+        <item quantity="one">"Nesprávný kód, zbývá %d  pokus"</item>
+        <item quantity="few">"Nesprávný kód, zbývají %d  pokusy"</item>
+        <item quantity="other">"Nesprávný kód, zbývá %d  pokusů"</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Varování! Zbývá poslední pokus před odhlášením!</string>
     <string name="too_many_pin_failures">Příliš mnoho chyb, byli jste odhlášeni</string>
     <string name="create_pin_title">Zvolte PIN pro zabezpečení</string>
