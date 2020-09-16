@@ -1567,8 +1567,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynkroniseringen kan skjutas upp beroende på resurserna (batteri) eller status för enheten (vila).</string>
     <string name="settings_set_sync_delay">Fördröjning mellan varje synkronisering</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekunder</string>
 
     <string name="settings_contact">Lokala kontakter</string>
     <string name="settings_contacts_app_permission">Kontaktbehörighet</string>

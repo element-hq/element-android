@@ -449,8 +449,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
     <string name="settings_set_sync_delay">Verzögerung zwischen jeder Synchronisierung</string>
-    <string name="settings_second">Sekunde</string>
-    <string name="settings_seconds">Sekunden</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">OLM Version</string>

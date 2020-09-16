@@ -747,8 +747,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nSync může být odložen v závislosti na zdrojích (baterie) nebo stavu zařízení (spánek).</string>
     <string name="settings_set_sync_delay">Prodleva mezi jednotlivými syncy</string>
-    <string name="settings_second">vteřina</string>
-    <string name="settings_seconds">vteřiny</string>
 
     <string name="settings_version">Verze</string>
     <string name="settings_olm_version">verze olm</string>

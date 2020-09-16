@@ -456,8 +456,6 @@
     <string name="settings_enable_background_sync">Увімкнути фонову синхронізацію</string>
     <string name="settings_set_sync_timeout">Таймаут синхронізації</string>
     <string name="settings_set_sync_delay">Інтервал між запитами синхронізації</string>
-    <string name="settings_second">секунда</string>
-    <string name="settings_seconds">секунд</string>
 
     <string name="settings_version">Версія</string>
     <string name="settings_olm_version">Версія OLM</string>

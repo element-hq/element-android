@@ -813,8 +813,6 @@
     <string name="settings_set_workmanager_delay">Preferred Sync Interval</string>
     <string name="settings_set_workmanager_delay_summary">%s\nThe sync might be deferred depending on the resources (battery) or state of the device (sleep).</string>
     <string name="settings_set_sync_delay">Delay between each Sync</string>
-    <string name="settings_second">second</string>
-    <string name="settings_seconds">seconds</string>
     <plurals name="seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>

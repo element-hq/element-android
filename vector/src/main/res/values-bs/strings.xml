@@ -420,8 +420,6 @@ Da li ste sigurani?</string>
     <string name="settings_enable_background_sync">Omogući pozadinsku sinkronizaciju</string>
     <string name="settings_set_sync_timeout">Sinkronizacijski zahtjev istekao</string>
     <string name="settings_set_sync_delay">Napravi pauzu između dva sinkronizacijska zahtjeva</string>
-    <string name="settings_second">sekunda</string>
-    <string name="settings_seconds">sekunde</string>
 
     <string name="settings_version">Verzija</string>
     <string name="settings_olm_version">olm verzija</string>

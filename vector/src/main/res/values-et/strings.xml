@@ -1297,8 +1297,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSünkroniseerimine võib jääda vahele, kui aku täituvus on madal või seade energiasäästurežiimil.</string>
     <string name="settings_set_sync_delay">Viivitus sünkroonimiste vahel</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekundit</string>
 
     <string name="settings_version">Versioon</string>
     <string name="settings_olm_version">olm-teegi versioon</string>

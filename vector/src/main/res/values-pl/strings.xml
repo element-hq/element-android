@@ -368,8 +368,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_start_on_boot">Rozpocznij przy uruchomieniu systemu</string>
     <string name="settings_background_sync">Synchronizacja w tle</string>
     <string name="settings_enable_background_sync">Włącz synchronizację w tle</string>
-    <string name="settings_second">sekunda</string>
-    <string name="settings_seconds">sekundy</string>
 
     <string name="settings_version">Wersja</string>
     <string name="settings_app_term_conditions">Zasady użytkowania</string>

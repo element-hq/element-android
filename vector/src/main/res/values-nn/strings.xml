@@ -515,8 +515,6 @@
     <string name="settings_enable_background_sync">Skru på bakgrunnsamstilling</string>
     <string name="settings_set_sync_timeout">Samstillingsfyrespurnaden fekk tidsavbrot</string>
     <string name="settings_set_sync_delay">Forsinkelse mellom kvar synkronisering</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekund</string>
 
     <string name="settings_version">Versjon</string>
     <string name="settings_olm_version">olm versjon</string>

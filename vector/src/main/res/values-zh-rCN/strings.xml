@@ -300,8 +300,6 @@
     <string name="settings_enable_background_sync">启用后台同步</string>
     <string name="settings_set_sync_timeout">同步请求超时</string>
     <string name="settings_set_sync_delay">每次同步请求之间的间隔</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_copyright">版权</string>
     <string name="settings_privacy_policy">隐私政策</string>

@@ -410,8 +410,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_enable_background_sync">Gaitu bigarren planoko sinkronizazioa</string>
     <string name="settings_set_sync_timeout">Sinkronizazio eskaerak debora-muga gainditu du</string>
     <string name="settings_set_sync_delay">Sinkronizazioen arteko itxaronaldia</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundo</string>
 
     <string name="settings_version">Bertsioa:</string>
     <string name="settings_olm_version">olm bertsioa</string>

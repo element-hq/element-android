@@ -472,8 +472,6 @@ Er du sikker?</string>
     <string name="settings_enable_background_sync">Aktiver baggrundssynkronisering</string>
     <string name="settings_set_sync_timeout">Timeout for synkroniseringskald</string>
     <string name="settings_set_sync_delay">Pause mellem to synkroniseringskald</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekunder</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_app_term_conditions">Anvendelsesbetingelser</string>

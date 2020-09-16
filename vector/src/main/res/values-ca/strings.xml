@@ -473,8 +473,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_enable_background_sync">Habilita la sincronització en segon pla</string>
     <string name="settings_set_sync_timeout">Temps màxim d\'espera de la petició de sincronització</string>
     <string name="settings_set_sync_delay">Retard entre cada petició</string>
-    <string name="settings_second">segon</string>
-    <string name="settings_seconds">segons</string>
 
     <string name="settings_version">Versió</string>
     <string name="settings_olm_version">Versió d\'OLM</string>

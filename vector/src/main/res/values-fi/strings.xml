@@ -455,8 +455,6 @@
     <string name="settings_enable_background_sync">Käytä taustasynkronointia</string>
     <string name="settings_set_sync_timeout">Synkronointipyynnön aikakatkaisu</string>
     <string name="settings_set_sync_delay">Viive synkronointien välillä</string>
-    <string name="settings_second">sekunti</string>
-    <string name="settings_seconds">sekuntia</string>
 
     <string name="settings_version">Versio</string>
     <string name="settings_olm_version">olm-versio</string>

@@ -451,8 +451,6 @@
     <string name="settings_enable_background_sync">Achtergrondssynchronisatie inschakelen</string>
     <string name="settings_set_sync_timeout">Synchronisatieverzoek is verlopen</string>
     <string name="settings_set_sync_delay">Pauze tussen elk synchronisatie</string>
-    <string name="settings_second">seconde</string>
-    <string name="settings_seconds">seconden</string>
 
     <string name="settings_version">Versie</string>
     <string name="settings_olm_version">olm-versie</string>

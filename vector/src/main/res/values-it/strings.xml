@@ -458,8 +458,6 @@
     <string name="settings_enable_background_sync">Abilita la sincronizzazione in background</string>
     <string name="settings_set_sync_timeout">La richiesta di sincronizzazione sta impiegando troppo tempo</string>
     <string name="settings_set_sync_delay">Ritardo tra ogni sincronizzazione</string>
-    <string name="settings_second">secondo</string>
-    <string name="settings_seconds">secondi</string>
 
     <string name="settings_version">Versione</string>
     <string name="settings_olm_version">Versione olm</string>

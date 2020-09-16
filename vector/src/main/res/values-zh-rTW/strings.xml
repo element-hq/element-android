@@ -510,8 +510,6 @@
     <string name="settings_enable_background_sync">開啓後臺同步</string>
     <string name="settings_set_sync_timeout">同步請求超時</string>
     <string name="settings_set_sync_delay">每次同步間的延遲</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>

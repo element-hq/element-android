@@ -955,8 +955,6 @@
         <item quantity="many">%d محدّدة</item>
         <item quantity="other">%d محدّدة</item>
     </plurals>
-    <string name="settings_second">من الثواني</string>
-    <string name="settings_seconds">من الثواني</string>
 
     <string name="settings_preview_media_before_sending">عايِن الوسيط قبل إرساله</string>
 

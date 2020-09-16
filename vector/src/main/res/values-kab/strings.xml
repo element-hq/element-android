@@ -1406,8 +1406,6 @@
     <string name="settings_background_fdroid_sync_mode_disabled">Ulac amtawi n ugilal</string>
     <string name="settings_start_on_boot">Bdu seg usenker</string>
     <string name="settings_enable_background_sync">Rmed amtawi n ugilal</string>
-    <string name="settings_second">tasint</string>
-    <string name="settings_seconds">tasinin</string>
 
     <string name="settings_app_term_conditions">Tiwtilin &amp; tfadiwin</string>
     <string name="settings_clear_cache">Sfeḍ takatut tuffirt</string>

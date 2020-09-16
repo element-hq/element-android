@@ -275,9 +275,6 @@
     <string name="settings_app_info_link_summary">Kerfisupplýsingar forrits</string>
     <string name="settings_app_info_link_title">Upplýsingar um forrit</string>
 
-    <string name="settings_second">sekúnda</string>
-    <string name="settings_seconds">sekúndur</string>
-
     <string name="settings_version">Útgáfa</string>
     <string name="settings_olm_version">Útgáfa olm</string>
     <string name="settings_app_term_conditions">Skilmálar og kvaðir</string>

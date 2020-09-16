@@ -283,9 +283,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_enable_all_notif">Activar notificacións para esta conta</string>
     <string name="settings_messages_sent_by_bot">Mensaxes enviadas por bot</string>
 
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
-
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versións anteriores</string>
     <string name="settings_clear_cache">Limpar o caché</string>

@@ -453,8 +453,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_enable_background_sync">Habilitar sincronización en segundo plano</string>
     <string name="settings_set_sync_timeout">Venció el tiempo de espera para la solicitud de sincronización</string>
     <string name="settings_set_sync_delay">Retraso entre cada sincronización</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versión de olm</string>
