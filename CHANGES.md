@@ -15,6 +15,7 @@ Bugfix 🐛:
  - Various report of people that cannot play video (#2107)
  - Rooms incorrectly marked as unread (#588)
  - Allow users to show/hide room member state events (#1231) 
+ - Fix stuck on loader when launching home
 
 Translations 🗣:
  -
