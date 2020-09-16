@@ -35,6 +35,8 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBod
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
+import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestBody
+import org.matrix.android.sdk.internal.session.room.search.response.SearchResponse
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
 import org.matrix.android.sdk.internal.session.room.timeline.EventContextResponse
@@ -366,6 +368,11 @@ internal interface RoomAPI {
                   @Path("roomId") roomId: String,
                   @Path("tag") tag: String): Call<Unit>
 
+    /**
+     * Performs a full text search across different categories.
+     */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "search")
-    fun search()
+    fun search(
+            @Query("next_batch") nextBatch: String?,
+            @Body body: SearchRequestBody): Call<SearchResponse>
 }
