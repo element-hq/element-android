@@ -28,7 +28,7 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 4L
+        const val SESSION_STORE_SCHEMA_VERSION = 5L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -38,6 +38,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
         if (oldVersion <= 3) migrateTo4(realm)
+        if (oldVersion <= 4) migrateTo5(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -54,16 +55,16 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
     private fun migrateTo2(realm: DynamicRealm) {
         Timber.d("Step 1 -> 2")
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, Boolean::class.java)
+                ?.addField("adminE2EByDefault", Boolean::class.java)
                 ?.transform { obj ->
-                    obj.setBoolean(HomeServerCapabilitiesEntityFields.ADMIN_E2_E_BY_DEFAULT, true)
+                    obj.setBoolean("adminE2EByDefault", true)
                 }
     }
 
     private fun migrateTo3(realm: DynamicRealm) {
         Timber.d("Step 2 -> 3")
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.PREFERRED_JITSI_DOMAIN, String::class.java)
+                ?.addField("preferredJitsiDomain", String::class.java)
                 ?.transform { obj ->
                     // Schedule a refresh of the capabilities
                     obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
@@ -81,5 +82,12 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 .addField(PendingThreePidEntityFields.SID, String::class.java)
                 .setRequired(PendingThreePidEntityFields.SID, true)
                 .addField(PendingThreePidEntityFields.SUBMIT_URL, String::class.java)
+    }
+
+    private fun migrateTo5(realm: DynamicRealm) {
+        Timber.d("Step 4 -> 5")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.removeField("adminE2EByDefault")
+                ?.removeField("preferredJitsiDomain")
     }
 }

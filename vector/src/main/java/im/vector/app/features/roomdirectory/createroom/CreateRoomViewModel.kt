@@ -17,6 +17,7 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -27,15 +28,22 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
-                                                      private val session: Session
+                                                      private val session: Session,
+                                                      private val rawService: RawService
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -44,11 +52,25 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     }
 
     init {
-        setState {
-            copy(
-                    isEncrypted = !this.isPublic && session.getHomeServerCapabilities().adminE2EByDefault,
-                    hsAdminHasDisabledE2E = !session.getHomeServerCapabilities().adminE2EByDefault
-            )
+        initAdminE2eByDefault()
+    }
+
+    private var adminE2EByDefault = true
+
+    private fun initAdminE2eByDefault() {
+        viewModelScope.launch(Dispatchers.IO) {
+            adminE2EByDefault = tryThis {
+                rawService.getElementWellknown(session.myUserId)
+                        ?.isE2EByDefault()
+                        ?: true
+            } ?: true
+
+            setState {
+                copy(
+                        isEncrypted = !isPublic && adminE2EByDefault,
+                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                )
+            }
         }
     }
 
@@ -81,7 +103,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
         copy(
                 isPublic = action.isPublic,
-                isEncrypted = !action.isPublic && session.getHomeServerCapabilities().adminE2EByDefault
+                isEncrypted = !action.isPublic && adminE2EByDefault
         )
     }
 

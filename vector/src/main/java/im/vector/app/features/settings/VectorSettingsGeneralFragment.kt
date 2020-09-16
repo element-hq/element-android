@@ -80,9 +80,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private var mDisplayedEmails = ArrayList<String>()
-    private var mDisplayedPhoneNumber = ArrayList<String>()
-
     private var avatarCameraUri: Uri? = null
 
     private val mUserSettingsCategory by lazy {

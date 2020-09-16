@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.homeserver
+package im.vector.app.features.raw.wellknown
 
-import com.airbnb.mvrx.MvRxState
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import com.squareup.moshi.JsonAdapter
+import org.matrix.android.sdk.internal.di.MoshiProvider
 
-data class HomeServerCapabilitiesViewState(
-        val capabilities: HomeServerCapabilities = HomeServerCapabilities(),
-        val isE2EByDefault: Boolean = true
-) : MvRxState
+object ElementWellKnownMapper {
+
+    val adapter: JsonAdapter<ElementWellKnown> = MoshiProvider.providesMoshi().adapter(ElementWellKnown::class.java)
+
+    fun from(value: String): ElementWellKnown? {
+        return adapter.fromJson(value)
+    }
+}

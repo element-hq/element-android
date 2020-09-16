@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +15,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.homeserver
+package org.matrix.android.sdk.internal.raw
 
-import com.airbnb.mvrx.MvRxState
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import io.realm.annotations.RealmModule
+import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 
-data class HomeServerCapabilitiesViewState(
-        val capabilities: HomeServerCapabilities = HomeServerCapabilities(),
-        val isE2EByDefault: Boolean = true
-) : MvRxState
+/**
+ * Realm module for global classes
+ */
+@RealmModule(library = true,
+        classes = [
+            RawCacheEntity::class
+        ])
+internal class GlobalRealmModule

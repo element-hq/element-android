@@ -42,6 +42,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
@@ -58,6 +59,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -107,6 +109,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
+        private val rawService: RawService,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummaryHolder: RoomSummaryHolder,
@@ -331,7 +334,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             val roomId: String = room.roomId
             val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
 
-            val jitsiDomain = session.getHomeServerCapabilities().preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
+            val preferredJitsiDomain = tryThis {
+                rawService.getElementWellknown(session.myUserId)
+                        ?.jitsiServer
+                        ?.preferredDomain
+            }
+            val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
 
             // We use the default element wrapper for this widget
             // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md

@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.homeserver
+package im.vector.app.features.raw.wellknown
 
-import com.airbnb.mvrx.MvRxState
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.internal.util.awaitCallback
 
-data class HomeServerCapabilitiesViewState(
-        val capabilities: HomeServerCapabilities = HomeServerCapabilities(),
-        val isE2EByDefault: Boolean = true
-) : MvRxState
+suspend fun RawService.getElementWellknown(userId: String): ElementWellKnown? {
+    return awaitCallback<String> { getWellknown(userId, it) }
+            .let { ElementWellKnownMapper.from(it) }
+}
+
+fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true
