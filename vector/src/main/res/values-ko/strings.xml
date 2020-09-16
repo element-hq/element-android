@@ -24,7 +24,6 @@
     <string name="save">저장</string>
     <string name="leave">떠나기</string>
     <string name="send">보내기</string>
-    <string name="copy">복사</string>
     <string name="resend">다시 보내기</string>
     <string name="redact">감추기</string>
     <string name="quote">인용</string>

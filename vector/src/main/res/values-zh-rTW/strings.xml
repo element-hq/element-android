@@ -35,7 +35,6 @@
     <string name="title_activity_historical">歷史</string>
     <string name="title_activity_group_details">社群細節</string>
 
-    <string name="copy">複製</string>
     <string name="redact">移除</string>
     <string name="quote">引用</string>
     <string name="later">稍後</string>

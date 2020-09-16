@@ -18,7 +18,6 @@
     <string name="save">Säästä</string>
     <string name="leave">Poistu</string>
     <string name="send">Lähetä</string>
-    <string name="copy">Kopioi</string>
     <string name="resend">Lähetä uudelleen</string>
     <string name="redact">Poista</string> <!-- ??? -->
     <string name="quote">Lainaa</string>

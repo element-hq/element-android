@@ -36,7 +36,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
             EventSharedAction(R.string.message_add_reaction, R.drawable.ic_add_reaction)
 
     data class Copy(val content: String) :
-            EventSharedAction(R.string.copy, R.drawable.ic_copy)
+            EventSharedAction(R.string.action_copy, R.drawable.ic_copy)
 
     data class Edit(val eventId: String) :
             EventSharedAction(R.string.edit, R.drawable.ic_edit)

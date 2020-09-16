@@ -66,7 +66,6 @@
     <string name="save">保存</string>
     <string name="leave">离开</string>
     <string name="send">发送</string>
-    <string name="copy">复制</string>
     <string name="view_source">查看源代码</string>
     <string name="view_decrypted_source">查看解密后的源代码</string>
     <string name="or">或</string>
