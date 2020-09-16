@@ -1,0 +1,30 @@
+Element es un nuevo tipo de aplicación de mensajería y colaboración que:
+
+1. Le da el control para preservar su privacidad 
+2. Le permite comunicarse con cualquier persona en la red Matrix e incluso más allá al integrarse con aplicaciones como Slack.
+3. Te protege de la publicidad, la minería de datos y los jardines vallados. 
+4. Lo protege a través del cifrado de un extremo a otro, con firma cruzada para verificar a otros
+
+Element es completamente diferente de otras aplicaciones de mensajería y colaboración porque es descentralizado y de código abierto.
+
+Element le permite autohospedarse, o elegir un host, para que tenga privacidad, propiedad y control de sus datos y conversaciones. Te da acceso a una red abierta; para que no se quede atascado hablando solo con otros usuarios de Element. Y es muy seguro.
+
+Element puede hacer todo esto porque opera en Matrix, el estándar para la comunicación abierta y descentralizada.
+
+Element te da el control permitiéndote elegir quién aloja tus conversaciones. Desde la aplicación Element, puede elegir hospedar de diferentes maneras:
+
+1. Obtenga una cuenta gratuita en el servidor público de matrix.org alojado por los desarrolladores de Matrix, o elija entre miles de servidores públicos alojados por voluntarios 
+2. Autohospede su cuenta ejecutando un servidor en su propio hardware 
+3. Regístrese para obtener una cuenta en un servidor personalizado simplemente suscribiéndose a la plataforma de alojamiento de Element Matrix Services
+
+<b>¿Por qué elegir Element?</b>
+
+<b>POSEE SUS DATOS</b>: Tú decides dónde guardar tus datos y mensajes. Usted es el propietario y lo controla, no algún MEGACORP que extraiga sus datos o dé acceso a terceros.
+
+<b>MENSAJERÍA ABIERTA Y COLABORACIÓN</b>: Puede chatear con cualquier otra persona en la red de Matrix, ya sea que estén usando Element u otra aplicación de Matrix, e incluso si están usando un sistema de mensajería diferente como Slack, IRC o XMPP.
+
+<b>SUPER SEGURO</b>: Cifrado real de extremo a extremo (solo aquellos en la conversación pueden descifrar mensajes) y firma cruzada para verificar los dispositivos de los participantes de la conversación.
+
+<b>COMUNICACIÓN COMPLETA</b>: Mensajería, llamadas de voz y video, uso compartido de archivos, uso compartido de pantalla y un montón de integraciones, bots y widgets. Construya salas, comunidades, manténgase en contacto y haga las cosas.
+
+<b>EN TODAS PARTES</b>: Manténgase en contacto donde quiera que esté con un historial de mensajes totalmente sincronizado en todos sus dispositivos y en la web en https://app.element.io.
