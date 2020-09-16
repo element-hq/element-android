@@ -18,7 +18,6 @@
     <string name="save">Guardar</string>
     <string name="leave">Salir</string>
     <string name="send">Enviar</string>
-    <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
     <string name="redact">Eliminar</string>
     <string name="quote">Citar</string>
@@ -453,8 +452,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_enable_background_sync">Habilitar sincronización en segundo plano</string>
     <string name="settings_set_sync_timeout">Venció el tiempo de espera para la solicitud de sincronización</string>
     <string name="settings_set_sync_delay">Retraso entre cada sincronización</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versión de olm</string>
@@ -1953,7 +1950,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="autocomplete_limited_results">Mostrando solo el primer resultado, agregue mas letras…</string>
 
-    <string name="settings_developer_mode_fail_fast_title">Fallar rapido (Test)</string>
+    <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
     <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
 
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
@@ -2004,7 +2001,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="verification_verify_user">Verificar %s</string>
     <string name="verification_verified_user">Verificado %s</string>
     <string name="verification_request_waiting_for">Esperando por %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no estan encriptados punto a punto.</string>
+    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no están encriptados punto a punto.</string>
     <string name="room_profile_section_security">Seguridad</string>
     <string name="room_profile_section_security_learn_more">Saber mas</string>
     <string name="room_profile_section_more">Mas</string>
@@ -2042,7 +2039,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_list_sharing_header_other_rooms">Otras salas</string>
 
     <string name="command_description_rainbow">Envía el mensaje dado en colores</string>
-    <string name="settings_category_timeline">Linea de tiempo</string>
+    <string name="settings_category_timeline">Línea de tiempo</string>
 
     <string name="settings_category_composer">Editor de mensage</string>
 
@@ -2082,7 +2079,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Sin conexión</string>
-    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avion Activado</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avión Activado</string>
 
     <string name="settings_dev_tools">Herramientas de desarrollo</string>
     <string name="settings_account_data">Datos de cuenta</string>
@@ -2129,7 +2126,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar sección y crear uno nuevo.</string>
     <string name="settings_security_pin_code_title">Establecer PIN</string>
     <string name="settings_security_pin_code_summary">Si decea resetear su PIN, toque Olvidé PIN para cerrar sesión y restablecer.</string>
-<string name="settings_phone_numbers">Numeros telefonicos</string>
+    <string name="settings_phone_numbers">Numeros telefonicos</string>
     <string name="settings_emails_and_phone_numbers_title">Correos y numeros telefonicos</string>
     <string name="settings_emails_and_phone_numbers_summary">Administre el correo y numero telefonico de su cuenta</string>
 
@@ -2182,16 +2179,16 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="disabled_integration_dialog_content">Habilite \'Permitir integraciones\' en Configuración para hacer esto.</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d usuario prohibido</item>
-	<item quantity="other">%d usuarios prohibidos</item>
-</plurals>
+        <item quantity="one">%d usuario prohibido</item>
+        <item quantity="other">%d usuarios prohibidos</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Claves exportadas correctamente</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d clave importada con éxito.</item>
-	<item quantity="other">%1$d/%2$d claves importadas con éxito.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d clave importada con éxito.</item>
+        <item quantity="other">%1$d/%2$d claves importadas con éxito.</item>
+    </plurals>
 
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
@@ -2219,9 +2216,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_text_message_sent_wrong_code">El código de verificación no es correcto.</string>
 
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s y %3$d otra lectura</item>
-	<item quantity="other">%1$s, %2$s y %3$d otras lecturas</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s y %3$d otra lectura</item>
+        <item quantity="other">%1$s, %2$s y %3$d otras lecturas</item>
+    </plurals>
     <string name="uploads_media_title">MEDIO</string>
     <string name="uploads_media_no_result">No hay medios en esta sala</string>
     <string name="uploads_files_subtitle">%1$s a %2$s</string>
@@ -2310,9 +2307,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_error_outdated_homeserver_content">Este servidor doméstico está ejecutando una versión demasiado antigua para conectarse. Pídale al administrador de su servidor doméstico que actualice.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundo…</item>
-	<item quantity="other">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundos…</item>
-</plurals>
+        <item quantity="one">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundo…</item>
+        <item quantity="other">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundos…</item>
+    </plurals>
 
     <string name="login_connect_using_matrix_id_notice">Alternativamente, si ya tiene una cuenta y conoce su identificador Matrix y su contraseña, puede usar este método:</string>
     <string name="login_connect_using_matrix_id_submit">Iniciar sesión con Matrix ID</string>
@@ -2396,9 +2393,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_active_sessions_unverified_device_desc">Verifique esta sesión para marcarla como confiable y otorgarle acceso a mensajes encriptados. Si no inició sesión en esta sesión, su cuenta puede verse comprometida:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d sesión activa</item>
-	<item quantity="other">%d sesiones activas</item>
-</plurals>
+        <item quantity="one">%d sesión activa</item>
+        <item quantity="other">%d sesiones activas</item>
+    </plurals>
 
     <string name="verification_open_other_to_verify">Utilice una sesión existente para verificar esta, otorgándole acceso a los mensajes cifrados.</string>
 
@@ -2410,13 +2407,13 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="qr_code_scanned_by_other_notice">¡Casi ahí! ¿Es %s muestra el mismo escudo\?</string>
     <plurals name="poll_info">
-	<item quantity="one">%d voto</item>
-	<item quantity="other">%d votos</item>
-</plurals>
+        <item quantity="one">%d voto</item>
+        <item quantity="other">%d votos</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d voto - Resultados finales</item>
-	<item quantity="other">%d votos - Resultados finales</item>
-</plurals>
+        <item quantity="one">%d voto - Resultados finales</item>
+        <item quantity="other">%d votos - Resultados finales</item>
+    </plurals>
     <string name="command_description_poll">Crea una encuesta simple</string>
     <string name="verification_cannot_access_other_session">Use una contraseña o clave de recuperación</string>
     <string name="verification_use_passphrase">Si no puede acceder a una sesión existente</string>
@@ -2427,9 +2424,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="share_confirm_room">¿Quieres enviar este adjunto a %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Enviar imagen con el tamaño original</item>
-	<item quantity="other">Envía imágenes con el tamaño original</item>
-</plurals>
+        <item quantity="one">Enviar imagen con el tamaño original</item>
+        <item quantity="other">Envía imágenes con el tamaño original</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Confirmar eliminación</string>
     <string name="delete_event_dialog_content">¿Está seguro de que desea eliminar (eliminar) este evento\? Tenga en cuenta que si elimina el nombre de una sala o el cambio de tema, podría deshacer el cambio.</string>
@@ -2651,9 +2648,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="alert_push_are_disabled_title">Las notificaciones push están deshabilitadas</string>
     <string name="alert_push_are_disabled_description">Revise su configuración para habilitar las notificaciones push</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Código incorrecto, %d intento restante</item>
-	<item quantity="other">Código incorrecto, %d intentos restantes</item>
-</plurals>
+        <item quantity="one">Código incorrecto, %d intento restante</item>
+        <item quantity="other">Código incorrecto, %d intentos restantes</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">¡Advertencia! ¡Último intento restante antes de cerrar sesión!</string>
     <string name="too_many_pin_failures">Demasiados errores, se ha desconectado</string>
     <string name="create_pin_title">Elija un PIN por seguridad</string>

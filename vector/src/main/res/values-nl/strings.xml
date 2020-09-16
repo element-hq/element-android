@@ -18,7 +18,6 @@
     <string name="save">Opslaan</string>
     <string name="leave">Verlaten</string>
     <string name="send">Versturen</string>
-    <string name="copy">Kopiëren</string>
     <string name="resend">Opnieuw versturen</string>
     <string name="redact">Verwijderen</string>
     <string name="quote">Citeren</string>
@@ -451,8 +450,6 @@
     <string name="settings_enable_background_sync">Achtergrondssynchronisatie inschakelen</string>
     <string name="settings_set_sync_timeout">Synchronisatieverzoek is verlopen</string>
     <string name="settings_set_sync_delay">Pauze tussen elk synchronisatie</string>
-    <string name="settings_second">seconde</string>
-    <string name="settings_seconds">seconden</string>
 
     <string name="settings_version">Versie</string>
     <string name="settings_olm_version">olm-versie</string>

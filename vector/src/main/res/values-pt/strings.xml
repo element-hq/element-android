@@ -18,7 +18,6 @@
     <string name="save">Guardar</string>
     <string name="leave">Sair</string>
     <string name="send">Enviar</string>
-    <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
     <string name="redact">Apagar</string>
     <string name="quote">Citar</string>
@@ -451,8 +450,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="settings_enable_background_sync">Ativar sincronização em segundo plano</string>
     <string name="settings_set_sync_timeout">Tempo do pedido de sincronização esgotou</string>
     <string name="settings_set_sync_delay">Tempo entre duas solicitações de sincronização</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versão</string>
     <string name="settings_olm_version">versão olm</string>

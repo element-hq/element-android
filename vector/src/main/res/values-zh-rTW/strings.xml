@@ -35,7 +35,6 @@
     <string name="title_activity_historical">歷史</string>
     <string name="title_activity_group_details">社群細節</string>
 
-    <string name="copy">複製</string>
     <string name="redact">移除</string>
     <string name="quote">引用</string>
     <string name="later">稍後</string>
@@ -510,8 +509,6 @@
     <string name="settings_enable_background_sync">開啓後臺同步</string>
     <string name="settings_set_sync_timeout">同步請求超時</string>
     <string name="settings_set_sync_delay">每次同步間的延遲</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>
@@ -2547,7 +2544,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
     <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
-<string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
+    <string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
     <string name="settings_phone_number_empty">未新增電話號碼到您的帳號</string>
     <string name="settings_emails">電子郵件地址</string>
     <string name="settings_emails_empty">未傳送電子郵件到您的帳號</string>

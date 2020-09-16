@@ -43,7 +43,6 @@
     <string name="leave">Napusti</string>
     <string name="stay">Ostani</string>
     <string name="send">Pošalji</string>
-    <string name="copy">Kopiraj</string>
     <string name="resend">Pošalji ponovo</string>
     <string name="redact">Ukloni</string>
     <string name="share">Podeli</string>
@@ -239,8 +238,6 @@
     <string name="settings_background_sync">Sinhronizacija u pozadini</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizovano za potrošnju baterije</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Bez sinhronizacije u pozadini</string>
-    <string name="settings_second">sekundu</string>
-    <string name="settings_seconds">sekundi</string>
 
     <string name="settings_version">Verzija</string>
     <string name="settings_olm_version">olm verzija</string>

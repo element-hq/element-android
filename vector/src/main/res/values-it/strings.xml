@@ -19,7 +19,6 @@
     <string name="save">Salva</string>
     <string name="leave">Esci</string>
     <string name="send">Invia</string>
-    <string name="copy">Copia</string>
     <string name="resend">Rispedisci</string>
     <string name="redact">Rimuovi</string>
     <string name="quote">Citazione</string>
@@ -458,8 +457,6 @@
     <string name="settings_enable_background_sync">Abilita la sincronizzazione in background</string>
     <string name="settings_set_sync_timeout">La richiesta di sincronizzazione sta impiegando troppo tempo</string>
     <string name="settings_set_sync_delay">Ritardo tra ogni sincronizzazione</string>
-    <string name="settings_second">secondo</string>
-    <string name="settings_seconds">secondi</string>
 
     <string name="settings_version">Versione</string>
     <string name="settings_olm_version">Versione olm</string>
@@ -2654,7 +2651,7 @@
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Attenzione! Ultimo tentativo rimasto prima di venire disconnesso!</string>
     <string name="too_many_pin_failures">Troppi errori, sei stato disconnesso</string>
-<string name="auth_msisdn_already_defined">Questo numero di telefono è già definito.</string>
+    <string name="auth_msisdn_already_defined">Questo numero di telefono è già definito.</string>
     <string name="settings_phone_number_empty">Nessun numero di telefono aggiunto al tuo account</string>
     <string name="settings_emails">Indirizzi email</string>
     <string name="settings_emails_empty">Nessuna email aggiunta al tuo account</string>

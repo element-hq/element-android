@@ -66,7 +66,6 @@
     <string name="save">保存</string>
     <string name="leave">离开</string>
     <string name="send">发送</string>
-    <string name="copy">复制</string>
     <string name="view_source">查看源代码</string>
     <string name="view_decrypted_source">查看解密后的源代码</string>
     <string name="or">或</string>
@@ -300,8 +299,6 @@
     <string name="settings_enable_background_sync">启用后台同步</string>
     <string name="settings_set_sync_timeout">同步请求超时</string>
     <string name="settings_set_sync_delay">每次同步请求之间的间隔</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_copyright">版权</string>
     <string name="settings_privacy_policy">隐私政策</string>
@@ -2563,7 +2560,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">注意！登出前最后一次尝试！</string>
     <string name="too_many_pin_failures">错误次数过多，您已被登出</string>
-<string name="auth_msisdn_already_defined">此电话号码已定义。</string>
+    <string name="auth_msisdn_already_defined">此电话号码已定义。</string>
     <string name="settings_phone_number_empty">您的帐户尚未添加电话号码</string>
     <string name="settings_emails">电子邮件地址</string>
     <string name="settings_emails_empty">您的账户尚未添加电子邮件</string>

@@ -28,7 +28,6 @@
     <string name="save">Konservi</string>
     <string name="leave">Eliri</string>
     <string name="send">Sendi</string>
-    <string name="copy">Kopii</string>
     <string name="resend">Resendi</string>
     <string name="redact">Forigi</string>
     <string name="quote">Citi</string>
@@ -361,8 +360,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nLa spegulado povas esti prokrastita, depende de la rimedoj (baterio) aŭ la stato de la aparato (dormeto).</string>
     <string name="settings_set_sync_delay">Prokrasto inter ĉiu spegulado</string>
-    <string name="settings_second">sekundo</string>
-    <string name="settings_seconds">sekundoj</string>
 
     <string name="settings_version">Versio</string>
     <string name="settings_olm_version">Versio de olm</string>

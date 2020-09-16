@@ -33,7 +33,6 @@
 
     <string name="leave">Ayrıl</string>
     <string name="send">Gönder</string>
-    <string name="copy">Kopyala</string>
     <string name="resend">Tekrar gönder</string>
     <string name="redact">Sil</string>
     <string name="quote">Alıntı</string>
@@ -700,8 +699,6 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_enable_background_sync">Arkaplanda eşzamanlamayı etkinleştir</string>
     <string name="settings_set_sync_timeout">Eşzamanlama talep süresi doldu</string>
     <string name="settings_set_sync_delay">Her senkronizasyon arası gecikme</string>
-    <string name="settings_second">saniye</string>
-    <string name="settings_seconds">saniye</string>
 
     <string name="settings_version">Sürüm</string>
     <string name="settings_olm_version">olm sürümü</string>

@@ -15,7 +15,6 @@
     <string name="save">Mentés</string>
     <string name="leave">Elhagyás</string>
     <string name="send">Küldés</string>
-    <string name="copy">Másolás</string>
     <string name="resend">Újraküldés</string>
     <string name="redact">Törlés</string>
     <string name="quote">Idézés</string>
@@ -410,8 +409,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_enable_background_sync">Háttérben történő szinkronizáció engedélyezése</string>
     <string name="settings_set_sync_timeout">Szinkronizáció kérelem időtúllépés</string>
     <string name="settings_set_sync_delay">Késleltetés a szinkronizációk között</string>
-    <string name="settings_second">másodperc</string>
-    <string name="settings_seconds">másodperc</string>
 
     <string name="settings_version">Verzió</string>
     <string name="settings_olm_version">olm verzió</string>

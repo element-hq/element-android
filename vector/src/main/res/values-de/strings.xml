@@ -22,7 +22,6 @@
     <string name="save">Speichern</string>
     <string name="leave">Verlassen</string>
     <string name="send">Senden</string>
-    <string name="copy">Kopieren</string>
     <string name="resend">Erneut senden</string>
     <string name="redact">Entfernen</string>
     <string name="quote">Zitieren</string>
@@ -449,8 +448,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
     <string name="settings_set_sync_delay">Verzögerung zwischen jeder Synchronisierung</string>
-    <string name="settings_second">Sekunde</string>
-    <string name="settings_seconds">Sekunden</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">OLM Version</string>
@@ -2658,7 +2655,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
     <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
-<string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
+    <string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
     <string name="settings_phone_number_empty">Deinem Konto wurde keine Telefonnummer hinzugefügt</string>
     <string name="settings_emails">E-mail-Adressen</string>
     <string name="settings_emails_empty">Deinem Konto wurde keine E-Mail hinzugefügt</string>

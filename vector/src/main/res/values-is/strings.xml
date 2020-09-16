@@ -27,7 +27,6 @@
     <string name="save">Vista</string>
     <string name="leave">Fara út</string>
     <string name="send">Senda</string>
-    <string name="copy">Afrita</string>
     <string name="resend">Endursenda</string>
     <string name="redact">Ritstýra</string>
     <string name="quote">Tilvitnun</string>
@@ -274,9 +273,6 @@
     <string name="settings_add_phone_number">Bæta við símanúmeri</string>
     <string name="settings_app_info_link_summary">Kerfisupplýsingar forrits</string>
     <string name="settings_app_info_link_title">Upplýsingar um forrit</string>
-
-    <string name="settings_second">sekúnda</string>
-    <string name="settings_seconds">sekúndur</string>
 
     <string name="settings_version">Útgáfa</string>
     <string name="settings_olm_version">Útgáfa olm</string>

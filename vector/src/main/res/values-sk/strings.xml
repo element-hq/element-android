@@ -25,7 +25,6 @@
     <string name="save">Uložiť</string>
     <string name="leave">Opustiť</string>
     <string name="send">Odoslať</string>
-    <string name="copy">Kopírovať</string>
     <string name="resend">Odoslať znovu</string>
     <string name="redact">Vymazať</string>
     <string name="quote">Citovať</string>
@@ -428,8 +427,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_enable_background_sync">Povoliť synchronizáciu na pozadí</string>
     <string name="settings_set_sync_timeout">Časový limit požiadavky na synchronizáciu</string>
     <string name="settings_set_sync_delay">Oneskorenie medzi jednotlivými synchronizáciami</string>
-    <string name="settings_second">sekunda</string>
-    <string name="settings_seconds">sekúnd</string>
 
     <string name="settings_version">Verzia</string>
     <string name="settings_olm_version">Verzia knižnice olm</string>

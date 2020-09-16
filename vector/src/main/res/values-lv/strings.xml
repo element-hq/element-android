@@ -16,7 +16,6 @@
     <string name="save">Saglabāt</string>
     <string name="leave">Atstāt</string>
     <string name="send">Nosūtīt</string>
-    <string name="copy">Kopēt</string>
     <string name="resend">Sūtīt atkārtoti</string>
     <string name="redact">Rediģēt</string>
     <string name="quote">Citāts</string>
@@ -457,8 +456,6 @@ Vai vēlies turpināt?</string>
     <string name="settings_enable_background_sync">Iespējot sinhronizāciju fonā</string>
     <string name="settings_set_sync_timeout">Sinhronizācijas pieprasījuma noildze</string>
     <string name="settings_set_sync_delay">Intervāls starp 2 sinhronizācijas pieprasījumiem</string>
-    <string name="settings_second">sekunde</string>
-    <string name="settings_seconds">sekundes</string>
 
     <string name="settings_version">Versija</string>
     <string name="settings_olm_version">Olm versija</string>
