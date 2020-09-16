@@ -857,6 +857,8 @@
     <string name="settings_12_24_timestamps">Show timestamps in 12-hour format</string>
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
+    <string name="settings_show_room_member_state_events">Show room member state events</string>
+    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
