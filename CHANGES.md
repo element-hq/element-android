@@ -19,7 +19,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Create a new RawService to get plain data from the server.
 
 Build 🧱:
  -

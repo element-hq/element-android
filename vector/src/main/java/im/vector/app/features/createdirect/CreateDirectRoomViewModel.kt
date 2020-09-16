@@ -16,6 +16,7 @@
 
 package im.vector.app.features.createdirect
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -23,13 +24,20 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.homeserver.ElementWellKnownMapper
+import im.vector.app.features.homeserver.isE2EByDefault
 import im.vector.app.features.userdirectory.PendingInvitee
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
+                                                            private val rawService: RawService,
                                                             private val session: Session)
     : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -54,22 +62,29 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
-        val roomParams = CreateRoomParams()
-                .apply {
-                    invitees.forEach {
-                        when (it) {
-                            is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
-                            is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
-                        }.exhaustive
-                    }
-                    setDirectMessage()
-                    enableEncryptionIfInvitedUsersSupportIt = session.getHomeServerCapabilities().adminE2EByDefault
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            val adminE2EByDefault = awaitCallback<String> { rawService.getWellknown(session.myUserId, it) }
+                    .let { ElementWellKnownMapper.from(it) }
+                    ?.isE2EByDefault()
+                    ?: true
 
-        session.rx()
-                .createRoom(roomParams)
-                .execute {
-                    copy(createAndInviteState = it)
-                }
+            val roomParams = CreateRoomParams()
+                    .apply {
+                        invitees.forEach {
+                            when (it) {
+                                is PendingInvitee.UserPendingInvitee -> invitedUserIds.add(it.user.userId)
+                                is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
+                            }.exhaustive
+                        }
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                    }
+
+            session.rx()
+                    .createRoom(roomParams)
+                    .execute {
+                        copy(createAndInviteState = it)
+                    }
+        }
     }
 }
