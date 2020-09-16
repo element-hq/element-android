@@ -1995,7 +1995,7 @@
     <string name="sas_emoji_description">Selkem tiɣimit-a s usentem n yimujiten-a i d-yettbanen ɣef ugdil n baba-is</string>
     <string name="sas_decimal_description">Selkem tiɣimit-a s usentem n wuṭṭunen-a i d-yettbanen ɣef ugdil n baba-is</string>
 
-    <string name="sas_incoming_verification_request_dialog">Tremseḍ-d asuter n uselken i d-iteddun...</string>
+    <string name="sas_incoming_verification_request_dialog">Tremseḍ-d asuter n uselken i d-iteddun…</string>
     <string name="sas_waiting_for_partner">Aṛaǧu n usentem sɣur bab-is…</string>
 
     <string name="sas_verified_successful">Teslekneḍ taxxamt-a akken iwata.</string>
