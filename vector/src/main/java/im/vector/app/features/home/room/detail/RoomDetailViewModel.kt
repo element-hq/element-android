@@ -42,8 +42,8 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.app.features.home.room.typing.TypingHelper
-import im.vector.app.features.homeserver.ElementWellKnownMapper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
@@ -353,8 +353,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
 
             val preferredJitsiDomain = tryThis {
-                awaitCallback<String> { rawService.getWellknown(session.myUserId, it) }
-                        .let { ElementWellKnownMapper.from(it) }
+                rawService.getElementWellknown(session.myUserId)
                         ?.jitsiServer
                         ?.preferredDomain
             }

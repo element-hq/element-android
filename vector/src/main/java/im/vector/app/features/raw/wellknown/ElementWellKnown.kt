@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.homeserver
+package im.vector.app.features.raw.wellknown
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.di.MoshiProvider
 
 @JsonClass(generateAdapter = true)
 data class ElementWellKnown(
         /**
-         *Preferred Jitsi domain, provided in Wellknown
+         * Preferred Jitsi domain
          */
         @Json(name = "im.vector.riot.jitsi")
         val jitsiServer: WellKnownPreferredConfig? = null,
@@ -39,15 +37,6 @@ data class ElementWellKnown(
         @Json(name = "im.vector.riot.e2ee")
         val riotE2E: E2EWellKnownConfig? = null
 )
-
-object ElementWellKnownMapper {
-
-    val adapter: JsonAdapter<ElementWellKnown> = MoshiProvider.providesMoshi().adapter(ElementWellKnown::class.java)
-
-    fun from(value: String): ElementWellKnown? {
-        return adapter.fromJson(value)
-    }
-}
 
 @JsonClass(generateAdapter = true)
 data class E2EWellKnownConfig(
@@ -64,5 +53,3 @@ data class WellKnownPreferredConfig(
         @Json(name = "preferredDomain")
         val preferredDomain: String? = null
 )
-
-fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true

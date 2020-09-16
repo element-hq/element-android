@@ -24,15 +24,14 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.homeserver.ElementWellKnownMapper
-import im.vector.app.features.homeserver.isE2EByDefault
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.userdirectory.PendingInvitee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
@@ -63,8 +62,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val adminE2EByDefault = awaitCallback<String> { rawService.getWellknown(session.myUserId, it) }
-                    .let { ElementWellKnownMapper.from(it) }
+            val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
                     ?.isE2EByDefault()
                     ?: true
 

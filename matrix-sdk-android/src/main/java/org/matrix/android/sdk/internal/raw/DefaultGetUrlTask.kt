@@ -69,7 +69,7 @@ internal class DefaultGetUrlTask @Inject constructor(
         // Get data from cache
         var dataFromCache: String? = null
         var isCacheValid = false
-        monarchy.awaitTransaction { realm ->
+        monarchy.doWithRealm { realm ->
             val entity = RawCacheEntity.get(realm, url)
             dataFromCache = entity?.data
             isCacheValid = entity != null && Date().time < entity.lastUpdatedTimestamp + validityDurationInMillis

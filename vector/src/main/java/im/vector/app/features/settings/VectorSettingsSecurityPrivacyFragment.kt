@@ -51,13 +51,13 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
-import im.vector.app.features.homeserver.ElementWellKnownMapper
-import im.vector.app.features.homeserver.isE2EByDefault
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
+import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
