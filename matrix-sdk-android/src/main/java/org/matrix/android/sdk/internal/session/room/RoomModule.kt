@@ -25,6 +25,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.room.search.SearchService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
@@ -61,6 +62,7 @@ import org.matrix.android.sdk.internal.session.room.relation.FindReactionEventFo
 import org.matrix.android.sdk.internal.session.room.relation.UpdateQuickReactionTask
 import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportContentTask
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentTask
+import org.matrix.android.sdk.internal.session.room.search.DefaultSearchService
 import org.matrix.android.sdk.internal.session.room.search.DefaultSearchTask
 import org.matrix.android.sdk.internal.session.room.search.SearchTask
 import org.matrix.android.sdk.internal.session.room.state.DefaultSendStateTask
@@ -122,6 +124,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindFileService(service: DefaultFileService): FileService
+
+    @Binds
+    abstract fun bindSearchService(service: DefaultSearchService): SearchService
 
     @Binds
     abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
