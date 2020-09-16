@@ -44,5 +44,4 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun shouldShowRoomMemberStateEvents(): Boolean {
         return vectorPreferences.showRoomMemberStateEvents()
     }
-
 }

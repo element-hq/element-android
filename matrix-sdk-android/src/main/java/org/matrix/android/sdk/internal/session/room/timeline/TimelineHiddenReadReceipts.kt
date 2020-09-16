@@ -18,6 +18,10 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import android.util.SparseArray
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.RealmResults
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
@@ -27,10 +31,6 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
 import org.matrix.android.sdk.internal.database.query.whereInRoom
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.RealmResults
 
 /**
  * This class is responsible for handling the read receipts for hidden events (check [TimelineSettings] to see filtering).
@@ -152,7 +152,8 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         beginGroup()
         var needOr = false
         if (settings.filters.filterTypes) {
-            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.filters.allowedTypes.toTypedArray())
+            val allowedTypes = settings.filters.allowedTypes.toTypedArray()
+            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", allowedTypes)
             needOr = true
         }
         if (settings.filters.filterUseless) {
