@@ -26,6 +26,7 @@ Build 🧱:
 
 Other changes:
  - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
+ - UI: Moved the security shields to the left side of avatars, to anticipate presence indicators.
 
 Changes in Element 1.0.6 (2020-09-08)
 ===================================================
