@@ -1953,7 +1953,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="autocomplete_limited_results">Mostrando solo el primer resultado, agregue mas letras…</string>
 
-    <string name="settings_developer_mode_fail_fast_title">Fallar rapido (Test)</string>
+    <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
     <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
 
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
@@ -2004,7 +2004,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="verification_verify_user">Verificar %s</string>
     <string name="verification_verified_user">Verificado %s</string>
     <string name="verification_request_waiting_for">Esperando por %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no estan encriptados punto a punto.</string>
+    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no están encriptados punto a punto.</string>
     <string name="room_profile_section_security">Seguridad</string>
     <string name="room_profile_section_security_learn_more">Saber mas</string>
     <string name="room_profile_section_more">Mas</string>
@@ -2042,7 +2042,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_list_sharing_header_other_rooms">Otras salas</string>
 
     <string name="command_description_rainbow">Envía el mensaje dado en colores</string>
-    <string name="settings_category_timeline">Linea de tiempo</string>
+    <string name="settings_category_timeline">Línea de tiempo</string>
 
     <string name="settings_category_composer">Editor de mensage</string>
 
@@ -2082,7 +2082,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Sin conexión</string>
-    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avion Activado</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avión Activado</string>
 
     <string name="settings_dev_tools">Herramientas de desarrollo</string>
     <string name="settings_account_data">Datos de cuenta</string>
