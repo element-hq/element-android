@@ -1,8 +1,5 @@
-Changes in Element 1.0.7 (2020-XX-XX)
+Changes in Element 1.0.7 (2020-09-17)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Handle date formatting properly (show time am/pm if needed, display year when needed)
@@ -17,14 +14,8 @@ Bugfix 🐛:
  - Allow users to show/hide room member state events (#1231) 
  - Fix stuck on loader when launching home
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Create a new RawService to get plain data from the server.
-
-Build 🧱:
- -
 
 Other changes:
  - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
