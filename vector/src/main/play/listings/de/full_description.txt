@@ -1,0 +1,30 @@
+Element ist eine neuartige Messaging- und Kollaborationsapp:
+
+1. Volle Kontrolle über deine Privatssphäre
+2. Kommuniziere mit jedem aus dem Matrix-Netzwerk und mit der Integration von z.B. Slack sogar über Matrix hinaus
+3. Schutz vor Werbung, Datamining und geschlossenen Platformen
+4. Absicherung durch Ende-zu-Ende-Verschlüsselung, und Cross Signing um andere zu verifizieren
+
+Element unterscheidet sich durch Dezentralität und Open Source deutlich von anderen Messaging- und Kollaborationsapps.
+
+Element ermöglicht es einen eigenen Server zu betreiben - oder einen beliebigen auszuwählen, sodass du nicht nur Privatssphäre gewinnst, sondern auch deine Daten und Konversationen in deiner Hand sind und du sie kontrollieren kannst. Du hast Zugriff auf ein offenes Netzwerk, und kannst daher nicht nur mit Element-Nutzern schreiben. Und es ist sehr sicher.
+
+Element ist zu all diesem in der Lage, weil es Matrix nutzt - einen Standard für offene, dezentrale Kommunikation.
+
+Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine Konversationen hostet. In der Element App kannst du zwischen verschiedenen Möglichkeiten auswählen:
+
+1. Kostenlos auf dem öffentlichen matrix.org Server registrieren
+2. Einen Account auf einem eigenen Server auf eigener Hardware betreiben
+3. Einen Account auf einem benutzerdefinierten Server erstellen, zum Beispiel durch ein Abonnment bei der Element Matrix Services Hosting-Platform
+
+<b>Wieso Element nutzen?</b>
+
+<b>BESITZE DEINE DATEN</b>: Du entscheidest wo deine Daten und Nachrichten gespeichert werden. Du besitzt und kontrollierst sie, anstatt ein Großkonzern, der deine Daten analysiert und Dritten Zugriff gibt.
+
+<b>OFFENE KOMMUNIKATION UND KOLLABORATION</b>: Du kannst mit jedem im Matrix-Netzwerk schreiben, ob sie nun Element oder eine andere Matrix-App nutzen, oder gar ein anderes Kommunikationssystem wie z.B. Slack, IRC oder XMPP.
+
+<b>SUPER SICHER</b>: Echte Ende-zu-Ende-Verschlüsselung (nur Personen in der Konversation können die Nachrichten entschlüsseln), und Cross Signing um die Geräte der anderen Personen zu verifizieren.
+
+<b>VOLLSTÄNDIGE KOMMUNIKATION</b>: Nachrichten, Telefonate und Videoanrufe, Teilen von Dateien oder dem eigenen Bildschirm und viele andere Integrationen, Bots und Widgets. Erstelle Räume, Communities, bleib in Kontakt und sei produktiv.
+
+<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Web auf https://app.element.io.
