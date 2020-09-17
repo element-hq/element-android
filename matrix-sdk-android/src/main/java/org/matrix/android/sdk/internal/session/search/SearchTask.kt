@@ -55,7 +55,7 @@ internal class DefaultSearchTask @Inject constructor(
                     searchCategories = SearchRequestCategories(
                             roomEvents = SearchRequestRoomEvents(
                                     searchTerm = params.searchTerm,
-                                    orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
+                                    orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT.value else SearchRequestOrder.RANK.value,
                                     filter = SearchRequestFilter(
                                             limit = params.limit,
                                             rooms = listOf(params.roomId)

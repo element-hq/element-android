@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 data class SearchResponseItem(
         // A number that describes how closely this result matches the search. Higher is closer.
         @Json(name = "rank")
-        val rank: Int? = null,
+        val rank: Double? = null,
         // The event that matched.
         @Json(name = "result")
         val event: Event
