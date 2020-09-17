@@ -161,9 +161,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
                 filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
         val latestPreviewableContentEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
-                filterTypes = PREVIEWABLE_CONTENT_TYPES, filterContentRelation = true, filterRedactions = true)
+                filterTypes = PREVIEWABLE_CONTENT_TYPES, filterContentRelation = true)
         val latestPreviewableOriginalContentEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
-                filterTypes = PREVIEWABLE_ORIGINAL_CONTENT_TYPES, filterContentRelation = true, filterRedactions = true)
+                filterTypes = PREVIEWABLE_ORIGINAL_CONTENT_TYPES, filterContentRelation = true)
 
         val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
