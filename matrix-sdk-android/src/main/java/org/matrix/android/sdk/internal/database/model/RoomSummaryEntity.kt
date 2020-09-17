@@ -32,6 +32,10 @@ internal open class RoomSummaryEntity(
         var name: String? = "",
         var topic: String? = "",
         var latestPreviewableEvent: TimelineEventEntity? = null,
+        @Deprecated("Different implementation available from upstream. Field not removed to avoid db scheme numbers differing from upstream")
+        var latestPreviewableContentEvent: TimelineEventEntity? = null,
+        @Deprecated("Different implementation available from upstream. Field not removed to avoid db scheme numbers differing from upstream")
+        var latestPreviewableOriginalContentEvent: TimelineEventEntity? = null,
         var heroes: RealmList<String> = RealmList(),
         var joinedMembersCount: Int? = 0,
         var invitedMembersCount: Int? = 0,
@@ -42,6 +46,10 @@ internal open class RoomSummaryEntity(
         var highlightCount: Int = 0,
         var readMarkerId: String? = null,
         var hasUnreadMessages: Boolean = false,
+        @Deprecated("Different implementation available from upstream. Field not removed to avoid db scheme numbers differing from upstream")
+        var hasUnreadContentMessages: Boolean = false,
+        @Deprecated("Different implementation available from upstream. Field not removed to avoid db scheme numbers differing from upstream")
+        var hasUnreadOriginalContentMessages: Boolean = false,
         var tags: RealmList<RoomTagEntity> = RealmList(),
         var userDrafts: UserDraftsEntity? = null,
         var breadcrumbsIndex: Int = RoomSummary.NOT_IN_BREADCRUMBS,
