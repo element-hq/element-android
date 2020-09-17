@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
@@ -200,6 +201,11 @@ interface Session :
      * Returns the permalink service associated with the session
      */
     fun permalinkService(): PermalinkService
+
+    /**
+     * Returns the search service associated with the session
+     */
+    fun searchService(): SearchService
 
     /**
      * Add a listener to the session.
