@@ -31,7 +31,7 @@ internal class DefaultSearchService @Inject constructor(
 ) : SearchService {
 
     override fun search(searchTerm: String,
-                        rooms: List<String>,
+                        roomId: String,
                         nextBatch: String?,
                         orderByRecent: Boolean,
                         limit: Int,
@@ -42,7 +42,7 @@ internal class DefaultSearchService @Inject constructor(
         return searchTask
                 .configureWith(SearchTask.Params(
                         searchTerm = searchTerm,
-                        rooms = rooms,
+                        roomId = roomId,
                         nextBatch = nextBatch,
                         orderByRecent = orderByRecent,
                         limit = limit,

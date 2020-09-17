@@ -34,7 +34,7 @@ internal interface SearchTask : Task<SearchTask.Params, SearchResponse> {
 
     data class Params(
             val searchTerm: String,
-            val rooms: List<String>,
+            val roomId: String,
             val nextBatch: String? = null,
             val orderByRecent: Boolean,
             val limit: Int,
@@ -58,7 +58,7 @@ internal class DefaultSearchTask @Inject constructor(
                                     orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
                                     filter = SearchRequestFilter(
                                             limit = params.limit,
-                                            rooms = params.rooms
+                                            rooms = listOf(params.roomId)
                                     ),
                                     eventContext = SearchRequestEventContext(
                                             beforeLimit = params.beforeLimit,

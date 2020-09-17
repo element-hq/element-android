@@ -30,7 +30,7 @@ interface SearchService {
      * Generic function to search a term in multiple rooms.
      * Ref: https://matrix.org/docs/spec/client_server/latest#module-search
      * @param searchTerm the term to search
-     * @param rooms roomIds to search term inside
+     * @param roomId the roomId to search term inside
      * @param nextBatch the token that retrieved from the previous response. Should be provided to get the next batch of results
      * @param limit the maximum number of events to return.
      * @param beforeLimit how many events before the result are returned.
@@ -38,7 +38,7 @@ interface SearchService {
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
      */
     fun search(searchTerm: String,
-               rooms: List<String>,
+               roomId: String,
                nextBatch: String?,
                orderByRecent: Boolean,
                limit: Int,
