@@ -90,14 +90,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             val date = latestEvent.root.localDateTime()
             val currentDate = DateProvider.currentLocalDateTime()
             val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
-            val withinOneYear = currentDate.minusYears(1).isBefore(date)
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
             latestEventTime = if (isSameDay) {
                 dateFormatter.formatMessageHour(date)
-            } else if (withinOneYear) {
-                dateFormatter.formatMessageDay(date)
             } else {
-                dateFormatter.formatMessageDayWithYear(date)
+                dateFormatter.formatMessageDay(date)
             }
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
