@@ -40,14 +40,10 @@ data class RoomSummary constructor(
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
-        val latestPreviewableContentEvent: TimelineEvent? = null,
-        val latestPreviewableOriginalContentEvent: TimelineEvent? = null,
         val otherMemberIds: List<String> = emptyList(),
         val notificationCount: Int = 0,
         val highlightCount: Int = 0,
         val hasUnreadMessages: Boolean = false,
-        val hasUnreadContentMessages: Boolean = false,
-        val hasUnreadOriginalContentMessages: Boolean = false,
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
         val versioningState: VersioningState = VersioningState.NONE,
@@ -74,42 +70,7 @@ data class RoomSummary constructor(
     val canStartCall: Boolean
         get() = joinedMembersCount == 2
 
-    fun scHasUnreadMessages(preferenceProvider: RoomSummaryPreferenceProvider?): Boolean {
-        if (preferenceProvider == null) {
-            // Fallback to default
-            return hasUnreadMessages
-        }
-        return when(preferenceProvider.getUnreadKind()) {
-            UNREAD_KIND_ORIGINAL_CONTENT -> hasUnreadOriginalContentMessages
-            UNREAD_KIND_CONTENT -> hasUnreadContentMessages
-            // UNREAD_KIND_DEFAULT
-            else -> hasUnreadMessages
-        }
-    }
-
-    fun scLatestPreviewableEvent(preferenceProvider: RoomSummaryPreferenceProvider?): TimelineEvent? {
-        if (preferenceProvider == null) {
-            // Fallback to default
-            return latestPreviewableEvent
-        }
-        return when(preferenceProvider.getUnreadKind()) {
-            UNREAD_KIND_ORIGINAL_CONTENT -> latestPreviewableOriginalContentEvent
-            UNREAD_KIND_CONTENT -> latestPreviewableContentEvent
-            // UNREAD_KIND_DEFAULT
-            else -> latestPreviewableEvent
-        }
-    }
-
     companion object {
         const val NOT_IN_BREADCRUMBS = -1
-        // SC addition
-        const val UNREAD_KIND_DEFAULT = 0
-        const val UNREAD_KIND_CONTENT = 1
-        const val UNREAD_KIND_ORIGINAL_CONTENT = 2
-    }
-
-    // SC addition
-    interface RoomSummaryPreferenceProvider {
-        fun getUnreadKind(): Int
     }
 }

@@ -126,8 +126,6 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
                 roomSummary.hasUnreadMessages = false
-                roomSummary.hasUnreadContentMessages = false
-                roomSummary.hasUnreadOriginalContentMessages = false
             }
         }
     }
