@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.search
+package org.matrix.android.sdk.api.session.search
 
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.room.search.response.SearchResponse
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 
 /**
  * This interface defines methods to search messages in rooms.

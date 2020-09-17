@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search.request
+package org.matrix.android.sdk.internal.session.search.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SearchRequestRoomEvents(
+internal data class SearchRequestRoomEvents(
         // Required. The string to search events for.
         @Json(name = "search_term")
         val searchTerm: String,

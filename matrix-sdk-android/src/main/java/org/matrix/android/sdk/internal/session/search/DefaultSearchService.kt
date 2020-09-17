@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.search
 
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.room.search.SearchService
+import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.room.search.response.SearchResponse
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import javax.inject.Inject
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith

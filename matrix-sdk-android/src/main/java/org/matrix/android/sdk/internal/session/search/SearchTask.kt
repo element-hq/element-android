@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search
+package org.matrix.android.sdk.internal.session.search
 
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestBody
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestCategories
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestEventContext
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestFilter
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestOrder
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestRoomEvents
-import org.matrix.android.sdk.internal.session.room.search.response.SearchResponse
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestCategories
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestEventContext
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestFilter
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestOrder
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestRoomEvents
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 

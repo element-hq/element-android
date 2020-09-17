@@ -15,22 +15,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search.response
+package org.matrix.android.sdk.internal.session.search.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class SearchResponseRoomEvents(
-        // List of results in the requested order.
-        @Json(name = "results")
-        val results: List<SearchResponseItem>? = null,
-        @Json(name = "count")
-        val count: Int? = null,
-        // List of words which should be highlighted, useful for stemming which may change the query terms.
-        @Json(name = "highlights")
-        val highlights: List<String>? = null,
-        // Token that can be used to get the next batch of results, by passing as the next_batch parameter to the next call. If this field is absent, there are no more results.
-        @Json(name = "next_batch")
-        val nextBatch: String? = null
+data class SearchResponse(
+        // Required. Describes which categories to search in and their criteria.
+        @Json(name = "search_categories")
+        val searchCategories: SearchResponseCategories
 )

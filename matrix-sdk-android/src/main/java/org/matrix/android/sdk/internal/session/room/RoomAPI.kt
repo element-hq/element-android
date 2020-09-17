@@ -35,8 +35,8 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBod
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
-import org.matrix.android.sdk.internal.session.room.search.request.SearchRequestBody
-import org.matrix.android.sdk.internal.session.room.search.response.SearchResponse
+import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
 import org.matrix.android.sdk.internal.session.room.timeline.EventContextResponse

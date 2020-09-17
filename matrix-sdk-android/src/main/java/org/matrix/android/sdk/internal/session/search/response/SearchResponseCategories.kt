@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search.request
+package org.matrix.android.sdk.internal.session.search.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SearchRequestBody(
-        @Json(name = "search_categories")
-        val searchCategories: SearchRequestCategories
+data class SearchResponseCategories(
+        @Json(name = "room_events")
+        val roomEvents: SearchResponseRoomEvents? = null
 )

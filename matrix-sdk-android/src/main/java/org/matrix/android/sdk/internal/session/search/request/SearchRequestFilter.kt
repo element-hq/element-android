@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search.request
+package org.matrix.android.sdk.internal.session.search.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SearchRequestFilter(
+internal data class SearchRequestFilter(
         // The maximum number of events to return.
         @Json(name = "limit")
         val limit: Int? = null,

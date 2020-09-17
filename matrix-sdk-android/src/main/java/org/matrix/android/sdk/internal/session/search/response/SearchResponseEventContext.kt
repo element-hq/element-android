@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.search.response
+package org.matrix.android.sdk.internal.session.search.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-data class SearchResponseEventContext(
+internal data class SearchResponseEventContext(
         // Events just before the result.
         @Json(name = "events_before")
         val eventsBefore: List<Event>,
