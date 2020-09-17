@@ -52,7 +52,6 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
-                        .also { Timber.e("Unable to parse work parameters") }
 
         if (params.lastFailureMessage != null) {
             // Transmit the error

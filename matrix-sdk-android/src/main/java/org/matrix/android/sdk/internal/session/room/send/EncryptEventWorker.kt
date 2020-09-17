@@ -24,11 +24,13 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -46,7 +48,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val event: Event,
+            val eventId: String,
             /** Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to) */
             val keepKeys: List<String>? = null,
             override val lastFailureMessage: String? = null
@@ -60,20 +62,19 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
-                        .also { Timber.e("Unable to parse work parameters") }
 
-        Timber.v("## SendEvent: Start Encrypt work for event ${params.event.eventId}")
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
+        Timber.v("## SendEvent: Start Encrypt work for event ${params.eventId}")
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val localEvent = params.event
-        if (localEvent.eventId == null) {
+        val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
+        if (localEvent?.eventId == null) {
             return Result.success()
         }
 
@@ -106,15 +107,10 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     modifiedContent[toKeep] = it
                 }
             }
-            val safeResult = result.copy(eventContent = modifiedContent)
-            val encryptedEvent = localEvent.copy(
-                    type = safeResult.eventType,
-                    content = safeResult.eventContent
-            )
             // Better handling of local echo, to avoid decrypting transition on remote echo
             // Should I only do it for text messages?
-            if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
-                val decryptionLocalEcho = MXEventDecryptionResult(
+            val decryptionLocalEcho = if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
+                MXEventDecryptionResult(
                         clearEvent = Event(
                                 type = localEvent.type,
                                 content = localEvent.content,
@@ -124,10 +120,18 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                         senderCurve25519Key = result.eventContent["sender_key"] as? String,
                         claimedEd25519Key = crypto.getMyDevice().fingerprint()
                 )
-                localEchoRepository.updateEncryptedEcho(localEvent.eventId, safeResult.eventContent, decryptionLocalEcho)
+            } else {
+                null
+            }
+            localEchoRepository.updateEcho(localEvent.eventId) { _, localEcho ->
+                localEcho.type = EventType.ENCRYPTED
+                localEcho.content = ContentMapper.map(modifiedContent)
+                decryptionLocalEcho?.also {
+                    localEcho.setDecryptionResult(it)
+                }
             }
 
-            val nextWorkerParams = SendEventWorker.Params(sessionId = params.sessionId, event = encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(sessionId = params.sessionId, eventId = params.eventId)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {
             val sendState = when (error) {
@@ -138,7 +142,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             // always return success, or the chain will be stuck for ever!
             val nextWorkerParams = SendEventWorker.Params(
                     sessionId = params.sessionId,
-                    event = localEvent,
+                    eventId = localEvent.eventId,
                     lastFailureMessage = error?.localizedMessage ?: "Error"
             )
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))

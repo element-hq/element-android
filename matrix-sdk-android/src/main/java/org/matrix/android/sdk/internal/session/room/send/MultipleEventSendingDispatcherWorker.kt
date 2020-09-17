@@ -23,7 +23,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -48,7 +47,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val events: List<Event>,
+            val localEchoIds: List<LocalEchoIdentifiers>,
             val isEncrypted: Boolean,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
@@ -61,42 +60,42 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
         Timber.v("## SendEvent: Start dispatch sending multiple event work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
-                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         if (params.lastFailureMessage != null) {
-            params.events.forEach { event ->
-                event.eventId?.let { localEchoRepository.updateSendState(it, SendState.UNDELIVERED) }
+            params.localEchoIds.forEach { localEchoIds ->
+                localEchoRepository.updateSendState(localEchoIds.eventId, SendState.UNDELIVERED)
             }
             // Transmit the error if needed?
             return Result.success(inputData)
                     .also { Timber.e("## SendEvent: Work cancelled due to input error from parent ${params.lastFailureMessage}") }
         }
-
         // Create a work for every event
-        params.events.forEach { event ->
+        params.localEchoIds.forEach { localEchoIds ->
+            val roomId = localEchoIds.roomId
+            val eventId = localEchoIds.eventId
             if (params.isEncrypted) {
-                localEchoRepository.updateSendState(event.eventId ?: "", SendState.ENCRYPTING)
-                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule encrypt and send event ${event.eventId}")
-                val encryptWork = createEncryptEventWork(params.sessionId, event, true)
+                localEchoRepository.updateSendState(eventId, SendState.ENCRYPTING)
+                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule encrypt and send event $eventId")
+                val encryptWork = createEncryptEventWork(params.sessionId, eventId, true)
                 // Note that event will be replaced by the result of the previous work
-                val sendWork = createSendEventWork(params.sessionId, event, false)
-                timelineSendEventWorkCommon.postSequentialWorks(event.roomId!!, encryptWork, sendWork)
+                val sendWork = createSendEventWork(params.sessionId, eventId, false)
+                timelineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, sendWork)
             } else {
-                localEchoRepository.updateSendState(event.eventId ?: "", SendState.SENDING)
-                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event ${event.eventId}")
-                val sendWork = createSendEventWork(params.sessionId, event, true)
-                timelineSendEventWorkCommon.postWork(event.roomId!!, sendWork)
+                localEchoRepository.updateSendState(eventId, SendState.SENDING)
+                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event $eventId")
+                val sendWork = createSendEventWork(params.sessionId, eventId, true)
+                timelineSendEventWorkCommon.postWork(roomId, sendWork)
             }
         }
 
         return Result.success()
     }
 
-    private fun createEncryptEventWork(sessionId: String, event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val params = EncryptEventWorker.Params(sessionId, event)
+    private fun createEncryptEventWork(sessionId: String, eventId: String, startChain: Boolean): OneTimeWorkRequest {
+        val params = EncryptEventWorker.Params(sessionId, eventId)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
@@ -107,8 +106,8 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
                 .build()
     }
 
-    private fun createSendEventWork(sessionId: String, event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, event = event)
+    private fun createSendEventWork(sessionId: String, eventId: String, startChain: Boolean): OneTimeWorkRequest {
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, eventId = eventId)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)

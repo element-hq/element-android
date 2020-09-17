@@ -24,7 +24,6 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -34,9 +33,13 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
+import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoIdentifiers
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -61,7 +64,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val events: List<Event>,
+            val localEchoIds: List<LocalEchoIdentifiers>,
             val attachment: ContentAttachmentData,
             val isEncrypted: Boolean,
             val compressBeforeSending: Boolean,
@@ -73,6 +76,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var fileService: DefaultFileService
     @Inject lateinit var cancelSendTracker: CancelSendTracker
     @Inject lateinit var imageCompressor: ImageCompressor
+    @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -100,7 +104,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val allCancelled = params.events.all { cancelSendTracker.isCancelRequestedFor(it.eventId, it.roomId) }
+        val allCancelled = params.localEchoIds.all { cancelSendTracker.isCancelRequestedFor(it.eventId, it.roomId) }
         if (allCancelled) {
             // there is no point in uploading the image!
             return Result.success(inputData)
@@ -289,46 +293,48 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         )
     }
 
-    private fun handleSuccess(params: Params,
-                              attachmentUrl: String,
-                              encryptedFileInfo: EncryptedFileInfo?,
-                              thumbnailUrl: String?,
-                              thumbnailEncryptedFileInfo: EncryptedFileInfo?,
-                              newImageAttributes: NewImageAttributes?): Result {
+    private suspend fun handleSuccess(params: Params,
+                                      attachmentUrl: String,
+                                      encryptedFileInfo: EncryptedFileInfo?,
+                                      thumbnailUrl: String?,
+                                      thumbnailEncryptedFileInfo: EncryptedFileInfo?,
+                                      newImageAttributes: NewImageAttributes?): Result {
         notifyTracker(params) { contentUploadStateTracker.setSuccess(it) }
+        params.localEchoIds.forEach {
+            updateEvent(it.eventId, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newImageAttributes)
+        }
 
-        val updatedEvents = params.events
-                .map {
-                    updateEvent(it, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newImageAttributes)
-                }
-
-        val sendParams = MultipleEventSendingDispatcherWorker.Params(params.sessionId, updatedEvents, params.isEncrypted)
+        val sendParams = MultipleEventSendingDispatcherWorker.Params(
+                sessionId = params.sessionId,
+                localEchoIds = params.localEchoIds,
+                isEncrypted = params.isEncrypted
+        )
         return Result.success(WorkerParamsFactory.toData(sendParams)).also {
             Timber.v("## handleSuccess $attachmentUrl, work is stopped $isStopped")
         }
     }
 
-    private fun updateEvent(event: Event,
-                            url: String,
-                            encryptedFileInfo: EncryptedFileInfo?,
-                            thumbnailUrl: String? = null,
-                            thumbnailEncryptedFileInfo: EncryptedFileInfo?,
-                            newImageAttributes: NewImageAttributes?): Event {
-        val messageContent: MessageContent = event.content.toModel() ?: return event
-        val updatedContent = when (messageContent) {
-            is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newImageAttributes)
-            is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
-            is MessageFileContent  -> messageContent.update(url, encryptedFileInfo)
-            is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
-            else                   -> messageContent
+    private suspend fun updateEvent(eventId: String,
+                                    url: String,
+                                    encryptedFileInfo: EncryptedFileInfo?,
+                                    thumbnailUrl: String? = null,
+                                    thumbnailEncryptedFileInfo: EncryptedFileInfo?,
+                                    newImageAttributes: NewImageAttributes?) {
+        localEchoRepository.updateEcho(eventId) { _, event ->
+            val messageContent: MessageContent? = event.asDomain().content.toModel()
+            val updatedContent = when (messageContent) {
+                is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newImageAttributes)
+                is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
+                is MessageFileContent -> messageContent.update(url, encryptedFileInfo)
+                is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
+                else                   -> messageContent
+            }
+            event.content = ContentMapper.map(updatedContent.toContent())
         }
-        return event.copy(content = updatedContent.toContent())
     }
 
     private fun notifyTracker(params: Params, function: (String) -> Unit) {
-        params.events
-                .mapNotNull { it.eventId }
-                .forEach { eventId -> function.invoke(eventId) }
+        params.localEchoIds.forEach { function.invoke(it.eventId) }
     }
 
     private fun MessageImageContent.update(url: String,

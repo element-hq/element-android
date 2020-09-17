@@ -23,8 +23,8 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
@@ -42,12 +42,15 @@ internal class SendVerificationMessageWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val event: Event,
+            val eventId: String,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject
     lateinit var sendVerificationMessageTask: SendVerificationMessageTask
+
+    @Inject
+    lateinit var localEchoRepository: LocalEchoRepository
 
     @Inject
     lateinit var cryptoService: CryptoService
@@ -63,16 +66,18 @@ internal class SendVerificationMessageWorker(context: Context,
                     Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
                 }
         sessionComponent.inject(this)
-        val localId = params.event.eventId ?: ""
+
+        val localEvent = localEchoRepository.getUpToDateEcho(params.eventId) ?: return Result.success(errorOutputData)
+
         return try {
             val eventId = sendVerificationMessageTask.execute(
                     SendVerificationMessageTask.Params(
-                            event = params.event,
+                            event = localEvent,
                             cryptoService = cryptoService
                     )
             )
 
-            Result.success(Data.Builder().putString(localId, eventId).build())
+            Result.success(Data.Builder().putString(params.eventId, eventId).build())
         } catch (exception: Throwable) {
             if (exception.shouldBeRetried()) {
                 Result.retry()

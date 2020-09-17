@@ -24,7 +24,6 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -44,7 +43,6 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
-                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
