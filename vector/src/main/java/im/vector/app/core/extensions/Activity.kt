@@ -22,36 +22,63 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 
-fun VectorBaseActivity.addFragment(frameId: Int, fragment: Fragment) {
-    supportFragmentManager.commitTransaction { add(frameId, fragment) }
+fun VectorBaseActivity.addFragment(
+        frameId: Int,
+        fragment: Fragment,
+        allowStateLoss: Boolean = false
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseActivity.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    supportFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseActivity.addFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    supportFragmentManager.commitTransaction { replace(frameId, fragment, tag) }
+fun VectorBaseActivity.replaceFragment(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseActivity.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    supportFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseActivity.replaceFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseActivity.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
-    supportFragmentManager.commitTransaction { replace(frameId, fragment).addToBackStack(tag) }
+fun VectorBaseActivity.addFragmentToBackstack(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment).addToBackStack(tag) }
 }
 
 fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int,
                                                              fragmentClass: Class<T>,
                                                              params: Parcelable? = null,
                                                              tag: String? = null,
+                                                             allowStateLoss: Boolean = false,
                                                              option: ((FragmentTransaction) -> Unit)? = null) {
-    supportFragmentManager.commitTransaction {
+    supportFragmentManager.commitTransaction(allowStateLoss) {
         option?.invoke(this)
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }

@@ -33,13 +33,13 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.api.failure.isInvalidPassword
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.isInvalidPassword
 import javax.inject.Inject
 
 /**
@@ -234,7 +234,13 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     override fun onError(throwable: Throwable) {
-        loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+        // Show M_WEAK_PASSWORD error in the password field
+        if (throwable is Failure.ServerError
+                && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
+            passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+        } else {
+            loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+        }
     }
 
     override fun updateWithState(state: LoginViewState) {

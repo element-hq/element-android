@@ -26,7 +26,6 @@
     <string name="save">Ruaje</string>
     <string name="leave">Dil</string>
     <string name="send">Dërgoje</string>
-    <string name="copy">Kopjoje</string>
     <string name="resend">Ridërgoje</string>
     <string name="quote">Citim</string>
     <string name="download">Shkarkoje</string>
@@ -404,8 +403,6 @@
     <string name="settings_enable_background_sync">Aktivizo njëkohësim në prapaskenë</string>
     <string name="settings_set_sync_timeout">Mbarim kohe për kërkesë njëkohësimi</string>
     <string name="settings_set_sync_delay">Vonesë mes çdo Njëkohësimi</string>
-    <string name="settings_second">sekondë</string>
-    <string name="settings_seconds">sekonda</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_app_term_conditions">Terma &amp; kushte</string>

@@ -25,16 +25,21 @@ import android.os.Parcelable
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.RuleKind
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.utils.isIgnoringBatteryOptimizations
+import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.push.fcm.FcmHelper
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -42,7 +47,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         private val pushManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+) : VectorSettingsBaseFragment(),
+        BackgroundSyncModeChooserDialog.InteractionListener {
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -65,7 +71,97 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
         }
 
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val initialMode = vectorPreferences.getFdroidSyncBackgroundMode()
+                val dialogFragment = BackgroundSyncModeChooserDialog.newInstance(initialMode)
+                dialogFragment.interactionListener = this
+                activity?.supportFragmentManager?.let { fm ->
+                    dialogFragment.show(fm, "syncDialog")
+                }
+                true
+            }
+        }
+
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
+            it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                if (newValue is String) {
+                    val syncTimeout = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
+                    vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
+                    refreshBackgroundSyncPrefs()
+                }
+                true
+            }
+        }
+
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
+            it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                if (newValue is String) {
+                    val syncDelay = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
+                    vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
+                    refreshBackgroundSyncPrefs()
+                }
+                true
+            }
+        }
+
+        refreshBackgroundSyncPrefs()
+
         handleSystemPreference()
+    }
+
+    // BackgroundSyncModeChooserDialog.InteractionListener
+    override fun onOptionSelected(mode: BackgroundSyncMode) {
+        // option has change, need to act
+        if (mode == BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME) {
+            // Important, Battery optim white listing is needed in this mode;
+            // Even if using foreground service with foreground notif, it stops to work
+            // in doze mode for certain devices :/
+            if (!isIgnoringBatteryOptimizations(requireContext())) {
+                requestDisablingBatteryOptimization(requireActivity(),
+                        this@VectorSettingsNotificationPreferenceFragment,
+                        REQUEST_BATTERY_OPTIMIZATION)
+            }
+        }
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        refreshBackgroundSyncPrefs()
+    }
+
+    private fun refreshBackgroundSyncPrefs() {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
+            it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> getString(R.string.settings_background_fdroid_sync_mode_battery)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+            }
+        }
+
+        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)?.let {
+            it.isVisible = !FcmHelper.isPushSupported()
+        }
+
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
+            it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
+        }
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
+            it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
+        }
+    }
+
+    /**
+     * Convert a delay in seconds to string
+     *
+     * @param seconds the delay in seconds
+     * @return the text
+     */
+    private fun secondsToText(seconds: Int): String {
+        return resources.getQuantityString(R.plurals.seconds, seconds, seconds)
     }
 
     private fun handleSystemPreference() {
@@ -148,6 +244,16 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             val preference = findPreference<VectorSwitchPreference>(key)
             preference?.isHighlighted = true
         }
+
+        refreshPref()
+    }
+
+    private fun refreshPref() {
+        // This pref may have change from troubleshoot pref fragment
+        if (!FcmHelper.isPushSupported()) {
+            findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
+                    ?.isChecked = vectorPreferences.autoStartOnBoot()
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -155,6 +261,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         if (context is VectorSettingsFragmentInteractionListener) {
             interactionListener = context
         }
+        (activity?.supportFragmentManager
+                ?.findFragmentByTag("syncDialog") as BackgroundSyncModeChooserDialog?)
+                ?.interactionListener = this
     }
 
     override fun onDetach() {
@@ -234,5 +343,6 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     companion object {
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
+        private const val REQUEST_BATTERY_OPTIMIZATION = 500
     }
 }

@@ -22,15 +22,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.PowerManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.services.VectorSyncService
-import androidx.core.content.getSystemService
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
+
+    lateinit var vectorPreferences: VectorPreferences
 
     override fun onReceive(context: Context, intent: Intent) {
         val appContext = context.applicationContext
@@ -40,41 +42,35 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                 Timber.v("No active session don't launch sync service.")
                 return
             }
-        }
-
-        // Acquire a lock to give enough time for the sync :/
-        context.getSystemService<PowerManager>()!!.run {
-            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {
-                acquire((10_000).toLong())
-            }
+            vectorPreferences = appContext.injector().vectorPreferences()
         }
 
         val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
-        VectorSyncService.newIntent(context, sessionId).let {
+        VectorSyncService.newPeriodicIntent(context, sessionId, vectorPreferences.backgroundSyncTimeOut(), vectorPreferences.backgroundSyncDelay()).let {
             try {
                 ContextCompat.startForegroundService(context, it)
             } catch (ex: Throwable) {
-                // TODO
+                Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
+                scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
                 Timber.e(ex)
             }
         }
-
-        scheduleAlarm(context, sessionId, 30_000L)
-        Timber.i("Alarm scheduled to restart service")
     }
 
     companion object {
         private const val REQUEST_CODE = 0
 
-        fun scheduleAlarm(context: Context, sessionId: String, delay: Long) {
+        fun scheduleAlarm(context: Context, sessionId: String, delayInSeconds: Int) {
             // Reschedule
+            Timber.v("## Sync: Scheduling alarm for background sync in $delayInSeconds seconds")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
                 putExtra(SyncService.EXTRA_SESSION_ID, sessionId)
+                putExtra(SyncService.EXTRA_PERIODIC, true)
             }
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val firstMillis = System.currentTimeMillis() + delay
+            val firstMillis = System.currentTimeMillis() + delayInSeconds * 1000L
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pIntent)
@@ -84,11 +80,20 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         }
 
         fun cancelAlarm(context: Context) {
-            Timber.v("Cancel alarm")
+            Timber.v("## Sync: Cancel alarm for background sync")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             alarmMgr.cancel(pIntent)
+
+            // Stop current service to restart
+            VectorSyncService.stopIntent(context).let {
+                try {
+                    ContextCompat.startForegroundService(context, it)
+                } catch (ex: Throwable) {
+                    Timber.i("## Sync: Cancel sync")
+                }
+            }
         }
     }
 }

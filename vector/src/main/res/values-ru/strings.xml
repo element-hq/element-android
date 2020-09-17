@@ -22,7 +22,6 @@
     <string name="save">Сохранить</string>
     <string name="leave">Покинуть</string>
     <string name="send">Отправить</string>
-    <string name="copy">Копировать</string>
     <string name="resend">Повторить отправку</string>
     <string name="redact">Удалить</string>
     <string name="quote">Цитировать</string>
@@ -449,8 +448,6 @@
     <string name="settings_enable_background_sync">Включить фоновую синхронизацию</string>
     <string name="settings_set_sync_timeout">Таймаут синхронизации</string>
     <string name="settings_set_sync_delay">Задержка между каждой синхронизацией</string>
-    <string name="settings_second">секунда</string>
-    <string name="settings_seconds">секунд</string>
 
     <string name="settings_version">Версия</string>
     <string name="settings_olm_version">Версия OLM</string>
@@ -2228,10 +2225,10 @@
     <string name="verification_conclusion_not_secure">Не безопасно</string>
     <string name="verification_conclusion_compromised">Одно из следующих условий может быть скомпрометировано:
 \n
-\n-- Ваш домашний сервер
-\n-- Домашний сервер, к которому подключен пользователь, которого вы проверяете
-\n-- Ваше или подключение к интернету других пользователей
-\n-- Ваше или устройство других пользователей</string>
+\n— Ваш домашний сервер
+\n— Домашний сервер, к которому подключен пользователь, которого вы проверяете
+\n— Ваше или подключение к интернету других пользователей
+\n— Ваше или устройство других пользователей</string>
 
     <string name="sent_a_video">Видео.</string>
     <string name="sent_an_image">Изображение.</string>
@@ -2701,4 +2698,22 @@
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Предупреждение! Последняя оставшаяся попытка перед выходом из системы!</string>
     <string name="too_many_pin_failures">Слишком много ошибок, вы вышли из системы</string>
+    <string name="auth_msisdn_already_defined">Этот номер телефона уже определён.</string>
+    <string name="settings_phone_number_empty">В ваш аккаунт не добавлен номер телефона</string>
+    <string name="settings_emails">Адрес электронной почты</string>
+    <string name="settings_emails_empty">В ваш аккаунт не добавлен адрес электронной почты</string>
+    <string name="settings_phone_numbers">Телефонные номера</string>
+    <string name="settings_remove_three_pid_confirmation_content">Удалить %s\?</string>
+    <string name="error_threepid_auth_failed">Убедитесь, что вы перешли по ссылке в электронном письме, которое мы вам отправили.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">Электронная почта и номера телефонов</string>
+    <string name="settings_emails_and_phone_numbers_summary">Управляйте электронной почтой и номерами телефонов, привязанными к вашей учетной записи Matrix</string>
+
+    <string name="settings_text_message_sent_hint">Код</string>
+    <string name="login_msisdn_notice">Используйте международный формат (номер телефона должен начинаться с \'+\')</string>
+    <string name="confirm_your_identity_quad_s">Подтвердите свою личность, проверив этот логин, предоставив ему доступ к зашифрованным сообщениям.</string>
+    <string name="error_sso_flow_not_supported_yet">К сожалению, эта операция пока недоступна для учетных записей, подключенных с помощью единого входа.</string>
+
+    <string name="error_opening_banned_room">Невозможно открыть комнату, в которую вам запрещён доступ.</string>
+    <string name="room_error_not_found">Невозможно найти эту комнату. Убедитесь, что она существует.</string>
 </resources>

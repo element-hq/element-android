@@ -18,8 +18,8 @@ package im.vector.app.features.homeserver
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 
 /**
  * Object to store and retrieve home and identity server urls
@@ -38,7 +38,7 @@ object ServerUrlsRepository {
      * Save home and identity sever urls received by the Referrer receiver
      */
     fun setDefaultUrlsFromReferrer(context: Context, homeServerUrl: String, identityServerUrl: String) {
-        PreferenceManager.getDefaultSharedPreferences(context)
+        DefaultSharedPreferences.getInstance(context)
                 .edit {
                     if (homeServerUrl.isNotEmpty()) {
                         putString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF, homeServerUrl)
@@ -54,7 +54,7 @@ object ServerUrlsRepository {
      * Save home and identity sever urls entered by the user. May be custom or default value
      */
     fun saveServerUrls(context: Context, homeServerUrl: String, identityServerUrl: String) {
-        PreferenceManager.getDefaultSharedPreferences(context)
+        DefaultSharedPreferences.getInstance(context)
                 .edit {
                     putString(HOME_SERVER_URL_PREF, homeServerUrl)
                     putString(IDENTITY_SERVER_URL_PREF, identityServerUrl)
@@ -65,7 +65,7 @@ object ServerUrlsRepository {
      * Return last used home server url, or the default one from referrer or the default one from resources
      */
     fun getLastHomeServerUrl(context: Context): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val prefs = DefaultSharedPreferences.getInstance(context)
 
         return prefs.getString(HOME_SERVER_URL_PREF,
                 prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,

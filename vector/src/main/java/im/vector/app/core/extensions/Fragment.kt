@@ -26,62 +26,126 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun VectorBaseFragment.addFragment(frameId: Int, fragment: Fragment) {
-    parentFragmentManager.commitTransaction { add(frameId, fragment) }
+fun VectorBaseFragment.addFragment(
+        frameId: Int,
+        fragment: Fragment,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    parentFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.addFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseFragment.replaceFragment(frameId: Int, fragment: Fragment) {
-    parentFragmentManager.commitTransaction { replace(frameId, fragment) }
+fun VectorBaseFragment.replaceFragment(
+        frameId: Int,
+        fragment: Fragment,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    parentFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.replaceFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
-    parentFragmentManager.commitTransaction { replace(frameId, fragment, tag).addToBackStack(tag) }
+fun VectorBaseFragment.addFragmentToBackstack(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    parentFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    parentFragmentManager.commitTransaction(allowStateLoss) {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }
 }
 
-fun VectorBaseFragment.addChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    childFragmentManager.commitTransaction { add(frameId, fragment, tag) }
+fun VectorBaseFragment.addChildFragment(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    childFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.addChildFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) {
         add(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseFragment.replaceChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
-    childFragmentManager.commitTransaction { replace(frameId, fragment, tag) }
+fun VectorBaseFragment.replaceChildFragment(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.replaceChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    childFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.replaceChildFragment(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
-fun VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
-    childFragmentManager.commitTransaction { replace(frameId, fragment).addToBackStack(tag) }
+fun VectorBaseFragment.addChildFragmentToBackstack(
+        frameId: Int,
+        fragment: Fragment,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
-    childFragmentManager.commitTransaction {
+fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false
+) {
+    childFragmentManager.commitTransaction(allowStateLoss) {
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }
 }

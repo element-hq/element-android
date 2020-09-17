@@ -42,9 +42,6 @@ import org.matrix.android.sdk.api.util.JsonDict
  *              }
  *          ]
  *    }
- *     "im.vector.riot.jitsi": {
- *         "preferredDomain": "https://jitsi.riot.im/"
- *     }
  * }
  * </pre>
  */
@@ -57,24 +54,5 @@ data class WellKnown(
         val identityServer: WellKnownBaseConfig? = null,
 
         @Json(name = "m.integrations")
-        val integrations: JsonDict? = null,
-
-        @Json(name = "im.vector.riot.e2ee")
-        val e2eAdminSetting: E2EWellKnownConfig? = null,
-
-        @Json(name = "im.vector.riot.jitsi")
-        val jitsiServer: WellKnownPreferredConfig? = null
-
-)
-
-@JsonClass(generateAdapter = true)
-data class E2EWellKnownConfig(
-        @Json(name = "default")
-        val e2eDefault: Boolean = true
-)
-
-@JsonClass(generateAdapter = true)
-data class WellKnownPreferredConfig(
-        @Json(name = "preferredDomain")
-        val preferredDomain: String? = null
+        val integrations: JsonDict? = null
 )

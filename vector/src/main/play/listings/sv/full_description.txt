@@ -13,7 +13,7 @@ Element kan göra allt detta för att den använder Matrix - standarden för öp
 
 Element sätter dig i kontroll genom att låta dig välja att vara värd för dina konversationer. Från appen Element kan du välja att ansluta på följande sätt:
 
-1. Skaffa ett gratis konto på den publika servern på matrix.org
+1. Skaffa ett gratis konto på den publika servern på matrix.org, vilken drivs av Matrix-utvecklarna, eller välj bland tusentals offentliga servrar som drivs av volontärer
 2. Var värd för ditt eget konto genom att driva en server på din egen hårdvara
 3. Skapa ett konto på en anpassad server genom att registrera dig på värdplattformen Element Matrix Services
 
@@ -25,6 +25,6 @@ Element sätter dig i kontroll genom att låta dig välja att vara värd för di
 
 <b>SUPERSÄKER</b>: Riktig totalsträckskryptering (bara de in konversationen kan avkryptera meddelandena), och korssingering för att verifiera konversationsmedlemmars enheter.
 
-<b>Komplett kommunikation</b>: Meddelanden, röst- och videosamtal, fildelning, skärmdelning och massa integrationer, bottar och widgets. Skapa rum och gemenskaper, håll kontakten och få saker gjorda.
+<b>KOMPLETT KOMMUNIKATION</b>: Meddelanden, röst- och videosamtal, fildelning, skärmdelning och massa integrationer, bottar och widgets. Skapa rum och gemenskaper, håll kontakten och få saker gjorda.
 
 <b>ÖVERALLT DÄR DU ÄR</b>: Håll kontakten vart du än befinner dig med fullständigt synkroniserad meddelandehistorik på alla dina enheter och på webben på https://app.element.io.

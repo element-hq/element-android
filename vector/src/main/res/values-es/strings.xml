@@ -18,7 +18,6 @@
     <string name="save">Guardar</string>
     <string name="leave">Salir</string>
     <string name="send">Enviar</string>
-    <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
     <string name="redact">Eliminar</string>
     <string name="quote">Citar</string>
@@ -249,13 +248,13 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
 
 Por favor permite el acceso en la próxima ventana emergente para poder enviar archivos desde tu teléfono.</string>
     <string name="permissions_rationale_msg_camera">Element necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Por favor permite el acceso en la próxima ventana emergente para poder realizar la llamada.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nPor favor permite el acceso en la próxima ventana emergente para poder realizar la llamada."</string>
     <string name="permissions_rationale_msg_record_audio">Element necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Por favor permite el acceso en la próxima ventana emergente para poder realizar la llamada.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nPor favor permite el acceso en la próxima ventana emergente para poder realizar la llamada."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Element necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
 
 Por favor permite el acceso en las próximas ventanas emergentes para poder realizar la llamada.</string>
@@ -453,8 +452,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_enable_background_sync">Habilitar sincronización en segundo plano</string>
     <string name="settings_set_sync_timeout">Venció el tiempo de espera para la solicitud de sincronización</string>
     <string name="settings_set_sync_delay">Retraso entre cada sincronización</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versión de olm</string>
@@ -618,7 +615,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="encryption_information_sender_device_information">Información de la sesión emisora</string>
     <string name="encryption_information_device_name">Nombre público</string>
     <string name="encryption_information_name">Nombre público</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">ID de sesión</string>
     <string name="encryption_information_device_key">Clave de sesión</string>
     <string name="encryption_information_verification">Verificación</string>
     <string name="encryption_information_ed25519_fingerprint">Huella digital Ed25519</string>
@@ -781,7 +778,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
 
     <string name="groups_list">Lista de Grupos</string>
 
-    <string name="room_participants_ban_prompt_msg">¿Seguro que quieres vetar a este usuario de esta conversación?</string>
+    <string name="room_participants_ban_prompt_msg">El usuario baneado lo echará de esta sala y evitará que se unan nuevamente.</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
@@ -1557,7 +1554,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="call_failed_no_ice_description">Por favor, pídele al administrador de tu servidor doméstico (%1$s) que configure un servidor TURN para que las llamadas funcionen de forma fiable.
 \n
 \nAlternativamente, puedes intentar usar el servidor público en %2$s, pero no será tan confiable, y compartirá tu dirección IP con ese servidor. También puedes cambiar esto en Configuración.</string>
-    <string name="auth_add_email_message_2">Configura un correo electrónico para la recuperación de la cuenta, y opcionalmente para encontrar personas conocidas</string>
+    <string name="auth_add_email_message_2">Configura un correo electrónico para la recuperación de la cuenta, y opcionalmente para encontrar personas conocidas.</string>
     <string name="auth_add_email_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
     <string name="auth_add_email_and_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
@@ -1626,7 +1623,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="quick_reactions">Reacciones rápidas</string>
 
-    <string name="settings_general_title">General</string>
+    <string name="settings_general_title">Cuenta</string>
     <string name="settings_expert">Experto</string>
     <string name="settings_push_rules">Reglas Push</string>
     <string name="settings_push_rules_no_rules">No hay reglas push definidas</string>
@@ -1785,7 +1782,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="no_network_indicator">No hay conexión de red</string>
 
-    <string name="message_ignore_user">Bloquear usuario</string>
+    <string name="message_ignore_user">Ignorar usuario</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Todos los mensajes (sonido)</string>
     <string name="room_list_quick_actions_notifications_all">Todos los mensajes</string>
@@ -1795,7 +1792,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_list_quick_actions_leave">Abandonar sala</string>
     <string name="notice_member_no_changes">%1$s no ha hecho ningún cambio</string>
     <string name="command_description_spoiler">Envía el mensaje como spoiler</string>
-    <string name="spoiler">Spoiler</string>
+    <string name="spoiler">Revelación</string>
     <string name="reaction_search_type_hint">Escribe las palabras clave para encontrar una reacción.</string>
 
     <string name="no_ignored_users">No hay usuarios ignorados</string>
@@ -1807,7 +1804,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_join_rules_invite">%1$s: Ahora la sala solo es accesible por invitación.</string>
     <string name="timeline_unread_messages">Mensajes no leídos</string>
 
-    <string name="login_splash_title">Libera tu comunicación</string>
+    <string name="login_splash_title">Es tu conversación. Me pertenece.</string>
     <string name="login_splash_text1">Envía mensajes a personas o grupos</string>
     <string name="login_splash_text2">Mantén las conversaciones privadas con encriptación</string>
     <string name="login_splash_text3">Extiende y personaliza tu experiencia</string>
@@ -1899,7 +1896,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="choose_locale_current_locale_title">Idioma actual</string>
     <string name="choose_locale_other_locales_title">Otros idiomas disponibles</string>
-    <string name="choose_locale_loading_locales">Cargando lenguajes disponibles</string>
+    <string name="choose_locale_loading_locales">Cargando lenguajes disponibles…</string>
 
     <string name="open_terms_of">Leer los terminos de %s</string>
     <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad %s\?</string>
@@ -1924,7 +1921,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="cannot_call_yourself_with_invite">No puedes hacer una llamada contigo mismo, espera a que los participantes acepten la invitación</string>
     <string name="failed_to_add_widget">Fallo al adicionar Widget</string>
     <string name="failed_to_remove_widget">Fallo al eliminar Widget</string>
-    <string name="settings_call_show_confirmation_dialog_title">Prevenir llamadas por accidente</string>
+    <string name="settings_call_show_confirmation_dialog_title">Confirmar llamada</string>
     <string name="settings_call_show_confirmation_dialog_summary">Pedir confirmacion antes de iniciar una llamda</string>
     <string name="room_participants_kick_reason">Rason de expulsion</string>
     <string name="room_participants_ban_title">Banear usuario</string>
@@ -1953,7 +1950,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="autocomplete_limited_results">Mostrando solo el primer resultado, agregue mas letras…</string>
 
-    <string name="settings_developer_mode_fail_fast_title">Fallar rapido (Test)</string>
+    <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
     <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
 
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
@@ -2004,7 +2001,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="verification_verify_user">Verificar %s</string>
     <string name="verification_verified_user">Verificado %s</string>
     <string name="verification_request_waiting_for">Esperando por %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no estan encriptados punto a punto.</string>
+    <string name="room_profile_not_encrypted_subtitle">Los mensages en esta sala no están encriptados punto a punto.</string>
     <string name="room_profile_section_security">Seguridad</string>
     <string name="room_profile_section_security_learn_more">Saber mas</string>
     <string name="room_profile_section_more">Mas</string>
@@ -2042,7 +2039,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_list_sharing_header_other_rooms">Otras salas</string>
 
     <string name="command_description_rainbow">Envía el mensaje dado en colores</string>
-    <string name="settings_category_timeline">Linea de tiempo</string>
+    <string name="settings_category_timeline">Línea de tiempo</string>
 
     <string name="settings_category_composer">Editor de mensage</string>
 
@@ -2082,7 +2079,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Sin conexión</string>
-    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avion Activado</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avión Activado</string>
 
     <string name="settings_dev_tools">Herramientas de desarrollo</string>
     <string name="settings_account_data">Datos de cuenta</string>
@@ -2126,7 +2123,540 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="create_pin_confirm_title">Confirmar PIN</string>
     <string name="auth_pin_reset_title">Resetear PIN</string>
     <string name="auth_pin_new_pin_action">Nuevo PIN</string>
-    <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar seccion y crear uno nuevo</string>
+    <string name="auth_pin_reset_content">Para resetear su PIN, debe iniciar sección y crear uno nuevo.</string>
     <string name="settings_security_pin_code_title">Establecer PIN</string>
     <string name="settings_security_pin_code_summary">Si decea resetear su PIN, toque Olvidé PIN para cerrar sesión y restablecer.</string>
+    <string name="settings_phone_numbers">Numeros telefonicos</string>
+    <string name="settings_emails_and_phone_numbers_title">Correos y numeros telefonicos</string>
+    <string name="settings_emails_and_phone_numbers_summary">Administre el correo y numero telefonico de su cuenta</string>
+
+    <string name="settings_show_redacted">Mostrar mensages eliminados</string>
+    <string name="settings_show_redacted_summary">Indicar marca de mensaje eliminado</string>
+    <string name="uploads_files_title">ARCHIVOS</string>
+    <string name="uploads_files_no_result">No se han subido archivos a la sala</string>
+
+    <string name="settings_notification_advanced_summary">Establecer notificaciones por eventos</string>
+
+    <string name="change_password_summary">Establecer una nueva contraseña…</string>
+
+    <string name="audio_video_meeting_description">Las reuniones utilizan políticas de seguridad y permisos de Jitsi. Todas las personas que se encuentren actualmente en la sala verán una invitación para unirse mientras se lleva a cabo la reunión.</string>
+    <string name="call_notification_answer">Aceptar</string>
+    <string name="call_notification_reject">Declinar</string>
+    <string name="call_notification_hangup">Colgar</string>
+
+    <string name="auth_msisdn_already_defined">Este número de teléfono ya está definido.</string>
+    <string name="room_participants_power_level_demote_warning_title">¿Degradarte\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">No podrá deshacer este cambio ya que se está degradando, si es el último usuario privilegiado en la sala, será imposible recuperar los privilegios.</string>
+    <string name="room_participants_power_level_demote">Degradar</string>
+
+
+    <string name="room_participants_action_ignore_prompt_msg">Si ignora a este usuario, se eliminarán sus mensajes de las salas que comparte.
+\n
+\n Puede revertir esta acción en cualquier momento en la configuración general.</string>
+    <string name="room_participants_action_unignore_title">Dejar de ignorar al usuario</string>
+    <string name="room_participants_action_unignore_prompt_msg">Si ignora a este usuario, se mostrarán todos sus mensajes nuevamente.</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">¿Estás seguro de que deseas cancelar la invitación de este usuario\?</string>
+    <string name="room_participants_kick_title">Patear usuario</string>
+    <string name="room_participants_kick_prompt_msg">patear al usuario los eliminará de esta sala. 
+\n
+\nPara evitar que vuelvan a unirse, debes prohibirlos.</string>
+    <string name="settings_phone_number_empty">No se ha agregado ningún número de teléfono a su cuenta</string>
+    <string name="settings_emails">Correos electrónicos</string>
+    <string name="settings_emails_empty">No se ha agregado ningún correo electrónico a su cuenta</string>
+    <string name="settings_remove_three_pid_confirmation_content">¿Elimina %s\?</string>
+    <string name="error_threepid_auth_failed">Asegúrese de haber hecho clic en el enlace del correo electrónico que le enviamos.</string>
+
+    <string name="settings_secure_backup_section_title">Copia de seguridad segura</string>
+    <string name="settings_secure_backup_manage">Gestionar</string>
+    <string name="settings_secure_backup_setup">Configurar copia de seguridad segura</string>
+    <string name="settings_secure_backup_reset">Restablecer copia de seguridad segura</string>
+    <string name="settings_secure_backup_enter_to_setup">Configurar en este dispositivo</string>
+    <string name="settings_secure_backup_section_info">Protéjase contra la pérdida de acceso a los mensajes y datos cifrados haciendo una copia de seguridad de las claves de cifrado en su servidor.</string>
+    <string name="reset_secure_backup_title">Genere una nueva llave de seguridad o establezca una nueva frase de seguridad para su copia de seguridad existente.</string>
+    <string name="reset_secure_backup_warning">Esto reemplazará su clave o frase actual.</string>
+
+    <string name="disabled_integration_dialog_title">Las integraciones están deshabilitadas</string>
+    <string name="disabled_integration_dialog_content">Habilite \'Permitir integraciones\' en Configuración para hacer esto.</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d usuario prohibido</item>
+        <item quantity="other">%d usuarios prohibidos</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">Claves exportadas correctamente</string>
+
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d clave importada con éxito.</item>
+        <item quantity="other">%1$d/%2$d claves importadas con éxito.</item>
+    </plurals>
+
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="active_widget_view_action">VER</string>
+    <string name="active_widgets_title">Widgets activos</string>
+
+
+    <string name="room_manage_integrations">Gestionar integraciones</string>
+    <string name="room_no_active_widgets">Sin widgets activos</string>
+    <string name="recovery_key_export_saved">La clave de recuperación se ha guardada.</string>
+
+    <string name="secure_backup_banner_setup_line1">Copia de seguridad segura</string>
+    <string name="secure_backup_banner_setup_line2">Protéjase contra la pérdida de acceso a mensajes y datos cifrados</string>
+
+    <string name="secure_backup_setup">Configurar copia de seguridad segura</string>
+
+    <string name="event_redacted">Mensaje borrado</string>
+    <string name="create_room_federation_error">Se ha creado la sala, pero algunas invitaciones no se han enviado por el siguiente motivo:
+\n
+\n%s</string>
+
+    <string name="settings_discovery_confirm_mail_not_clicked">Le enviamos un correo electrónico de confirmación %s, primero revise su correo electrónico y haga clic en el enlace de confirmación</string>
+    <string name="settings_text_message_sent_hint">Código</string>
+    <string name="settings_text_message_sent_wrong_code">El código de verificación no es correcto.</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s y %3$d otra lectura</item>
+        <item quantity="other">%1$s, %2$s y %3$d otras lecturas</item>
+    </plurals>
+    <string name="uploads_media_title">MEDIO</string>
+    <string name="uploads_media_no_result">No hay medios en esta sala</string>
+    <string name="uploads_files_subtitle">%1$s a %2$s</string>
+    <string name="room_list_quick_actions_favorite_add">Agregar a los favoritos</string>
+    <string name="room_list_quick_actions_favorite_remove">Quitar de favoritos</string>
+    <string name="notice_member_no_changes_by_you">No hiciste cambios</string>
+    <string name="room_join_rules_public_by_you">Hiciste que la sala fuera pública para quien conozca el enlace.</string>
+    <string name="room_join_rules_invite_by_you">Hiciste la sala solo por invitación.</string>
+    <string name="login_server_matrix_org_text">Únase a millones gratis en el servidor público más grande</string>
+    <string name="login_signin_sso">Continuar con SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Dirección de servicios de Element Matrix</string>
+    <string name="login_server_url_form_common_notice">Ingrese la dirección del servidor que desea utilizar</string>
+
+    <string name="login_reset_password_notice">Se enviará un correo electrónico de verificación a su bandeja de entrada para confirmar la configuración de su nueva contraseña.</string>
+    <string name="login_reset_password_submit">Próximo</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">Nueva contraseña</string>
+
+    <string name="login_reset_password_warning_title">¡Advertencia!</string>
+    <string name="login_reset_password_warning_content">Cambiar su contraseña restablecerá cualquier clave de cifrado de extremo a extremo en todas sus sesiones, haciendo ilegible el historial de chat cifrado. Configure Key Backup o exporte las llaves de su sala desde otra sesión antes de restablecer su contraseña.</string>
+    <string name="login_reset_password_warning_submit">Seguir</string>
+
+    <string name="login_reset_password_error_not_found">Este correo electrónico no está vinculado a ninguna cuenta</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Revisa tu correo</string>
+    <string name="login_reset_password_mail_confirmation_notice">Se envió un correo electrónico de verificación a %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Toque el enlace para confirmar su nueva contraseña. Una vez que haya seguido el enlace que contiene, haga clic a continuación.</string>
+    <string name="login_reset_password_mail_confirmation_submit">He verificado mi dirección de correo electrónico</string>
+
+    <string name="login_reset_password_success_title">¡Éxito!</string>
+    <string name="login_reset_password_success_notice">Tu contraseña ha sido restablecida.</string>
+    <string name="login_reset_password_success_notice_2">Ha cerrado sesión en todas las sesiones y ya no recibirá notificaciones automáticas. Para volver a habilitar las notificaciones, inicie sesión nuevamente en cada dispositivo.</string>
+    <string name="login_reset_password_success_submit">Volver a Iniciar sesión</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Advertencia</string>
+    <string name="login_reset_password_cancel_confirmation_content">u contraseña aún no ha cambiado. 
+\n
+\n¿Detener el proceso de cambio de contraseña\?</string>
+
+    <string name="login_set_email_title">Establecer dirección de correo electrónico</string>
+    <string name="login_set_email_notice">Configure un correo electrónico para recuperar su cuenta. Más tarde, opcionalmente, puede permitir que las personas que conoce lo descubran mediante su correo electrónico.</string>
+    <string name="login_set_email_mandatory_hint">Correo electrónico</string>
+    <string name="login_set_email_optional_hint">Email (opcional)</string>
+    <string name="login_set_email_submit">Próximo</string>
+
+    <string name="login_set_msisdn_title">Establecer número de teléfono</string>
+    <string name="login_set_msisdn_notice">Configure un número de teléfono para permitir que las personas que conoce lo descubran opcionalmente.</string>
+    <string name="login_set_msisdn_notice2">Utilice el formato internacional.</string>
+    <string name="login_set_msisdn_mandatory_hint">Número de teléfono</string>
+    <string name="login_set_msisdn_optional_hint">Numero de teléfono (opcional)</string>
+    <string name="login_set_msisdn_submit">Próximo</string>
+
+    <string name="login_msisdn_confirm_title">Confirmar número de teléfono</string>
+    <string name="login_msisdn_confirm_notice">Acabamos de mandar un codigo a %1$s. Ingréselo a continuación para verificar que es usted.</string>
+    <string name="login_msisdn_confirm_hint">Introduzca el código</string>
+    <string name="login_msisdn_confirm_send_again">Enviar de nuevo</string>
+    <string name="login_msisdn_confirm_submit">Próximo</string>
+
+    <string name="login_msisdn_notice">Utilice el formato internacional (el número de teléfono debe comenzar con \'+\')</string>
+    <string name="login_msisdn_error_not_international">Los números de teléfono internacionales deben comenzar con \'+\'</string>
+    <string name="login_msisdn_error_other">El número de teléfono parece no válido. Compruébelo por favor</string>
+
+    <string name="login_signup_to">Inscribirse a %1$s</string>
+    <string name="login_signin_username_hint">Nombre de usuario o correo electrónico</string>
+    <string name="login_signup_username_hint">Nombre de usuario</string>
+    <string name="login_signup_password_hint">Contraseña</string>
+    <string name="login_signup_submit">Próximo</string>
+    <string name="login_signup_error_user_in_use">Ese nombre de usuario está siendo usado</string>
+    <string name="login_signup_cancel_confirmation_title">Advertencia</string>
+    <string name="login_signup_cancel_confirmation_content">Tu cuenta aún no está creada.
+\n
+\n ¿Detener el proceso de registro\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Seleccione matrix.org</string>
+    <string name="login_a11y_choose_modular">Seleccionar servicios de matriz de elementos</string>
+    <string name="login_a11y_choose_other">Seleccione un servidor doméstico personalizado</string>
+    <string name="login_a11y_captcha_container">Realiza el desafío de captcha</string>
+    <string name="login_terms_title">Acepta los términos para continuar</string>
+
+    <string name="login_wait_for_email_title">Por favor revise su correo electrónico</string>
+    <string name="login_wait_for_email_notice">Acabamos de enviar un correo electrónico a %1$s.
+\nHaga clic en el enlace que contiene para continuar con la creación de la cuenta.</string>
+    <string name="login_validation_code_is_not_correct">El código introducido no es correcto. Por favor, compruebe.</string>
+    <string name="login_error_outdated_homeserver_title">Servidor doméstico obsoleto</string>
+    <string name="login_error_outdated_homeserver_content">Este servidor doméstico está ejecutando una versión demasiado antigua para conectarse. Pídale al administrador de su servidor doméstico que actualice.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundo…</item>
+        <item quantity="other">Se han enviado demasiadas solicitudes. Puedes volver a intentarlo en %1$d segundos…</item>
+    </plurals>
+
+    <string name="login_connect_using_matrix_id_notice">Alternativamente, si ya tiene una cuenta y conoce su identificador Matrix y su contraseña, puede usar este método:</string>
+    <string name="login_connect_using_matrix_id_submit">Iniciar sesión con Matrix ID</string>
+    <string name="login_signin_matrix_id_title">Iniciar sesión con Matrix ID</string>
+    <string name="login_signin_matrix_id_notice">Si configura una cuenta en un servidor doméstico, use su ID de Matrix (por ejemplo, @user: dominio.com) y contraseña a continuación.</string>
+    <string name="login_signin_matrix_id_hint">ID de Matrix</string>
+    <string name="login_signin_matrix_id_password_notice">Si no conoce su contraseña, vuelva a restablecerla.</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">"Este no es un identificador de usuario válido. Formato esperado:  \'@user:homeserver.org\'"</string>
+    <string name="autodiscover_well_known_error">No se pudo encontrar un servidor de inicio válido. Por favor verifique su identificador</string>
+
+    <string name="seen_by">Visto por</string>
+
+    <string name="signed_out_title">Estás desconectado</string>
+    <string name="signed_out_notice">Puede deberse a varias razones:
+\n
+\n• Has cambiado tu contraseña en otra sesión. 
+\n
+\n• Ha eliminado esta sesión de otra sesión. 
+\n
+\n• El administrador de su servidor ha invalidado su acceso por motivos de seguridad.</string>
+    <string name="signed_out_submit">Iniciar sesión de nuevo</string>
+
+    <string name="soft_logout_title">Estás desconectado</string>
+    <string name="soft_logout_signin_title">Registrarse</string>
+    <string name="soft_logout_signin_notice">"El administrador de su servidor doméstico  (%1$s) ha cerrado la sesión de su cuenta %2$s (%3$s)."</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Inicie sesión para recuperar las claves de cifrado almacenadas exclusivamente en este dispositivo. Los necesita para leer todos sus mensajes seguros en cualquier dispositivo.</string>
+    <string name="soft_logout_signin_submit">Registrarse</string>
+    <string name="soft_logout_signin_password_hint">Contraseña</string>
+    <string name="soft_logout_clear_data_title">Borrar datos personales</string>
+    <string name="soft_logout_clear_data_notice">Advertencia: sus datos personales (incluidas las claves de cifrado) todavía se almacenan en este dispositivo. 
+\n
+\nBórrelo si terminó de usar este dispositivo o si desea iniciar sesión en otra cuenta.</string>
+    <string name="soft_logout_clear_data_submit">Borrar todos los datos</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Borrar datos</string>
+    <string name="soft_logout_clear_data_dialog_content">¿Borrar todos los datos almacenados actualmente en este dispositivo\? 
+\nVuelva a iniciar sesión para acceder a los datos y mensajes de su cuenta.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Perderás el acceso a los mensajes seguros a menos que inicies sesión para recuperar tus claves de cifrado.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Borrar datos</string>
+    <string name="soft_logout_sso_not_same_user_error">La sesión actual es para el usuario %1$s y usted proporciona las credenciales para el usuario %2$s. Esto no es compatible con Element. Primero borre los datos, luego inicie sesión nuevamente con otra cuenta.</string>
+
+    <string name="permalink_malformed">Su enlace matrix.to estaba mal formado</string>
+    <string name="settings_developer_mode_summary">El modo desarrollador activa funciones ocultas y también puede hacer que la aplicación sea menos estable. ¡Solo para desarrolladores!</string>
+    <string name="verification_conclusion_compromised">Uno de los siguientes puede verse comprometido: 
+\n- Tu servidor doméstico 
+\n- El servidor doméstico al que está conectado el usuario que estás verificando 
+\n- La suya o la conexión a Internet de otros usuarios 
+\n- El suyo o el dispositivo de otros usuarios</string>
+
+    <string name="verification_request_alert_description">Para mayor seguridad, verifique %s verificando un código único en ambos dispositivos. 
+\n
+\nPara máxima seguridad, hágalo en persona.</string>
+    <string name="room_profile_encrypted_subtitle">Los mensajes de esta sala están cifrados de extremo a extremo. 
+\n
+\nSus mensajes están protegidos con candados y solo usted y el destinatario tienen las claves únicas para desbloquearlos.</string>
+    <string name="verify_cannot_cross_sign">Esta sesión no puede compartir esta verificación con sus otras sesiones. 
+\nLa verificación se guardará localmente y se compartirá en una versión futura de la aplicación.</string>
+
+    <string name="command_description_rainbow_emote">Envía el emote dado coloreado como un arcoíris</string>
+
+    <string name="room_settings_enable_encryption_dialog_content">Una vez habilitado, el cifrado de una sala no se puede deshabilitar. Los mensajes enviados en una sala cifrada no pueden ser vistos por el servidor, solo por los participantes de la sala. Habilitar el cifrado puede evitar que muchos bots y puentes funcionen correctamente.</string>
+    <string name="verification_request_notice">Para estar seguro, verifique %s comprobando un código de un solo uso.</string>
+    <string name="verification_request_start_notice">Para estar seguro, hágalo en persona o use otra forma de comunicarse.</string>
+
+    <string name="verification_emoji_notice">Compare los emoji únicos, asegurándose de que aparezcan en el mismo orden.</string>
+    <string name="verification_code_notice">Compare el código con el que se muestra en la pantalla del otro usuario.</string>
+    <string name="verification_conclusion_ok_notice">Los mensajes con este usuario están encriptados de extremo a extremo y no pueden ser leídos por terceros.</string>
+    <string name="verification_conclusion_ok_self_notice">Su nueva sesión ahora está verificada. Tiene acceso a sus mensajes cifrados y otros usuarios lo verán como de confianza.</string>
+
+    <string name="encryption_information_dg_xsigning_complete">La firma cruzada está habilitada
+\n Claves privadas en el dispositivo.</string>
+    <string name="encryption_information_dg_xsigning_trusted">La firma cruzada está habilitada 
+\nLas llaves son de confianza. 
+\nNo se conocen las claves privadas</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">La firma cruzada está habilitada. 
+\nLas claves no son de confianza</string>
+    <string name="settings_hs_admin_e2e_disabled">El administrador de su servidor ha desactivado el cifrado de extremo a extremo de forma predeterminada en salas privadas y mensajes directos.</string>
+    <string name="settings_failed_to_get_crypto_device_info">No hay información criptográfica disponible</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Esta sesión es confiable para mensajería segura porque usted la verificó:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifique esta sesión para marcarla como confiable y otorgarle acceso a mensajes encriptados. Si no inició sesión en esta sesión, su cuenta puede verse comprometida:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d sesión activa</item>
+        <item quantity="other">%d sesiones activas</item>
+    </plurals>
+
+    <string name="verification_open_other_to_verify">Utilice una sesión existente para verificar esta, otorgándole acceso a los mensajes cifrados.</string>
+
+
+    <string name="verification_profile_device_verified_because">"Esta sesión es confiable para mensajería segura porque  %1$s (%2$s) la verificó:"</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) iniciado sesión con una nueva sesión:</string>
+    <string name="verification_profile_device_untrust_info">Hasta que este usuario confíe en esta sesión, los mensajes enviados hacia y desde ella se etiquetan con advertencias. Alternativamente, puede verificarlo manualmente.</string>
+
+
+    <string name="qr_code_scanned_by_other_notice">¡Casi ahí! ¿Es %s muestra el mismo escudo\?</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d voto</item>
+        <item quantity="other">%d votos</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d voto - Resultados finales</item>
+        <item quantity="other">%d votos - Resultados finales</item>
+    </plurals>
+    <string name="command_description_poll">Crea una encuesta simple</string>
+    <string name="verification_cannot_access_other_session">Use una contraseña o clave de recuperación</string>
+    <string name="verification_use_passphrase">Si no puede acceder a una sesión existente</string>
+
+    <string name="enter_secret_storage_invalid">No puedo encontrar secretos almacenados</string>
+    <string name="enter_secret_storage_passphrase">Ingrese la contraseña de almacenamiento secreta</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Solo debe acceder al almacenamiento secreto desde un dispositivo confiable</string>
+
+    <string name="share_confirm_room">¿Quieres enviar este adjunto a %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Enviar imagen con el tamaño original</item>
+        <item quantity="other">Envía imágenes con el tamaño original</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Confirmar eliminación</string>
+    <string name="delete_event_dialog_content">¿Está seguro de que desea eliminar (eliminar) este evento\? Tenga en cuenta que si elimina el nombre de una sala o el cambio de tema, podría deshacer el cambio.</string>
+    <string name="event_redacted_by_user_reason_with_reason">Evento eliminado por el usuario, motivo: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Evento moderado por el administrador de la sala, motivo: %1$s</string>
+
+    <string name="settings_key_requests">Solicitudes clave</string>
+
+    <string name="e2e_use_keybackup">Desbloquear el historial de mensajes cifrados</string>
+
+    <string name="verify_new_session_notice">Utilice esta sesión para verificar su nuevo, otorgándole acceso a mensajes encriptados.</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Si cancela, no podrá leer mensajes encriptados en este dispositivo y otros usuarios no confiarán en él</string>
+    <string name="verify_cancel_self_verification_from_trusted">Si cancela, no podrá leer mensajes encriptados en su nuevo dispositivo y otros usuarios no confiarán en él</string>
+    <string name="verify_cancel_other">No verificarás %1$s (%2$s) si cancelas ahora. Comience de nuevo en su perfil de usuario.</string>
+
+    <string name="verify_not_me_self_verification">Uno de los siguientes puede verse comprometido: 
+\n
+\n- Tu contraseña 
+\n- Tu servidor doméstico 
+\n- Este dispositivo o el otro dispositivo 
+\n- La conexión a Internet que está usando cualquiera de los dispositivos 
+\n
+\nLe recomendamos que cambie su contraseña y clave de recuperación en Configuración de inmediato.</string>
+
+    <string name="verify_cancelled_notice">Verifique sus dispositivos desde Configuración.</string>
+    <string name="set_recovery_passphrase">Establecer un %s</string>
+    <string name="generate_message_key">Generar una clave de mensaje</string>
+
+    <string name="confirm_recovery_passphrase">Confirmar %s</string>
+
+    <string name="enter_account_password">"Ingrese su  %s para continuar."</string>
+
+    <string name="bootstrap_info_text">Proteja y desbloquee los mensajes cifrados y confíe en %s.</string>
+    <string name="bootstrap_info_confirm_text">Ingrese su %s nuevamente para confirmarlo.</string>
+    <string name="bootstrap_dont_reuse_pwd">No use la contraseña de su cuenta.</string>
+
+    <string name="bootstrap_info_text_2">Ingrese una frase de seguridad que solo usted conozca, que se usa para proteger secretos en su servidor.</string>
+
+    <string name="bootstrap_loading_text">Esto puede tardar varios segundos, tenga paciencia.</string>
+    <string name="bootstrap_loading_title">Configurando la recuperación.</string>
+    <string name="your_recovery_key">Tu clave de recuperación</string>
+    <string name="keep_it_safe">Manténlo seguro</string>
+    <string name="finish">Terminar</string>
+
+    <string name="bootstrap_save_key_description">Utilice este %1$s como red de seguridad en caso de que olvide su %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Publicar claves de identidad creadas</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generando clave segura a partir de frase de contraseña</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Definición de la clave predeterminada de SSSS</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Sincronización de la llave maestra</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Sincronización de la clave de usuario</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Sincronización de la clave de autofirma</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Configuración de copia de seguridad de claves</string>
+
+
+    <string name="bootstrap_cross_signing_success">Tus %2$s y %1$s ahora están configurados.
+\n
+\n¡Mantenlos a salvo! Los necesitará para desbloquear mensajes cifrados y proteger la información si pierde todas sus sesiones activas.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Imprímelo y guárdalo en un lugar seguro</string>
+    <string name="bootstrap_crosssigning_save_usb">Guárdelo en una llave USB o unidad de respaldo</string>
+    <string name="bootstrap_crosssigning_save_cloud">Cópielo en su almacenamiento personal en la nube</string>
+
+    <string name="auth_flow_not_supported">No puedes hacer eso desde el móvil</string>
+
+    <string name="bootstrap_skip_text">Establecer una frase de contraseña de recuperación le permite proteger y desbloquear mensajes cifrados y de confianza.
+\n
+\nSi no desea establecer una contraseña de mensaje, genere una clave de mensaje.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Establecer una frase de contraseña de recuperación le permite proteger y desbloquear mensajes cifrados y de confianza.</string>
+    <string name="bootstrap_cancel_text">Si cancela ahora, puede perder mensajes y datos cifrados si pierde el acceso a sus inicios de sesión. 
+\n
+\nTambién puede configurar la Copia de seguridad segura y administrar sus claves en Configuración.</string>
+
+    <string name="encryption_enabled_tile_description">Los mensajes de esta sala están cifrados de extremo a extremo. Obtenga más información y verifique a los usuarios en su perfil.</string>
+    <string name="encryption_not_enabled">Cifrado no habilitado</string>
+    <string name="encryption_unknown_algorithm_tile_description">El cifrado utilizado por esta sala no es compatible</string>
+
+    <string name="room_created_summary_item">%s creado y configurado la sala.</string>
+    <string name="qr_code_scanned_self_verif_notice">¡Casi ahí! ¿El otro dispositivo muestra el mismo escudo\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">¡Casi ahí! Esperando confirmación…</string>
+    <string name="error_failed_to_import_keys">No se pudieron importar las claves</string>
+
+    <string name="settings_messages_at_room">Mensajes que contienen @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Mensajes cifrados en chats uno a uno</string>
+    <string name="settings_messages_in_e2e_group_chat">Mensajes cifrados en chats grupales</string>
+    <string name="settings_when_rooms_are_upgraded">Cuando las salas son actualizadas</string>
+    <string name="settings_troubleshoot_title">Solucionar problemas</string>
+    <string name="command_description_plain">Envía un mensaje como texto estándar, sin interpretarlo como Markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Nombre de usuario y / o contraseña incorrectos. La contraseña ingresada comienza o termina con espacios, verifíquela.</string>
+    <string name="auth_invalid_login_deactivated_account">Esta cuenta ha sido desactivada.</string>
+
+    <string name="upgrade_security">Mejora de encriptación disponible</string>
+    <string name="setup_cross_signing">Habilitar la firma cruzada</string>
+    <string name="security_prompt_text">Verifíquese a usted mismo y a los demás para mantener sus chats seguros</string>
+
+    <string name="enter_backup_passphrase">Entrar %s</string>
+    <string name="backup_recovery_passphrase">Frase de contraseña de recuperación</string>
+    <string name="bootstrap_invalid_recovery_key">No es una clave de recuperación válida</string>
+    <string name="recovery_key_empty_error_message">Por favor introduce una clave de recuperación</string>
+
+    <string name="bootstrap_progress_checking_backup">Comprobando la clave de respaldo</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Comprobando la clave de respaldo (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Obteniendo clave de curva</string>
+    <string name="bootstrap_progress_generating_ssss">Generando clave SSSS a partir de frase de contraseña</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generando clave SSSS a partir de frase de contraseña (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generando clave SSSS a partir de clave de recuperación</string>
+    <string name="bootstrap_progress_storing_in_sss">Almacenar el secreto de la copia de seguridad de claves en SSSS</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Ingrese su Frase de contraseña de respaldo de clave para continuar.</string>
+    <string name="bootstrap_migration_use_recovery_key">use su clave de recuperación de Key Backup</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">No conoces tu frase de contraseña de copia de seguridad clave, puedes %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Clave de recuperación de copia de seguridad</string>
+
+    <string name="settings_security_prevent_screenshots_title">Evitar capturas de pantalla de la aplicación</string>
+    <string name="settings_security_prevent_screenshots_summary">Al habilitar esta configuración, se agrega FLAG_SECURE a todas las actividades. Reinicie la aplicación para que el cambio surta efecto.</string>
+
+    <string name="media_file_added_to_gallery">Archivo multimedia agregado a la Galería</string>
+    <string name="error_adding_media_file_to_gallery">No se pudo agregar el archivo multimedia a la Galería</string>
+    <string name="use_other_session_content_description">Utilice la última versión de Element en sus otros dispositivos, Element Web, Element Desktop, Element iOS, Element para Android u otro cliente Matrix con capacidad de firma cruzada</string>
+    <string name="app_desktop_web">Elemento Web 
+\nElemento de escritorio</string>
+    <string name="app_ios_android">Elemento iOS 
+\nElemento Android</string>
+    <string name="or_other_mx_capabale_client">u otro cliente Matrix con capacidad de firma cruzada</string>
+    <string name="use_latest_app">Utilice la última versión de Element en sus otros dispositivos:</string>
+    <string name="command_description_discard_session">Obliga a descartar la sesión de grupo saliente actual en una sala cifrada</string>
+    <string name="command_description_discard_session_not_handled">Solo se admite en salas cifradas</string>
+    <string name="enter_secret_storage_passphrase_or_key">Use su %1$s o use su %2$s para continuar.</string>
+    <string name="use_recovery_key">Usar clave de recuperación</string>
+    <string name="enter_secret_storage_input_key">Seleccione su clave de recuperación o introdúzcala manualmente escribiéndola o pegándola desde su portapapeles</string>
+    <string name="keys_backup_recovery_key_error_decrypt">La copia de seguridad no se pudo descifrar con esta clave de recuperación: verifique que ingresó la clave de recuperación correcta.</string>
+    <string name="failed_to_access_secure_storage">No se pudo acceder al almacenamiento seguro</string>
+
+    <string name="unencrypted">Sin encriptar</string>
+    <string name="encrypted_unverified">Cifrado por un dispositivo no verificado</string>
+    <string name="review_logins">Revise dónde inició sesión</string>
+    <string name="verify_other_sessions">Verifique todas sus sesiones para asegurarse de que su cuenta y sus mensajes estén seguros</string>
+    <string name="verify_this_session">Verifique el nuevo inicio de sesión accediendo a su cuenta: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Verificar manualmente por texto</string>
+    <string name="cross_signing_verify_by_emoji">Verificación interactiva por emoji</string>
+    <string name="confirm_your_identity">Confirme su identidad verificando este inicio de sesión de una de sus otras sesiones, otorgándole acceso a los mensajes cifrados.</string>
+    <string name="confirm_your_identity_quad_s">Confirme su identidad verificando este inicio de sesión, otorgándole acceso a los mensajes cifrados.</string>
+    <string name="mark_as_verified">Marcar como de confianza</string>
+
+    <string name="error_sso_flow_not_supported_yet">Lo sentimos, esta operación aún no es posible para las cuentas conectadas mediante el inicio de sesión único.</string>
+
+    <string name="create_room_dm_failure">No pudimos crear tu DM. Marque los usuarios que desea invitar y vuelva a intentarlo.</string>
+
+    <string name="identity_server_error_terms_not_signed">Primero acepta los términos del servidor de identidad en la configuración.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Para su privacidad, Element solo admite el envío de números de teléfono y correos electrónicos de usuario con hash.</string>
+    <string name="identity_server_error_binding_error">La asociación ha fallado.</string>
+    <string name="identity_server_error_no_current_binding_error">No hay asociación actual con este identificador.</string>
+
+    <string name="identity_server_set_default_notice">Su servidor doméstico (%1$s) propone utilizar %2$s para su servidor de identidad</string>
+    <string name="identity_server_set_default_submit">Utilizar %1$s</string>
+    <string name="identity_server_set_alternative_notice">Alternativamente, puede ingresar cualquier otra URL del servidor de identidad</string>
+    <string name="identity_server_set_alternative_notice_no_default">Ingrese la URL de un servidor de identidad</string>
+    <string name="identity_server_set_alternative_submit">Enviar</string>
+    <string name="power_level_edit_title">Establecer rol</string>
+    <string name="power_level_title">Rol</string>
+    <string name="a11y_open_chat">Conversación abierta</string>
+    <string name="a11y_mute_microphone">Silenciar el micrófono</string>
+    <string name="a11y_unmute_microphone">Activar el sonido del micrófono</string>
+    <string name="a11y_stop_camera">Detén la cámara</string>
+    <string name="a11y_start_camera">Enciende la cámara</string>
+
+    <string name="settings_setup_secure_backup">Configurar copia de seguridad segura</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Respaldo seguro</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Protéjase contra la pérdida de acceso a los mensajes y datos cifrados haciendo una copia de seguridad de las claves de cifrado en su servidor.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Preparar</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Usa una llave de seguridad</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Genere una clave de seguridad para almacenar en un lugar seguro, como un administrador de contraseñas o una caja fuerte.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Utilice una frase de seguridad</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Ingrese una frase secreta que solo usted conozca y genere una clave de respaldo.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Guarde su llave de seguridad</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Guarde su llave de seguridad en un lugar seguro, como un administrador de contraseñas o una caja fuerte.</string>
+
+    <string name="set_a_security_phrase_title">Establecer una frase de seguridad</string>
+    <string name="set_a_security_phrase_notice">Ingrese una frase de seguridad que solo usted conozca, que se usa para proteger secretos en su servidor.</string>
+    <string name="set_a_security_phrase_hint">Frase de seguridad</string>
+    <string name="set_a_security_phrase_again_notice">Ingrese su Frase de seguridad nuevamente para confirmarla.</string>
+
+    <string name="save_your_security_key_title">Guarde su llave de seguridad</string>
+    <string name="save_your_security_key_notice">Guarde su llave de seguridad en un lugar seguro, como un administrador de contraseñas o una caja fuerte.</string>
+
+    <string name="room_settings_name_hint">Nombre de la Sala</string>
+    <string name="room_settings_topic_hint">Tema</string>
+    <string name="room_settings_save_success">Cambiaste la configuración de la sala con éxito</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">No puedes acceder a este mensaje</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Esperando este mensaje, esto puede tardar un poco</string>
+    <string name="crypto_utd">No se puede descifrar</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Debido al cifrado de extremo a extremo, es posible que deba esperar a que llegue el mensaje de alguien porque las claves de cifrado no se le enviaron correctamente.</string>
+    <string name="crypto_error_withheld_blacklisted">No puede acceder a este mensaje porque ha sido bloqueado por el remitente</string>
+    <string name="crypto_error_withheld_unverified">No puede acceder a este mensaje porque el remitente no confía en su sesión</string>
+    <string name="crypto_error_withheld_generic">No puede acceder a este mensaje porque el remitente no envió las claves a propósito</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Esperando el historial de cifrado</string>
+
+    <string name="element_disclaimer_content">¡Nos complace anunciar que hemos cambiado de nombre! Tu aplicación está actualizada y accediste a tu cuenta.</string>
+    <string name="save_recovery_key_chooser_hint">Guardar la clave de recuperación en</string>
+
+    <string name="add_from_phone_book">Agregar desde mi directorio telefónico</string>
+    <string name="empty_phone_book">Tu directorio telefónico está vacío</string>
+    <string name="phone_book_title">Directorio telefónico</string>
+    <string name="loading_contact_book">Recuperando tus contactos…</string>
+    <string name="empty_contact_book">Tu libro de contactos está vacío</string>
+    <string name="contacts_book_title">Libro de contactos</string>
+
+    <string name="three_pid_revoke_invite_dialog_content">¿Revocar la invitación a %1$s\?</string>
+
+    <string name="member_banned_by">Prohibido por %1$s</string>
+    <string name="failed_to_unban">No se pudo anular la prohibición del usuario</string>
+
+    <string name="alert_push_are_disabled_title">Las notificaciones push están deshabilitadas</string>
+    <string name="alert_push_are_disabled_description">Revise su configuración para habilitar las notificaciones push</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Código incorrecto, %d intento restante</item>
+        <item quantity="other">Código incorrecto, %d intentos restantes</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">¡Advertencia! ¡Último intento restante antes de cerrar sesión!</string>
+    <string name="too_many_pin_failures">Demasiados errores, se ha desconectado</string>
+    <string name="create_pin_title">Elija un PIN por seguridad</string>
+    <string name="create_pin_confirm_failure">No se pudo validar el PIN, toque uno nuevo.</string>
+    <string name="auth_pin_title">Introduce tu PIN</string>
+    <string name="auth_pin_forgot">¿Olvidó su PIN\?</string>
+    <string name="error_opening_banned_room">No se puede abrir una sala en la que está prohibido.</string>
+    <string name="room_error_not_found">No puedo encontrar esta sala. Asegúrate de que exista.</string>
 </resources>

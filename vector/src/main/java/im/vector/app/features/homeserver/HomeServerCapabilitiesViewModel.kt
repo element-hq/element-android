@@ -16,24 +16,69 @@
 
 package im.vector.app.features.homeserver
 
+import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
+import im.vector.app.features.userdirectory.KnownUsersFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
-class HomeServerCapabilitiesViewModel(initialState: HomeServerCapabilitiesViewState)
-    : VectorViewModel<HomeServerCapabilitiesViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class HomeServerCapabilitiesViewModel @AssistedInject constructor(
+        @Assisted initialState: HomeServerCapabilitiesViewState,
+        private val session: Session,
+        private val rawService: RawService
+) : VectorViewModel<HomeServerCapabilitiesViewState, EmptyAction, EmptyViewEvents>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel
+    }
 
     companion object : MvRxViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
+        @JvmStatic
+        override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
+            val fragment: KnownUsersFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.homeServerCapabilitiesViewModelFactory.create(state)
+        }
 
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
                     capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
             )
+        }
+    }
+
+    init {
+        initAdminE2eByDefault()
+    }
+
+    private fun initAdminE2eByDefault() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val adminE2EByDefault = tryThis {
+                rawService.getElementWellknown(session.myUserId)
+                        ?.isE2EByDefault()
+                        ?: true
+            } ?: true
+
+            setState {
+                copy(
+                        isE2EByDefault = adminE2EByDefault
+                )
+            }
         }
     }
 

@@ -48,7 +48,6 @@
     <string name="leave">Napusti</string>
     <string name="stay">Ostani</string>
     <string name="send">Pošalji</string>
-    <string name="copy">Kopiraj</string>
     <string name="resend">Pošalji ponovno</string>
     <string name="redact">Ukloni</string>
     <string name="quote">Citiraj</string>
@@ -725,8 +724,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSinkronizacija može biti odgođena ovisno o sredstvima (baterija) ili stanju uređaja (spavanje).</string>
     <string name="settings_set_sync_delay">Razmak između dvije sinkronizacije</string>
-    <string name="settings_second">sekunda</string>
-    <string name="settings_seconds">sekunde</string>
 
     <string name="settings_version">Inačica</string>
     <string name="settings_olm_version">Inačica olm-a</string>

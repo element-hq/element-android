@@ -19,7 +19,6 @@ package im.vector.app.push.fcm
 
 import android.app.Activity
 import android.content.Context
-import androidx.preference.PreferenceManager
 import android.widget.Toast
 import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
@@ -27,6 +26,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
@@ -46,7 +46,7 @@ object FcmHelper {
      * @return the FCM token or null if not received from FCM
      */
     fun getFcmToken(context: Context): String? {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREFS_KEY_FCM_TOKEN, null)
+        return DefaultSharedPreferences.getInstance(context).getString(PREFS_KEY_FCM_TOKEN, null)
     }
 
     /**
@@ -58,7 +58,7 @@ object FcmHelper {
      */
     fun storeFcmToken(context: Context,
                       token: String?) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
     }
@@ -102,7 +102,7 @@ object FcmHelper {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onEnterForeground(context: Context) {
+    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         // No op
     }
 

@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.widget.textChanges
-import org.matrix.android.sdk.api.session.user.model.User
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -39,12 +38,14 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import kotlinx.android.synthetic.main.fragment_known_users.*
+import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 class KnownUsersFragment @Inject constructor(
         val userDirectoryViewModelFactory: UserDirectoryViewModel.Factory,
         private val knownUsersController: KnownUsersController,
-        private val dimensionConverter: DimensionConverter
+        private val dimensionConverter: DimensionConverter,
+        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
     private val args: KnownUsersFragmentArgs by args()
@@ -71,7 +72,7 @@ class KnownUsersFragment @Inject constructor(
         setupCloseView()
 
         homeServerCapabilitiesViewModel.subscribe {
-            knownUsersE2EbyDefaultDisabled.isVisible = !it.capabilities.adminE2EByDefault
+            knownUsersE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
         viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {

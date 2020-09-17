@@ -20,24 +20,26 @@ package org.matrix.android.sdk.internal.session.room.state
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.where
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.process
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
 import javax.inject.Inject
 
-internal class StateEventDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class StateEventDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                        private val realmSessionProvider: RealmSessionProvider) {
 
     fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue): Event? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        return realmSessionProvider.withRealm { realm ->
             buildStateEventQuery(realm, roomId, setOf(eventType), stateKey).findFirst()?.root?.asDomain()
         }
     }
@@ -53,7 +55,7 @@ internal class StateEventDataSource @Inject constructor(@SessionDatabase private
     }
 
     fun getStateEvents(roomId: String, eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        return realmSessionProvider.withRealm { realm ->
             buildStateEventQuery(realm, roomId, eventTypes, stateKey)
                     .findAll()
                     .mapNotNull {

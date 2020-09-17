@@ -20,8 +20,8 @@ import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.settings.VectorSettingsUrls
 
@@ -33,7 +33,7 @@ private const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 fun showDisclaimerDialog(activity: Activity) {
     // This is a RiotX/Element disclaimer
     if (true) return
-    val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity)
+    val sharedPrefs = DefaultSharedPreferences.getInstance(activity)
 
     if (sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE) {
         sharedPrefs.edit {
@@ -54,7 +54,7 @@ fun showDisclaimerDialog(activity: Activity) {
 }
 
 fun doNotShowDisclaimerDialog(context: Context) {
-    val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val sharedPrefs = DefaultSharedPreferences.getInstance(context)
 
     sharedPrefs.edit {
         putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)

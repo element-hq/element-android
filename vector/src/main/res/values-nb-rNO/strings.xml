@@ -24,7 +24,6 @@
     <string name="save">Lagre</string>
     <string name="leave">Forlat</string>
     <string name="send">Send</string>
-    <string name="copy">Kopier</string>
     <string name="resend">Send på nytt</string>
     <string name="redact">Fjern</string>
     <string name="quote">Sitering</string>
@@ -192,7 +191,6 @@
 
     <string name="settings_notification_privacy_normal">Vanlig</string>
     <string name="settings_notification_ringtone">Varslingslyd</string>
-    <string name="settings_seconds">sekunder</string>
 
     <string name="settings_version">Versjon</string>
     <string name="settings_copyright">Opphavsrettighet</string>

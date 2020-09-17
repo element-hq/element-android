@@ -30,9 +30,7 @@ internal object HomeServerCapabilitiesMapper {
                 canChangePassword = entity.canChangePassword,
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
-                defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                adminE2EByDefault = entity.adminE2EByDefault,
-                preferredJitsiDomain = entity.preferredJitsiDomain
+                defaultIdentityServerUrl = entity.defaultIdentityServerUrl
         )
     }
 }

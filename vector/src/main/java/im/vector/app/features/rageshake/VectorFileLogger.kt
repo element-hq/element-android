@@ -19,6 +19,9 @@ package im.vector.app.features.rageshake
 import android.content.Context
 import android.util.Log
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.io.PrintWriter
@@ -85,12 +88,14 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (sFileHandler == null) return
-        if (skipLog(priority)) return
-        if (t != null) {
-            logToFile(t)
+        GlobalScope.launch(Dispatchers.IO) {
+            if (sFileHandler == null) return@launch
+            if (skipLog(priority)) return@launch
+            if (t != null) {
+                logToFile(t)
+            }
+            logToFile(prioPrefixes[priority] ?: "$priority ", tag ?: "Tag", message)
         }
-        logToFile(prioPrefixes[priority] ?: "$priority ", tag ?: "Tag", message)
     }
 
     private fun skipLog(priority: Int): Boolean {
@@ -174,7 +179,8 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
 
         companion object {
             private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
-//            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+
+            //            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
             private val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss*SSSZZZZ", Locale.US)
 
             private var mIsTimeZoneSet = false
@@ -201,7 +207,6 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         if (null == sCacheDirectory) {
             return
         }
-
         val b = StringBuilder()
         b.append(Thread.currentThread().id)
         b.append(" ")

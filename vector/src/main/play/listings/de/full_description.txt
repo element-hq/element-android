@@ -13,7 +13,7 @@ Element ist zu all diesem in der Lage, weil es Matrix nutzt - einen Standard fü
 
 Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine Konversationen hostet. In der Element App kannst du zwischen verschiedenen Möglichkeiten auswählen:
 
-1. Kostenlos auf dem öffentlichen matrix.org Server registrieren
+1. Kostenlos auf dem öffentlichen matrix.org Server registrieren, der von den Matrix-Entwicklern gehostet wird, oder wähle aus Tausenden von öffentlichen Servern, die von Freiwilligen gehostet werden
 2. Einen Account auf einem eigenen Server auf eigener Hardware betreiben
 3. Einen Account auf einem benutzerdefinierten Server erstellen, zum Beispiel durch ein Abonnment bei der Element Matrix Services Hosting-Platform
 

@@ -12,7 +12,6 @@
     <string name="save">保存</string>
     <string name="leave">退室</string>
     <string name="send">送信</string>
-    <string name="copy">コピー</string>
     <string name="resend">再送信</string>
     <string name="redact">削除</string>
     <string name="share">共有</string>
@@ -191,8 +190,6 @@
 
     <string name="settings_start_on_boot">端末起動時に開始</string>
     <string name="settings_background_sync">アプリを閉じているときの動作</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_enable_background_sync">アプリを閉じても新着を確認</string>
     <string name="settings_set_sync_timeout">新着確認を失敗とするまでの時間</string>

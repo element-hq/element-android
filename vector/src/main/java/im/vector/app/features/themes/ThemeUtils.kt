@@ -27,9 +27,10 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Util class for managing themes.
@@ -49,6 +50,9 @@ object ThemeUtils {
     private const val THEME_SC_DARK_VALUE = "sc_dark"
     private const val THEME_SC_COLORED_VALUE = "sc_colored"
     private const val THEME_SC_DARK_COLORED_VALUE = "sc_dark_colored"
+
+    private var currentLightTheme = AtomicReference<String>(null)
+    private var currentDarkTheme = AtomicReference<String>(null)
 
     private val mColorByAttr = HashMap<Int, Int>()
 
@@ -122,8 +126,15 @@ object ThemeUtils {
      * @return the selected application theme for light system design
      */
     fun getApplicationLightTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
+        val currentTheme = this.currentLightTheme.get()
+        return if (currentTheme == null) {
+            val themeFromPref = DefaultSharedPreferences.getInstance(context)
+                    .getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
+            this.currentLightTheme.set(themeFromPref)
+            themeFromPref
+        } else {
+            currentTheme
+        }
     }
 
 
@@ -134,8 +145,15 @@ object ThemeUtils {
      * @return the selected application theme for night system design
      */
     fun getApplicationDarkTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
+        val currentTheme = this.currentDarkTheme.get()
+        return if (currentTheme == null) {
+            val themeFromPref = DefaultSharedPreferences.getInstance(context)
+                    .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
+            this.currentDarkTheme.set(themeFromPref)
+            themeFromPref
+        } else {
+            currentTheme
+        }
     }
 
     /**
@@ -164,6 +182,8 @@ object ThemeUtils {
      * @param aTheme the new theme
      */
     fun setApplicationTheme(context: Context, aLightTheme: String, aDarkTheme: String) {
+        currentLightTheme.set(aLightTheme)
+        currentDarkTheme.set(aDarkTheme)
         val aTheme = if (useDarkTheme(context)) aDarkTheme else aLightTheme
         when (aTheme) {
             THEME_LIGHT_VALUE  -> context.setTheme(R.style.AppTheme_Light)

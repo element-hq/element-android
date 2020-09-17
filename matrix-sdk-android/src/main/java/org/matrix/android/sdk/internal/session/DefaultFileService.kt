@@ -144,11 +144,13 @@ internal class DefaultFileService @Inject constructor(
 
                         if (elementToDecrypt != null) {
                             Timber.v("## FileService: decrypt file")
-                            val decryptSuccess = MXEncryptedAttachments.decryptAttachment(
-                                    source.inputStream(),
-                                    elementToDecrypt,
-                                    destFile.outputStream().buffered()
-                            )
+                            val decryptSuccess = destFile.outputStream().buffered().use {
+                                MXEncryptedAttachments.decryptAttachment(
+                                        source.inputStream(),
+                                        elementToDecrypt,
+                                        it
+                                )
+                            }
                             response.close()
                             if (!decryptSuccess) {
                                 return@flatMap Try.Failure(IllegalStateException("Decryption error"))

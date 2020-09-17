@@ -22,9 +22,9 @@ import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.fdroid.BackgroundSyncStarter
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
 import im.vector.app.features.settings.VectorPreferences
-import timber.log.Timber
 
 /**
  * This class has an alter ego in the gplay variant.
@@ -61,16 +61,13 @@ object FcmHelper {
         // No op
     }
 
-    fun onEnterForeground(context: Context) {
+    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
+        // try to stop all regardless of background mode
+        activeSessionHolder.getSafeActiveSession()?.stopAnyBackgroundSync()
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        // We need to use alarm in this mode
-        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            val currentSession = activeSessionHolder.getActiveSession()
-            AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.sessionId, 4_000L)
-            Timber.i("Alarm scheduled to restart service")
-        }
+        BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder)
     }
 }

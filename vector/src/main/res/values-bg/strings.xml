@@ -82,7 +82,6 @@
     <string name="save">Запази</string>
     <string name="leave">Напусни</string>
     <string name="send">Изпрати</string>
-    <string name="copy">Копирай</string>
     <string name="resend">Изпрати отново</string>
     <string name="redact">Премахни</string>
     <string name="quote">Цитирай</string>
@@ -413,9 +412,6 @@
     <string name="settings_invited_to_room">Когато ме поканят в стая</string>
     <string name="settings_call_invitations">Покани за разговор</string>
     <string name="settings_messages_sent_by_bot">Съобщения изпратени от бот</string>
-
-    <string name="settings_second">секунда</string>
-    <string name="settings_seconds">секунди</string>
 
     <string name="settings_version">Версия</string>
     <string name="settings_olm_version">Olm версия</string>

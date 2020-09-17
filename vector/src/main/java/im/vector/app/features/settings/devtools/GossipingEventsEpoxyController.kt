@@ -31,11 +31,11 @@ import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericFooterItem
@@ -94,8 +94,7 @@ class GossipingEventsEpoxyController @Inject constructor(
                         )
                         description(
                                 span {
-                                    +vectorDateFormatter.formatMessageDay(DateProvider.toLocalDateTime(event.ageLocalTs))
-                                    +" ${vectorDateFormatter.formatMessageHour(DateProvider.toLocalDateTime(event.ageLocalTs))}"
+                                    +vectorDateFormatter.format(event.ageLocalTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
                                     span("\nfrom: ") {
                                         textStyle = "bold"
                                     }

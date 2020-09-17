@@ -66,7 +66,6 @@
     <string name="save">保存</string>
     <string name="leave">离开</string>
     <string name="send">发送</string>
-    <string name="copy">复制</string>
     <string name="view_source">查看源代码</string>
     <string name="view_decrypted_source">查看解密后的源代码</string>
     <string name="or">或</string>
@@ -300,8 +299,6 @@
     <string name="settings_enable_background_sync">启用后台同步</string>
     <string name="settings_set_sync_timeout">同步请求超时</string>
     <string name="settings_set_sync_delay">每次同步请求之间的间隔</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_copyright">版权</string>
     <string name="settings_privacy_policy">隐私政策</string>
@@ -1877,8 +1874,8 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 \n
 \n您想要通过网页客户端登录吗？</string>
     <string name="login_registration_disabled">抱歉，此服务器不接受新账户。</string>
-    <string name="login_registration_not_supported">应用无法再次服务器上创建账户。
-\n
+    <string name="login_registration_not_supported">应用无法在此服务器上创建账户。 
+\n 
 \n您想要通过网页客户端注册吗？</string>
 
     <string name="login_login_with_email_error">电子邮件未关联到任何账户。</string>
@@ -2563,4 +2560,22 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">注意！登出前最后一次尝试！</string>
     <string name="too_many_pin_failures">错误次数过多，您已被登出</string>
+    <string name="auth_msisdn_already_defined">此电话号码已定义。</string>
+    <string name="settings_phone_number_empty">您的帐户尚未添加电话号码</string>
+    <string name="settings_emails">电子邮件地址</string>
+    <string name="settings_emails_empty">您的账户尚未添加电子邮件</string>
+    <string name="settings_phone_numbers">电话号码</string>
+    <string name="settings_remove_three_pid_confirmation_content">移除 %s？</string>
+    <string name="error_threepid_auth_failed">请确认您已点击我们向您发送的电子邮件中的链接。</string>
+
+    <string name="settings_emails_and_phone_numbers_title">电子邮件和电话号码</string>
+    <string name="settings_emails_and_phone_numbers_summary">管理链接到您的 Matrix 账户的电子邮件和电话号码</string>
+
+    <string name="settings_text_message_sent_hint">代码</string>
+    <string name="login_msisdn_notice">请使用国际格式（电话号码必须以 ‘+’ 开始）</string>
+    <string name="confirm_your_identity_quad_s">通过验证此登录确认您的身份，授权它访问加密信息。</string>
+    <string name="error_sso_flow_not_supported_yet">抱歉，对于连接到单点登录的账户此操作尚不可用。</string>
+
+    <string name="error_opening_banned_room">无法打开您被封禁的聊天室。</string>
+    <string name="room_error_not_found">无法找到此聊天室。请确认它存在。</string>
 </resources>

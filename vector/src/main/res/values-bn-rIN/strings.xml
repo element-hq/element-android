@@ -45,7 +45,6 @@
     <string name="leave">ত্যাগ</string>
     <string name="stay">থাক</string>
     <string name="send">পাঠান</string>
-    <string name="copy">অনুলিপি</string>
     <string name="resend">আবার পাঠান</string>
     <string name="redact">অপসারণ</string>
     <string name="quote">উদ্ধৃতি</string>
@@ -708,8 +707,6 @@
     <string name="settings_enable_background_sync">ব্যাকগ্রাউন্ড সিঙ্ক সক্ষম করুন</string>
     <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
     <string name="settings_set_sync_delay">প্রতিটি সিঙ্কের মধ্যে বিলম্ব</string>
-    <string name="settings_second">সেকেন্ড</string>
-    <string name="settings_seconds">সেকেন্ড</string>
 
     <string name="settings_version">সংস্করণ</string>
     <string name="settings_olm_version">olm সংস্করণ</string>
