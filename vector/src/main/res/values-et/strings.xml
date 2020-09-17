@@ -1277,7 +1277,7 @@
     <string name="settings_messages_sent_by_bot">Robotite saadetud sõnumid</string>
 
     <string name="settings_background_sync">Andmete sünkroniseerimine taustal</string>
-    <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim (katseline)</string>
+    <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
 \nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.</string>
@@ -2544,4 +2544,17 @@
 
     <string name="error_opening_banned_room">Ei ole võimalik avada sellise jututoa vaadet, kus sulle on seatud suhtluskeeld.</string>
     <string name="room_error_not_found">Ei leia sellist jututuba. Palun kontrolli, et ta ikka olemas on.</string>
+<plurals name="seconds">
+	<item quantity="one">%d sekund</item>
+	<item quantity="other">%d sekundit</item>
+</plurals>
+
+    <string name="settings_show_room_member_state_events">Näita jututoa liikmete olekusündmusi</string>
+    <string name="settings_show_room_member_state_events_summary">Sealhulgas kutsumisi, liitumisi, lahkumisi, müksamisi, keelamisi ning tunnuspildi ja kuvatava nime muutusi.</string>
+    <string name="sent_a_poll">Küsitlus</string>
+    <string name="sent_a_bot_buttons">Robotinupud</string>
+    <string name="sent_a_reaction">Reageeris: %s</string>
+    <string name="sent_verification_conclusion">Verifitseerimise tulemus</string>
+
+    <string name="universal_link_malformed">Link oli vigane</string>
 </resources>
