@@ -56,6 +56,8 @@ import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
+import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -151,8 +153,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     disposables.add(it)
                 }
 
-        val e2eByDefault = session.getHomeServerCapabilities().adminE2EByDefault
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible = !e2eByDefault
+        vectorActivity.getVectorComponent()
+                .rawService()
+                .getWellknown(session.myUserId, object : MatrixCallback<String> {
+            override fun onSuccess(data: String) {
+                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                        ElementWellKnownMapper.from(data)?.isE2EByDefault() == false
+            }
+        })
     }
 
     private val secureBackupCategory by lazy {
@@ -273,8 +281,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
                 textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
             }
-
-            it.isVisible = session.getHomeServerCapabilities().adminE2EByDefault
         }
     }
 

@@ -16,7 +16,6 @@
     <string name="title_activity_historical">చారిత్రిక</string>
 
     <string name="leave">వదిలివేయు</string>
-    <string name="copy">నకలుతీయు</string>
     <string name="resend">తిరిగిపంపు</string>
     <string name="title_activity_home">సందేశాలు</string>
     <string name="title_activity_settings">అమరికలు</string>
@@ -329,8 +328,6 @@
     <string name="settings_enable_background_sync">నేపథ్య సమకాలీకరణను చేతనపరుచు</string>
     <string name="settings_set_sync_timeout">సమకాలీకరణ అభ్యర్థన సమయం ముగిసింది</string>
     <string name="settings_set_sync_delay">రెండు సమకాలీకరణ అభ్యర్థనల మధ్య ఆలస్యం</string>
-    <string name="settings_second">క్షణం</string>
-    <string name="settings_seconds">క్షణాలు</string>
 
     <string name="settings_version">వెర్షన్</string>
     <string name="settings_olm_version">olm వెర్షన్</string>

@@ -22,7 +22,6 @@
     <string name="save">Salvar</string>
     <string name="leave">Sair da sala</string>
     <string name="send">Enviar</string>
-    <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
     <string name="redact">Apagar</string>
     <string name="quote">Citar</string>
@@ -454,8 +453,6 @@
     <string name="settings_enable_background_sync">Ativar a sincronização em segundo plano</string>
     <string name="settings_set_sync_timeout">Tempo expirado na solicitação de sincronização</string>
     <string name="settings_set_sync_delay">Demora entre cada solicitação</string>
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versão</string>
     <string name="settings_olm_version">Versão do olm</string>

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
@@ -53,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoCon
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
@@ -333,13 +333,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         ) {
             requestModelBuild()
         }
-        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
+        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, event.root.originServerTs)
         return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
     }
 
-    private fun buildDaySeparatorItem(addDaySeparator: Boolean, date: LocalDateTime): DaySeparatorItem? {
+    private fun buildDaySeparatorItem(addDaySeparator: Boolean, originServerTs: Long?): DaySeparatorItem? {
         return if (addDaySeparator) {
-            val formattedDay = dateFormatter.formatMessageDay(date)
+            val formattedDay = dateFormatter.format(originServerTs, DateFormatKind.TIMELINE_DAY_DIVIDER)
             DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
         } else {
             null

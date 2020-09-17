@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -32,19 +33,16 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
-import org.matrix.android.sdk.internal.database.query.latestEvent
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
+import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryEventsHelper
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -177,12 +175,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 currentChunk.isLastForward = true
                 currentLastForwardChunk?.deleteOnCascade()
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
-                    latestPreviewableEvent = TimelineEventEntity.latestEvent(
-                            realm,
-                            roomId,
-                            includesSending = true,
-                            filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES
-                    )
+                    latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
                 }
             }
         } else {
@@ -249,13 +242,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
         val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
                 || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
-            val latestPreviewableEvent = TimelineEventEntity.latestEvent(
-                    realm,
-                    roomId,
-                    includesSending = true,
-                    filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES
-            )
-            roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
+            roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)

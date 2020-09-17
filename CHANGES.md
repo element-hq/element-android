@@ -1,3 +1,25 @@
+Changes in Element 1.0.7 (2020-09-17)
+===================================================
+
+Improvements 🙌:
+ - Handle date formatting properly (show time am/pm if needed, display year when needed)
+ - Improve F-Droid Notification (#2055)
+
+Bugfix 🐛:
+ - Clear the notification when the event is read elsewhere (#1822)
+ - Speakerphone is not used for ringback tone (#1644, #1645)
+ - Back camera preview is not mirrored anymore (#1776)
+ - Various report of people that cannot play video (#2107)
+ - Rooms incorrectly marked as unread (#588)
+ - Allow users to show/hide room member state events (#1231) 
+ - Fix stuck on loader when launching home
+
+SDK API changes ⚠️:
+ - Create a new RawService to get plain data from the server.
+
+Other changes:
+ - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
+
 Changes in Element 1.0.6 (2020-09-08)
 ===================================================
 

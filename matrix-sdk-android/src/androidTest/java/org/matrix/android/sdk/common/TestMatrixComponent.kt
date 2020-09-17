@@ -25,8 +25,16 @@ import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.MatrixModule
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.NetworkModule
+import org.matrix.android.sdk.internal.raw.RawModule
 
-@Component(modules = [TestModule::class, MatrixModule::class, NetworkModule::class, AuthModule::class, TestNetworkModule::class])
+@Component(modules = [
+    TestModule::class,
+    MatrixModule::class,
+    NetworkModule::class,
+    AuthModule::class,
+    RawModule::class,
+    TestNetworkModule::class
+])
 @MatrixScope
 internal interface TestMatrixComponent : MatrixComponent {
 

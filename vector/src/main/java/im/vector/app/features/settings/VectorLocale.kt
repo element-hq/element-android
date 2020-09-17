@@ -19,9 +19,9 @@ package im.vector.app.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -59,7 +59,7 @@ object VectorLocale {
      */
     fun init(context: Context) {
         this.context = context
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
             applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
@@ -85,7 +85,7 @@ object VectorLocale {
     fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             val language = locale.language
             if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)

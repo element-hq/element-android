@@ -25,9 +25,10 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.preference.PreferenceManager
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Util class for managing themes.
@@ -41,6 +42,8 @@ object ThemeUtils {
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
     private const val THEME_STATUS_VALUE = "status"
+
+    private var currentTheme = AtomicReference<String>(null)
 
     private val mColorByAttr = HashMap<Int, Int>()
 
@@ -68,8 +71,15 @@ object ThemeUtils {
      * @return the selected application theme
      */
     fun getApplicationTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) ?: THEME_LIGHT_VALUE
+        val currentTheme = this.currentTheme.get()
+        return if (currentTheme == null) {
+            val themeFromPref = DefaultSharedPreferences.getInstance(context)
+                    .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) ?: THEME_LIGHT_VALUE
+            this.currentTheme.set(themeFromPref)
+            themeFromPref
+        } else {
+            currentTheme
+        }
     }
 
     /**
@@ -78,6 +88,7 @@ object ThemeUtils {
      * @param aTheme the new theme
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
+        currentTheme.set(aTheme)
         when (aTheme) {
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)

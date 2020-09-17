@@ -87,13 +87,13 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
-                    addFragmentToBackstack(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
+                    addFragmentToBackstack(R.id.container, KeysBackupRestoreFromKeyFragment::class.java, allowStateLoss = true)
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
                     viewModel.keyVersionResult.value?.version?.let {
                         KeysBackupBanner.onRecoverDoneForVersion(this, it)
                     }
-                    replaceFragment(R.id.container, KeysBackupRestoreSuccessFragment::class.java)
+                    replaceFragment(R.id.container, KeysBackupRestoreSuccessFragment::class.java, allowStateLoss = true)
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_4S               -> {
                     launch4SActivity()

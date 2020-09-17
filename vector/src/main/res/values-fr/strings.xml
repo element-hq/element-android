@@ -14,7 +14,6 @@
     <string name="cancel">Annuler</string>
     <string name="save">Enregistrer</string>
     <string name="send">Envoyer</string>
-    <string name="copy">Copier</string>
     <string name="resend">Renvoyer</string>
     <string name="share">Partager</string>
     <string name="later">Plus tard</string>
@@ -294,8 +293,6 @@
     <string name="settings_enable_background_sync">Activer la synchronisation en arrière-plan</string>
     <string name="settings_set_sync_timeout">Délai d’attente de la requête de synchronisation</string>
     <string name="settings_set_sync_delay">Délai entre chaque synchronisation</string>
-    <string name="settings_second">seconde</string>
-    <string name="settings_seconds">secondes</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">Version de olm</string>

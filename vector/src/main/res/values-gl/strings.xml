@@ -26,7 +26,6 @@
     <string name="save">Gardar</string>
     <string name="leave">Saír</string>
     <string name="send">Enviar</string>
-    <string name="copy">Copiar</string>
     <string name="resend">Enviar de novo</string>
     <string name="redact">Redactar</string>
     <string name="quote">Citar</string>
@@ -282,9 +281,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_add_phone_number">Engada número de teléfono</string>
     <string name="settings_enable_all_notif">Activar notificacións para esta conta</string>
     <string name="settings_messages_sent_by_bot">Mensaxes enviadas por bot</string>
-
-    <string name="settings_second">segundo</string>
-    <string name="settings_seconds">segundos</string>
 
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versións anteriores</string>

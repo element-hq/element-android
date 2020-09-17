@@ -35,7 +35,6 @@
     <string name="title_activity_historical">歷史</string>
     <string name="title_activity_group_details">社群細節</string>
 
-    <string name="copy">複製</string>
     <string name="redact">移除</string>
     <string name="quote">引用</string>
     <string name="later">稍後</string>
@@ -510,8 +509,6 @@
     <string name="settings_enable_background_sync">開啓後臺同步</string>
     <string name="settings_set_sync_timeout">同步請求超時</string>
     <string name="settings_set_sync_delay">每次同步間的延遲</string>
-    <string name="settings_second">秒</string>
-    <string name="settings_seconds">秒</string>
 
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>
@@ -2547,4 +2544,22 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
     <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
+    <string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
+    <string name="settings_phone_number_empty">未新增電話號碼到您的帳號</string>
+    <string name="settings_emails">電子郵件地址</string>
+    <string name="settings_emails_empty">未傳送電子郵件到您的帳號</string>
+    <string name="settings_phone_numbers">電話號碼</string>
+    <string name="settings_remove_three_pid_confirmation_content">移除 %s？</string>
+    <string name="error_threepid_auth_failed">確保您已經點擊我們傳送給您的電子郵件中的連結。</string>
+
+    <string name="settings_emails_and_phone_numbers_title">電子郵件與電話號碼</string>
+    <string name="settings_emails_and_phone_numbers_summary">管理連結到您 Matrix 帳號的電子郵件與電話號碼</string>
+
+    <string name="settings_text_message_sent_hint">代碼</string>
+    <string name="login_msisdn_notice">請使用國際格式（電話號碼必須以 \'+\' 開頭）</string>
+    <string name="confirm_your_identity_quad_s">透過確認此登入來驗證您的身份，以及授予存取加密訊息的權限。</string>
+    <string name="error_sso_flow_not_supported_yet">抱歉，對於使用單一登入的帳號，還無法執行此動作。</string>
+
+    <string name="error_opening_banned_room">無法開啟禁止您進入的聊天室。</string>
+    <string name="room_error_not_found">找不到此聊天室。請確定它存在。</string>
 </resources>

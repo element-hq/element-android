@@ -25,6 +25,7 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.UserAgentHolder
@@ -42,6 +43,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
+    @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
@@ -61,6 +63,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun authenticationService(): AuthenticationService {
         return authenticationService
     }
+
+    fun rawService() = rawService
 
     fun legacySessionImporter(): LegacySessionImporter {
         return legacySessionImporter

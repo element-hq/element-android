@@ -130,14 +130,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.i("## onMessageReceivedInternal() : $data")
             }
-            val eventId = data["event_id"]
-            val roomId = data["room_id"]
-            if (eventId == null || roomId == null) {
-                Timber.e("## onMessageReceivedInternal() missing eventId and/or roomId")
-                return
-            }
+
             // update the badge counter
-            val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
+            val unreadCount = data["unread"]?.let { Integer.parseInt(it) } ?: 0
             BadgeProxy.updateBadgeCount(applicationContext, unreadCount)
 
             val session = activeSessionHolder.getSafeActiveSession()
@@ -145,6 +140,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             if (session == null) {
                 Timber.w("## Can't sync from push, no current session")
             } else {
+                val eventId = data["event_id"]
+                val roomId = data["room_id"]
+
                 if (isEventAlreadyKnown(eventId, roomId)) {
                     Timber.i("Ignoring push, event already known")
                 } else {

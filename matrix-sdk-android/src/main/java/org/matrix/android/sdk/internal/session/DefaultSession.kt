@@ -166,8 +166,8 @@ internal class DefaultSession @Inject constructor(
         SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
     }
 
-    override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, 0, repeatDelay)
+    override fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long) {
+        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, timeOutInSeconds, repeatDelayInSeconds)
     }
 
     override fun stopAnyBackgroundSync() {

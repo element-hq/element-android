@@ -29,7 +29,6 @@
     <string name="save">Зберегти</string>
     <string name="leave">Залишити</string>
     <string name="send">Надіслати</string>
-    <string name="copy">Копіювати</string>
     <string name="resend">Надіслати ще раз</string>
     <string name="redact">Прибрати</string>
     <string name="quote">Цитата</string>
@@ -456,8 +455,6 @@
     <string name="settings_enable_background_sync">Увімкнути фонову синхронізацію</string>
     <string name="settings_set_sync_timeout">Таймаут синхронізації</string>
     <string name="settings_set_sync_delay">Інтервал між запитами синхронізації</string>
-    <string name="settings_second">секунда</string>
-    <string name="settings_seconds">секунд</string>
 
     <string name="settings_version">Версія</string>
     <string name="settings_olm_version">Версія OLM</string>

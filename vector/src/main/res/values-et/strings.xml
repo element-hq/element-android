@@ -50,7 +50,6 @@
     <string name="leave">Lahku</string>
     <string name="stay">Jää</string>
     <string name="send">Saada</string>
-    <string name="copy">Kopeeri</string>
     <string name="resend">Saada uuesti</string>
     <string name="redact">Eemalda</string>
     <string name="quote">Tsiteeri</string>
@@ -1297,8 +1296,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSünkroniseerimine võib jääda vahele, kui aku täituvus on madal või seade energiasäästurežiimil.</string>
     <string name="settings_set_sync_delay">Viivitus sünkroonimiste vahel</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekundit</string>
 
     <string name="settings_version">Versioon</string>
     <string name="settings_olm_version">olm-teegi versioon</string>
@@ -2526,4 +2523,25 @@
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Hoiatus! Viimane katse enne väljalogimist!</string>
     <string name="too_many_pin_failures">Liiga palju vigu PIN-koodi sisestamisel ning sa oled nüüd välja logitud</string>
+    <string name="auth_msisdn_already_defined">See telefoninumber on juba määratletud.</string>
+    <string name="settings_phone_number_empty">Ühtegi telefoninumbrit pole sinu kasutajakontoga seotud</string>
+    <string name="settings_emails">E-posti aadressid</string>
+    <string name="settings_emails_empty">Ühtegi e-posti aadressi pole sinu kasutajakontoga seotud</string>
+    <string name="settings_phone_numbers">Telefoninumbrid</string>
+    <string name="settings_remove_three_pid_confirmation_content">Kas eemaldan %s\?</string>
+    <string name="error_threepid_auth_failed">Palun vaata üle, et kindlasti oleksid klõpsinud linki, mille me sulle e-kirjaga saatsime.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">E-posti aadressid ja telefoninumbrid</string>
+    <string name="settings_emails_and_phone_numbers_summary">Halda on Matrix\'i kontoga seotud e-posti aadresse ja telefoninumbreid</string>
+
+    <string name="settings_text_message_sent_hint">Kood</string>
+    <string name="login_msisdn_notice">Palun kasuta rahvusvahelist vormingut (telefoninumbri alguses peaks olema „+“)</string>
+    <string name="verification_request_alert_description">Lisaturvalisus mõttes verifitseeri %s võrreldes selleks üheks korraks loodud koodi teie mõlemas seadmes.
+\n
+\nParima turvalisuse nimel kohtuge silmast silma.</string>
+    <string name="confirm_your_identity_quad_s">Kinnita oma isikusamasust verifitseerides seda sisselogimissessiooni. Sellega tagad ligipääsu krüptitud sõnumitele.</string>
+    <string name="error_sso_flow_not_supported_yet">Vabandust, selline tegevus pole veel võimalik kasutajakontode puhul, kus kasutatakse ühekordset sisselogimist.</string>
+
+    <string name="error_opening_banned_room">Ei ole võimalik avada sellise jututoa vaadet, kus sulle on seatud suhtluskeeld.</string>
+    <string name="room_error_not_found">Ei leia sellist jututuba. Palun kontrolli, et ta ikka olemas on.</string>
 </resources>

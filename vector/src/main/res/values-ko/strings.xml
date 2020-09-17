@@ -24,7 +24,6 @@
     <string name="save">저장</string>
     <string name="leave">떠나기</string>
     <string name="send">보내기</string>
-    <string name="copy">복사</string>
     <string name="resend">다시 보내기</string>
     <string name="redact">감추기</string>
     <string name="quote">인용</string>
@@ -669,8 +668,6 @@
     <string name="settings_enable_background_sync">백그라운드 동기화 켜기</string>
     <string name="settings_set_sync_timeout">동기화 요청 시간 초과</string>
     <string name="settings_set_sync_delay">각 동기화 간 딜레이</string>
-    <string name="settings_second">초</string>
-    <string name="settings_seconds">초</string>
 
     <string name="settings_version">버전</string>
     <string name="settings_olm_version">olm 버전</string>

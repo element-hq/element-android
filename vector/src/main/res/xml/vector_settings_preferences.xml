@@ -78,6 +78,12 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
+            android:key="SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
+            android:summary="@string/settings_show_room_member_state_events_summary"
+            android:title="@string/settings_show_room_member_state_events" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
             android:title="@string/settings_show_join_leave_messages"

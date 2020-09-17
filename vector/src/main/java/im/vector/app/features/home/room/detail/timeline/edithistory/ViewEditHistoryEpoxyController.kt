@@ -17,27 +17,26 @@ package im.vector.app.features.home.room.detail.timeline.edithistory
 
 import android.content.Context
 import android.text.Spannable
-import android.text.format.DateUtils
 import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
-import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
+import me.gujun.android.span.span
+import name.fraser.neil.plaintext.diff_match_patch
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 import org.matrix.android.sdk.internal.session.room.send.TextContent
-import me.gujun.android.span.span
-import name.fraser.neil.plaintext.diff_match_patch
 import java.util.Calendar
 
 /**
@@ -82,11 +81,9 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
-                    val dateString = if (DateUtils.isToday(evDate.timeInMillis)) context.getString(R.string.today)
-                    else dateFormatter.formatMessageDay(timelineEvent.localDateTime())
                     genericItemHeader {
                         id(evDate.hashCode())
-                        text(dateString)
+                        text(dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                     }
                 }
                 lastDate = evDate
@@ -130,7 +127,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(dateFormatter.formatMessageHour(timelineEvent.localDateTime()))
+                    title(dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
                     description(spannedDiff ?: body)
                 }
             }

@@ -56,7 +56,6 @@
     <string name="leave">Leave</string>
     <string name="stay">Stay</string>
     <string name="send">Send</string>
-    <string name="copy">Copy</string>
     <string name="resend">Resend</string>
     <string name="redact">Remove</string>
     <string name="quote">Quote</string>
@@ -797,7 +796,7 @@
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
     <string name="settings_background_sync">Background synchronization</string>
-    <string name="settings_background_fdroid_sync_mode">Background Sync Mode (Experimental)</string>
+    <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
@@ -813,8 +812,10 @@
     <string name="settings_set_workmanager_delay">Preferred Sync Interval</string>
     <string name="settings_set_workmanager_delay_summary">%s\nThe sync might be deferred depending on the resources (battery) or state of the device (sleep).</string>
     <string name="settings_set_sync_delay">Delay between each Sync</string>
-    <string name="settings_second">second</string>
-    <string name="settings_seconds">seconds</string>
+    <plurals name="seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">olm version</string>
@@ -853,6 +854,8 @@
     <string name="settings_12_24_timestamps">Show timestamps in 12-hour format</string>
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
+    <string name="settings_show_room_member_state_events">Show room member state events</string>
+    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>

@@ -23,6 +23,9 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.session.Session
@@ -35,9 +38,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -79,9 +79,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
-        fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {}
-        fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
-        fun onCameraChange(mgr: WebRtcPeerConnectionManager) {}
+        fun onCaptureStateChanged() {}
+        fun onAudioDevicesChange() {}
+        fun onCameraChange() {}
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -93,9 +93,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val audioManager = CallAudioManager(context.applicationContext) {
+    val callAudioManager = CallAudioManager(context.applicationContext) {
         currentCallsListeners.forEach {
-            tryThis { it.onAudioDevicesChange(this) }
+            tryThis { it.onAudioDevicesChange() }
         }
     }
 
@@ -174,7 +174,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCaptureStateChanged(this) }
+                tryThis { it.onCaptureStateChanged() }
             }
         }
 
@@ -503,7 +503,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // render local video in pip view
         localSurfaceRenderer.forEach {
             it.get()?.let { pipSurface ->
-                pipSurface.setMirror(true)
+                pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT)
                 // no need to check if already added, addSink is checking that
                 currentCall?.localVideoTrack?.addSink(pipSurface)
             }
@@ -577,7 +577,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun close() {
         Timber.v("## VOIP WebRtcPeerConnectionManager close() >")
         CallService.onNoActiveCall(context)
-        audioManager.stop()
+        callAudioManager.stop()
         val callToEnd = currentCall
         currentCall = null
         // This must be done in this thread
@@ -631,7 +631,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val createdCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
 
-        audioManager.startForCall(createdCall)
+        callAudioManager.startForCall(createdCall)
         currentCall = callContext
 
         val name = currentSession?.getUser(createdCall.otherUserId)?.getBestName()
@@ -684,7 +684,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         val callContext = CallContext(mxCall)
         currentCall = callContext
-        audioManager.startForCall(mxCall)
+        callAudioManager.startForCall(mxCall)
         executor.execute {
             callContext.remoteCandidateSource = ReplaySubject.create()
         }
@@ -740,8 +740,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 override fun onCameraSwitchDone(isFrontCamera: Boolean) {
                     Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
                     cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
+                    localSurfaceRenderer.forEach {
+                        it.get()?.setMirror(isFrontCamera)
+                    }
+
                     currentCallsListeners.forEach {
-                        tryThis { it.onCameraChange(this@WebRtcPeerConnectionManager) }
+                        tryThis { it.onCameraChange() }
                     }
                 }
 
@@ -767,7 +771,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             // videoCapturer?.stopCapture()
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureMode = format
-            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged(this) } }
+            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged() } }
         }
     }
 
@@ -798,12 +802,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP onWiredDeviceEvent $event")
         currentCall ?: return
         // sometimes we received un-wanted unplugged...
-        audioManager.wiredStateChange(event)
+        callAudioManager.wiredStateChange(event)
     }
 
     fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
         Timber.v("## VOIP onWirelessDeviceEvent $event")
-        audioManager.bluetoothStateChange(event.plugged)
+        callAudioManager.bluetoothStateChange(event.plugged)
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
@@ -858,6 +862,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  */
                 PeerConnection.PeerConnectionState.CONNECTED    -> {
                     callContext.mxCall.state = CallState.Connected(newState)
+                    callAudioManager.onCallConnected(callContext.mxCall)
                 }
                 /**
                  * One or more of the ICE transports on the connection is in the "failed" state.

@@ -50,7 +50,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.bind(holder)
         imageContentRenderer.render(mediaData, mode, holder.imageView)
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, mediaData.isLocalFile(), holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, mediaData.isLocalFile, holder.progressLayout)
         } else {
             holder.progressLayout.isVisible = false
         }

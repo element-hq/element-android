@@ -21,9 +21,9 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -32,11 +32,14 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 class DevicesController @Inject constructor(private val errorFormatter: ErrorFormatter,
                                             private val stringProvider: StringProvider,
                                             private val colorProvider: ColorProvider,
+                                            private val dateFormatter: VectorDateFormatter,
                                             private val dimensionConverter: DimensionConverter,
                                             private val vectorPreferences: VectorPreferences) : EpoxyController() {
 
@@ -100,6 +103,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                         deviceInfo(deviceInfo)
                         currentDevice(true)
                         e2eCapable(true)
+                        lastSeenFormatted(dateFormatter.format(deviceInfo.lastSeenTs, DateFormatKind.DEFAULT_DATE_AND_TIME))
                         itemClickAction { callback?.onDeviceClicked(deviceInfo) }
                         trusted(DeviceTrustLevel(currentSessionCrossTrusted, true))
                     }

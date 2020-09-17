@@ -25,6 +25,10 @@ internal annotation class AuthDatabase
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
+internal annotation class GlobalDatabase
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
 internal annotation class SessionDatabase
 
 @Qualifier

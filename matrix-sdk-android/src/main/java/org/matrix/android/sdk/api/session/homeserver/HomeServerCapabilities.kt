@@ -33,16 +33,7 @@ data class HomeServerCapabilities(
         /**
          * Default identity server url, provided in Wellknown
          */
-        val defaultIdentityServerUrl: String? = null,
-        /**
-         * Option to allow homeserver admins to set the default E2EE behaviour back to disabled for DMs / private rooms
-         * (as it was before) for various environments where this is desired.
-         */
-        val adminE2EByDefault: Boolean = true,
-        /**
-         * Preferred Jitsi domain, provided in Wellknown
-         */
-        val preferredJitsiDomain: String? = null
+        val defaultIdentityServerUrl: String? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L

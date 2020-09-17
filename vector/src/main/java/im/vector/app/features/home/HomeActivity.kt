@@ -121,7 +121,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         is HomeActivitySharedAction.CloseDrawer -> drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup   -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
-                            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                         }
                     }.exhaustive
                 }

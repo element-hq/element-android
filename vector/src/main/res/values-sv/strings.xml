@@ -48,7 +48,6 @@
     <string name="leave">Lämna</string>
     <string name="stay">Stanna</string>
     <string name="send">Skicka</string>
-    <string name="copy">Kopiera</string>
     <string name="resend">Skicka igen</string>
     <string name="redact">Ta bort</string>
     <string name="quote">Citat</string>
@@ -1307,8 +1306,8 @@
     <string name="settings_devices_list">Sessioner</string>
     <string name="settings_send_typing_notifs_summary">Låt andra användare se när du skriver.</string>
     <string name="settings_send_markdown">Markdownformatering</string>
-    <string name="settings_show_read_receipts">Visa läsindikationer</string>
-    <string name="settings_show_read_receipts_summary">Tryck på läsindikationer för en detaljerad lista.</string>
+    <string name="settings_show_read_receipts">Visa läskvitton</string>
+    <string name="settings_show_read_receipts_summary">Tryck på läskvitton för en detaljerad lista.</string>
     <string name="settings_secure_backup_section_title">Säker säkerhetskopiering</string>
     <string name="settings_secure_backup_setup">Sätt upp säker säkerhetskopiering</string>
     <string name="settings_secure_backup_reset">Återställ säker säkerhetskopiering</string>
@@ -1567,8 +1566,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynkroniseringen kan skjutas upp beroende på resurserna (batteri) eller status för enheten (vila).</string>
     <string name="settings_set_sync_delay">Fördröjning mellan varje synkronisering</string>
-    <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekunder</string>
 
     <string name="settings_contact">Lokala kontakter</string>
     <string name="settings_contacts_app_permission">Kontaktbehörighet</string>
@@ -2277,7 +2274,7 @@
     <string name="room_member_power_level_default_in">Standard i %1$s</string>
     <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
 
-    <string name="room_member_jump_to_read_receipt">Hoppa till läsindikation</string>
+    <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">Element hanterar inte händelser av typen \'%1$s\'</string>
     <string name="rendering_event_error_exception">Element stötte på ett fel vid rendering av innehållet i händelsen med id \'%1$s\'</string>
@@ -2532,4 +2529,22 @@
     <string name="settings_security_pin_code_title">Aktivera PIN</string>
     <string name="settings_security_pin_code_summary">Om du vill återställa din PIN-kod, tryck på \"Glömt PIN\?\" för att logga ut och återställa.</string>
     <string name="auth_pin_confirm_to_disable_title">Bekräfta PIN för att återställa PIN</string>
+    <string name="auth_msisdn_already_defined">Det här telefonnumret är redan definierat.</string>
+    <string name="settings_phone_number_empty">Inget telefonnummer har lagts till till ditt konto</string>
+    <string name="settings_emails">E-postadresser</string>
+    <string name="settings_emails_empty">Ingen e-postadress har lagts till till ditt konto</string>
+    <string name="settings_phone_numbers">Telefonnummer</string>
+    <string name="settings_remove_three_pid_confirmation_content">Ta bort %s\?</string>
+    <string name="error_threepid_auth_failed">Se till att du har klickat på länken i e-brevet vi skickade till dig.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">E-postadresser och telefonnummer</string>
+    <string name="settings_emails_and_phone_numbers_summary">Hantera e-postadresser och telefonnummer länkade till ditt Matrix-konto</string>
+
+    <string name="settings_text_message_sent_hint">Kod</string>
+    <string name="login_msisdn_notice">Vänligen använd internationellt format (telefonnumret måste börja med \'+\')</string>
+    <string name="confirm_your_identity_quad_s">Bekräfta din identitet genom att verifiera den här inloggningen, och ge den åtkomst till dina krypterade meddelanden.</string>
+    <string name="error_sso_flow_not_supported_yet">Tyvärr stöds den här handlingen inte än för konton anslutna med externt konto.</string>
+
+    <string name="error_opening_banned_room">Kan inte öppna ett rum du är bannad från.</string>
+    <string name="room_error_not_found">Kan inte hitta det här rummet. Se till att det existerar.</string>
 </resources>
