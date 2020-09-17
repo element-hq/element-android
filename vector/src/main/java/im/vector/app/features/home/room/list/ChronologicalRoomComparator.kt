@@ -16,19 +16,18 @@
 
 package im.vector.app.features.home.room.list
 
-import im.vector.app.features.home.room.ScSdkPreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class ChronologicalRoomComparator @Inject constructor(val scSdkPreferences: ScSdkPreferences) : Comparator<RoomSummary> {
+class ChronologicalRoomComparator @Inject constructor() : Comparator<RoomSummary> {
 
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {
         return when {
-            rightRoomSummary?.scLatestPreviewableEvent(scSdkPreferences)?.root == null -> -1
-            leftRoomSummary?.scLatestPreviewableEvent(scSdkPreferences)?.root == null  -> 1
+            rightRoomSummary?.latestPreviewableEvent?.root == null -> -1
+            leftRoomSummary?.latestPreviewableEvent?.root == null  -> 1
             else                                                   -> {
-                val rightTimestamp = rightRoomSummary.scLatestPreviewableEvent(scSdkPreferences)?.root?.originServerTs ?: 0
-                val leftTimestamp = leftRoomSummary.scLatestPreviewableEvent(scSdkPreferences)?.root?.originServerTs ?: 0
+                val rightTimestamp = rightRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
+                val leftTimestamp = leftRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
 
                 val deltaTimestamp = rightTimestamp - leftTimestamp
 
