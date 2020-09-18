@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
+import android.os.Handler
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
@@ -28,6 +29,8 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.home.room.detail.timeline.EpoxyControllerDiffHandler
+import im.vector.app.features.home.room.detail.timeline.EpoxyControllerModelHandler
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
 import im.vector.app.features.home.room.list.grid.roomGridItem
@@ -45,8 +48,12 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                                 private val avatarRenderer: AvatarRenderer,
                                                 private val vectorPreferences: VectorPreferences,
                                                 private val drawableProvider: DrawableProvider,
-                                                private val colorProvider: ColorProvider
-) : EpoxyController() {
+                                                private val colorProvider: ColorProvider,
+                                                @EpoxyControllerModelHandler
+                                                private val backgroundModelHandler: Handler,
+                                                @EpoxyControllerDiffHandler
+                                                private val backgroundDiffHandler: Handler
+) : EpoxyController(backgroundModelHandler, backgroundDiffHandler) {
 
     var listener: Listener? = null
 
