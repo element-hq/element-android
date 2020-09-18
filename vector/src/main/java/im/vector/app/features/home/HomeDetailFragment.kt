@@ -22,6 +22,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -38,6 +39,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.WebRtcPeerConnectionManager
@@ -49,7 +51,6 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
-import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
@@ -71,7 +72,8 @@ class HomeDetailFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val alertManager: PopupAlertManager,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val dimensionConverter: DimensionConverter
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory, FabMenuView.Listener {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
@@ -211,9 +213,27 @@ class HomeDetailFragment @Inject constructor(
         if (vectorPreferences.labUseTabNavigation()) {
             addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
             bottomNavigationView.isVisible = false
+            createGroupRoomButton.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(16)
+            }
+            createChatRoomButton.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(16)
+            }
+            createChatFabMenu.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(0)
+            }
         } else {
             bottomNavigationView.isVisible = true
             switchDisplayMode(state.displayMode)
+            createGroupRoomButton.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(64)
+            }
+            createChatRoomButton.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(64)
+            }
+            createChatFabMenu.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                this.bottomMargin = dimensionConverter.dpToPx(48)
+            }
         }
 //        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
 //        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
@@ -332,8 +352,8 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_chats      -> HomeDisplayMode.CHATS
                 //R.id.bottom_action_you        -> HomeDisplayMode.YOU
                 R.id.bottom_action_favourites -> HomeDisplayMode.FAVORITES
-                R.id.bottom_action_people -> HomeDisplayMode.PEOPLE
-                R.id.bottom_action_rooms -> HomeDisplayMode.ROOMS
+                R.id.bottom_action_people     -> HomeDisplayMode.PEOPLE
+                R.id.bottom_action_rooms      -> HomeDisplayMode.ROOMS
                 else                          -> HomeDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -374,8 +394,8 @@ class HomeDetailFragment @Inject constructor(
 //                    add(R.id.roomListContainer, VectorSettingsGeneralFragment::class.java, Bundle.EMPTY, fragmentTag)
 //                }
 //                else {
-                    val params = RoomListParams(displayMode.toRoomMode())
-                    add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                val params = RoomListParams(displayMode.toRoomMode())
+                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
 //                }
             } else {
                 attach(fragmentToShow)
@@ -422,20 +442,20 @@ class HomeDetailFragment @Inject constructor(
 //    }
 
     private fun HomeDisplayMode.toMenuId() = when (this) {
-        HomeDisplayMode.CHATS     -> R.id.bottom_action_chats
-        HomeDisplayMode.FAVORITES -> R.id.bottom_action_favourites
-        HomeDisplayMode.ROOMS -> R.id.bottom_action_rooms
-        HomeDisplayMode.PEOPLE -> R.id.bottom_action_people
+        HomeDisplayMode.CHATS         -> R.id.bottom_action_chats
+        HomeDisplayMode.FAVORITES     -> R.id.bottom_action_favourites
+        HomeDisplayMode.ROOMS         -> R.id.bottom_action_rooms
+        HomeDisplayMode.PEOPLE        -> R.id.bottom_action_people
         HomeDisplayMode.NOTIFICATIONS -> R.id.bottom_action_notification
 //        HomeDisplayMode.YOU       -> R.id.bottom_action_you
     }
 
     private fun HomeDisplayMode.toRoomMode() = when (this) {
-        HomeDisplayMode.CHATS -> RoomListDisplayMode.ALL
-        HomeDisplayMode.FAVORITES -> RoomListDisplayMode.FAVORITES
+        HomeDisplayMode.CHATS         -> RoomListDisplayMode.ALL
+        HomeDisplayMode.FAVORITES     -> RoomListDisplayMode.FAVORITES
         HomeDisplayMode.NOTIFICATIONS -> RoomListDisplayMode.NOTIFICATIONS
-        HomeDisplayMode.ROOMS -> RoomListDisplayMode.ROOMS
-        HomeDisplayMode.PEOPLE -> RoomListDisplayMode.PEOPLE
+        HomeDisplayMode.ROOMS         -> RoomListDisplayMode.ROOMS
+        HomeDisplayMode.PEOPLE        -> RoomListDisplayMode.PEOPLE
 //        else                      -> RoomListDisplayMode.ROOMS
     }
 
