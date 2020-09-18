@@ -350,7 +350,7 @@ class HomeDetailFragment @Inject constructor(
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_chats      -> HomeDisplayMode.CHATS
-                //R.id.bottom_action_you        -> HomeDisplayMode.YOU
+                // R.id.bottom_action_you        -> HomeDisplayMode.YOU
                 R.id.bottom_action_favourites -> HomeDisplayMode.FAVORITES
                 R.id.bottom_action_people     -> HomeDisplayMode.PEOPLE
                 R.id.bottom_action_rooms      -> HomeDisplayMode.ROOMS
@@ -436,8 +436,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
 //    private fun RoomListDisplayMode.toMenuId() = when (this) {
-////        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-////        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+// //        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+// //        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
 //        else                       -> R.id.bottom_action_notification
 //    }
 

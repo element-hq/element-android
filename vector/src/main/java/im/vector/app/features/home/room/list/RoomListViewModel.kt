@@ -228,7 +228,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         val lowPriorities = ArrayList<RoomSummary>()
         val serverNotices = ArrayList<RoomSummary>()
 
-
         if (vectorPreferences.labUseTabNavigation()) {
             rooms
                     .filter { roomListDisplayModeFilter.test(it) }

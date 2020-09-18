@@ -21,7 +21,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -55,7 +54,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 //            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
             // TODO
             return HomeDetailViewState(
-                    displayMode = HomeDisplayMode.CHATS//uiStateRepository.getDisplayMode()
+                    displayMode = HomeDisplayMode.CHATS // uiStateRepository.getDisplayMode()
             )
         }
 
@@ -84,7 +83,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 copy(displayMode = action.displayMode)
             }
 
-            //uiStateRepository.storeDisplayMode(action.displayMode)
+            // uiStateRepository.storeDisplayMode(action.displayMode)
         }
     }
 

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.ui
 
-import im.vector.app.features.home.HomeDisplayMode
 import im.vector.app.features.home.RoomListDisplayMode
 
 /**

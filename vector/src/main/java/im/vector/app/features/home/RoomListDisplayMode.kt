@@ -19,14 +19,13 @@ package im.vector.app.features.home
 import androidx.annotation.StringRes
 import im.vector.app.R
 
-
 enum class HomeDisplayMode(@StringRes val titleRes: Int) {
         CHATS(R.string.home_bottom_tab_chats),
         NOTIFICATIONS(R.string.bottom_action_notification),
         FAVORITES(R.string.room_recents_favourites),
         PEOPLE(R.string.bottom_action_people_x),
         ROOMS(R.string.bottom_action_rooms),
-        //YOU(R.string.home_bottom_tab_you),
+        // YOU(R.string.home_bottom_tab_you),
 }
 
 enum class RoomListDisplayMode(@StringRes val titleRes: Int) {

@@ -58,9 +58,9 @@ abstract class RoomGridItem : VectorEpoxyModel<RoomGridItem.Holder>() {
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
         holder.typingIndicator.isVisible = hasTypingUsers
-        holder.roomName.text = if(textDrawableLeft != null) "⭐️ ${matrixItem.getBestName()}" else matrixItem.getBestName()
+        holder.roomName.text = if (textDrawableLeft != null) "⭐️ ${matrixItem.getBestName()}" else matrixItem.getBestName()
         // TODO this drawable don't work
-        //holder.roomName.setCompoundDrawables(textDrawableLeft, null, null, null)
+        // holder.roomName.setCompoundDrawables(textDrawableLeft, null, null, null)
     }
 
     override fun unbind(holder: Holder) {

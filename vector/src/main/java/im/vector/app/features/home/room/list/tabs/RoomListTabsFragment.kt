@@ -21,7 +21,6 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
