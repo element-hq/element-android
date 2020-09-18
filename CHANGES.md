@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add "show password" in import Megolm keys dialog
 
 Bugfix 🐛:
  -
