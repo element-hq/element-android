@@ -24,28 +24,43 @@ import com.airbnb.mvrx.MvRx
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
-
+import im.vector.app.features.settings.VectorPreferences
 
 class RoomListTabsPagerAdapter(private val fragment: Fragment,
-                               private val context: Context) : FragmentStateAdapter(fragment) {
+                               private val context: Context,
+                               private val vectorPreferences: VectorPreferences) : FragmentStateAdapter(fragment) {
 
-    companion object {
-        val TABS = listOf(
-                RoomListDisplayMode.ALL,
-                RoomListDisplayMode.NOTIFICATIONS,
-                RoomListDisplayMode.FAVORITES,
-                RoomListDisplayMode.ROOMS,
-                RoomListDisplayMode.PEOPLE,
-                RoomListDisplayMode.INVITES,
-                RoomListDisplayMode.LOW_PRIORITY
-        )
+//    companion object {
+//        val TABS = listOf(
+//                RoomListDisplayMode.ALL,
+//                RoomListDisplayMode.FAVORITES,
+//                RoomListDisplayMode.NOTIFICATIONS,
+//                RoomListDisplayMode.ROOMS,
+//                RoomListDisplayMode.PEOPLE,
+//                RoomListDisplayMode.INVITES,
+//                RoomListDisplayMode.LOW_PRIORITY
+//        )
+//    }
+
+    fun getTabs() : List<RoomListDisplayMode> {
+        return ArrayList<RoomListDisplayMode>().apply {
+            add(RoomListDisplayMode.ALL)
+            if (!vectorPreferences.labPinFavInTabNavigation()) {
+                add(RoomListDisplayMode.FAVORITES)
+            }
+            add(RoomListDisplayMode.NOTIFICATIONS)
+            add(RoomListDisplayMode.ROOMS)
+            add(RoomListDisplayMode.PEOPLE)
+            add(RoomListDisplayMode.INVITES)
+            add(RoomListDisplayMode.LOW_PRIORITY)
+        }
     }
 
-    override fun getItemCount() = TABS.count()
+    override fun getItemCount() = getTabs().count()
 
     override fun createFragment(position: Int): Fragment {
         val roomListFragment = fragment.childFragmentManager.fragmentFactory.instantiate(context.classLoader, RoomListFragment::class.java.name)
-        val displayMode = TABS[position]
+        val displayMode = getTabs()[position]
         val params = RoomListParams(displayMode)
         return roomListFragment.apply {
             arguments = Bundle().apply { putParcelable(MvRx.KEY_ARG, params) }

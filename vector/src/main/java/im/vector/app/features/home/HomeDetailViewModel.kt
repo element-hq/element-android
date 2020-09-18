@@ -52,9 +52,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
-            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+//            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+            // TODO
             return HomeDetailViewState(
-                    displayMode = uiStateRepository.getDisplayMode()
+                    displayMode = HomeDisplayMode.CHATS//uiStateRepository.getDisplayMode()
             )
         }
 
@@ -83,7 +84,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 copy(displayMode = action.displayMode)
             }
 
-            uiStateRepository.storeDisplayMode(action.displayMode)
+            //uiStateRepository.storeDisplayMode(action.displayMode)
         }
     }
 

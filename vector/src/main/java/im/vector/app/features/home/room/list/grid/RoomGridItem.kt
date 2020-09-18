@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list.grid
 
+import android.graphics.drawable.Drawable
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ abstract class RoomGridItem : VectorEpoxyModel<RoomGridItem.Holder>() {
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
+    @EpoxyAttribute var textDrawableLeft: Drawable? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
 
@@ -56,7 +58,9 @@ abstract class RoomGridItem : VectorEpoxyModel<RoomGridItem.Holder>() {
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
         holder.typingIndicator.isVisible = hasTypingUsers
-        holder.roomName.text = matrixItem.getBestName()
+        holder.roomName.text = if(textDrawableLeft != null) "⭐️ ${matrixItem.getBestName()}" else matrixItem.getBestName()
+        // TODO this drawable don't work
+        //holder.roomName.setCompoundDrawables(textDrawableLeft, null, null, null)
     }
 
     override fun unbind(holder: Holder) {

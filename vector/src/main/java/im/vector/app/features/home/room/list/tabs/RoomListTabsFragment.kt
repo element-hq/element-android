@@ -27,12 +27,14 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.android.synthetic.main.fragment_room_list_tabs.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class RoomListTabsFragment @Inject constructor(
-        private val viewModelFactory: RoomListTabsViewModel.Factory
+        private val viewModelFactory: RoomListTabsViewModel.Factory,
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment(), RoomListTabsViewModel.Factory by viewModelFactory {
 
     private val viewModel: RoomListTabsViewModel by fragmentViewModel()
@@ -44,22 +46,27 @@ class RoomListTabsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
-        pagerAdapter = RoomListTabsPagerAdapter(this, requireContext())
+        pagerAdapter = RoomListTabsPagerAdapter(this, requireContext(), vectorPreferences)
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            val item = RoomListTabsPagerAdapter.TABS[position]
+            val item = pagerAdapter.getTabs()[position]
             tab.text = getString(item.titleRes).toLowerCase().capitalize()
         }.attach()
 
         val onPageChangeListener: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val item = RoomListTabsPagerAdapter.TABS[position]
+                val item = pagerAdapter.getTabs()[position]
                 sharedActionViewModel.post(HomeActivitySharedAction.OnDisplayModeSelected(item))
             }
         }
         viewPager.registerOnPageChangeCallback(onPageChangeListener)
     }
 
+    override fun onResume() {
+        // Tmp if the labs preference did change
+        pagerAdapter.notifyDataSetChanged()
+        super.onResume()
+    }
     override fun invalidate() = withState(viewModel) { state ->
         Timber.v("Invalidate state: $state")
     }

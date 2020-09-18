@@ -38,6 +38,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
@@ -46,6 +47,7 @@ import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.home.room.list.widget.FabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.roomprofile.uploads.media.IMAGE_SIZE_DP
 import kotlinx.android.parcel.Parcelize
@@ -68,7 +70,7 @@ class RoomListFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool,
         private val dimensionConverter: DimensionConverter
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
+) : VectorBaseFragment(), RoomSummaryController.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -133,44 +135,44 @@ class RoomListFragment @Inject constructor(
         navigator.openRoom(requireActivity(), event.roomSummary.roomId)
     }
 
-    private fun setupCreateRoomButton() {
-        when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS -> createGroupRoomButton.isVisible = true
-            else                              -> Unit // No button in this mode
-        }
-
-        createChatRoomButton.debouncedClicks {
-            createDirectChat()
-        }
-        createGroupRoomButton.debouncedClicks {
-            openRoomDirectory()
-        }
-
-        // Hide FAB when list is scrolling
-        roomListView.addOnScrollListener(
-                object : RecyclerView.OnScrollListener() {
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        createChatFabMenu.removeCallbacks(showFabRunnable)
-
-                        when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
-                                createChatFabMenu.postDelayed(showFabRunnable, 250)
-                            }
-                            RecyclerView.SCROLL_STATE_DRAGGING,
-                            RecyclerView.SCROLL_STATE_SETTLING -> {
-                                when (roomListParams.displayMode) {
-                                    RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS         -> createGroupRoomButton.hide()
-                                    else                              -> Unit
-                                }
-                            }
-                        }
-                    }
-                })
-    }
+//    private fun setupCreateRoomButton() {
+//        when (roomListParams.displayMode) {
+//            RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
+//            RoomListDisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
+//            RoomListDisplayMode.ROOMS -> createGroupRoomButton.isVisible = true
+//            else                              -> Unit // No button in this mode
+//        }
+//
+//        createChatRoomButton.debouncedClicks {
+//            createDirectChat()
+//        }
+//        createGroupRoomButton.debouncedClicks {
+//            openRoomDirectory()
+//        }
+//
+//        // Hide FAB when list is scrolling
+//        roomListView.addOnScrollListener(
+//                object : RecyclerView.OnScrollListener() {
+//                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                        createChatFabMenu.removeCallbacks(showFabRunnable)
+//
+//                        when (newState) {
+//                            RecyclerView.SCROLL_STATE_IDLE     -> {
+//                                createChatFabMenu.postDelayed(showFabRunnable, 250)
+//                            }
+//                            RecyclerView.SCROLL_STATE_DRAGGING,
+//                            RecyclerView.SCROLL_STATE_SETTLING -> {
+//                                when (roomListParams.displayMode) {
+//                                    RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
+//                                    RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
+//                                    RoomListDisplayMode.ROOMS         -> createGroupRoomButton.hide()
+//                                    else                              -> Unit
+//                                }
+//                            }
+//                        }
+//                    }
+//                })
+//    }
 
     fun filterRoomsWith(filter: String) {
         // Scroll the list to top
@@ -203,16 +205,16 @@ class RoomListFragment @Inject constructor(
         return dimensionConverter.pxToDp(displayMetrics.widthPixels) / ITEM_SIZE_DP
     }
 
-    private val showFabRunnable = Runnable {
-        if (isAdded) {
-            when (roomListParams.displayMode) {
-                RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS -> createGroupRoomButton.show()
-                else                              -> Unit
-            }
-        }
-    }
+//    private val showFabRunnable = Runnable {
+//        if (isAdded) {
+//            when (roomListParams.displayMode) {
+//                RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
+//                RoomListDisplayMode.PEOPLE -> createChatRoomButton.show()
+//                RoomListDisplayMode.ROOMS -> createGroupRoomButton.show()
+//                else                              -> Unit
+//            }
+//        }
+//    }
 
     private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
         when (quickAction) {
@@ -372,7 +374,15 @@ class RoomListFragment @Inject constructor(
         navigator.openCreateRoom(requireActivity(), initialName)
     }
 
+    override fun createDirectChat() {
+        TODO("Not yet implemented")
+    }
+
+    override fun openRoomDirectory(initialFilter: String) {
+        TODO("Not yet implemented")
+    }
+
     companion object {
-        const val ITEM_SIZE_DP = 80
+        const val ITEM_SIZE_DP = 110
     }
 }

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
@@ -48,6 +49,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
@@ -102,6 +104,11 @@ class HomeDetailFragment @Inject constructor(
             onGroupChange(groupSummary.orNull())
         }
 
+        viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
+            if (vectorPreferences.labUseTabNavigation()) return@selectSubscribe
+            switchDisplayMode(displayMode)
+        }
+
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
@@ -135,7 +142,10 @@ class HomeDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 })
 
-        addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
+        if (vectorPreferences.labUseTabNavigation()) {
+            addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
+            bottomNavigationView.isVisible = false
+        }
     }
 
     override fun onDestroyView() {
@@ -193,17 +203,28 @@ class HomeDetailFragment @Inject constructor(
         checkNotificationTabStatus()
     }
 
-    private fun checkNotificationTabStatus() {
-        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
-        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
-            // As we hide it check if it's not the current item!
-            withState(viewModel) {
-                if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
-                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
-                }
-            }
+    private fun checkNotificationTabStatus() = withState(viewModel) { state ->
+        bottomNavigationView.menu.forEach { menuItem ->
+            menuItem.isVisible = state.tabList.indexOfFirst { it.toMenuId() == menuItem.itemId } != -1
         }
+
+        if (vectorPreferences.labUseTabNavigation()) {
+            addFragment(R.id.roomListContainer, RoomListTabsFragment::class.java)
+            bottomNavigationView.isVisible = false
+        } else {
+            bottomNavigationView.isVisible = true
+            switchDisplayMode(state.displayMode)
+        }
+//        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
+//        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+//        if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
+//            // As we hide it check if it's not the current item!
+//            withState(viewModel) {
+//                if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
+//                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(HomeDisplayMode.CHATS))
+//                }
+//            }
+//        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -308,9 +329,12 @@ class HomeDetailFragment @Inject constructor(
         bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
-                R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
-                else                      -> RoomListDisplayMode.NOTIFICATIONS
+                R.id.bottom_action_chats      -> HomeDisplayMode.CHATS
+                //R.id.bottom_action_you        -> HomeDisplayMode.YOU
+                R.id.bottom_action_favourites -> HomeDisplayMode.FAVORITES
+                R.id.bottom_action_people -> HomeDisplayMode.PEOPLE
+                R.id.bottom_action_rooms -> HomeDisplayMode.ROOMS
+                else                          -> HomeDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
@@ -328,12 +352,12 @@ class HomeDetailFragment @Inject constructor(
 //        }
     }
 
-    private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
+    private fun switchDisplayMode(displayMode: HomeDisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
     }
 
-    private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
+    private fun updateSelectedFragment(displayMode: HomeDisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
@@ -343,8 +367,16 @@ class HomeDetailFragment @Inject constructor(
                         detach(it)
                     }
             if (fragmentToShow == null) {
-                val params = RoomListParams(displayMode)
-                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+//                if (displayMode == HomeDisplayMode.CHATS) {
+//                    add(R.id.roomListContainer, RoomListTabsFragment::class.java, Bundle.EMPTY, fragmentTag)
+//                }
+//                else if (displayMode == HomeDisplayMode.YOU) {
+//                    add(R.id.roomListContainer, VectorSettingsGeneralFragment::class.java, Bundle.EMPTY, fragmentTag)
+//                }
+//                else {
+                    val params = RoomListParams(displayMode.toRoomMode())
+                    add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+//                }
             } else {
                 attach(fragmentToShow)
             }
@@ -365,9 +397,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         Timber.v(it.toString())
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
+//        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
+//        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
+//        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         syncStateView.render(it.syncState)
     }
 
@@ -383,10 +415,28 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun RoomListDisplayMode.toMenuId() = when (this) {
-        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-        else                       -> R.id.bottom_action_notification
+//    private fun RoomListDisplayMode.toMenuId() = when (this) {
+////        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+////        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+//        else                       -> R.id.bottom_action_notification
+//    }
+
+    private fun HomeDisplayMode.toMenuId() = when (this) {
+        HomeDisplayMode.CHATS     -> R.id.bottom_action_chats
+        HomeDisplayMode.FAVORITES -> R.id.bottom_action_favourites
+        HomeDisplayMode.ROOMS -> R.id.bottom_action_rooms
+        HomeDisplayMode.PEOPLE -> R.id.bottom_action_people
+        HomeDisplayMode.NOTIFICATIONS -> R.id.bottom_action_notification
+//        HomeDisplayMode.YOU       -> R.id.bottom_action_you
+    }
+
+    private fun HomeDisplayMode.toRoomMode() = when (this) {
+        HomeDisplayMode.CHATS -> RoomListDisplayMode.ALL
+        HomeDisplayMode.FAVORITES -> RoomListDisplayMode.FAVORITES
+        HomeDisplayMode.NOTIFICATIONS -> RoomListDisplayMode.NOTIFICATIONS
+        HomeDisplayMode.ROOMS -> RoomListDisplayMode.ROOMS
+        HomeDisplayMode.PEOPLE -> RoomListDisplayMode.PEOPLE
+//        else                      -> RoomListDisplayMode.ROOMS
     }
 
     override fun onTapToReturnToCall() {

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.ui
 
+import im.vector.app.features.home.HomeDisplayMode
 import im.vector.app.features.home.RoomListDisplayMode
 
 /**
@@ -29,6 +30,8 @@ interface UiStateRepository {
     fun reset()
 
     fun getDisplayMode(): RoomListDisplayMode
+
+//    fun getHomeDisplayMode(): HomeDisplayMode
 
     fun storeDisplayMode(displayMode: RoomListDisplayMode)
 }

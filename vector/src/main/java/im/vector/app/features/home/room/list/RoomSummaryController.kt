@@ -17,18 +17,21 @@
 package im.vector.app.features.home.room.list
 
 import android.view.View
-import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.helpFooterItem
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
 import im.vector.app.features.home.room.list.grid.roomGridItem
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -39,7 +42,10 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
                                                 private val roomListNameFilter: RoomListNameFilter,
                                                 private val userPreferencesProvider: UserPreferencesProvider,
-                                                private val avatarRenderer: AvatarRenderer
+                                                private val avatarRenderer: AvatarRenderer,
+                                                private val vectorPreferences: VectorPreferences,
+                                                private val drawableProvider: DrawableProvider,
+                                                private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -89,26 +95,21 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     private fun buildRooms(viewState: RoomListViewState) {
         var showHelp = false
         val roomSummaries = viewState.asyncFilteredRooms()
+        if (vectorPreferences.labUseTabNavigation() && vectorPreferences.labPinFavInTabNavigation()
+                && !roomSummaries?.get(RoomCategory.FAVOURITE).isNullOrEmpty()) {
+            genericFooterItem {
+                id("Top Spacing")
+                text(" ")
+                spanSizeOverride { _, _, _ -> spanCount }
+            }
+        }
         roomSummaries?.forEach { (category, summaries) ->
             if (summaries.isEmpty()) {
                 return@forEach
             } else {
                 val isExpanded = viewState.isCategoryExpanded(category)
                 val mode = viewState.getCategoryMode(category)
-                buildRoomCategory(
-                        viewState,
-                        category,
-                        summaries,
-                        isExpanded,
-                        mode,
-                        { newMode ->
-                            listener?.onChangeModeRoomCategory(category, newMode)
-                        },
-                        {
-                            listener?.onToggleRoomCategory(category)
-                        }
-                )
-                if (isExpanded) {
+                if (vectorPreferences.labUseTabNavigation()) {
                     buildRoomModels(summaries,
                             mode,
                             viewState.roomMembershipChanges,
@@ -116,6 +117,30 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                     // Never set showHelp to true for invitation
                     if (category != RoomCategory.INVITE) {
                         showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
+                    }
+                } else {
+                    buildRoomCategory(
+                            viewState,
+                            category,
+                            summaries,
+                            isExpanded,
+                            mode,
+                            { newMode ->
+                                listener?.onChangeModeRoomCategory(category, newMode)
+                            },
+                            {
+                                listener?.onToggleRoomCategory(category)
+                            }
+                    )
+                    if (isExpanded) {
+                        buildRoomModels(summaries,
+                                mode,
+                                viewState.roomMembershipChanges,
+                                emptySet())
+                        // Never set showHelp to true for invitation
+                        if (category != RoomCategory.INVITE) {
+                            showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
+                        }
                     }
                 }
             }
@@ -197,6 +222,12 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                         hasTypingUsers(roomSummary.typingUsers.isNotEmpty())
                         avatarRenderer(avatarRenderer)
                         matrixItem(roomSummary.toMatrixItem())
+                        apply {
+                            if (roomSummary.isFavorite) {
+                                textDrawableLeft(drawableProvider.getDrawable(R.drawable.ic_star_green_24dp))
+                            }
+                        }
+
                         unreadNotificationCount(roomSummary.notificationCount)
                         showHighlighted(roomSummary.highlightCount > 0)
                         hasUnreadMessage(roomSummary.hasUnreadMessages)
