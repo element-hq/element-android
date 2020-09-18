@@ -9,7 +9,8 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingStart="8dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="2dp">
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
