@@ -383,6 +383,6 @@ class RoomListFragment @Inject constructor(
     }
 
     companion object {
-        const val ITEM_SIZE_DP = 110
+        const val ITEM_SIZE_DP = 80
     }
 }
