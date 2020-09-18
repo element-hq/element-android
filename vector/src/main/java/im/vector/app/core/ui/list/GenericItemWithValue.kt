@@ -56,6 +56,9 @@ abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Hold
     @EpoxyAttribute
     var itemClickAction: View.OnClickListener? = null
 
+    @EpoxyAttribute
+    var itemLongClickAction: View.OnLongClickListener? = null
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.titleText.setTextOrHide(title)
@@ -76,6 +79,7 @@ abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Hold
         }
 
         holder.view.setOnClickListener(itemClickAction?.let { DebouncedClickListener(it) })
+        holder.view.setOnLongClickListener(itemLongClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

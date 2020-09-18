@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Add an advanced action to reset an account data entry
 
 Changes in Element 1.0.7 (2020-09-17)
 ===================================================
