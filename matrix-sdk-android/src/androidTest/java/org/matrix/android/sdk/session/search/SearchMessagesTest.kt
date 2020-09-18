@@ -47,7 +47,7 @@ class SearchMessagesTest : InstrumentedTest {
     private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
 
     @Test
-    fun sendTextMessageAndSearchPartOfIt() {
+    fun sendTextMessageAndSearchPartOfItUsingSession() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -110,5 +110,69 @@ class SearchMessagesTest : InstrumentedTest {
         }
 
         aliceSession.startSync(true)
-}
+    }
+
+    @Test
+    fun sendTextMessageAndSearchPartOfItUsingRoom() {
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
+        val aliceSession = cryptoTestData.firstSession
+        val aliceRoomId = cryptoTestData.roomId
+        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
+        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(10))
+        aliceTimeline.start()
+
+        commonTestHelper.sendTextMessage(
+                roomFromAlicePOV,
+                MESSAGE,
+                2)
+
+        run {
+            var lock = CountDownLatch(1)
+
+            val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
+                snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
+            }
+
+            aliceTimeline.addListener(eventListener)
+            commonTestHelper.await(lock)
+
+            lock = CountDownLatch(1)
+            roomFromAlicePOV
+                    .search(
+                            searchTerm = "lore",
+                            limit = 10,
+                            includeProfile = true,
+                            afterLimit = 0,
+                            beforeLimit = 10,
+                            orderByRecent = true,
+                            nextBatch = null,
+                            callback = object : MatrixCallback<SearchResponse> {
+                                override fun onSuccess(data: SearchResponse) {
+                                    super.onSuccess(data)
+                                    assertTrue(data.searchCategories.roomEvents?.results?.size == 2)
+                                    assertTrue(
+                                            data.searchCategories.roomEvents?.results
+                                                    ?.all {
+                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                                                    }.orFalse()
+                                    )
+                                    lock.countDown()
+                                }
+
+                                override fun onFailure(failure: Throwable) {
+                                    super.onFailure(failure)
+                                    fail(failure.localizedMessage)
+                                    lock.countDown()
+                                }
+                            }
+                    )
+            lock.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+
+            aliceTimeline.removeAllListeners()
+            cryptoTestData.cleanUp(commonTestHelper)
+        }
+
+        aliceSession.startSync(true)
+    }
 }

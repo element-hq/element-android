@@ -36,10 +36,13 @@ import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
+import org.matrix.android.sdk.internal.session.search.SearchTask
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import java.security.InvalidParameterException
@@ -62,7 +65,8 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val roomMembersService: MembershipService,
                                                private val roomPushRuleService: RoomPushRuleService,
                                                private val taskExecutor: TaskExecutor,
-                                               private val sendStateTask: SendStateTask) :
+                                               private val sendStateTask: SendStateTask,
+                                               private val searchTask: SearchTask) :
         Room,
         TimelineService by timelineService,
         SendService by sendService,
@@ -122,5 +126,28 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                         .executeBy(taskExecutor)
             }
         }
+    }
+
+    override fun search(searchTerm: String,
+                        nextBatch: String?,
+                        orderByRecent: Boolean,
+                        limit: Int,
+                        beforeLimit: Int,
+                        afterLimit: Int,
+                        includeProfile: Boolean,
+                        callback: MatrixCallback<SearchResponse>): Cancelable {
+        return searchTask
+                .configureWith(SearchTask.Params(
+                        searchTerm = searchTerm,
+                        roomId = roomId,
+                        nextBatch = nextBatch,
+                        orderByRecent = orderByRecent,
+                        limit = limit,
+                        beforeLimit = beforeLimit,
+                        afterLimit = afterLimit,
+                        includeProfile = includeProfile
+                )) {
+                    this.callback = callback
+                }.executeBy(taskExecutor)
     }
 }

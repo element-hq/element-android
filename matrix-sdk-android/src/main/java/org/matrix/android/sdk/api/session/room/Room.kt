@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -33,7 +34,9 @@ import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 
 /**
  * This interface defines methods to interact within a room.
@@ -69,4 +72,23 @@ interface Room :
      * A current snapshot of [RoomSummary] associated with the room
      */
     fun roomSummary(): RoomSummary?
+
+    /**
+     * Generic function to search a term in a room.
+     * Ref: https://matrix.org/docs/spec/client_server/latest#module-search
+     * @param searchTerm the term to search
+     * @param nextBatch the token that retrieved from the previous response. Should be provided to get the next batch of results
+     * @param limit the maximum number of events to return.
+     * @param beforeLimit how many events before the result are returned.
+     * @param afterLimit how many events after the result are returned.
+     * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
+     */
+    fun search(searchTerm: String,
+               nextBatch: String?,
+               orderByRecent: Boolean,
+               limit: Int,
+               beforeLimit: Int,
+               afterLimit: Int,
+               includeProfile: Boolean,
+               callback: MatrixCallback<SearchResponse>): Cancelable
 }

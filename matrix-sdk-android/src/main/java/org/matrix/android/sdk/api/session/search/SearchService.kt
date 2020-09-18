@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 interface SearchService {
 
     /**
-     * Generic function to search a term in multiple rooms.
+     * Generic function to search a term in a room.
      * Ref: https://matrix.org/docs/spec/client_server/latest#module-search
      * @param searchTerm the term to search
      * @param roomId the roomId to search term inside
