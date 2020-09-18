@@ -8,7 +8,7 @@ Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
 
 Bugfix 🐛:
- -
+ - Manual import of Megolm keys does back up the imported keys
 
 Translations 🗣:
  -
