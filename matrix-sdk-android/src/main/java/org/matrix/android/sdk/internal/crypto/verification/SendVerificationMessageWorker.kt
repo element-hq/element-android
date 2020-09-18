@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
+import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
@@ -52,6 +53,8 @@ internal class SendVerificationMessageWorker(context: Context,
     @Inject
     lateinit var cryptoService: CryptoService
 
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
+
     override suspend fun doWork(): Result {
         val errorOutputData = Data.Builder().putBoolean(OUTPUT_KEY_FAILED, true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -63,7 +66,17 @@ internal class SendVerificationMessageWorker(context: Context,
                     Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
                 }
         sessionComponent.inject(this)
+
         val localId = params.event.eventId ?: ""
+
+        if (cancelSendTracker.isCancelRequestedFor(localId, params.event.roomId)) {
+            return Result.success()
+                    .also {
+                        cancelSendTracker.markCancelled(localId, params.event.roomId ?: "")
+                        Timber.e("## SendEvent: Event sending has been cancelled $localId")
+                    }
+        }
+
         return try {
             val eventId = sendVerificationMessageTask.execute(
                     SendVerificationMessageTask.Params(

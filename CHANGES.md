@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - User Verification in DM not working
 
 Translations 🗣:
  -
