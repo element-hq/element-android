@@ -42,16 +42,18 @@ const val PERMISSION_CAMERA = 0x1
 private const val PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 shl 1
 private const val PERMISSION_RECORD_AUDIO = 0x1 shl 2
 private const val PERMISSION_READ_CONTACTS = 0x1 shl 3
+private const val PERMISSION_READ_EXTERNAL_STORAGE = 0x1 shl 4
 
 // Permissions sets
 const val PERMISSIONS_FOR_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_VIDEO_IP_CALL = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
-const val PERMISSIONS_FOR_TAKING_PHOTO = PERMISSION_CAMERA or PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_TAKING_PHOTO = PERMISSION_CAMERA or PERMISSION_READ_EXTERNAL_STORAGE
 const val PERMISSIONS_FOR_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_ROOM_AVATAR = PERMISSION_CAMERA
 const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_WRITING_FILES = PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_READING_FILES = PERMISSION_READ_EXTERNAL_STORAGE
 const val PERMISSIONS_FOR_PICKING_CONTACT = PERMISSION_READ_CONTACTS
 
 const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
@@ -79,6 +81,7 @@ fun logPermissionStatuses(context: Context) {
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CONTACTS)
 
         Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
@@ -145,7 +148,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                              fragment: Fragment?,
                              requestCode: Int,
                              @StringRes rationaleMessage: Int
-                             ): Boolean {
+): Boolean {
     var isPermissionGranted = false
 
     // sanity check
@@ -161,7 +164,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
-            && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap) {
+            && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_READING_FILES != permissionsToBeGrantedBitMap) {
         Timber.w("## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -184,6 +188,12 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 
         if (PERMISSION_WRITE_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_WRITE_EXTERNAL_STORAGE) {
             val permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+        }
+
+        if (PERMISSION_READ_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_READ_EXTERNAL_STORAGE) {
+            val permissionType = Manifest.permission.READ_EXTERNAL_STORAGE
             isRequestPermissionRequired = isRequestPermissionRequired or
                     updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
