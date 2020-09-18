@@ -122,7 +122,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     suspend fun getUpToDateEcho(eventId: String): Event? {
         // We are using awaitTransaction here to make sure this executes after other transactions
         return monarchy.awaitTransaction { realm ->
-            EventEntity.where(realm, eventId).findFirst()?.asDomain()
+            EventEntity.where(realm, eventId).findFirst()?.asDomain(castJsonNumbers = true)
         }
     }
 

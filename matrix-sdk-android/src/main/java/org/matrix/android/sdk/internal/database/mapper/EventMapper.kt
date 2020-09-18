@@ -54,7 +54,7 @@ internal object EventMapper {
         return eventEntity
     }
 
-    fun map(eventEntity: EventEntity): Event {
+    fun map(eventEntity: EventEntity, castJsonNumbers: Boolean = false): Event {
         val ud = eventEntity.unsignedData
                 ?.takeIf { it.isNotBlank() }
                 ?.let {
@@ -69,8 +69,8 @@ internal object EventMapper {
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
-                content = ContentMapper.map(eventEntity.content),
-                prevContent = ContentMapper.map(eventEntity.prevContent),
+                content = ContentMapper.map(eventEntity.content, castJsonNumbers),
+                prevContent = ContentMapper.map(eventEntity.prevContent, castJsonNumbers),
                 originServerTs = eventEntity.originServerTs,
                 senderId = eventEntity.sender,
                 stateKey = eventEntity.stateKey,
@@ -96,8 +96,8 @@ internal object EventMapper {
     }
 }
 
-internal fun EventEntity.asDomain(): Event {
-    return EventMapper.map(this)
+internal fun EventEntity.asDomain(castJsonNumbers: Boolean = false): Event {
+    return EventMapper.map(this, castJsonNumbers)
 }
 
 internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?): EventEntity {
