@@ -22,4 +22,4 @@ import com.squareup.moshi.JsonClass
  * This is used as a holder to pass necessary data to some workers params.
  */
 @JsonClass(generateAdapter = true)
-data class LocalEchoIdentifiers(val roomId: String, val eventId: String)
+internal data class LocalEchoIdentifiers(val roomId: String, val eventId: String)
