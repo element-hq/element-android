@@ -1704,6 +1704,7 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
 
     <string name="bottom_action_people_x">Direct Messages</string>
+    <string name="bottom_action_people_short">DMs</string>
 
     <string name="send_file_step_idle">Waiting…</string>
     <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>

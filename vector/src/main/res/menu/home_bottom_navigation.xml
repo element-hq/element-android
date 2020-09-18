@@ -5,8 +5,8 @@
     <item
         android:id="@+id/bottom_action_chats"
         android:enabled="true"
-        android:icon="@drawable/ic_tab_chats"
-        android:title="@string/home_bottom_tab_chats" />
+        android:icon="@drawable/ic_home_bottom_house"
+        android:title="@string/bottom_action_home" />
 
 
     <item
@@ -20,7 +20,7 @@
         android:id="@+id/bottom_action_people"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_chat"
-        android:title="@string/bottom_action_people_x" />
+        android:title="@string/bottom_action_people_short" />
 
 
     <item
