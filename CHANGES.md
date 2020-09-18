@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Long message cannot be sent/takes infinite time & blocks other messages #1397
 
 Translations 🗣:
  -

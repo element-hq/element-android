@@ -87,7 +87,7 @@ internal class VerificationTransportRoomMessage(
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                eventId = event.eventId?:""
+                eventId = event.eventId ?: ""
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
 
