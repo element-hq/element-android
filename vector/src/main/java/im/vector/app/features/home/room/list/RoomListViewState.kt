@@ -31,10 +31,70 @@ data class RoomListViewState(
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val roomFilter: String = "",
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
-        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap()
+        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
+        val isInviteExpanded: Boolean = true,
+        val isFavouriteRoomsExpanded: Boolean = true,
+        val isDirectRoomsExpanded: Boolean = true,
+        val isGroupRoomsExpanded: Boolean = true,
+        val isLowPriorityRoomsExpanded: Boolean = true,
+        val isServerNoticeRoomsExpanded: Boolean = true,
+        val favouriteRoomsMode: CategoryMode = CategoryMode.List,
+        val directRoomsMode: CategoryMode = CategoryMode.List,
+        val groupRoomsMode: CategoryMode = CategoryMode.List,
+        val lowPriorityRoomsMode: CategoryMode = CategoryMode.List,
+        val serverNoticeRoomsMode: CategoryMode = CategoryMode.List
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
+
+    fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
+        return when (roomCategory) {
+            RoomCategory.INVITE        -> isInviteExpanded
+            RoomCategory.FAVOURITE     -> isFavouriteRoomsExpanded
+            RoomCategory.DIRECT        -> isDirectRoomsExpanded
+            RoomCategory.GROUP         -> isGroupRoomsExpanded
+            RoomCategory.LOW_PRIORITY  -> isLowPriorityRoomsExpanded
+            RoomCategory.SERVER_NOTICE -> isServerNoticeRoomsExpanded
+        }
+    }
+
+    enum class CategoryMode {
+        List,
+        Grid
+    }
+
+    fun getCategoryMode(roomCategory: RoomCategory): CategoryMode {
+        return when (roomCategory) {
+            RoomCategory.INVITE        -> CategoryMode.List
+            RoomCategory.FAVOURITE     -> favouriteRoomsMode
+            RoomCategory.DIRECT        -> directRoomsMode
+            RoomCategory.GROUP         -> groupRoomsMode
+            RoomCategory.LOW_PRIORITY  -> lowPriorityRoomsMode
+            RoomCategory.SERVER_NOTICE -> serverNoticeRoomsMode
+        }
+    }
+
+    fun toggle(roomCategory: RoomCategory): RoomListViewState {
+        return when (roomCategory) {
+            RoomCategory.INVITE        -> copy(isInviteExpanded = !isInviteExpanded)
+            RoomCategory.FAVOURITE     -> copy(isFavouriteRoomsExpanded = !isFavouriteRoomsExpanded)
+            RoomCategory.DIRECT        -> copy(isDirectRoomsExpanded = !isDirectRoomsExpanded)
+            RoomCategory.GROUP         -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
+            RoomCategory.LOW_PRIORITY  -> copy(isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded)
+            RoomCategory.SERVER_NOTICE -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
+        }
+    }
+
+    fun setMode(roomCategory: RoomCategory, newCategoryMode: CategoryMode): RoomListViewState {
+        return when (roomCategory) {
+            RoomCategory.INVITE        -> this
+            RoomCategory.FAVOURITE     -> copy(favouriteRoomsMode = newCategoryMode)
+            RoomCategory.DIRECT        -> copy(directRoomsMode = newCategoryMode)
+            RoomCategory.GROUP         -> copy(groupRoomsMode = newCategoryMode)
+            RoomCategory.LOW_PRIORITY  -> copy(lowPriorityRoomsMode = newCategoryMode)
+            RoomCategory.SERVER_NOTICE -> copy(serverNoticeRoomsMode = newCategoryMode)
+        }
+    }
 
     val hasUnread: Boolean
         get() = asyncFilteredRooms.invoke()

@@ -20,6 +20,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
@@ -40,13 +42,16 @@ import javax.inject.Inject
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val fontProvider: EmojiCompatFontProvider
+        private val fontProvider: EmojiCompatFontProvider,
+        private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
 
     override fun buildModels(state: MessageActionState) {
         // Message preview
+        val date = state.timelineEvent()?.root?.originServerTs
+        val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(avatarRenderer)
@@ -54,7 +59,7 @@ class MessageActionsEpoxyController @Inject constructor(
             movementMethod(createLinkMovementMethod(listener))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
-            time(state.time())
+            time(formattedDate)
         }
 
         // Send state

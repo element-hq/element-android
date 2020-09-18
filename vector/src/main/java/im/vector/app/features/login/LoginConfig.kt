@@ -33,10 +33,13 @@ data class LoginConfig(
 ) : Parcelable {
 
     companion object {
+        const val CONFIG_HS_PARAMETER = "hs_url"
+        private const val CONFIG_IS_PARAMETER = "is_url"
+
         fun parse(from: Uri): LoginConfig {
             return LoginConfig(
-                    homeServerUrl = from.getQueryParameter("hs_url"),
-                    identityServerUrl = from.getQueryParameter("is_url")
+                    homeServerUrl = from.getQueryParameter(CONFIG_HS_PARAMETER),
+                    identityServerUrl = from.getQueryParameter(CONFIG_IS_PARAMETER)
             )
         }
     }

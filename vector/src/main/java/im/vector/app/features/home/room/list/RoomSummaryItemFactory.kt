@@ -18,10 +18,9 @@ package im.vector.app.features.home.room.list
 
 import android.view.View
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.localDateTime
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
@@ -42,19 +41,21 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
+               spanCount: Int,
                listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
-                createInvitationItem(roomSummary, changeMembershipState, listener)
+                createInvitationItem(roomSummary, changeMembershipState, spanCount, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else              -> createRoomItem(roomSummary, selectedRoomIds, spanCount, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,
-                             changeMembershipState: ChangeMembershipState,
-                             listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+                                     changeMembershipState: ChangeMembershipState,
+                                     spanCount: Int,
+                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -72,11 +73,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
                 .listener { listener?.onRoomClicked(roomSummary) }
+                .spanSizeOverride { _, _, _ -> spanCount }
     }
 
     fun createRoomItem(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
+            spanCount: Int,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
@@ -87,15 +90,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
-            val date = latestEvent.root.localDateTime()
-            val currentDate = DateProvider.currentLocalDateTime()
-            val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
-            latestEventTime = if (isSameDay) {
-                dateFormatter.formatMessageHour(date)
-            } else {
-                dateFormatter.formatMessageDay(date)
-            }
+            latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
@@ -121,5 +117,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                             onClick?.invoke(roomSummary)
                         })
                 )
+                .spanSizeOverride { _, _, _ -> spanCount }
     }
 }
