@@ -14,7 +14,7 @@ def kotlinCoroutines = "1.5.1"
 def dagger = "2.38.1"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
-def markwon = "4.6.2"
+def markwon = "4.3.1"
 def moshi = "1.12.0"
 def lifecycle = "2.2.0"
 def rxBinding = "3.1.0"
@@ -90,6 +90,8 @@ ext.libs = [
         ],
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",
+                'extLatex'               : "io.noties.markwon:ext-latex:$markwon",
+                'inlineParser'           : "io.noties.markwon:inline-parser:$markwon",
                 'html'                   : "io.noties.markwon:html:$markwon"
         ],
         airbnb      : [
