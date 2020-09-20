@@ -27,8 +27,8 @@
     <string name="notice_room_ban_by_you">Du bannade %1$s</string>
     <string name="notice_room_withdraw">%1$s drog tillbaka inbjudan för %2$s</string>
     <string name="notice_room_withdraw_by_you">Du drog tillbaka inbjudan för %1$s</string>
-    <string name="notice_avatar_url_changed">%1$s ändrade sin avatar</string>
-    <string name="notice_avatar_url_changed_by_you">Du ändrade din avatar</string>
+    <string name="notice_avatar_url_changed">%1$s bytte sin avatar</string>
+    <string name="notice_avatar_url_changed_by_you">Du bytte din avatar</string>
     <string name="notice_display_name_set">%1$s satte sitt visningsnamn till %2$s</string>
     <string name="notice_display_name_set_by_you">Du satte ditt visningsnamn till %1$s</string>
     <string name="notice_display_name_changed_from">%1$s bytte sitt visningsnamn från %2$s till %3$s</string>
