@@ -16,12 +16,13 @@
 
 package im.vector.app.features.raw.wellknown
 
+import org.matrix.android.sdk.api.extensions.tryThis
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.util.awaitCallback
 
 suspend fun RawService.getElementWellknown(userId: String): ElementWellKnown? {
-    return awaitCallback<String> { getWellknown(userId, it) }
-            .let { ElementWellKnownMapper.from(it) }
+    return tryThis { awaitCallback<String> { getWellknown(userId, it) } }
+            ?.let { ElementWellKnownMapper.from(it) }
 }
 
 fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true
