@@ -8,6 +8,7 @@ Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
 
 Bugfix 🐛:
+ - Long message cannot be sent/takes infinite time & blocks other messages #1397
  - User Verification in DM not working
  - Manual import of Megolm keys does back up the imported keys
 

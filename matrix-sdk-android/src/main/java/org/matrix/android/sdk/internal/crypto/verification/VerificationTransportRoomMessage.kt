@@ -22,6 +22,9 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.Operation
 import androidx.work.WorkInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
@@ -52,9 +55,6 @@ import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.StringProvider
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -87,7 +87,7 @@ internal class VerificationTransportRoomMessage(
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
 
@@ -185,7 +185,7 @@ internal class VerificationTransportRoomMessage(
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
 
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
@@ -240,7 +240,7 @@ internal class VerificationTransportRoomMessage(
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         enqueueSendWork(workerParams)
     }
@@ -260,7 +260,7 @@ internal class VerificationTransportRoomMessage(
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
 

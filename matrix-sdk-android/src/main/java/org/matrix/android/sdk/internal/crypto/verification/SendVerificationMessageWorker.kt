@@ -23,9 +23,9 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.getSessionComponent
@@ -43,12 +43,15 @@ internal class SendVerificationMessageWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val event: Event,
+            val eventId: String,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject
     lateinit var sendVerificationMessageTask: SendVerificationMessageTask
+
+    @Inject
+    lateinit var localEchoRepository: LocalEchoRepository
 
     @Inject
     lateinit var cryptoService: CryptoService
@@ -67,25 +70,27 @@ internal class SendVerificationMessageWorker(context: Context,
                 }
         sessionComponent.inject(this)
 
-        val localId = params.event.eventId ?: ""
+        val localEvent = localEchoRepository.getUpToDateEcho(params.eventId) ?: return Result.success(errorOutputData)
+        val localEventId = localEvent.eventId ?: ""
+        val roomId = localEvent.roomId ?: ""
 
-        if (cancelSendTracker.isCancelRequestedFor(localId, params.event.roomId)) {
+        if (cancelSendTracker.isCancelRequestedFor(localEventId, roomId)) {
             return Result.success()
                     .also {
-                        cancelSendTracker.markCancelled(localId, params.event.roomId ?: "")
-                        Timber.e("## SendEvent: Event sending has been cancelled $localId")
+                        cancelSendTracker.markCancelled(localEventId, roomId)
+                        Timber.e("## SendEvent: Event sending has been cancelled $localEventId")
                     }
         }
 
         return try {
-            val eventId = sendVerificationMessageTask.execute(
+            val resultEventId = sendVerificationMessageTask.execute(
                     SendVerificationMessageTask.Params(
-                            event = params.event,
+                            event = localEvent,
                             cryptoService = cryptoService
                     )
             )
 
-            Result.success(Data.Builder().putString(localId, eventId).build())
+            Result.success(Data.Builder().putString(localEventId, resultEventId).build())
         } catch (exception: Throwable) {
             if (exception.shouldBeRetried()) {
                 Result.retry()

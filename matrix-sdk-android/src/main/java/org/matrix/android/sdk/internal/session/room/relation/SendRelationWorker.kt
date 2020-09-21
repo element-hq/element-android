@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -42,18 +43,18 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     internal data class Params(
             override val sessionId: String,
             val roomId: String,
-            val event: Event,
+            val eventId: String,
             val relationType: String? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
     @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
-                        .also { Timber.e("Unable to parse work parameters") }
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
@@ -64,8 +65,8 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val localEvent = params.event
-        if (localEvent.eventId == null) {
+        val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
+        if (localEvent?.eventId == null) {
             return Result.failure()
         }
         val relationContent = localEvent.content.toModel<ReactionContent>()

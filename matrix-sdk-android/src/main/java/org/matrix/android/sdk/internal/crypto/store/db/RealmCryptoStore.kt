@@ -20,6 +20,10 @@ package org.matrix.android.sdk.internal.crypto.store.db
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.Sort
+import io.realm.kotlin.where
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -85,10 +89,6 @@ import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.Sort
-import io.realm.kotlin.where
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import timber.log.Timber
@@ -541,7 +541,7 @@ internal class RealmCryptoStore @Inject constructor(
                     deviceId = it.deviceId
             )
         }
-        monarchy.writeAsync { realm ->
+        doRealmTransactionAsync(realmConfiguration) { realm ->
             realm.where<MyDeviceLastSeenInfoEntity>().findAll().deleteAllFromRealm()
             entities.forEach {
                 realm.insertOrUpdate(it)
@@ -1191,7 +1191,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .findAll()
                     .mapNotNull { entity ->
                         when (entity.type) {
-                            GossipRequestType.KEY    -> {
+                            GossipRequestType.KEY -> {
                                 IncomingRoomKeyRequest(
                                         userId = entity.otherUserId,
                                         deviceId = entity.otherDeviceId,
