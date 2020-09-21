@@ -89,6 +89,7 @@
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
+    <string name="no_permissions_to_start_webrtc_call">You do not have permission to start a call in this room</string>
     <string name="conference_call_in_progress">A conference is already in progress!</string>
     <string name="video_meeting">Start video meeting</string>
     <string name="audio_meeting">Start audio meeting</string>
