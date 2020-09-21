@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.download
 
 import android.os.Handler
 import android.os.Looper
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
@@ -76,7 +76,7 @@ internal class DefaultContentDownloadStateTracker @Inject constructor() : Progre
             Timber.v("## DL Progress Error code:$errorCode")
             updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
             listeners[url]?.forEach {
-                tryThis { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+                tryOrNull { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
             }
         }
     }
@@ -84,7 +84,7 @@ internal class DefaultContentDownloadStateTracker @Inject constructor() : Progre
     private fun updateState(url: String, state: ContentDownloadStateTracker.State) {
         states[url] = state
         listeners[url]?.forEach {
-            tryThis { it.onDownloadStateUpdate(state) }
+            tryOrNull { it.onDownloadStateUpdate(state) }
         }
     }
 }

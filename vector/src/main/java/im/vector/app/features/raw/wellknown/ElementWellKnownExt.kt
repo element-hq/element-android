@@ -16,12 +16,12 @@
 
 package im.vector.app.features.raw.wellknown
 
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.util.awaitCallback
 
 suspend fun RawService.getElementWellknown(userId: String): ElementWellKnown? {
-    return tryThis { awaitCallback<String> { getWellknown(userId, it) } }
+    return tryOrNull { awaitCallback<String> { getWellknown(userId, it) } }
             ?.let { ElementWellKnownMapper.from(it) }
 }
 

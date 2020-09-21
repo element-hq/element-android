@@ -37,7 +37,7 @@ import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import javax.inject.Inject
@@ -88,7 +88,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncTimeout = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
+                    val syncTimeout = tryOrNull { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
                     vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
                     refreshBackgroundSyncPrefs()
                 }
@@ -101,7 +101,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
-                    val syncDelay = tryThis { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
+                    val syncDelay = tryOrNull { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
                     vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
                     refreshBackgroundSyncPrefs()
                 }

@@ -31,7 +31,7 @@ import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.userdirectory.KnownUsersFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -68,7 +68,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
 
     private fun initAdminE2eByDefault() {
         viewModelScope.launch(Dispatchers.IO) {
-            val adminE2EByDefault = tryThis {
+            val adminE2EByDefault = tryOrNull {
                 rawService.getElementWellknown(session.myUserId)
                         ?.isE2EByDefault()
                         ?: true

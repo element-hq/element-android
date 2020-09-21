@@ -36,7 +36,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
@@ -345,13 +345,13 @@ internal class DefaultCryptoService @Inject constructor(
             // Open the store
             cryptoStore.open()
             // this can throw if no network
-            tryThis {
+            tryOrNull {
                 uploadDeviceKeys()
             }
 
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
-            tryThis {
+            tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
             }
         }

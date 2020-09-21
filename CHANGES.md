@@ -16,7 +16,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Rename `tryThis` to `tryOrNull`
 
 Build 🧱:
  -

@@ -23,7 +23,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import arrow.core.Try
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.util.Cancelable
@@ -174,7 +174,7 @@ internal class DefaultFileService @Inject constructor(
                     }
                 }
                 toNotify?.forEach { otherCallbacks ->
-                    tryThis { otherCallbacks.onFailure(it) }
+                    tryOrNull { otherCallbacks.onFailure(it) }
                 }
             }, { file ->
                 callback.onSuccess(file)
@@ -186,7 +186,7 @@ internal class DefaultFileService @Inject constructor(
                 }
                 Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
                 toNotify?.forEach { otherCallbacks ->
-                    tryThis { otherCallbacks.onSuccess(file) }
+                    tryOrNull { otherCallbacks.onSuccess(file) }
                 }
             })
         }.toCancelable()

@@ -17,7 +17,7 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
@@ -45,7 +45,7 @@ internal open class IncomingGossipingRequestEntity(@Index var requestId: String?
 
     var type: GossipRequestType
         get() {
-            return tryThis { typeStr?.let { GossipRequestType.valueOf(it) } } ?: GossipRequestType.KEY
+            return tryOrNull { typeStr?.let { GossipRequestType.valueOf(it) } } ?: GossipRequestType.KEY
         }
         set(value) {
             typeStr = value.name
@@ -55,7 +55,7 @@ internal open class IncomingGossipingRequestEntity(@Index var requestId: String?
 
     var requestState: GossipingRequestState
         get() {
-            return tryThis { GossipingRequestState.valueOf(requestStateStr) }
+            return tryOrNull { GossipingRequestState.valueOf(requestStateStr) }
                     ?: GossipingRequestState.NONE
         }
         set(value) {

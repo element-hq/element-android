@@ -22,7 +22,7 @@ import android.graphics.BitmapFactory
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -229,7 +229,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         } finally {
             // Delete all temporary files
             filesToDelete.forEach {
-                tryThis { it.delete() }
+                tryOrNull { it.delete() }
             }
         }
     }
