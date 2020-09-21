@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
@@ -47,7 +47,7 @@ internal open class OutgoingGossipingRequestEntity(
 
     var type: GossipRequestType
         get() {
-            return tryThis { typeStr?.let { GossipRequestType.valueOf(it) } } ?: GossipRequestType.KEY
+            return tryOrNull { typeStr?.let { GossipRequestType.valueOf(it) } } ?: GossipRequestType.KEY
         }
         set(value) {
             typeStr = value.name
@@ -57,7 +57,7 @@ internal open class OutgoingGossipingRequestEntity(
 
     var requestState: OutgoingGossipingRequestState
         get() {
-            return tryThis { OutgoingGossipingRequestState.valueOf(requestStateStr) }
+            return tryOrNull { OutgoingGossipingRequestState.valueOf(requestStateStr) }
                     ?: OutgoingGossipingRequestState.UNSENT
         }
         set(value) {

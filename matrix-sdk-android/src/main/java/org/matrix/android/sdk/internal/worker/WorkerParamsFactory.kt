@@ -18,7 +18,7 @@
 package org.matrix.android.sdk.internal.worker
 
 import androidx.work.Data
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 
@@ -42,7 +42,7 @@ internal object WorkerParamsFactory {
         return Data.Builder().putString(KEY, json).build()
     }
 
-    inline fun <reified T> fromData(data: Data): T? = tryThis("Unable to parse work parameters") {
+    inline fun <reified T> fromData(data: Data): T? = tryOrNull("Unable to parse work parameters") {
         val json = data.getString(KEY)
         return if (json == null) {
             null

@@ -27,7 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import java.net.URL
 
@@ -42,7 +42,7 @@ abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.widgetName.text = widget.name
-        holder.widgetUrl.text = tryThis { URL(widget.computedUrl) }?.host ?: widget.computedUrl
+        holder.widgetUrl.text = tryOrNull { URL(widget.computedUrl) }?.host ?: widget.computedUrl
         if (iconRes != null) {
             holder.iconImage.isVisible = true
             holder.iconImage.setImageResource(iconRes!!)

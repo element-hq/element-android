@@ -84,7 +84,7 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
@@ -362,7 +362,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         super.onPostResume()
         synchronized(postResumeScheduledActions) {
             postResumeScheduledActions.forEach {
-                tryThis { it.invoke() }
+                tryOrNull { it.invoke() }
             }
             postResumeScheduledActions.clear()
         }

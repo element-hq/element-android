@@ -27,7 +27,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.CallsListener
@@ -95,7 +95,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     val callAudioManager = CallAudioManager(context.applicationContext) {
         currentCallsListeners.forEach {
-            tryThis { it.onAudioDevicesChange() }
+            tryOrNull { it.onAudioDevicesChange() }
         }
     }
 
@@ -174,7 +174,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCaptureStateChanged() }
+                tryOrNull { it.onCaptureStateChanged() }
             }
         }
 
@@ -205,7 +205,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCurrentCallChange(value?.mxCall) }
+                tryOrNull { it.onCurrentCallChange(value?.mxCall) }
             }
         }
 
@@ -745,7 +745,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     }
 
                     currentCallsListeners.forEach {
-                        tryThis { it.onCameraChange() }
+                        tryOrNull { it.onCameraChange() }
                     }
                 }
 
@@ -771,7 +771,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             // videoCapturer?.stopCapture()
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureMode = format
-            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged() } }
+            currentCallsListeners.forEach { tryOrNull { it.onCaptureStateChanged() } }
         }
     }
 

@@ -28,7 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -424,7 +424,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun getUnknownDeviceDismissedList(): List<String> {
-        return tryThis {
+        return tryOrNull {
             defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
         }.orEmpty()
     }
@@ -846,7 +846,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun backgroundSyncTimeOut(): Int {
-        return tryThis {
+        return tryOrNull {
             // The xml pref is saved as a string so use getString and parse
             defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, null)?.toInt()
         } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
@@ -860,7 +860,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun backgroundSyncDelay(): Int {
-        return tryThis {
+        return tryOrNull {
             // The xml pref is saved as a string so use getString and parse
             defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, null)?.toInt()
         } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS

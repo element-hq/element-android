@@ -17,7 +17,7 @@
 
 package org.matrix.android.sdk.api.failure
 
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.IOException
@@ -49,7 +49,7 @@ fun Throwable.isInvalidPassword(): Boolean {
  */
 fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
     return if (this is Failure.OtherServerError && this.httpCode == 401) {
-        tryThis {
+        tryOrNull {
             MoshiProvider.providesMoshi()
                     .adapter(RegistrationFlowResponse::class.java)
                     .fromJson(this.errorBody)

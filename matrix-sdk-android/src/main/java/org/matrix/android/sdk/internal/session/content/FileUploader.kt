@@ -32,7 +32,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
 import okio.source
 import org.greenrobot.eventbus.EventBus
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
@@ -96,7 +96,7 @@ internal class FileUploader @Inject constructor(@Authenticated
             inputStream.copyTo(it)
         }
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
-            tryThis { workingFile.delete() }
+            tryOrNull { workingFile.delete() }
         }
     }
 

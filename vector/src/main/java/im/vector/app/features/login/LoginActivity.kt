@@ -44,7 +44,7 @@ import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -262,7 +262,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         super.onNewIntent(intent)
 
         intent?.data
-                ?.let { tryThis { it.getQueryParameter("loginToken") } }
+                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
     }
 

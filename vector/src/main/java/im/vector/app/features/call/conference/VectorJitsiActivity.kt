@@ -38,7 +38,7 @@ import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
 import org.jitsi.meet.sdk.JitsiMeetViewListener
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.net.URL
 import javax.inject.Inject
 
@@ -100,7 +100,7 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
                 .setVideoMuted(!viewState.enableVideo)
                 .setUserInfo(viewState.userInfo)
                 .apply {
-                    tryThis { URL(viewState.jitsiUrl) }?.let {
+                    tryOrNull { URL(viewState.jitsiUrl) }?.let {
                         setServerURL(it)
                     }
                 }
