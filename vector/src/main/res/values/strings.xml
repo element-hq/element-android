@@ -2226,6 +2226,8 @@
 
     <string name="settings_dev_tools">Dev Tools</string>
     <string name="settings_account_data">Account Data</string>
+    <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
+
     <plurals name="poll_info">
         <item quantity="zero">%d vote</item>
         <item quantity="other">%d votes</item>

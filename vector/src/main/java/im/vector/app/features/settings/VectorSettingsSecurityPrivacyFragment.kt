@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
+import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.ExternalIntentData
 import im.vector.app.core.intent.analyseIntent
 import im.vector.app.core.intent.getFilenameFromUri
@@ -457,6 +459,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
             val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
+
+            val showPassword = dialogLayout.findViewById<ImageView>(R.id.importDialogShowPassword)
+            var passwordVisible = false
+
+            showPassword.setOnClickListener {
+                passwordVisible = !passwordVisible
+                passPhraseEditText.showPassword(passwordVisible)
+                showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            }
 
             passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
