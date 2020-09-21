@@ -11,6 +11,7 @@ Improvements 🙌:
  - Add a setting to show timestamp for all messages (#2123)
  - Use cache for user color
  - Allow using an outdated homeserver, at user's risk (#1972)
+ - Restore small logo on login screens and fix scrolling issue on those screens
 
 Bugfix 🐛:
  - Long message cannot be sent/takes infinite time & blocks other messages #1397
