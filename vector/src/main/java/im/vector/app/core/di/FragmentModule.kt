@@ -52,6 +52,7 @@ import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.RoomDetailFragment
+import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
@@ -570,4 +571,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomBannedMemberListFragment::class)
     fun bindRoomBannedMemberListFragment(fragment: RoomBannedMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SearchFragment::class)
+    fun bindSearchFragment(fragment: SearchFragment): Fragment
 }

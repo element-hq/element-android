@@ -43,6 +43,8 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.search.SearchActivity
+import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
@@ -327,6 +329,11 @@ class DefaultNavigator @Inject constructor(
             val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
             activity.startActivity(intent, bundle)
         }
+    }
+
+    override fun openSearch(context: Context, roomId: String) {
+        val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+        context.startActivity(intent)
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

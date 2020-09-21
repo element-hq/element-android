@@ -38,6 +38,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.HomeModule
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
+import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
@@ -142,6 +143,7 @@ interface ScreenComponent {
     fun inject(activity: VectorCallActivity)
     fun inject(activity: VectorAttachmentViewerActivity)
     fun inject(activity: VectorJitsiActivity)
+    fun inject(activity: SearchActivity)
 
     /* ==========================================================================================
      * BottomSheets
