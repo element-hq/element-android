@@ -8,6 +8,7 @@ Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
 
 Bugfix 🐛:
+ - User Verification in DM not working
  - Manual import of Megolm keys does back up the imported keys
 
 Translations 🗣:
