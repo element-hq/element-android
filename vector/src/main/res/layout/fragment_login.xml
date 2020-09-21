@@ -109,7 +109,7 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp">
@@ -119,21 +119,20 @@
                     style="@style/Style.Vector.Login.Button.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/auth_forgot_password"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:layout_gravity="start"
+                    android:text="@string/auth_forgot_password" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginSubmit"
                     style="@style/Style.Vector.Login.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
                     android:text="@string/auth_login"
-                    app:layout_constraintEnd_toEndOf="parent"
                     tools:enabled="false"
                     tools:ignore="RelativeOverlap" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
 
         </LinearLayout>
 
