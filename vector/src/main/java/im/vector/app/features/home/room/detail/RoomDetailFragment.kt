@@ -610,6 +610,16 @@ class RoomDetailFragment @Inject constructor(
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
         withState(roomDetailViewModel) { state ->
+            // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
+            val callButtonsEnabled = when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
+                1 -> false
+                2 -> state.isAllowedToStartWebRTCCall
+                else -> state.isAllowedToManageWidgets
+            }
+            setOf(R.id.voice_call, R.id.video_call).forEach {
+                menu.findItem(it).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
+            }
+
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
             if (widgetsCount > 0) {
@@ -687,6 +697,8 @@ class RoomDetailFragment @Inject constructor(
                     //                            webRtcPeerConnectionManager.endCall()
                     //                            safeStartCall(it, isVideoCall)
                     //                        }
+                } else if (!state.isAllowedToStartWebRTCCall) {
+                    showDialogWithMessage(getString(R.string.no_permissions_to_start_webrtc_call))
                 } else {
                     safeStartCall(isVideoCall)
                 }

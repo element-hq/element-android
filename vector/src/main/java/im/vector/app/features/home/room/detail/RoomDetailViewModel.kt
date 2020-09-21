@@ -181,10 +181,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .subscribe {
                     val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
+                    val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
                     setState {
                         copy(
                                 canSendMessage = canSendMessage,
-                                isAllowedToManageWidgets = isAllowedToManageWidgets
+                                isAllowedToManageWidgets = isAllowedToManageWidgets,
+                                isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
                         )
                     }
                 }
