@@ -333,11 +333,19 @@ internal class DefaultTimeline(
 
 // Private methods *****************************************************************************
 
-    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
+    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
         return builtEventsIdMap[eventId]?.let { builtIndex ->
             // Update the relation of existing event
             builtEvents[builtIndex]?.let { te ->
-                builtEvents[builtIndex] = builder(te)
+                val rebuiltEvent = builder(te)
+                // If rebuilt event is filtered its returned as null and should be removed.
+                if (rebuiltEvent == null) {
+                    builtEventsIdMap.remove(eventId)
+                    builtEventsIdMap.entries.filter { it.value > builtIndex }.forEach { it.setValue(it.value - 1) }
+                    builtEvents.removeAt(builtIndex)
+                } else {
+                    builtEvents[builtIndex] = builder(te)
+                }
                 true
             }
         } ?: false
@@ -413,14 +421,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState.get()
+            Timeline.Direction.FORWARDS -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState
+            Timeline.Direction.FORWARDS -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -489,7 +497,8 @@ internal class DefaultTimeline(
             val eventEntity = results[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
-                    buildTimelineEvent(eventEntity)
+                    val builtEvent = buildTimelineEvent(eventEntity)
+                    listOf(builtEvent).filterEventsWithSettings().firstOrNull()
                 } || postSnapshot
             }
         }
@@ -730,10 +739,10 @@ internal class DefaultTimeline(
         return object : MatrixCallback<TokenChunkEventPersistor.Result> {
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
-                    TokenChunkEventPersistor.Result.SUCCESS           -> {
+                    TokenChunkEventPersistor.Result.SUCCESS -> {
                         Timber.v("Success fetching $limit items $direction from pagination request")
                     }
-                    TokenChunkEventPersistor.Result.REACHED_END       -> {
+                    TokenChunkEventPersistor.Result.REACHED_END -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
@@ -775,8 +784,7 @@ internal class DefaultTimeline(
             }
             if (!filterEdits) return@filter false
 
-            val filterRedacted = !settings.filters.filterRedacted || it.root.isRedacted()
-
+            val filterRedacted = !settings.filters.filterRedacted || it.root.isRedacted().not()
             filterRedacted
         }
     }
