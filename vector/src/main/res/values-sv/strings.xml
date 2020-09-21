@@ -2125,7 +2125,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services-adress</string>
     <string name="login_server_url_form_other_hint">Adress</string>
     <string name="login_server_url_form_modular_text">Premiumservervärd för organisationer</string>
-    <string name="login_server_url_form_modular_notice">Skriv in adressen för Modular Element eller servern du vill använda</string>
+    <string name="login_server_url_form_modular_notice">Skriv in adressen för den Modular Element eller server du vill använda</string>
     <string name="login_server_url_form_other_notice">Skriv in adressen för en server eller Element du vill ansluta till</string>
     <string name="login_server_url_form_common_notice">Skriv in adressen för servern du vill använda</string>
 
