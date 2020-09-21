@@ -11,6 +11,7 @@ Bugfix 🐛:
  - Long message cannot be sent/takes infinite time & blocks other messages #1397
  - User Verification in DM not working
  - Manual import of Megolm keys does back up the imported keys
+ - Auto scrolling to the latest message when sending (#2094)
  - Fix incorrect permission check when creating widgets (#2137)
 
 Translations 🗣:
