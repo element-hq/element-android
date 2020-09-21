@@ -1048,7 +1048,7 @@
 \nKas sa oled ikka kindel\?</string>
 
     <string name="room_participants_power_level_demote_warning_title">Kas vähendad enda õigusi\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Kuna sa vähendad enda õigusi, siis sul ei pruugi enam olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.</string>
     <string name="room_participants_power_level_demote">Vähenda enda õigusi</string>
 
 
@@ -2331,8 +2331,8 @@
     <string name="sent_an_audio_file">Helifail</string>
     <string name="sent_a_file">Fail</string>
     <string name="room_profile_not_encrypted_subtitle">Sõnumid siin jututoas on läbivalt krüptitud.</string>
-    <string name="room_profile_encrypted_subtitle">Sõnumid siis jututoas kasutavad läbivat krüptimist.
-\n
+    <string name="room_profile_encrypted_subtitle">Sõnumid siin jututoas kasutavad läbivat krüptimist. 
+\n 
 \nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.</string>
     <string name="room_profile_section_security">Turvalisus</string>
     <string name="room_profile_section_security_learn_more">Lisateave</string>
