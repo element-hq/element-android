@@ -748,34 +748,21 @@ class LoginViewModel @AssistedInject constructor(
                             else                                                       -> LoginMode.Unsupported
                         }
 
-                        if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
-                            notSupported()
-                        } else {
-                            // FIXME We should post a view event here normally?
-                            setState {
-                                copy(
-                                        asyncHomeServerLoginFlowRequest = Uninitialized,
-                                        homeServerUrl = data.homeServerUrl,
-                                        loginMode = loginMode,
-                                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                                )
-                            }
+                        // FIXME We should post a view event here normally?
+                        setState {
+                            copy(
+                                    asyncHomeServerLoginFlowRequest = Uninitialized,
+                                    homeServerUrl = data.homeServerUrl,
+                                    loginMode = loginMode,
+                                    loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                            )
+                        }
+                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                                || data.isOutdatedHomeserver) {
+                            // Notify the UI
+                            _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
                         }
                     }
-                    is LoginFlowResult.OutdatedHomeserver -> {
-                        notSupported()
-                    }
-                }
-            }
-
-            private fun notSupported() {
-                // Notify the UI
-                _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized
-                    )
                 }
             }
         })

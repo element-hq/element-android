@@ -1988,6 +1988,7 @@
     <string name="login_validation_code_is_not_correct">The entered code is not correct. Please check.</string>
     <string name="login_error_outdated_homeserver_title">Outdated homeserver</string>
     <string name="login_error_outdated_homeserver_content">This homeserver is running too old a version to connect to. Ask your homeserver admin to upgrade.</string>
+    <string name="login_error_outdated_homeserver_warning_content">This homeserver is running an old version. Ask your homeserver admin to upgrade. You can continue, but some features may not work correctly.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
