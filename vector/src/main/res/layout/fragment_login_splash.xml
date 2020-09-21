@@ -18,17 +18,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <ImageView
-                android:id="@+id/logoType"
-                android:layout_width="wrap_content"
-                android:layout_height="102dp"
-                android:src="@drawable/element_logotype_combined"
-                android:tint="?colorAccent"
+                android:id="@+id/loginSplashLogo"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/element_logo_green"
+                android:transitionName="loginLogoTransition"
+                app:layout_constraintBottom_toTopOf="@+id/logoType"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <ImageView
+                android:id="@+id/logoType"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/element_logotype"
+                android:tint="?colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginSplashLogo" />
 
             <TextView
                 android:id="@+id/loginSplashTitle"
