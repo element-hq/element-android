@@ -18,29 +18,56 @@ package im.vector.app.features.home.room.detail.search
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.MvRx
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : VectorBaseActivity() {
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    private val searchFragment: SearchFragment?
+        get() {
+            return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? SearchFragment
+        }
+
+    override fun getLayoutRes() = R.layout.activity_search
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        configureToolbar(searchToolbar)
+    }
+
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: SearchArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
-            addFragment(R.id.simpleFragmentContainer, SearchFragment::class.java, fragmentArgs)
+            addFragment(R.id.searchFragmentContainer, SearchFragment::class.java, fragmentArgs, FRAGMENT_TAG)
         }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchFragment?.search(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return true
+            }
+        })
+        // Open the keyboard immediately
+        searchView.requestFocus()
     }
 
     companion object {
+        private const val FRAGMENT_TAG = "SearchFragment"
+
         fun newIntent(context: Context, args: SearchArgs): Intent {
             return Intent(context, SearchActivity::class.java).apply {
                 putExtra(MvRx.KEY_ARG, args)

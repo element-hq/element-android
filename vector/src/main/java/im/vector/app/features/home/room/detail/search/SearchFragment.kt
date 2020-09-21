@@ -24,6 +24,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -42,5 +43,9 @@ class SearchFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun search(query: String) {
+        Timber.d(query)
     }
 }
