@@ -115,20 +115,31 @@ internal class VerificationTransportRoomMessage(
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
                 workInfoList
-                        ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
-                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
-                                Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
-                                tx?.cancel(onErrorReason)
-                            } else {
-                                if (onDone != null) {
-                                    onDone()
-                                } else {
-                                    tx?.state = nextState
+
+                            when (wInfo.state) {
+                                WorkInfo.State.FAILED -> {
+                                    tx?.cancel(onErrorReason)
+                                    workLiveData.removeObserver(this)
+                                }
+                                WorkInfo.State.SUCCEEDED -> {
+                                    if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
+                                        Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
+                                        tx?.cancel(onErrorReason)
+                                    } else {
+                                        if (onDone != null) {
+                                            onDone()
+                                        } else {
+                                            tx?.state = nextState
+                                        }
+                                    }
+                                    workLiveData.removeObserver(this)
+                                }
+                                else -> {
+                                    // nop
                                 }
                             }
-                            workLiveData.removeObserver(this)
                         }
             }
         }
@@ -184,7 +195,7 @@ internal class VerificationTransportRoomMessage(
                 .build()
 
         workManagerProvider.workManager
-                .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
                 .enqueue()
 
         // I cannot just listen to the given work request, because when used in a uniqueWork,
@@ -280,7 +291,7 @@ internal class VerificationTransportRoomMessage(
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
                 .build()
         return workManagerProvider.workManager
-                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
                 .enqueue() to workRequest.id
     }
 

@@ -39,7 +39,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
      * Must be call on the crypto coroutine thread
      *
      * @param megolmSessionsData megolm sessions.
-     * @param backUpKeys         true to back up them to the homeserver.
+     * @param fromBackup         true if the imported keys are already backed up on the server.
      * @param progressListener   the progress listener
      * @return import room keys result
      */

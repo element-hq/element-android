@@ -27,6 +27,12 @@ import androidx.lifecycle.LiveData
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
@@ -102,12 +108,6 @@ import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.fetchCopied
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -1072,7 +1072,11 @@ internal class DefaultCryptoService @Inject constructor(
                         throw Exception("Error")
                     }
 
-                    megolmSessionDataImporter.handle(importedSessions, true, progressListener)
+                    megolmSessionDataImporter.handle(
+                            megolmSessionsData = importedSessions,
+                            fromBackup = false,
+                            progressListener = progressListener
+                    )
                 }
             }.foldToCallback(callback)
         }

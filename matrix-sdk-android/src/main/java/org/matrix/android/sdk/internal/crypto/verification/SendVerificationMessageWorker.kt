@@ -24,6 +24,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
+import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -55,6 +56,8 @@ internal class SendVerificationMessageWorker(context: Context,
     @Inject
     lateinit var cryptoService: CryptoService
 
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
+
     override suspend fun doWork(): Result {
         val errorOutputData = Data.Builder().putBoolean(OUTPUT_KEY_FAILED, true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -68,16 +71,26 @@ internal class SendVerificationMessageWorker(context: Context,
         sessionComponent.inject(this)
 
         val localEvent = localEchoRepository.getUpToDateEcho(params.eventId) ?: return Result.success(errorOutputData)
+        val localEventId = localEvent.eventId ?: ""
+        val roomId = localEvent.roomId ?: ""
+
+        if (cancelSendTracker.isCancelRequestedFor(localEventId, roomId)) {
+            return Result.success()
+                    .also {
+                        cancelSendTracker.markCancelled(localEventId, roomId)
+                        Timber.e("## SendEvent: Event sending has been cancelled $localEventId")
+                    }
+        }
 
         return try {
-            val eventId = sendVerificationMessageTask.execute(
+            val resultEventId = sendVerificationMessageTask.execute(
                     SendVerificationMessageTask.Params(
                             event = localEvent,
                             cryptoService = cryptoService
                     )
             )
 
-            Result.success(Data.Builder().putString(params.eventId, eventId).build())
+            Result.success(Data.Builder().putString(localEventId, resultEventId).build())
         } catch (exception: Throwable) {
             if (exception.shouldBeRetried()) {
                 Result.retry()
