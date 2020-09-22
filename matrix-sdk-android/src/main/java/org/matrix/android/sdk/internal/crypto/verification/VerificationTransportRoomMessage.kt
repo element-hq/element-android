@@ -54,6 +54,7 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.StringProvider
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.UUID
@@ -117,14 +118,13 @@ internal class VerificationTransportRoomMessage(
                 workInfoList
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
-
                             when (wInfo.state) {
                                 WorkInfo.State.FAILED -> {
                                     tx?.cancel(onErrorReason)
                                     workLiveData.removeObserver(this)
                                 }
                                 WorkInfo.State.SUCCEEDED -> {
-                                    if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
+                                    if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
                                         Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
                                         tx?.cancel(onErrorReason)
                                     } else {
@@ -210,7 +210,7 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == workRequest.id }
                         ?.let { wInfo ->
-                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
+                            if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
                                 callback(null, null)
                             } else {
                                 val eventId = wInfo.outputData.getString(localId)
