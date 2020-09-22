@@ -2562,9 +2562,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_opening_banned_room">無法開啟禁止您進入的聊天室。</string>
     <string name="room_error_not_found">找不到此聊天室。請確定它存在。</string>
-<plurals name="seconds">
-	<item quantity="other">%d 秒</item>
-</plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
     <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
