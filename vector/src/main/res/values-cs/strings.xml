@@ -2609,11 +2609,11 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="auth_pin_confirm_to_disable_title">Pro vypnutí PINu potvrďte PIN</string>
     <string name="error_opening_banned_room">Nemohu otevřít místnost, z níž jste byli vykázáni.</string>
     <string name="room_error_not_found">Nemohu najít tuto místnost. Ujistěte se, že existuje.</string>
-<plurals name="seconds">
-	<item quantity="one">%d vteřina</item>
-	<item quantity="few">%d vteřiny</item>
-	<item quantity="other">%d vteřin</item>
-</plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d vteřina</item>
+        <item quantity="few">%d vteřiny</item>
+        <item quantity="other">%d vteřin</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
     <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>

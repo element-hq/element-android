@@ -2544,10 +2544,10 @@
 
     <string name="error_opening_banned_room">Ei ole võimalik avada sellise jututoa vaadet, kus sulle on seatud suhtluskeeld.</string>
     <string name="room_error_not_found">Ei leia sellist jututuba. Palun kontrolli, et ta ikka olemas on.</string>
-<plurals name="seconds">
-	<item quantity="one">%d sekund</item>
-	<item quantity="other">%d sekundit</item>
-</plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekundit</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">Näita jututoa liikmete olekusündmusi</string>
     <string name="settings_show_room_member_state_events_summary">Sealhulgas kutsumisi, liitumisi, lahkumisi, müksamisi, keelamisi ning tunnuspildi ja kuvatava nime muutusi.</string>

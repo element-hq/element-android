@@ -27,7 +27,7 @@
     <string name="verification_emoji_banana">Banan</string>
     <string name="verification_emoji_apple">Äpple</string>
     <string name="verification_emoji_strawberry">Jordgubbe</string>
-    <string name="verification_emoji_corn">Majskolv</string>
+    <string name="verification_emoji_corn">Majs</string>
     <string name="verification_emoji_pizza">Pizza</string>
     <string name="verification_emoji_cake">Tårta</string>
     <string name="verification_emoji_heart">Hjärta</string>
@@ -41,7 +41,7 @@
     <string name="verification_emoji_umbrella">Paraply</string>
     <string name="verification_emoji_hourglass">Timglas</string>
     <string name="verification_emoji_clock">Klocka</string>
-    <string name="verification_emoji_gift">Paket</string>
+    <string name="verification_emoji_gift">Present</string>
     <string name="verification_emoji_light_bulb">Lampa</string>
     <string name="verification_emoji_book">Bok</string>
     <string name="verification_emoji_pencil">Penna</string>
@@ -52,7 +52,7 @@
     <string name="verification_emoji_hammer">Hammare</string>
     <string name="verification_emoji_telephone">Telefon</string>
     <string name="verification_emoji_flag">Flagga</string>
-    <string name="verification_emoji_train">Ånglok</string>
+    <string name="verification_emoji_train">Tåg</string>
     <string name="verification_emoji_bicycle">Cykel</string>
     <string name="verification_emoji_aeroplane">Flygplan</string>
     <string name="verification_emoji_rocket">Raket</string>

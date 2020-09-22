@@ -2547,10 +2547,10 @@
 
     <string name="error_opening_banned_room">Kan inte öppna ett rum du är bannad från.</string>
     <string name="room_error_not_found">Kan inte hitta det här rummet. Se till att det existerar.</string>
-<plurals name="seconds">
-	<item quantity="one">%d sekund</item>
-	<item quantity="other">%d sekunder</item>
-</plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">Visa statushändelser angående rumsmedlemmar</string>
     <string name="settings_show_room_member_state_events_summary">Inkluderar när personer bjuds in, går med, lämnar, kickas, bannas eller byter sin avatar eller sitt namn.</string>
