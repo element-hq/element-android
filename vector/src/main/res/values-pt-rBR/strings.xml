@@ -1315,7 +1315,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
 
     <string name="settings_notification_privacy_no_background_sync">O aplicativo <b>não</b> precisa de se conectar ao servidor em segundo plano, isto deve reduzir a utilização da bateria</string>
-    <string name="settings_background_fdroid_sync_mode">Sincronização em segundo plano (Experimental)</string>
+    <string name="settings_background_fdroid_sync_mode">Sincronização em segundo plano</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element sincronizará em segundo plano para preservar os recursos limitados do aparelho (bateria).
 \nDependendo do estado dos recursos do seu aparelho, a sincronização pode ser adiada pelo sistema operacional.</string>
@@ -2643,4 +2643,28 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Atenção! Última tentativa restante antes de você ser desconectada/o!</string>
     <string name="too_many_pin_failures">Muitos erros, você foi desconectada/o</string>
+<string name="no_permissions_to_start_webrtc_call">Você não tem permissão para iniciar uma chamada nesta sala</string>
+    <string name="settings_phone_number_empty">Nenhum número de telefone foi adicionado à sua conta</string>
+    <string name="settings_emails">Endereços de e-mail</string>
+    <string name="settings_emails_empty">Nenhum e-mail foi adicionado à sua conta</string>
+    <string name="settings_phone_numbers">Números de telefone</string>
+    <string name="settings_remove_three_pid_confirmation_content">Remover %s\?</string>
+    <string name="error_threepid_auth_failed">Certifique-se de ter clicado no link do e-mail que enviamos para você.</string>
+
+    <plurals name="seconds">
+	<item quantity="one">%d segundo</item>
+	<item quantity="other">%d segundos</item>
+</plurals>
+
+    <string name="settings_show_room_member_state_events_summary">Mostrar quando alguém for convidado/entrar/sair/banido e mostrar alterações de foto de perfil e de nome e sobrenome.</string>
+    <string name="settings_emails_and_phone_numbers_title">E-mails e números de telefone</string>
+    <string name="settings_emails_and_phone_numbers_summary">Editar e-mails e números de telefone vinculados à sua conta Matrix</string>
+
+    <string name="settings_text_message_sent_hint">Código</string>
+    <string name="login_msisdn_notice">Por favor, use o formato internacional (o número de telefone precisa começar com \'+\')</string>
+    <string name="confirm_your_identity_quad_s">Confirme sua identidade verificando este login, concedendo a ele acesso a mensagens criptografadas.</string>
+    <string name="error_opening_banned_room">Não é possível carregar uma sala da qual você foi banido.</string>
+    <string name="room_error_not_found">Não foi possível encontrar esta sala. Certifique-se de que ela existe.</string>
+
+    <string name="universal_link_malformed">O link não está correto</string>
 </resources>
