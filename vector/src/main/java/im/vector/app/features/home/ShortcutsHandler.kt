@@ -70,7 +70,7 @@ class ShortcutsHandler @Inject constructor(
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)
                                 val bitmap = try {
-                                    avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), iconSize)
+                                    avatarRenderer.shortcutDrawable(GlideApp.with(context), room.toMatrixItem(), iconSize)
                                 } catch (failure: Throwable) {
                                     null
                                 }

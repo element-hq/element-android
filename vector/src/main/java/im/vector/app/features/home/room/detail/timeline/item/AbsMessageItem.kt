@@ -85,7 +85,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         super.unbind(holder)
     }
 
-    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.senderId)
+    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.matrixItem)
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
