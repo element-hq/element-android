@@ -28,7 +28,7 @@ internal object RoomSummaryEventsHelper {
             filterTypes = true,
             allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES,
             filterUseless = true,
-            filterRedacted = false,
+            filterRedacted = true,
             filterEdits = true
     )
 
