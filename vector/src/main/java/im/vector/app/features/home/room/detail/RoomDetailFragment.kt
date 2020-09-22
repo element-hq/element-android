@@ -120,6 +120,7 @@ import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivit
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.detail.composer.TextComposerView
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -1022,7 +1023,7 @@ class RoomDetailFragment @Inject constructor(
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             jumpToBottomView.count = summary.notificationCount
-            jumpToBottomView.drawBadge = summary.hasUnreadMessages
+            jumpToBottomView.drawBadge = summary.scHasUnreadMessages(ScSdkPreferences(context))
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE

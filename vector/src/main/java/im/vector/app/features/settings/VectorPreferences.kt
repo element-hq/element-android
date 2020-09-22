@@ -29,6 +29,7 @@ import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -177,6 +178,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // SC additions
         private const val SETTINGS_SINGLE_OVERVIEW = "SETTINGS_SINGLE_OVERVIEW"
+        private const val SETTINGS_ROOM_UNREAD_KIND = "SETTINGS_ROOM_UNREAD_KIND"
         private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
@@ -842,8 +844,19 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
     }
 
+    // SC addition
     fun singleOverview(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SINGLE_OVERVIEW, true)
+    }
+
+    // SC addition
+    fun roomUnreadKind(): Int {
+        val kind = defaultPrefs.getString(SETTINGS_ROOM_UNREAD_KIND, RoomSummary.UNREAD_KIND_CONTENT.toString())
+        return try {
+            Integer.parseInt(kind!!)
+        } catch (e: Exception) {
+            RoomSummary.UNREAD_KIND_CONTENT
+        }
     }
 
     // SC addition

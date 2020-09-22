@@ -25,6 +25,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.home.room.ScSdkPreferences
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -41,7 +42,8 @@ data class RoomListViewState(
         val isGroupRoomsExpanded: Boolean = true,
         val isCombinedRoomsExpanded: Boolean = true,
         val isLowPriorityRoomsExpanded: Boolean = true,
-        val isServerNoticeRoomsExpanded: Boolean = true
+        val isServerNoticeRoomsExpanded: Boolean = true,
+        val scSdkPreferences: ScSdkPreferences? = null
 ) : MvRxState {
 
     companion object {
@@ -57,12 +59,15 @@ data class RoomListViewState(
         return ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX + displayMode.toString()
     }
 
+    // SC addition
     fun initWithContext(context: Context, displayMode: RoomListDisplayMode): RoomListViewState {
         val sp = getSharedPreferences(context)
         val pref = getRoomListExpandedLowPriorityPref(displayMode)
-        return copy(isLowPriorityRoomsExpanded = sp.getBoolean(pref, isLowPriorityRoomsExpanded))
+        val scSdkPreferences = ScSdkPreferences(context)
+        return copy(isLowPriorityRoomsExpanded = sp.getBoolean(pref, isLowPriorityRoomsExpanded), scSdkPreferences = scSdkPreferences)
     }
 
+    // SC addition
     fun persistWithContext(context: Context, displayMode: RoomListDisplayMode) {
         val sp = getSharedPreferences(context)
         val pref = getRoomListExpandedLowPriorityPref(displayMode)
@@ -97,7 +102,7 @@ data class RoomListViewState(
         get() = asyncFilteredRooms.invoke()
                 ?.flatMap { it.value }
                 ?.filter { it.membership == Membership.JOIN }
-                ?.any { it.hasUnreadMessages }
+                ?.any { it.scHasUnreadMessages(scSdkPreferences) }
                 ?: false
 }
 

@@ -97,17 +97,29 @@ internal class RoomSummaryUpdater @Inject constructor(
                 .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
                 .findFirst()
 
-        val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScAll(realm, roomId)
+        val latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        val latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
                 || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+        roomSummaryEntity.hasUnreadContentMessages = roomSummaryEntity.notificationCount > 0
+                // avoid this call if we are sure there are unread events
+                || (latestPreviewableContentEvent != null
+                    && !isEventRead(realm.configuration, userId, roomId, latestPreviewableContentEvent.eventId))
+        roomSummaryEntity.hasUnreadOriginalContentMessages = roomSummaryEntity.notificationCount > 0
+                // avoid this call if we are sure there are unread events
+                || (latestPreviewableOriginalContentEvent != null
+                    && !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
+        roomSummaryEntity.latestPreviewableContentEvent = latestPreviewableContentEvent
+        roomSummaryEntity.latestPreviewableOriginalContentEvent = latestPreviewableOriginalContentEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 

@@ -34,6 +34,12 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
             timelineEventMapper.map(it, buildReadReceipts = false)
         }
+        val latestContentEvent = roomSummaryEntity.latestPreviewableContentEvent?.let {
+            timelineEventMapper.map(it, buildReadReceipts = false)
+        }
+        val latestOriginalContentEvent = roomSummaryEntity.latestPreviewableOriginalContentEvent?.let {
+            timelineEventMapper.map(it, buildReadReceipts = false)
+        }
         // typings are updated through the sync where room summary entity gets updated no matter what, so it's ok get there
         val typingUsers = typingUsersTracker.getTypingUsers(roomSummaryEntity.roomId)
 
@@ -45,12 +51,16 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 isDirect = roomSummaryEntity.isDirect,
                 latestPreviewableEvent = latestEvent,
+                latestPreviewableContentEvent = latestContentEvent,
+                latestPreviewableOriginalContentEvent = latestOriginalContentEvent,
                 joinedMembersCount = roomSummaryEntity.joinedMembersCount,
                 invitedMembersCount = roomSummaryEntity.invitedMembersCount,
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
+                hasUnreadContentMessages = roomSummaryEntity.hasUnreadContentMessages,
+                hasUnreadOriginalContentMessages = roomSummaryEntity.hasUnreadOriginalContentMessages,
                 tags = tags,
                 typingUsers = typingUsers,
                 membership = roomSummaryEntity.membership,

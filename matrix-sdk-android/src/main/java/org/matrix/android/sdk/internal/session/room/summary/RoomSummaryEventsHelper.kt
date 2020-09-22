@@ -32,12 +32,50 @@ internal object RoomSummaryEventsHelper {
             filterEdits = true
     )
 
+    // SC addition
+    private val previewFiltersScAll = TimelineEventFilters(
+            filterTypes = true,
+            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES_ALL,
+            filterUseless = true,
+            filterRedacted = false,
+            filterEdits = true
+    )
+
+    // SC addition
+    private val previewFiltersScOriginalContent = TimelineEventFilters(
+            filterTypes = true,
+            allowedTypes = RoomSummaryConstants.PREVIEWABLE_ORIGINAL_CONTENT_TYPES,
+            filterUseless = true,
+            filterRedacted = true,
+            filterEdits = true
+    )
+
     fun getLatestPreviewableEvent(realm: Realm, roomId: String): TimelineEventEntity? {
         return TimelineEventEntity.latestEvent(
                 realm = realm,
                 roomId = roomId,
                 includesSending = true,
                 filters = previewFilters
+        )
+    }
+
+    // SC addition
+    fun getLatestPreviewableEventScAll(realm: Realm, roomId: String): TimelineEventEntity? {
+        return TimelineEventEntity.latestEvent(
+                realm = realm,
+                roomId = roomId,
+                includesSending = true,
+                filters = previewFiltersScAll
+        )
+    }
+
+    // SC addition
+    fun getLatestPreviewableEventScOriginalContent(realm: Realm, roomId: String): TimelineEventEntity? {
+        return TimelineEventEntity.latestEvent(
+                realm = realm,
+                roomId = roomId,
+                includesSending = true,
+                filters = previewFiltersScOriginalContent
         )
     }
 }

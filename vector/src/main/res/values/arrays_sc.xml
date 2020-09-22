@@ -12,4 +12,15 @@
         <item>both</item>
     </string-array>
 
+    <string-array name="room_unread_kind_entries" translatable="false">
+        <item>@string/settings_room_unread_kind_default</item>
+        <item>@string/settings_room_unread_kind_content</item>
+        <item>@string/settings_room_unread_kind_original_content</item>
+    </string-array>
+    <string-array name="room_unread_kind_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>
