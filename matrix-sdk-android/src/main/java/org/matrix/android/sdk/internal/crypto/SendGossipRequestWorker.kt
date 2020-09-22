@@ -18,10 +18,9 @@
 package org.matrix.android.sdk.internal.crypto
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -34,40 +33,34 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
+import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendGossipRequestWorker(context: Context,
                                        params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<SendGossipRequestWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val sessionId: String,
+            override val sessionId: String,
             val keyShareRequest: OutgoingRoomKeyRequest? = null,
-            val secretShareRequest: OutgoingSecretRequest? = null
-    )
+            val secretShareRequest: OutgoingSecretRequest? = null,
+            override val lastFailureMessage: String? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
     @Inject lateinit var cryptoStore: IMXCryptoStore
     @Inject lateinit var eventBus: EventBus
     @Inject lateinit var credentials: Credentials
 
-    override suspend fun doWork(): Result {
-        val errorOutputData = Data.Builder().putBoolean("failed", true).build()
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success(errorOutputData)
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        val sessionComponent = getSessionComponent(params.sessionId)
-                ?: return Result.success(errorOutputData).also {
-                    // TODO, can this happen? should I update local echo?
-                    Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
-                }
-        sessionComponent.inject(this)
-
+    override suspend fun doSafeWork(params: Params): Result {
         val localId = LocalEcho.createLocalEchoId()
         val contentMap = MXUsersDevicesMap<Any>()
         val eventType: String
@@ -121,7 +114,7 @@ internal class SendGossipRequestWorker(context: Context,
                 }
             }
             else                              -> {
-                return Result.success(errorOutputData).also {
+                return buildErrorResult(params, "Unknown empty gossiping request").also {
                     Timber.e("Unknown empty gossiping request: $params")
                 }
             }
@@ -137,13 +130,17 @@ internal class SendGossipRequestWorker(context: Context,
             )
             cryptoStore.updateOutgoingGossipingRequestState(requestId, OutgoingGossipingRequestState.SENT)
             return Result.success()
-        } catch (exception: Throwable) {
-            return if (exception.shouldBeRetried()) {
+        } catch (throwable: Throwable) {
+            return if (throwable.shouldBeRetried()) {
                 Result.retry()
             } else {
                 cryptoStore.updateOutgoingGossipingRequestState(requestId, OutgoingGossipingRequestState.FAILED_TO_SEND)
-                Result.success(errorOutputData)
+                buildErrorResult(params, throwable.localizedMessage ?: "error")
             }
         }
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 }

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.relation
 
 import android.content.Context
-import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.greenrobot.eventbus.EventBus
@@ -27,17 +26,17 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
-import timber.log.Timber
 import javax.inject.Inject
 
 // TODO This is not used. Delete?
-internal class SendRelationWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+internal class SendRelationWorker(context: Context, params: WorkerParameters)
+    : SessionSafeCoroutineWorker<SendRelationWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -52,19 +51,11 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     @Inject lateinit var eventBus: EventBus
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
-    override suspend fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        if (params.lastFailureMessage != null) {
-            // Transmit the error
-            return Result.success(inputData)
-                    .also { Timber.e("Work cancelled due to input error from parent") }
-        }
-
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
-
+    override suspend fun doSafeWork(params: Params): Result {
         val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
         if (localEvent?.eventId == null) {
             return Result.failure()
@@ -87,6 +78,10 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
                 }
             }
         }
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {

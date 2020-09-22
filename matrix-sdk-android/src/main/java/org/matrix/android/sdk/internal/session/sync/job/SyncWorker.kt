@@ -18,18 +18,18 @@ package org.matrix.android.sdk.internal.session.sync.job
 
 import android.content.Context
 import androidx.work.BackoffPolicy
-import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
+import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -43,7 +43,7 @@ private const val DEFAULT_DELAY_TIMEOUT = 30_000L
  */
 internal class SyncWorker(context: Context,
                           workerParameters: WorkerParameters
-) : CoroutineWorker(context, workerParameters) {
+) : SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -59,14 +59,13 @@ internal class SyncWorker(context: Context,
     @Inject lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     @Inject lateinit var workManagerProvider: WorkManagerProvider
 
-    override suspend fun doWork(): Result {
-        Timber.i("Sync work starting")
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
-                        .also { Timber.e("Unable to parse work parameters") }
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
+    override suspend fun doSafeWork(params: Params): Result {
+        Timber.i("Sync work starting")
+
         return runCatching {
             doSync(params.timeout)
         }.fold(
@@ -89,6 +88,10 @@ internal class SyncWorker(context: Context,
                     }
                 }
         )
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 
     private suspend fun doSync(timeout: Long) {
