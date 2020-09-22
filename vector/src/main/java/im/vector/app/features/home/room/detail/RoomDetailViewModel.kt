@@ -680,7 +680,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }.exhaustive
                 }
-                is SendMode.EDIT    -> {
+                is SendMode.EDIT -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
                             ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
@@ -706,7 +706,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.QUOTE   -> {
+                is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                                     ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
@@ -729,7 +729,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.REPLY   -> {
+                is SendMode.REPLY -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(RoomDetailViewEvents.MessageSent)
@@ -741,6 +741,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun popDraft() {
+        setState {
+            copy(sendMode = SendMode.REGULAR(""))
+        }
         room.deleteDraft(NoOpMatrixCallback())
     }
 
@@ -915,73 +918,25 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
-        saveCurrentDraft(action.text)
-
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.EDIT(timelineEvent, action.text)) }
-            timelineEvent.root.eventId?.let {
-                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""), NoOpMatrixCallback())
-            }
+            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent() ?: "")) }
         }
     }
 
     private fun handleQuoteAction(action: RoomDetailAction.EnterQuoteMode) {
-        saveCurrentDraft(action.text)
-
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.QUOTE(timelineEvent, action.text)) }
-            withState { state ->
-                // Save a new draft and keep the previously entered text, if it was not an edit
-                timelineEvent.root.eventId?.let {
-                    if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.QUOTE(it, ""), NoOpMatrixCallback())
-                    } else {
-                        room.saveDraft(UserDraft.QUOTE(it, action.text), NoOpMatrixCallback())
-                    }
-                }
-            }
         }
     }
 
     private fun handleReplyAction(action: RoomDetailAction.EnterReplyMode) {
-        saveCurrentDraft(action.text)
-
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.REPLY(timelineEvent, action.text)) }
-            withState { state ->
-                // Save a new draft and keep the previously entered text, if it was not an edit
-                timelineEvent.root.eventId?.let {
-                    if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.REPLY(it, ""), NoOpMatrixCallback())
-                    } else {
-                        room.saveDraft(UserDraft.REPLY(it, action.text), NoOpMatrixCallback())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun saveCurrentDraft(draft: String) {
-        // Save the draft with the current text if any
-        withState {
-            if (draft.isNotBlank()) {
-                when (it.sendMode) {
-                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft), NoOpMatrixCallback())
-                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
-                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
-                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
-                }
-            }
         }
     }
 
     private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) = withState {
-        if (it.sendMode is SendMode.EDIT) {
-            room.deleteDraft(NoOpMatrixCallback())
-        } else {
-            // Save a new draft and keep the previously entered text
-            room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
-        }
+        room.deleteDraft(NoOpMatrixCallback())
         setState { copy(sendMode = SendMode.REGULAR(action.text)) }
     }
 
