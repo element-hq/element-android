@@ -1632,8 +1632,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="sas_error_m_user">O contato cancelou a confirmação</string>
     <string name="sas_error_m_timeout">O tempo de confirmação expirou</string>
-    <string name="sas_error_m_unknown_transaction">A sessão não sabe sobre essa transacção</string>
-    <string name="sas_error_m_unknown_method">A sessão não pode chegar a acordo sobre a chave, método hash, MAC, or SAS</string>
+    <string name="sas_error_m_unknown_transaction">A sessão não sabe sobre essa transação</string>
+    <string name="sas_error_m_unknown_method">A sessão não concorda com a chave, método hash, MAC, ou SAS</string>
     <string name="sas_error_m_mismatched_commitment">O compromisso de hash não coincidiu</string>
     <string name="sas_error_m_mismatched_sas">O SAS não corresponde</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
