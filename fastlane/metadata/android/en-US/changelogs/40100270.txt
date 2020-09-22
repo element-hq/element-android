@@ -1,0 +1,2 @@
+- Add Russian translation
+- Update codebase to Element 1.0.7
