@@ -137,7 +137,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
     fun <T: Fragment> navigateTo(fragmentClass: Class<T>) {
         supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
+                .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
                 .replace(R.id.vector_settings_page, fragmentClass, null)
                 .addToBackStack(null)
                 .commit()
