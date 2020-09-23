@@ -8,33 +8,38 @@
         <item name="android:paddingEnd">36dp</item>
     </style>
 
+    <item name="loginLogo" type="id" />
     <item name="loginFormScrollView" type="id" />
     <item name="loginFormContainer" type="id" />
 
+    <style name="LoginLogo">
+        <item name="android:id">@id/loginLogo</item>
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">36dp</item>
+        <item name="android:src">@drawable/element_logo_green</item>
+        <item name="android:transitionName">loginLogoTransition</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
     <style name="LoginFormContainer">
         <item name="android:id">@id/loginFormContainer</item>
+        <item name="android:paddingTop">36dp</item>
         <item name="android:paddingStart">36dp</item>
         <item name="android:paddingEnd">36dp</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="LoginFormScrollViewBase">
+    <style name="LoginFormScrollView">
         <item name="android:id">@id/loginFormScrollView</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:clipToPadding">false</item>
         <item name="android:paddingTop">32dp</item>
         <item name="android:paddingBottom">32dp</item>
-    </style>
-
-    <style name="LoginFormScrollView" parent="LoginFormScrollViewBase">
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginTop">72dp</item>
     </style>
 
     <style name="Style.Vector.Login.Button" parent="VectorButtonStyle">

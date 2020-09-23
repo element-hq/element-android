@@ -28,6 +28,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.signout.soft.epoxy.loginCenterButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginErrorWithRetryItem
+import im.vector.app.features.signout.soft.epoxy.loginHeaderItem
 import im.vector.app.features.signout.soft.epoxy.loginPasswordFormItem
 import im.vector.app.features.signout.soft.epoxy.loginRedButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginTextItem
@@ -64,6 +65,9 @@ class SoftLogoutController @Inject constructor(
     }
 
     private fun buildHeader(state: SoftLogoutViewState) {
+        loginHeaderItem {
+            id("header")
+        }
         loginTitleItem {
             id("title")
             text(stringProvider.getString(R.string.soft_logout_title))
