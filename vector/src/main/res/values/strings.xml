@@ -1154,6 +1154,10 @@
         <item quantity="one">1 room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
+    <plurals name="notification_invitations">
+        <item quantity="one">1 invitation</item>
+        <item quantity="other">%d invitations</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 message</item>
@@ -1165,6 +1169,8 @@
     </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s in %2$s and %3$s"</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s and %2$s"</string>
     <string name="notification_unknown_new_event">New Event</string>
     <string name="notification_unknown_room_name">Room</string>
     <string name="notification_new_messages">New Messages</string>
@@ -2574,6 +2580,9 @@
     <string name="settings_security_pin_code_use_biometrics_title">Use biometrics</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Depending on your device, you will be able to unlock using fingerprints, face recognition, iris recognition, etc.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock the application.</string>
+    <string name="settings_security_pin_code_notifications_title">Display complete notifications</string>
+    <string name="settings_security_pin_code_notifications_summary_on">Show full notification details, including rooms details and message contents.</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
     <string name="settings_security_pin_code_grace_period_title">Enable grace period</string>
     <string name="settings_security_pin_code_grace_period_summary_on">PIN code will be asked after 2 minutes not using the application.</string>
     <string name="settings_security_pin_code_grace_period_summary_off">PIN code will be requested every time you put the application to foreground.</string>

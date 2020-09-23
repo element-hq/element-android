@@ -22,6 +22,7 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinMode
@@ -30,7 +31,8 @@ import javax.inject.Inject
 
 class VectorSettingsPinFragment @Inject constructor(
         private val pinCodeStore: PinCodeStore,
-        private val navigator: Navigator
+        private val navigator: Navigator,
+        private val notificationDrawerManager: NotificationDrawerManager
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_application_protection_screen_title
@@ -40,8 +42,18 @@ class VectorSettingsPinFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
     }
 
+    private val useCompleteNotificationPref by lazy {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG)!!
+    }
+
     override fun bindPref() {
         refreshPinCodeStatus()
+
+        useCompleteNotificationPref.setOnPreferenceChangeListener { _, _ ->
+            // Refresh the drawer for an immediate effect of this change
+            notificationDrawerManager.refreshNotificationDrawer()
+            true
+        }
     }
 
     private fun refreshPinCodeStatus() {

@@ -168,6 +168,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
         private const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
         private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
+        const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -854,6 +855,14 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun useGracePeriod(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG, true)
+    }
+
+    /**
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content
+     */
+    fun useCompleteNotificationFormat(): Boolean {
+        return !useFlagPinCode()
+                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
     }
 
     fun backgroundSyncTimeOut(): Int {

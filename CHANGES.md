@@ -12,7 +12,7 @@ Improvements 🙌:
  - Use cache for user color
  - Allow using an outdated homeserver, at user's risk (#1972)
  - Restore small logo on login screens and fix scrolling issue on those screens
- - PIN Code Improvements. Add more settings (#1985)
+ - PIN Code Improvements: Add more settings: biometrics, grace period, notification content (#1985)
 
 Bugfix 🐛:
  - Long message cannot be sent/takes infinite time & blocks other messages #1397
