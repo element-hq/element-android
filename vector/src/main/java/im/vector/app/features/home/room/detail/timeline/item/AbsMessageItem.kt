@@ -21,6 +21,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
 import im.vector.app.core.utils.DebouncedClickListener
@@ -69,8 +71,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.avatarImageView.setOnClickListener(null)
             holder.memberNameView.setOnClickListener(null)
             holder.avatarImageView.visibility = View.GONE
-            holder.memberNameView.visibility = View.GONE
-            holder.timeView.visibility = View.GONE
+            if (attributes.informationData.forceShowTimestamp) {
+                holder.memberNameView.isInvisible = true
+                holder.timeView.isVisible = true
+                holder.timeView.text = attributes.informationData.time
+            } else {
+                holder.memberNameView.isVisible = false
+                holder.timeView.isVisible = false
+            }
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
@@ -85,7 +93,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         super.unbind(holder)
     }
 
-    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.senderId)
+    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.matrixItem)
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)

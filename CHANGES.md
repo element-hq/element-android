@@ -8,6 +8,9 @@ Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
  - Visually disable call buttons in menu and prohibit calling when permissions are insufficient (#2112)
  - Better management of requested permissions (#2048)
+ - Add a setting to show timestamp for all messages (#2123)
+ - Use cache for user color
+ - Allow using an outdated homeserver, at user's risk (#1972)
 
 Bugfix 🐛:
  - Long message cannot be sent/takes infinite time & blocks other messages #1397
