@@ -42,7 +42,6 @@ import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
@@ -215,10 +214,10 @@ class AttachmentTypeSelectorView(context: Context,
      */
     enum class Type(val permissionsBit: Int) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
-        GALLERY(PERMISSIONS_FOR_WRITING_FILES),
-        FILE(PERMISSIONS_FOR_WRITING_FILES),
+        GALLERY(PERMISSIONS_EMPTY),
+        FILE(PERMISSIONS_EMPTY),
         STICKER(PERMISSIONS_EMPTY),
-        AUDIO(PERMISSIONS_FOR_WRITING_FILES),
+        AUDIO(PERMISSIONS_EMPTY),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT)
     }
 }
