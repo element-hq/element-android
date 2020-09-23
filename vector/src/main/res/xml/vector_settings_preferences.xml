@@ -56,8 +56,7 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
-            android:title="@string/settings_always_show_timestamps"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_always_show_timestamps" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_12_24_TIMESTAMPS_KEY"
