@@ -27,7 +27,7 @@ SDK API changes ⚠️:
  - Rename `tryThis` to `tryOrNull`
 
 Build 🧱:
- -
+ - Update Gradle Wrapper Action
 
 Other changes:
  - Add an advanced action to reset an account data entry
