@@ -2683,5 +2683,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_bot_buttons">Bot-Schaltflächen</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
-    <string name="universal_link_malformed">Der Link war nicht korrekt</string>
-</resources>
+    <string name="universal_link_malformed">Der Link war fehlerhaft</string>
+<string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu starten</string>
+    <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
+
+    <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
+\n
+\nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
+
+    </resources>
