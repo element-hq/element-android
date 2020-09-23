@@ -322,41 +322,45 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SAVE_MEGOLM_EXPORT) {
-            val uri = data?.data
-            if (resultCode == Activity.RESULT_OK && uri != null) {
-                activity?.let { activity ->
-                    ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
-                        override fun onPassphrase(passphrase: String) {
-                            displayLoadingView()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SAVE_MEGOLM_EXPORT -> {
+                    val uri = data?.data
+                    if (uri != null) {
+                        activity?.let { activity ->
+                            ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                                override fun onPassphrase(passphrase: String) {
+                                    displayLoadingView()
 
-                            KeysExporter(session)
-                                    .export(requireContext(),
-                                            passphrase,
-                                            uri,
-                                            object : MatrixCallback<Boolean> {
-                                                override fun onSuccess(data: Boolean) {
-                                                    if (data) {
-                                                        requireActivity().toast(getString(R.string.encryption_exported_successfully))
-                                                    } else {
-                                                        requireActivity().toast(getString(R.string.unexpected_error))
-                                                    }
-                                                    hideLoadingView()
-                                                }
+                                    KeysExporter(session)
+                                            .export(requireContext(),
+                                                    passphrase,
+                                                    uri,
+                                                    object : MatrixCallback<Boolean> {
+                                                        override fun onSuccess(data: Boolean) {
+                                                            if (data) {
+                                                                requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                                                            } else {
+                                                                requireActivity().toast(getString(R.string.unexpected_error))
+                                                            }
+                                                            hideLoadingView()
+                                                        }
 
-                                                override fun onFailure(failure: Throwable) {
-                                                    onCommonDone(failure.localizedMessage)
-                                                }
-                                            })
+                                                        override fun onFailure(failure: Throwable) {
+                                                            onCommonDone(failure.localizedMessage)
+                                                        }
+                                                    })
+                                }
+                            })
                         }
-                    })
+                    }
                 }
-            }
-        } else if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            doOpenPinCodePreferenceScreen()
-        } else if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                importKeys(data)
+                PinActivity.PIN_REQUEST_CODE    -> {
+                    doOpenPinCodePreferenceScreen()
+                }
+                REQUEST_E2E_FILE_REQUEST_CODE   -> {
+                    importKeys(data)
+                }
             }
         }
     }
