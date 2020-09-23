@@ -2566,6 +2566,9 @@
     <string name="auth_pin_reset_title">Reset pin</string>
     <string name="auth_pin_new_pin_action">New pin</string>
     <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="settings_security_application_protection_title">Protect access to the application.</string>
+    <string name="settings_security_application_protection_summary">Protect access to the application using pin code and biometrics.</string>
+    <string name="settings_security_application_protection_screen_title">Configure protection</string>
     <string name="settings_security_pin_code_title">Enable PIN</string>
     <string name="settings_security_pin_code_summary">If you want to reset your PIN, tap Forgot PIN to logout and reset.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>

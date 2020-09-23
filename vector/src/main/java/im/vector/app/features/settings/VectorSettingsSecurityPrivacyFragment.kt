@@ -29,7 +29,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -53,11 +52,6 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
-import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.pin.PinActivity
-import im.vector.app.features.pin.PinCodeStore
-import im.vector.app.features.pin.PinLocker
-import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
@@ -76,10 +70,7 @@ import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
-        private val pinLocker: PinLocker,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val pinCodeStore: PinCodeStore,
-        private val navigator: Navigator
+        private val activeSessionHolder: ActiveSessionHolder
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
@@ -126,10 +117,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
-    }
-
-    private val usePinCodePref by lazy {
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
     }
 
     override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
@@ -265,8 +252,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
         }
 
-        refreshPinCodeStatus()
-
         refreshXSigningStatus()
 
         secureBackupPreference.icon = activity?.let {
@@ -351,28 +336,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     })
                 }
             }
-        } else if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            pinLocker.unlock()
-            refreshPinCodeStatus()
         } else if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 importKeys(data)
-            }
-        }
-    }
-
-    private fun refreshPinCodeStatus() {
-        lifecycleScope.launchWhenResumed {
-            val hasPinCode = pinCodeStore.hasEncodedPin()
-            usePinCodePref.isChecked = hasPinCode
-            usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val pinMode = if (hasPinCode) {
-                    PinMode.DELETE
-                } else {
-                    PinMode.CREATE
-                }
-                navigator.openPinCode(this@VectorSettingsSecurityPrivacyFragment, pinMode)
-                true
             }
         }
     }
