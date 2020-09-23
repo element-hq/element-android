@@ -97,7 +97,6 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
-import im.vector.app.core.utils.getColorFromUserId
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionResultAudioIpCall
 import im.vector.app.core.utils.onPermissionResultVideoIpCall
@@ -127,6 +126,7 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -217,7 +217,9 @@ class RoomDetailFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
         private val notificationUtils: NotificationUtils,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val matrixItemColorProvider: MatrixItemColorProvider
+) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -790,7 +792,7 @@ class RoomDetailFragment @Inject constructor(
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
             text = event.senderInfo.disambiguatedDisplayName
-            setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
+            setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
