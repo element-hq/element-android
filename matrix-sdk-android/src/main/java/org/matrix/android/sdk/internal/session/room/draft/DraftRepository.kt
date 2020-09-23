@@ -75,11 +75,7 @@ internal class DraftRepository @Inject constructor(@SessionDatabase private val 
     }
 
     private fun deleteDraftFromDb(realm: Realm, roomId: String) {
-        UserDraftsEntity.where(realm, roomId).findFirst()?.let { userDraftsEntity ->
-            if (userDraftsEntity.userDrafts.isNotEmpty()) {
-                userDraftsEntity.userDrafts.removeAt(userDraftsEntity.userDrafts.size - 1)
-            }
-        }
+        UserDraftsEntity.where(realm, roomId).findFirst()?.userDrafts?.clear()
     }
 
     private fun saveDraftInDb(realm: Realm, draft: UserDraft, roomId: String) {

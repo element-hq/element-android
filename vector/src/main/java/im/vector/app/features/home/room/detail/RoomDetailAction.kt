@@ -51,7 +51,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class ExitSpecialMode(val text: String) : RoomDetailAction()
+    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : RoomDetailAction()
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()

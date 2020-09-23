@@ -164,7 +164,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         getUnreadState()
         observeSyncState()
         observeEventDisplayedActions()
-        observeDrafts()
+        getDraftIfAny()
         observeUnreadState()
         observeMyRoomMember()
         observeActiveRoomWidgets()
@@ -226,52 +226,52 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
-            is RoomDetailAction.UserIsTyping                     -> handleUserIsTyping(action)
-            is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
-            is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
-            is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
-            is RoomDetailAction.SendSticker                      -> handleSendSticker(action)
-            is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
-            is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
-            is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
-            is RoomDetailAction.SendReaction                     -> handleSendReaction(action)
-            is RoomDetailAction.AcceptInvite                     -> handleAcceptInvite()
-            is RoomDetailAction.RejectInvite                     -> handleRejectInvite()
-            is RoomDetailAction.RedactAction                     -> handleRedactEvent(action)
-            is RoomDetailAction.UndoReaction                     -> handleUndoReact(action)
-            is RoomDetailAction.UpdateQuickReactAction           -> handleUpdateQuickReaction(action)
-            is RoomDetailAction.ExitSpecialMode                  -> handleExitSpecialMode(action)
-            is RoomDetailAction.EnterEditMode                    -> handleEditAction(action)
-            is RoomDetailAction.EnterQuoteMode                   -> handleQuoteAction(action)
-            is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
-            is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
-            is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
-            is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
-            is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
-            is RoomDetailAction.ClearSendQueue                   -> handleClearSendQueue()
-            is RoomDetailAction.ResendAll                        -> handleResendAll()
-            is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
-            is RoomDetailAction.ReportContent                    -> handleReportContent(action)
-            is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
+            is RoomDetailAction.UserIsTyping -> handleUserIsTyping(action)
+            is RoomDetailAction.SaveDraft -> handleSaveDraft(action)
+            is RoomDetailAction.SendMessage -> handleSendMessage(action)
+            is RoomDetailAction.SendMedia -> handleSendMedia(action)
+            is RoomDetailAction.SendSticker -> handleSendSticker(action)
+            is RoomDetailAction.TimelineEventTurnsVisible -> handleEventVisible(action)
+            is RoomDetailAction.TimelineEventTurnsInvisible -> handleEventInvisible(action)
+            is RoomDetailAction.LoadMoreTimelineEvents -> handleLoadMore(action)
+            is RoomDetailAction.SendReaction -> handleSendReaction(action)
+            is RoomDetailAction.AcceptInvite -> handleAcceptInvite()
+            is RoomDetailAction.RejectInvite -> handleRejectInvite()
+            is RoomDetailAction.RedactAction -> handleRedactEvent(action)
+            is RoomDetailAction.UndoReaction -> handleUndoReact(action)
+            is RoomDetailAction.UpdateQuickReactAction -> handleUpdateQuickReaction(action)
+            is RoomDetailAction.EnterRegularMode -> handleEnterRegularMode(action)
+            is RoomDetailAction.EnterEditMode -> handleEditAction(action)
+            is RoomDetailAction.EnterQuoteMode -> handleQuoteAction(action)
+            is RoomDetailAction.EnterReplyMode -> handleReplyAction(action)
+            is RoomDetailAction.DownloadOrOpen -> handleOpenOrDownloadFile(action)
+            is RoomDetailAction.NavigateToEvent -> handleNavigateToEvent(action)
+            is RoomDetailAction.HandleTombstoneEvent -> handleTombstoneEvent(action)
+            is RoomDetailAction.ResendMessage -> handleResendEvent(action)
+            is RoomDetailAction.RemoveFailedEcho -> handleRemove(action)
+            is RoomDetailAction.ClearSendQueue -> handleClearSendQueue()
+            is RoomDetailAction.ResendAll -> handleResendAll()
+            is RoomDetailAction.MarkAllAsRead -> handleMarkAllAsRead()
+            is RoomDetailAction.ReportContent -> handleReportContent(action)
+            is RoomDetailAction.IgnoreUser -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
-            is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
-            is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
-            is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
-            is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
-            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
-            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
-            is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
-            is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
-            is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
-            is RoomDetailAction.StartCall                        -> handleStartCall(action)
-            is RoomDetailAction.EndCall                          -> handleEndCall()
-            is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
-            is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
-            is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
-            is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
-            is RoomDetailAction.CancelSend                       -> handleCancel(action)
+            is RoomDetailAction.ExitTrackingUnreadMessagesState -> stopTrackingUnreadMessages()
+            is RoomDetailAction.ReplyToOptions -> handleReplyToOptions(action)
+            is RoomDetailAction.AcceptVerificationRequest -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest -> handleDeclineVerification(action)
+            is RoomDetailAction.RequestVerification -> handleRequestVerification(action)
+            is RoomDetailAction.ResumeVerification -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
+            is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
+            is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
+            is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
+            is RoomDetailAction.StartCall -> handleStartCall(action)
+            is RoomDetailAction.EndCall -> handleEndCall()
+            is RoomDetailAction.ManageIntegrations -> handleManageIntegrations()
+            is RoomDetailAction.AddJitsiWidget -> handleAddJitsiConference(action)
+            is RoomDetailAction.RemoveWidget -> handleDeleteWidget(action.widgetId)
+            is RoomDetailAction.EnsureNativeWidgetAllowed -> handleCheckWidgetAllowed(action)
+            is RoomDetailAction.CancelSend -> handleCancel(action)
         }.exhaustive
     }
 
@@ -451,45 +451,48 @@ class RoomDetailViewModel @AssistedInject constructor(
      */
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) {
         withState {
-            when (it.sendMode) {
-                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
-                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-            }.exhaustive
+            when {
+                it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
+                    room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
+                }
+                it.sendMode is SendMode.REPLY                               -> {
+                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                }
+                it.sendMode is SendMode.QUOTE                               -> {
+                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                }
+                it.sendMode is SendMode.EDIT                                -> {
+                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                }
+            }
         }
     }
 
-    private fun observeDrafts() {
-        room.rx().liveDrafts()
-                .subscribe {
-                    Timber.d("Draft update --> SetState")
-                    setState {
-                        val draft = it.lastOrNull() ?: UserDraft.REGULAR("")
-                        copy(
-                                // Create a sendMode from a draft and retrieve the TimelineEvent
-                                sendMode = when (draft) {
-                                    is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
-                                    is UserDraft.QUOTE   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.QUOTE(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.REPLY   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.REPLY(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.EDIT    -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.EDIT(timelineEvent, draft.text)
-                                        }
-                                    }
-                                } ?: SendMode.REGULAR("")
-                        )
-                    }
-                }
-                .disposeOnClear()
+    private fun getDraftIfAny() {
+        val currentDraft = room.getDraft() ?: return
+        setState {
+            copy(
+                    // Create a sendMode from a draft and retrieve the TimelineEvent
+                    sendMode = when (currentDraft) {
+                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.text, false)
+                        is UserDraft.QUOTE   -> {
+                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                                SendMode.QUOTE(timelineEvent, currentDraft.text)
+                            }
+                        }
+                        is UserDraft.REPLY   -> {
+                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                                SendMode.REPLY(timelineEvent, currentDraft.text)
+                            }
+                        }
+                        is UserDraft.EDIT    -> {
+                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                                SendMode.EDIT(timelineEvent, currentDraft.text)
+                            }
+                        }
+                    } ?: SendMode.REGULAR("", fromSharing = false)
+            )
+        }
     }
 
     private fun handleUserIsTyping(action: RoomDetailAction.UserIsTyping) {
@@ -740,11 +743,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun popDraft() {
-        setState {
-            copy(sendMode = SendMode.REGULAR(""))
+    private fun popDraft() = withState {
+        if (it.sendMode is SendMode.REGULAR && it.sendMode.fromSharing) {
+            // If we were sharing, we want to get back our last value from draft
+            getDraftIfAny()
+        } else {
+            // Otherwise we clear the composer and remove the draft from db
+            setState { copy(sendMode = SendMode.REGULAR("", false)) }
+            room.deleteDraft(NoOpMatrixCallback())
         }
-        room.deleteDraft(NoOpMatrixCallback())
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
@@ -935,9 +942,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) = withState {
-        room.deleteDraft(NoOpMatrixCallback())
-        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
+    private fun handleEnterRegularMode(action: RoomDetailAction.EnterRegularMode) = setState {
+        copy(sendMode = SendMode.REGULAR(action.text, action.fromSharing))
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {

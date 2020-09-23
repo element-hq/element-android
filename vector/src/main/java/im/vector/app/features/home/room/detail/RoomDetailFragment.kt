@@ -485,8 +485,7 @@ class RoomDetailFragment @Inject constructor(
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
                 is SharedData.Text        -> {
-                    // Save a draft to set the shared text to the composer
-                    roomDetailViewModel.handle(RoomDetailAction.SaveDraft(sharedData.text))
+                    roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(sharedData.text, fromSharing = true))
                 }
                 is SharedData.Attachments -> {
                     // open share edition
@@ -1014,7 +1013,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onCloseRelatedMessage() {
-                roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.text.toString()))
+                roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(composerLayout.text.toString(), false))
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
@@ -1147,12 +1146,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: RoomDetailViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is RoomDetailViewEvents.MessageSent                -> {
-                updateComposerText("")
-            }
             is RoomDetailViewEvents.SlashCommandHandled        -> {
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
-                updateComposerText("")
             }
             is RoomDetailViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
