@@ -42,10 +42,10 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
 /**
@@ -127,7 +127,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             is LoginViewEvents.OutdatedHomeserver                         -> {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
-                        .setMessage(R.string.login_error_outdated_homeserver_content)
+                        .setMessage(R.string.login_error_outdated_homeserver_warning_content)
                         .setPositiveButton(R.string.ok, null)
                         .show()
                 Unit
