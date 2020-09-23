@@ -32,9 +32,6 @@ import javax.inject.Singleton
 // 2 minutes, when enabled
 private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
 
-// 1 seconds, to avoid asking for PIN code when switching between Activities
-private const val PERIOD_OF_GRACE_DISABLED_IN_MS = 1000L
-
 /**
  * This class is responsible for keeping the status of locking
  * It automatically locks when entering background/foreground with a grace period.
@@ -112,7 +109,7 @@ class PinLocker @Inject constructor(
         return if (vectorPreferences.useGracePeriod()) {
             PERIOD_OF_GRACE_IN_MS
         } else {
-            PERIOD_OF_GRACE_DISABLED_IN_MS
+           0L
         }
     }
 }
