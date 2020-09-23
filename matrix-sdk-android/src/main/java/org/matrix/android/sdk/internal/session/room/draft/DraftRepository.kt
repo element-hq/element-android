@@ -26,6 +26,7 @@ import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.DraftMapper
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.UserDraftsEntity
@@ -35,7 +36,8 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                   private val realmSessionProvider: RealmSessionProvider) {
 
     suspend fun saveDraft(roomId: String, userDraft: UserDraft) {
         monarchy.awaitTransaction {
@@ -50,7 +52,7 @@ internal class DraftRepository @Inject constructor(@SessionDatabase private val 
     }
 
     fun getDraft(roomId: String): UserDraft? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        return realmSessionProvider.withRealm { realm ->
             UserDraftsEntity.where(realm, roomId).findFirst()
                     ?.userDrafts
                     ?.firstOrNull()
