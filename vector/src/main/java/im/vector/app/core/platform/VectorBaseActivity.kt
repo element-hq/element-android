@@ -320,10 +320,15 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 Activity.RESULT_OK -> {
                     Timber.v("Pin ok, unlock app")
                     pinLocker.unlock()
+
+                    // Cancel any new started PinActivity, after a screen rotation for instance
+                    finishActivity(PinActivity.PIN_REQUEST_CODE)
                 }
                 else               -> {
-                    // Remove the task, to be sure that PIN code will be requested when resumed
-                    finishAndRemoveTask()
+                    if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
+                        // Remove the task, to be sure that PIN code will be requested when resumed
+                        finishAndRemoveTask()
+                    }
                 }
             }
         }

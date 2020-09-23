@@ -20,6 +20,7 @@ Bugfix 🐛:
  - Manual import of Megolm keys does back up the imported keys
  - Auto scrolling to the latest message when sending (#2094)
  - Fix incorrect permission check when creating widgets (#2137)
+ - Pin code: user has to enter pin code twice (#2005)
 
 Translations 🗣:
  -

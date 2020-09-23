@@ -218,9 +218,7 @@
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
-        <activity
-            android:name=".features.pin.PinActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".features.pin.PinActivity" />
 
         <!-- Services -->
 
