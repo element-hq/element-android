@@ -20,6 +20,9 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri 
 import android.os.Build
 import androidx.core.content.getSystemService
 import im.vector.app.R
@@ -32,14 +35,19 @@ class CallRingPlayer(
     private val applicationContext = context.applicationContext
 
     private var player: MediaPlayer? = null
+    
+    private var r: Ringtone? = null
 
     fun start() {
-        val audioManager = applicationContext.getSystemService<AudioManager>()!!
-        player?.release()
-        player = createPlayer()
+//        val audioManager = applicationContext.getSystemService<AudioManager>()!!
+//        player?.release()
+//        player = createPlayer()
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        r = RingtoneManager.getRingtone(applicationContext, notification)
+        r?.play()
 
         // Check if sound is enabled
-        val ringerMode = audioManager.ringerMode
+ /*       val ringerMode = audioManager.ringerMode
         if (player != null && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
             try {
                 if (player?.isPlaying == false) {
@@ -54,12 +62,13 @@ class CallRingPlayer(
             }
         } else {
             Timber.v("## VOIP Can't play $player ode $ringerMode")
-        }
+        }*/
     }
 
     fun stop() {
         player?.release()
         player = null
+        r?.stop()
     }
 
     private fun createPlayer(): MediaPlayer? {
