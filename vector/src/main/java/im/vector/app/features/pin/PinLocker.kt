@@ -22,22 +22,29 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// 2 minutes, when enabled
 private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
+
+// 1 seconds, to avoid asking for PIN code when switching between Activities
+private const val PERIOD_OF_GRACE_DISABLED_IN_MS = 1000L
 
 /**
  * This class is responsible for keeping the status of locking
  * It automatically locks when entering background/foreground with a grace period.
  * You can force to unlock with unlock method, use it whenever the pin code has been validated.
  */
-
 @Singleton
-class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : LifecycleObserver {
+class PinLocker @Inject constructor(
+        private val pinCodeStore: PinCodeStore,
+        private val vectorPreferences: VectorPreferences
+) : LifecycleObserver {
 
     enum class State {
         // App is locked, can be unlock
@@ -90,7 +97,7 @@ class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : Li
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         val timeElapsedSinceBackground = SystemClock.elapsedRealtime() - entersBackgroundTs
-        shouldBeLocked = shouldBeLocked || timeElapsedSinceBackground >= PERIOD_OF_GRACE_IN_MS
+        shouldBeLocked = shouldBeLocked || timeElapsedSinceBackground >= getGracePeriod()
         Timber.v("App enters foreground after $timeElapsedSinceBackground ms spent in background")
         computeState()
     }
@@ -99,5 +106,13 @@ class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : Li
     fun entersBackground() {
         isBlocked = false
         entersBackgroundTs = SystemClock.elapsedRealtime()
+    }
+
+    private fun getGracePeriod(): Long {
+        return if (vectorPreferences.useGracePeriod()) {
+            PERIOD_OF_GRACE_IN_MS
+        } else {
+            PERIOD_OF_GRACE_DISABLED_IN_MS
+        }
     }
 }
