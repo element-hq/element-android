@@ -120,9 +120,8 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_SECURITY_PIN"
             android:persistent="false"
-            android:title="@string/settings_security_application_protection_title"
             android:summary="@string/settings_security_application_protection_summary"
-            app:fragment="im.vector.app.features.settings.VectorSettingsPinFragment" />
+            android:title="@string/settings_security_application_protection_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"

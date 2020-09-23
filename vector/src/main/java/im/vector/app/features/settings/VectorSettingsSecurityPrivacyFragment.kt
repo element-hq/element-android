@@ -29,6 +29,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -52,6 +53,11 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
+import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.pin.PinActivity
+import im.vector.app.features.pin.PinCodeStore
+import im.vector.app.features.pin.PinLocker
+import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
@@ -70,7 +76,9 @@ import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val pinCodeStore: PinCodeStore,
+        private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
@@ -119,6 +127,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
+    private val openPinCodeSettingsPref by lazy {
+        findPreference<VectorPreference>("SETTINGS_SECURITY_PIN")!!
+    }
+
     override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
         return super.onCreateRecyclerView(inflater, parent, savedInstanceState).also {
             // Insert animation are really annoying the first time the list is shown
@@ -145,11 +157,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         vectorActivity.getVectorComponent()
                 .rawService()
                 .getWellknown(session.myUserId, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
-                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                        ElementWellKnownMapper.from(data)?.isE2EByDefault() == false
-            }
-        })
+                    override fun onSuccess(data: String) {
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                                ElementWellKnownMapper.from(data)?.isE2EByDefault() == false
+                    }
+                })
     }
 
     private val secureBackupCategory by lazy {
@@ -252,6 +264,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
         }
 
+        openPinCodeSettingsPref.setOnPreferenceClickListener {
+            openPinCodePreferenceScreen()
+            true
+        }
+
         refreshXSigningStatus()
 
         secureBackupPreference.icon = activity?.let {
@@ -336,11 +353,33 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     })
                 }
             }
+        } else if (requestCode == PinActivity.PIN_REQUEST_CODE) {
+            doOpenPinCodePreferenceScreen()
         } else if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 importKeys(data)
             }
         }
+    }
+
+    private fun openPinCodePreferenceScreen() {
+        lifecycleScope.launchWhenResumed {
+            val hasPinCode = pinCodeStore.hasEncodedPin()
+            if (hasPinCode) {
+                navigator.openPinCode(this@VectorSettingsSecurityPrivacyFragment, PinMode.AUTH)
+            } else {
+                doOpenPinCodePreferenceScreen()
+            }
+        }
+    }
+
+    private fun doOpenPinCodePreferenceScreen() {
+        // TODO Avoid duplication of this code. Move it to Activity
+        parentFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
+                .replace(R.id.vector_settings_page, VectorSettingsPinFragment::class.java, null)
+                .addToBackStack(null)
+                .commit()
     }
 
     private fun refreshKeysManagementSection() {

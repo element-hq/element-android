@@ -55,52 +55,8 @@ class PinFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
-            PinMode.DELETE -> showDeleteFragment()
             PinMode.AUTH   -> showAuthFragment()
         }
-    }
-
-    private fun showDeleteFragment() {
-        val encodedPin = pinCodeStore.getEncodedPin() ?: return
-        val authFragment = PFLockScreenFragment()
-        val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setUseBiometric(vectorPreferences.useBiometricsToUnlock() && pinCodeStore.getRemainingBiometricsAttemptsNumber() > 0)
-                .setTitle(getString(R.string.auth_pin_confirm_to_disable_title))
-                .setClearCodeOnError(true)
-                .setMode(PFFLockScreenConfiguration.MODE_AUTH)
-        authFragment.setConfiguration(builder.build())
-        authFragment.setEncodedPinCode(encodedPin)
-        authFragment.setLoginListener(object : PFLockScreenFragment.OnPFLockScreenLoginListener {
-            override fun onPinLoginFailed() {
-                onWrongPin()
-            }
-
-            override fun onBiometricAuthSuccessful() {
-                lifecycleScope.launch {
-                    pinCodeStore.deleteEncodedPin()
-                    vectorBaseActivity.setResult(Activity.RESULT_OK)
-                    vectorBaseActivity.finish()
-                }
-            }
-
-            override fun onBiometricAuthLoginFailed() {
-                val remainingAttempts = pinCodeStore.onWrongBiometrics()
-                if (remainingAttempts <= 0) {
-                    // Disable Biometrics
-                    builder.setUseBiometric(false)
-                    authFragment.setConfiguration(builder.build())
-                }
-            }
-
-            override fun onCodeInputSuccessful() {
-                lifecycleScope.launch {
-                    pinCodeStore.deleteEncodedPin()
-                    vectorBaseActivity.setResult(Activity.RESULT_OK)
-                    vectorBaseActivity.finish()
-                }
-            }
-        })
-        replaceFragment(R.id.pinFragmentContainer, authFragment)
     }
 
     private fun showCreateFragment() {

@@ -24,12 +24,11 @@ import im.vector.app.R
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
-import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class VectorSettingsPinFragment @Inject constructor(
-        private val pinLocker: PinLocker,
         private val pinCodeStore: PinCodeStore,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
@@ -50,12 +49,14 @@ class VectorSettingsPinFragment @Inject constructor(
             val hasPinCode = pinCodeStore.hasEncodedPin()
             usePinCodePref.isChecked = hasPinCode
             usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val pinMode = if (hasPinCode) {
-                    PinMode.DELETE
+                if (hasPinCode) {
+                    lifecycleScope.launch {
+                        pinCodeStore.deleteEncodedPin()
+                        refreshPinCodeStatus()
+                    }
                 } else {
-                    PinMode.CREATE
+                    navigator.openPinCode(this@VectorSettingsPinFragment, PinMode.CREATE)
                 }
-                navigator.openPinCode(this@VectorSettingsPinFragment, pinMode)
                 true
             }
         }
@@ -64,7 +65,6 @@ class VectorSettingsPinFragment @Inject constructor(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            pinLocker.unlock()
             refreshPinCodeStatus()
         }
     }
