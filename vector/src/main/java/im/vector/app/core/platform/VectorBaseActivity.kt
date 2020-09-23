@@ -318,11 +318,12 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         if (requestCode == PinActivity.PIN_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
+                    Timber.v("Pin ok, unlock app")
                     pinLocker.unlock()
                 }
                 else               -> {
-                    pinLocker.block()
-                    moveTaskToBack(true)
+                    // Remove the task, to be sure that PIN code will be requested when resumed
+                    finishAndRemoveTask()
                 }
             }
         }
