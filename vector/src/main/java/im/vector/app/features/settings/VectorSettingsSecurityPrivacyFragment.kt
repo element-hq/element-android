@@ -56,7 +56,6 @@ import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
-import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
 import im.vector.app.features.raw.wellknown.isE2EByDefault
@@ -374,12 +373,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun doOpenPinCodePreferenceScreen() {
-        // TODO Avoid duplication of this code. Move it to Activity
-        parentFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
-                .replace(R.id.vector_settings_page, VectorSettingsPinFragment::class.java, null)
-                .addToBackStack(null)
-                .commit()
+        (vectorActivity as? VectorSettingsActivity)?.navigateTo(VectorSettingsPinFragment::class.java)
     }
 
     private fun refreshKeysManagementSection() {

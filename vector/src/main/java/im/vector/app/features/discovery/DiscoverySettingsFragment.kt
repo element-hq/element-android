@@ -31,6 +31,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
+import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -178,10 +179,6 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     private fun navigateToChangeIdentityServerFragment() {
-        parentFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
-                .replace(R.id.vector_settings_page, SetIdentityServerFragment::class.java, null)
-                .addToBackStack(null)
-                .commit()
+        (vectorBaseActivity as? VectorSettingsActivity)?.navigateTo(SetIdentityServerFragment::class.java)
     }
 }
