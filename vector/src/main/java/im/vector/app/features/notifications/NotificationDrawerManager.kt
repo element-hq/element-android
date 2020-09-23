@@ -492,7 +492,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification, simpleNotificationMessageCounter, simpleNotificationMessageCounter)
                         if (simpleNotificationRoomCounter > 1) {
                             // In several rooms
-                            val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, simpleNotificationMessageCounter, simpleNotificationMessageCounter)
+                            val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, simpleNotificationRoomCounter, simpleNotificationRoomCounter)
                             stringProvider.getString(R.string.notification_unread_notified_messages_in_room, messageStr, roomStr)
                         } else {
                             // In one room

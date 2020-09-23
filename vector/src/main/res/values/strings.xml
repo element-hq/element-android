@@ -1143,24 +1143,24 @@
 
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 unread notified message</item>
+        <item quantity="one">%d unread notified message</item>
         <item quantity="other">%d unread notified messages</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 unread notified message</item>
+        <item quantity="one">%d unread notified message</item>
         <item quantity="other">%d unread notified messages</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
     <plurals name="notification_invitations">
-        <item quantity="one">1 invitation</item>
+        <item quantity="one">%d invitation</item>
         <item quantity="other">%d invitations</item>
     </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 message</item>
+        <item quantity="one">%1$s: %2$d message</item>
         <item quantity="other">%1$s: %2$d messages</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
