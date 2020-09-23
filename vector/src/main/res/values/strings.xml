@@ -178,7 +178,7 @@
     <string name="no_room_placeholder">No rooms</string>
     <string name="no_public_room_placeholder">No public rooms available</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
+        <item quantity="one">%d user</item>
         <item quantity="other">%d users</item>
     </plurals>
 
@@ -347,7 +347,7 @@
 
     <!-- Mels -->
     <plurals name="membership_changes">
-        <item quantity="one">1 membership change</item>
+        <item quantity="one">%d membership change</item>
         <item quantity="other">%d membership changes</item>
     </plurals>
 
@@ -450,30 +450,30 @@
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 active members</item>
+        <item quantity="one">%d active members</item>
         <item quantity="other">%d active members</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 member</item>
+        <item quantity="one">%d member</item>
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
+        <item quantity="one">%dh</item>
         <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
 
@@ -581,7 +581,7 @@
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 new message</item>
+        <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
     </plurals>
 
@@ -604,7 +604,7 @@
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 selected</item>
+        <item quantity="one">%d selected</item>
         <item quantity="other">%d selected</item>
     </plurals>
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
@@ -642,7 +642,7 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -1199,7 +1199,7 @@
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget from this room?</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 active widget</item>
+        <item quantity="one">%d active widget</item>
         <item quantity="other">%d active widgets</item>
     </plurals>
     <string name="active_widget_view_action">"VIEW"</string>
@@ -1325,12 +1325,12 @@
     <string name="filter_group_rooms">Filter group rooms</string>
 
     <plurals name="group_members">
-        <item quantity="one">1 member</item>
+        <item quantity="one">%d member</item>
         <item quantity="other">%d members</item>
     </plurals>
 
     <plurals name="group_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
@@ -1815,7 +1815,7 @@
     <string name="two_users_read">%1$s and %2$s read</string>
     <string name="one_user_read">%s read</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">1 user read</item>
+        <item quantity="one">%d user read</item>
         <item quantity="other">%d users read</item>
     </plurals>
 
