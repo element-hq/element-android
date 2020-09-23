@@ -53,7 +53,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        avatarRenderer.render(context, glideRequests, matrixItem, target)
+        avatarRenderer.render(glideRequests, matrixItem, target)
     }
 
     // ReplacementSpan *****************************************************************************
@@ -99,7 +99,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
         val icon = try {
             avatarRenderer.getCachedDrawable(glideRequests, matrixItem)
         } catch (exception: Exception) {
-            avatarRenderer.getPlaceholderDrawable(context, matrixItem)
+            avatarRenderer.getPlaceholderDrawable(matrixItem)
         }
 
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
