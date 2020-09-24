@@ -326,6 +326,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
+    implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
     implementation 'com.airbnb.android:mvrx:1.3.0'
