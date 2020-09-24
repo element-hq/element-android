@@ -116,6 +116,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
+    private var previousModelsSize = 0
 
     var callback: Callback? = null
     var timeline: Timeline? = null
@@ -191,6 +192,20 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 models.add(position, readMarker)
             }
         }
+        val shouldAdd = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
+        if (shouldAdd) {
+            val indexOfPrefetchBackward = (previousModelsSize - 1)
+                    .coerceAtLeast(0)
+                    .coerceAtMost(models.size - 1)
+
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
+
+            models.add(indexOfPrefetchBackward, loadingItem)
+        }
+        previousModelsSize = models.size
     }
 
     fun update(viewState: RoomDetailViewState) {
