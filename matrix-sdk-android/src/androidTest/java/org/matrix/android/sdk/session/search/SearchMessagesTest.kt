@@ -30,10 +30,10 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -83,14 +83,14 @@ class SearchMessagesTest : InstrumentedTest {
                             orderByRecent = true,
                             nextBatch = null,
                             roomId = aliceRoomId,
-                            callback = object : MatrixCallback<SearchResponse> {
-                                override fun onSuccess(data: SearchResponse) {
+                            callback = object : MatrixCallback<SearchResult> {
+                                override fun onSuccess(data: SearchResult) {
                                     super.onSuccess(data)
-                                    assertTrue(data.searchCategories.roomEvents?.results?.size == 2)
+                                    assertTrue(data.results?.size == 2)
                                     assertTrue(
-                                            data.searchCategories.roomEvents?.results
+                                            data.results
                                                     ?.all {
-                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                                                        (it.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                                                     }.orFalse()
                                     )
                                     lock.countDown()
@@ -147,14 +147,14 @@ class SearchMessagesTest : InstrumentedTest {
                             beforeLimit = 10,
                             orderByRecent = true,
                             nextBatch = null,
-                            callback = object : MatrixCallback<SearchResponse> {
-                                override fun onSuccess(data: SearchResponse) {
+                            callback = object : MatrixCallback<SearchResult> {
+                                override fun onSuccess(data: SearchResult) {
                                     super.onSuccess(data)
-                                    assertTrue(data.searchCategories.roomEvents?.results?.size == 2)
+                                    assertTrue(data.results?.size == 2)
                                     assertTrue(
-                                            data.searchCategories.roomEvents?.results
+                                            data.results
                                                     ?.all {
-                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                                                        (it.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                                                     }.orFalse()
                                     )
                                     lock.countDown()

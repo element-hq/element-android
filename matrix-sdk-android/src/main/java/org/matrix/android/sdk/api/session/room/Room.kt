@@ -34,9 +34,9 @@ import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
+import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 
 /**
  * This interface defines methods to interact within a room.
@@ -90,5 +90,5 @@ interface Room :
                beforeLimit: Int,
                afterLimit: Int,
                includeProfile: Boolean,
-               callback: MatrixCallback<SearchResponse>): Cancelable
+               callback: MatrixCallback<SearchResult>): Cancelable
 }

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.api.session.search
 
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 
 /**
  * This interface defines methods to search messages in rooms.
@@ -45,5 +44,5 @@ interface SearchService {
                beforeLimit: Int,
                afterLimit: Int,
                includeProfile: Boolean,
-               callback: MatrixCallback<SearchResponse>): Cancelable
+               callback: MatrixCallback<SearchResult>): Cancelable
 }

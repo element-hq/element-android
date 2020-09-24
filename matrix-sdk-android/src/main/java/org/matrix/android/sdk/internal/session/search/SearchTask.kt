@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.internal.session.search
 
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
@@ -30,7 +31,7 @@ import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface SearchTask : Task<SearchTask.Params, SearchResponse> {
+internal interface SearchTask : Task<SearchTask.Params, SearchResult> {
 
     data class Params(
             val searchTerm: String,
@@ -49,8 +50,8 @@ internal class DefaultSearchTask @Inject constructor(
         private val eventBus: EventBus
 ) : SearchTask {
 
-    override suspend fun execute(params: SearchTask.Params): SearchResponse {
-        return executeRequest(eventBus) {
+    override suspend fun execute(params: SearchTask.Params): SearchResult {
+        return executeRequest<SearchResponse>(eventBus) {
             val searchRequestBody = SearchRequestBody(
                     searchCategories = SearchRequestCategories(
                             roomEvents = SearchRequestRoomEvents(
@@ -69,6 +70,14 @@ internal class DefaultSearchTask @Inject constructor(
                     )
             )
             apiCall = roomAPI.search(params.nextBatch, searchRequestBody)
-        }
+        }.toDomain().apply { results = results?.reversed() }
+    }
+
+    private fun SearchResponse.toDomain(): SearchResult {
+        return SearchResult(
+                nextBatch = searchCategories.roomEvents?.nextBatch,
+                highlights = searchCategories.roomEvents?.highlights,
+                results = searchCategories.roomEvents?.results?.map { it.event }
+        )
     }
 }

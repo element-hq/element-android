@@ -18,9 +18,9 @@
 package org.matrix.android.sdk.internal.session.search
 
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import javax.inject.Inject
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
@@ -38,7 +38,7 @@ internal class DefaultSearchService @Inject constructor(
                         beforeLimit: Int,
                         afterLimit: Int,
                         includeProfile: Boolean,
-                        callback: MatrixCallback<SearchResponse>): Cancelable {
+                        callback: MatrixCallback<SearchResult>): Cancelable {
         return searchTask
                 .configureWith(SearchTask.Params(
                         searchTerm = searchTerm,

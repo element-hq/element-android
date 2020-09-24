@@ -36,12 +36,12 @@ import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePid
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
-import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
 import org.matrix.android.sdk.internal.session.room.timeline.EventContextResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.session.room.typing.TypingBody
+import org.matrix.android.sdk.internal.session.search.response.SearchResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
