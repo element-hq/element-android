@@ -81,7 +81,6 @@ import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.model.Size
 import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView

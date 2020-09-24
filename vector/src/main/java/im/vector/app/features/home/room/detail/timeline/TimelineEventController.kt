@@ -56,6 +56,8 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
+private const val DEFAULT_PREFETCH_THRESHOLD = 30
+
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
@@ -192,11 +194,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 models.add(position, readMarker)
             }
         }
-        val shouldAdd = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
-        if (shouldAdd) {
+        val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
+        if (shouldAddBackwardPrefetch) {
             val indexOfPrefetchBackward = (previousModelsSize - 1)
+                    .coerceAtMost(models.size - DEFAULT_PREFETCH_THRESHOLD)
                     .coerceAtLeast(0)
-                    .coerceAtMost(models.size - 1)
 
             val loadingItem = LoadingItem_()
                     .id("prefetch_backward_loading${System.currentTimeMillis()}")
@@ -204,6 +206,15 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
 
             models.add(indexOfPrefetchBackward, loadingItem)
+        }
+        val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
+        if (shouldAddForwardPrefetch) {
+            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(models.size - 1)
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
+            models.add(indexOfPrefetchForward, loadingItem)
         }
         previousModelsSize = models.size
     }
