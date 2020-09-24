@@ -116,7 +116,7 @@ class SearchFragment @Inject constructor(
         } else {
             stateView.state = StateView.State.Empty(
                     title = stringProvider.getString(R.string.search_no_results),
-                    image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search)
+                    image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
             )
         }
     }
