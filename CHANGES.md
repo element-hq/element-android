@@ -2,6 +2,7 @@ Changes in Element 1.0.9 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Search messages in a room - phase 1 (#2110)
  - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
 
 Improvements 🙌:
@@ -18,7 +19,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Search messages in a room by using Session.searchService() or Room.search()
 
 Build 🧱:
  - Use Update Gradle Wrapper Action
