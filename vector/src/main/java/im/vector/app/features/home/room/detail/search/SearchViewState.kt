@@ -17,7 +17,14 @@
 package im.vector.app.features.home.room.detail.search
 
 import com.airbnb.mvrx.MvRxState
+import org.matrix.android.sdk.api.session.search.SearchResult
 
 data class SearchViewState(
-        val searchTerm: String = ""
+        // Accumulated search result
+        val searchResult: SearchResult? = null,
+        // Last batch result will help RecyclerView to position itself
+        val lastBatch: SearchResult? = null,
+        val searchTerm: String? = null,
+        val roomId: String? = null,
+        val isNextBatch: Boolean = false
 ) : MvRxState
