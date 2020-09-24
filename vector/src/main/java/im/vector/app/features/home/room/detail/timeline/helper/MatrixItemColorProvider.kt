@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.annotation.VisibleForTesting
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -43,30 +44,33 @@ class MatrixItemColorProvider @Inject constructor(
         }
     }
 
-    @ColorRes
-    private fun getColorFromUserId(userId: String?): Int {
-        var hash = 0
+    companion object {
+        @ColorRes
+        @VisibleForTesting
+        fun getColorFromUserId(userId: String?): Int {
+            var hash = 0
 
-        userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.toInt() }
+            userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.toInt() }
 
-        return when (abs(hash) % 8) {
-            1 -> R.color.riotx_username_2
-            2 -> R.color.riotx_username_3
-            3 -> R.color.riotx_username_4
-            4 -> R.color.riotx_username_5
-            5 -> R.color.riotx_username_6
-            6 -> R.color.riotx_username_7
-            7 -> R.color.riotx_username_8
-            else -> R.color.riotx_username_1
+            return when (abs(hash) % 8) {
+                1    -> R.color.riotx_username_2
+                2    -> R.color.riotx_username_3
+                3    -> R.color.riotx_username_4
+                4    -> R.color.riotx_username_5
+                5    -> R.color.riotx_username_6
+                6    -> R.color.riotx_username_7
+                7    -> R.color.riotx_username_8
+                else -> R.color.riotx_username_1
+            }
         }
-    }
 
-    @ColorRes
-    private fun getColorFromRoomId(roomId: String?): Int {
-        return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
-            1 -> R.color.riotx_avatar_fill_2
-            2 -> R.color.riotx_avatar_fill_3
-            else -> R.color.riotx_avatar_fill_1
+        @ColorRes
+        private fun getColorFromRoomId(roomId: String?): Int {
+            return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
+                1    -> R.color.riotx_avatar_fill_2
+                2    -> R.color.riotx_avatar_fill_3
+                else -> R.color.riotx_avatar_fill_1
+            }
         }
     }
 }
