@@ -1,8 +1,5 @@
-Changes in Element 1.0.8 (2020-XX-XX)
+Changes in Element 1.0.8 (2020-09-25)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
@@ -23,14 +20,8 @@ Bugfix 🐛:
  - Fix incorrect permission check when creating widgets (#2137)
  - Pin code: user has to enter pin code twice (#2005)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Rename `tryThis` to `tryOrNull`
-
-Build 🧱:
- -
 
 Other changes:
  - Add an advanced action to reset an account data entry
