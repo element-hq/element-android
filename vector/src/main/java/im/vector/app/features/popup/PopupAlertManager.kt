@@ -20,6 +20,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
 import com.tapadoo.alerter.Alerter
@@ -172,6 +173,10 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {
         clearLightStatusBar()
 
+        val systemAnimationDurationDisabled = Settings.Global.getFloat(
+                activity.contentResolver,
+                Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+
         alert.weakCurrentActivity = WeakReference(activity)
         val alerter = if (alert is VerificationVectorAlert) Alerter.create(activity, R.layout.alerter_verification_layout)
         else Alerter.create(activity)
@@ -187,7 +192,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                     }
                 }
                 .apply {
-                    if (!animate) {
+                    if (systemAnimationDurationDisabled || !animate) {
                         setEnterAnimation(R.anim.anim_alerter_no_anim)
                     }
 
@@ -237,6 +242,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                         setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
                     }
                 }
+                .enableIconPulse(!systemAnimationDurationDisabled)
                 .show()
     }
 

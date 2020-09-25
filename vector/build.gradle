@@ -172,6 +172,22 @@ android {
                 output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
             }
         }
+
+
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
+    }
+
+
+    testOptions {
+        // Disables animations during instrumented tests you run from the command line…
+        // This property does not affect tests that you run using Android Studio.”
+        animationsDisabled = true
+
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     signingConfigs {
@@ -428,11 +444,12 @@ dependencies {
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
-    androidTestImplementation 'androidx.test:core:1.2.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:core:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     // Plant Timber tree for test
