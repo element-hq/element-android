@@ -2539,4 +2539,14 @@
 
     <string name="settings_developer_mode_summary">Askar n uneflay yermed timahilin i yeffren yerna yezmer daɣen ad yerr asnas ur yerkid ara akken iwata. I yineflayen kan!</string>
     <string name="settings_developer_mode_fail_fast_title">Abrir arurad</string>
+    <plurals name="seconds">
+        <item quantity="one">%d n tsint</item>
+        <item quantity="other">%d n tsintin</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Sken tidyanin n waddad n uɛeggal n texxamt</string>
+    <string name="sent_a_bot_buttons">Tiqeffalin n uṛubut</string>
+    <string name="sent_verification_conclusion">Taggrayt n usenqed</string>
+
+    <string name="universal_link_malformed">Aseɣwen ur yemsil ara akken iwata</string>
 </resources>

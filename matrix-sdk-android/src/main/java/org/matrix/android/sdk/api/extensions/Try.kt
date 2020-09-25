@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.extensions
 
 import timber.log.Timber
 
-inline fun <A> tryThis(message: String? = null, operation: () -> A): A? {
+inline fun <A> tryOrNull(message: String? = null, operation: () -> A): A? {
     return try {
         operation()
     } catch (any: Throwable) {

@@ -17,17 +17,17 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import android.content.Context
-import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
+import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,56 +37,56 @@ import javax.inject.Inject
  */
 internal class SendVerificationMessageWorker(context: Context,
                                              params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<SendVerificationMessageWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val event: Event,
+            val eventId: String,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
-    @Inject
-    lateinit var sendVerificationMessageTask: SendVerificationMessageTask
+    @Inject lateinit var sendVerificationMessageTask: SendVerificationMessageTask
+    @Inject lateinit var localEchoRepository: LocalEchoRepository
+    @Inject lateinit var cryptoService: CryptoService
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
 
-    @Inject
-    lateinit var cryptoService: CryptoService
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-    override suspend fun doWork(): Result {
-        val errorOutputData = Data.Builder().putBoolean(OUTPUT_KEY_FAILED, true).build()
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success(errorOutputData)
+    override suspend fun doSafeWork(params: Params): Result {
+        val localEvent = localEchoRepository.getUpToDateEcho(params.eventId) ?: return buildErrorResult(params, "Event not found")
+        val localEventId = localEvent.eventId ?: ""
+        val roomId = localEvent.roomId ?: ""
 
-        val sessionComponent = getSessionComponent(params.sessionId)
-                ?: return Result.success(errorOutputData).also {
-                    // TODO, can this happen? should I update local echo?
-                    Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
-                }
-        sessionComponent.inject(this)
-        val localId = params.event.eventId ?: ""
+        if (cancelSendTracker.isCancelRequestedFor(localEventId, roomId)) {
+            return Result.success()
+                    .also {
+                        cancelSendTracker.markCancelled(localEventId, roomId)
+                        Timber.e("## SendEvent: Event sending has been cancelled $localEventId")
+                    }
+        }
+
         return try {
-            val eventId = sendVerificationMessageTask.execute(
+            val resultEventId = sendVerificationMessageTask.execute(
                     SendVerificationMessageTask.Params(
-                            event = params.event,
+                            event = localEvent,
                             cryptoService = cryptoService
                     )
             )
 
-            Result.success(Data.Builder().putString(localId, eventId).build())
-        } catch (exception: Throwable) {
-            if (exception.shouldBeRetried()) {
+            Result.success(Data.Builder().putString(localEventId, resultEventId).build())
+        } catch (throwable: Throwable) {
+            if (throwable.shouldBeRetried()) {
                 Result.retry()
             } else {
-                Result.success(errorOutputData)
+                buildErrorResult(params, throwable.localizedMessage ?: "error")
             }
         }
     }
 
-    companion object {
-        private const val OUTPUT_KEY_FAILED = "failed"
-
-        fun hasFailed(outputData: Data): Boolean {
-            return outputData.getBoolean(OUTPUT_KEY_FAILED, false)
-        }
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 }

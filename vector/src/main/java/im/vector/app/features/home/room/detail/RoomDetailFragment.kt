@@ -97,7 +97,6 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
-import im.vector.app.core.utils.getColorFromUserId
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionResultAudioIpCall
 import im.vector.app.core.utils.onPermissionResultVideoIpCall
@@ -127,6 +126,7 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -217,7 +217,9 @@ class RoomDetailFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
         private val notificationUtils: NotificationUtils,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val matrixItemColorProvider: MatrixItemColorProvider
+) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -610,6 +612,16 @@ class RoomDetailFragment @Inject constructor(
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
         withState(roomDetailViewModel) { state ->
+            // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
+            val callButtonsEnabled = when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
+                1 -> false
+                2 -> state.isAllowedToStartWebRTCCall
+                else -> state.isAllowedToManageWidgets
+            }
+            setOf(R.id.voice_call, R.id.video_call).forEach {
+                menu.findItem(it).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
+            }
+
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
             if (widgetsCount > 0) {
@@ -687,6 +699,8 @@ class RoomDetailFragment @Inject constructor(
                     //                            webRtcPeerConnectionManager.endCall()
                     //                            safeStartCall(it, isVideoCall)
                     //                        }
+                } else if (!state.isAllowedToStartWebRTCCall) {
+                    showDialogWithMessage(getString(R.string.no_permissions_to_start_webrtc_call))
                 } else {
                     safeStartCall(isVideoCall)
                 }
@@ -778,7 +792,7 @@ class RoomDetailFragment @Inject constructor(
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
             text = event.senderInfo.disambiguatedDisplayName
-            setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
+            setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()

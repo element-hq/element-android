@@ -273,16 +273,16 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
-        return if (versions.isSupportedBySdk()) {
-            // Get the login flow
-            val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
-                apiCall = authAPI.getLoginFlows()
-            }
-            LoginFlowResult.Success(loginFlowResponse.flows.orEmpty().mapNotNull { it.type }, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
-        } else {
-            // Not supported
-            LoginFlowResult.OutdatedHomeserver
+        // Get the login flow
+        val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
+            apiCall = authAPI.getLoginFlows()
         }
+        return LoginFlowResult.Success(
+                loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
+                versions.isLoginAndRegistrationSupportedBySdk(),
+                homeServerUrl,
+                !versions.isSupportedBySdk()
+        )
     }
 
     override fun getRegistrationWizard(): RegistrationWizard {

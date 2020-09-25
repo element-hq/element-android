@@ -67,7 +67,8 @@ data class RoomDetailViewState(
         val canShowJumpToReadMarker: Boolean = true,
         val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
         val canSendMessage: Boolean = true,
-        val isAllowedToManageWidgets: Boolean = false
+        val isAllowedToManageWidgets: Boolean = false,
+        val isAllowedToStartWebRTCCall: Boolean = true
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(

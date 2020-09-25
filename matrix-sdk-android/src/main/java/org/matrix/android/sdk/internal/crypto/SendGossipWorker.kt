@@ -18,10 +18,9 @@
 package org.matrix.android.sdk.internal.crypto
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -34,22 +33,23 @@ import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
+import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendGossipWorker(context: Context,
                                 params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<SendGossipWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val sessionId: String,
+            override val sessionId: String,
             val secretValue: String,
-            val request: IncomingSecretShareRequest
-    )
+            val request: IncomingSecretShareRequest,
+            override val lastFailureMessage: String? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
     @Inject lateinit var cryptoStore: IMXCryptoStore
@@ -58,18 +58,11 @@ internal class SendGossipWorker(context: Context,
     @Inject lateinit var messageEncrypter: MessageEncrypter
     @Inject lateinit var ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction
 
-    override suspend fun doWork(): Result {
-        val errorOutputData = Data.Builder().putBoolean("failed", true).build()
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success(errorOutputData)
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        val sessionComponent = getSessionComponent(params.sessionId)
-                ?: return Result.success(errorOutputData).also {
-                    // TODO, can this happen? should I update local echo?
-                    Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
-                }
-        sessionComponent.inject(this)
-
+    override suspend fun doSafeWork(params: Params): Result {
         val localId = LocalEcho.createLocalEchoId()
         val eventType: String = EventType.SEND_SECRET
 
@@ -81,7 +74,7 @@ internal class SendGossipWorker(context: Context,
         val requestingUserId = params.request.userId ?: ""
         val requestingDeviceId = params.request.deviceId ?: ""
         val deviceInfo = cryptoStore.getUserDevice(requestingUserId, requestingDeviceId)
-                ?: return Result.success(errorOutputData).also {
+                ?: return buildErrorResult(params, "Unknown deviceInfo, cannot send message").also {
                     cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
                     Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.request.deviceId}")
                 }
@@ -94,7 +87,7 @@ internal class SendGossipWorker(context: Context,
         if (olmSessionResult?.sessionId == null) {
             // no session with this device, probably because there
             // were no one-time keys.
-            return Result.success(errorOutputData).also {
+            return buildErrorResult(params, "no session with this device").also {
                 cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
                 Timber.e("no session with this device, probably because there were no one-time keys.")
             }
@@ -130,13 +123,17 @@ internal class SendGossipWorker(context: Context,
             )
             cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.ACCEPTED)
             return Result.success()
-        } catch (exception: Throwable) {
-            return if (exception.shouldBeRetried()) {
+        } catch (throwable: Throwable) {
+            return if (throwable.shouldBeRetried()) {
                 Result.retry()
             } else {
                 cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
-                Result.success(errorOutputData)
+                buildErrorResult(params, throwable.localizedMessage ?: "error")
             }
         }
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 }

@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val p
 
         Timber.d("Get ${accountThreePidsResponse.threePids?.size} threePids")
         // Store the list in DB
-        monarchy.writeAsync { realm ->
+        monarchy.awaitTransaction { realm ->
             realm.where(UserThreePidEntity::class.java).findAll().deleteAllFromRealm()
             accountThreePidsResponse.threePids?.forEach {
                 val entity = UserThreePidEntity(

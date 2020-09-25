@@ -164,8 +164,8 @@
     <string name="auth_forgot_password">Esqueceu sua senha?</string>
     <string name="auth_use_server_options">Use opções para servidor personalizado (avançado)</string>
     <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar a inscrição</string>
-    <string name="auth_threepid_warning_message">Atualmente, registrar-se com e-mail e número de telefone ao mesmo tempo não é possível. Apenas o número de telefone será levado em consideração.↵
-\n↵
+    <string name="auth_threepid_warning_message">Atualmente, registrar-se com e-mail e número de telefone ao mesmo tempo não é possível. Apenas o número de telefone será levado em consideração.
+\n
 \nNo entanto, você pode adicionar o endereço de e-mail ao seu perfil nas configurações.</string>
     <string name="auth_recaptcha_message">Este servidor local quer se certificar de que você não é um robô</string>
     <string name="auth_username_in_use">Nome de usuário indisponível</string>
@@ -177,8 +177,8 @@
     <string name="auth_reset_password_missing_password">Uma nova senha precisa ser inserida.</string>
     <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Após clicar no link contido no e-mail, clique abaixo.</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao confirmar o endereço de e-mail: certifique-se de clicar no link do e-mail</string>
-    <string name="auth_reset_password_success_message">Sua senha foi alterada.↵
-\n↵
+    <string name="auth_reset_password_success_message">Sua senha foi alterada.
+\n
 \nVocê foi desconectado de todas as sessões e não receberá mais notificações. Para reativar as notificações, faça login novamente em cada aparelho.</string>
 
     <!-- Login Screen -->
@@ -247,8 +247,8 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Element precisa de permissão para acessar sua galeria de fotos e vídeos para enviar e salvar anexos.↵
-\n↵
+    <string name="permissions_rationale_msg_storage">Element precisa de permissão para acessar sua galeria de fotos e vídeos para enviar e salvar anexos.
+\n
 \nPor favor, permita o acesso na próxima tela para poder enviar arquivos do seu celular.</string>
     <string name="permissions_rationale_msg_camera">Element necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
@@ -258,12 +258,12 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nPor favor, permita o acesso na próxima tela para fazer a chamada."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para fazer chamadas de vídeo.↵ 
-\n↵ 
+    <string name="permissions_rationale_msg_camera_and_audio">Element necessita permissão para acessar sua câmera e seu microfone para fazer chamadas de vídeo.
+\n
 \nPor favor, permita o acesso na próxima tela para fazer a chamada.</string>
     <string name="permissions_rationale_msg_contacts">Element precisa de permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus e-mails e números de telefone. Se você concordar em usar a sua lista de contatos para esse propósito, permita o acesso na próxima janela pop-up.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element precisa de permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus e-mails e números de telefone.↵
-\n↵
+    <string name="permissions_msg_contacts_warning_other_androids">Element precisa de permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus e-mails e números de telefone.
+\n
 \nVocê concorda em usar a sua lista de contatos para esse propósito\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Desculpe. A ação não foi realizada, por falta de permissão</string>
@@ -286,7 +286,7 @@
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Você foi convidada(o) a entrar nesta sala por %s</string>
-    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associado com esta conta.↵
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associado com esta conta.
 \nVocê pode querer fazer login com uma conta diferente, ou adicionar este e-mail à sua conta.</string>
     <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Quer entrar na sala para poder participar da conversa?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
@@ -507,8 +507,8 @@
     <string name="settings_confirm_password">Confirme a nova senha</string>
     <string name="settings_fail_to_update_password">Não consegui atualizar a senha</string>
     <string name="settings_password_updated">Sua senha foi atualizada</string>
-    <string name="settings_unignore_user">Mostrar todas as mensagens de %s\?↵
-\n↵
+    <string name="settings_unignore_user">Mostrar todas as mensagens de %s\?
+\n
 \nNote que esta ação irá reiniciar o aplicativo e pode levar algum tempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Deseja deixar de notificar este aparelho\?</string>
@@ -592,7 +592,7 @@
 
     <string name="room_settings_addresses_e2e_enabled">A criptografia está ativada nesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">A criptografia está desativada nesta sala.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia·↵
+    <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia·
 \n(atenção: não é possível desativar depois!)</string>
 
     <!-- Directory -->
@@ -900,8 +900,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="option_send_voice">Enviar áudio</string>
 
     <string name="option_send_sticker">Enviar uma figurinha</string>
-    <string name="no_sticker_application_dialog_content">No momento, você não tem nenhum pacote de figurinhas ativado.↵
-\n↵
+    <string name="no_sticker_application_dialog_content">No momento, você não tem nenhum pacote de figurinhas ativado.
+\n
 \nQuer adicionar alguns agora\?</string>
 
     <string name="go_on_with">continuar com…</string>
@@ -1002,10 +1002,10 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="dialog_user_consent_submit">Revisar agora</string>
 
     <string name="deactivate_account_title">Desativar minha conta</string>
-    <string name="deactivate_account_content">Isso tornará sua conta permanentemente inutilizável. Você não conseguirá efetuar login e ninguém poderá registrar novamente o mesmo ID de usuário. Isso fará com que sua conta saia de todas as salas das quais está participando e removerá os detalhes de sua conta do servidor de identidade. <b>Esta ação é irreversível</b>.↵
-\n↵
-\nDesativar sua conta <b>não faz com que, por padrão, suas mensagens enviadas sejam apagadas</b>. Se você deseja que suas mensagens também sejam apagadas, marque a opção abaixo.↵
-\n↵
+    <string name="deactivate_account_content">Isso tornará sua conta permanentemente inutilizável. Você não conseguirá efetuar login e ninguém poderá registrar novamente o mesmo ID de usuário. Isso fará com que sua conta saia de todas as salas das quais está participando e removerá os detalhes de sua conta do servidor de identidade. <b>Esta ação é irreversível</b>.
+\n
+\nDesativar sua conta <b>não faz com que, por padrão, suas mensagens enviadas sejam apagadas</b>. Se você deseja que suas mensagens também sejam apagadas, marque a opção abaixo.
+\n
 \nA visibilidade de mensagens na Matrix é semelhante a um e-mail. O fato de apagarmos suas mensagens significa que suas mensagens enviadas não serão compartilhadas com nenhum usuário novo ou ainda não registrado, mas os usuários registrados que já tiveram acesso a essas mensagens ainda terão acesso uma cópia delas.</string>
     <string name="deactivate_account_delete_checkbox">Quando minha conta for desativada, apague todas as mensagens que eu enviei (Atenção: isso fará com que futuros usuários tenham uma visão incompleta das conversas)</string>
     <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
@@ -1063,14 +1063,14 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da conta</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão ativadas para sua conta.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Notificações estão desativadas para sua conta.↵
+    <string name="settings_troubleshoot_test_account_settings_failed">Notificações estão desativadas para sua conta.
 \nPor favor, revise as configurações da conta.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ativar</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Configurações da sessão</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão ativadas nesta sessão.</string>
     <string name="room_participants_action_kick">Remover da sala</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notificações não estão ativadas nesta sessão.↵
+    <string name="settings_troubleshoot_test_device_settings_failed">Notificações não estão ativadas nesta sessão.
 \nPor favor, revise as configurações do Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ativar</string>
 
@@ -1126,10 +1126,10 @@ Tente reiniciar a aplicação.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
 Na próxima tela, você será solicitado a permitir que o Element funcione sempre em segundo plano, por favor aceite.</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desativadas para o Element. Este teste deve ser realizado usando dados móveis (sem Wi-Fi).↵
+    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desativadas para o Element. Este teste deve ser realizado usando dados móveis (sem Wi-Fi).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão ativadas para o Element.↵
-\nO aplicativo funciona bastante restringido enquanto está em segundo plano, o que pode afetar as notificações.↵
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão ativadas para o Element.
+\nO aplicativo funciona bastante restringido enquanto está em segundo plano, o que pode afetar as notificações.
 \n%1$s</string>
     <string name="settings_send_markdown">Formatação de texto</string>
     <string name="settings_send_markdown_summary">Formatar o texto das mensagens a serem enviadas. Por exemplo: inserir asteriscos antes e depois do texto, mostrará o texto em itálico.</string>
@@ -1205,14 +1205,14 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Falha ao carregar regras personalizadas, tente novamente.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Verifique as configurações</string>
 
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]↵
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nEste erro está fora do controle do Element e, de acordo com o Google, esse erro indica que o aparelho tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
     <string name="ignore">Bloquear</string>
 
     <string name="auth_login_sso">Entre com o login único</string>
     <string name="login_error_unknown_host">Este endereço não está acessível. Por favor, verifique-o</string>
     <string name="login_error_ssl_handshake">Seu aparelho está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]↵
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle da Element. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o uso de dados do Google Play Service está restrito nas configurações do sistema, ou se o relógio do seu aparelho está correto. O erro também pode ocorrer em ROMs personalizadas.</string>
     <string name="notification_sync_init">Iniciando o serviço</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -1257,7 +1257,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="call_failed_dont_ask_again">Não pergunte novamente</string>
 
     <string name="call_failed_no_connection">A chamada falhou</string>
-    <string name="call_failed_no_connection_description">Falha ao estabelecer conexão em tempo real.↵
+    <string name="call_failed_no_connection_description">Falha ao estabelecer conexão em tempo real.
 \nPor favor, peça ao administrador do seu servidor para configurar um servidor TURN, de modo que as chamadas funcionem de maneira estável.</string>
 
     <string name="call_select_sound_device">Selecione a caixa de som</string>
@@ -1317,10 +1317,10 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="settings_notification_privacy_no_background_sync">O aplicativo <b>não</b> precisa de se conectar ao servidor em segundo plano, isto deve reduzir a utilização da bateria</string>
     <string name="settings_background_fdroid_sync_mode">Sincronização em segundo plano (Experimental)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element sincronizará em segundo plano para preservar os recursos limitados do aparelho (bateria).↵
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element sincronizará em segundo plano para preservar os recursos limitados do aparelho (bateria).
 \nDependendo do estado dos recursos do seu aparelho, a sincronização pode ser adiada pelo sistema operacional.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizado em tempo real</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">O Element sincronizará periodicamente em segundo plano, no momento estabelecido (configurável).↵
+    <string name="settings_background_fdroid_sync_mode_real_time_description">O Element sincronizará periodicamente em segundo plano, no momento estabelecido (configurável).
 \nIsso afetará o uso de dados e da bateria. Haverá uma notificação permanente informando que o Element está sincronizando.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sem sincronização em segundo plano</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Você não será notificado sobre mensagens recebidas quando o Element estiver em segundo plano.</string>
@@ -1328,7 +1328,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
 
     <string name="settings_set_workmanager_delay">Intervalo de sincronização preferido</string>
-    <string name="settings_set_workmanager_delay_summary">%s↵
+    <string name="settings_set_workmanager_delay_summary">%s
 \nA sincronização pode ser adiada dependendo dos recursos (bateria) ou do estado do aparelho (modo de suspensão).</string>
     <string name="settings_integrations">Integrações</string>
     <string name="settings_integrations_summary">Use o Gerenciador de Integrações para gerenciar bots, pontes, widgets e pacotes de figurinhas.
@@ -1405,7 +1405,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_widget_permission_added_by">Widget adicionado por:</string>
     <string name="room_widget_permission_webview_shared_info_title">A sua utilização pode definir cookies e compartilhar dados com %s:</string>
     <string name="room_widget_permission_shared_info_title">A sua utilização pode compartilhar dados com %s:</string>
-    <string name="room_widget_failed_to_load">Falha ao carregar widget.↵
+    <string name="room_widget_failed_to_load">Falha ao carregar widget.
 \n%s</string>
     <string name="room_widget_reload">Recarregar widget</string>
     <string name="room_widget_open_in_browser">Abrir no navegador</string>
@@ -1430,12 +1430,12 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="integration_manager_not_configured">O gerenciador de integrações não está configurado.</string>
     <string name="widget_integration_review_terms">Para continuar, você precisa aceitar os termos de serviço.</string>
 
-    <string name="you_added_a_new_device_with_info">Uma nova sessão está solicitando chaves de criptografia. Nome da sessão: %1$s↵
-\nVisto por último às: %2$s↵
+    <string name="you_added_a_new_device_with_info">Uma nova sessão está solicitando chaves de criptografia. Nome da sessão: %1$s
+\nVisto por último às: %2$s
 \nSe você não fez login em outra sessão, ignore essa solicitação.</string>
-    <string name="your_unverified_device_requesting_with_info">Uma nova sessão está solicitando chaves de criptografia.↵
-\nNome da sessão: %1$s↵
-\nVisto por último às: %2$s↵
+    <string name="your_unverified_device_requesting_with_info">Uma nova sessão está solicitando chaves de criptografia.
+\nNome da sessão: %1$s
+\nVisto por último às: %2$s
 \nSe você não fez login em outra sessão, ignore essa solicitação.</string>
 
     <string name="start_verification_short_label">Confirmar</string>
@@ -1452,8 +1452,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_no_session_error">Nenhuma sessão Matrix disponível</string>
 
     <string name="keys_backup_setup_step1_title">Nunca perca mensagens criptografadas</string>
-    <string name="keys_backup_setup_step1_description">As mensagens em salas criptografadas são protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.↵
-\n↵
+    <string name="keys_backup_setup_step1_description">As mensagens em salas criptografadas são protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.
+\n
 \nFaça backup de suas chaves de segurança para evitar perdê-las.</string>
     <string name="keys_backup_setup">Comece a usar o Backup de Chave</string>
     <string name="keys_backup_setup_step1_advanced">(Avançado)</string>
@@ -1591,7 +1591,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="autodiscover_invalid_response">Resposta de descoberta inválida no servidor local</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Completar Automaticamente as Opções do Servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element detectou uma configuração personalizada do servidor para a sua ID de usuário \"%1$s\":↵
+    <string name="autodiscover_well_known_autofill_dialog_message">Element detectou uma configuração personalizada do servidor para a sua ID de usuário \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usar a Configuração</string>
 
@@ -1632,8 +1632,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="sas_error_m_user">O contato cancelou a confirmação</string>
     <string name="sas_error_m_timeout">O tempo de confirmação expirou</string>
-    <string name="sas_error_m_unknown_transaction">A sessão não sabe sobre essa transacção</string>
-    <string name="sas_error_m_unknown_method">A sessão não pode chegar a acordo sobre a chave, método hash, MAC, or SAS</string>
+    <string name="sas_error_m_unknown_transaction">A sessão não sabe sobre essa transação</string>
+    <string name="sas_error_m_unknown_method">A sessão não concorda com a chave, método hash, MAC, ou SAS</string>
     <string name="sas_error_m_mismatched_commitment">O compromisso de hash não coincidiu</string>
     <string name="sas_error_m_mismatched_sas">O SAS não corresponde</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
@@ -1881,8 +1881,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 \n
 \nSe você não quiser ver mais conteúdo deste usuário, você pode bloqueá-lo para esconder suas mensagens</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Element precisa de permissão para salvar suas chaves E2E no aparelho.↵
-\n↵
+    <string name="permissions_rationale_msg_keys_backup_export">Element precisa de permissão para salvar suas chaves E2E no aparelho.
+\n
 \nPermita o acesso na próxima janela para poder exportar suas chaves manualmente.</string>
 
     <string name="no_network_indicator">Não há conexão de rede no momento</string>
@@ -1945,12 +1945,12 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_server_url_form_common_notice">Digite o endereço do servidor que você deseja usar</string>
 
     <string name="login_sso_error_message">Ocorreu um erro ao carregar a página: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">O aplicativo não pode entrar neste servidor. O servidor suporta os seguintes tipos de login: %1$s.↵
-\n↵
+    <string name="login_mode_not_supported">O aplicativo não pode entrar neste servidor. O servidor suporta os seguintes tipos de login: %1$s.
+\n
 \nDeseja entrar no servidor usando o Element Web\?</string>
     <string name="login_registration_disabled">Desculpe, este servidor não está aceitando novas contas.</string>
-    <string name="login_registration_not_supported">O aplicativo não pode criar uma conta neste servidor.↵
-\n↵
+    <string name="login_registration_not_supported">O aplicativo não pode criar uma conta neste servidor.
+\n
 \nDeseja criar uma conta no servidor usando o Element Web\?</string>
 
     <string name="login_login_with_email_error">Este e-mail não está associado a nenhuma conta.</string>
@@ -1978,8 +1978,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_reset_password_success_submit">Voltar para Entrar</string>
 
     <string name="login_reset_password_cancel_confirmation_title">Atenção</string>
-    <string name="login_reset_password_cancel_confirmation_content">Sua senha ainda não foi alterada.↵
-\n↵
+    <string name="login_reset_password_cancel_confirmation_content">Sua senha ainda não foi alterada.
+\n
 \nInterromper a alteração de senha\?</string>
 
     <string name="login_set_email_title">Defina um endereço de e-mail</string>
@@ -2023,7 +2023,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_terms_title">Aceitar termos para continuar</string>
 
     <string name="login_wait_for_email_title">Por favor, verifique seu e-mail</string>
-    <string name="login_wait_for_email_notice">Acabamos de enviar um e-mail para %1$s.↵
+    <string name="login_wait_for_email_notice">Acabamos de enviar um e-mail para %1$s.
 \nPor favor, clique no link que ele contém para continuar a criação da conta.</string>
     <string name="login_validation_code_is_not_correct">O código digitado não está correto. Por favor, verifique-o.</string>
     <string name="login_error_outdated_homeserver_title">Servidor desatualizado</string>
@@ -2062,13 +2062,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="soft_logout_signin_submit">Entrar</string>
     <string name="soft_logout_signin_password_hint">Senha</string>
     <string name="soft_logout_clear_data_title">Limpar dados pessoais</string>
-    <string name="soft_logout_clear_data_notice">Atenção: Seus dados pessoais (incluindo chaves de criptografia) ainda estão armazenados neste aparelho.↵
-\n↵
+    <string name="soft_logout_clear_data_notice">Atenção: Seus dados pessoais (incluindo chaves de criptografia) ainda estão armazenados neste aparelho.
+\n
 \nApague-os quando não usar mais este aparelho, ou se quiser entrar em outra conta.</string>
     <string name="soft_logout_clear_data_submit">Limpar todos os dados</string>
 
     <string name="soft_logout_clear_data_dialog_title">Limpar dados</string>
-    <string name="soft_logout_clear_data_dialog_content">Limpar todos os dados atualmente armazenados neste aparelho\?↵
+    <string name="soft_logout_clear_data_dialog_content">Limpar todos os dados atualmente armazenados neste aparelho\?
 \nEntre novamente para acessar os dados e mensagens da sua conta.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Você perderá o acesso as mensagens seguras a menos que você faça login para recuperar suas chaves de criptografia.</string>
     <string name="soft_logout_clear_data_dialog_submit">Limpar dados</string>
@@ -2113,11 +2113,11 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="verification_green_shield">Procure o escudo verde para garantir que um usuário seja confiável. Confie em todos os usuários numa sala para garantir que a sala é segura.</string>
 
     <string name="verification_conclusion_not_secure">Não seguro</string>
-    <string name="verification_conclusion_compromised">Um dos seguintes casos pode estar comprometido:↵
-\n↵
-\n·- Seu servidor doméstico↵
-\n·- O servidor do usuário que você está verificando↵
-\n·- A sua, ou a conexão de outros usuários à internet↵
+    <string name="verification_conclusion_compromised">Um dos seguintes casos pode estar comprometido:
+\n
+\n·- Seu servidor doméstico
+\n·- O servidor do usuário que você está verificando
+\n·- A sua, ou a conexão de outros usuários à internet
 \n·- O seu, ou o aparelho dos outros usuários</string>
 
     <string name="sent_a_video">Vídeo.</string>
@@ -2153,8 +2153,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="verification_verify_user">Confirmar %s</string>
     <string name="verification_verified_user">Confirmou %s</string>
     <string name="verification_request_waiting_for">Aguardando por %s…</string>
-    <string name="verification_request_alert_description">Para segurança extra, confirme %s comparando um código único em ambos os aparelhos.↵ 
-\n↵ 
+    <string name="verification_request_alert_description">Para segurança extra, confirme %s comparando um código único em ambos os aparelhos.
+\n
 \nPara máxima segurança, faça isso pessoalmente.</string>
     <string name="room_profile_not_encrypted_subtitle">As mensagens nesta sala não estão criptografadas de ponta a ponta.</string>
     <string name="room_profile_encrypted_subtitle">As mensagens nesta sala estão criptografadas de ponta a ponta.
@@ -2193,7 +2193,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="unignore">Desbloquear</string>
 
-    <string name="verify_cannot_cross_sign">Esta sessão não pode compartilhar essa confirmação com suas outras sessões.↵ 
+    <string name="verify_cannot_cross_sign">Esta sessão não pode compartilhar essa confirmação com suas outras sessões.
 \nA confirmação será salvada localmente e será compartilhada em uma versão futura do aplicativo.</string>
 
     <string name="room_list_sharing_header_recent_rooms">Salas recentes</string>
@@ -2337,13 +2337,13 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="verify_cancel_self_verification_from_trusted">Se você cancelar, você não poderá ler mensagens criptografadas em seu novo aparelho, e outros usuários não confiarão nele</string>
     <string name="verify_cancel_other">Você não confirmará %1$s (%2$s) se cancelar agora. Precisará começar novamente no perfil dele.</string>
 
-    <string name="verify_not_me_self_verification">Um dos seguintes casos pode estar comprometido:↵
-\n↵
-\n- Sua senha↵
-\n- Seu servidor doméstico↵
-\n- Este aparelho, ou o outro aparelho↵
-\n- A conexão à internet de qualquer um dos aparelhos que você está usando↵
-\n↵
+    <string name="verify_not_me_self_verification">Um dos seguintes casos pode estar comprometido:
+\n
+\n- Sua senha
+\n- Seu servidor doméstico
+\n- Este aparelho, ou o outro aparelho
+\n- A conexão à internet de qualquer um dos aparelhos que você está usando
+\n
 \nRecomendamos que você altere imediatamente a sua senha e a chave de recuperação em Configurações.</string>
 
     <string name="verify_cancelled_notice">Confirme seus aparelhos em Configurações.</string>
@@ -2466,7 +2466,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="change_password_summary">Definir uma nova senha da conta…</string>
 
     <string name="use_other_session_content_description">Use o Element mais recente em seus outros aparelhos: Element Web, Element para Computador, Element para iOS, Element para Android, ou outro cliente Matrix capaz de fazer autoverificação</string>
-    <string name="app_desktop_web">Element Web↵
+    <string name="app_desktop_web">Element Web
 \nElement para Computador</string>
     <string name="app_ios_android">Element para iOS
 \nElement para Android</string>
@@ -2495,8 +2495,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="error_empty_field_choose_user_name">Escolha um nome de usuário.</string>
     <string name="error_empty_field_choose_password">Escolha uma senha.</string>
     <string name="external_link_confirmation_title">Verificar este link</string>
-    <string name="external_link_confirmation_message">O link %1$s redirecionará você para outro site: %2$s.↵
-\n↵
+    <string name="external_link_confirmation_message">O link %1$s redirecionará você para outro site: %2$s.
+\n
 \nDeseja continuar\?</string>
 
     <string name="create_room_dm_failure">Não foi possível criar sua DM. Por favor, verifique os usuários que você deseja convidar e tente novamente.</string>

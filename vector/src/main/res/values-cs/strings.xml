@@ -727,7 +727,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_messages_sent_by_bot">Zprávy poslané botem</string>
 
     <string name="settings_background_sync">Synchronizace na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode">Režim synchronizace na pozadí (experimentální)</string>
+    <string name="settings_background_fdroid_sync_mode">Režim synchronizace na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizován pro baterii</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
 \nV závislosti na stavu zdrojů zařízení může být sync operačním systémem odložen.</string>
@@ -2609,4 +2609,18 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="auth_pin_confirm_to_disable_title">Pro vypnutí PINu potvrďte PIN</string>
     <string name="error_opening_banned_room">Nemohu otevřít místnost, z níž jste byli vykázáni.</string>
     <string name="room_error_not_found">Nemohu najít tuto místnost. Ujistěte se, že existuje.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d vteřina</item>
+        <item quantity="few">%d vteřiny</item>
+        <item quantity="other">%d vteřin</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
+    <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
+    <string name="sent_a_poll">Průzkum</string>
+    <string name="sent_a_bot_buttons">Tlačítka botů</string>
+    <string name="sent_a_reaction">Reagovali skrze: %s</string>
+    <string name="sent_verification_conclusion">Výsledek ověření</string>
+
+    <string name="universal_link_malformed">Odkaz byl chybně zformován</string>
 </resources>

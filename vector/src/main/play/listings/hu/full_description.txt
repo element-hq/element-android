@@ -13,7 +13,7 @@ Az Element-tel azért válik mindez lehetővé, mert a Matrix hálózatra épül
 
 Az Element a te kezedbe adja az irányítást azáltal, hogy eldöntheted, ki tárolja a beszélgetéseidet. Az Element alkalmazásból több féle szolgáltatót is választhatsz:
 
-1. Regisztrálhatsz ingyen egy fiókot a matrix.org nyilvános szerveren
+1. Regisztrálhatsz ingyen egy fiókot a matrix.org nyilvános szerveren, amit a Matrix fejlesztői üzemeltetnek, vagy választhatsz a több ezer, ingyenes szerver közül, amit önkéntesek üzemeltetnek
 2. A saját számítógépeden is futtathatsz szervert
 3. Előfizethetsz egy saját szerverre az Element Matrix Szolgáltatások platformon
 

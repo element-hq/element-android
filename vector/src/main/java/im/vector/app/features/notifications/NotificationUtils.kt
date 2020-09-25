@@ -772,7 +772,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     /**
      * Build the summary notification
      */
-    fun buildSummaryListNotification(style: NotificationCompat.InboxStyle,
+    fun buildSummaryListNotification(style: NotificationCompat.InboxStyle?,
                                      compatSummary: String,
                                      noisy: Boolean,
                                      lastMessageTimestamp: Long): Notification {

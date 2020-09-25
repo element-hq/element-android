@@ -17,6 +17,7 @@ package im.vector.app.features.settings
 
 import android.content.Context
 import android.content.Intent
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -132,6 +133,14 @@ class VectorSettingsActivity : VectorBaseActivity(),
         } else {
             super.handleInvalidToken(globalError)
         }
+    }
+
+    fun <T: Fragment> navigateTo(fragmentClass: Class<T>) {
+        supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
+                .replace(R.id.vector_settings_page, fragmentClass, null)
+                .addToBackStack(null)
+                .commit()
     }
 
     companion object {

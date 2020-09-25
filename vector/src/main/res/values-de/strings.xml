@@ -258,7 +258,7 @@
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
     <string name="permissions_rationale_msg_contacts">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
+    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden. 
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
@@ -1055,7 +1055,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="x_plus">%d+</string>
 
     <string name="call_anyway">Trotzdem anrufen</string>
-    <string name="room_participants_action_kick">Kicken</string>
+    <string name="room_participants_action_kick">Entfernen</string>
     <string name="reason_hint">Grund</string>
 
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Home-Server diese Funktion unterstützt.</string>
@@ -1342,7 +1342,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="keys_backup_banner_in_progress">Sichere Schlüssel…</string>
 
-    <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel gesichert</string>
+    <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel sind gesichert</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Sichere %d Schlüssel…</item>
         <item quantity="other">Sichere %d Schlüssel…</item>
@@ -1669,9 +1669,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
 
 
-    <string name="settings_background_fdroid_sync_mode">Hintergrundsynchronisierungsmodus (experimentell)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts schont (Akku).
-\nAbhängig von dem Ressourcen-Statuses deines Geräts kann dein System die Synchronisierung verschieben.</string>
+    <string name="settings_background_fdroid_sync_mode">Hintergrund-Synchronisierungsmodus</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts (Akku) schont. 
+\nAbhängig vom Ressourcen-Status deines Geräts kann dein System die Synchronisierung verschieben.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">Element wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
 \nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Element auf Ereignisse lauscht.</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1808,7 +1808,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_splash_submit">Beginne</string>
 
     <string name="login_server_title">Wähle einen Server</string>
-    <string name="login_server_text">Genau wie bei Emails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
+    <string name="login_server_text">Genau wie bei E-Mails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
     <string name="login_server_matrix_org_text">Folge Millionen anderen kostenlos auf dem größten öffentlichen Server</string>
     <string name="login_server_modular_text">Premium Hosting für Organisationen</string>
     <string name="login_server_modular_learn_more">Mehr erfahren</string>
@@ -2118,7 +2118,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="settings_active_sessions_list">Aktive Sitzungen</string>
     <string name="settings_active_sessions_show_all">Zeige alle Sitzungen</string>
-    <string name="settings_active_sessions_manage">Verwalte Sitzungen</string>
+    <string name="settings_active_sessions_manage">Sitzungen verwalten</string>
     <string name="settings_active_sessions_signout_device">Diese Sitzung abmelden</string>
 
     <string name="settings_failed_to_get_crypto_device_info">Keine kryptografischen Informationen verfügbar</string>
@@ -2271,7 +2271,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="error_failed_to_import_keys">Import der Schlüssel fehlgeschlagen</string>
 
     <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
-    <string name="settings_messages_at_room">\@raum enthaltende Nachrichten</string>
+    <string name="settings_messages_at_room">Nachrichten, die @raum enthalten</string>
     <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Nachrichten in Gruppenchats</string>
     <string name="settings_notification_advanced_summary">Setze die Benachrichtigungspräferenz abhängig vom Ereignistyp</string>
 
@@ -2353,7 +2353,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="use_latest_app">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
-    <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>
+    <string name="enter_secret_storage_passphrase_or_key">Benutze deine %1$s oder deinen %2$s um fortzufahren.</string>
     <string name="use_recovery_key">Wiederherstellungsschlüssel verwenden</string>
     <string name="enter_secret_storage_input_key">Wähle deinen Wiederherstellungsschüssel, gib ihn ein oder füge ihn aus der Zwischenablage ein</string>
     <string name="keys_backup_recovery_key_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
@@ -2478,9 +2478,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="event_redacted">Nachricht gelöscht</string>
     <string name="settings_show_redacted">Zeige gelöschte Nachrichten</string>
     <string name="settings_show_redacted_summary">Zeige einen Platzhalter für gelöschte Nachrichten</string>
-    <string name="labs_show_unread_notifications_as_tab">Füge dedizierten Tab für ungelesene Benachrichtungen zur Hauptansicht hinzu.</string>
+    <string name="labs_show_unread_notifications_as_tab">Dedizierten Tab für ungelesene Nachrichten zur Hauptansicht hinzufügen</string>
 
-    <string name="settings_discovery_confirm_mail_not_clicked">Wir haben dir eine Bestätigungsmail an %s gesendet. Bitte prüfe deine Emails und klicke auf den Bestätigungslink</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Wir haben dir eine Bestätigungsmail an %s gesendet. Bitte prüfe deine E-Mails und klicke auf den Bestätigungslink</string>
     <string name="settings_text_message_sent_wrong_code">Der Verifizierungscode ist nicht korrekt.</string>
 
     <string name="uploads_media_title">MEDIEN</string>
@@ -2497,13 +2497,13 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_server_url_form_common_notice">Gib die Adresse des Servers ein, den du benutzen möchtest</string>
 
     <string name="login_connect_using_matrix_id_notice">Wenn du deine Matrixkennung und dein Passwort weißt, kannst du alternativ diese Methode nutzen:</string>
-    <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix ID</string>
-    <string name="login_signin_matrix_id_title">Einloggen mit Matrix ID</string>
-    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Homeserver eingerichtet hast, benutze deine Matrix ID (z.B. @benutzer@domain.com) und Passwort.</string>
-    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix-ID</string>
+    <string name="login_signin_matrix_id_title">Einloggen mit Matrix-ID</string>
+    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Home-Server eingerichtet hast, benutze deine Matrix-ID (z.B. @benutzer:domain.com) und Passwort.</string>
+    <string name="login_signin_matrix_id_hint">Matrix-ID</string>
     <string name="login_signin_matrix_id_password_notice">Wenn du dein Passwort nicht weißt, gehe zurück um es zurücksetzen zu lassen.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dies ist keine gültige Benutzerkennung. Erwartetes Format: \'@benutzer:homeserver.org\'</string>
-    <string name="autodiscover_well_known_error">Es konnte kein gültiger Homeserver gefunden werden. Bitte prüfe deine Kennung</string>
+    <string name="autodiscover_well_known_error">Es konnte kein gültiger Home-Server gefunden werden. Bitte prüfe deine Kennung</string>
 
     <string name="send_a_sticker">Sticker</string>
 
@@ -2621,7 +2621,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
-    <string name="labs_merge_e2e_in_timeline">Fasse \"Nicht entschlüsselbar\"-Fehler im Chatverlauf zu Hinweisen zusammen</string>
+    <string name="labs_merge_e2e_in_timeline">\"Nicht entschlüsselbar\"-Fehler im Chatverlauf zusammenfassen</string>
     <string name="settings_call_show_confirmation_dialog_title">Verhindere versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
@@ -2673,4 +2673,15 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="error_opening_banned_room">Raum, indem du gebannt wurdest, kann nicht geöffnet werden.</string>
     <string name="room_error_not_found">Raum kann nicht gefunden werden. Stelle sicher, dass er existiert.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Zeige Status-Ereignisse der Raum-Mitglieder</string>
+    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernen-/Verbannen-Ereignisse und Avatar-/Anzeigenamen-Wechsel mit ein.</string>
+    <string name="sent_a_poll">Umfrage</string>
+    <string name="sent_a_bot_buttons">Bot-Schaltflächen</string>
+    <string name="sent_a_reaction">Reagierte mit: %s</string>
+    <string name="universal_link_malformed">Der Link war nicht korrekt</string>
 </resources>

@@ -36,6 +36,7 @@ import im.vector.app.features.crypto.verification.IncomingVerificationRequestHan
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.login.ReAuthHelper
@@ -70,6 +71,8 @@ interface VectorComponent {
     fun inject(vectorApplication: VectorApplication)
 
     fun matrix(): Matrix
+
+    fun matrixItemColorProvider(): MatrixItemColorProvider
 
     fun sessionListener(): SessionListener
 

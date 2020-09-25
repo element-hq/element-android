@@ -49,7 +49,7 @@ interface CheckNumberType {
                             val numberAsString = reader.nextString()
                             val decimal = BigDecimal(numberAsString)
                             if (decimal.scale() <= 0) {
-                                decimal.intValueExact()
+                                decimal.longValueExact()
                             } else {
                                 decimal.toDouble()
                             }

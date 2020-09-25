@@ -34,7 +34,7 @@ import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -59,7 +59,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun initAdminE2eByDefault() {
         viewModelScope.launch(Dispatchers.IO) {
-            adminE2EByDefault = tryThis {
+            adminE2EByDefault = tryOrNull {
                 rawService.getElementWellknown(session.myUserId)
                         ?.isE2EByDefault()
                         ?: true

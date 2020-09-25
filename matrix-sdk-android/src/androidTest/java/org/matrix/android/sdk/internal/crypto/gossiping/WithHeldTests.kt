@@ -20,7 +20,7 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -227,7 +227,7 @@ class WithHeldTests : InstrumentedTest {
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 val timeLineEvent = bobSecondSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId)?.also {
                     // try to decrypt and force key request
-                    tryThis { bobSecondSession.cryptoService().decryptEvent(it.root, "") }
+                    tryOrNull { bobSecondSession.cryptoService().decryptEvent(it.root, "") }
                 }
                 sessionId = timeLineEvent?.root?.content?.toModel<EncryptedEventContent>()?.sessionId
                 timeLineEvent != null

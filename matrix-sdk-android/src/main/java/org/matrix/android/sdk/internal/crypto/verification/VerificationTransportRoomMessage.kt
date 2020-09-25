@@ -22,6 +22,9 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.Operation
 import androidx.work.WorkInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
@@ -51,10 +54,8 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.StringProvider
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -87,7 +88,7 @@ internal class VerificationTransportRoomMessage(
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
 
@@ -115,20 +116,30 @@ internal class VerificationTransportRoomMessage(
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
                 workInfoList
-                        ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
-                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
-                                Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
-                                tx?.cancel(onErrorReason)
-                            } else {
-                                if (onDone != null) {
-                                    onDone()
-                                } else {
-                                    tx?.state = nextState
+                            when (wInfo.state) {
+                                WorkInfo.State.FAILED -> {
+                                    tx?.cancel(onErrorReason)
+                                    workLiveData.removeObserver(this)
+                                }
+                                WorkInfo.State.SUCCEEDED -> {
+                                    if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
+                                        Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
+                                        tx?.cancel(onErrorReason)
+                                    } else {
+                                        if (onDone != null) {
+                                            onDone()
+                                        } else {
+                                            tx?.state = nextState
+                                        }
+                                    }
+                                    workLiveData.removeObserver(this)
+                                }
+                                else -> {
+                                    // nop
                                 }
                             }
-                            workLiveData.removeObserver(this)
                         }
             }
         }
@@ -174,7 +185,7 @@ internal class VerificationTransportRoomMessage(
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
 
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
@@ -184,7 +195,7 @@ internal class VerificationTransportRoomMessage(
                 .build()
 
         workManagerProvider.workManager
-                .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
                 .enqueue()
 
         // I cannot just listen to the given work request, because when used in a uniqueWork,
@@ -199,7 +210,7 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == workRequest.id }
                         ?.let { wInfo ->
-                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
+                            if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
                                 callback(null, null)
                             } else {
                                 val eventId = wInfo.outputData.getString(localId)
@@ -229,7 +240,7 @@ internal class VerificationTransportRoomMessage(
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         enqueueSendWork(workerParams)
     }
@@ -249,7 +260,7 @@ internal class VerificationTransportRoomMessage(
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
-                event = event
+                eventId = event.eventId ?: ""
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
 
@@ -280,7 +291,7 @@ internal class VerificationTransportRoomMessage(
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
                 .build()
         return workManagerProvider.workManager
-                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
                 .enqueue() to workRequest.id
     }
 

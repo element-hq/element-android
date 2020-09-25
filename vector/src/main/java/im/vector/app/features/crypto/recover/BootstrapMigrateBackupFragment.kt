@@ -37,7 +37,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
@@ -150,7 +150,7 @@ class BootstrapMigrateBackupFragment @Inject constructor(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == IMPORT_FILE_REQ && resultCode == Activity.RESULT_OK) {
             data?.data?.let { dataURI ->
-                tryThis {
+                tryOrNull {
                     activity?.contentResolver?.openInputStream(dataURI)
                             ?.bufferedReader()
                             ?.use { it.readText() }
