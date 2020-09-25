@@ -112,6 +112,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     ReferencesInfoData(verificationState)
                 },
                 sentByMe = event.root.senderId == session.myUserId,
+                isDirect = roomSummaryHolder.roomSummary?.isDirect ?: false,
                 e2eDecoration = e2eDecoration
         )
     }

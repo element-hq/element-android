@@ -41,6 +41,7 @@ data class MessageInformationData(
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe : Boolean,
+        val isDirect: Boolean = false,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
 

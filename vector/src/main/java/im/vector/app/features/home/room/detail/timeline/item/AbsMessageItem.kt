@@ -68,7 +68,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 height = attributes.avatarSize
                 width = attributes.avatarSize
             }
-            holder.avatarImageView.visibility = View.VISIBLE
+            //holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarImageView.setOnClickListener(_avatarClickListener)
             //holder.memberNameView.visibility = View.VISIBLE
             holder.memberNameView.setOnClickListener(_memberNameClickListener)
@@ -89,11 +89,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 holder.timeView.visibility = View.GONE
                 holder.bubbleMemberNameView.visibility = View.VISIBLE
                 holder.bubbleTimeView.visibility = View.VISIBLE
+                if (attributes.informationData.isDirect) {
+                    holder.avatarImageView.visibility = View.GONE
+                } else {
+                    holder.avatarImageView.visibility = View.VISIBLE
+                }
             } else {
                 holder.memberNameView.visibility = View.VISIBLE
                 holder.timeView.visibility = View.VISIBLE
                 holder.bubbleMemberNameView.visibility = View.GONE
                 holder.bubbleTimeView.visibility = View.GONE
+                holder.avatarImageView.visibility = View.VISIBLE
             }
         } else {
             holder.avatarImageView.setOnClickListener(null)
@@ -181,7 +187,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     override fun ignoreMessageGuideline(context: Context): Boolean {
-        return infoInBubbles(context) && attributes.informationData.sentByMe
+        return infoInBubbles(context) && (attributes.informationData.sentByMe || attributes.informationData.isDirect)
     }
 
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
