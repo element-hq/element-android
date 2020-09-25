@@ -96,7 +96,7 @@ class RegistrationTest {
 
         // Ensure password
         onView((withId(R.id.passwordField)))
-                .perform(typeText(password))
+                .perform(closeSoftKeyboard(), typeText(password))
 
         // Submit
         onView(withId(R.id.loginSubmit))

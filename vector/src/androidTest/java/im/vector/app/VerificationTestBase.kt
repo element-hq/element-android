@@ -84,7 +84,7 @@ abstract class VerificationTestBase {
                 .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.isEnabled())))
 
         Espresso.onView((ViewMatchers.withId(R.id.passwordField)))
-                .perform(ViewActions.typeText(password))
+                .perform(ViewActions.closeSoftKeyboard(), ViewActions.typeText(password))
 
         Espresso.onView(ViewMatchers.withId(R.id.loginSubmit))
                 .check(ViewAssertions.matches(ViewMatchers.isEnabled()))
