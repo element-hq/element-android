@@ -84,6 +84,10 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     override fun getViewType() = STUB_ID
 
     override fun messageBubbleAllowed(context: Context): Boolean {
+        return false
+    }
+
+    override fun pseudoBubbleAllowed(): Boolean {
         return true
     }
 

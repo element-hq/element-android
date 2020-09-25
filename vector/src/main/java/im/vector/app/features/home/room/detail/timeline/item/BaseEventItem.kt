@@ -102,8 +102,21 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
     fun updateMessageBubble(holder: H) {
         val bubbleStyleSetting = BubbleThemeUtils.getBubbleStyle(holder.checkableBackground.context)
-        val bubbleStyle = if (messageBubbleAllowed(holder.checkableBackground.context)) bubbleStyleSetting else BubbleThemeUtils.BUBBLE_STYLE_NONE
-        val reverseBubble = shouldReverseBubble() && bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH
+        val bubbleStyle = when {
+            messageBubbleAllowed(holder.checkableBackground.context)                           -> {
+                bubbleStyleSetting
+            }
+            bubbleStyleSetting == BubbleThemeUtils.BUBBLE_STYLE_BOTH && pseudoBubbleAllowed()  -> {
+                BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN
+            }
+            bubbleStyleSetting == BubbleThemeUtils.BUBBLE_STYLE_START && pseudoBubbleAllowed() -> {
+                BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN
+            }
+            else                                                                               -> {
+                BubbleThemeUtils.BUBBLE_STYLE_NONE
+            }
+        }
+        val reverseBubble = shouldReverseBubble() && BubbleThemeUtils.drawsDualSide(bubbleStyle)
 
         setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
     }
@@ -116,6 +129,10 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         return false
     }
 
+    open fun pseudoBubbleAllowed(): Boolean {
+        return false
+    }
+
     @CallSuper
     open fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
         val defaultDirection = holder.readReceiptsView.resources.configuration.layoutDirection;
@@ -123,7 +140,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
 
         // Always keep read receipts of others on other side for dual side bubbles
-        val dualBubbles = bubbleStyleSetting == BubbleThemeUtils.BUBBLE_STYLE_BOTH
+        val dualBubbles = BubbleThemeUtils.drawsDualSide(bubbleStyleSetting)
 
         val receiptParent = holder.readReceiptsView.parent
         if (receiptParent is LinearLayout) {

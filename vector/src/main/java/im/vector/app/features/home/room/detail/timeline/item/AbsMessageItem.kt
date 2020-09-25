@@ -25,11 +25,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import kotlin.math.max
 import kotlin.math.round
@@ -84,7 +82,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.bubbleMemberNameView.setOnLongClickListener(attributes.itemLongClickListener)
-            if (contentInBubble) {
+            if (hideSenderInformation()) {
+                holder.memberNameView.visibility = View.GONE
+                holder.timeView.visibility = View.GONE
+                holder.bubbleMemberNameView.visibility = View.GONE
+                holder.bubbleTimeView.visibility = View.GONE
+                if (attributes.informationData.isDirect) {
+                    holder.avatarImageView.visibility = View.GONE
+                } else {
+                    holder.avatarImageView.visibility = View.VISIBLE
+                }
+            } else if (contentInBubble) {
                 holder.memberNameView.visibility = View.GONE
                 holder.timeView.visibility = View.GONE
                 holder.bubbleMemberNameView.visibility = View.VISIBLE
@@ -109,7 +117,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.visibility = View.GONE
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
-            if (attributes.informationData.showInformation /* && contentInBubble && attributes.informationData.sentByMe */) {
+            if (attributes.informationData.showInformation && !hideSenderInformation()/* && contentInBubble && attributes.informationData.sentByMe */) {
                 holder.bubbleTimeView.visibility = View.VISIBLE
                 holder.bubbleTimeView.text = attributes.informationData.time
                 holder.bubbleMemberNameView.visibility = View.VISIBLE
@@ -203,11 +211,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     private fun infoInBubbles(context: Context): Boolean {
-        return messageBubbleAllowed(context) && BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH
+        return BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH &&
+                (messageBubbleAllowed(context) || pseudoBubbleAllowed())
     }
 
     override fun shouldReverseBubble(): Boolean {
         return attributes.informationData.sentByMe
+    }
+
+    private fun hideSenderInformation(): Boolean {
+        return pseudoBubbleAllowed() && false
     }
 
     open fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
@@ -231,19 +244,31 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                  */
                 bubbleView.setPadding(0, 0, 0, 0)
             }
-            BubbleThemeUtils.BUBBLE_STYLE_START, BubbleThemeUtils.BUBBLE_STYLE_BOTH -> {
-                if (attributes.informationData.showInformation) {
-                    bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
+            BubbleThemeUtils.BUBBLE_STYLE_START,
+            BubbleThemeUtils.BUBBLE_STYLE_BOTH,
+            BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN,
+            BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> {
+                val longPadding: Int
+                val shortPadding: Int
+                if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
+                    if (attributes.informationData.showInformation) {
+                        bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
+                    } else {
+                        bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble2_outgoing else R.drawable.msg_bubble2_incoming)
+                    }
+                    var tintColor = ColorStateList(
+                            arrayOf(intArrayOf(0)),
+                            intArrayOf(ThemeUtils.getColor(bubbleView.context,
+                                    if (attributes.informationData.sentByMe) R.attr.sc_message_bg_outgoing else R.attr.sc_message_bg_incoming)
+                            )
+                    )
+                    bubbleView.backgroundTintList = tintColor
+                    longPadding = 20
+                    shortPadding = 8
                 } else {
-                    bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble2_outgoing else R.drawable.msg_bubble2_incoming)
+                    longPadding = 10
+                    shortPadding = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
                 }
-                var tintColor = ColorStateList(
-                        arrayOf(intArrayOf(0)),
-                        intArrayOf(ThemeUtils.getColor(bubbleView.context,
-                                if (attributes.informationData.sentByMe) R.attr.sc_message_bg_outgoing else R.attr.sc_message_bg_incoming)
-                        )
-                )
-                bubbleView.backgroundTintList = tintColor
                 val density = bubbleView.resources.displayMetrics.density
                 // TODO 96 = 2 * avatar size?
                 if (reverseBubble) {
@@ -261,17 +286,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 // TODO padding?
                 if (reverseBubble) {
                     bubbleView.setPaddingRelative(
-                            round(8 * density).toInt(),
-                            round(8 * density).toInt(),
-                            round(20 * density).toInt(),
-                            round(8 * density).toInt()
+                            round(shortPadding * density).toInt(),
+                            round(shortPadding * density).toInt(),
+                            round(longPadding * density).toInt(),
+                            round(shortPadding * density).toInt()
                     )
                 } else {
                     bubbleView.setPaddingRelative(
-                            round(20 * density).toInt(),
-                            round(8 * density).toInt(),
-                            round(8 * density).toInt(),
-                            round(8 * density).toInt()
+                            round(longPadding * density).toInt(),
+                            round(shortPadding * density).toInt(),
+                            round(shortPadding * density).toInt(),
+                            round(shortPadding * density).toInt()
                     )
                 }
             }
