@@ -57,7 +57,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinMode
-import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
+import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -153,14 +153,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     disposables.add(it)
                 }
 
-        vectorActivity.getVectorComponent()
-                .rawService()
-                .getWellknown(session.myUserId, object : MatrixCallback<String> {
-                    override fun onSuccess(data: String) {
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                                ElementWellKnownMapper.from(data)?.isE2EByDefault() == false
-                    }
-                })
+        lifecycleScope.launchWhenResumed {
+            findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                    vectorActivity.getVectorComponent()
+                            .rawService()
+                            .getElementWellknown(session.myUserId)
+                            ?.isE2EByDefault() == false
+        }
     }
 
     private val secureBackupCategory by lazy {

@@ -15,7 +15,8 @@ Improvements 🙌:
  - PIN Code Improvements: Add more settings: biometrics, grace period, notification content (#1985)
 
 Bugfix 🐛:
- - Long message cannot be sent/takes infinite time & blocks other messages #1397
+ - Long message cannot be sent/takes infinite time & blocks other messages (#1397)
+ - Fix crash when wellknown are malformed, or redirect to some HTML content (reported by rageshakes)
  - User Verification in DM not working
  - Manual import of Megolm keys does back up the imported keys
  - Auto scrolling to the latest message when sending (#2094)
