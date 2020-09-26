@@ -1181,7 +1181,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
 
     <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
-    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Райот.</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Element.</string>
     <string name="settings_troubleshoot_test_battery_failed">Если пользователь оставляет устройство в отключенном от сети и в неподвижном состоянии в течение некоторого времени при выключенном экране, устройство переходит в режим Doze. Это предотвращает доступ приложений к сети и откладывает выполнение заданий, синхронизацию и передачу стандартных аварийных сигналов.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
 
@@ -1196,7 +1196,7 @@
     <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
 
-    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
+    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
     <string name="generic_label">%1$s:</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
