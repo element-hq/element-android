@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix Splash layout on small screens
 
 Translations 🗣:
  -
