@@ -42,6 +42,11 @@ upstream_diff() {
     local previous_tag=`upstream_previous_tag`
     git diff "$previous_tag".."$latest_tag" "$@"
 }
+upstream_log() {
+    local latest_tag=`upstream_latest_tag`
+    local previous_tag=`upstream_previous_tag`
+    git log "$previous_tag".."$latest_tag" "$@"
+}
 
 downstream_upstream_diff() {
     local previous_tag=`upstream_previous_tag`
