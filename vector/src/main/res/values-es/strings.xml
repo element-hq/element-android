@@ -83,7 +83,7 @@
     <string name="local_address_book_header">Agenda de contactos local</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
-    <string name="no_contact_access_placeholder">No permitiste que Element acceda a tus contactos locales</string>
+    <string name="no_contact_access_placeholder">No permitiste que SchildiChat acceda a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
 
     <!-- Rooms fragment -->
@@ -244,26 +244,26 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
-    <string name="permissions_rationale_msg_storage">Element necesita permiso para acceder a tu biblioteca de fotos y vídeos para enviar y guardar archivos adjuntos.
+    <string name="permissions_rationale_msg_storage">SchildiChat necesita permiso para acceder a tu biblioteca de fotos y vídeos para enviar y guardar archivos adjuntos.
 
 Por favor permite el acceso en la próxima ventana emergente para poder enviar archivos desde tu teléfono.</string>
-    <string name="permissions_rationale_msg_camera">Element necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nPor favor permite el acceso en la próxima ventana emergente para poder realizar la llamada."</string>
-    <string name="permissions_rationale_msg_record_audio">Element necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nPor favor permite el acceso en la próxima ventana emergente para poder realizar la llamada."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
 
 Por favor permite el acceso en las próximas ventanas emergentes para poder realizar la llamada.</string>
-    <string name="permissions_rationale_msg_contacts">Element necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+    <string name="permissions_rationale_msg_contacts">SchildiChat necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
-Por favor permite el acceso en la próxima ventana emergente para descubrir usuarios accesibles desde Element en tu agenda de contactos.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+Por favor permite el acceso en la próxima ventana emergente para descubrir usuarios accesibles desde SchildiChat en tu agenda de contactos.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat necesita permiso para acceder a tu agenda de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
-¿Permitir que Element acceda a tus contactos ?</string>
+¿Permitir que SchildiChat acceda a tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Lo sentimos. Acción no realizada, debido a que faltan permisos</string>
 
@@ -929,7 +929,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="widget_integration_missing_parameter">Falta un parámetro requerido.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
     <string name="speak">Conversar</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicia Element en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a esta sesión.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, inicia SchildiChat en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a esta sesión.</string>
 
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>
 
@@ -942,10 +942,10 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="e2e_re_request_encryption_key_sent">Solicitud de clave enviada.</string>
 
     <string name="startup_notification_privacy_title">Privacidad de Notificaciones</string>
-    <string name="startup_notification_privacy_message">Element puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada. Esto podría afectar la duración de la batería.</string>
+    <string name="startup_notification_privacy_message">SchildiChat puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada. Esto podría afectar la duración de la batería.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análisis de estadísticas</string>
-    <string name="settings_opt_in_of_analytics_summary">Element recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita los análisis de estadísticas para ayudarnos a mejorar Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita los análisis de estadísticas para ayudarnos a mejorar SchildiChat.</string>
     <string name="lock_screen_hint">Escribe aquí…</string>
 
     <string name="send_bug_report_description_in_english">Si es posible, por favor escribe la descripción en inglés.</string>
@@ -1052,7 +1052,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de SchildiChat para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
@@ -1104,7 +1104,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_troubleshoot_test_device_settings_title">Ajustes de sesión.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Las notificaciones están activadas para esta sesión.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Las notificaciones no están habilitadas para esta sesión. 
-\nPor favor comprueba los ajustes Element.</string>
+\nPor favor comprueba los ajustes SchildiChat.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Ajustes personalizados.</string>
@@ -1124,17 +1124,17 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="sign_out_bottom_sheet_warning_backing_up">Copia de seguridad en progreso. Si cierras sesión ahora perderás el acceso a tus mensajes encriptados.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">La copia de seguridad debería estar activa ahora en todas tus sesiones para evitar la pérdida del acceso a tus mensajes encriptados.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Token Base</string>
     <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperada correctamente:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar token FCM:\n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nEste error esta fuera del control de Element y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nEste error esta fuera del control de Element. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nEste error esta fuera del control de SchildiChat y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nEste error esta fuera del control de SchildiChat. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nEste error esta fuera del control de Element. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
+\nEste error esta fuera del control de SchildiChat. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">añadir cuenta</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token de registro</string>
@@ -1171,19 +1171,19 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_troubleshoot_test_service_boot_title">Inicio automático</string>
     <string name="settings_troubleshoot_test_service_boot_success">El servicio funcionará cuando reinicie el dispositivo.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">El servicio no se iniciará al reiniciar el dispositivo, no recibirá notificaciones hasta que Element haya sido abierto al menos 1 vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">El servicio no se iniciará al reiniciar el dispositivo, no recibirá notificaciones hasta que SchildiChat haya sido abierto al menos 1 vez.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">activar Inicio automático</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprobar restricciones en segundo plano</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Las restricciones de segundo plano están desactivadas para Element. Este debería funcionar con datos móviles (sin WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Las restricciones de segundo plano están desactivadas para SchildiChat. Este debería funcionar con datos móviles (sin WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano están activadas para Element.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano están activadas para SchildiChat.
 \nLa app estará completamente restringida mientras esté en segundo plano y esto podría afectar a las notificaciones.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricciones</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimización de la bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">A Element no le afecta la Optimización de la bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">A SchildiChat no le afecta la Optimización de la bateria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuario deja el dispositivo desenchufado e inmóvil durante cierto periodo de tiempo con la pantalla apagada, el dispositivo entrará en modo hibernación. Esto evita que las apps accedan a la red y postpone sus tareas, sincronizaciones y alarmas.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">ignorar optimización</string>
 
@@ -1210,8 +1210,8 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_send_message_with_enter_summary">La tecla Intro enviará el mensaje en vez de añadir un salto de línea</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Conexión en segundo plano</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element necesita mantener una leve conexión en segundo plano para poder ofrecer notificaciones de confianza.
-\nEn la siguiente pantalla se le pedirá permisos para que Element siempre funcione en segundo plano, por favor acepte.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat necesita mantener una leve conexión en segundo plano para poder ofrecer notificaciones de confianza.
+\nEn la siguiente pantalla se le pedirá permisos para que SchildiChat siempre funcione en segundo plano, por favor acepte.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Conceder permiso</string>
 
     <string name="settings_data_save_mode_summary">El modo de guardado de datos aplica un filtro específico para que las actualizaciones de presencia y las notificaciones de escritura sean eliminadas.</string>
@@ -1274,7 +1274,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Por favor borra la contraseña si quieres que Element genere una clave de recuperación.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Por favor borra la contraseña si quieres que SchildiChat genere una clave de recuperación.</string>
     <string name="keys_backup_no_session_error">No hay ninguna sesión de Matrix disponible</string>
 
     <string name="keys_backup_setup_step1_title">Nunca se pierden los mensajes cifrados</string>
@@ -1374,7 +1374,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="keys_backup_info_title_signature">Firma</string>
 
     <string name="autodiscover_well_known_autofill_dialog_title">autocompletar opciones del servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuración de uso</string>
 
@@ -1498,7 +1498,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="group_all_communities">Todas la comunidades</string>
 
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con Element</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con SchildiChat</string>
 
     <string name="fab_menu_create_room">Salas</string>
     <string name="fab_menu_create_chat">Mensajes directos</string>
@@ -1537,7 +1537,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="invite_no_identity_server_error">Para hacer esto, vaya a las opciones y añada un servidor de identidad.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme su contraseña</string>
-    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Element para móvil</string>
+    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en SchildiChat para móvil</string>
     <string name="settings_add_3pid_authentication_needed">Se necesita autenticación</string>
 
 
@@ -1563,10 +1563,10 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
 \nDependiendo del estado de los recursos del dispositivo, la sincronización puede ser aplazada por el sistema operativo.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
-\nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que Element está escuchando a nuevos acontecimientos.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
+\nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que SchildiChat está escuchando a nuevos acontecimientos.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">No se le notificará de los mensajes entrantes cuando la aplicación esté en segundo plano.</string>
     <string name="settings_set_workmanager_delay">Intervalo de sincronización preferido</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1776,7 +1776,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 \n
 \nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Element necesita permiso para guardar tus claves E2E en la memória del dispositivo.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat necesita permiso para guardar tus claves E2E en la memória del dispositivo.
 \n
 \nPorfavor permite el acceso en el siguiente pop-up para poder exportar tus claves manualmente.</string>
 
@@ -1826,8 +1826,8 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_signin">Iniciar sesión</string>
     <string name="login_server_url_form_other_hint">Dirección</string>
     <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
-    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Element o servidor que quieres usar</string>
-    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Element al que quieres conectarte</string>
+    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular SchildiChat o servidor que quieres usar</string>
+    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor SchildiChat al que quieres conectarte</string>
 
     <string name="login_sso_error_message">Se produjo un error al cargar la página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">"La aplicación no es capaz de iniciar sesión en este servidor. Este solo soporta el acceso mediante:  %1$s.
@@ -1852,7 +1852,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="dialog_title_success">Correcto</string>
 
     <string name="bottom_action_notification">Notificaciones</string>
-    <string name="call_failed_no_connection">Element Fallo la Llamada</string>
+    <string name="call_failed_no_connection">SchildiChat Fallo la Llamada</string>
     <string name="call_failed_no_connection_description">Fallo al intentar establecer conexion.
 \nTURN Server fallo. Por favor, contacte con el administrador de su Servidor y notifique el fallo.</string>
 
@@ -1900,14 +1900,14 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="open_terms_of">Leer los terminos de %s</string>
     <string name="disconnect_identity_server_dialog_content">Desconectarse del servidor de Identidad %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. Element solo soporta API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. SchildiChat solo soporta API V2.</string>
     <string name="identity_server_error_outdated_home_server">Operación no posible. Servidor desactualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>
-    <string name="element_disclaimer_title">Riot ahora es Element!</string>
+    <string name="element_disclaimer_title">Riot ahora es SchildiChat!</string>
     <string name="element_disclaimer_negative_button">Entendido</string>
     <string name="element_disclaimer_positive_button">Aprender Mas</string>
 
-    <string name="element_login_splash_brand">Element</string>
+    <string name="element_login_splash_brand">SchildiChat</string>
 
 
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
@@ -1951,7 +1951,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="autocomplete_limited_results">Mostrando solo el primer resultado, agregue mas letras…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat puede fallar con más frecuencia cuando ocurre un error inesperado</string>
 
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
 
@@ -2029,9 +2029,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="room_member_jump_to_read_receipt">Saltar para leer el recibo</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">Element no maneja eventos de tipo \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element no maneja el mensaje de tipo \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element encontró un problema al representar el contenido del evento con el ID \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat no maneja eventos de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat no maneja el mensaje de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_exception">SchildiChat encontró un problema al representar el contenido del evento con el ID \'%1$s\'</string>
 
     <string name="unignore">Dejar de ignorar</string>
 
@@ -2091,7 +2091,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="delete_event_dialog_reason_checkbox">Razón</string>
     <string name="delete_event_dialog_reason_hint">Razón para redactar</string>
 
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
 
     <string name="refresh">Refrescar</string>
 
@@ -2230,7 +2230,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_server_matrix_org_text">Únase a millones gratis en el servidor público más grande</string>
     <string name="login_signin_sso">Continuar con SSO</string>
 
-    <string name="login_server_url_form_modular_hint">Dirección de servicios de Element Matrix</string>
+    <string name="login_server_url_form_modular_hint">Dirección de servicios de SchildiChat Matrix</string>
     <string name="login_server_url_form_common_notice">Ingrese la dirección del servidor que desea utilizar</string>
 
     <string name="login_reset_password_notice">Se enviará un correo electrónico de verificación a su bandeja de entrada para confirmar la configuración de su nueva contraseña.</string>
@@ -2349,7 +2349,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 \nVuelva a iniciar sesión para acceder a los datos y mensajes de su cuenta.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Perderás el acceso a los mensajes seguros a menos que inicies sesión para recuperar tus claves de cifrado.</string>
     <string name="soft_logout_clear_data_dialog_submit">Borrar datos</string>
-    <string name="soft_logout_sso_not_same_user_error">La sesión actual es para el usuario %1$s y usted proporciona las credenciales para el usuario %2$s. Esto no es compatible con Element. Primero borre los datos, luego inicie sesión nuevamente con otra cuenta.</string>
+    <string name="soft_logout_sso_not_same_user_error">La sesión actual es para el usuario %1$s y usted proporciona las credenciales para el usuario %2$s. Esto no es compatible con SchildiChat. Primero borre los datos, luego inicie sesión nuevamente con otra cuenta.</string>
 
     <string name="permalink_malformed">Su enlace matrix.to estaba mal formado</string>
     <string name="settings_developer_mode_summary">El modo desarrollador activa funciones ocultas y también puede hacer que la aplicación sea menos estable. ¡Solo para desarrolladores!</string>
@@ -2547,13 +2547,13 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="media_file_added_to_gallery">Archivo multimedia agregado a la Galería</string>
     <string name="error_adding_media_file_to_gallery">No se pudo agregar el archivo multimedia a la Galería</string>
-    <string name="use_other_session_content_description">Utilice la última versión de Element en sus otros dispositivos, Element Web, Element Desktop, Element iOS, Element para Android u otro cliente Matrix con capacidad de firma cruzada</string>
-    <string name="app_desktop_web">Elemento Web 
-\nElemento de escritorio</string>
-    <string name="app_ios_android">Elemento iOS 
-\nElemento Android</string>
+    <string name="use_other_session_content_description">Utilice la última versión de SchildiChat/Element en sus otros dispositivos, Element Web, Element Desktop, Element iOS, SchildiChat para Android u otro cliente Matrix con capacidad de firma cruzada</string>
+    <string name="app_desktop_web">SchildiChato Web 
+\nSchildiChato de escritorio</string>
+    <string name="app_ios_android">SchildiChato iOS 
+\nSchildiChato Android</string>
     <string name="or_other_mx_capabale_client">u otro cliente Matrix con capacidad de firma cruzada</string>
-    <string name="use_latest_app">Utilice la última versión de Element en sus otros dispositivos:</string>
+    <string name="use_latest_app">Utilice la última versión de SchildiChat en sus otros dispositivos:</string>
     <string name="command_description_discard_session">Obliga a descartar la sesión de grupo saliente actual en una sala cifrada</string>
     <string name="command_description_discard_session_not_handled">Solo se admite en salas cifradas</string>
     <string name="enter_secret_storage_passphrase_or_key">Use su %1$s o use su %2$s para continuar.</string>
@@ -2579,7 +2579,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="create_room_dm_failure">No pudimos crear tu DM. Marque los usuarios que desea invitar y vuelva a intentarlo.</string>
 
     <string name="identity_server_error_terms_not_signed">Primero acepta los términos del servidor de identidad en la configuración.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Para su privacidad, Element solo admite el envío de números de teléfono y correos electrónicos de usuario con hash.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Para su privacidad, SchildiChat solo admite el envío de números de teléfono y correos electrónicos de usuario con hash.</string>
     <string name="identity_server_error_binding_error">La asociación ha fallado.</string>
     <string name="identity_server_error_no_current_binding_error">No hay asociación actual con este identificador.</string>
 

@@ -100,7 +100,7 @@
     <string name="user_directory_header">Directori de l\'usuari</string>
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_conversation_placeholder">Cap conversa</string>
-    <string name="no_contact_access_placeholder">No vau donar permís al Element per accedir als contactes locals</string>
+    <string name="no_contact_access_placeholder">No vau donar permís al SchildiChat per accedir als contactes locals</string>
     <string name="no_result_placeholder">Cap resultat</string>
 
     <!-- Rooms fragment -->
@@ -269,16 +269,16 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informació</string>
-    <string name="permissions_rationale_msg_storage">Per poder enviar i desar adjunts, el Element necessita permís d\'accés a la galeria de fotos i vídeos.\n\nA la següent finestra emergent, doneu-li el permís d\'accés i així podreu enviar fitxers des del telefon.</string>
-    <string name="permissions_rationale_msg_camera">Per poder fer fotos i vídeotrucades, el Element necessita permís d\'accés a la càmera.</string>
+    <string name="permissions_rationale_msg_storage">Per poder enviar i desar adjunts, el SchildiChat necessita permís d\'accés a la galeria de fotos i vídeos.\n\nA la següent finestra emergent, doneu-li el permís d\'accés i així podreu enviar fitxers des del telefon.</string>
+    <string name="permissions_rationale_msg_camera">Per poder fer fotos i vídeotrucades, el SchildiChat necessita permís d\'accés a la càmera.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
-    <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, el Element necessita permís d\'accés al microfon.</string>
+    <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, el SchildiChat necessita permís d\'accés al microfon.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer vídeotrucades, el Element necessita permís d\'accés a la càmera i al microfon.\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
-    <string name="permissions_rationale_msg_contacts">Element pot comprovar la vostra agenda de contactes per tal de trobar altres usuaris de Matrix basant-se en les seves adreces de correu i números de telèfon.
+    <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer vídeotrucades, el SchildiChat necessita permís d\'accés a la càmera i al microfon.\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
+    <string name="permissions_rationale_msg_contacts">SchildiChat pot comprovar la vostra agenda de contactes per tal de trobar altres usuaris de Matrix basant-se en les seves adreces de correu i números de telèfon.
 \n
 \nSi accepteu compartir la vostra agenda de contactes amb aquesta finalitat, si us plau permeteu l\'accés de la següent finestra emergent.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Element necessita permís d\'accés a l\'agenda de contactes.\n\nPermeteu que Element accedeixi als vostres contactes?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el SchildiChat necessita permís d\'accés a l\'agenda de contactes.\n\nPermeteu que SchildiChat accedeixi als vostres contactes?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">No s\'ha realitzat l\'acció per falta de permisos</string>
 
@@ -874,7 +874,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="e2e_re_request_encryption_key_sent">Petició de clau enviada.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Sol·licitud enviada</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega Element a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega SchildiChat a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="status_theme">Tema Status.im</string>
@@ -935,13 +935,13 @@ En voleu afegir algun?</string>
     <string name="settings_deactivate_my_account">Desactivar el meu compte</string>
 
     <string name="startup_notification_privacy_title">Notificació de privacitat</string>
-    <string name="startup_notification_privacy_message">El Element pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada. Això podria afectar el consum de bateria.</string>
+    <string name="startup_notification_privacy_message">El SchildiChat pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada. Això podria afectar el consum de bateria.</string>
     <string name="startup_notification_privacy_button_grant">Concedir permís</string>
     <string name="startup_notification_privacy_button_other">Escolliu una altra opció</string>
 
     <string name="settings_opt_in_of_analytics">Envia dades d\'anàlisi</string>
-    <string name="settings_opt_in_of_analytics_summary">Element recopila dades d\'anàlisi anònimes per tal de permetre\'ns millorar l\'aplicació.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Si us plau, activeu les dades d\'anàlisi per ajudar-nos a millorar Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat recopila dades d\'anàlisi anònimes per tal de permetre\'ns millorar l\'aplicació.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Si us plau, activeu les dades d\'anàlisi per ajudar-nos a millorar SchildiChat.</string>
     <string name="settings_opt_in_of_analytics_ok">Sí, vull ajudar!</string>
 
     <string name="settings_without_flair">No sou ara mateix membre de cap comunitat.</string>
@@ -1026,7 +1026,7 @@ En voleu afegir algun?</string>
     <string name="accept">Acceptar</string>
 
     <string name="settings_call_category">Trucada</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Useu el to de SchildiChat per defecte per les trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
     <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
 
@@ -1077,12 +1077,12 @@ Proveu de reiniciar l\'aplicació.</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">El Element no està afectat per l\'optimització de bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">El SchildiChat no està afectat per l\'optimització de bateria.</string>
     <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'entrada i sortida</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis d\'avatar i àlies.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Connexió al rerefons</string>
-    <string name="startup_notification_fdroid_battery_optim_message">El Element necessita mantenir una connexió de baix impacte al rerefons, per tal de tindre notificacions fiables.
-A la pantalla següent se us demanarà que permeteu al Element executar-se sempre al rerefons, si us plau, accepteu-ho.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">El SchildiChat necessita mantenir una connexió de baix impacte al rerefons, per tal de tindre notificacions fiables.
+A la pantalla següent se us demanarà que permeteu al SchildiChat executar-se sempre al rerefons, si us plau, accepteu-ho.</string>
     <string name="settings_password">Contrasenya</string>
     <string name="account_additional_info">Informació addicional: %s</string>
 
@@ -1116,7 +1116,7 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envieu un informe d\'error per ajudar-nos a investigar-ho.</string>
 
     <string name="settings_troubleshoot_test_device_settings_failed">Les notificacions no són permeses per a aquest dispositiu.
-Comproveu els paràmetres del Element.</string>
+Comproveu els paràmetres del SchildiChat.</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Paràmetres personalitzats.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Teniu en compte que alguns tipus de missatge estan configurats per a ser silenciosos (això produirà una notificació sense so).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Algunes notificacions estan inhabilitades als vostres paràmetres personalitzats.</string>
@@ -1125,7 +1125,7 @@ Comproveu els paràmetres del Element.</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Comprovació dels serveis de Play</string>
     <string name="settings_troubleshoot_test_play_services_success">L\'APK dels serveis de Google Play és disponible i al dia.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">El Element empra els serveis de Google Play per a lliurar les notificacions, però no sembla que estiguen configurats correctament.
+    <string name="settings_troubleshoot_test_play_services_failed">El SchildiChat empra els serveis de Google Play per a lliurar les notificacions, però no sembla que estiguen configurats correctament.
 %1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">Testimoni del Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">S\'ha recuperat el testimoni FCM correctament.
@@ -1133,7 +1133,7 @@ Comproveu els paràmetres del Element.</string>
     <string name="settings_troubleshoot_test_fcm_failed">No s\'ha pogut recuperar el testimonu FCM:
 %1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Aquest error és fora del control del Element i segons Google aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions, i no hauria d\'afectar un usuari normal.</string>
+Aquest error és fora del control del SchildiChat i segons Google aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions, i no hauria d\'afectar un usuari normal.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Registre del testimoni</string>
@@ -1146,7 +1146,7 @@ Aquest error és fora del control del Element i segons Google aquest error indic
     <string name="settings_troubleshoot_test_service_restart_failed">No s\'ha pogut iniciar el servei</string>
 
     <string name="settings_troubleshoot_test_service_boot_success">El servei s\'iniciarà quan s\'iniciï el dispositiu.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu s\'iniciï, per la qual cosa no rebreu notificacions fins que el Element s\'haja obert una vegada.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu s\'iniciï, per la qual cosa no rebreu notificacions fins que el SchildiChat s\'haja obert una vegada.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Habilita l\'inici durant l\'arrencada</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprova les restriccions del rerefons</string>
@@ -1176,7 +1176,7 @@ Aquest error és fora del control del Element i segons Google aquest error indic
     <string name="passphrase_empty_error_message">Introduïu una frase de pas</string>
     <string name="passphrase_passphrase_too_weak">La frase de pas és massa feble</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase de pas si voleu que el Element generi una clau de recuperació.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase de pas si voleu que el SchildiChat generi una clau de recuperació.</string>
     <string name="keys_backup_no_session_error">No hi ha cap sessió de Matrix disponible</string>
 
     <string name="keys_backup_setup_step1_title">No perdeu mai els missatges xifrats</string>
@@ -1211,12 +1211,12 @@ Avís: és possible que calgui suprimir el fitxer si es desinstal·la l\'aplicac
 
     <string name="keys_backup_restore_with_key_helper">Heu perdut la vostra clau de recuperació? Podeu establir una nova a les preferències.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">"[%1$s]
-Aquest error és fora del control del Element. Pot ocórrer per diferents raons. És possible que funcioni si ho torneu a provar més endavant. També podeu comprovar que el servei de Google Play no està restringit a l\'ús  de dades a les preferències del sistema, o que el rellotge del dispositiu marca l\'hora correcta. També pot passar amb ROM personalitzades."</string>
+Aquest error és fora del control del SchildiChat. Pot ocórrer per diferents raons. És possible que funcioni si ho torneu a provar més endavant. També podeu comprovar que el servei de Google Play no està restringit a l\'ús  de dades a les preferències del sistema, o que el rellotge del dispositiu marca l\'hora correcta. També pot passar amb ROM personalitzades."</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Aquest error és fora del control del Element. No hi ha cap compte de Google al telèfon. Obrir el gestor de comptes i afegiu un compte de Google.</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Les restriccions de rerefons són inhabilitades per al Element. Aquesta prova s\'hauria d\'executar emprant dades mòbils (sense wifi).
+Aquest error és fora del control del SchildiChat. No hi ha cap compte de Google al telèfon. Obrir el gestor de comptes i afegiu un compte de Google.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Les restriccions de rerefons són inhabilitades per al SchildiChat. Aquesta prova s\'hauria d\'executar emprant dades mòbils (sense wifi).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions de rerefons són habilitades per al Element.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions de rerefons són habilitades per al SchildiChat.
 Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
 %1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode d\'estalvi d\'energia. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
@@ -1409,7 +1409,7 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
 
     <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opcions d\'autocompleció del servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element ha detectat una configuració de servidor personalitzat pel domini del seu identificador d\'usuari \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat ha detectat una configuració de servidor personalitzat pel domini del seu identificador d\'usuari \"%1$s\":
 \n%2$s</string>
     <string name="invalid_or_expired_credentials">Us heu desconnectat a causa de credencials incorrectes o caducades.</string>
 
@@ -1497,7 +1497,7 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="group_all_communities">Totes les comunitats</string>
 
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element encara no suporta la pre-visualització de sales llegibles per tothom</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">SchildiChat encara no suporta la pre-visualització de sales llegibles per tothom</string>
 
     <string name="fab_menu_create_room">Sales</string>
     <string name="fab_menu_create_chat">Missatges directes</string>
