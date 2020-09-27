@@ -96,7 +96,7 @@
     <string name="user_directory_header">Каталог користувачів</string>
     <string name="matrix_only_filter">Лише Matrix-контакти</string>
     <string name="no_conversation_placeholder">Немає діалогів</string>
-    <string name="no_contact_access_placeholder">Ви не надали SchildiChat доступу до контактів</string>
+    <string name="no_contact_access_placeholder">Ви не надали Element доступу до контактів</string>
     <string name="no_result_placeholder">Немає результатів</string>
 
     <!-- Rooms fragment -->
@@ -260,10 +260,10 @@
     <string name="permissions_rationale_msg_record_audio">Для здійснення аудіодзвінків потрібен доступ до мікрофону.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nБудь ласка, надайте його у наступному виринаючому вікні, щоб мати змогу здійснити дзвінок.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
-    <string name="permissions_rationale_msg_contacts">SchildiChat потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nБудь ласка, надайте його у наступному виринаючому діалозі, щоб знати, які з контактів теж використовують SchildiChat.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix по email чи за номерами телефонів.
+    <string name="permissions_rationale_msg_contacts">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nБудь ласка, надайте його у наступному виринаючому діалозі, щоб знати, які з контактів теж використовують Element.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix по email чи за номерами телефонів.
 
-Надати SchildiChat доступ до ваших контактів?</string>
+Надати Element доступ до ваших контактів?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Вибачте.. Дію не виконано через нестачу дозволів</string>
 
@@ -844,7 +844,7 @@
     <string name="settings_flair">Настрій</string>
 
     <string name="room_settings_room_notifications_title">Сповіщення</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть SchildiChat на іншому пристрої, що може дешифрувати повідомлення.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть Element на іншому пристрої, що може дешифрувати повідомлення.</string>
 
     <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
 
@@ -918,9 +918,9 @@
     <string name="settings_inline_url_preview">Попередній перегляд посилань</string>
     <string name="settings_preview_media_before_sending">Попередній перегляд медіа перед відправкою</string>
 
-    <string name="startup_notification_privacy_message">SchildiChat може працювати у фоновому режимі для керування безпекою та конфіденційністю ваших сповіщень. Це може вплинути на час роботи батареї.</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat збирає анонімну аналітику, щоб ми могли вдосконалювати цей додаток.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Будь ласка, увімкніть аналітику, щоб допомагати нам вдосконалювати SchildiChat.</string>
+    <string name="startup_notification_privacy_message">Element може працювати у фоновому режимі для керування безпекою та конфіденційністю ваших сповіщень. Це може вплинути на час роботи батареї.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element збирає анонімну аналітику, щоб ми могли вдосконалювати цей додаток.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Будь ласка, увімкніть аналітику, щоб допомагати нам вдосконалювати Element.</string>
     <string name="settings_without_flair">Ви наразі не є учасником жодної спільноти.</string>
 
     <string name="room_settings_no_flair">Ця кімната не показує настрій для спільнот</string>
@@ -1101,7 +1101,7 @@
     <string name="markdown_has_been_disabled">Markdown вимкнено.</string>
 
     <string name="settings_call_category">Виклики</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Використовувати стандартний рингтон SchildiChat для вхідних викликів</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Використовувати стандартний рингтон Element для вхідних викликів</string>
     <string name="settings_call_ringtone_title">Рингтон вхідного виклику</string>
     <string name="settings_call_ringtone_dialog_title">Оберіть рингтон для викликів:</string>
 
