@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.signout.soft.epoxy
+package org.matrix.android.sdk.internal.session.room.send
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
-import im.vector.app.core.epoxy.VectorEpoxyHolder
-import im.vector.app.core.epoxy.VectorEpoxyModel
+import com.squareup.moshi.JsonClass
 
-@EpoxyModelClass(layout = R.layout.item_login_header)
-abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
-    class Holder : VectorEpoxyHolder()
-}
+/**
+ * This is used as a holder to pass necessary data to some workers params.
+ */
+@JsonClass(generateAdapter = true)
+internal data class LocalEchoIdentifiers(val roomId: String, val eventId: String)

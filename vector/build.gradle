@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 7
+ext.versionPatch = 8
 
 ext.scVersion = 20
 
@@ -356,7 +356,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
-    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta9'
+    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta10'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.2.0'

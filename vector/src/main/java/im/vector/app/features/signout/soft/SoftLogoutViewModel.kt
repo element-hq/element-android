@@ -25,16 +25,16 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.hasUnsavedKeys
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.login.LoginMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.Cancelable
-import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.hasUnsavedKeys
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.login.LoginMode
 import timber.log.Timber
 
 /**
@@ -102,7 +102,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
             override fun onSuccess(data: LoginFlowResult) {
                 when (data) {
-                    is LoginFlowResult.Success            -> {
+                    is LoginFlowResult.Success -> {
                         val loginMode = when {
                             // SSO login is taken first
                             data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
@@ -110,29 +110,12 @@ class SoftLogoutViewModel @AssistedInject constructor(
                             else                                                       -> LoginMode.Unsupported
                         }
 
-                        if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
-                            notSupported()
-                        } else {
-                            setState {
-                                copy(
-                                        asyncHomeServerLoginFlowRequest = Success(loginMode)
-                                )
-                            }
+                        setState {
+                            copy(
+                                    asyncHomeServerLoginFlowRequest = Success(loginMode)
+                            )
                         }
                     }
-                    is LoginFlowResult.OutdatedHomeserver -> {
-                        notSupported()
-                    }
-                }
-            }
-
-            private fun notSupported() {
-                // Should not happen since it's a re-logout
-                // Notify the UI
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Fail(IllegalStateException("Should not happen"))
-                    )
                 }
             }
         })

@@ -21,13 +21,13 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -49,7 +49,7 @@ import javax.inject.Inject
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val roomSummaryHolder: RoomSummaryHolder,
                                                         private val dateFormatter: VectorDateFormatter,
-                                                        private val colorProvider: ColorProvider) {
+                                                        private val vectorPreferences: VectorPreferences) {
 
     fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
@@ -81,6 +81,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 showInformation = showInformation,
+                forceShowTimestamp = vectorPreferences.alwaysShowTimeStamps(),
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
                         ?.map {

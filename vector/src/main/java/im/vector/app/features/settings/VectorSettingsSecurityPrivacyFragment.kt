@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
+import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.ExternalIntentData
 import im.vector.app.core.intent.analyseIntent
 import im.vector.app.core.intent.getFilenameFromUri
@@ -54,9 +56,8 @@ import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
-import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
-import im.vector.app.features.raw.wellknown.ElementWellKnownMapper
+import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -74,7 +75,6 @@ import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
-        private val pinLocker: PinLocker,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
         private val navigator: Navigator
@@ -126,8 +126,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
-    private val usePinCodePref by lazy {
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
+    private val openPinCodeSettingsPref by lazy {
+        findPreference<VectorPreference>("SETTINGS_SECURITY_PIN")!!
     }
 
     override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
@@ -153,14 +153,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     disposables.add(it)
                 }
 
-        vectorActivity.getVectorComponent()
-                .rawService()
-                .getWellknown(session.myUserId, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
-                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                        ElementWellKnownMapper.from(data)?.isE2EByDefault() == false
-            }
-        })
+        lifecycleScope.launchWhenResumed {
+            findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                    vectorActivity.getVectorComponent()
+                            .rawService()
+                            .getElementWellknown(session.myUserId)
+                            ?.isE2EByDefault() == false
+        }
     }
 
     private val secureBackupCategory by lazy {
@@ -263,7 +262,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
         }
 
-        refreshPinCodeStatus()
+        openPinCodeSettingsPref.setOnPreferenceClickListener {
+            openPinCodePreferenceScreen()
+            true
+        }
 
         refreshXSigningStatus()
 
@@ -319,60 +321,62 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SAVE_MEGOLM_EXPORT) {
-            val uri = data?.data
-            if (resultCode == Activity.RESULT_OK && uri != null) {
-                activity?.let { activity ->
-                    ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
-                        override fun onPassphrase(passphrase: String) {
-                            displayLoadingView()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SAVE_MEGOLM_EXPORT -> {
+                    val uri = data?.data
+                    if (uri != null) {
+                        activity?.let { activity ->
+                            ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                                override fun onPassphrase(passphrase: String) {
+                                    displayLoadingView()
 
-                            KeysExporter(session)
-                                    .export(requireContext(),
-                                            passphrase,
-                                            uri,
-                                            object : MatrixCallback<Boolean> {
-                                                override fun onSuccess(data: Boolean) {
-                                                    if (data) {
-                                                        requireActivity().toast(getString(R.string.encryption_exported_successfully))
-                                                    } else {
-                                                        requireActivity().toast(getString(R.string.unexpected_error))
-                                                    }
-                                                    hideLoadingView()
-                                                }
+                                    KeysExporter(session)
+                                            .export(requireContext(),
+                                                    passphrase,
+                                                    uri,
+                                                    object : MatrixCallback<Boolean> {
+                                                        override fun onSuccess(data: Boolean) {
+                                                            if (data) {
+                                                                requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                                                            } else {
+                                                                requireActivity().toast(getString(R.string.unexpected_error))
+                                                            }
+                                                            hideLoadingView()
+                                                        }
 
-                                                override fun onFailure(failure: Throwable) {
-                                                    onCommonDone(failure.localizedMessage)
-                                                }
-                                            })
+                                                        override fun onFailure(failure: Throwable) {
+                                                            onCommonDone(failure.localizedMessage)
+                                                        }
+                                                    })
+                                }
+                            })
                         }
-                    })
+                    }
                 }
-            }
-        } else if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            pinLocker.unlock()
-            refreshPinCodeStatus()
-        } else if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                importKeys(data)
+                PinActivity.PIN_REQUEST_CODE    -> {
+                    doOpenPinCodePreferenceScreen()
+                }
+                REQUEST_E2E_FILE_REQUEST_CODE   -> {
+                    importKeys(data)
+                }
             }
         }
     }
 
-    private fun refreshPinCodeStatus() {
+    private fun openPinCodePreferenceScreen() {
         lifecycleScope.launchWhenResumed {
             val hasPinCode = pinCodeStore.hasEncodedPin()
-            usePinCodePref.isChecked = hasPinCode
-            usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val pinMode = if (hasPinCode) {
-                    PinMode.DELETE
-                } else {
-                    PinMode.CREATE
-                }
-                navigator.openPinCode(this@VectorSettingsSecurityPrivacyFragment, pinMode)
-                true
+            if (hasPinCode) {
+                navigator.openPinCode(this@VectorSettingsSecurityPrivacyFragment, PinMode.AUTH)
+            } else {
+                doOpenPinCodePreferenceScreen()
             }
         }
+    }
+
+    private fun doOpenPinCodePreferenceScreen() {
+        (vectorActivity as? VectorSettingsActivity)?.navigateTo(VectorSettingsPinFragment::class.java)
     }
 
     private fun refreshKeysManagementSection() {
@@ -457,6 +461,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
             val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
+
+            val showPassword = dialogLayout.findViewById<ImageView>(R.id.importDialogShowPassword)
+            var passwordVisible = false
+
+            showPassword.setOnClickListener {
+                passwordVisible = !passwordVisible
+                passPhraseEditText.showPassword(passwordVisible)
+                showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            }
 
             passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

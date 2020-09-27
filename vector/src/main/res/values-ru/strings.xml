@@ -1685,7 +1685,7 @@
     <string name="settings_discovery_category">Обнаружение</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать%s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
     <string name="invite_no_identity_server_error">Добавьте идентификационный сервер в свои настройки, чтобы выполнить это действие.</string>
-    <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации (Экспериментальный)</string>
+    <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
 \nВ зависимости от состояния ресурса вашего устройства, синхронизация может быть отложена операционной системой.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">Element будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
@@ -2716,4 +2716,18 @@
 
     <string name="error_opening_banned_room">Невозможно открыть комнату, в которую вам запрещён доступ.</string>
     <string name="room_error_not_found">Невозможно найти эту комнату. Убедитесь, что она существует.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Показать события статуса участников комнаты</string>
+    <string name="settings_show_room_member_state_events_summary">Включает в себя события приглашения/ присоединения/выхода/исключения/бана и изменение аватара/отображаемого имени.</string>
+    <string name="sent_a_poll">Голосование</string>
+    <string name="sent_a_bot_buttons">Кнопки бота</string>
+    <string name="sent_a_reaction">Отреагировал: %s</string>
+    <string name="sent_verification_conclusion">Результат проверки</string>
+
+    <string name="universal_link_malformed">Ссылка была искажена</string>
 </resources>

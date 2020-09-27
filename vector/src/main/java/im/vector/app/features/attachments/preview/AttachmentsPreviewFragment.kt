@@ -42,17 +42,13 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.OnSnapPositionChangeListener
-import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT
 import im.vector.app.core.utils.SnapOnScrollListener
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.attachSnapHelperWithListener
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.media.createUCropWithDefaultSettings
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -102,7 +98,7 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction   -> {
+            R.id.attachmentsPreviewEditAction -> {
                 handleEditAction()
                 true
             }
@@ -183,22 +179,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         viewModel.handle(AttachmentsPreviewAction.RemoveCurrentAttachment)
     }
 
-    private fun handleEditAction() {
-        // check permissions
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT)) {
-            doHandleEditAction()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT && allGranted(grantResults)) {
-            doHandleEditAction()
-        }
-    }
-
-    private fun doHandleEditAction() = withState(viewModel) {
+    private fun handleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
         val uri = currentAttachment.queryUri

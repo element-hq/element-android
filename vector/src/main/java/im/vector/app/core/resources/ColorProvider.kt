@@ -25,7 +25,7 @@ import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
-class ColorProvider @Inject constructor(private val context: Context) {
+class ColorProvider @Inject constructor(val context: Context) {
 
     @ColorInt
     fun getColor(@ColorRes colorRes: Int): Int {

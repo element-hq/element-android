@@ -28,7 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import timber.log.Timber
 import javax.inject.Inject
@@ -167,6 +167,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // Security
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
         const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        private const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
+        private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
+        const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -430,7 +433,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun getUnknownDeviceDismissedList(): List<String> {
-        return tryThis {
+        return tryOrNull {
             defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
         }.orEmpty()
     }
@@ -865,14 +868,31 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * The user enable protecting app access with pin code
+     * The user enable protecting app access with pin code.
+     * Currently we use the pin code store to know if the pin is enabled, so this is not used
      */
     fun useFlagPinCode(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
     }
 
+    fun useBiometricsToUnlock(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_BIOMETRICS_FLAG, true)
+    }
+
+    fun useGracePeriod(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG, true)
+    }
+
+    /**
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content
+     */
+    fun useCompleteNotificationFormat(): Boolean {
+        return !useFlagPinCode()
+                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
+    }
+
     fun backgroundSyncTimeOut(): Int {
-        return tryThis {
+        return tryOrNull {
             // The xml pref is saved as a string so use getString and parse
             defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, null)?.toInt()
         } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
@@ -886,7 +906,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun backgroundSyncDelay(): Int {
-        return tryThis {
+        return tryOrNull {
             // The xml pref is saved as a string so use getString and parse
             defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, null)?.toInt()
         } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS

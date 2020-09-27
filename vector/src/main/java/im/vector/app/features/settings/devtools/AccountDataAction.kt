@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.settings.devtools
 
-import android.content.Context
-import androidx.annotation.ColorRes
-import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.core.platform.VectorViewModelAction
 
-@ColorRes
-fun getColorFromRoomId(roomId: String?, context: Context? = null): Int {
-    if (ThemeUtils.isScTheme(context)) return R.color.avatar_fill_sc_1;
-    return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
-        1    -> R.color.riotx_avatar_fill_2
-        2    -> R.color.riotx_avatar_fill_3
-        else -> R.color.riotx_avatar_fill_1
-    }
+sealed class AccountDataAction : VectorViewModelAction {
+    data class DeleteAccountData(val type: String) : AccountDataAction()
 }

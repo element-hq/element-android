@@ -18,8 +18,8 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
-import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -27,11 +27,11 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.asyncTransaction
 import org.matrix.android.sdk.internal.database.helper.nextId
-import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -44,11 +44,13 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
+import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                       private val taskExecutor: TaskExecutor,
                                                        private val realmSessionProvider: RealmSessionProvider,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
@@ -76,12 +78,12 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
-        monarchy.writeAsync { realm ->
+        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
             val eventInsertEntity = EventInsertEntity(event.eventId, event.type).apply {
                 this.insertType = EventInsertType.LOCAL_ECHO
             }
             realm.insert(eventInsertEntity)
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@writeAsync
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
@@ -89,27 +91,38 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
 
     fun updateSendState(eventId: String, sendState: SendState) {
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
-        monarchy.writeAsync { realm ->
+        updateEchoAsync(eventId) { realm, sendingEventEntity ->
+            if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
+                // If already synced, do not put as sent
+            } else {
+                sendingEventEntity.sendState = sendState
+            }
+            roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
+        }
+    }
+
+    suspend fun updateEcho(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
+        monarchy.awaitTransaction { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
-                if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
-                    // If already synced, do not put as sent
-                } else {
-                    sendingEventEntity.sendState = sendState
-                }
-                roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
+                block(realm, sendingEventEntity)
             }
         }
     }
 
-    fun updateEncryptedEcho(eventId: String, encryptedContent: Content, mxEventDecryptionResult: MXEventDecryptionResult) {
-        monarchy.writeAsync { realm ->
+    fun updateEchoAsync(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
+        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
-                sendingEventEntity.type = EventType.ENCRYPTED
-                sendingEventEntity.content = ContentMapper.map(encryptedContent)
-                sendingEventEntity.setDecryptionResult(mxEventDecryptionResult)
+                block(realm, sendingEventEntity)
             }
+        }
+    }
+
+    suspend fun getUpToDateEcho(eventId: String): Event? {
+        // We are using awaitTransaction here to make sure this executes after other transactions
+        return monarchy.awaitTransaction { realm ->
+            EventEntity.where(realm, eventId).findFirst()?.asDomain(castJsonNumbers = true)
         }
     }
 
@@ -150,7 +163,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         return getAllEventsWithStates(roomId, SendState.HAS_FAILED_STATES)
     }
 
-    fun getAllEventsWithStates(roomId: String, states : List<SendState>): List<TimelineEvent> {
+    fun getAllEventsWithStates(roomId: String, states: List<SendState>): List<TimelineEvent> {
         return realmSessionProvider.withRealm { realm ->
             TimelineEventEntity
                     .findAllInRoomWithSendStates(realm, roomId, states)

@@ -1539,7 +1539,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_call_ringtone_use_default_stun">允許汰退呼叫協助伺服器</string>
     <string name="settings_call_ringtone_use_default_stun_sum">當您的家伺服器未提供時，將會使用 %s 做為協助（您的 IP 位置將會在通話時被分享）</string>
     <string name="invite_no_identity_server_error">在您的設定中新增一臺身份識別伺服器以執行此動作。</string>
-    <string name="settings_background_fdroid_sync_mode">背景同步模式（實驗性）</string>
+    <string name="settings_background_fdroid_sync_mode">背景同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">為電池最佳化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element 將會在背景同步以節省裝置的有限資源（電池）。
 \n取決於您裝置的資源狀態，作業系統可能會延遲同步。</string>
@@ -2562,4 +2562,16 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_opening_banned_room">無法開啟禁止您進入的聊天室。</string>
     <string name="room_error_not_found">找不到此聊天室。請確定它存在。</string>
+    <plurals name="seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
+    <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
+    <string name="sent_a_poll">投票</string>
+    <string name="sent_a_bot_buttons">機器人按鈕</string>
+    <string name="sent_a_reaction">反應：%s</string>
+    <string name="sent_verification_conclusion">驗證結論</string>
+
+    <string name="universal_link_malformed">連結格式錯誤</string>
 </resources>

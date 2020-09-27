@@ -346,11 +346,11 @@
     <string name="permissions_rationale_msg_camera">Element behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet."</string>
+\nVänligen ge åtkomst i nästa popup för att kunna utföra samtalet."</string>
     <string name="permissions_rationale_msg_record_audio">Element behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet."</string>
+\nVänligen ge åtkomst i nästa popup för att kunna utföra samtalet."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Element behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal. 
 \n 
 \nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet.</string>
@@ -525,7 +525,7 @@
     <string name="settings_add_3pid_confirm_password_title">Bekräfta ditt lösenord</string>
     <string name="settings_containing_my_display_name">Meddelanden som innehåller mitt visningsnamn</string>
     <string name="settings_user_settings">Användarinställningar</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Innehåller ändringar av avatar eller visningsnamn.</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Innehåller byten av avatar eller visningsnamn.</string>
     <string name="devices_delete_dialog_text">Den här handlingen kräver extra autentisering.
 \nFör att fortsätta, skriv in ditt lösenord.</string>
     <string name="devices_delete_pswd">Lösenord:</string>
@@ -1294,7 +1294,7 @@
     <string name="settings_notification_privacy_no_background_sync">Apparna behöver <b>inte</b> ansluta till hemservern i bakgrunden, det bör reducera batterianvändning</string>
     <string name="settings_turn_screen_on">Tänd skärmen i 3 sekunder</string>
     <string name="settings_background_sync">Bakgrundssynkronisering</string>
-    <string name="settings_background_fdroid_sync_mode">Bakgrundssynkläge (experimentellt)</string>
+    <string name="settings_background_fdroid_sync_mode">Bakgrundssynkläge</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimerad för batteri</string>
     <string name="settings_app_term_conditions">Användarvillkor</string>
     <string name="settings_third_party_notices">Meddelanden från tredje part</string>
@@ -2125,7 +2125,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services-adress</string>
     <string name="login_server_url_form_other_hint">Adress</string>
     <string name="login_server_url_form_modular_text">Premiumservervärd för organisationer</string>
-    <string name="login_server_url_form_modular_notice">Skriv in adressen för Modular Element eller servern du vill använda</string>
+    <string name="login_server_url_form_modular_notice">Skriv in adressen för den Modular Element eller server du vill använda</string>
     <string name="login_server_url_form_other_notice">Skriv in adressen för en server eller Element du vill ansluta till</string>
     <string name="login_server_url_form_common_notice">Skriv in adressen för servern du vill använda</string>
 
@@ -2547,4 +2547,17 @@
 
     <string name="error_opening_banned_room">Kan inte öppna ett rum du är bannad från.</string>
     <string name="room_error_not_found">Kan inte hitta det här rummet. Se till att det existerar.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Visa statushändelser angående rumsmedlemmar</string>
+    <string name="settings_show_room_member_state_events_summary">Inkluderar när personer bjuds in, går med, lämnar, kickas, bannas eller byter sin avatar eller sitt namn.</string>
+    <string name="sent_a_poll">Omröstning</string>
+    <string name="sent_a_bot_buttons">Bottknappar</string>
+    <string name="sent_a_reaction">Reagerade med: %s</string>
+    <string name="sent_verification_conclusion">Verifieringsavslutning</string>
+
+    <string name="universal_link_malformed">Länken var felformaterad</string>
 </resources>

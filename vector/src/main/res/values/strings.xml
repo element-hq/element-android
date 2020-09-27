@@ -89,6 +89,7 @@
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
+    <string name="no_permissions_to_start_webrtc_call">You do not have permission to start a call in this room</string>
     <string name="conference_call_in_progress">A conference is already in progress!</string>
     <string name="video_meeting">Start video meeting</string>
     <string name="audio_meeting">Start audio meeting</string>
@@ -177,7 +178,7 @@
     <string name="no_room_placeholder">No rooms</string>
     <string name="no_public_room_placeholder">No public rooms available</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 user</item>
+        <item quantity="one">%d user</item>
         <item quantity="other">%d users</item>
     </plurals>
 
@@ -346,7 +347,7 @@
 
     <!-- Mels -->
     <plurals name="membership_changes">
-        <item quantity="one">1 membership change</item>
+        <item quantity="one">%d membership change</item>
         <item quantity="other">%d membership changes</item>
     </plurals>
 
@@ -449,30 +450,30 @@
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 active members</item>
+        <item quantity="one">%d active members</item>
         <item quantity="other">%d active members</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 member</item>
+        <item quantity="one">%d member</item>
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
+        <item quantity="one">%dh</item>
         <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
 
@@ -580,7 +581,7 @@
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 new message</item>
+        <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
     </plurals>
 
@@ -603,7 +604,7 @@
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 selected</item>
+        <item quantity="one">%d selected</item>
         <item quantity="other">%d selected</item>
     </plurals>
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
@@ -641,7 +642,7 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -1142,20 +1143,24 @@
 
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 unread notified message</item>
+        <item quantity="one">%d unread notified message</item>
         <item quantity="other">%d unread notified messages</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 unread notified message</item>
+        <item quantity="one">%d unread notified message</item>
         <item quantity="other">%d unread notified messages</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
+    </plurals>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d invitation</item>
+        <item quantity="other">%d invitations</item>
     </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 message</item>
+        <item quantity="one">%1$s: %2$d message</item>
         <item quantity="other">%1$s: %2$d messages</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1164,6 +1169,8 @@
     </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s in %2$s and %3$s"</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s and %2$s"</string>
     <string name="notification_unknown_new_event">New Event</string>
     <string name="notification_unknown_room_name">Room</string>
     <string name="notification_new_messages">New Messages</string>
@@ -1192,7 +1199,7 @@
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget from this room?</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 active widget</item>
+        <item quantity="one">%d active widget</item>
         <item quantity="other">%d active widgets</item>
     </plurals>
     <string name="active_widget_view_action">"VIEW"</string>
@@ -1318,12 +1325,12 @@
     <string name="filter_group_rooms">Filter group rooms</string>
 
     <plurals name="group_members">
-        <item quantity="one">1 member</item>
+        <item quantity="one">%d member</item>
         <item quantity="other">%d members</item>
     </plurals>
 
     <plurals name="group_rooms">
-        <item quantity="one">1 room</item>
+        <item quantity="one">%d room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
@@ -1808,7 +1815,7 @@
     <string name="two_users_read">%1$s and %2$s read</string>
     <string name="one_user_read">%s read</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">1 user read</item>
+        <item quantity="one">%d user read</item>
         <item quantity="other">%d users read</item>
     </plurals>
 
@@ -1987,6 +1994,7 @@
     <string name="login_validation_code_is_not_correct">The entered code is not correct. Please check.</string>
     <string name="login_error_outdated_homeserver_title">Outdated homeserver</string>
     <string name="login_error_outdated_homeserver_content">This homeserver is running too old a version to connect to. Ask your homeserver admin to upgrade.</string>
+    <string name="login_error_outdated_homeserver_warning_content">This homeserver is running an old version. Ask your homeserver admin to upgrade. You can continue, but some features may not work correctly.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
@@ -2226,6 +2234,8 @@
 
     <string name="settings_dev_tools">Dev Tools</string>
     <string name="settings_account_data">Account Data</string>
+    <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
+
     <plurals name="poll_info">
         <item quantity="zero">%d vote</item>
         <item quantity="other">%d votes</item>
@@ -2556,14 +2566,26 @@
     <string name="too_many_pin_failures">Too many errors, you\'ve been logged out</string>
     <string name="create_pin_title">Choose a PIN for security</string>
     <string name="create_pin_confirm_title">Confirm PIN</string>
-    <string name="create_pin_confirm_failure">Failed to validate pin, please tap a new one.</string>
+    <string name="create_pin_confirm_failure">Failed to validate PIN, please tap a new one.</string>
     <string name="auth_pin_title">Enter your PIN</string>
     <string name="auth_pin_forgot">Forgot PIN?</string>
-    <string name="auth_pin_reset_title">Reset pin</string>
-    <string name="auth_pin_new_pin_action">New pin</string>
+    <string name="auth_pin_reset_title">Reset PIN</string>
+    <string name="auth_pin_new_pin_action">New PIN</string>
     <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="settings_security_application_protection_title">Protect access</string>
+    <string name="settings_security_application_protection_summary">Protect access using PIN and biometrics.</string>
+    <string name="settings_security_application_protection_screen_title">Configure protection</string>
     <string name="settings_security_pin_code_title">Enable PIN</string>
     <string name="settings_security_pin_code_summary">If you want to reset your PIN, tap Forgot PIN to logout and reset.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Enable biometrics</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock Element.</string>
+    <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
+    <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
+    <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open Element.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>

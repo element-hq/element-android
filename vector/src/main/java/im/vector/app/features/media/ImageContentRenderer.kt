@@ -39,7 +39,7 @@ import im.vector.app.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -109,7 +109,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     fun clear(imageView: ImageView) {
         // It can be called after recycler view is destroyed, just silently catch
         // We'd better keep ref to requestManager, but we don't have it
-        tryThis {
+        tryOrNull {
             GlideApp
                     .with(imageView).clear(imageView)
         }

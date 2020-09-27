@@ -336,7 +336,7 @@ internal class DefaultSendService @AssistedInject constructor(
 
     private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         // Same parameter
-        return EncryptEventWorker.Params(sessionId, event)
+        return EncryptEventWorker.Params(sessionId, event.eventId ?: "")
                 .let { WorkerParamsFactory.toData(it) }
                 .let {
                     workManagerProvider.matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
@@ -360,7 +360,10 @@ internal class DefaultSendService @AssistedInject constructor(
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
                                       compressBeforeSending: Boolean): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, allLocalEchos, attachment, isRoomEncrypted, compressBeforeSending)
+        val localEchoIds = allLocalEchos.map {
+            LocalEchoIdentifiers(it.roomId!!, it.eventId!!)
+        }
+        val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, localEchoIds, attachment, isRoomEncrypted, compressBeforeSending)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
