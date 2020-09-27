@@ -1,0 +1,5 @@
+- Hide sender avatars in DMs
+- Increase sticker size
+- Remove speach bubbles for images, videos and stickers
+- Multiple stickers in a row don't require sender information each time
+- Codebase updated to Element 1.0.8
