@@ -21,6 +21,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
+import com.nikitakozlov.pury.Pury
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -325,6 +326,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createEvent(roomId: String, type: String, content: Content?): Event {
         val localId = LocalEcho.createLocalEchoId()
+        SendPerformanceTracker.startProfiling(localId)
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -433,10 +435,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE   -> return TextContent("sent a file.")
-            MessageType.MSGTYPE_AUDIO  -> return TextContent("sent an audio file.")
-            MessageType.MSGTYPE_IMAGE  -> return TextContent("sent an image.")
-            MessageType.MSGTYPE_VIDEO  -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_FILE -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO -> return TextContent("sent a video.")
             else                       -> return TextContent(content?.body ?: "")
         }
     }

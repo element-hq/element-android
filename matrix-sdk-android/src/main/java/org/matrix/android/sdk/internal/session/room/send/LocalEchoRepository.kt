@@ -17,6 +17,9 @@
 
 package org.matrix.android.sdk.internal.session.room.send
 
+import com.nikitakozlov.pury.Pury
+import com.nikitakozlov.pury.annotations.MethodProfiling
+import com.nikitakozlov.pury.annotations.StartProfiling
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
@@ -62,6 +65,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
+        SendPerformanceTracker.startStage(event.eventId, SendPerformanceTracker.Stage.LOCAL_ECHO)
         val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
@@ -86,6 +90,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
+            SendPerformanceTracker.stopStage(event.eventId, SendPerformanceTracker.Stage.LOCAL_ECHO)
         }
     }
 

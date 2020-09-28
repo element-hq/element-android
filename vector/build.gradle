@@ -316,6 +316,9 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
+    debugImplementation 'com.nikitakozlov.pury:pury:1.1.0'
+    releaseImplementation 'com.nikitakozlov.pury:pury-no-op:1.1.0'
+
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'

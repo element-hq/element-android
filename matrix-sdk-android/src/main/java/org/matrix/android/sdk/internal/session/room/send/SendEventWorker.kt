@@ -19,6 +19,9 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import android.content.Context
 import androidx.work.WorkerParameters
+import com.nikitakozlov.pury.Pury
+import com.nikitakozlov.pury.annotations.MethodProfiling
+import com.nikitakozlov.pury.annotations.StartProfiling
 import com.squareup.moshi.JsonClass
 import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
@@ -62,6 +65,7 @@ internal class SendEventWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
+        SendPerformanceTracker.startStage(params.eventId, SendPerformanceTracker.Stage.SEND_WORKER)
         val event = localEchoRepository.getUpToDateEcho(params.eventId)
         if (event?.eventId == null || event.roomId == null) {
             localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
@@ -110,5 +114,6 @@ internal class SendEventWorker(context: Context,
             apiCall = roomAPI.send(eventId, roomId, type, content)
         }
         localEchoRepository.updateSendState(eventId, SendState.SENT)
+        SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.SEND_WORKER)
     }
 }

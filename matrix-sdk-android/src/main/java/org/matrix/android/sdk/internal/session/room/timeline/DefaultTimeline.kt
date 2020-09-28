@@ -17,6 +17,7 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
+import com.nikitakozlov.pury.Pury
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm

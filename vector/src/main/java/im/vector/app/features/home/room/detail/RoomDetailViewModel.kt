@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
+import com.nikitakozlov.pury.Pury
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
@@ -94,6 +95,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.internal.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -890,6 +892,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
         viewModelScope.launch(Dispatchers.Default) {
             if (action.event.root.sendState.isSent()) { // ignore pending/local events
+                action.event.root.unsignedData?.transactionId?.also {
+                    SendPerformanceTracker.stopProfiling(it)
+                }
                 visibleEventsObservable.accept(action)
             }
             // We need to update this with the related m.replace also (to move read receipt)

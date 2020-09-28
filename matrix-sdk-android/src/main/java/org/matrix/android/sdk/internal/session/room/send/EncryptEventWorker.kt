@@ -64,7 +64,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doSafeWork(params: Params): Result {
         Timber.v("## SendEvent: Start Encrypt work for event ${params.eventId}")
-
+        SendPerformanceTracker.startStage(params.eventId, SendPerformanceTracker.Stage.ENCRYPT_WORKER)
         val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
         if (localEvent?.eventId == null) {
             return Result.success()
@@ -122,7 +122,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     localEcho.setDecryptionResult(it)
                 }
             }
-
+            SendPerformanceTracker.stopStage(params.eventId, SendPerformanceTracker.Stage.ENCRYPT_WORKER)
             val nextWorkerParams = SendEventWorker.Params(sessionId = params.sessionId, eventId = params.eventId)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {

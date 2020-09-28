@@ -22,6 +22,7 @@ import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
+import com.nikitakozlov.pury.annotations.StartProfiling
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
@@ -138,6 +139,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { timelineSendEventWorkCommon.postWork(roomId, it) }
     }
 
+    @StartProfiling(profilerName = "Sending", stageName = "Send service", stageOrder = 0)
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable {
         if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
             localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
