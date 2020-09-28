@@ -449,21 +449,23 @@ class RoomDetailViewModel @AssistedInject constructor(
     /**
      * Convert a send mode to a draft and save the draft
      */
-    private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) {
-        withState {
-            when {
-                it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
-                    room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
-                }
-                it.sendMode is SendMode.REPLY                               -> {
-                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-                }
-                it.sendMode is SendMode.QUOTE                               -> {
-                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-                }
-                it.sendMode is SendMode.EDIT                                -> {
-                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-                }
+    private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) = withState {
+        when {
+            it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
+                setState { copy(sendMode = it.sendMode.copy(action.draft)) }
+                room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
+            }
+            it.sendMode is SendMode.REPLY                               -> {
+                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+            }
+            it.sendMode is SendMode.QUOTE                               -> {
+                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+            }
+            it.sendMode is SendMode.EDIT                                -> {
+                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
             }
         }
     }
