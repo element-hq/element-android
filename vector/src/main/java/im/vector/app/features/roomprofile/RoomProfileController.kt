@@ -71,10 +71,11 @@ class RoomProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
                 id = "settings",
-                title = if (roomSummary.isDirect)
+                title = if (roomSummary.isDirect) {
                     stringProvider.getString(R.string.direct_room_profile_section_more_settings)
-                else
-                    stringProvider.getString(R.string.room_profile_section_more_settings),
+                } else {
+                    stringProvider.getString(R.string.room_profile_section_more_settings)
+                },
                 dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
@@ -115,10 +116,11 @@ class RoomProfileController @Inject constructor(
         )
         buildProfileAction(
                 id = "leave",
-                title = if (roomSummary.isDirect)
+                title = if (roomSummary.isDirect) {
                     stringProvider.getString(R.string.direct_room_profile_section_more_leave)
-                else
-                    stringProvider.getString(R.string.room_profile_section_more_leave),
+                } else {
+                    stringProvider.getString(R.string.room_profile_section_more_leave)
+                },
                 dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
