@@ -59,6 +59,7 @@ Changes in Element 1.0.7 (2020-09-17)
 Improvements 🙌:
  - Handle date formatting properly (show time am/pm if needed, display year when needed)
  - Improve F-Droid Notification (#2055)
+ - Wording differentiation for direct rooms (#2176)
 
 Bugfix 🐛:
  - Clear the notification when the event is read elsewhere (#1822)
