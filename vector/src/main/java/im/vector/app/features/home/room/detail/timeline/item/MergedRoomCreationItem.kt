@@ -48,9 +48,17 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
 
             val createdFromCurrentUser = data?.userId == attributes.currentUserId
             val summary = if (createdFromCurrentUser) {
-                holder.expandView.resources.getString(R.string.room_created_summary_item_by_you)
+                if (data?.isDirectRoom == true) {
+                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item_by_you)
+                } else {
+                    holder.expandView.resources.getString(R.string.room_created_summary_item_by_you)
+                }
             } else {
-                holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
+                if (data?.isDirectRoom == true) {
+                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, data.memberName)
+                } else {
+                    holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
+                }
             }
             holder.summaryView.text = summary
             holder.summaryView.visibility = View.VISIBLE
@@ -69,7 +77,11 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
                 }
                 if (attributes.isEncryptionAlgorithmSecure) {
                     holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_enabled)
-                    holder.e2eTitleDescriptionView.text = holder.expandView.resources.getString(R.string.encryption_enabled_tile_description)
+                    holder.e2eTitleDescriptionView.text = if (data?.isDirectRoom == true) {
+                        holder.expandView.resources.getString(R.string.direct_room_encryption_enabled_tile_description)
+                    } else {
+                        holder.expandView.resources.getString(R.string.encryption_enabled_tile_description)
+                    }
                     holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
                     holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
                             ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),

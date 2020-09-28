@@ -89,7 +89,9 @@
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">You do not have permission to start a conference call</string>
     <string name="no_permissions_to_start_webrtc_call">You do not have permission to start a call in this room</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">You do not have permission to start a call</string>
     <string name="conference_call_in_progress">A conference is already in progress!</string>
     <string name="video_meeting">Start video meeting</string>
     <string name="audio_meeting">Start audio meeting</string>
@@ -1881,6 +1883,8 @@
     <string name="room_join_rules_public_by_you">You made the room public to whoever knows the link.</string>
     <string name="room_join_rules_invite">%1$s made the room invite only.</string>
     <string name="room_join_rules_invite_by_you">You made the room invite only.</string>
+    <string name="direct_room_join_rules_invite">%1$s made this invite only.</string>
+    <string name="direct_room_join_rules_invite_by_you">You made this invite only.</string>
     <string name="timeline_unread_messages">Unread messages</string>
 
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
@@ -2355,11 +2359,14 @@
 
     <string name="encryption_enabled">Encryption enabled</string>
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Messages in this room are end-to-end encrypted.</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
 
     <string name="room_created_summary_item">%s created and configured the room.</string>
     <string name="room_created_summary_item_by_you">You created and configured the room.</string>
+    <string name="direct_room_created_summary_item">%s joined.</string>
+    <string name="direct_room_created_summary_item_by_you">You joined.</string>
 
     <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
