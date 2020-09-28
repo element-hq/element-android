@@ -59,7 +59,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
 
     private fun isDirectRoom(roomId: String?): Boolean {
         return roomId?.let {
-            activeSessionDataSource.currentValue?.orNull()?.getRoom(roomId)?.roomSummary()?.isDirect
+            activeSessionDataSource.currentValue?.orNull()?.getRoomSummary(roomId)?.isDirect
         }.orFalse()
     }
 
