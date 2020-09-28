@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
@@ -82,10 +81,7 @@ import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkServic
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
-import org.matrix.android.sdk.internal.session.search.DefaultSearchService
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
-import org.matrix.android.sdk.internal.session.search.DefaultSearchTask
-import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultAccountDataService
@@ -372,10 +368,4 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
-
-    @Binds
-    abstract fun bindSearchService(service: DefaultSearchService): SearchService
-
-    @Binds
-    abstract fun bindSearchTask(task: DefaultSearchTask): SearchTask
 }

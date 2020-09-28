@@ -20,7 +20,6 @@ package org.matrix.android.sdk.internal.session.search
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestCategories
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestEventContext
@@ -46,7 +45,7 @@ internal interface SearchTask : Task<SearchTask.Params, SearchResult> {
 }
 
 internal class DefaultSearchTask @Inject constructor(
-        private val roomAPI: RoomAPI,
+        private val searchAPI: SearchAPI,
         private val eventBus: EventBus
 ) : SearchTask {
 
@@ -69,7 +68,7 @@ internal class DefaultSearchTask @Inject constructor(
                             )
                     )
             )
-            apiCall = roomAPI.search(params.nextBatch, searchRequestBody)
+            apiCall = searchAPI.search(params.nextBatch, searchRequestBody)
         }.toDomain().apply { results = results?.reversed() }
     }
 
