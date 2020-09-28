@@ -17,13 +17,14 @@
 
 package org.matrix.android.sdk.internal.session.search.request
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
  * Represents the order in which to search for results.
  */
 @JsonClass(generateAdapter = false)
-internal enum class SearchRequestOrder(val value: String) {
-    RANK("rank"),
-    RECENT("recent")
+internal enum class SearchRequestOrder {
+    @Json(name = "rank") RANK,
+    @Json(name = "recent") RECENT
 }

@@ -29,7 +29,7 @@ internal data class SearchRequestRoomEvents(
         val filter: SearchRequestFilter? = null,
         // By default, this is "rank". One of: ["recent", "rank"]
         @Json(name = "order_by")
-        val orderBy: String? = null,
+        val orderBy: SearchRequestOrder? = null,
         // Configures whether any context for the events returned are included in the response.
         @Json(name = "event_context")
         val eventContext: SearchRequestEventContext? = null
