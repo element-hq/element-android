@@ -2118,11 +2118,13 @@
     <string name="verification_request_alert_description">For extra security, verify %s by checking a one-time code on both your devices.\n\nFor maximum security, do this in person.</string>
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
+    <string name="direct_room_profile_encrypted_subtitle">Messages here are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
     <string name="room_profile_section_admin">Admin Actions</string>
     <string name="room_profile_section_more_settings">Room settings</string>
+    <string name="direct_room_profile_section_more_settings">Settings</string>
     <string name="room_profile_section_more_notifications">Notifications</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">"One person"</item>
@@ -2130,6 +2132,7 @@
     </plurals>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
+    <string name="direct_room_profile_section_more_leave">Leave</string>
     <string name="room_profile_leaving_room">"Leaving the room…"</string>
 
     <string name="room_member_power_level_admins">Admins</string>
