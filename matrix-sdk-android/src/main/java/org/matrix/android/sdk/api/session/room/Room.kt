@@ -78,6 +78,7 @@ interface Room :
      * Ref: https://matrix.org/docs/spec/client_server/latest#module-search
      * @param searchTerm the term to search
      * @param nextBatch the token that retrieved from the previous response. Should be provided to get the next batch of results
+     * @param orderByRecent if true, the most recent message events will return in the first places of the list
      * @param limit the maximum number of events to return.
      * @param beforeLimit how many events before the result are returned.
      * @param afterLimit how many events after the result are returned.
