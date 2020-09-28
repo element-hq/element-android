@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - PIN code: request PIN code if phone has been locked
 
 Bugfix 🐛:
  - Fix Splash layout on small screens
