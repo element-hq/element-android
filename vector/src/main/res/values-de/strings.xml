@@ -12,13 +12,16 @@
     <string name="title_activity_member_details">Benutzerdetails</string>
     <string name="title_activity_historical">Historisch</string>
 
+    <string name="call_notification_answer">Akzeptiere</string>
+    <string name="call_notification_reject">Ablehnen</string>
+    <string name="call_notification_hangup">Anruf beenden</string>
+
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="save">Speichern</string>
     <string name="leave">Verlassen</string>
     <string name="send">Senden</string>
-    <string name="copy">Kopieren</string>
     <string name="resend">Erneut senden</string>
     <string name="redact">Entfernen</string>
     <string name="quote">Zitieren</string>
@@ -246,7 +249,7 @@
     <string name="permissions_rationale_msg_camera">Element benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen."</string>
+\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
     <string name="permissions_rationale_msg_record_audio">Element benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
@@ -255,7 +258,7 @@
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
     <string name="permissions_rationale_msg_contacts">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
+    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden. 
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
@@ -445,8 +448,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
     <string name="settings_set_sync_delay">Verzögerung zwischen jeder Synchronisierung</string>
-    <string name="settings_second">Sekunde</string>
-    <string name="settings_seconds">Sekunden</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">OLM Version</string>
@@ -608,7 +609,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_information_sender_device_information">Informationen der Absendersitzung</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
     <string name="encryption_information_name">Öffentlicher Name</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Sitzungs-ID</string>
     <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_information_verification">Verifizierungsstatus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-Fingerabdruck</string>
@@ -785,7 +786,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Communities die Abzeichen an</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt für keine Community Avatare an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -819,9 +820,9 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="forget_room">Raum vergessen</string>
     <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
-    <string name="settings_flair">Abzeichen</string>
+    <string name="settings_flair">Community Avatare</string>
 
-    <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
+    <string name="send_bug_report_rage_shake">Schütteln, um einen Fehler zu melden</string>
 
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
@@ -900,7 +901,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 \nMöchtest du welche hinzufügen\?</string>
 
     <string name="settings_deactivate_account_section">Account deaktivieren</string>
-    <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
+    <string name="settings_deactivate_my_account">Deaktiviere meinen Account</string>
 
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
     <string name="settings_opt_in_of_analytics_summary">Element sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
@@ -1054,7 +1055,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="x_plus">%d+</string>
 
     <string name="call_anyway">Trotzdem anrufen</string>
-    <string name="room_participants_action_kick">Kicken</string>
+    <string name="room_participants_action_kick">Entfernen</string>
     <string name="reason_hint">Grund</string>
 
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Home-Server diese Funktion unterstützt.</string>
@@ -1187,7 +1188,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="settings_noisy_notifications_preferences">Laute Benachrichtigungen einstellen</string>
     <string name="settings_call_notifications_preferences">Anrufbenachrichtigung einstellen</string>
-    <string name="settings_silent_notifications_preferences">Stumme Benachrichtigungen einstellen</string>
+    <string name="settings_silent_notifications_preferences">Lautlose Benachrichtigungen einstellen</string>
     <string name="settings_system_preferences_summary">Wähle LED-Farbe, Vibration, Ton…</string>
 
 
@@ -1341,7 +1342,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="keys_backup_banner_in_progress">Sichere Schlüssel…</string>
 
-    <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel gesichert</string>
+    <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel sind gesichert</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Sichere %d Schlüssel…</item>
         <item quantity="other">Sichere %d Schlüssel…</item>
@@ -1403,7 +1404,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
 
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
-    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungs-Schlüssel an. 
+    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungsschlüssel an. 
 \nSitzungsname: %1$s 
 \nZuletzt gesehen: %2$s 
 \nWenn du dich nicht mit einer anderen Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
@@ -1623,7 +1624,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
 
     <string name="settings_set_workmanager_delay">Bevorzugtes Synchronisationsintervall</string>
-    <string name="settings_discovery_category">Fund</string>
+    <string name="settings_discovery_category">Auffindbarkeit</string>
     <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen du kommunizierst)</string>
     <string name="device_name_warning">Der öffentliche Name der Sitzung ist für Personen sichtbar, mit denen du kommunizierst</string>
     <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
@@ -1648,7 +1649,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="disconnect_identity_server">Verbindung zum Identitätsserver trennen</string>
     <string name="add_identity_server">Identitätsserver konfigurieren</string>
     <string name="change_identity_server">Identitätsserver ändern</string>
-    <string name="settings_discovery_emails_title">Erkennbare E-Mail-Adressen</string>
+    <string name="settings_discovery_emails_title">Auffindbare E-Mail-Adressen</string>
     <string name="settings_discovery_no_mails">Erkennungsoptionen werden angezeigt, sobald du eine E-Mail hinzugefügt hast.</string>
     <string name="settings_discovery_mail_pending">ausstehend</string>
 
@@ -1668,9 +1669,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
 
 
-    <string name="settings_background_fdroid_sync_mode">Hintergrundsynchronisierungsmodus (experimentell)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts schont (Akku).
-\nAbhängig von dem Ressourcen-Statuses deines Geräts kann dein System die Synchronisierung verschieben.</string>
+    <string name="settings_background_fdroid_sync_mode">Hintergrund-Synchronisierungsmodus</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts (Akku) schont. 
+\nAbhängig vom Ressourcen-Status deines Geräts kann dein System die Synchronisierung verschieben.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">Element wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
 \nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Element auf Ereignisse lauscht.</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1710,11 +1711,11 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
-    <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
-    <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
+    <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
+    <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
     <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzer!n des Dienstes vertraust</string>
-    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
+    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
@@ -1763,7 +1764,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="report_content_custom_title">Diesen Inhalt melden</string>
     <string name="report_content_custom_hint">Meldegrund</string>
     <string name="report_content_custom_submit">MELDEN</string>
-    <string name="block_user">NUTZER BLOCKIEREN</string>
+    <string name="block_user">NUTZER IGNORIEREN</string>
 
     <string name="content_reported_title">Inhalt gemeldet</string>
     <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
@@ -1784,7 +1785,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="no_network_indicator">Aktuell besteht keine Netzwerkverbindung</string>
 
-    <string name="message_ignore_user">Nutzer blockieren</string>
+    <string name="message_ignore_user">Nutzer ignorieren</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Alle Nachrichten (laut)</string>
     <string name="room_list_quick_actions_notifications_all">Alle Nachrichten</string>
@@ -1807,7 +1808,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_splash_submit">Beginne</string>
 
     <string name="login_server_title">Wähle einen Server</string>
-    <string name="login_server_text">Genau wie bei Emails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
+    <string name="login_server_text">Genau wie bei E-Mails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
     <string name="login_server_matrix_org_text">Folge Millionen anderen kostenlos auf dem größten öffentlichen Server</string>
     <string name="login_server_modular_text">Premium Hosting für Organisationen</string>
     <string name="login_server_modular_learn_more">Mehr erfahren</string>
@@ -1891,7 +1892,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
-    <string name="login_splash_title">Es ist dein Gespräch. Besitze es.</string>
+    <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
     <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
@@ -2049,7 +2050,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_profile_section_security">Sicherheit</string>
     <string name="room_profile_section_security_learn_more">Mehr erfahren</string>
     <string name="room_profile_section_more">Mehr</string>
-    <string name="room_profile_section_more_settings">Raum Einstellungen</string>
+    <string name="room_profile_section_more_settings">Raum-Einstellungen</string>
     <string name="room_profile_section_more_notifications">Benachrichtigungen</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">Eine Person</item>
@@ -2104,7 +2105,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
 
 
-    <string name="encryption_information_cross_signing_state">Kreuz-Signierung</string>
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
     <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
@@ -2117,7 +2118,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="settings_active_sessions_list">Aktive Sitzungen</string>
     <string name="settings_active_sessions_show_all">Zeige alle Sitzungen</string>
-    <string name="settings_active_sessions_manage">Verwalte Sitzungen</string>
+    <string name="settings_active_sessions_manage">Sitzungen verwalten</string>
     <string name="settings_active_sessions_signout_device">Diese Sitzung abmelden</string>
 
     <string name="settings_failed_to_get_crypto_device_info">Keine kryptografischen Informationen verfügbar</string>
@@ -2270,7 +2271,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="error_failed_to_import_keys">Import der Schlüssel fehlgeschlagen</string>
 
     <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
-    <string name="settings_messages_at_room">\@raum enthaltende Nachrichten</string>
+    <string name="settings_messages_at_room">Nachrichten, die @raum enthalten</string>
     <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Nachrichten in Gruppenchats</string>
     <string name="settings_notification_advanced_summary">Setze die Benachrichtigungspräferenz abhängig vom Ereignistyp</string>
 
@@ -2352,7 +2353,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="use_latest_app">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
-    <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>
+    <string name="enter_secret_storage_passphrase_or_key">Benutze deine %1$s oder deinen %2$s um fortzufahren.</string>
     <string name="use_recovery_key">Wiederherstellungsschlüssel verwenden</string>
     <string name="enter_secret_storage_input_key">Wähle deinen Wiederherstellungsschüssel, gib ihn ein oder füge ihn aus der Zwischenablage ein</string>
     <string name="keys_backup_recovery_key_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
@@ -2477,9 +2478,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="event_redacted">Nachricht gelöscht</string>
     <string name="settings_show_redacted">Zeige gelöschte Nachrichten</string>
     <string name="settings_show_redacted_summary">Zeige einen Platzhalter für gelöschte Nachrichten</string>
-    <string name="labs_show_unread_notifications_as_tab">Füge dedizierten Tab für ungelesene Benachrichtungen zur Hauptansicht hinzu.</string>
+    <string name="labs_show_unread_notifications_as_tab">Dedizierten Tab für ungelesene Nachrichten zur Hauptansicht hinzufügen</string>
 
-    <string name="settings_discovery_confirm_mail_not_clicked">Wir haben dir eine Bestätigungsmail an %s gesendet. Bitte prüfe deine Emails und klicke auf den Bestätigungslink</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Wir haben dir eine Bestätigungsmail an %s gesendet. Bitte prüfe deine E-Mails und klicke auf den Bestätigungslink</string>
     <string name="settings_text_message_sent_wrong_code">Der Verifizierungscode ist nicht korrekt.</string>
 
     <string name="uploads_media_title">MEDIEN</string>
@@ -2496,13 +2497,13 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_server_url_form_common_notice">Gib die Adresse des Servers ein, den du benutzen möchtest</string>
 
     <string name="login_connect_using_matrix_id_notice">Wenn du deine Matrixkennung und dein Passwort weißt, kannst du alternativ diese Methode nutzen:</string>
-    <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix ID</string>
-    <string name="login_signin_matrix_id_title">Einloggen mit Matrix ID</string>
-    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Homeserver eingerichtet hast, benutze deine Matrix ID (z.B. @benutzer@domain.com) und Passwort.</string>
-    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix-ID</string>
+    <string name="login_signin_matrix_id_title">Einloggen mit Matrix-ID</string>
+    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Home-Server eingerichtet hast, benutze deine Matrix-ID (z.B. @benutzer:domain.com) und Passwort.</string>
+    <string name="login_signin_matrix_id_hint">Matrix-ID</string>
     <string name="login_signin_matrix_id_password_notice">Wenn du dein Passwort nicht weißt, gehe zurück um es zurücksetzen zu lassen.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dies ist keine gültige Benutzerkennung. Erwartetes Format: \'@benutzer:homeserver.org\'</string>
-    <string name="autodiscover_well_known_error">Es konnte kein gültiger Homeserver gefunden werden. Bitte prüfe deine Kennung</string>
+    <string name="autodiscover_well_known_error">Es konnte kein gültiger Home-Server gefunden werden. Bitte prüfe deine Kennung</string>
 
     <string name="send_a_sticker">Sticker</string>
 
@@ -2620,8 +2621,67 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
-    <string name="labs_merge_e2e_in_timeline">Übertragung von Schlüsseln zur Entschlüsselung in Nachrichtenverlauf fehlgeschlagen</string>
-    <string name="settings_call_show_confirmation_dialog_title">Verhindern Sie versehentliche Anrufe</string>
-    <string name="settings_call_show_confirmation_dialog_summary">Bitten Sie um Bestätigung, bevor Sie einen Anruf tätigen</string>
+    <string name="labs_merge_e2e_in_timeline">\"Nicht entschlüsselbar\"-Fehler im Chatverlauf zusammenfassen</string>
+    <string name="settings_call_show_confirmation_dialog_title">Verhindere versehentliche Anrufe</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
+    <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
+    <string name="conference_call_in_progress">Es ist bereits eine Konferenz aktiv!</string>
+    <string name="video_meeting">Starte eine Videokonferenz</string>
+    <string name="audio_meeting">Starte eine Audiokonferenz</string>
+    <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwessenden können während der Konferenz beitreten.</string>
+    <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
+    <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
+    <string name="failed_to_add_widget">Hinzufügen des Widgets fehlgeschlagen</string>
+    <string name="failed_to_remove_widget">Entfernen des Widgets fehlgeschlagen</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+        <item quantity="other">%1$d/%2$d Schlüssel erfolgreich importiert.</item>
+    </plurals>
+
+    <string name="room_manage_integrations">Verwalte Integrationen</string>
+    <string name="room_no_active_widgets">Keine aktiven Widgets</string>
+    <string name="create_room_federation_error">Der Raum wurde erstellt, aber manche Einladungen wurden aus folgendem Grund nicht versendet:
+\n
+\n%s</string>
+
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">Von %1$s, %2$s und %3$d anderem gelesen</item>
+        <item quantity="other">Von %1$s, %2$s und %3$d anderen gelesen</item>
+    </plurals>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Falscher code, %d verbleibender Versuch</item>
+        <item quantity="other">Falscher code, %d verbleibende Versuche</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
+    <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
+    <string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
+    <string name="settings_phone_number_empty">Deinem Konto wurde keine Telefonnummer hinzugefügt</string>
+    <string name="settings_emails">E-mail-Adressen</string>
+    <string name="settings_emails_empty">Deinem Konto wurde keine E-Mail hinzugefügt</string>
+    <string name="settings_phone_numbers">Telefonnummern</string>
+    <string name="settings_remove_three_pid_confirmation_content">%s entfernen\?</string>
+    <string name="error_threepid_auth_failed">Stelle sicher, dass du auf den Link in der E-Mail geklickt hast, die wir dir gesendet haben.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">E-Mail-Adressen und Telefonnummern</string>
+    <string name="settings_emails_and_phone_numbers_summary">Verwalte E-Mails und Telefonnummern, die mit deinem Matrix-Konto verknüpft sind</string>
+
+    <string name="settings_text_message_sent_hint">Code</string>
+    <string name="login_msisdn_notice">Verwende das internationale Format (Telefonnummer muss mit \'+\' beginnen)</string>
+    <string name="confirm_your_identity_quad_s">Bestätige deine Identität, indem du dieses Login verifizierst, um Zugriff auf verschlüsselte Nachrichten zu erhalten.</string>
+    <string name="error_sso_flow_not_supported_yet">Leider ist dieser Vorgang für Konten, die über Single Sign-On verbunden sind, noch nicht möglich.</string>
+
+    <string name="error_opening_banned_room">Raum, indem du gebannt wurdest, kann nicht geöffnet werden.</string>
+    <string name="room_error_not_found">Raum kann nicht gefunden werden. Stelle sicher, dass er existiert.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Zeige Status-Ereignisse der Raum-Mitglieder</string>
+    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernen-/Verbannen-Ereignisse und Avatar-/Anzeigenamen-Wechsel mit ein.</string>
+    <string name="sent_a_poll">Umfrage</string>
+    <string name="sent_a_bot_buttons">Bot-Schaltflächen</string>
+    <string name="sent_a_reaction">Reagierte mit: %s</string>
+    <string name="universal_link_malformed">Der Link war nicht korrekt</string>
 </resources>

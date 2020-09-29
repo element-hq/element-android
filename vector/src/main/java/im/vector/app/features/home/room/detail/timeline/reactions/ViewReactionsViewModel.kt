@@ -24,17 +24,18 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
+import io.reactivex.Observable
+import io.reactivex.Single
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.rx.RxRoom
 import org.matrix.android.sdk.rx.unwrap
-import io.reactivex.Observable
-import io.reactivex.Single
 
 data class DisplayReactionsViewState(
         val eventId: String,
@@ -112,7 +113,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                 summary.key,
                                 event.root.senderId ?: "",
                                 event.senderInfo.disambiguatedDisplayName,
-                                dateFormatter.formatRelativeDateTime(event.root.originServerTs)
+                                dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
 
                         )
                     }

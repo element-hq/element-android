@@ -17,33 +17,6 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.ReadReceipt
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.api.util.CancelableBag
-import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
-import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
-import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
-import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.database.query.whereRoomId
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.util.Debouncer
-import org.matrix.android.sdk.internal.util.createBackgroundHandler
-import org.matrix.android.sdk.internal.util.createUIHandler
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
@@ -54,6 +27,35 @@ import io.realm.Sort
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.ReadReceipt
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.util.CancelableBag
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
+import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.query.filterEvents
+import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
+import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereRoomId
+import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.util.Debouncer
+import org.matrix.android.sdk.internal.util.createBackgroundHandler
+import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -76,7 +78,8 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
         private val eventBus: EventBus,
-        private val eventDecryptor: TimelineEventDecryptor
+        private val eventDecryptor: TimelineEventDecryptor,
+        private val realmSessionProvider: RealmSessionProvider
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
@@ -136,13 +139,13 @@ internal class DefaultTimeline(
     }
 
     override fun pendingEventCount(): Int {
-        return Realm.getInstance(realmConfiguration).use {
+        return realmSessionProvider.withRealm {
             RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
         }
     }
 
     override fun failedToDeliverEventCount(): Int {
-        return Realm.getInstance(realmConfiguration).use {
+        return realmSessionProvider.withRealm {
             TimelineEventEntity.findAllInRoomWithSendStates(it, roomId, SendState.HAS_FAILED_STATES).count()
         }
     }
@@ -182,7 +185,7 @@ internal class DefaultTimeline(
     }
 
     private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {
-        return buildReadReceipts && (filterEdits || filterTypes)
+        return buildReadReceipts && (filters.filterEdits || filters.filterTypes)
     }
 
     override fun dispose() {
@@ -239,7 +242,7 @@ internal class DefaultTimeline(
             return eventId
         }
         // Otherwise, we should check if the event is in the db, but is hidden because of filters
-        return Realm.getInstance(realmConfiguration).use { localRealm ->
+        return realmSessionProvider.withRealm { localRealm ->
             val nonFilteredEvents = buildEventQuery(localRealm)
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                     .findAll()
@@ -317,23 +320,36 @@ internal class DefaultTimeline(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
         if (isLive && onLocalEchoCreated.roomId == roomId) {
-            listeners.forEach {
-                it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+            // do not add events that would have been filtered
+            if (listOf(onLocalEchoCreated.timelineEvent).filterEventsWithSettings().isNotEmpty()) {
+                listeners.forEach {
+                    it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+                }
+                Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId}")
+                inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+                postSnapshot()
             }
-            Timber.v("On local echo created: $onLocalEchoCreated")
-            inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
-            postSnapshot()
         }
     }
 
 // Private methods *****************************************************************************
 
-    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
-        return builtEventsIdMap[eventId]?.let { builtIndex ->
-            // Update the relation of existing event
-            builtEvents[builtIndex]?.let { te ->
-                builtEvents[builtIndex] = builder(te)
-                true
+    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+        return tryOrNull {
+            builtEventsIdMap[eventId]?.let { builtIndex ->
+                // Update the relation of existing event
+                builtEvents[builtIndex]?.let { te ->
+                    val rebuiltEvent = builder(te)
+                    // If rebuilt event is filtered its returned as null and should be removed.
+                    if (rebuiltEvent == null) {
+                        builtEventsIdMap.remove(eventId)
+                        builtEventsIdMap.entries.filter { it.value > builtIndex }.forEach { it.setValue(it.value - 1) }
+                        builtEvents.removeAt(builtIndex)
+                    } else {
+                        builtEvents[builtIndex] = rebuiltEvent
+                    }
+                    true
+                }
             }
         } ?: false
     }
@@ -408,14 +424,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState.get()
+            Timeline.Direction.FORWARDS -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState
+            Timeline.Direction.FORWARDS -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -484,7 +500,8 @@ internal class DefaultTimeline(
             val eventEntity = results[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
-                    buildTimelineEvent(eventEntity)
+                    val builtEvent = buildTimelineEvent(eventEntity)
+                    listOf(builtEvent).filterEventsWithSettings().firstOrNull()
                 } || postSnapshot
             }
         }
@@ -725,10 +742,10 @@ internal class DefaultTimeline(
         return object : MatrixCallback<TokenChunkEventPersistor.Result> {
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
-                    TokenChunkEventPersistor.Result.SUCCESS           -> {
+                    TokenChunkEventPersistor.Result.SUCCESS -> {
                         Timber.v("Success fetching $limit items $direction from pagination request")
                     }
-                    TokenChunkEventPersistor.Result.REACHED_END       -> {
+                    TokenChunkEventPersistor.Result.REACHED_END -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
@@ -754,39 +771,24 @@ internal class DefaultTimeline(
     }
 
     private fun RealmQuery<TimelineEventEntity>.filterEventsWithSettings(): RealmQuery<TimelineEventEntity> {
-        if (settings.filterTypes) {
-            `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
-        }
-        if (settings.filterUseless) {
-            not()
-                    .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
-        }
-        if (settings.filterEdits) {
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
-        }
-        if (settings.filterRedacted) {
-            not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)
-        }
-        return this
+        return filterEvents(settings.filters)
     }
 
     private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
         return filter {
-            val filterType = !settings.filterTypes || settings.allowedTypes.contains(it.root.type)
+            val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.contains(it.root.type)
             if (!filterType) return@filter false
 
-            val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
+            val filterEdits = if (settings.filters.filterEdits && it.root.type == EventType.MESSAGE) {
                 val messageContent = it.root.content.toModel<MessageContent>()
-                messageContent?.relatesTo?.type != RelationType.REPLACE
+                messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
                 true
             }
             if (!filterEdits) return@filter false
 
-            val filterRedacted = !settings.filterRedacted || it.root.isRedacted()
-
-            filterRedacted
+            val filterRedacted = settings.filters.filterRedacted && it.root.isRedacted()
+            !filterRedacted
         }
     }
 

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -398,7 +398,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
                 ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
                 ?.transform { deviceInfoEntity ->
-                    tryThis {
+                    tryOrNull {
                         deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
                     }
                 }

@@ -18,19 +18,19 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import android.content.Context
-import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,35 +42,29 @@ import javax.inject.Inject
  */
 internal class SendEventWorker(context: Context,
                                params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
             override val lastFailureMessage: String? = null,
-            val event: Event? = null,
-            // Keep for compat at the moment, will be removed later
-            val eventId: String? = null
+            val eventId: String
     ) : SessionWorkerParams
 
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var roomAPI: RoomAPI
     @Inject lateinit var eventBus: EventBus
     @Inject lateinit var cancelSendTracker: CancelSendTracker
+    @SessionDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
 
-    override suspend fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
-                        .also { Timber.e("## SendEvent: Unable to parse work parameters") }
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        val event = params.event
+    override suspend fun doSafeWork(params: Params): Result {
+        val event = localEchoRepository.getUpToDateEcho(params.eventId)
         if (event?.eventId == null || event.roomId == null) {
-            // Old way of sending
-            if (params.eventId != null) {
-                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
-            }
+            localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
             return Result.success()
                     .also { Timber.e("Work cancelled due to bad input data") }
         }
@@ -104,6 +98,10 @@ internal class SendEventWorker(context: Context,
                 Result.retry()
             }
         }
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 
     private suspend fun sendEvent(eventId: String, roomId: String, type: String, content: Content?) {

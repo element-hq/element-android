@@ -18,12 +18,14 @@
 package org.matrix.android.sdk.internal.worker
 
 import androidx.work.Data
+import com.squareup.moshi.Moshi
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 
 internal object WorkerParamsFactory {
 
-    val moshi by lazy {
+    private val moshi: Moshi by lazy {
         // We are adding the CheckNumberType as we are serializing/deserializing multiple time in a row
         // and we lost typing information doing so.
         // We don't want this check to be done on all adapters, so we just add it here.
@@ -33,20 +35,24 @@ internal object WorkerParamsFactory {
                 .build()
     }
 
-    const val KEY = "WORKER_PARAMS_JSON"
+    private const val KEY = "WORKER_PARAMS_JSON"
 
-    inline fun <reified T> toData(params: T): Data {
-        val adapter = moshi.adapter(T::class.java)
+    inline fun <reified T> toData(params: T) = toData(T::class.java, params)
+
+    fun <T> toData(clazz: Class<T>, params: T): Data {
+        val adapter = moshi.adapter(clazz)
         val json = adapter.toJson(params)
         return Data.Builder().putString(KEY, json).build()
     }
 
-    inline fun <reified T> fromData(data: Data): T? {
+    inline fun <reified T> fromData(data: Data) = fromData(T::class.java, data)
+
+    fun <T> fromData(clazz: Class<T>, data: Data): T? = tryOrNull("Unable to parse work parameters") {
         val json = data.getString(KEY)
         return if (json == null) {
             null
         } else {
-            val adapter = moshi.adapter(T::class.java)
+            val adapter = moshi.adapter(clazz)
             adapter.fromJson(json)
         }
     }

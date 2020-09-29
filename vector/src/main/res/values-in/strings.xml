@@ -69,7 +69,6 @@
     <string name="auth_opt_phone_number_placeholder">Nomor Telpon (piihan)</string>
     <string name="auth_repeat_password_placeholder">Ulangi password</string>
     <string name="auth_repeat_new_password_placeholder">Konfirmasi password baru</string>
-    <string name="copy">Gandakan</string>
     <string name="resend">Kirim Ulang</string>
     <string name="forward">Teruskan</string>
     <string name="view_source">Tampilkan Sumber</string>
@@ -554,8 +553,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_enable_background_sync">Perbolehkan sinkronisasi di balik layar</string>
     <string name="settings_set_sync_timeout">Batas waktu permohonan sinkronisasi</string>
     <string name="settings_set_sync_delay">Masa tunda sebelum permohonan berikutnya</string>
-    <string name="settings_second">detik</string>
-    <string name="settings_seconds">detik</string>
 
     <string name="settings_version">Versi</string>
     <string name="settings_olm_version">versi olm</string>

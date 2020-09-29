@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.call
 
 import android.os.SystemClock
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.CallsListener
@@ -210,7 +210,7 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private fun onCallHangup(hangup: CallHangupContent) {
         callListeners.toList().forEach {
-            tryThis {
+            tryOrNull {
                 it.onCallHangupReceived(hangup)
             }
         }
@@ -218,7 +218,7 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private fun onCallAnswer(answer: CallAnswerContent) {
         callListeners.toList().forEach {
-            tryThis {
+            tryOrNull {
                 it.onCallAnswerReceived(answer)
             }
         }
@@ -226,7 +226,7 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private fun onCallManageByOtherSession(callId: String) {
         callListeners.toList().forEach {
-            tryThis {
+            tryOrNull {
                 it.onCallManagedByOtherSession(callId)
             }
         }
@@ -237,7 +237,7 @@ internal class DefaultCallSignalingService @Inject constructor(
         if (incomingCall.otherUserId == userId) return
 
         callListeners.toList().forEach {
-            tryThis {
+            tryOrNull {
                 it.onCallInviteReceived(incomingCall, invite)
             }
         }
@@ -245,7 +245,7 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private fun onCallIceCandidate(incomingCall: MxCall, candidates: CallCandidatesContent) {
         callListeners.toList().forEach {
-            tryThis {
+            tryOrNull {
                 it.onCallIceCandidateReceived(incomingCall, candidates)
             }
         }

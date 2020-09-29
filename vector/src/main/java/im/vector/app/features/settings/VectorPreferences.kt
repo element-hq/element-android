@@ -22,13 +22,13 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,6 +55,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
         const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_FDROID_BACKGROUND_SYNC_MODE = "SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
@@ -92,6 +93,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
         private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
         private const val SETTINGS_SHOW_REDACTED_KEY = "SETTINGS_SHOW_REDACTED_KEY"
+        private const val SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY = "SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
         private const val SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
         private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
@@ -164,6 +166,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // Security
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
         const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        private const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
+        private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
+        const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -182,6 +187,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
+        // Background sync modes
+
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
                 SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
@@ -192,6 +199,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
                 SETTINGS_12_24_TIMESTAMPS_KEY,
                 SETTINGS_SHOW_READ_RECEIPTS_KEY,
+                SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY,
                 SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
                 SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
                 SETTINGS_MEDIA_SAVING_PERIOD_KEY,
@@ -227,7 +235,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         )
     }
 
-    private val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
      * Clear the preferences.
@@ -341,6 +349,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Tells if all room member state events should be shown in the messages list.
+     *
+     * @return true all room member state events should be shown in the messages list.
+     */
+    fun showRoomMemberStateEvents(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY, true)
+    }
+
+    /**
      * Tells if the join and leave membership events should be shown in the messages list.
      *
      * @return true if the join and leave membership events should be shown in the messages list
@@ -410,7 +427,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun getUnknownDeviceDismissedList(): List<String> {
-        return tryThis {
+        return tryOrNull {
             defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
         }.orEmpty()
     }
@@ -825,9 +842,75 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * The user enable protecting app access with pin code
+     * The user enable protecting app access with pin code.
+     * Currently we use the pin code store to know if the pin is enabled, so this is not used
      */
     fun useFlagPinCode(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
+    }
+
+    fun useBiometricsToUnlock(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_BIOMETRICS_FLAG, true)
+    }
+
+    fun useGracePeriod(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG, true)
+    }
+
+    /**
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content
+     */
+    fun useCompleteNotificationFormat(): Boolean {
+        return !useFlagPinCode()
+                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
+    }
+
+    fun backgroundSyncTimeOut(): Int {
+        return tryOrNull {
+            // The xml pref is saved as a string so use getString and parse
+            defaultPrefs.getString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, null)?.toInt()
+        } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
+    }
+
+    fun setBackgroundSyncTimeout(timeInSecond: Int) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeInSecond.toString())
+                .apply()
+    }
+
+    fun backgroundSyncDelay(): Int {
+        return tryOrNull {
+            // The xml pref is saved as a string so use getString and parse
+            defaultPrefs.getString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, null)?.toInt()
+        } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
+    }
+
+    fun setBackgroundSyncDelay(timeInSecond: Int) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, timeInSecond.toString())
+                .apply()
+    }
+
+    fun isBackgroundSyncEnabled(): Boolean {
+        return getFdroidSyncBackgroundMode() != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+    }
+
+    fun setFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
+        defaultPrefs
+                .edit()
+                .putString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, mode.name)
+                .apply()
+    }
+
+    fun getFdroidSyncBackgroundMode(): BackgroundSyncMode {
+        return try {
+            val strPref = defaultPrefs
+                    .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.name)
+            BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        } catch (e: Throwable) {
+            BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        }
     }
 }

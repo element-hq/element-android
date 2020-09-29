@@ -32,6 +32,7 @@ data class MessageInformationData(
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true,
+        val forceShowTimestamp: Boolean = false,
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
         val pollResponseAggregatedSummary: PollResponseData? = null,

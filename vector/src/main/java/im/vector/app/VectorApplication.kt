@@ -17,10 +17,14 @@
 package im.vector.app
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.StrictMode
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Lifecycle
@@ -91,7 +95,17 @@ class VectorApplication :
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
+    private val powerKeyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF
+                    && vectorPreferences.useFlagPinCode()) {
+                pinLocker.screenIsOff()
+            }
+        }
+    }
+
     override fun onCreate() {
+        enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
@@ -144,7 +158,7 @@ class VectorApplication :
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext)
+                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }
@@ -161,6 +175,21 @@ class VectorApplication :
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
+
+        applicationContext.registerReceiver(powerKeyReceiver, IntentFilter().apply {
+            // Looks like i cannot receive OFF, if i don't have both ON and OFF
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        })
+    }
+
+    private fun enableStrictModeIfNeeded() {
+        if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+        }
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)

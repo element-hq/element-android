@@ -46,10 +46,10 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
+import kotlinx.android.synthetic.main.fragment_home_detail.*
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -151,9 +151,9 @@ class HomeDetailFragment @Inject constructor(
                         uid = uid,
                         title = getString(R.string.new_session),
                         description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
-                        iconId = R.drawable.ic_shield_warning
+                        iconId = R.drawable.ic_shield_warning,
+                        matrixItem = user
                 ).apply {
-                    matrixItem = user
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)
@@ -179,9 +179,9 @@ class HomeDetailFragment @Inject constructor(
                         uid = uid,
                         title = getString(R.string.review_logins),
                         description = getString(R.string.verify_other_sessions),
-                        iconId = R.drawable.ic_shield_warning
+                        iconId = R.drawable.ic_shield_warning,
+                        matrixItem = user
                 ).apply {
-                    matrixItem = user
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {

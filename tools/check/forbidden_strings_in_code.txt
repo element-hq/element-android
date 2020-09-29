@@ -151,7 +151,7 @@ android\.app\.AlertDialog
 new Gson\(\)
 
 ### Use matrixOneTimeWorkRequestBuilder
-import androidx.work.OneTimeWorkRequestBuilder===1
+import androidx.work.OneTimeWorkRequestBuilder===2
 
 ### Use TextUtils.formatFileSize
 Formatter\.formatFileSize===1
@@ -164,7 +164,7 @@ Formatter\.formatShortFileSize===1
 # android\.text\.TextUtils
 
 ### This is not a rule, but a warning: the number of "enum class" has changed. For Json classes, it is mandatory that they have `@JsonClass(generateAdapter = false)`. If it is ok, change the value in file forbidden_strings_in_code.txt
-enum class===76
+enum class===78
 
 ### Do not import temporary legacy classes
 import org.matrix.android.sdk.internal.legacy.riot===3
@@ -172,3 +172,6 @@ import org.matrix.androidsdk.crypto.data===2
 
 ### Use `Context#getSystemService` extension function provided by `core-ktx`
 getSystemService\(Context
+
+### Use DefaultSharedPreferences.getInstance() instead for better performance
+PreferenceManager\.getDefaultSharedPreferences==2

@@ -84,6 +84,7 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
@@ -317,11 +318,17 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         if (requestCode == PinActivity.PIN_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
+                    Timber.v("Pin ok, unlock app")
                     pinLocker.unlock()
+
+                    // Cancel any new started PinActivity, after a screen rotation for instance
+                    finishActivity(PinActivity.PIN_REQUEST_CODE)
                 }
                 else               -> {
-                    pinLocker.block()
-                    moveTaskToBack(true)
+                    if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
+                        // Remove the task, to be sure that PIN code will be requested when resumed
+                        finishAndRemoveTask()
+                    }
                 }
             }
         }
@@ -343,6 +350,28 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                     debugReceiver = DebugReceiver()
                     registerReceiver(debugReceiver, it)
                 }
+    }
+
+    private val postResumeScheduledActions = mutableListOf<() -> Unit>()
+
+    /**
+     * Schedule action to be done in the next call of onPostResume()
+     * It fixes bug observed on Android 6 (API 23)
+     */
+    protected fun doOnPostResume(action: () -> Unit) {
+        synchronized(postResumeScheduledActions) {
+            postResumeScheduledActions.add(action)
+        }
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        synchronized(postResumeScheduledActions) {
+            postResumeScheduledActions.forEach {
+                tryOrNull { it.invoke() }
+            }
+            postResumeScheduledActions.clear()
+        }
     }
 
     override fun onPause() {

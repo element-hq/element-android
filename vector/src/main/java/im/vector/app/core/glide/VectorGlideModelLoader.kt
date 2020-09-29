@@ -100,7 +100,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         Timber.v("Load data: $data")
-        if (data.isLocalFile() && data.url != null) {
+        if (data.isLocalFile && data.url != null) {
             val initialFile = File(data.url)
             callback.onDataReady(initialFile.inputStream())
             return

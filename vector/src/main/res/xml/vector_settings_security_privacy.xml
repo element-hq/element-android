@@ -117,17 +117,17 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_other">
 
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SECURITY_PIN"
+            android:persistent="false"
+            android:summary="@string/settings_security_application_protection_summary"
+            android:title="@string/settings_security_application_protection_title" />
+
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_SECURITY_USE_FLAG_SECURE"
             android:summary="@string/settings_security_prevent_screenshots_summary"
             android:title="@string/settings_security_prevent_screenshots_title" />
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:key="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
-            android:summary="@string/settings_security_pin_code_summary"
-            android:title="@string/settings_security_pin_code_title" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

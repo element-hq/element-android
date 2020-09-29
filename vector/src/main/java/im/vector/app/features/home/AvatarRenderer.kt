@@ -16,13 +16,11 @@
 
 package im.vector.app.features.home
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
@@ -33,8 +31,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
-import im.vector.app.core.utils.getColorFromUserId
-import org.matrix.android.sdk.api.extensions.tryThis
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -43,7 +41,8 @@ import javax.inject.Inject
  * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
  */
 
-class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
+class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                         private val matrixItemColorProvider: MatrixItemColorProvider) {
 
     companion object {
         private const val THUMBNAIL_SIZE = 250
@@ -51,21 +50,19 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
-        render(imageView.context,
-                GlideApp.with(imageView),
+        render(GlideApp.with(imageView),
                 matrixItem,
                 DrawableImageViewTarget(imageView))
     }
 
     fun clear(imageView: ImageView) {
         // It can be called after recycler view is destroyed, just silently catch
-        tryThis { GlideApp.with(imageView).clear(imageView) }
+        tryOrNull { GlideApp.with(imageView).clear(imageView) }
     }
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        render(imageView.context,
-                glideRequests,
+        render(glideRequests,
                 matrixItem,
                 DrawableImageViewTarget(imageView))
     }
@@ -79,7 +76,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 displayName = mappedContact.displayName
         )
 
-        val placeholder = getPlaceholderDrawable(imageView.context, matrixItem)
+        val placeholder = getPlaceholderDrawable(matrixItem)
         GlideApp.with(imageView)
                 .load(mappedContact.photoURI)
                 .apply(RequestOptions.circleCropTransform())
@@ -88,11 +85,10 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
-    fun render(context: Context,
-               glideRequests: GlideRequests,
+    fun render(glideRequests: GlideRequests,
                matrixItem: MatrixItem,
                target: Target<Drawable>) {
-        val placeholder = getPlaceholderDrawable(context, matrixItem)
+        val placeholder = getPlaceholderDrawable(matrixItem)
         buildGlideRequest(glideRequests, matrixItem.avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
@@ -100,7 +96,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @AnyThread
     @Throws
-    fun shortcutDrawable(context: Context, glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
+    fun shortcutDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
         return glideRequests
                 .asBitmap()
                 .apply {
@@ -108,7 +104,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                     if (resolvedUrl != null) {
                         load(resolvedUrl)
                     } else {
-                        val avatarColor = avatarColor(matrixItem, context)
+                        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
                         load(TextDrawable.builder()
                                 .beginConfig()
                                 .bold()
@@ -130,8 +126,8 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
-    fun getPlaceholderDrawable(context: Context, matrixItem: MatrixItem): Drawable {
-        val avatarColor = avatarColor(matrixItem, context)
+    fun getPlaceholderDrawable(matrixItem: MatrixItem): Drawable {
+        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
         return TextDrawable.builder()
                 .beginConfig()
                 .bold()
@@ -151,12 +147,5 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     private fun resolvedUrl(avatarUrl: String?): String? {
         return activeSessionHolder.getSafeActiveSession()?.contentUrlResolver()
                 ?.resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
-    }
-
-    private fun avatarColor(matrixItem: MatrixItem, context: Context): Int {
-        return when (matrixItem) {
-            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
-            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
-        }
     }
 }

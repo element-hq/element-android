@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signedOut"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_background">
 
-    <!-- Missing attributes are in the style -->
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical">
+        <LinearLayout style="@style/LoginFormContainer">
+
+            <ImageView
+                style="@style/LoginLogo"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,5 +43,5 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 

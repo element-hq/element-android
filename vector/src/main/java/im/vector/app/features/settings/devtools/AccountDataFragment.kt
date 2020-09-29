@@ -16,13 +16,14 @@
 
 package im.vector.app.features.settings.devtools
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import im.vector.app.R
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseActivity
@@ -31,6 +32,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import javax.inject.Inject
 
 class AccountDataFragment @Inject constructor(
@@ -73,5 +76,17 @@ class AccountDataFragment @Inject constructor(
                 -1, // open All
                 createJSonViewerStyleProvider(colorProvider)
         ).show(childFragmentManager, "JSON_VIEWER")
+    }
+
+    override fun didLongTap(data: UserAccountDataEvent) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.delete)
+                .setMessage(getString(R.string.delete_account_data_warning, data.type))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
+                }
+                .show()
+                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 }

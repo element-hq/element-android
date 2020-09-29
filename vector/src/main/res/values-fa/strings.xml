@@ -20,7 +20,6 @@
     <string name="save">ذخیره</string>
     <string name="leave">ترک کردن</string>
     <string name="send">ارسال</string>
-    <string name="copy">روگرفت</string>
     <string name="resend">ارسال مجدد</string>
     <string name="quote">نقل قول</string>
     <string name="share">اشتراک گذاری</string>
@@ -410,8 +409,6 @@
     <string name="settings_call_notifications_preferences">پیکربندی أگاهی‌های تماس</string>
     <string name="settings_silent_notifications_preferences">پیکربندی أگاهی‌های صامت</string>
     <string name="settings_set_sync_delay">تأخیر بین همگام‌سازی‌ها</string>
-    <string name="settings_second">ثانیه</string>
-    <string name="settings_seconds">ثانیه</string>
 
     <string name="settings_version">نگارش</string>
     <string name="settings_olm_version">نگارش olm</string>

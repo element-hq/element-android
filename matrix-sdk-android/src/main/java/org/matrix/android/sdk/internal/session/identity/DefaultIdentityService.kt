@@ -23,7 +23,7 @@ import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -113,7 +113,7 @@ internal class DefaultIdentityService @Inject constructor(
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
             identityStore.setUrl(baseUrl)
             updateIdentityAPI(baseUrl)
-            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
+            listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
     }
 
@@ -236,7 +236,7 @@ internal class DefaultIdentityService @Inject constructor(
     private suspend fun updateAccountData(url: String?) {
         // Also notify the listener
         withContext(coroutineDispatchers.main) {
-            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
+            listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
 
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(

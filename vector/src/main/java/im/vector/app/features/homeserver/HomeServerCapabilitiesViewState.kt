@@ -20,5 +20,6 @@ import com.airbnb.mvrx.MvRxState
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 data class HomeServerCapabilitiesViewState(
-        val capabilities: HomeServerCapabilities = HomeServerCapabilities()
+        val capabilities: HomeServerCapabilities = HomeServerCapabilities(),
+        val isE2EByDefault: Boolean = true
 ) : MvRxState

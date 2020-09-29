@@ -78,70 +78,6 @@
     <string name="notice_event_redacted_by">Messaggio rimosso da %1$s</string>
     <string name="notice_event_redacted_with_reason">Messaggio rimosso [motivo: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Messaggio rimosso da %1$s [motivo: %2$s]</string>
-    <string name="verification_emoji_dog">Cane</string>
-    <string name="verification_emoji_cat">Gatto</string>
-    <string name="verification_emoji_lion">Leone</string>
-    <string name="verification_emoji_horse">Cavallo</string>
-    <string name="verification_emoji_unicorn">Unicorno</string>
-    <string name="verification_emoji_pig">Maiale</string>
-    <string name="verification_emoji_elephant">Elefante</string>
-    <string name="verification_emoji_rabbit">Coniglio</string>
-    <string name="verification_emoji_panda">Panda</string>
-    <string name="verification_emoji_rooster">Gallo</string>
-    <string name="verification_emoji_penguin">Pinguino</string>
-    <string name="verification_emoji_turtle">Tartaruga</string>
-    <string name="verification_emoji_fish">Pesce</string>
-    <string name="verification_emoji_octopus">Piovra</string>
-    <string name="verification_emoji_butterfly">Farfalla</string>
-    <string name="verification_emoji_flower">Fiore</string>
-    <string name="verification_emoji_tree">Albero</string>
-    <string name="verification_emoji_cactus">Cactus</string>
-    <string name="verification_emoji_mushroom">Fungo</string>
-    <string name="verification_emoji_globe">Globo</string>
-    <string name="verification_emoji_moon">Luna</string>
-    <string name="verification_emoji_cloud">Nuvola</string>
-    <string name="verification_emoji_fire">Fuoco</string>
-    <string name="verification_emoji_banana">Banana</string>
-    <string name="verification_emoji_apple">Mela</string>
-    <string name="verification_emoji_strawberry">Fragola</string>
-    <string name="verification_emoji_corn">Mais</string>
-    <string name="verification_emoji_pizza">Pizza</string>
-    <string name="verification_emoji_cake">Torta</string>
-    <string name="verification_emoji_heart">Cuore</string>
-    <string name="verification_emoji_smiley">Sorriso</string>
-    <string name="verification_emoji_robot">Robot</string>
-    <string name="verification_emoji_hat">Cappello</string>
-    <string name="verification_emoji_glasses">Occhiali</string>
-    <string name="verification_emoji_wrench">Chiave inglese</string>
-    <string name="verification_emoji_santa">Babbo Natale</string>
-    <string name="verification_emoji_thumbsup">Pollice in su</string>
-    <string name="verification_emoji_umbrella">Ombrello</string>
-    <string name="verification_emoji_hourglass">Clessidra</string>
-    <string name="verification_emoji_clock">Orologio</string>
-    <string name="verification_emoji_gift">Regalo</string>
-    <string name="verification_emoji_lightbulb">Lampadina</string>
-    <string name="verification_emoji_book">Libro</string>
-    <string name="verification_emoji_pencil">Matita</string>
-    <string name="verification_emoji_paperclip">Graffetta</string>
-    <string name="verification_emoji_scissors">Forbici</string>
-    <string name="verification_emoji_lock">Lucchetto</string>
-    <string name="verification_emoji_key">Chiave</string>
-    <string name="verification_emoji_hammer">Martello</string>
-    <string name="verification_emoji_telephone">Telefono</string>
-    <string name="verification_emoji_flag">Bandiera</string>
-    <string name="verification_emoji_train">Treno</string>
-    <string name="verification_emoji_bicycle">Bicicletta</string>
-    <string name="verification_emoji_airplane">Aeroplano</string>
-    <string name="verification_emoji_rocket">Razzo</string>
-    <string name="verification_emoji_trophy">Trofeo</string>
-    <string name="verification_emoji_ball">Palla</string>
-    <string name="verification_emoji_guitar">Chitarra</string>
-    <string name="verification_emoji_trumpet">Tromba</string>
-    <string name="verification_emoji_bell">Campana</string>
-    <string name="verification_emoji_anchor">Ancora</string>
-    <string name="verification_emoji_headphone">Cuffie</string>
-    <string name="verification_emoji_folder">Cartella</string>
-    <string name="verification_emoji_pin">Spillo</string>
 
     <string name="initial_sync_start_importing_account">Sync iniziale:
 \nImportazione account…</string>
@@ -295,9 +231,5 @@
 
     <string name="notice_end_to_end_ok_by_you">Hai attivato la crittografia end-to-end.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Hai attivato la crittografia end-to-end (algoritmo %1$s sconosciuto).</string>
-
-    <string name="call_notification_answer">Accetta</string>
-    <string name="call_notification_reject">Rifiuta</string>
-    <string name="call_notification_hangup">Riaggancia</string>
 
 </resources>

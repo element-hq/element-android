@@ -3,7 +3,7 @@ Element é um novo tipo de aplicativo de mensagens e colaboração que:
 1. Coloca você no controle de sua privacidade;
 2. Permite que você se comunique com qualquer pessoa na rede Matrix e, através de integrações, outros aplicativos como o Slack;
 3. Protege você de anúncios, mineração de dados e de ecossistemas fechados;
-4. Faz uso da criptografia de ponta-a-ponta, com assinatura cruzada para verificar outros.
+4. Faz uso da criptografia de ponta a ponta, com autoverificação para confirmar outras pessoas.
 
 Element é completamente diferente de outros aplicativos de mensagem e colaboração porque é descentralizado e código aberto.
 
@@ -19,12 +19,12 @@ Element coloca você no controle ao permitir quem hospeda suas conversas. Neste 
 
 <b>Por que escolher o Element?</b>
 
-<b>SEJA O DONO DE SEUS DADOS</b>: Você decide onde manter seus dados e mensagens. Você é o dono deles e também os controla, não alguma mega corporação que minera os seus dados ou compartilha eles com terceiros.
+<b>SEJA O DONO DE SEUS DADOS</b>: você decide onde manter seus dados e mensagens. Você é o dono deles e também os controla, não alguma mega corporação que minera os seus dados ou compartilha eles com terceiros.
 
-<b>COLABORAÇÃO E MENSAGENS ABERTAS</b>: Você pode falar com qualquer outra pessoa na rede Matrix, não importa se ela está usando o Element ou algum outro aplicativo Matrix, ou até mesmo se ela está utilizando um sistema de mensagens diferente como o Slack, IRC ou XMPP.
+<b>COLABORAÇÃO E MENSAGENS ABERTAS</b>: você pode falar com qualquer outra pessoa na rede Matrix, não importa se ela está usando o Element ou algum outro aplicativo Matrix, ou até mesmo se ela está utilizando um sistema de mensagens diferente como o Slack, IRC ou XMPP.
 
-<b>SUPER-SEGURO</b>: Criptografia de ponta-a-ponta verdadeira (apenas aqueles na conversa podem descriptografar mensagens), e assinatura cruzada para verificar os dispositivos de participantes de conversas.
+<b>SUPER-SEGURO</b>: criptografia de ponta a ponta verdadeira (apenas aqueles na conversa podem descriptografar mensagens), e assinatura cruzada para verificar os dispositivos de participantes de conversas.
 
-<b>COMUNICAÇÃO COMPLETA</b>: Mensagens, chamadas de voz, chamadas de vídeo, compartilhamento de arquivos, compartilhamento de tela e um monte de integrações, robôs e widgets. Construa salas, comunidades, mantenha contato e faça seus projetos.
+<b>COMUNICAÇÃO COMPLETA</b>: mensagens, chamadas de voz, chamadas de vídeo, compartilhamento de arquivos, compartilhamento de tela e um monte de integrações, robôs e widgets. Construa salas, comunidades, mantenha contato e faça seus projetos.
 
-<b>NÃO IMPORTA ONDE VOCÊ ESTEJA</b>: Mantenha contato não importa onde você esteja com o histórico sincronizado de mensagens em todos os seus dispositivos e no navegador em https://app.element.io.
+<b>NÃO IMPORTA ONDE VOCÊ ESTEJA</b>: mantenha contato não importa onde você esteja com o histórico sincronizado de mensagens em todos os seus dispositivos e no navegador em https://app.element.io.

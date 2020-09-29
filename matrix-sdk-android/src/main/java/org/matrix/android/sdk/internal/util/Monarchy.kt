@@ -18,9 +18,9 @@
 package org.matrix.android.sdk.internal.util
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.internal.database.awaitTransaction
 import io.realm.Realm
 import io.realm.RealmModel
+import org.matrix.android.sdk.internal.database.awaitTransaction
 import java.util.concurrent.atomic.AtomicReference
 
 internal suspend fun <T> Monarchy.awaitTransaction(transaction: suspend (realm: Realm) -> T): T {

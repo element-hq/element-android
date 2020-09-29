@@ -27,7 +27,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
 import java.util.concurrent.TimeUnit
@@ -84,7 +84,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == IMPORT_FILE_REQ && resultCode == Activity.RESULT_OK) {
             data?.data?.let { dataURI ->
-                tryThis {
+                tryOrNull {
                     activity?.contentResolver?.openInputStream(dataURI)
                             ?.bufferedReader()
                             ?.use { it.readText() }

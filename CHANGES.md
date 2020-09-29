@@ -1,4 +1,81 @@
-Changes in Element 1.0.6 (2020-XX-XX)
+Changes in Element 1.0.9 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
+
+Bugfix 🐛:
+ - Improve support for image selection with intent changes (#1376)
+ - Fix Splash layout on small screens
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ -
+
+Other changes:
+ - Added registration/verification automated UI tests
+ - Create a script to help getting public information form any homeserver
+
+Changes in Element 1.0.8 (2020-09-25)
+===================================================
+
+Improvements 🙌:
+ - Add "show password" in import Megolm keys dialog
+ - Visually disable call buttons in menu and prohibit calling when permissions are insufficient (#2112)
+ - Better management of requested permissions (#2048)
+ - Add a setting to show timestamp for all messages (#2123)
+ - Use cache for user color
+ - Allow using an outdated homeserver, at user's risk (#1972)
+ - Restore small logo on login screens and fix scrolling issue on those screens
+ - PIN Code Improvements: Add more settings: biometrics, grace period, notification content (#1985)
+
+Bugfix 🐛:
+ - Long message cannot be sent/takes infinite time & blocks other messages (#1397)
+ - Fix crash when wellknown are malformed, or redirect to some HTML content (reported by rageshakes)
+ - User Verification in DM not working
+ - Manual import of Megolm keys does back up the imported keys
+ - Auto scrolling to the latest message when sending (#2094)
+ - Fix incorrect permission check when creating widgets (#2137)
+ - Pin code: user has to enter pin code twice (#2005)
+
+SDK API changes ⚠️:
+ - Rename `tryThis` to `tryOrNull`
+
+Other changes:
+ - Add an advanced action to reset an account data entry
+
+Changes in Element 1.0.7 (2020-09-17)
+===================================================
+
+Improvements 🙌:
+ - Handle date formatting properly (show time am/pm if needed, display year when needed)
+ - Improve F-Droid Notification (#2055)
+
+Bugfix 🐛:
+ - Clear the notification when the event is read elsewhere (#1822)
+ - Speakerphone is not used for ringback tone (#1644, #1645)
+ - Back camera preview is not mirrored anymore (#1776)
+ - Various report of people that cannot play video (#2107)
+ - Rooms incorrectly marked as unread (#588)
+ - Allow users to show/hide room member state events (#1231) 
+ - Fix stuck on loader when launching home
+
+SDK API changes ⚠️:
+ - Create a new RawService to get plain data from the server.
+
+Other changes:
+ - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
+
+Changes in Element 1.0.6 (2020-09-08)
 ===================================================
 
 Features ✨:
@@ -7,8 +84,9 @@ Features ✨:
 Improvements 🙌:
  - You can now join room through permalink and within room directory search
  - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
- - Fix several issues when uploading bug files (#1889)
+ - Fix several issues when uploading big files (#1889)
  - Do not propose to verify session if there is only one session and 4S is not configured (#1901)
+ - Call screen does not use proximity sensor (#1735)
 
 Bugfix 🐛:
  - Display name not shown under Settings/General (#1926)
@@ -21,15 +99,19 @@ Bugfix 🐛:
  - Loudspeaker is always used (#1685)
  - Fix uploads still don't work with room v6 (#1879)
  - Can't handle ongoing call events in background (#1992)
+ - Handle room, user and group links by the Element app (#1795)
+ - Update associated site domain (#1833)
  - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
  - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
- - Improve support for image selection with intent changes (#1376)
+ - Support for image compression on Android 10
+ - Verification popup won't show
+ - Android 6: App crash when read Contact permission is granted (#2064)
+ - JSON for verification events leaks in to the room list (#1246)
+ - Replies to poll appears in timeline as unsupported events during sending (#1004)
 
 Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
+ - New translation to kabyle
 
 Build 🧱:
  - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
@@ -37,10 +119,10 @@ Build 🧱:
     New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
     New build location: https://buildkite.com/matrix-dot-org/element-android
 
-
 Other changes:
  - Use File extension functions to make code more concise (#1996)
  - Create a script to import SAS strings (#1909)
+ - Support `data-mx-[bg-]color` attributes on `<font>` tags.
 
 Changes in Element 1.0.5 (2020-08-21)
 ===================================================

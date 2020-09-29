@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
@@ -53,8 +54,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoCon
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
+
+private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
@@ -116,6 +118,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
+    private var previousModelsSize = 0
 
     var callback: Callback? = null
     var timeline: Timeline? = null
@@ -191,6 +194,29 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 models.add(position, readMarker)
             }
         }
+        val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
+        if (shouldAddBackwardPrefetch) {
+            val indexOfPrefetchBackward = (previousModelsSize - 1)
+                    .coerceAtMost(models.size - DEFAULT_PREFETCH_THRESHOLD)
+                    .coerceAtLeast(0)
+
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
+
+            models.add(indexOfPrefetchBackward, loadingItem)
+        }
+        val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
+        if (shouldAddForwardPrefetch) {
+            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(models.size - 1)
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
+            models.add(indexOfPrefetchForward, loadingItem)
+        }
+        previousModelsSize = models.size
     }
 
     fun update(viewState: RoomDetailViewState) {
@@ -333,13 +359,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         ) {
             requestModelBuild()
         }
-        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
+        val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, event.root.originServerTs)
         return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
     }
 
-    private fun buildDaySeparatorItem(addDaySeparator: Boolean, date: LocalDateTime): DaySeparatorItem? {
+    private fun buildDaySeparatorItem(addDaySeparator: Boolean, originServerTs: Long?): DaySeparatorItem? {
         return if (addDaySeparator) {
-            val formattedDay = dateFormatter.formatMessageDay(date)
+            val formattedDay = dateFormatter.format(originServerTs, DateFormatKind.TIMELINE_DAY_DIVIDER)
             DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
         } else {
             null
@@ -355,9 +381,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         return shouldAdd
     }
 
-    /**
-     * Return true if added
-     */
     private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
         return onVisibilityStateChanged { _, _, visibilityState ->
             if (visibilityState == VisibilityState.VISIBLE) {

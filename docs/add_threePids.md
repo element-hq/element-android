@@ -261,11 +261,11 @@ This is not an ideal, but the client will display a hint to check the entered co
 
 200
 
-````json
+```json
 {
   "success": true
 }
-````
+```
 
 Then the app call `https://homeserver.org/_matrix/client/r0/account/3pid/add` as per adding an email and follow the same UIS flow
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.signout.soft.epoxy
 
-import androidx.annotation.ColorRes
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@ColorRes
-fun getColorFromRoomId(roomId: String?): Int {
-    return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
-        1    -> R.color.riotx_avatar_fill_2
-        2    -> R.color.riotx_avatar_fill_3
-        else -> R.color.riotx_avatar_fill_1
-    }
+@EpoxyModelClass(layout = R.layout.item_login_header)
+abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
+    class Holder : VectorEpoxyHolder()
 }

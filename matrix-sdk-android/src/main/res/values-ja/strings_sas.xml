@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generated file, do not edit -->
+    <string name="verification_emoji_dog">犬</string>
+    <string name="verification_emoji_cat">猫</string>
+    <string name="verification_emoji_horse">馬</string>
+    <string name="verification_emoji_octopus">たこ</string>
+    <string name="verification_emoji_flower">花</string>
+    <string name="verification_emoji_tree">木</string>
+    <string name="verification_emoji_mushroom">きのこ</string>
+    <string name="verification_emoji_moon">月</string>
+    <string name="verification_emoji_apple">リンゴ</string>
+    <string name="verification_emoji_cake">ケーキ</string>
+    <string name="verification_emoji_robot">ロボと</string>
+    <string name="verification_emoji_glasses">めがね</string>
+    <string name="verification_emoji_book">本</string>
+    <string name="verification_emoji_telephone">電話機</string>
+    <string name="verification_emoji_train">電車</string>
+    <string name="verification_emoji_bicycle">自転車</string>
+</resources>

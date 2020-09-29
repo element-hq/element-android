@@ -21,6 +21,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.fdroid.BackgroundSyncStarter
 import timber.log.Timber
 
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
@@ -29,10 +31,11 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
         Timber.v("## onReceive() ${intent.action}")
         val appContext = context.applicationContext
         if (appContext is HasVectorInjector) {
-            val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
-            if (activeSession != null) {
-                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.sessionId, 10)
-            }
+            BackgroundSyncStarter.start(
+                    context,
+                    appContext.vectorComponent().vectorPreferences(),
+                    appContext.injector().activeSessionHolder()
+            )
         }
     }
 }

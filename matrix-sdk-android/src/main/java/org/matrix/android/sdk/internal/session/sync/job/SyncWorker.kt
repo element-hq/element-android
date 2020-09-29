@@ -18,23 +18,24 @@ package org.matrix.android.sdk.internal.session.sync.job
 
 import android.content.Context
 import androidx.work.BackoffPolicy
-import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
+import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
+private const val DEFAULT_LONG_POOL_TIMEOUT = 6L
+private const val DEFAULT_DELAY_TIMEOUT = 30_000L
 
 /**
  * Possible previous worker: None
@@ -42,44 +43,59 @@ private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
  */
 internal class SyncWorker(context: Context,
                           workerParameters: WorkerParameters
-) : CoroutineWorker(context, workerParameters) {
+) : SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
             val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT,
-            val automaticallyRetry: Boolean = false,
+            val delay: Long = DEFAULT_DELAY_TIMEOUT,
+            val periodic: Boolean = false,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var syncTask: SyncTask
     @Inject lateinit var taskExecutor: TaskExecutor
     @Inject lateinit var networkConnectivityChecker: NetworkConnectivityChecker
+    @Inject lateinit var workManagerProvider: WorkManagerProvider
 
-    override suspend fun doWork(): Result {
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
+
+    override suspend fun doSafeWork(params: Params): Result {
         Timber.i("Sync work starting")
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
-                        .also { Timber.e("Unable to parse work parameters") }
 
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
         return runCatching {
             doSync(params.timeout)
         }.fold(
-                { Result.success() },
+                {
+                    Result.success().also {
+                        if (params.periodic) {
+                            // we want to schedule another one after delay
+                            automaticallyBackgroundSync(workManagerProvider, params.sessionId, params.timeout, params.delay)
+                        }
+                    }
+                },
                 { failure ->
-                    if (failure.isTokenError() || !params.automaticallyRetry) {
+                    if (failure.isTokenError()) {
                         Result.failure()
                     } else {
+                        // If the worker was stopped (when going back in foreground), a JobCancellation exception is sent
+                        // but in this case the result is ignored, as the work is considered stopped,
+                        // so don't worry of the retry here for this case
                         Result.retry()
                     }
                 }
         )
     }
 
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
+    }
+
     private suspend fun doSync(timeout: Long) {
-        val taskParams = SyncTask.Params(timeout)
+        val taskParams = SyncTask.Params(timeout * 1000)
         syncTask.execute(taskParams)
     }
 
@@ -87,25 +103,27 @@ internal class SyncWorker(context: Context,
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
         fun requireBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, false))
+            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, 0L, false))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
                     .setInputData(data)
                     .build()
             workManagerProvider.workManager
-                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0, delay: Long = 30_000) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, true))
+        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0, delayInSeconds: Long = 30) {
+            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, delayInSeconds, true))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, delay, TimeUnit.MILLISECONDS)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
+                    .setInitialDelay(delayInSeconds, TimeUnit.SECONDS)
                     .build()
+
             workManagerProvider.workManager
-                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
         fun stopAnyBackgroundSync(workManagerProvider: WorkManagerProvider) {

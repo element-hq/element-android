@@ -21,13 +21,13 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.utils.DebouncedClickListener
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import javax.inject.Inject
 
 class AccountDataEpoxyController @Inject constructor(
@@ -36,6 +36,7 @@ class AccountDataEpoxyController @Inject constructor(
 
     interface InteractionListener {
         fun didTap(data: UserAccountDataEvent)
+        fun didLongTap(data: UserAccountDataEvent)
     }
 
     var interactionListener: InteractionListener? = null
@@ -70,6 +71,10 @@ class AccountDataEpoxyController @Inject constructor(
                             itemClickAction(DebouncedClickListener(View.OnClickListener {
                                 interactionListener?.didTap(accountData)
                             }))
+                            itemLongClickAction(View.OnLongClickListener {
+                                interactionListener?.didLongTap(accountData)
+                                true
+                            })
                         }
                     }
                 }

@@ -40,7 +40,7 @@ import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -530,7 +530,7 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
         return null
     } finally {
         // Close resources
-        tryThis { inputStream?.close() }
-        tryThis { outputStream?.close() }
+        tryOrNull { inputStream?.close() }
+        tryOrNull { outputStream?.close() }
     }
 }

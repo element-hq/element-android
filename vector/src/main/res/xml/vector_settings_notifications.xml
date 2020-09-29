@@ -62,6 +62,36 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
+        android:title="@string/settings_background_sync"
+        app:isPreferenceVisible="false">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
+            android:persistent="false"
+            android:title="@string/settings_background_fdroid_sync_mode" />
+
+        <im.vector.app.core.preference.VectorEditTextPreference
+            android:inputType="numberDecimal"
+            android:persistent="false"
+            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:title="@string/settings_set_sync_delay" />
+
+        <im.vector.app.core.preference.VectorEditTextPreference
+            android:inputType="numberDecimal"
+            android:persistent="false"
+            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+            android:title="@string/settings_set_sync_timeout" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:title="@string/settings_start_on_boot" />
+
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_troubleshoot_title">
 
         <im.vector.app.core.preference.VectorPreference
@@ -72,33 +102,6 @@
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <!--im.vector.app.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
-        android:title="@string/settings_background_sync">
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
-            android:title="@string/settings_start_on_boot" />
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:title="@string/settings_enable_background_sync" />
-
-        <im.vector.app.core.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_timeout" />
-
-        <im.vector.app.core.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_delay" />
-
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
-    <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" /-->
 

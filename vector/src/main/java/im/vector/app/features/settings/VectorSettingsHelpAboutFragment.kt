@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.preference.Preference
+import im.vector.app.BuildConfig
 import org.matrix.android.sdk.api.Matrix
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
@@ -58,7 +59,13 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
 
         // application version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
-            it.summary = versionProvider.getVersion(longFormat = false, useBuildNumber = true)
+            it.summary = buildString {
+                append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
+                if (BuildConfig.DEBUG) {
+                    append(" ")
+                    append(BuildConfig.GIT_BRANCH_NAME)
+                }
+            }
 
             it.setOnPreferenceClickListener { pref ->
                 copyToClipboard(requireContext(), pref.summary)

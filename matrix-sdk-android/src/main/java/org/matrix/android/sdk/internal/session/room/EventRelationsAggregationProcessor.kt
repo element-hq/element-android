@@ -347,7 +347,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                 if (userId == senderId) {
                     sumModel.myVote = optionIndex
                 }
-                Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+                Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$targetEventId ")
             } else {
                 Timber.v("## POLL Ignoring vote (older than known one)  eventId:$eventId ")
             }
@@ -356,7 +356,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             if (userId == senderId) {
                 sumModel.myVote = optionIndex
             }
-            Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+            Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$targetEventId ")
         }
         sumModel.votes = votes
         if (isLocalEcho) {

@@ -56,8 +56,7 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
-            android:title="@string/settings_always_show_timestamps"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_always_show_timestamps" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_12_24_TIMESTAMPS_KEY"
@@ -75,6 +74,12 @@
             android:key="SETTINGS_SHOW_REDACTED_KEY"
             android:summary="@string/settings_show_redacted_summary"
             android:title="@string/settings_show_redacted" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
+            android:summary="@string/settings_show_room_member_state_events_summary"
+            android:title="@string/settings_show_room_member_state_events" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"

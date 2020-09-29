@@ -47,7 +47,7 @@
 
 
     <TextView
-        android:id="@+id/riot_desktop_web"
+        android:id="@+id/app_desktop_web"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/monitorIcon" />
 
     <TextView
-        android:id="@+id/riot_ios_android"
+        android:id="@+id/app_ios_android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="riot_ios_android,riot_desktop_web" />
+        app:constraint_referenced_ids="app_ios_android,app_desktop_web" />
 
 
     <TextView

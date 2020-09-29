@@ -20,7 +20,6 @@
     <string name="save">احفظ</string>
     <string name="leave">اترك</string>
     <string name="send">أرسِل</string>
-    <string name="copy">انسخ</string>
     <string name="resend">أعِد الإرسال</string>
     <string name="quote">اقتبس</string>
     <string name="share">شارِك</string>
@@ -955,8 +954,6 @@
         <item quantity="many">%d محدّدة</item>
         <item quantity="other">%d محدّدة</item>
     </plurals>
-    <string name="settings_second">من الثواني</string>
-    <string name="settings_seconds">من الثواني</string>
 
     <string name="settings_preview_media_before_sending">عايِن الوسيط قبل إرساله</string>
 

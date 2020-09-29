@@ -132,6 +132,8 @@ data class MatrixError(
         const val M_CANNOT_LEAVE_SERVER_NOTICE_ROOM = "M_CANNOT_LEAVE_SERVER_NOTICE_ROOM"
         /** (Not documented yet) */
         const val M_WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
+        /** (Not documented yet) */
+        const val M_WEAK_PASSWORD = "M_WEAK_PASSWORD"
 
         const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
 
