@@ -33,6 +33,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
+import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.isLocalFile
@@ -206,12 +207,14 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+    fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+        return createGlideRequest(data, mode, GlideApp.with(imageView), size)
+    }
+
+    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode)): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
-            GlideApp
-                    .with(imageView)
-                    .load(data)
+            glideRequests.load(data)
         } else {
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
@@ -223,15 +226,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             // Fallback to base url
                     ?: data.url.takeIf { it?.startsWith("content://") == true }
 
-            GlideApp
-                    .with(imageView)
+           glideRequests
                     .load(resolvedUrl)
                     .apply {
                         if (mode == Mode.THUMBNAIL) {
                             error(
-                                    GlideApp
-                                            .with(imageView)
-                                            .load(resolveUrl(data))
+                                   glideRequests.load(resolveUrl(data))
                             )
                         }
                     }

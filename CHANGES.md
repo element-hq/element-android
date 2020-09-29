@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
 
 Bugfix 🐛:
  - Fix Splash layout on small screens
@@ -21,6 +22,7 @@ Build 🧱:
 
 Other changes:
  - Added registration/verification automated UI tests
+ - Create a script to help getting public information form any homeserver
 
 Changes in Element 1.0.8 (2020-09-25)
 ===================================================
