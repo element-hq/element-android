@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.StringProvider
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -46,8 +45,7 @@ data class SearchArgs(
 
 class SearchFragment @Inject constructor(
         val viewModelFactory: SearchViewModel.Factory,
-        val controller: SearchResultController,
-        val stringProvider: StringProvider
+        val controller: SearchResultController
 ) : VectorBaseFragment(), StateView.EventCallback, SearchResultController.Listener {
 
     private val fragmentArgs: SearchArgs by args()
@@ -115,7 +113,7 @@ class SearchFragment @Inject constructor(
             pendingScrollToPosition = scrollPosition
         } else {
             stateView.state = StateView.State.Empty(
-                    title = stringProvider.getString(R.string.search_no_results),
+                    title = getString(R.string.search_no_results),
                     image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
             )
         }
