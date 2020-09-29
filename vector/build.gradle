@@ -173,14 +173,11 @@ android {
             }
         }
 
-
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
-
     }
-
 
     testOptions {
         // Disables animations during instrumented tests you run from the command line…
@@ -296,6 +293,11 @@ dependencies {
     def work_version = '2.4.0'
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
+
+    // Tests
+    def kluent_version = '1.44'
+    def androidxTest_version = '1.3.0'
+    def espresso_version = '3.3.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -437,20 +439,20 @@ dependencies {
 
     // TESTS
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+    testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
-    androidTestImplementation 'androidx.test:core:1.3.0'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation "androidx.test:core:$androidxTest_version"
+    androidTestImplementation "androidx.test:runner:$androidxTest_version"
+    androidTestImplementation "androidx.test:rules:$androidxTest_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "org.amshove.kluent:kluent-android:$kluent_version"
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'

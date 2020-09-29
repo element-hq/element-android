@@ -48,7 +48,7 @@ class RegistrationTest {
         val password: String = "password"
         val homeServerUrl: String = "http://10.0.2.2:8080"
 
-        // Check splashcreen is there
+        // Check splashscreen is there
         onView(withId(R.id.loginSplashSubmit))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(R.string.login_splash_submit)))
@@ -57,7 +57,7 @@ class RegistrationTest {
         onView(withId(R.id.loginSplashSubmit))
                 .perform(click())
 
-        // Check that home server options are showned
+        // Check that home server options are shown
         onView(withId(R.id.loginServerTitle))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(R.string.login_server_title)))

@@ -16,20 +16,20 @@ Out of the box, the tests use one of the homeservers (located at http://localhos
 
 You first need to follow instructions to set up Synapse in development mode at https://github.com/matrix-org/synapse#synapse-development. If you have already installed all dependencies, the steps are:
 
-```
+```shell script
 $ git clone https://github.com/matrix-org/synapse.git
 $ cd synapse
 $ virtualenv -p python3 env
 $ source env/bin/activate
-(env) $ python -m pip install --no-use-pep517 -e .`
+(env) $ python -m pip install --no-use-pep517 -e .
 ```
 
 Every time you want to launch these test homeservers, type:
 
-```
+```shell script
 $ virtualenv -p python3 env
 $ source env/bin/activate
-(env) $ demo/start.sh --no-rate-limit`
+(env) $ demo/start.sh --no-rate-limit
 ```
 
 **Emulator/Device set up**
@@ -50,33 +50,53 @@ On your device, under **Settings > Developer options**, disable the following 3 
 -   Transition animation scale
 -   Animator duration scale
 
+## Run the tests
 
+Once Synapse is running, and an emulator is running, you can run the UI tests.
+
+### From the source code
+
+Click on the green arrow in front of each test. Clicking on the arrow in front of the test class, or from the package directory does not always work (Tests not found issue).
+
+### From command line
+
+````shell script
+./gradlew vector:connectedGplayDebugAndroidTest
+````
+
+To run all the tests from the `vector` module.
+
+In case of trouble, you can try to uninstall the previous installed test APK first with this command:
+
+```shell script
+adb uninstall im.vector.app.debug.test
+```
 ## Recipes
 
 We added some specific Espresso IdlingResources, and other utilities for matrix related tests
 
 ### Wait for initial sync
 
-````
+```kotlin
 // Wait for initial sync and check room list is there
 withIdlingResource(initialSyncIdlingResource(uiSession)) {
   onView(withId(R.id.roomListContainer))
             .check(matches(isDisplayed()))
 }
-````
+```
 
 ### Accessing current activity
 
-````
+```kotlin
     val activity = EspressoHelper.getCurrentActivity()!!
     val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
-````
+```
 
 ### Interact with other session
 
 It's possible to create a session via the SDK, and then use this session to interact with the one that the emulator is using (to check verifications for example)
 
-````
+```kotlin
 @Before
 fun initAccount() {
   val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -84,4 +104,4 @@ fun initAccount() {
   val userName = "foobar_${System.currentTimeMillis()}"
   existingSession = createAccountAndSync(matrix, userName, password, true)
 }
-`````
+```

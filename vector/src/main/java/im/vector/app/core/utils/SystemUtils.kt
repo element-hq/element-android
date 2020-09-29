@@ -55,6 +55,10 @@ fun isAirplaneModeOn(context: Context): Boolean {
     return Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
 }
 
+fun isAnimationDisabled(context: Context): Boolean {
+    return Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+}
+
 /**
  * display the system dialog for granting this permission. If previously granted, the
  * system will not show it (so you should call this method).

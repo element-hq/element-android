@@ -20,7 +20,6 @@ import android.app.Activity
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
 import com.tapadoo.alerter.Alerter
@@ -28,6 +27,7 @@ import com.tapadoo.alerter.OnHideAlertListener
 import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.isAnimationDisabled
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -173,9 +173,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {
         clearLightStatusBar()
 
-        val systemAnimationDurationDisabled = Settings.Global.getFloat(
-                activity.contentResolver,
-                Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+        val noAnimation = !animate || isAnimationDisabled(activity)
 
         alert.weakCurrentActivity = WeakReference(activity)
         val alerter = if (alert is VerificationVectorAlert) Alerter.create(activity, R.layout.alerter_verification_layout)
@@ -192,7 +190,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                     }
                 }
                 .apply {
-                    if (systemAnimationDurationDisabled || !animate) {
+                    if (noAnimation) {
                         setEnterAnimation(R.anim.anim_alerter_no_anim)
                     }
 
@@ -242,7 +240,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                         setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
                     }
                 }
-                .enableIconPulse(!systemAnimationDurationDisabled)
+                .enableIconPulse(!noAnimation)
                 .show()
     }
 

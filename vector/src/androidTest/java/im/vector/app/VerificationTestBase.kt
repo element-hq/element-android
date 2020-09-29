@@ -158,7 +158,7 @@ abstract class VerificationTestBase {
                     .createAccount(userName, password, null, it)
         }
 
-        // Preform dummy step
+        // Perform dummy step
         val registrationResult = doSync<RegistrationResult> {
             matrix.authenticationService()
                     .getRegistrationWizard()

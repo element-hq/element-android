@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Added registration/verification automated UI tests
 
 Changes in Element 1.0.8 (2020-09-25)
 ===================================================
@@ -49,7 +49,6 @@ SDK API changes ⚠️:
 
 Other changes:
  - Add an advanced action to reset an account data entry
- - Added registration/verification automated UI tests
 
 Changes in Element 1.0.7 (2020-09-17)
 ===================================================

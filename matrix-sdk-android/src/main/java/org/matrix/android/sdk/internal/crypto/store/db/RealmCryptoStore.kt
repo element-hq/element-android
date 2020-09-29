@@ -372,7 +372,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?) {
-        Timber.v("## CRYPTO | *** storePrivateKeysInfo ${msk != null} ")
+        Timber.v("## CRYPTO | *** storePrivateKeysInfo ${msk != null}, ${usk != null}, ${ssk != null}")
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignMasterPrivateKey = msk

@@ -44,12 +44,14 @@ import java.util.concurrent.TimeoutException
 object EspressoHelper {
     fun getCurrentActivity(): Activity? {
         var currentActivity: Activity? = null
-        getInstrumentation().runOnMainSync { run { currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0) } }
+        getInstrumentation().runOnMainSync {
+            currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
+        }
         return currentActivity
     }
 }
 
-fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10000, waitForDisplayed: Boolean = true): ViewAction {
+fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDisplayed: Boolean = true): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
             return Matchers.any(View::class.java)
@@ -62,25 +64,25 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10000, waitForDispla
         }
 
         override fun perform(uiController: UiController, view: View) {
-            System.out.println("*** waitForView 1 $view")
+            println("*** waitForView 1 $view")
             uiController.loopMainThreadUntilIdle()
             val startTime = System.currentTimeMillis()
             val endTime = startTime + timeout
             val visibleMatcher = isDisplayed()
 
             do {
-                System.out.println("*** waitForView loop $view end:$endTime currrent:${System.currentTimeMillis()}")
+                println("*** waitForView loop $view end:$endTime current:${System.currentTimeMillis()}")
                 val viewVisible = TreeIterables.breadthFirstViewTraversal(view)
                         .any { viewMatcher.matches(it) && visibleMatcher.matches(it) }
 
-                System.out.println("*** waitForView loop viewVisible:$viewVisible")
+                println("*** waitForView loop viewVisible:$viewVisible")
                 if (viewVisible == waitForDisplayed) return
-                System.out.println("*** waitForView loop loopMainThreadForAtLeast...")
+                println("*** waitForView loop loopMainThreadForAtLeast...")
                 uiController.loopMainThreadForAtLeast(50)
-                System.out.println("*** waitForView loop ...loopMainThreadForAtLeast")
+                println("*** waitForView loop ...loopMainThreadForAtLeast")
             } while (System.currentTimeMillis() < endTime)
 
-            System.out.println("*** waitForView timeout $view")
+            println("*** waitForView timeout $view")
             // Timeout happens.
             throw PerformException.Builder()
                     .withActionDescription(this.description)
@@ -136,24 +138,24 @@ fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
             val currentActivity = currentActivity ?: ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
 
             val isIdle = hasResumed || currentActivity?.javaClass?.let { activityClass.isAssignableFrom(it) } ?: false
-            System.out.println("*** [$name] isIdleNow activityIdlingResource $currentActivity  isIdle:$isIdle")
+            println("*** [$name] isIdleNow activityIdlingResource $currentActivity  isIdle:$isIdle")
             return isIdle
         }
 
         override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
-            System.out.println("*** [$name]  registerIdleTransitionCallback $callback")
+            println("*** [$name]  registerIdleTransitionCallback $callback")
             this.callback = callback
             // if (hasResumed) callback?.onTransitionToIdle()
         }
 
         override fun onActivityLifecycleChanged(activity: Activity?, stage: Stage?) {
-            System.out.println("*** [$name]  onActivityLifecycleChanged $activity  $stage")
+            println("*** [$name]  onActivityLifecycleChanged $activity  $stage")
             currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
             val isIdle = currentActivity?.javaClass?.let { activityClass.isAssignableFrom(it) } ?: false
-            System.out.println("*** [$name]  onActivityLifecycleChanged $currentActivity  isIdle:$isIdle")
+            println("*** [$name]  onActivityLifecycleChanged $currentActivity  isIdle:$isIdle")
             if (isIdle) {
                 hasResumed = true
-                System.out.println("*** [$name]  onActivityLifecycleChanged callback: $callback")
+                println("*** [$name]  onActivityLifecycleChanged callback: $callback")
                 callback?.onTransitionToIdle()
                 ActivityLifecycleMonitorRegistry.getInstance().removeLifecycleCallback(this)
             }
@@ -164,10 +166,10 @@ fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
 }
 
 fun withIdlingResource(idlingResource: IdlingResource, block: (() -> Unit)) {
-    System.out.println("*** withIdlingResource register")
+    println("*** withIdlingResource register")
     IdlingRegistry.getInstance().register(idlingResource)
     block.invoke()
-    System.out.println("*** withIdlingResource unregister")
+    println("*** withIdlingResource unregister")
     IdlingRegistry.getInstance().unregister(idlingResource)
 }
 
@@ -179,7 +181,7 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
         override fun getName() = "AllSecretsKnownIdling_${session.myUserId}"
 
         override fun isIdleNow(): Boolean {
-            System.out.println("*** [$name]/isIdleNow  allSecretsKnownIdling ${privateKeysInfo?.allKnown()}")
+            println("*** [$name]/isIdleNow  allSecretsKnownIdling ${privateKeysInfo?.allKnown()}")
             return privateKeysInfo?.allKnown() == true
         }
 
@@ -188,7 +190,7 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
         }
 
         override fun onChanged(t: Optional<PrivateKeysInfo>?) {
-            System.out.println("*** [$name]  allSecretsKnownIdling ${t?.getOrNull()}")
+            println("*** [$name]  allSecretsKnownIdling ${t?.getOrNull()}")
             privateKeysInfo = t?.getOrNull()
             if (t?.getOrNull()?.allKnown() == true) {
                 session.cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys().removeObserver(this)
