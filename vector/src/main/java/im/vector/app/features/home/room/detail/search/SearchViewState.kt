@@ -27,4 +27,7 @@ data class SearchViewState(
         val searchTerm: String? = null,
         val roomId: String? = null,
         val isNextBatch: Boolean = false
-) : MvRxState
+) : MvRxState {
+
+    constructor(args: SearchArgs) : this(roomId = args.roomId)
+}

@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.search
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class SearchAction : VectorViewModelAction {
-    data class SearchWith(val roomId: String, val searchTerm: String) : SearchAction()
+    data class SearchWith(val searchTerm: String) : SearchAction()
     object ScrolledToTop : SearchAction()
     object Retry : SearchAction()
 }

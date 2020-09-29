@@ -123,7 +123,7 @@ class SearchFragment @Inject constructor(
 
     fun search(query: String) {
         view?.hideKeyboard()
-        searchViewModel.handle(SearchAction.SearchWith(fragmentArgs.roomId, query))
+        searchViewModel.handle(SearchAction.SearchWith(query))
     }
 
     override fun onRetryClicked() {

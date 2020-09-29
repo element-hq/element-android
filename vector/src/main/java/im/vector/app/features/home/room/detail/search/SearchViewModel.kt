@@ -57,7 +57,7 @@ class SearchViewModel @AssistedInject constructor(
     private fun handleSearchWith(action: SearchAction.SearchWith) {
         if (action.searchTerm.length > 1) {
             setState {
-                copy(searchTerm = action.searchTerm, roomId = action.roomId, isNextBatch = false)
+                copy(searchTerm = action.searchTerm, isNextBatch = false)
             }
 
             startSearching()
