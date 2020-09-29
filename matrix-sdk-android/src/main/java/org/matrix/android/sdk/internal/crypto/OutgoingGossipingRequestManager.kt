@@ -126,7 +126,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param request the request
      */
     private fun sendOutgoingGossipingRequest(request: OutgoingGossipingRequest) {
-        Timber.v("## CRYPTO - GOSSIP sendOutgoingRoomKeyRequest() : Requesting keys $request")
+        Timber.v("## CRYPTO - GOSSIP sendOutgoingGossipingRequest() : Requesting keys $request")
 
         val params = SendGossipRequestWorker.Params(
                 sessionId = sessionId,

@@ -89,6 +89,7 @@ import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
 import im.vector.app.features.settings.VectorSettingsNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment
+import im.vector.app.features.settings.VectorSettingsPinFragment
 import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.app.features.settings.account.deactivation.DeactivateAccountFragment
@@ -283,6 +284,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsLabsFragment::class)
     fun bindVectorSettingsLabsFragment(fragment: VectorSettingsLabsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VectorSettingsPinFragment::class)
+    fun bindVectorSettingsPinFragment(fragment: VectorSettingsPinFragment): Fragment
 
     @Binds
     @IntoMap

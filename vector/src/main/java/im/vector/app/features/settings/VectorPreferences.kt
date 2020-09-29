@@ -166,6 +166,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // Security
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
         const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        private const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
+        private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
+        const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -839,10 +842,27 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * The user enable protecting app access with pin code
+     * The user enable protecting app access with pin code.
+     * Currently we use the pin code store to know if the pin is enabled, so this is not used
      */
     fun useFlagPinCode(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
+    }
+
+    fun useBiometricsToUnlock(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_BIOMETRICS_FLAG, true)
+    }
+
+    fun useGracePeriod(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG, true)
+    }
+
+    /**
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content
+     */
+    fun useCompleteNotificationFormat(): Boolean {
+        return !useFlagPinCode()
+                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
     }
 
     fun backgroundSyncTimeOut(): Int {
