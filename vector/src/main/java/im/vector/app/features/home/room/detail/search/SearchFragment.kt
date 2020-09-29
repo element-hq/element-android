@@ -118,9 +118,9 @@ class SearchFragment @Inject constructor(
     }
 
     override fun onItemClicked(event: Event) {
-        event.roomId ?: return
-
-        navigator.openRoom(requireContext(), event.roomId!!, event.eventId)
+        event.roomId?.let {
+            navigator.openRoom(requireContext(), it, event.eventId)
+        }
     }
 
     override fun loadMore() {

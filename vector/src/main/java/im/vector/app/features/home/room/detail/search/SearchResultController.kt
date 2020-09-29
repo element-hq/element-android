@@ -48,9 +48,7 @@ class SearchResultController @Inject constructor(
     }
 
     override fun buildModels(data: SearchViewState?) {
-        data?.searchResult?.results ?: return
-
-        if (!data.searchResult.nextBatch.isNullOrEmpty()) {
+        if (!data?.searchResult?.nextBatch.isNullOrEmpty()) {
             loadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
                 id("loadMore${idx++}")
@@ -62,7 +60,7 @@ class SearchResultController @Inject constructor(
             }
         }
 
-        buildSearchResultItems(data.searchResult.results!!)
+        buildSearchResultItems(data?.searchResult?.results.orEmpty())
     }
 
     private fun buildSearchResultItems(events: List<Event>) {
