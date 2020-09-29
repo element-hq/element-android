@@ -17,6 +17,7 @@ package im.vector.app.core.platform
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -85,6 +86,24 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     }
 
     open val showExpanded = false
+
+    interface ResultListener {
+        fun onBottomSheetResult(resultCode: Int, data: Any?)
+
+        companion object {
+            const val RESULT_OK = 1
+            const val RESULT_CANCEL = 0
+        }
+    }
+
+    var resultListener : ResultListener? = null
+    var bottomSheetResult: Int = ResultListener.RESULT_OK
+    var bottomSheetResultData: Any? = null
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        resultListener?.onBottomSheetResult(bottomSheetResult, bottomSheetResultData)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(getLayoutResId(), container, false)

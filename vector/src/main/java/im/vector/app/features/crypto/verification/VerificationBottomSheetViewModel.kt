@@ -31,6 +31,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import kotlinx.coroutines.Dispatchers
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -74,7 +75,8 @@ data class VerificationBottomSheetViewState(
         val currentDeviceCanCrossSign: Boolean = false,
         val userWantsToCancel: Boolean = false,
         val userThinkItsNotHim: Boolean = false,
-        val quadSContainsSecrets: Boolean = true
+        val quadSContainsSecrets: Boolean = true,
+        val quadsHasBeenReseted: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -349,6 +351,14 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             is VerificationAction.GotResultFromSsss            -> {
                 handleSecretBackFromSSSS(action)
             }
+            VerificationAction.SecuredStorageHasBeenReseted    -> {
+                if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
+                    setState {
+                        copy(quadsHasBeenReseted = true)
+                    }
+                }
+                Unit
+            }
         }.exhaustive
     }
 
@@ -393,7 +403,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")

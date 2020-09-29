@@ -48,6 +48,7 @@ import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQrS
 import im.vector.app.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
+import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -55,7 +56,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -76,6 +76,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Inject
     lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
+
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
 
@@ -146,8 +147,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
-            data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)?.let {
-                viewModel.handle(VerificationAction.GotResultFromSsss(it, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
+            val result = data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
+            val reseted = data?.getBooleanExtra(SharedSecureStorageActivity.EXTRA_DATA_RESET, false) ?: false
+            if (result != null) {
+                viewModel.handle(VerificationAction.GotResultFromSsss(result, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
+            } else if (reseted) {
+                // all have been reset, so we are verified?
+                viewModel.handle(VerificationAction.SecuredStorageHasBeenReseted)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -180,6 +186,17 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     otherUserShield.isVisible = false
                 }
             }
+        }
+
+        if (state.quadsHasBeenReseted) {
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                        isSuccessFull = true,
+                        isMe = true,
+                        cancelReason = null
+                ))
+            })
+            return@withState
         }
 
         if (state.userThinkItsNotHim) {
@@ -356,6 +373,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 }
             }
         }
+
         fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
