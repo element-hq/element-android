@@ -362,4 +362,5 @@
     <string name="revoke">Ανάκληση</string>
     <string name="disconnect">Αποσύνδεση</string>
     <string name="pause_video">Παύση</string>
+    <string name="room_participants_header_direct_chats">Прямі повідомлення</string>
     </resources>
