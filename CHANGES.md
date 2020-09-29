@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Create a script to help getting public information form any homeserver
 
 Changes in Element 1.0.8 (2020-09-25)
 ===================================================
