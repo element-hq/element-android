@@ -218,7 +218,7 @@ class CommonTestHelper(context: Context) {
                     .createAccount(userName, password, null, it)
         }
 
-        // Preform dummy step
+        // Perform dummy step
         val registrationResult = doSync<RegistrationResult> {
             matrix.authenticationService
                     .getRegistrationWizard()
