@@ -17,8 +17,10 @@
 package im.vector.app.features.home.room.detail.search
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
@@ -34,8 +36,11 @@ class SearchResultController @Inject constructor(
 
     var listener: Listener? = null
 
+    private var idx = 0
+
     interface Listener {
         fun onItemClicked(event: Event)
+        fun loadMore()
     }
 
     init {
@@ -44,6 +49,18 @@ class SearchResultController @Inject constructor(
 
     override fun buildModels(data: SearchViewState?) {
         data?.searchResult?.results ?: return
+
+        if (!data.searchResult.nextBatch.isNullOrEmpty()) {
+            loadingItem {
+                // Always use a different id, because we can be notified several times of visibility state changed
+                id("loadMore${idx++}")
+                onVisibilityStateChanged { _, _, visibilityState ->
+                    if (visibilityState == VisibilityState.VISIBLE) {
+                        listener?.loadMore()
+                    }
+                }
+            }
+        }
 
         buildSearchResultItems(data.searchResult.results!!)
     }

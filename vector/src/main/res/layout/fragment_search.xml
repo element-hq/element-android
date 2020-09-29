@@ -2,8 +2,7 @@
 <im.vector.app.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/stateView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?riotx_header_panel_background">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchResultRecycler"

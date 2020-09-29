@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class SearchAction : VectorViewModelAction {
     data class SearchWith(val searchTerm: String) : SearchAction()
-    object ScrolledToTop : SearchAction()
+    object LoadMore : SearchAction()
     object Retry : SearchAction()
 }

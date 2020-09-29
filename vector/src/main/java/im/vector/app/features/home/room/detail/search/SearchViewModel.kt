@@ -16,16 +16,21 @@
 
 package im.vector.app.features.home.room.detail.search
 
+import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.search.SearchResult
+import org.matrix.android.sdk.internal.util.awaitCallback
 
 class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
@@ -48,26 +53,22 @@ class SearchViewModel @AssistedInject constructor(
 
     override fun handle(action: SearchAction) {
         when (action) {
-            is SearchAction.SearchWith    -> handleSearchWith(action)
-            is SearchAction.ScrolledToTop -> handleScrolledToTop()
-            is SearchAction.Retry         -> handleRetry()
+            is SearchAction.SearchWith -> handleSearchWith(action)
+            is SearchAction.LoadMore   -> handleLoadMore()
+            is SearchAction.Retry      -> handleRetry()
         }.exhaustive
     }
 
     private fun handleSearchWith(action: SearchAction.SearchWith) {
         if (action.searchTerm.length > 1) {
             setState {
-                copy(searchTerm = action.searchTerm, isNextBatch = false)
+                copy(searchTerm = action.searchTerm)
             }
-
             startSearching()
         }
     }
 
-    private fun handleScrolledToTop() {
-        setState {
-            copy(isNextBatch = true)
-        }
+    private fun handleLoadMore() {
         startSearching(true)
     }
 
@@ -75,44 +76,51 @@ class SearchViewModel @AssistedInject constructor(
         startSearching()
     }
 
-    private fun startSearching(scrolledToTop: Boolean = false) = withState { state ->
+    private fun startSearching(isNextBatch: Boolean = false) = withState { state ->
         if (state.roomId == null || state.searchTerm == null) return@withState
 
         // There is no batch to retrieve
-        if (scrolledToTop && state.searchResult?.nextBatch == null) return@withState
+        if (isNextBatch && state.searchResult?.nextBatch == null) return@withState
 
-        _viewEvents.post(SearchViewEvents.Loading())
-
-        session
-                .getRoom(state.roomId)
-                ?.search(
-                        searchTerm = state.searchTerm,
-                        nextBatch = state.searchResult?.nextBatch,
-                        orderByRecent = true,
-                        beforeLimit = 0,
-                        afterLimit = 0,
-                        includeProfile = true,
-                        limit = 20,
-                        callback = object : MatrixCallback<SearchResult> {
-                            override fun onFailure(failure: Throwable) {
-                                onSearchFailure(failure)
-                            }
-
-                            override fun onSuccess(data: SearchResult) {
-                                onSearchResultSuccess(data)
-                            }
-                        }
+        // Show full screen loading just for the clean search
+        if (!isNextBatch) {
+            setState {
+                copy(
+                        asyncEventsRequest = Loading()
                 )
-    }
-
-    private fun onSearchFailure(failure: Throwable) {
-        setState {
-            copy(searchResult = null)
+            }
         }
-        _viewEvents.post(SearchViewEvents.Failure(failure))
+
+        viewModelScope.launch {
+            try {
+                val result = awaitCallback<SearchResult> {
+                    session
+                            .getRoom(state.roomId)
+                            ?.search(
+                                    searchTerm = state.searchTerm,
+                                    nextBatch = state.searchResult?.nextBatch,
+                                    orderByRecent = true,
+                                    beforeLimit = 0,
+                                    afterLimit = 0,
+                                    includeProfile = true,
+                                    limit = 20,
+                                    callback = it
+                            )
+                }
+                onSearchResultSuccess(result, isNextBatch)
+            } catch (failure: Throwable) {
+                _viewEvents.post(SearchViewEvents.Failure(failure))
+                setState {
+                    copy(
+                            asyncEventsRequest = Fail(failure),
+                            searchResult = null
+                    )
+                }
+            }
+        }
     }
 
-    private fun onSearchResultSuccess(searchResult: SearchResult) = withState { state ->
+    private fun onSearchResultSuccess(searchResult: SearchResult, isNextBatch: Boolean) = withState { state ->
         val accumulatedResult = SearchResult(
                 nextBatch = searchResult.nextBatch,
                 results = searchResult.results,
@@ -120,7 +128,7 @@ class SearchViewModel @AssistedInject constructor(
         )
 
         // Accumulate results if it is the next batch
-        if (state.isNextBatch) {
+        if (isNextBatch) {
             if (state.searchResult != null) {
                 accumulatedResult.results = accumulatedResult.results?.plus(state.searchResult.results!!)
             }
@@ -130,7 +138,11 @@ class SearchViewModel @AssistedInject constructor(
         }
 
         setState {
-            copy(searchResult = accumulatedResult, lastBatch = searchResult)
+            copy(
+                    searchResult = accumulatedResult,
+                    lastBatch = searchResult,
+                    asyncEventsRequest = Success(Unit)
+            )
         }
     }
 }

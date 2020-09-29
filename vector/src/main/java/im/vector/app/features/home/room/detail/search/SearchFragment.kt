@@ -21,14 +21,15 @@ import android.os.Parcelable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
@@ -62,39 +63,19 @@ class SearchFragment @Inject constructor(
         stateView.eventCallback = this
 
         configureRecyclerView()
-
-        searchViewModel.observeViewEvents {
-            when (it) {
-                is SearchViewEvents.Failure -> {
-                    stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(it.throwable))
-                }
-                is SearchViewEvents.Loading -> {
-                    stateView.state = StateView.State.Loading
-                }
-            }.exhaustive
-        }
     }
 
     private fun configureRecyclerView() {
         searchResultRecycler.trackItemsVisibilityChange()
         searchResultRecycler.configureWith(controller, showDivider = false)
+        (searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
         controller.listener = this
 
         controller.addModelBuildListener {
             pendingScrollToPosition?.let {
-                searchResultRecycler.scrollToPosition(it)
+                searchResultRecycler.smoothScrollToPosition(it)
             }
         }
-
-        searchResultRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                // Load next batch when scrolled to the top
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && (searchResultRecycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() == 0) {
-                    searchViewModel.handle(SearchAction.ScrolledToTop)
-                }
-            }
-        })
     }
 
     override fun onDestroy() {
@@ -104,18 +85,26 @@ class SearchFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(searchViewModel) { state ->
-        if (state.searchResult?.results?.isNotEmpty() == true) {
+        if (state.searchResult?.results.isNullOrEmpty()) {
+            when (state.asyncEventsRequest) {
+                is Loading -> {
+                    stateView.state = StateView.State.Loading
+                }
+                is Fail    -> {
+                    stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
+                }
+                is Success -> {
+                    stateView.state = StateView.State.Empty(
+                            title = getString(R.string.search_no_results),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
+                }
+            }
+        } else {
+            val lastBatchSize = state.lastBatch?.results?.size ?: 0
+            pendingScrollToPosition = if (lastBatchSize > 0) lastBatchSize - 1 else 0
+
             stateView.state = StateView.State.Content
             controller.setData(state)
-
-            val lastBatchSize = state.lastBatch?.results?.size ?: 0
-            val scrollPosition = if (lastBatchSize > 0) lastBatchSize - 1 else 0
-            pendingScrollToPosition = scrollPosition
-        } else {
-            stateView.state = StateView.State.Empty(
-                    title = getString(R.string.search_no_results),
-                    image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
-            )
         }
     }
 
@@ -132,5 +121,9 @@ class SearchFragment @Inject constructor(
         event.roomId ?: return
 
         navigator.openRoom(requireContext(), event.roomId!!, event.eventId)
+    }
+
+    override fun loadMore() {
+        searchViewModel.handle(SearchAction.LoadMore)
     }
 }
