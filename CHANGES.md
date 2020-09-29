@@ -9,7 +9,7 @@ Improvements 🙌:
  - Small optimisation of scrolling experience in timeline (#2114)
 
 Bugfix 🐛:
- - Improve support for image selection with intent changes (#1376)
+ - Improve support for image/audio/video/file selection with intent changes (#1376)
  - Fix Splash layout on small screens
 
 Translations 🗣:
