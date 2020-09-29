@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
 
 Bugfix 🐛:
  - Fix Splash layout on small screens
