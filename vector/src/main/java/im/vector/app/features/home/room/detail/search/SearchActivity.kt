@@ -70,6 +70,7 @@ class SearchActivity : VectorBaseActivity() {
 
         fun newIntent(context: Context, args: SearchArgs): Intent {
             return Intent(context, SearchActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 putExtra(MvRx.KEY_ARG, args)
             }
         }
