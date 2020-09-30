@@ -44,14 +44,18 @@
         <TextView
             android:id="@+id/ssss_reset_other_devices"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/ic_smartphone"
             android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:textSize="17sp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_all_description"
-            tools:text="Show 2 devices you can verify with now" />
+            tools:text="Show 2 devices you can verify with now"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/ssss_reset_text3"
@@ -65,7 +69,6 @@
             android:textStyle="bold"
             android:tint="?riot_primary_text_color"
             app:layout_constraintStart_toStartOf="parent"
-
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_other_devices" />
 
         <TextView
@@ -83,7 +86,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/ssss_reset_button_cancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"

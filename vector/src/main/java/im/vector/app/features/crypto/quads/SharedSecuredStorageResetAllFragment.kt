@@ -18,19 +18,16 @@ package im.vector.app.features.crypto.quads
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import kotlinx.android.synthetic.main.fragment_ssss_reset_all.*
 import javax.inject.Inject
 
-class SharedSecuredStorageResetAllFragment @Inject constructor(
-        private val stringProvider: StringProvider
-) : VectorBaseFragment() {
+class SharedSecuredStorageResetAllFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_ssss_reset_all
 
@@ -53,17 +50,12 @@ class SharedSecuredStorageResetAllFragment @Inject constructor(
             }
         }
 
-        sharedViewModel.subscribe(this) {
-            if (it.activeDeviceCount == 0) {
-                ssss_reset_other_devices.isVisible = false
-            } else {
-                ssss_reset_other_devices.isVisible = true
-                ssss_reset_other_devices.text = stringProvider.getQuantityString(
-                        R.plurals.secure_backup_reset_devices_you_can_verify,
-                        it.activeDeviceCount,
-                        it.activeDeviceCount
-                )
-            }
+        sharedViewModel.subscribe(this) { state ->
+            ssss_reset_other_devices.setTextOrHide(
+                    state.activeDeviceCount
+                            .takeIf { it > 0 }
+                            ?.let { resources.getQuantityString(R.plurals.secure_backup_reset_devices_you_can_verify, it, it) }
+            )
         }
     }
 }

@@ -76,7 +76,7 @@ data class VerificationBottomSheetViewState(
         val userWantsToCancel: Boolean = false,
         val userThinkItsNotHim: Boolean = false,
         val quadSContainsSecrets: Boolean = true,
-        val quadsHasBeenReseted: Boolean = false
+        val quadSHasBeenReset: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -354,7 +354,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             VerificationAction.SecuredStorageHasBeenReseted    -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
-                        copy(quadsHasBeenReseted = true)
+                        copy(quadSHasBeenReset = true)
                     }
                 }
                 Unit

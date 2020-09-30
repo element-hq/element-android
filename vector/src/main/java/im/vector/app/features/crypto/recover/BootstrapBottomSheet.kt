@@ -45,10 +45,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Parcelize
     data class Args(
-//            val initCrossSigningOnly: Boolean,
             val setUpMode: SetupMode = SetupMode.NORMAL
-//            val forceReset4S: Boolean,
-//            val resetAllUnknownSecrets: Boolean
     ) : Parcelable
 
     override val showExpanded = true

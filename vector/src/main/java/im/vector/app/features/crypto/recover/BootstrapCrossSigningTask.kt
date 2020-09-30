@@ -69,11 +69,9 @@ interface BootstrapProgressListener {
 
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
-//        val initOnlyCrossSigning: Boolean = false,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null,
-//        val resetAllIfNeeded: Boolean = false,
         val setupMode: SetupMode
 )
 

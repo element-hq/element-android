@@ -188,7 +188,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-        if (state.quadsHasBeenReseted) {
+        if (state.quadSHasBeenReset) {
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
                         isSuccessFull = true,
