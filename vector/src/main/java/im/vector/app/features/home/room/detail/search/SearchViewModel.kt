@@ -28,9 +28,11 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.search.SearchResult
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.util.awaitCallback
 
 class SearchViewModel @AssistedInject constructor(
@@ -39,6 +41,7 @@ class SearchViewModel @AssistedInject constructor(
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
     private var room: Room? = null
+    private var currentTask: Cancelable? = null
 
     init {
         room = initialState.roomId?.let { session.getRoom(it) }
@@ -98,10 +101,14 @@ class SearchViewModel @AssistedInject constructor(
             }
         }
 
+        if (state.asyncEventsRequest is Loading) {
+            currentTask?.cancel()
+        }
+
         viewModelScope.launch {
             try {
                 val result = awaitCallback<SearchResult> {
-                    room?.search(
+                    currentTask = room?.search(
                             searchTerm = state.searchTerm,
                             nextBatch = state.searchResult?.nextBatch,
                             orderByRecent = true,
@@ -114,6 +121,8 @@ class SearchViewModel @AssistedInject constructor(
                 }
                 onSearchResultSuccess(result, isNextBatch)
             } catch (failure: Throwable) {
+                if (failure is Failure.Cancelled) return@launch
+
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {
                     copy(
