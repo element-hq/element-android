@@ -6,7 +6,7 @@
     <item
         android:id="@+id/search"
         android:title="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/video_call"
