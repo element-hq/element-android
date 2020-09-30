@@ -113,7 +113,6 @@ class SecurityBootstrapTest : VerificationTestBase() {
         // test back
         onView(isRoot()).perform(pressBack())
 
-
         Thread.sleep(1000)
 
         onView(withId(R.id.bootstrapSetupSecureUseSecurityKey))
@@ -144,14 +143,11 @@ class SecurityBootstrapTest : VerificationTestBase() {
         onView(withId(R.id.ssss_passphrase_enter_edittext))
                 .perform(replaceText("person woman man camera tv"))
 
-
         onView(withId(R.id.bootstrapSubmit))
                 .perform(closeSoftKeyboard(), click())
 
         onView(withId(R.id.bottomSheetScrollView))
                 .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
-
-
 
         intending(hasAction(Intent.ACTION_SEND)).respondWith(ActivityResult(Activity.RESULT_OK, null))
 
@@ -162,7 +158,6 @@ class SecurityBootstrapTest : VerificationTestBase() {
 
         // Dismiss dialog
         onView(withText(R.string.ok)).inRoot(RootMatchers.isDialog()).perform(click())
-
 
         onView(withId(R.id.bottomSheetScrollView))
                 .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
