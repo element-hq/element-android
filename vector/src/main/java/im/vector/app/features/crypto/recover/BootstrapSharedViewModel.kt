@@ -528,7 +528,13 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
             BootstrapStep.CheckingMigration                  -> Unit
             is BootstrapStep.FirstForm                       -> {
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+                _viewEvents.post(
+                        when (args.setUpMode) {
+                            SetupMode.CROSS_SIGNING_ONLY,
+                            SetupMode.NORMAL              -> BootstrapViewEvents.SkipBootstrap()
+                            else                          -> BootstrapViewEvents.Dismiss(success = false)
+                        }
+                )
             }
             is BootstrapStep.GetBackupSecretForMigration     -> {
                 setState {
