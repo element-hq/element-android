@@ -18,7 +18,6 @@
 package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -26,6 +25,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
@@ -71,11 +71,11 @@ class RoomProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
                 id = "settings",
-                title = if (roomSummary.isDirect) {
-                    stringProvider.getString(R.string.direct_room_profile_section_more_settings)
+                title = stringProvider.getString(if (roomSummary.isDirect) {
+                    R.string.direct_room_profile_section_more_settings
                 } else {
-                    stringProvider.getString(R.string.room_profile_section_more_settings)
-                },
+                    R.string.room_profile_section_more_settings
+                }),
                 dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
@@ -116,11 +116,11 @@ class RoomProfileController @Inject constructor(
         )
         buildProfileAction(
                 id = "leave",
-                title = if (roomSummary.isDirect) {
-                    stringProvider.getString(R.string.direct_room_profile_section_more_leave)
+                title = stringProvider.getString(if (roomSummary.isDirect) {
+                    R.string.direct_room_profile_section_more_leave
                 } else {
-                    stringProvider.getString(R.string.room_profile_section_more_leave)
-                },
+                    R.string.room_profile_section_more_leave
+                }),
                 dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
