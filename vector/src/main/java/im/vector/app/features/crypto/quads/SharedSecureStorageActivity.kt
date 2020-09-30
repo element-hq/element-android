@@ -119,6 +119,13 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
         }
     }
 
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+        if (fragment is VectorBaseBottomSheetDialogFragment) {
+            fragment.resultListener = this
+        }
+    }
+
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             supportFragmentManager.commitTransaction {
