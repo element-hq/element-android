@@ -54,7 +54,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             message?.findPillsAndProcess(coroutineScope) { it.bind(holder.messageView) }
         }
         var m = message
-        if (m != null) {
+        if (m != null && m.isNotEmpty()) {
             // Remove last trailing newline: looks especially bad in message bubble
             if (m.last() == '\n') {
                 m = m.subSequence(0, m.length-1)
