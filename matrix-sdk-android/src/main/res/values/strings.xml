@@ -10,8 +10,8 @@
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
     <string name="notice_room_created_by_you">You created the room</string>
-    <string name="notice_direct_room_created">%1$s joined</string>
-    <string name="notice_direct_room_created_by_you">You joined</string>
+    <string name="notice_direct_room_created">%1$s created the discussion</string>
+    <string name="notice_direct_room_created_by_you">You created the discussion</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_by_you">You invited %1$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
