@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -36,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -50,7 +50,6 @@ import javax.inject.Inject
 
 class NoticeEventFormatter @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
                                                private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-                                               private val roomSummaryHolder: RoomSummaryHolder,
                                                private val sp: StringProvider) {
 
     private val currentUserId: String?
@@ -58,34 +57,25 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    private fun Event.isDm(): Boolean {
-        return roomSummaryHolder.roomSummary?.isDirect
-                ?: run {
-                    // RoomSummaryHolder does not have any RoomSummary (not in the timeline)
-                    roomId?.let {
-                        activeSessionDataSource.currentValue?.orNull()?.getRoomSummary(it)?.isDirect
-                    }
-                }
-                        .orFalse()
-    }
+    private fun RoomSummary?.isDm()  = this?.isDirect.orFalse()
 
-    fun format(timelineEvent: TimelineEvent): CharSequence? {
+    fun format(timelineEvent: TimelineEvent, roomSummary: RoomSummary?): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root)
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary)
+            EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, roomSummary)
             EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary )
             EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary)
+            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary)
             EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_WIDGET,
             EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, roomSummary)
             EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
@@ -164,19 +154,19 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         }
     }
 
-    fun format(event: Event, senderName: String?): CharSequence? {
+    fun format(event: Event, senderName: String?, roomSummary: RoomSummary?): CharSequence? {
         return when (val type = event.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(event, senderName)
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(event, senderName, roomSummary)
             EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(event, senderName)
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(event, senderName)
             EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(event, senderName)
-            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(event, senderName)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName, roomSummary)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(event, senderName, roomSummary)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName, roomSummary)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
-            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(event, senderName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(event, senderName, roomSummary)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -188,14 +178,14 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         return "{ \"type\": ${event.getClearType()} }"
     }
 
-    private fun formatRoomCreateEvent(event: Event): CharSequence? {
+    private fun formatRoomCreateEvent(event: Event, roomSummary: RoomSummary?): CharSequence? {
         return event.getClearContent().toModel<RoomCreateContent>()
                 ?.takeIf { it.creator.isNullOrBlank().not() }
                 ?.let {
                     if (event.isSentByCurrentUser()) {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_created_by_you else R.string.notice_room_created_by_you)
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_created_by_you else R.string.notice_room_created_by_you)
                     } else {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_created else R.string.notice_room_created, it.creator)
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_created else R.string.notice_room_created, it.creator)
                     }
                 }
     }
@@ -217,11 +207,11 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         }
     }
 
-    private fun formatRoomTombstoneEvent(event: Event, senderName: String?): CharSequence? {
+    private fun formatRoomTombstoneEvent(event: Event, senderName: String?, roomSummary: RoomSummary?): CharSequence? {
         return if (event.isSentByCurrentUser()) {
-            sp.getString(if (event.isDm()) R.string.notice_direct_room_update_by_you else R.string.notice_room_update_by_you)
+            sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_update_by_you else R.string.notice_room_update_by_you)
         } else {
-            sp.getString(if (event.isDm()) R.string.notice_direct_room_update else R.string.notice_room_update, senderName)
+            sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_update else R.string.notice_room_update, senderName)
         }
     }
 
@@ -259,20 +249,20 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         }
     }
 
-    private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
+    private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?, roomSummary: RoomSummary?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
         val formattedVisibility = roomHistoryVisibilityFormatter.format(historyVisibility)
         return if (event.isSentByCurrentUser()) {
-            sp.getString(if (event.isDm()) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
+            sp.getString(if (roomSummary.isDm()) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
                     formattedVisibility)
         } else {
-            sp.getString(if (event.isDm()) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
+            sp.getString(if (roomSummary.isDm()) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
                     senderName, formattedVisibility)
         }
     }
 
-    private fun formatRoomThirdPartyInvite(event: Event, senderName: String?): CharSequence? {
+    private fun formatRoomThirdPartyInvite(event: Event, senderName: String?, roomSummary: RoomSummary?): CharSequence? {
         val content = event.getClearContent().toModel<RoomThirdPartyInviteContent>()
         val prevContent = event.resolvedPrevContent()?.toModel<RoomThirdPartyInviteContent>()
 
@@ -281,24 +271,24 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                 // Revoke case
                 if (event.isSentByCurrentUser()) {
                     sp.getString(
-                            if (event.isDm()) {
+                            if (roomSummary.isDm()) {
                                 R.string.notice_direct_room_third_party_revoked_invite_by_you
                             } else {
                                 R.string.notice_room_third_party_revoked_invite_by_you
                             },
                             prevContent.displayName)
                 } else {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_third_party_revoked_invite else R.string.notice_room_third_party_revoked_invite,
+                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_third_party_revoked_invite else R.string.notice_room_third_party_revoked_invite,
                             senderName, prevContent.displayName)
                 }
             }
             content != null     -> {
                 // Invitation case
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_third_party_invite_by_you else R.string.notice_room_third_party_invite_by_you,
+                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_third_party_invite_by_you else R.string.notice_room_third_party_invite_by_you,
                             content.displayName)
                 } else {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_third_party_invite else R.string.notice_room_third_party_invite,
+                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_third_party_invite else R.string.notice_room_third_party_invite,
                             senderName, content.displayName)
                 }
             }
@@ -347,13 +337,13 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         }
     }
 
-    private fun formatRoomMemberEvent(event: Event, senderName: String?): String? {
+    private fun formatRoomMemberEvent(event: Event, senderName: String?, roomSummary: RoomSummary?): String? {
         val eventContent: RoomMemberContent? = event.getClearContent().toModel()
         val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
                 || eventContent?.membership == Membership.LEAVE
         return if (isMembershipEvent) {
-            buildMembershipNotice(event, senderName, eventContent, prevEventContent)
+            buildMembershipNotice(event, senderName, eventContent, prevEventContent, roomSummary)
         } else {
             buildProfileNotice(event, senderName, eventContent, prevEventContent)
         }
@@ -411,25 +401,25 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                 }
     }
 
-    private fun formatRoomGuestAccessEvent(event: Event, senderName: String?): String? {
+    private fun formatRoomGuestAccessEvent(event: Event, senderName: String?, roomSummary: RoomSummary?): String? {
         val eventContent: RoomGuestAccessContent? = event.getClearContent().toModel()
         return when (eventContent?.guestAccess) {
             GuestAccess.CanJoin   ->
                 if (event.isSentByCurrentUser()) {
                     sp.getString(
-                            if (event.isDm()) R.string.notice_direct_room_guest_access_can_join_by_you else R.string.notice_room_guest_access_can_join_by_you
+                            if (roomSummary.isDm()) R.string.notice_direct_room_guest_access_can_join_by_you else R.string.notice_room_guest_access_can_join_by_you
                     )
                 } else {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_can_join else R.string.notice_room_guest_access_can_join,
+                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_guest_access_can_join else R.string.notice_room_guest_access_can_join,
                             senderName)
                 }
             GuestAccess.Forbidden ->
                 if (event.isSentByCurrentUser()) {
                     sp.getString(
-                            if (event.isDm()) R.string.notice_direct_room_guest_access_forbidden_by_you else R.string.notice_room_guest_access_forbidden_by_you
+                            if (roomSummary.isDm()) R.string.notice_direct_room_guest_access_forbidden_by_you else R.string.notice_room_guest_access_forbidden_by_you
                     )
                 } else {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_forbidden else R.string.notice_room_guest_access_forbidden,
+                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_guest_access_forbidden else R.string.notice_room_guest_access_forbidden,
                             senderName)
                 }
             else                  -> null
@@ -506,7 +496,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         return displayText.toString()
     }
 
-    private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?): String? {
+    private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?, roomSummary: RoomSummary?): String? {
         val senderDisplayName = senderName ?: event.senderId ?: ""
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {
@@ -556,17 +546,17 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             Membership.JOIN   ->
                 eventContent.safeReason?.let { reason ->
                     if (event.isSentByCurrentUser()) {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_join_with_reason_by_you else R.string.notice_room_join_with_reason_by_you,
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_join_with_reason_by_you else R.string.notice_room_join_with_reason_by_you,
                                 reason)
                     } else {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_join_with_reason else R.string.notice_room_join_with_reason,
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_join_with_reason else R.string.notice_room_join_with_reason,
                                 senderDisplayName, reason)
                     }
                 } ?: run {
                     if (event.isSentByCurrentUser()) {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_join_by_you else R.string.notice_room_join_by_you)
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_join_by_you else R.string.notice_room_join_by_you)
                     } else {
-                        sp.getString(if (event.isDm()) R.string.notice_direct_room_join else R.string.notice_room_join,
+                        sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_join else R.string.notice_room_join,
                                 senderDisplayName)
                     }
                 }
@@ -588,7 +578,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                             eventContent.safeReason?.let { reason ->
                                 if (event.isSentByCurrentUser()) {
                                     sp.getString(
-                                            if (event.isDm()) {
+                                            if (roomSummary.isDm()) {
                                                 R.string.notice_direct_room_leave_with_reason_by_you
                                             } else {
                                                 R.string.notice_room_leave_with_reason_by_you
@@ -596,14 +586,14 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                                             reason
                                     )
                                 } else {
-                                    sp.getString(if (event.isDm()) R.string.notice_direct_room_leave_with_reason else R.string.notice_room_leave_with_reason,
+                                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_leave_with_reason else R.string.notice_room_leave_with_reason,
                                             senderDisplayName, reason)
                                 }
                             } ?: run {
                                 if (event.isSentByCurrentUser()) {
-                                    sp.getString(if (event.isDm()) R.string.notice_direct_room_leave_by_you else R.string.notice_room_leave_by_you)
+                                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_leave_by_you else R.string.notice_room_leave_by_you)
                                 } else {
-                                    sp.getString(if (event.isDm()) R.string.notice_direct_room_leave else R.string.notice_room_leave,
+                                    sp.getString(if (roomSummary.isDm()) R.string.notice_direct_room_leave else R.string.notice_room_leave,
                                             senderDisplayName)
                                 }
                             }
@@ -668,14 +658,14 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         }
     }
 
-    private fun formatJoinRulesEvent(event: Event, senderName: String?): CharSequence? {
+    private fun formatJoinRulesEvent(event: Event, senderName: String?, roomSummary: RoomSummary?): CharSequence? {
         val content = event.getClearContent().toModel<RoomJoinRulesContent>() ?: return null
         return when (content.joinRules) {
             RoomJoinRules.INVITE ->
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (event.isDm()) R.string.direct_room_join_rules_invite_by_you else R.string.room_join_rules_invite_by_you)
+                    sp.getString(if (roomSummary.isDm()) R.string.direct_room_join_rules_invite_by_you else R.string.room_join_rules_invite_by_you)
                 } else {
-                    sp.getString(if (event.isDm()) R.string.direct_room_join_rules_invite else R.string.room_join_rules_invite,
+                    sp.getString(if (roomSummary.isDm()) R.string.direct_room_join_rules_invite else R.string.room_join_rules_invite,
                             senderName)
                 }
             RoomJoinRules.PUBLIC ->
