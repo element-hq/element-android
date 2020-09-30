@@ -47,7 +47,7 @@ scVersion=`get_prop ext.scVersion`
 
 version="$versionMajor.$versionMinor.$versionPatch.sc.$scVersion"
 versionCode=`echo "(($versionMajor * 10000 + $versionMinor * 100 + $versionPatch + $scVersion) + 4000000) * 10" | bc`
-new_tag="sc_pre_v$version"
+new_tag="sc_v$version"
 
 set_prop "ext.scVersion" "$scVersion"
 set_prop "versionCode" "$versionCode"
