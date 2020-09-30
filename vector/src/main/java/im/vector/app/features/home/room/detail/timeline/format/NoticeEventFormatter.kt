@@ -280,7 +280,12 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             prevContent != null -> {
                 // Revoke case
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_third_party_revoked_invite_by_you else R.string.notice_room_third_party_revoked_invite_by_you,
+                    sp.getString(
+                            if (event.isDm()) {
+                                R.string.notice_direct_room_third_party_revoked_invite_by_you
+                            } else {
+                                R.string.notice_room_third_party_revoked_invite_by_you
+                            },
                             prevContent.displayName)
                 } else {
                     sp.getString(if (event.isDm()) R.string.notice_direct_room_third_party_revoked_invite else R.string.notice_room_third_party_revoked_invite,
@@ -411,14 +416,18 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
         return when (eventContent?.guestAccess) {
             GuestAccess.CanJoin   ->
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_can_join_by_you else R.string.notice_room_guest_access_can_join_by_you)
+                    sp.getString(
+                            if (event.isDm()) R.string.notice_direct_room_guest_access_can_join_by_you else R.string.notice_room_guest_access_can_join_by_you
+                    )
                 } else {
                     sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_can_join else R.string.notice_room_guest_access_can_join,
                             senderName)
                 }
             GuestAccess.Forbidden ->
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_forbidden_by_you else R.string.notice_room_guest_access_forbidden_by_you)
+                    sp.getString(
+                            if (event.isDm()) R.string.notice_direct_room_guest_access_forbidden_by_you else R.string.notice_room_guest_access_forbidden_by_you
+                    )
                 } else {
                     sp.getString(if (event.isDm()) R.string.notice_direct_room_guest_access_forbidden else R.string.notice_room_guest_access_forbidden,
                             senderName)
@@ -578,8 +587,14 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                         else              ->
                             eventContent.safeReason?.let { reason ->
                                 if (event.isSentByCurrentUser()) {
-                                    sp.getString(if (event.isDm()) R.string.notice_direct_room_leave_with_reason_by_you else R.string.notice_room_leave_with_reason_by_you,
-                                            reason)
+                                    sp.getString(
+                                            if (event.isDm()) {
+                                                R.string.notice_direct_room_leave_with_reason_by_you
+                                            } else {
+                                                R.string.notice_room_leave_with_reason_by_you
+                                            },
+                                            reason
+                                    )
                                 } else {
                                     sp.getString(if (event.isDm()) R.string.notice_direct_room_leave_with_reason else R.string.notice_room_leave_with_reason,
                                             senderDisplayName, reason)
