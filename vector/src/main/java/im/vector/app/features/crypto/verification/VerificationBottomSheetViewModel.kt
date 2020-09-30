@@ -351,7 +351,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             is VerificationAction.GotResultFromSsss            -> {
                 handleSecretBackFromSSSS(action)
             }
-            VerificationAction.SecuredStorageHasBeenReseted    -> {
+            VerificationAction.SecuredStorageHasBeenReset      -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
                         copy(quadSHasBeenReset = true)

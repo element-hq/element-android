@@ -114,7 +114,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
                 finish()
             }
             is SharedSecureStorageViewEvent.ShowResetBottomSheet -> {
-                navigator.open4SSetup(this, SetupMode.HARD_RESET, this)
+                navigator.open4SSetup(this, SetupMode.HARD_RESET)
             }
         }
     }

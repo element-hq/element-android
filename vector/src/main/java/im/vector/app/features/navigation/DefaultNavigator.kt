@@ -238,11 +238,9 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override  fun open4SSetup(context: Context, setupMode: SetupMode, listener: VectorBaseBottomSheetDialogFragment.ResultListener?) {
+    override fun open4SSetup(context: Context, setupMode: SetupMode) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, setupMode).also {
-                it.resultListener = listener
-            }
+            BootstrapBottomSheet.show(context.supportFragmentManager, setupMode)
         }
     }
 

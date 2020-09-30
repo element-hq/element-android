@@ -148,12 +148,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
             val result = data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
-            val reseted = data?.getBooleanExtra(SharedSecureStorageActivity.EXTRA_DATA_RESET, false) ?: false
+            val reset = data?.getBooleanExtra(SharedSecureStorageActivity.EXTRA_DATA_RESET, false) ?: false
             if (result != null) {
                 viewModel.handle(VerificationAction.GotResultFromSsss(result, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
-            } else if (reseted) {
+            } else if (reset) {
                 // all have been reset, so we are verified?
-                viewModel.handle(VerificationAction.SecuredStorageHasBeenReseted)
+                viewModel.handle(VerificationAction.SecuredStorageHasBeenReset)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

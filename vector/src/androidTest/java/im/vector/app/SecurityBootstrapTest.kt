@@ -96,7 +96,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
                     .check(matches(isDisplayed()))
         }
 
-        activity.navigator.open4SSetup(activity, SetupMode.NORMAL, null)
+        activity.navigator.open4SSetup(activity, SetupMode.NORMAL)
 
         Thread.sleep(1000)
 
