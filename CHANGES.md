@@ -19,7 +19,7 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Use Update Gradle Wrapper Action
 
 Other changes:
  - Added registration/verification automated UI tests
