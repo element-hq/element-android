@@ -286,7 +286,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun labShowCompleteHistoryInEncryptedRoom(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM, false)
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM, false)
     }
 
     fun labAllowedExtendedLogging(): Boolean {

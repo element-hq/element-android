@@ -2,7 +2,7 @@ Changes in Element 1.0.9 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
 
 Improvements 🙌:
  - Wording differentiation for direct rooms (#2176)
