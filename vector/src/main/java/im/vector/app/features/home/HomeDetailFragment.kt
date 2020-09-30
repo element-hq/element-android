@@ -172,7 +172,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning,
                         matrixItem = user
                 ).apply {
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = ColorProvider(requireActivity()).getColor(R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)
                                 ?.navigator
