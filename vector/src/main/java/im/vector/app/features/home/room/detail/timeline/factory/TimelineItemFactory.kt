@@ -64,9 +64,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
                 EventType.REDACTION                     -> noticeItemFactory.create(event, highlight, callback)
-                EventType.STATE_ROOM_ENCRYPTION         -> {
-                    encryptionItemFactory.create(event, highlight, callback)
-                }
+                EventType.STATE_ROOM_ENCRYPTION         -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE             -> roomCreateItemFactory.create(event, callback)
                 // Crypto

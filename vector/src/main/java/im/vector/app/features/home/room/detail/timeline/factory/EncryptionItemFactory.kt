@@ -54,11 +54,13 @@ class EncryptionItemFactory @Inject constructor(
         val shield: StatusTileTimelineItem.ShieldUIState
         if (isSafeAlgorithm) {
             title = stringProvider.getString(R.string.encryption_enabled)
-            description = if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
-                stringProvider.getString(R.string.direct_room_encryption_enabled_tile_description)
-            } else {
-                stringProvider.getString(R.string.encryption_enabled_tile_description)
-            }
+            description = stringProvider.getString(
+                    if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
+                        R.string.direct_room_encryption_enabled_tile_description
+                    } else {
+                        R.string.encryption_enabled_tile_description
+                    }
+            )
             shield = StatusTileTimelineItem.ShieldUIState.BLACK
         } else {
             title = stringProvider.getString(R.string.encryption_not_enabled)
