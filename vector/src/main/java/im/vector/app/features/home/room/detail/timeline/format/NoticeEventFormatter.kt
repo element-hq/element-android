@@ -186,7 +186,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
                     if (event.isSentByCurrentUser())
                         sp.getString(if (event.isDm()) R.string.notice_direct_room_created_by_you else R.string.notice_room_created_by_you)
                     else
-                        sp.getString(if (event.isDm()) R.string.notice_room_created_by_you else R.string.notice_room_created, it.creator)
+                        sp.getString(if (event.isDm()) R.string.notice_direct_room_created else R.string.notice_room_created, it.creator)
                 }
     }
 
