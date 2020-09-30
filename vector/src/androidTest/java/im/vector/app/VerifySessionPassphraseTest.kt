@@ -38,6 +38,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapCrossSigningTask
 import im.vector.app.features.crypto.recover.Params
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -77,7 +78,8 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         runBlocking {
             task.execute(Params(
                     userPasswordAuth = UserPasswordAuth(password = password),
-                    passphrase = passphrase
+                    passphrase = passphrase,
+                    setupMode = SetupMode.NORMAL
             ))
         }
     }

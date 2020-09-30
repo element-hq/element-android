@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
+import im.vector.app.features.crypto.recover.SetupMode
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -121,7 +122,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         super.onActivityCreated(savedInstanceState)
 
         setupRecoveryButton.action = {
-            BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
+            BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
         }
 
         exitAnywayButton.action = {

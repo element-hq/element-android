@@ -45,8 +45,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Parcelize
     data class Args(
-            val initCrossSigningOnly: Boolean,
-            val forceReset4S: Boolean
+            val setUpMode: SetupMode = SetupMode.NORMAL
     ) : Parcelable
 
     override val showExpanded = true
@@ -66,7 +65,10 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents { event ->
             when (event) {
-                is BootstrapViewEvents.Dismiss       -> dismiss()
+                is BootstrapViewEvents.Dismiss       -> {
+                    bottomSheetResult = if (event.success) ResultListener.RESULT_OK else ResultListener.RESULT_CANCEL
+                    dismiss()
+                }
                 is BootstrapViewEvents.ModalError    -> {
                     AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
@@ -90,6 +92,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 .setMessage(R.string.bootstrap_cancel_text)
                 .setPositiveButton(R.string._continue, null)
                 .setNegativeButton(R.string.skip) { _, _ ->
+                    bottomSheetResult = ResultListener.RESULT_CANCEL
                     dismiss()
                 }
                 .show()
@@ -181,16 +184,15 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         const val EXTRA_ARGS = "EXTRA_ARGS"
 
-        fun show(fragmentManager: FragmentManager, initCrossSigningOnly: Boolean, forceReset4S: Boolean) {
-            BootstrapBottomSheet().apply {
+        fun show(fragmentManager: FragmentManager, mode: SetupMode): BootstrapBottomSheet {
+            return BootstrapBottomSheet().apply {
                 isCancelable = false
                 arguments = Bundle().apply {
-                    this.putParcelable(EXTRA_ARGS, Args(
-                            initCrossSigningOnly,
-                            forceReset4S
-                    ))
+                    this.putParcelable(EXTRA_ARGS, Args(setUpMode = mode))
                 }
-            }.show(fragmentManager, "BootstrapBottomSheet")
+            }.also {
+                it.show(fragmentManager, "BootstrapBottomSheet")
+            }
         }
     }
 

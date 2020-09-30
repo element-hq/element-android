@@ -74,6 +74,10 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
+        ssss_passphrase_reset.clickableView.debouncedClicks {
+            sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
+        }
+
         sharedViewModel.observeViewEvents {
             when (it) {
                 is SharedSecureStorageViewEvent.InlineError -> {

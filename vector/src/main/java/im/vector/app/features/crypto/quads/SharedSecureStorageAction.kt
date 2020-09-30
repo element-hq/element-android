@@ -28,6 +28,8 @@ sealed class SharedSecureStorageAction : VectorViewModelAction {
     object Cancel : SharedSecureStorageAction()
     data class SubmitPassphrase(val passphrase: String) : SharedSecureStorageAction()
     data class SubmitKey(val recoveryKey: String) : SharedSecureStorageAction()
+    object ForgotResetAll : SharedSecureStorageAction()
+    object DoResetAll : SharedSecureStorageAction()
 }
 
 sealed class SharedSecureStorageViewEvent : VectorViewEvents {
@@ -40,4 +42,5 @@ sealed class SharedSecureStorageViewEvent : VectorViewEvents {
     object ShowModalLoading : SharedSecureStorageViewEvent()
     object HideModalLoading : SharedSecureStorageViewEvent()
     data class UpdateLoadingState(val waitingData: WaitingViewData) : SharedSecureStorageViewEvent()
+    object ShowResetBottomSheet : SharedSecureStorageViewEvent()
 }

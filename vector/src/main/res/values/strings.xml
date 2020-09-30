@@ -78,6 +78,7 @@
     <string name="play_video">Play</string>
     <string name="pause_video">Pause</string>
     <string name="dismiss">Dismiss</string>
+    <string name="reset">Reset</string>
 
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
@@ -2446,6 +2447,15 @@
     <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
     <string name="keys_backup_recovery_key_error_decrypt">Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.</string>
     <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
+    <string name="bad_passphrase_key_reset_all_action">Forgot or lost all recovery options? Reset everything</string>
+    <string name="secure_backup_reset_all">Reset everything</string>
+    <string name="secure_backup_reset_all_no_other_devices">Only do this if you have no other device you can verify this device with.</string>
+    <string name="secure_backup_reset_if_you_reset_all">If you reset everything</string>
+    <string name="secure_backup_reset_no_history">You will restart with no history, no messages, trusted devices or trusted users</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Show the device you can verify with now</item>
+        <item quantity="other">Show %d devices you can verify with now</item>
+    </plurals>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>

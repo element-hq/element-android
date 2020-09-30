@@ -53,6 +53,7 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
@@ -193,7 +194,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     secureBackupCategory.isVisible = true
                     secureBackupPreference.title = getString(R.string.settings_secure_backup_setup)
                     secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
+                        BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
                         true
                     }
                 } else {
@@ -212,7 +213,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                         secureBackupCategory.isVisible = true
                         secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
                         secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                            BootstrapBottomSheet.show(parentFragmentManager, initCrossSigningOnly = false, forceReset4S = true)
+                            BootstrapBottomSheet.show(parentFragmentManager, SetupMode.PASSPHRASE_RESET)
                             true
                         }
                     } else if (!info.megolmSecretKnown) {
