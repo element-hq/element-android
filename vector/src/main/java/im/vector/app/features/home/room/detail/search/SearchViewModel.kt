@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.internal.util.awaitCallback
 
@@ -36,6 +37,12 @@ class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
         private val session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
+
+    private var room: Room? = null
+
+    init {
+        room = initialState.roomId?.let { session.getRoom(it) }
+    }
 
     @AssistedInject.Factory
     interface Factory {
@@ -94,18 +101,16 @@ class SearchViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val result = awaitCallback<SearchResult> {
-                    session
-                            .getRoom(state.roomId)
-                            ?.search(
-                                    searchTerm = state.searchTerm,
-                                    nextBatch = state.searchResult?.nextBatch,
-                                    orderByRecent = true,
-                                    beforeLimit = 0,
-                                    afterLimit = 0,
-                                    includeProfile = true,
-                                    limit = 20,
-                                    callback = it
-                            )
+                    room?.search(
+                            searchTerm = state.searchTerm,
+                            nextBatch = state.searchResult?.nextBatch,
+                            orderByRecent = true,
+                            beforeLimit = 0,
+                            afterLimit = 0,
+                            includeProfile = true,
+                            limit = 20,
+                            callback = it
+                    )
                 }
                 onSearchResultSuccess(result, isNextBatch)
             } catch (failure: Throwable) {
