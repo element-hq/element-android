@@ -59,7 +59,7 @@ class RoomProfileController @Inject constructor(
         val learnMoreSubtitle = if (roomSummary.isEncrypted) {
             if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
         } else {
-            R.string.room_profile_not_encrypted_subtitle
+            if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
         }
         genericFooterItem {
             id("e2e info")
