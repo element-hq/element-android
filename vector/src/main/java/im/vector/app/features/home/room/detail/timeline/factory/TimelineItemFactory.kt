@@ -20,6 +20,7 @@ import im.vector.app.core.epoxy.EmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -31,6 +32,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
+                                              private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
@@ -63,10 +65,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_ANSWER,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
-                EventType.REDACTION                     -> noticeItemFactory.create(event, highlight, callback)
-                EventType.STATE_ROOM_ENCRYPTION         -> {
-                    encryptionItemFactory.create(event, highlight, callback)
-                }
+                EventType.REDACTION                     -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.STATE_ROOM_ENCRYPTION         -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE             -> roomCreateItemFactory.create(event, callback)
                 // Crypto
@@ -87,7 +87,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, callback)
+                        noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
                     } else {
                         null
                     }

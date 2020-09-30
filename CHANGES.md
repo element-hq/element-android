@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Wording differentiation for direct rooms (#2176)
  - PIN code: request PIN code if phone has been locked
  - Small optimisation of scrolling experience in timeline (#2114)
 

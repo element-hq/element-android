@@ -22,6 +22,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.app.features.home.room.detail.timeline.helper.prevSameTypeEvents
@@ -33,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationI
 import im.vector.app.features.home.room.detail.timeline.item.MergedUTDItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedUTDItem_
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
@@ -45,6 +47,7 @@ import javax.inject.Inject
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider,
+                                                  private val roomSummaryHolder: RoomSummaryHolder,
                                                   private val vectorPreferences: VectorPreferences) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
@@ -78,6 +81,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         }
     }
 
+    private fun isDirectRoom() = roomSummaryHolder.roomSummary?.isDirect.orFalse()
+
     private fun buildMembershipEventsMergedSummary(currentPosition: Int,
                                                    items: List<TimelineEvent>,
                                                    event: TimelineEvent,
@@ -100,7 +105,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                         avatarUrl = mergedEvent.senderInfo.avatarUrl,
                         memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                         localId = mergedEvent.localId,
-                        eventId = mergedEvent.root.eventId ?: ""
+                        eventId = mergedEvent.root.eventId ?: "",
+                        isDirectRoom = isDirectRoom()
                 )
                 mergedData.add(data)
             }
@@ -157,7 +163,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                       items: List<TimelineEvent>,
                                       event: TimelineEvent,
                                       eventIdToHighlight: String?,
-                                      // requestModelBuild: () -> Unit,
+            // requestModelBuild: () -> Unit,
                                       callback: TimelineEventController.Callback?): MergedUTDItem_? {
         Timber.v("## MERGE: buildUTDMergedSummary from position $currentPosition")
         var prevEvent = items.prevOrNull(currentPosition)
@@ -187,7 +193,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                             avatarUrl = senderAvatar,
                             memberName = senderName,
                             localId = mergedEvent.localId,
-                            eventId = mergedEvent.root.eventId ?: ""
+                            eventId = mergedEvent.root.eventId ?: "",
+                            isDirectRoom = isDirectRoom()
                     )
                     mergedData.add(data)
                 }
@@ -247,7 +254,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                 avatarUrl = mergedEvent.senderInfo.avatarUrl,
                                 memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                                 localId = mergedEvent.localId,
-                                eventId = mergedEvent.root.eventId ?: ""
+                                eventId = mergedEvent.root.eventId ?: "",
+                                isDirectRoom = isDirectRoom()
                         )
                         mergedData.add(data)
                     }

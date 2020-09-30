@@ -190,7 +190,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
-                noticeEventFormatter.format(timelineEvent)
+                noticeEventFormatter.format(timelineEvent, room?.roomSummary())
             }
             else                  -> null
         } ?: ""
