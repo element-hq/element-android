@@ -28,6 +28,7 @@ import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.CancelableBag
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -82,14 +82,21 @@ internal class DefaultSendService @AssistedInject constructor(
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
 
-    override fun sendEvent(eventType: String, content: JsonDict?): Cancelable {
+    override fun sendEvent(eventType: String, content: Content?, onBuiltEvent: ((Event) -> Unit)?): Cancelable {
         return localEchoEventFactory.createEvent(roomId, eventType, content)
+                .also { onBuiltEvent?.invoke(it) }
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
+    override fun sendTextMessage(
+            text: CharSequence,
+            msgType: String,
+            autoMarkdown: Boolean,
+            onBuiltEvent: ((Event) -> Unit)?
+    ): Cancelable {
         return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown)
+                .also { onBuiltEvent?.invoke(it) }
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
@@ -107,8 +114,14 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
+    override fun sendFormattedTextMessage(
+            text: String,
+            formattedText: String,
+            msgType: String,
+            onBuiltEvent: ((Event) -> Unit)?
+    ): Cancelable {
         return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType)
+                .also { onBuiltEvent?.invoke(it) }
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }

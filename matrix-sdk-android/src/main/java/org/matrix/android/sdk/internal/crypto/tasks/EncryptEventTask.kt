@@ -54,7 +54,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
 
 //        try {
         awaitCallback<MXEncryptEventContentResult> {
-            params.crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
+            params.crypto.encryptEventContent(localEvent.eventId, localMutableContent, localEvent.type, params.roomId, it)
         }.let { result ->
             val modifiedContent = HashMap(result.eventContent)
             params.keepKeys?.forEach { toKeep ->

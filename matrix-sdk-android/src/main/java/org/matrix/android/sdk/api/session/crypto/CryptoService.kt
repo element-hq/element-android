@@ -112,7 +112,8 @@ interface CryptoService {
 
     fun isRoomEncrypted(roomId: String): Boolean
 
-    fun encryptEventContent(eventContent: Content,
+    fun encryptEventContent(eventId: String,
+                            eventContent: Content,
                             eventType: String,
                             roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)

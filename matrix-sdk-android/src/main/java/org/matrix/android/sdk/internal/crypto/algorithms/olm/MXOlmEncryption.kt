@@ -38,7 +38,7 @@ internal class MXOlmEncryption(
         private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
     : IMXEncrypting {
 
-    override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
+    override suspend fun encryptEventContent(eventId: String, eventContent: Content, eventType: String, userIds: List<String>): Content {
         // pick the list of recipients based on the membership list.
         //
         // TODO: there is a race condition here! What if a new user turns up

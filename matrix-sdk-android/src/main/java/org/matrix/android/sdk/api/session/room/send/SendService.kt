@@ -34,9 +34,10 @@ interface SendService {
      * Method to send a generic event asynchronously. If you want to send a state event, please use [StateService] instead.
      * @param eventType the type of the event
      * @param content the optional body as a json dict.
+     * @param onBuiltEvent lambda to react to the event creation
      * @return a [Cancelable]
      */
-    fun sendEvent(eventType: String, content: Content?): Cancelable
+    fun sendEvent(eventType: String, content: Content?, onBuiltEvent: ((Event) -> Unit)? = null): Cancelable
 
     /**
      * Method to send a text message asynchronously.
@@ -47,7 +48,12 @@ interface SendService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @return a [Cancelable]
      */
-    fun sendTextMessage(text: CharSequence, msgType: String = MessageType.MSGTYPE_TEXT, autoMarkdown: Boolean = false): Cancelable
+    fun sendTextMessage(
+            text: CharSequence,
+            msgType: String = MessageType.MSGTYPE_TEXT,
+            autoMarkdown: Boolean = false,
+            onBuiltEvent: ((Event) -> Unit)? = null
+    ): Cancelable
 
     /**
      * Method to send a text message with a formatted body.
@@ -56,7 +62,12 @@ interface SendService {
      * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
      * @return a [Cancelable]
      */
-    fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
+    fun sendFormattedTextMessage(
+            text: String,
+            formattedText: String,
+            msgType: String = MessageType.MSGTYPE_TEXT,
+            onBuiltEvent: ((Event) -> Unit)? = null
+    ): Cancelable
 
     /**
      * Method to send a media asynchronously.

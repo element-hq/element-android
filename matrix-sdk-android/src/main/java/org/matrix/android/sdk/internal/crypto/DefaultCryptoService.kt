@@ -54,6 +54,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
@@ -653,12 +654,14 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Encrypt an event content according to the configuration of the room.
      *
+     * @param eventId      the identifier of the event
      * @param eventContent the content of the event.
      * @param eventType    the type of the event.
      * @param roomId       the room identifier the event will be sent.
      * @param callback     the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
+    override fun encryptEventContent(eventId: String,
+                                     eventContent: Content,
                                      eventType: String,
                                      roomId: String,
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
@@ -667,22 +670,29 @@ internal class DefaultCryptoService @Inject constructor(
 //                Timber.v("## CRYPTO | encryptEventContent() : wait after e2e init")
 //                internalStart(false)
 //            }
-            val userIds = getRoomUserIds(roomId)
+
+            SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_GET_USERS)
+            val userIds =  getRoomUserIds(roomId)
+            SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_GET_USERS)
+
+            SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_SET_ROOM_ENCRYPTION)
             var alg = roomEncryptorsStore.get(roomId)
             if (alg == null) {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 if (algorithm != null) {
+
                     if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
                         alg = roomEncryptorsStore.get(roomId)
                     }
                 }
             }
+            SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_SET_ROOM_ENCRYPTION)
             val safeAlgorithm = alg
             if (safeAlgorithm != null) {
                 val t0 = System.currentTimeMillis()
                 Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
-                    val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
+                    val content = safeAlgorithm.encryptEventContent(eventId, eventContent, eventType, userIds)
                     Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
@@ -803,17 +813,17 @@ internal class DefaultCryptoService @Inject constructor(
                     onRoomKeyEvent(event)
                 }
                 EventType.REQUEST_SECRET,
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     // save audit trail
                     cryptoStore.saveGossipingEvent(event)
                     // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
                     incomingGossipingRequestManager.onGossipingRequestEvent(event)
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     cryptoStore.saveGossipingEvent(event)
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                      -> {
+                EventType.ROOM_KEY_WITHHELD -> {
                     onKeyWithHeldReceived(event)
                 }
                 else                                             -> {
@@ -892,7 +902,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME       -> {
+            MASTER_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -1351,9 +1361,9 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
     }
-    /* ==========================================================================================
-     * For test only
-     * ========================================================================================== */
+/* ==========================================================================================
+ * For test only
+ * ========================================================================================== */
 
     @VisibleForTesting
     val cryptoStoreForTesting = cryptoStore

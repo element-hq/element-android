@@ -21,7 +21,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
-import com.nikitakozlov.pury.Pury
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -54,6 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply

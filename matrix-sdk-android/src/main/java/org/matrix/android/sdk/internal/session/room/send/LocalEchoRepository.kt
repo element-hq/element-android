@@ -17,9 +17,6 @@
 
 package org.matrix.android.sdk.internal.session.room.send
 
-import com.nikitakozlov.pury.Pury
-import com.nikitakozlov.pury.annotations.MethodProfiling
-import com.nikitakozlov.pury.annotations.StartProfiling
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
@@ -28,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.RealmSessionProvider

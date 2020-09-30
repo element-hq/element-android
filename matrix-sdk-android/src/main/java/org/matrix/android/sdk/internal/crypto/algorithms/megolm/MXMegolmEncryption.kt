@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
@@ -71,17 +72,20 @@ internal class MXMegolmEncryption(
     private var sessionRotationPeriodMsgs: Int = 100
     private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
 
-    override suspend fun encryptEventContent(eventContent: Content,
+    override suspend fun encryptEventContent(eventId: String,
+                                             eventContent: Content,
                                              eventType: String,
                                              userIds: List<String>): Content {
         val ts = System.currentTimeMillis()
         Timber.v("## CRYPTO | encryptEventContent : getDevicesInRoom")
         val devices = getDevicesInRoom(userIds)
         Timber.v("## CRYPTO | encryptEventContent ${System.currentTimeMillis() - ts}: getDevicesInRoom ${devices.allowedDevices.map}")
-        val outboundSession = ensureOutboundSession(devices.allowedDevices)
+        val outboundSession = ensureOutboundSession(eventId, devices.allowedDevices)
 
+        SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_ENCRYPT)
         return encryptContent(outboundSession, eventType, eventContent)
                 .also {
+                    SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_ENCRYPT)
                     notifyWithheldForSession(devices.withHeldDevices, outboundSession)
                 }
     }
@@ -128,7 +132,7 @@ internal class MXMegolmEncryption(
      *
      * @param devicesInRoom the devices list
      */
-    private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
+    private suspend fun ensureOutboundSession(eventId: String, devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
         Timber.v("## CRYPTO | ensureOutboundSession start")
         var session = outboundSession
         if (session == null
@@ -152,7 +156,9 @@ internal class MXMegolmEncryption(
                 }
             }
         }
+        SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_SHARE_KEYS)
         shareKey(safeSession, shareMap)
+        SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_SHARE_KEYS)
         return safeSession
     }
 
@@ -307,6 +313,7 @@ internal class MXMegolmEncryption(
         // Get canonical Json from
 
         val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
+
         val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString)
 
         val map = HashMap<String, Any>()

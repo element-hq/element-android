@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
@@ -86,7 +87,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         var result: MXEncryptEventContentResult? = null
         try {
             result = awaitCallback {
-                crypto.encryptEventContent(localMutableContent, localEvent.type, localEvent.roomId!!, it)
+                crypto.encryptEventContent(localEvent.eventId, localMutableContent, localEvent.type, localEvent.roomId!!, it)
             }
         } catch (throwable: Throwable) {
             error = throwable

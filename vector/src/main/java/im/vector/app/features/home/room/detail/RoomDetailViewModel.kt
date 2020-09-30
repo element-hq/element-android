@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
-import com.nikitakozlov.pury.Pury
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
@@ -95,7 +94,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.internal.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -553,7 +552,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                     when (val slashCommandResult = CommandParser.parseSplashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
-                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown){
+                                SendPerformanceTracker.startProfiling(it.eventId)
+                            }
                             _viewEvents.post(RoomDetailViewEvents.MessageSent)
                             popDraft()
                         }
