@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -49,6 +50,7 @@ import javax.inject.Inject
 
 class NoticeEventFormatter @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
                                                private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+                                               private val roomSummaryHolder: RoomSummaryHolder,
                                                private val sp: StringProvider) {
 
     private val currentUserId: String?
@@ -56,9 +58,16 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    private fun Event.isDm() = roomId?.let {
-        activeSessionDataSource.currentValue?.orNull()?.getRoomSummary(it)?.isDirect
-    }.orFalse()
+    private fun Event.isDm(): Boolean {
+        return roomSummaryHolder.roomSummary?.isDirect
+                ?: run {
+                    // RoomSummaryHolder does not have any RoomSummary (not in the timeline)
+                    roomId?.let {
+                        activeSessionDataSource.currentValue?.orNull()?.getRoomSummary(it)?.isDirect
+                    }
+                }
+                        .orFalse()
+    }
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
