@@ -50,6 +50,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -64,6 +65,7 @@ import javax.inject.Inject
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
+                                                  private val vectorPreferences: VectorPreferences,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
@@ -394,6 +396,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private fun updateUTDStates(event: TimelineEvent, nextEvent: TimelineEvent?) {
+        if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
+            return
+        }
         if (event.root.type == EventType.STATE_ROOM_MEMBER
                 && event.root.stateKey == session.myUserId) {
             val content = event.root.content.toModel<RoomMemberContent>()
