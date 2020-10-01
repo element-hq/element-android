@@ -60,11 +60,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationDrawerManager = vectorComponent().notificationDrawerManager()
-        notifiableEventResolver = vectorComponent().notifiableEventResolver()
-        pusherManager = vectorComponent().pusherManager()
-        activeSessionHolder = vectorComponent().activeSessionHolder()
-        vectorPreferences = vectorComponent().vectorPreferences()
+        with(vectorComponent()) {
+            notificationDrawerManager = notificationDrawerManager()
+            notifiableEventResolver = notifiableEventResolver()
+            pusherManager = pusherManager()
+            activeSessionHolder = activeSessionHolder()
+            vectorPreferences = vectorPreferences()
+        }
     }
 
     /**
