@@ -9,6 +9,7 @@ Improvements 🙌:
  - PIN code: request PIN code if phone has been locked
  - Small optimisation of scrolling experience in timeline (#2114)
  - Allow user to reset cross signing if he has no way to recover (#2052)
+ - Create home shortcut for any room (#1525)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
