@@ -22,6 +22,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Use Update Gradle Wrapper Action
+ - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
 
 Other changes:
  - Added registration/verification automated UI tests
