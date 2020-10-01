@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.app.BuildConfig
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
@@ -163,6 +164,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     init {
+        isDebugLoggingEnabled = BuildConfig.DEBUG
         addInterceptor(this)
         requestModelBuild()
     }
