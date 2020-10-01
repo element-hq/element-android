@@ -38,5 +38,5 @@ internal data class SearchResponseEventContext(
         val end: String? = null,
         // The historic profile information of the users that sent the events returned. The string key is the user ID for which the profile belongs to.
         @Json(name = "profile_info")
-        val profileInfo: JsonDict? = null
+        val profileInfo: Map<String, JsonDict>? = null
 )

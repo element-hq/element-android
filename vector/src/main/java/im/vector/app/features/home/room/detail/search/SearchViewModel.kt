@@ -69,9 +69,14 @@ class SearchViewModel @AssistedInject constructor(
     }
 
     private fun handleSearchWith(action: SearchAction.SearchWith) {
-        if (action.searchTerm.length > 1) {
+        if (action.searchTerm.isNotEmpty()) {
             setState {
-                copy(searchTerm = action.searchTerm)
+                copy(
+                        searchResult = emptyList(),
+                        hasMoreResult = false,
+                        lastBatchSize = 0,
+                        searchTerm = action.searchTerm
+                )
             }
             startSearching(false)
         }
@@ -100,9 +105,7 @@ class SearchViewModel @AssistedInject constructor(
             }
         }
 
-        if (state.asyncSearchRequest is Loading) {
-            currentTask?.cancel()
-        }
+        currentTask?.cancel()
 
         viewModelScope.launch {
             try {
@@ -118,24 +121,22 @@ class SearchViewModel @AssistedInject constructor(
                             callback = it
                     )
                 }
-                onSearchResultSuccess(result, isNextBatch)
+                onSearchResultSuccess(result)
             } catch (failure: Throwable) {
                 if (failure is Failure.Cancelled) return@launch
 
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncSearchRequest = Fail(failure),
-                            searchResult = null
+                            asyncSearchRequest = Fail(failure)
                     )
                 }
             }
         }
     }
 
-    private fun onSearchResultSuccess(searchResult: SearchResult, isNextBatch: Boolean) = withState { state ->
-        // Accumulate results if it is the next batch
-        val accumulatedResult = searchResult.results.orEmpty().plus(state.searchResult?.takeIf { isNextBatch }.orEmpty())
+    private fun onSearchResultSuccess(searchResult: SearchResult) = withState { state ->
+        val accumulatedResult = searchResult.results.orEmpty().plus(state.searchResult)
 
         // Note: We do not care about the highlights for the moment, but it will be the same algorithm
 
@@ -145,9 +146,14 @@ class SearchViewModel @AssistedInject constructor(
             copy(
                     searchResult = accumulatedResult,
                     hasMoreResult = !nextBatch.isNullOrEmpty(),
-                    lastBatch = searchResult.results,
+                    lastBatchSize = searchResult.results.orEmpty().size,
                     asyncSearchRequest = Success(Unit)
             )
         }
+    }
+
+    override fun onCleared() {
+        currentTask?.cancel()
+        super.onCleared()
     }
 }

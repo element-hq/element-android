@@ -18,7 +18,9 @@
 package org.matrix.android.sdk.internal.session.search
 
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.session.search.EventAndSender
 import org.matrix.android.sdk.api.session.search.SearchResult
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestCategories
@@ -76,7 +78,21 @@ internal class DefaultSearchTask @Inject constructor(
         return SearchResult(
                 nextBatch = searchCategories.roomEvents?.nextBatch,
                 highlights = searchCategories.roomEvents?.highlights,
-                results = searchCategories.roomEvents?.results?.map { it.event }?.reversed()
+                results = searchCategories.roomEvents?.results?.map { searchResponseItem ->
+                    EventAndSender(
+                            searchResponseItem.event,
+                            searchResponseItem.event.senderId?.let { senderId ->
+                                searchResponseItem.context?.profileInfo?.get(senderId)
+                                        ?.let {
+                                            MatrixItem.UserItem(
+                                                    senderId,
+                                                    it["displayname"] as? String,
+                                                    it["avatar_url"] as? String
+                                            )
+                                        }
+                            }
+                    )
+                }?.reversed()
         )
     }
 }

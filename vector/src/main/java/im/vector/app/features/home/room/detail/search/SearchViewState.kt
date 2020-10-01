@@ -19,14 +19,14 @@ package im.vector.app.features.home.room.detail.search
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.search.EventAndSender
 
 data class SearchViewState(
         // Accumulated search result
-        val searchResult: List<Event>? = null,
+        val searchResult: List<EventAndSender> = emptyList(),
         val hasMoreResult: Boolean = false,
-        // Last batch result will help RecyclerView to position itself
-        val lastBatch: List<Event>? = null,
+        // Last batch size, will help RecyclerView to position itself
+        val lastBatchSize: Int = 0,
         val searchTerm: String? = null,
         val roomId: String = "",
         // Current pagination request

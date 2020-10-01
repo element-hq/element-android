@@ -90,7 +90,7 @@ class SearchFragment @Inject constructor(
                 is Loading -> {
                     stateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
@@ -100,8 +100,7 @@ class SearchFragment @Inject constructor(
                 }
             }
         } else {
-            val lastBatchSize = state.lastBatch?.size ?: 0
-            pendingScrollToPosition = if (lastBatchSize > 0) lastBatchSize - 1 else 0
+            pendingScrollToPosition = (state.lastBatchSize - 1).coerceAtLeast(0)
 
             stateView.state = StateView.State.Content
             controller.setData(state)

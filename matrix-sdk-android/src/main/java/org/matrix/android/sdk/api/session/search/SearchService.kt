@@ -36,6 +36,7 @@ interface SearchService {
      * @param beforeLimit how many events before the result are returned.
      * @param afterLimit how many events after the result are returned.
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
+     * @param callback Callback to get the search result
      */
     fun search(searchTerm: String,
                roomId: String,

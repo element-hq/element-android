@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.api.session.search
 
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
  * Domain class to represent the response of a search request in a room.
@@ -35,5 +36,10 @@ data class SearchResult(
         /**
          * List of results in the requested order.
          */
-        val results: List<Event>? = null
+        val results: List<EventAndSender>? = null
+)
+
+data class EventAndSender(
+        val event: Event,
+        val sender: MatrixItem.UserItem?
 )

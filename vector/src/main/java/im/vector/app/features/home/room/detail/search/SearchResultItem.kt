@@ -27,10 +27,10 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_search_result)
 abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
@@ -38,15 +38,15 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute var dateFormatter: VectorDateFormatter? = null
     @EpoxyAttribute lateinit var event: Event
-    @EpoxyAttribute var sender: User? = null
+    @EpoxyAttribute var sender: MatrixItem? = null
     @EpoxyAttribute var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
         holder.view.onClick(listener)
-        sender?.toMatrixItem()?.let { avatarRenderer.render(it, holder.avatarImageView) }
-        holder.memberNameView.text = sender?.getBestName()
+        sender?.let { avatarRenderer.render(it, holder.avatarImageView) }
+        holder.memberNameView.setTextOrHide(sender?.getBestName())
         holder.timeView.text = dateFormatter?.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         // TODO Improve that (use formattedBody, etc.)
         holder.contentView.text = event.content?.get("body") as? String

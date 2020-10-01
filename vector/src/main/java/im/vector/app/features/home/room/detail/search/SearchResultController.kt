@@ -25,6 +25,8 @@ import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.search.EventAndSender
+import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -62,15 +64,15 @@ class SearchResultController @Inject constructor(
             }
         }
 
-        buildSearchResultItems(data.searchResult.orEmpty())
+        buildSearchResultItems(data.searchResult)
     }
 
-    private fun buildSearchResultItems(events: List<Event>) {
+    private fun buildSearchResultItems(events: List<EventAndSender>) {
         var lastDate: Calendar? = null
 
-        events.forEach { event ->
+        events.forEach { eventAndSender ->
             val eventDate = Calendar.getInstance().apply {
-                timeInMillis = event.originServerTs ?: System.currentTimeMillis()
+                timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
                 genericItemHeader {
@@ -81,13 +83,13 @@ class SearchResultController @Inject constructor(
             lastDate = eventDate
 
             searchResultItem {
-                id(event.eventId)
+                id(eventAndSender.event.eventId)
                 avatarRenderer(avatarRenderer)
                 dateFormatter(dateFormatter)
-                event(event)
-                // I think we should use the data returned by the server?
-                sender(event.senderId?.let { session.getUser(it) })
-                listener { listener?.onItemClicked(event) }
+                event(eventAndSender.event)
+                sender(eventAndSender.sender
+                        ?: eventAndSender.event.senderId?.let { session.getUser(it) }?.toMatrixItem())
+                listener { listener?.onItemClicked(eventAndSender.event) }
             }
         }
     }
