@@ -137,6 +137,7 @@ class RoomProfileController @Inject constructor(
                 dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
+                icon = R.drawable.ic_room_actions_leave,
                 editable = false,
                 action = { callback?.onLeaveRoomClicked() }
         )
