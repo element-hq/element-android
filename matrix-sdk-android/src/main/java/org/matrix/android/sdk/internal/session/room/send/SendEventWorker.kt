@@ -24,7 +24,7 @@ import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -63,7 +63,7 @@ internal class SendEventWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        SendPerformanceTracker.startStage(params.eventId, SendPerformanceTracker.Stage.SEND_WORKER)
+        SendPerformanceProfiler.startStage(params.eventId, SendPerformanceProfiler.Stages.SEND_WORKER)
         val event = localEchoRepository.getUpToDateEcho(params.eventId)
         if (event?.eventId == null || event.roomId == null) {
             localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
@@ -89,7 +89,7 @@ internal class SendEventWorker(context: Context,
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
         return try {
             sendEvent(event.eventId, event.roomId, event.type, event.content)
-            SendPerformanceTracker.stopStage(event.eventId, SendPerformanceTracker.Stage.SEND_WORKER)
+            SendPerformanceProfiler.stopStage(event.eventId, SendPerformanceProfiler.Stages.SEND_WORKER)
             Result.success()
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
@@ -109,11 +109,11 @@ internal class SendEventWorker(context: Context,
 
     private suspend fun sendEvent(eventId: String, roomId: String, type: String, content: Content?) {
         localEchoRepository.updateSendState(eventId, SendState.SENDING)
-        SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.SEND_REQUEST)
+        SendPerformanceProfiler.startStage(eventId, SendPerformanceProfiler.Stages.SEND_REQUEST)
         executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.send(eventId, roomId, type, content)
         }
-        SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.SEND_REQUEST)
+        SendPerformanceProfiler.stopStage(eventId, SendPerformanceProfiler.Stages.SEND_REQUEST)
         localEchoRepository.updateSendState(eventId, SendState.SENT)
     }
 }

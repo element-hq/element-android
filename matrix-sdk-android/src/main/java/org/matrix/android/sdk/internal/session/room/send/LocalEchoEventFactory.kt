@@ -53,7 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
@@ -326,7 +326,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createEvent(roomId: String, type: String, content: Content?): Event {
         val localId = LocalEcho.createLocalEchoId()
-        SendPerformanceTracker.startProfiling(localId)
+        SendPerformanceProfiler.startProfiling(localId)
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),

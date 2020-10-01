@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
@@ -65,7 +65,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doSafeWork(params: Params): Result {
         Timber.v("## SendEvent: Start Encrypt work for event ${params.eventId}")
-        SendPerformanceTracker.startStage(params.eventId, SendPerformanceTracker.Stage.ENCRYPT_WORKER)
+        SendPerformanceProfiler.startStage(params.eventId, SendPerformanceProfiler.Stages.ENCRYPT_WORKER)
         val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
         if (localEvent?.eventId == null) {
             return Result.success()
@@ -123,7 +123,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     localEcho.setDecryptionResult(it)
                 }
             }
-            SendPerformanceTracker.stopStage(params.eventId, SendPerformanceTracker.Stage.ENCRYPT_WORKER)
+            SendPerformanceProfiler.stopStage(params.eventId, SendPerformanceProfiler.Stages.ENCRYPT_WORKER)
             val nextWorkerParams = SendEventWorker.Params(sessionId = params.sessionId, eventId = params.eventId)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {

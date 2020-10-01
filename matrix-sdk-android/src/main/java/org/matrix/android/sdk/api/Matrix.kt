@@ -59,22 +59,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
             WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
-        Pury.setLogger(object : Logger {
-            override fun result(tag: String, message: String) {
-                Timber.tag(tag)
-                Timber.v(message)
-            }
-
-            override fun warning(tag: String, message: String) {
-                Timber.tag(tag)
-                Timber.w(message)
-            }
-
-            override fun error(tag: String, message: String) {
-                Timber.tag(tag)
-                Timber.e(message)
-            }
-        })
     }
 
     fun getUserAgent() = userAgentHolder.userAgent

@@ -54,7 +54,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
@@ -671,11 +671,11 @@ internal class DefaultCryptoService @Inject constructor(
 //                internalStart(false)
 //            }
 
-            SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_GET_USERS)
+            SendPerformanceProfiler.startStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_GET_USERS)
             val userIds =  getRoomUserIds(roomId)
-            SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_GET_USERS)
+            SendPerformanceProfiler.stopStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_GET_USERS)
 
-            SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_SET_ROOM_ENCRYPTION)
+            SendPerformanceProfiler.startStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_SET_ROOM_ENCRYPTION)
             var alg = roomEncryptorsStore.get(roomId)
             if (alg == null) {
                 val algorithm = getEncryptionAlgorithm(roomId)
@@ -686,7 +686,7 @@ internal class DefaultCryptoService @Inject constructor(
                     }
                 }
             }
-            SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_SET_ROOM_ENCRYPTION)
+            SendPerformanceProfiler.stopStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_SET_ROOM_ENCRYPTION)
             val safeAlgorithm = alg
             if (safeAlgorithm != null) {
                 val t0 = System.currentTimeMillis()

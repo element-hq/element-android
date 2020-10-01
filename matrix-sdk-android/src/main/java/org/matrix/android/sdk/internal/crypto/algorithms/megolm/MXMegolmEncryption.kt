@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
@@ -82,10 +82,10 @@ internal class MXMegolmEncryption(
         Timber.v("## CRYPTO | encryptEventContent ${System.currentTimeMillis() - ts}: getDevicesInRoom ${devices.allowedDevices.map}")
         val outboundSession = ensureOutboundSession(eventId, devices.allowedDevices)
 
-        SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_ENCRYPT)
+        SendPerformanceProfiler.startStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_MEGOLM_ENCRYPT)
         return encryptContent(outboundSession, eventType, eventContent)
                 .also {
-                    SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_ENCRYPT)
+                    SendPerformanceProfiler.stopStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_MEGOLM_ENCRYPT)
                     notifyWithheldForSession(devices.withHeldDevices, outboundSession)
                 }
     }
@@ -156,9 +156,9 @@ internal class MXMegolmEncryption(
                 }
             }
         }
-        SendPerformanceTracker.startStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_SHARE_KEYS)
+        SendPerformanceProfiler.startStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_MEGOLM_SHARE_KEYS)
         shareKey(safeSession, shareMap)
-        SendPerformanceTracker.stopStage(eventId, SendPerformanceTracker.Stage.ENCRYPT_MEGOLM_SHARE_KEYS)
+        SendPerformanceProfiler.stopStage(eventId, SendPerformanceProfiler.Stages.ENCRYPT_MEGOLM_SHARE_KEYS)
         return safeSession
     }
 

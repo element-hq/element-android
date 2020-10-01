@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -63,7 +63,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
-        SendPerformanceTracker.startStage(event.eventId, SendPerformanceTracker.Stage.LOCAL_ECHO)
+        SendPerformanceProfiler.startStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
         val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
@@ -88,7 +88,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
-            SendPerformanceTracker.stopStage(event.eventId, SendPerformanceTracker.Stage.LOCAL_ECHO)
+            SendPerformanceProfiler.stopStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
         }
     }
 

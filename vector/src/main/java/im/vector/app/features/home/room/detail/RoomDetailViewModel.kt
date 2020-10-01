@@ -94,7 +94,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.api.session.room.send.SendPerformanceTracker
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -553,7 +553,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown){
-                                SendPerformanceTracker.startProfiling(it.eventId)
+                                SendPerformanceProfiler.startProfiling(it.eventId!!)
                             }
                             _viewEvents.post(RoomDetailViewEvents.MessageSent)
                             popDraft()
@@ -894,7 +894,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             if (action.event.root.sendState.isSent()) { // ignore pending/local events
                 action.event.root.unsignedData?.transactionId?.also {
-                    SendPerformanceTracker.stopProfiling(it)
+                    SendPerformanceProfiler.stopProfiling(it)
                 }
                 visibleEventsObservable.accept(action)
             }
