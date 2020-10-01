@@ -46,7 +46,7 @@ data class SearchArgs(
 
 class SearchFragment @Inject constructor(
         val viewModelFactory: SearchViewModel.Factory,
-        val controller: SearchResultController
+        private val controller: SearchResultController
 ) : VectorBaseFragment(), StateView.EventCallback, SearchResultController.Listener {
 
     private val fragmentArgs: SearchArgs by args()
@@ -85,13 +85,13 @@ class SearchFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(searchViewModel) { state ->
-        if (state.searchResult?.results.isNullOrEmpty()) {
-            when (state.asyncEventsRequest) {
+        if (state.searchResult.isNullOrEmpty()) {
+            when (state.asyncSearchRequest) {
                 is Loading -> {
                     stateView.state = StateView.State.Loading
                 }
                 is Fail    -> {
-                    stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
+                    stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
                     stateView.state = StateView.State.Empty(
@@ -100,7 +100,7 @@ class SearchFragment @Inject constructor(
                 }
             }
         } else {
-            val lastBatchSize = state.lastBatch?.results?.size ?: 0
+            val lastBatchSize = state.lastBatch?.size ?: 0
             pendingScrollToPosition = if (lastBatchSize > 0) lastBatchSize - 1 else 0
 
             stateView.state = StateView.State.Content

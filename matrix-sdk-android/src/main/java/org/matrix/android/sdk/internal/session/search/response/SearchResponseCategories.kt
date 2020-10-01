@@ -21,7 +21,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SearchResponseCategories(
+internal data class SearchResponseCategories(
+        /**
+         * Mapping of category name to search criteria.
+         */
         @Json(name = "room_events")
         val roomEvents: SearchResponseRoomEvents? = null
 )

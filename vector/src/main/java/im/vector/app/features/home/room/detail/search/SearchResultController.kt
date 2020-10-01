@@ -48,7 +48,9 @@ class SearchResultController @Inject constructor(
     }
 
     override fun buildModels(data: SearchViewState?) {
-        if (!data?.searchResult?.nextBatch.isNullOrEmpty()) {
+        data ?: return
+
+        if (data.hasMoreResult) {
             loadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
                 id("loadMore${idx++}")
@@ -60,7 +62,7 @@ class SearchResultController @Inject constructor(
             }
         }
 
-        buildSearchResultItems(data?.searchResult?.results.orEmpty())
+        buildSearchResultItems(data.searchResult.orEmpty())
     }
 
     private fun buildSearchResultItems(events: List<Event>) {
@@ -83,12 +85,9 @@ class SearchResultController @Inject constructor(
                 avatarRenderer(avatarRenderer)
                 dateFormatter(dateFormatter)
                 event(event)
+                // I think we should use the data returned by the server?
                 sender(event.senderId?.let { session.getUser(it) })
-                listener(object : SearchResultItem.Listener {
-                    override fun onItemClicked() {
-                        listener?.onItemClicked(event)
-                    }
-                })
+                listener { listener?.onItemClicked(event) }
             }
         }
     }

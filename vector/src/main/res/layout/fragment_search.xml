@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <im.vector.app.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,6 +9,7 @@
         android:id="@+id/searchResultRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="always" />
+        android:overScrollMode="always"
+        tools:listitem="@layout/item_search_result" />
 
 </im.vector.app.core.platform.StateView>

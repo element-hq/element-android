@@ -22,11 +22,22 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-data class SearchResponseItem(
-        // A number that describes how closely this result matches the search. Higher is closer.
+internal data class SearchResponseItem(
+        /**
+         *  A number that describes how closely this result matches the search. Higher is closer.
+         */
         @Json(name = "rank")
         val rank: Double? = null,
-        // The event that matched.
+
+        /**
+         * The event that matched.
+         */
         @Json(name = "result")
-        val event: Event
+        val event: Event,
+
+        /**
+         * Context for result, if requested.
+         */
+        @Json(name = "context")
+        val context: SearchResponseEventContext? = null
 )

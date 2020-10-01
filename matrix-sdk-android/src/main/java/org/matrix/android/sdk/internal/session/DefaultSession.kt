@@ -96,6 +96,7 @@ internal class DefaultSession @Inject constructor(
         private val pushRuleService: Lazy<PushRuleService>,
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
+        private val searchService: Lazy<SearchService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
         private val permalinkService: Lazy<PermalinkService>,
@@ -121,8 +122,7 @@ internal class DefaultSession @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val searchService: Lazy<SearchService>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),

@@ -24,8 +24,8 @@
                 style="@style/VectorSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:queryHint="@string/search_hint"
-                android:backgroundTint="@color/base_color" />
+                android:backgroundTint="@color/base_color"
+                app:queryHint="@string/search_hint" />
 
         </androidx.appcompat.widget.Toolbar>
 

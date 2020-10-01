@@ -21,7 +21,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class SearchResponseRoomEvents(
+internal data class SearchResponseRoomEvents(
         // List of results in the requested order.
         @Json(name = "results")
         val results: List<SearchResponseItem>? = null,

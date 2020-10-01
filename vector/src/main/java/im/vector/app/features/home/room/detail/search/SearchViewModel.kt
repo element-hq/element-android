@@ -37,15 +37,14 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 
 class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
-        private val session: Session
+        session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
-    private var room: Room? = null
+    private var room: Room? = session.getRoom(initialState.roomId)
+
     private var currentTask: Cancelable? = null
 
-    init {
-        room = initialState.roomId?.let { session.getRoom(it) }
-    }
+    private var nextBatch: String? = null
 
     @AssistedInject.Factory
     interface Factory {
@@ -64,8 +63,8 @@ class SearchViewModel @AssistedInject constructor(
     override fun handle(action: SearchAction) {
         when (action) {
             is SearchAction.SearchWith -> handleSearchWith(action)
-            is SearchAction.LoadMore   -> handleLoadMore()
-            is SearchAction.Retry      -> handleRetry()
+            is SearchAction.LoadMore -> handleLoadMore()
+            is SearchAction.Retry -> handleRetry()
         }.exhaustive
     }
 
@@ -74,7 +73,7 @@ class SearchViewModel @AssistedInject constructor(
             setState {
                 copy(searchTerm = action.searchTerm)
             }
-            startSearching()
+            startSearching(false)
         }
     }
 
@@ -83,25 +82,25 @@ class SearchViewModel @AssistedInject constructor(
     }
 
     private fun handleRetry() {
-        startSearching()
+        startSearching(false)
     }
 
-    private fun startSearching(isNextBatch: Boolean = false) = withState { state ->
-        if (state.roomId == null || state.searchTerm == null) return@withState
+    private fun startSearching(isNextBatch: Boolean) = withState { state ->
+        if (state.searchTerm == null) return@withState
 
         // There is no batch to retrieve
-        if (isNextBatch && state.searchResult?.nextBatch == null) return@withState
+        if (isNextBatch && nextBatch == null) return@withState
 
         // Show full screen loading just for the clean search
         if (!isNextBatch) {
             setState {
                 copy(
-                        asyncEventsRequest = Loading()
+                        asyncSearchRequest = Loading()
                 )
             }
         }
 
-        if (state.asyncEventsRequest is Loading) {
+        if (state.asyncSearchRequest is Loading) {
             currentTask?.cancel()
         }
 
@@ -110,7 +109,7 @@ class SearchViewModel @AssistedInject constructor(
                 val result = awaitCallback<SearchResult> {
                     currentTask = room?.search(
                             searchTerm = state.searchTerm,
-                            nextBatch = state.searchResult?.nextBatch,
+                            nextBatch = nextBatch,
                             orderByRecent = true,
                             beforeLimit = 0,
                             afterLimit = 0,
@@ -126,7 +125,7 @@ class SearchViewModel @AssistedInject constructor(
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncEventsRequest = Fail(failure),
+                            asyncSearchRequest = Fail(failure),
                             searchResult = null
                     )
                 }
@@ -135,27 +134,19 @@ class SearchViewModel @AssistedInject constructor(
     }
 
     private fun onSearchResultSuccess(searchResult: SearchResult, isNextBatch: Boolean) = withState { state ->
-        val accumulatedResult = SearchResult(
-                nextBatch = searchResult.nextBatch,
-                results = searchResult.results,
-                highlights = searchResult.highlights
-        )
-
         // Accumulate results if it is the next batch
-        if (isNextBatch) {
-            if (state.searchResult != null) {
-                accumulatedResult.results = accumulatedResult.results?.plus(state.searchResult.results!!)
-            }
-            if (state.searchResult?.highlights != null) {
-                accumulatedResult.highlights = accumulatedResult.highlights?.plus(state.searchResult.highlights!!)
-            }
-        }
+        val accumulatedResult = searchResult.results.orEmpty().plus(state.searchResult?.takeIf { isNextBatch }.orEmpty())
+
+        // Note: We do not care about the highlights for the moment, but it will be the same algorithm
+
+        nextBatch = searchResult.nextBatch
 
         setState {
             copy(
                     searchResult = accumulatedResult,
-                    lastBatch = searchResult,
-                    asyncEventsRequest = Success(Unit)
+                    hasMoreResult = !nextBatch.isNullOrEmpty(),
+                    lastBatch = searchResult.results,
+                    asyncSearchRequest = Success(Unit)
             )
         }
     }

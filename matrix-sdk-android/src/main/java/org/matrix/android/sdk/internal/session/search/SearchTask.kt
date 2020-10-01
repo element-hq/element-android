@@ -69,14 +69,14 @@ internal class DefaultSearchTask @Inject constructor(
                     )
             )
             apiCall = searchAPI.search(params.nextBatch, searchRequestBody)
-        }.toDomain().apply { results = results?.reversed() }
+        }.toDomain()
     }
 
     private fun SearchResponse.toDomain(): SearchResult {
         return SearchResult(
                 nextBatch = searchCategories.roomEvents?.nextBatch,
                 highlights = searchCategories.roomEvents?.highlights,
-                results = searchCategories.roomEvents?.results?.map { it.event }
+                results = searchCategories.roomEvents?.results?.map { it.event }?.reversed()
         )
     }
 }

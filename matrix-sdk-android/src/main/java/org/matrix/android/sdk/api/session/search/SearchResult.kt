@@ -23,10 +23,17 @@ import org.matrix.android.sdk.api.session.events.model.Event
  * Domain class to represent the response of a search request in a room.
  */
 data class SearchResult(
-        // Token that can be used to get the next batch of results, by passing as the next_batch parameter to the next call. If this field is absent, there are no more results.
+        /**
+         * Token that can be used to get the next batch of results, by passing as the next_batch parameter to the next call.
+         * If this field is null, there are no more results.
+         */
         val nextBatch: String? = null,
-        // List of words which should be highlighted, useful for stemming which may change the query terms.
-        var highlights: List<String>? = null,
-        // List of results in the requested order.
-        var results: List<Event>? = null
+        /**
+         *  List of words which should be highlighted, useful for stemming which may change the query terms.
+         */
+        val highlights: List<String>? = null,
+        /**
+         * List of results in the requested order.
+         */
+        val results: List<Event>? = null
 )

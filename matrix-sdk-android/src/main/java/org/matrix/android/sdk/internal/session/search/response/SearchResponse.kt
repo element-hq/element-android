@@ -21,8 +21,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SearchResponse(
-        // Required. Describes which categories to search in and their criteria.
+internal data class SearchResponse(
+        /**
+         * Required. Describes which categories to search in and their criteria.
+         */
         @Json(name = "search_categories")
         val searchCategories: SearchResponseCategories
 )
