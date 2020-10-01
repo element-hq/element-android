@@ -37,6 +37,7 @@ import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
@@ -153,7 +154,10 @@ class DefaultNavigator @Inject constructor(
 
     override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is VectorBaseActivity) {
-            BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly, false)
+            BootstrapBottomSheet.show(
+                    context.supportFragmentManager,
+                    if (initCrossSigningOnly) SetupMode.CROSS_SIGNING_ONLY else SetupMode.NORMAL
+            )
         }
     }
 
@@ -226,10 +230,16 @@ class DefaultNavigator @Inject constructor(
         // if cross signing is enabled we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
             if (session.cryptoService().crossSigningService().canCrossSign() && context is VectorBaseActivity) {
-                BootstrapBottomSheet.show(context.supportFragmentManager, initCrossSigningOnly = false, forceReset4S = false)
+                BootstrapBottomSheet.show(context.supportFragmentManager, SetupMode.NORMAL)
             } else {
                 context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
             }
+        }
+    }
+
+    override fun open4SSetup(context: Context, setupMode: SetupMode) {
+        if (context is VectorBaseActivity) {
+            BootstrapBottomSheet.show(context.supportFragmentManager, setupMode)
         }
     }
 

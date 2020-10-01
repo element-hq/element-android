@@ -64,7 +64,7 @@ class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(re
     }
 
     override fun createIntent(): Intent {
-        return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        return Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
             type = "*/*"

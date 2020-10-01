@@ -53,6 +53,8 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.epoxy.addGlidePreloader
+import com.airbnb.epoxy.glidePreloader
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -75,6 +77,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -218,7 +221,8 @@ class RoomDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val notificationUtils: NotificationUtils,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val imageContentRenderer: ImageContentRenderer
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -700,7 +704,13 @@ class RoomDetailFragment @Inject constructor(
                     //                            safeStartCall(it, isVideoCall)
                     //                        }
                 } else if (!state.isAllowedToStartWebRTCCall) {
-                    showDialogWithMessage(getString(R.string.no_permissions_to_start_webrtc_call))
+                    showDialogWithMessage(getString(
+                            if (state.isDm()) {
+                                R.string.no_permissions_to_start_webrtc_call_in_direct_room
+                            } else {
+                                R.string.no_permissions_to_start_webrtc_call
+                            })
+                    )
                 } else {
                     safeStartCall(isVideoCall)
                 }
@@ -710,7 +720,13 @@ class RoomDetailFragment @Inject constructor(
                 // can you add widgets??
                 if (!state.isAllowedToManageWidgets) {
                     // You do not have permission to start a conference call in this room
-                    showDialogWithMessage(getString(R.string.no_permissions_to_start_conf_call))
+                    showDialogWithMessage(getString(
+                            if (state.isDm()) {
+                                R.string.no_permissions_to_start_conf_call_in_direct_room
+                            } else {
+                                R.string.no_permissions_to_start_conf_call
+                            }
+                    ))
                 } else {
                     if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
                         // A conference is already in progress!
@@ -921,6 +937,16 @@ class RoomDetailFragment @Inject constructor(
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
+        recyclerView.addGlidePreloader(
+                epoxyController = timelineEventController,
+                requestManager = GlideApp.with(this),
+                preloader = glidePreloader { requestManager, epoxyModel: MessageImageVideoItem, _ ->
+                    imageContentRenderer.createGlideRequest(
+                            epoxyModel.mediaData,
+                            ImageContentRenderer.Mode.THUMBNAIL,
+                            requestManager as GlideRequests
+                    )
+                })
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {

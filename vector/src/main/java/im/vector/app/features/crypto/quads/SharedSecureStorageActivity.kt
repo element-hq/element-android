@@ -31,12 +31,14 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.features.crypto.recover.SetupMode
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class SharedSecureStorageActivity : SimpleFragmentActivity() {
+class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSheetDialogFragment.ResultListener {
 
     @Parcelize
     data class Args(
@@ -69,18 +71,22 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
 
     private fun renderState(state: SharedSecureStorageViewState) {
         if (!state.ready) return
-        val fragment = if (state.hasPassphrase) {
-            if (state.useKey) SharedSecuredStorageKeyFragment::class else SharedSecuredStoragePassphraseFragment::class
-        } else SharedSecuredStorageKeyFragment::class
+        val fragment =
+                when (state.step) {
+                    SharedSecureStorageViewState.Step.EnterPassphrase -> SharedSecuredStoragePassphraseFragment::class
+                    SharedSecureStorageViewState.Step.EnterKey        -> SharedSecuredStorageKeyFragment::class
+                    SharedSecureStorageViewState.Step.ResetAll        -> SharedSecuredStorageResetAllFragment::class
+                }
+
         showFragment(fragment, Bundle())
     }
 
     private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
         when (it) {
-            is SharedSecureStorageViewEvent.Dismiss            -> {
+            is SharedSecureStorageViewEvent.Dismiss              -> {
                 finish()
             }
-            is SharedSecureStorageViewEvent.Error              -> {
+            is SharedSecureStorageViewEvent.Error                -> {
                 AlertDialog.Builder(this)
                         .setTitle(getString(R.string.dialog_title_error))
                         .setMessage(it.message)
@@ -92,21 +98,31 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                         }
                         .show()
             }
-            is SharedSecureStorageViewEvent.ShowModalLoading   -> {
+            is SharedSecureStorageViewEvent.ShowModalLoading     -> {
                 showWaitingView()
             }
-            is SharedSecureStorageViewEvent.HideModalLoading   -> {
+            is SharedSecureStorageViewEvent.HideModalLoading     -> {
                 hideWaitingView()
             }
-            is SharedSecureStorageViewEvent.UpdateLoadingState -> {
+            is SharedSecureStorageViewEvent.UpdateLoadingState   -> {
                 updateWaitingView(it.waitingData)
             }
-            is SharedSecureStorageViewEvent.FinishSuccess      -> {
+            is SharedSecureStorageViewEvent.FinishSuccess        -> {
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
                 setResult(Activity.RESULT_OK, dataResult)
                 finish()
             }
+            is SharedSecureStorageViewEvent.ShowResetBottomSheet -> {
+                navigator.open4SSetup(this, SetupMode.HARD_RESET)
+            }
+        }
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+        if (fragment is VectorBaseBottomSheetDialogFragment) {
+            fragment.resultListener = this
         }
     }
 
@@ -124,6 +140,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
 
     companion object {
         const val EXTRA_DATA_RESULT = "EXTRA_DATA_RESULT"
+        const val EXTRA_DATA_RESET = "EXTRA_DATA_RESET"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
 
         fun newIntent(context: Context,
@@ -138,6 +155,14 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                         resultKeyStoreAlias
                 ))
             }
+        }
+    }
+
+    override fun onBottomSheetResult(resultCode: Int, data: Any?) {
+        if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK) {
+            // the 4S has been reset
+            setResult(Activity.RESULT_OK, Intent().apply { putExtra(EXTRA_DATA_RESET, true) })
+            finish()
         }
     }
 }

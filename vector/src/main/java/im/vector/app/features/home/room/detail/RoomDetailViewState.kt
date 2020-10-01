@@ -77,4 +77,6 @@ data class RoomDetailViewState(
             // Also highlight the target event, if any
             highlightedEventId = args.eventId
     )
+
+    fun isDm() = asyncRoomSummary()?.isDirect == true
 }

@@ -21,6 +21,7 @@ import android.content.Context
 import android.view.View
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinActivity
@@ -70,6 +71,8 @@ interface Navigator {
     fun openDebug(context: Context)
 
     fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
+
+    fun open4SSetup(context: Context, setupMode: SetupMode)
 
     fun openKeysBackupManager(context: Context)
 

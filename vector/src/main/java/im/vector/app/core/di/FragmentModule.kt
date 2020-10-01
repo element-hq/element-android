@@ -27,6 +27,7 @@ import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
+import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
 import im.vector.app.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
@@ -529,6 +530,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SharedSecuredStorageKeyFragment::class)
     fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SharedSecuredStorageResetAllFragment::class)
+    fun bindSharedSecuredStorageResetAllFragment(fragment: SharedSecuredStorageResetAllFragment): Fragment
 
     @Binds
     @IntoMap

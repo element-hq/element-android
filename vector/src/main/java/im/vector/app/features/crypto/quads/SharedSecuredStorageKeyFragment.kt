@@ -27,9 +27,9 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -62,6 +62,10 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                 .disposeOnDestroyView()
 
         ssss_key_use_file.debouncedClicks { startImportTextFromFileIntent(this, IMPORT_FILE_REQ) }
+
+        ssss_key_reset.clickableView.debouncedClicks {
+            sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
+        }
 
         sharedViewModel.observeViewEvents {
             when (it) {

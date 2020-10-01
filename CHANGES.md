@@ -1,8 +1,35 @@
-Changes in Element 1.0.8 (2020-XX-XX)
+Changes in Element 1.0.9 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
+
+Improvements 🙌:
+ - Wording differentiation for direct rooms (#2176)
+ - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
+ - Allow user to reset cross signing if he has no way to recover (#2052)
+
+Bugfix 🐛:
+ - Improve support for image/audio/video/file selection with intent changes (#1376)
+ - Fix Splash layout on small screens
+
+Translations 🗣:
  -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - Use Update Gradle Wrapper Action
+ - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
+
+Other changes:
+ - Added registration/verification automated UI tests
+ - Create a script to help getting public information form any homeserver
+
+Changes in Element 1.0.8 (2020-09-25)
+===================================================
 
 Improvements 🙌:
  - Add "show password" in import Megolm keys dialog
@@ -15,21 +42,16 @@ Improvements 🙌:
  - PIN Code Improvements: Add more settings: biometrics, grace period, notification content (#1985)
 
 Bugfix 🐛:
- - Long message cannot be sent/takes infinite time & blocks other messages #1397
+ - Long message cannot be sent/takes infinite time & blocks other messages (#1397)
+ - Fix crash when wellknown are malformed, or redirect to some HTML content (reported by rageshakes)
  - User Verification in DM not working
  - Manual import of Megolm keys does back up the imported keys
  - Auto scrolling to the latest message when sending (#2094)
  - Fix incorrect permission check when creating widgets (#2137)
  - Pin code: user has to enter pin code twice (#2005)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Rename `tryThis` to `tryOrNull`
-
-Build 🧱:
- -
 
 Other changes:
  - Add an advanced action to reset an account data entry
