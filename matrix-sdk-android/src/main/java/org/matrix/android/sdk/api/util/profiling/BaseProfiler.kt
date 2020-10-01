@@ -58,6 +58,18 @@ abstract class BaseProfiler<STAGE : Enum<STAGE>> {
     }
 
     /**
+     * Use to profile a block of code. Internally it will call start and stop stage.
+     *
+     * @param key unique identifier of the profiling.
+     * @param stage the current stage to mark
+     */
+    fun profileBlock(key: String, stage: STAGE, block: (() -> Unit)? = null) {
+        startStage(key, stage)
+        block?.invoke()
+        stopStage(key, stage)
+    }
+
+    /**
      * Use to add a new stage to profile inside the root profiling.
      * You should have called startProfiling with the same key before.
      * You should also call stopStage with same key and same stage to mark the end of this stage.

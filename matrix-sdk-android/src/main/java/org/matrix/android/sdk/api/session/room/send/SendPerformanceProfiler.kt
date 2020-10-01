@@ -28,7 +28,8 @@ object SendPerformanceProfiler: BaseProfiler<SendPerformanceProfiler.Stages>() {
         ENCRYPT_MEGOLM_SHARE_KEYS,
         ENCRYPT_MEGOLM_ENCRYPT,
         SEND_WORKER,
-        SEND_REQUEST
+        SEND_REQUEST,
+        RECEIVED_IN_SYNC
     }
 
     override val name = "SEND_PROFILER"

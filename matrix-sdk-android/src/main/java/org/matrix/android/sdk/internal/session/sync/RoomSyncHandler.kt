@@ -66,6 +66,7 @@ import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.session.room.send.SendPerformanceProfiler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -334,6 +335,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             event.unsignedData?.transactionId?.also {
                 val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
                 if (sendingEventEntity != null) {
+                    SendPerformanceProfiler.profileBlock(it, SendPerformanceProfiler.Stages.RECEIVED_IN_SYNC)
                     Timber.v("Remove local echo for tx:$it")
                     roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
                     if (event.isEncrypted() && event.content?.get("algorithm") as? String == MXCRYPTO_ALGORITHM_MEGOLM) {
