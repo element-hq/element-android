@@ -552,7 +552,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     when (val slashCommandResult = CommandParser.parseSplashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
-                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown){
+                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown) {
                                 SendPerformanceProfiler.startProfiling(it.eventId!!)
                             }
                             _viewEvents.post(RoomDetailViewEvents.MessageSent)

@@ -21,8 +21,6 @@ import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.nikitakozlov.pury.Logger
-import com.nikitakozlov.pury.Pury
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -33,7 +31,6 @@ import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
-import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject

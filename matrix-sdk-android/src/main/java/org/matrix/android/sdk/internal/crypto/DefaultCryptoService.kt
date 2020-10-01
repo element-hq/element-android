@@ -680,7 +680,6 @@ internal class DefaultCryptoService @Inject constructor(
             if (alg == null) {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 if (algorithm != null) {
-
                     if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
                         alg = roomEncryptorsStore.get(roomId)
                     }

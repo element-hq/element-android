@@ -19,8 +19,6 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequest
-import com.nikitakozlov.pury.annotations.MethodProfiling
-import com.nikitakozlov.pury.annotations.StartProfiling
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable

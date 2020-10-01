@@ -17,7 +17,6 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import com.nikitakozlov.pury.Pury
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
