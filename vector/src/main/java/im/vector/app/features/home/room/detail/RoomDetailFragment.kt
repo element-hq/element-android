@@ -656,6 +656,10 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
                 true
             }
+            R.id.timeline_setting    -> {
+                navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+                true
+            }
             R.id.resend_all          -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
                 true

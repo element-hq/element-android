@@ -533,6 +533,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 // For now always disable when not in developer mode, worker cancellation is not working properly
                 timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
             R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.timeline_setting    -> true
             R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps    -> true
             R.id.voice_call,

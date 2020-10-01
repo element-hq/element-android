@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/timeline_setting"
+        android:icon="@drawable/ic_settings_x"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/search"
         android:title="@string/search"
         app:showAsAction="never" />
