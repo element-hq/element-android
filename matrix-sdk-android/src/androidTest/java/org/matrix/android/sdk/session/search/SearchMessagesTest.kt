@@ -90,7 +90,7 @@ class SearchMessagesTest : InstrumentedTest {
                                     assertTrue(
                                             data.results
                                                     ?.all {
-                                                        (it.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                                                     }.orFalse()
                                     )
                                     lock.countDown()
@@ -154,7 +154,7 @@ class SearchMessagesTest : InstrumentedTest {
                                     assertTrue(
                                             data.results
                                                     ?.all {
-                                                        (it.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                                                     }.orFalse()
                                     )
                                     lock.countDown()
