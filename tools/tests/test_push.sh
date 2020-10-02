@@ -25,7 +25,7 @@ curl -H "Authorization: key=$SERVER_KEY" \
 read -p "Enter the FCM token: " FCM_TOKEN
 
 # content of the notification
-DATA="{\"message\":\"Message of PUSH!\"}"
+DATA='{"event_id":"$THIS_IS_A_FAKE_EVENT_ID"}'
 
 echo
 echo

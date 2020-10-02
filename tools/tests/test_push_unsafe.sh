@@ -32,7 +32,7 @@ curl -H "Authorization: key=$SERVER_KEY" \
 # {"multicast_id":5978845027639121780,"success":0,"failure":1,"canonical_ids":0,"results":[{"error":"InvalidRegistration"}]}
 
 # content of the notification
-DATA="{\"message\":\"Message of PUSH!\"}"
+DATA='{"event_id":"$THIS_IS_A_FAKE_EVENT_ID"}'
 
 echo
 echo
