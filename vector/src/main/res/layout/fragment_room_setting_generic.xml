@@ -59,11 +59,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@null"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:queryHint="@string/search_hint"
         app:layout_constraintTop_toBottomOf="@id/roomSettingsToolbar"
-        android:background="@null" />
+        tools:queryHint="@string/search_hint"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
