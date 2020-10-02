@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SygnalDevice(
-        /**
-         * Required. The app_id given when the pusher was created.
-         */
-        @Json(name = "app_id")
-        val appId: String,
-        /**
-         * Required. The pushkey given when the pusher was created.
-         */
-        @Json(name = "pushkey")
-        val pushKey: String
+internal data class PushGatewayNotifyResponse(
+        @Json(name = "rejected")
+        val rejectedPushKeys: List<String>
 )

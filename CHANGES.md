@@ -17,6 +17,7 @@ Improvements 🙌:
  - Filter room member (and banned users) by name (#2184)
  - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
  - Add Sygnal API implementation to test is Push are correctly received
+ - Add PushGateway API implementation to test if Push are correctly received
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)

@@ -23,16 +23,16 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.pushers.SygnalFailure
+import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
 import javax.inject.Inject
 
 /**
- * Test Push by asking Sygnal to send a Push back
+ * Test Push by asking the Push Gateway to send a Push back
  */
-class TestPushFromSygnal @Inject constructor(private val context: AppCompatActivity,
-                                             private val stringProvider: StringProvider,
-                                             private val errorFormatter: ErrorFormatter,
-                                             private val pushersManager: PushersManager)
+class TestPushFromPushGateway @Inject constructor(private val context: AppCompatActivity,
+                                                  private val stringProvider: StringProvider,
+                                                  private val errorFormatter: ErrorFormatter,
+                                                  private val pushersManager: PushersManager)
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
     override fun perform() {
@@ -42,7 +42,7 @@ class TestPushFromSygnal @Inject constructor(private val context: AppCompatActiv
         }
         pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
-                description = if (failure is SygnalFailure.PusherRejected) {
+                description = if (failure is PushGatewayFailure.PusherRejected) {
                     stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
                 } else {
                     errorFormatter.toHumanReadable(failure)

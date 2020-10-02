@@ -67,12 +67,12 @@ interface PushersService {
                       withEventIdOnly: Boolean): UUID
 
     /**
-     * Directly ask Sygnal to send a push to this device
-     * @param url the Sygnal url (full path)
+     * Directly ask the push gateway to send a push to this device
+     * @param url the push gateway url (full path)
      * @param appId the application id
      * @param pushkey the FCM token
      * @param eventId the eventId which will be sent in the Push message. Use a fake eventId.
-     * @param callback callback to know if Sygnal has accepted the request. In this case, the app should receive a Push with the provided eventId.
+     * @param callback callback to know if the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
      *                 In case of error, PusherRejected failure can happen. In this case it means that the pushkey is not valid.
      */
     fun testPush(url: String,

@@ -31,8 +31,8 @@ internal object NetworkConstants {
     const val URI_IDENTITY_PREFIX_PATH = "_matrix/identity/v2"
     const val URI_IDENTITY_PATH_V2 = "$URI_IDENTITY_PREFIX_PATH/"
 
-    // Sygnal
-    const val URI_SYGNAL_PREFIX_PATH = "_matrix/push/v1/"
+    // Push Gateway
+    const val URI_PUSH_GATEWAY_PREFIX_PATH = "_matrix/push/v1/"
 
     // Integration
     const val URI_INTEGRATION_MANAGER_PATH = "_matrix/integrations/v1/"

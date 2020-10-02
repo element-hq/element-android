@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SygnalNotifyResponse(
-        @Json(name = "rejected")
-        val rejectedPushKey: List<String>
+internal data class PushGatewayNotifyBody(
+        /**
+         * Required. Information about the push notification
+         */
+        @Json(name = "notification")
+        val notification: PushGatewayNotification
 )

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.session.pushers.SygnalFailure
+import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface SygnalNotifyTask : Task<SygnalNotifyTask.Params, Unit> {
+internal interface PushGatewayNotifyTask : Task<PushGatewayNotifyTask.Params, Unit> {
     data class Params(
             val url: String,
             val appId: String,
@@ -33,25 +33,25 @@ internal interface SygnalNotifyTask : Task<SygnalNotifyTask.Params, Unit> {
     )
 }
 
-internal class DefaultSygnalNotifyTask @Inject constructor(
+internal class DefaultPushGatewayNotifyTask @Inject constructor(
         private val retrofitFactory: RetrofitFactory,
         @Unauthenticated private val unauthenticatedOkHttpClient: OkHttpClient
-) : SygnalNotifyTask {
+) : PushGatewayNotifyTask {
 
-    override suspend fun execute(params: SygnalNotifyTask.Params) {
+    override suspend fun execute(params: PushGatewayNotifyTask.Params) {
         val sygnalApi = retrofitFactory.create(
                 unauthenticatedOkHttpClient,
-                params.url.substringBefore(NetworkConstants.URI_SYGNAL_PREFIX_PATH)
+                params.url.substringBefore(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH)
         )
-                .create(SygnalAPI::class.java)
+                .create(PushGatewayAPI::class.java)
 
-        val response = executeRequest<SygnalNotifyResponse>(null) {
+        val response = executeRequest<PushGatewayNotifyResponse>(null) {
             apiCall = sygnalApi.notify(
-                    SygnalNotifyBody(
-                            SygnalNotification(
+                    PushGatewayNotifyBody(
+                            PushGatewayNotification(
                                     eventId = params.eventId,
                                     devices = listOf(
-                                            SygnalDevice(
+                                            PushGatewayDevice(
                                                     params.appId,
                                                     params.pushKey
                                             )
@@ -61,8 +61,8 @@ internal class DefaultSygnalNotifyTask @Inject constructor(
             )
         }
 
-        if (response.rejectedPushKey.contains(params.pushKey)) {
-            throw SygnalFailure.PusherRejected
+        if (response.rejectedPushKeys.contains(params.pushKey)) {
+            throw PushGatewayFailure.PusherRejected
         }
     }
 }

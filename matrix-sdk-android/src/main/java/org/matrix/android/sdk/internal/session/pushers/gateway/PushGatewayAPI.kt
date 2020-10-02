@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface SygnalAPI {
+internal interface PushGatewayAPI {
     /**
-     * Ask Sygnal to send a push to the current device.
+     * Ask the Push Gateway to send a push to the current device.
      *
      * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#post-matrix-push-v1-notify
      */
-    @POST(NetworkConstants.URI_SYGNAL_PREFIX_PATH + "notify")
-    fun notify(@Body body: SygnalNotifyBody): Call<SygnalNotifyResponse>
+    @POST(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
+    fun notify(@Body body: PushGatewayNotifyBody): Call<PushGatewayNotifyResponse>
 }
 

@@ -23,7 +23,7 @@ import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import im.vector.app.gplay.features.settings.troubleshoot.TestFirebaseToken
 import im.vector.app.gplay.features.settings.troubleshoot.TestPlayServices
-import im.vector.app.gplay.features.settings.troubleshoot.TestPushFromSygnal
+import im.vector.app.gplay.features.settings.troubleshoot.TestPushFromPushGateway
 import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testPlayServices: TestPlayServices,
         private val testFirebaseToken: TestFirebaseToken,
         private val testTokenRegistration: TestTokenRegistration,
-        private val testPushFromSygnal: TestPushFromSygnal
+        private val testPushFromPushGateway: TestPushFromPushGateway
 ) {
 
     fun create(fragment: Fragment): NotificationTroubleshootTestManager {
@@ -47,7 +47,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testPlayServices)
         mgr.addTest(testFirebaseToken)
         mgr.addTest(testTokenRegistration)
-        mgr.addTest(testPushFromSygnal)
+        mgr.addTest(testPushFromPushGateway)
         return mgr
     }
 }

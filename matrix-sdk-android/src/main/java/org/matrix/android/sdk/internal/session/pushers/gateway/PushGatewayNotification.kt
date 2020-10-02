@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SygnalNotification(
+internal data class PushGatewayNotification(
         @Json(name = "event_id")
         val eventId: String,
 
@@ -28,5 +28,5 @@ internal data class SygnalNotification(
          * Required. This is an array of devices that the notification should be sent to.
          */
         @Json(name = "devices")
-        val devices: List<SygnalDevice>
+        val devices: List<PushGatewayDevice>
 )
