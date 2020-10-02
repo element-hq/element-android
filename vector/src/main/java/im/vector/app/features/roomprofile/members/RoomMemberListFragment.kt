@@ -21,6 +21,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -72,10 +74,25 @@ class RoomMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
+        setupSearchView()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
         viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
             invalidateOptionsMenu()
         }
+    }
+
+    private fun setupSearchView() {
+        searchView.isVisible = true
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.handle(RoomMemberListAction.FilterMemberList(newText))
+                return true
+            }
+        })
     }
 
     override fun onDestroyView() {

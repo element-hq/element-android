@@ -53,6 +53,18 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        style="@style/VectorSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:queryHint="@string/search_hint"
+        app:layout_constraintTop_toBottomOf="@id/roomSettingsToolbar"
+        android:background="@null" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -61,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomSettingsToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:listitem="@layout/item_profile_action" />
 
     <include layout="@layout/merge_overlay_waiting_view" />

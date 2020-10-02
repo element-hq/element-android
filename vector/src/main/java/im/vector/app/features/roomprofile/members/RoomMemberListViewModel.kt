@@ -188,6 +188,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
+            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
         }.exhaustive
     }
 
@@ -200,5 +201,29 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     callback = NoOpMatrixCallback()
             )
         }
+    }
+
+    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) = withState { state ->
+        if (action.searchTerm.isBlank()) {
+            setState { copy(filteredRoomMemberSummaries = null) }
+            return@withState
+        }
+        val roomMemberSummaries = state.roomMemberSummaries.invoke()
+        roomMemberSummaries
+                ?.mapNotNull { (powerLevelCategory, roomMemberList) ->
+                    roomMemberList
+                            .filter { it.displayName?.contains(action.searchTerm).orFalse() || it.userId.contains(action.searchTerm) }
+                            .takeIf { it.isNotEmpty() }
+                            ?.let { filteredMemberList ->
+                                Pair(powerLevelCategory, filteredMemberList)
+                            }
+                }
+                ?.also { filteredRoomMemberSummaries ->
+                    setState {
+                        copy(
+                                filteredRoomMemberSummaries = filteredRoomMemberSummaries
+                        )
+                    }
+                }
     }
 }

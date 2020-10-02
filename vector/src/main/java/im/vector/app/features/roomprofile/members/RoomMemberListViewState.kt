@@ -31,6 +31,7 @@ data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val filteredRoomMemberSummaries: RoomMemberSummaries? = null,
         val threePidInvites: Async<List<Event>> = Uninitialized,
         val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
         val actionsPermissions: ActionPermissions = ActionPermissions()

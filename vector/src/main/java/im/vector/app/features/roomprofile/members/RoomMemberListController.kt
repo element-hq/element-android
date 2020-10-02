@@ -53,7 +53,9 @@ class RoomMemberListController @Inject constructor(
     }
 
     override fun buildModels(data: RoomMemberListViewState?) {
-        val roomMembersByPowerLevel = data?.roomMemberSummaries?.invoke() ?: return
+        data ?: return
+
+        val roomMembersByPowerLevel = data.filteredRoomMemberSummaries ?: data.roomMemberSummaries.invoke() ?: return
         val threePidInvites = data.threePidInvites().orEmpty()
         var threePidInvitesDone = threePidInvites.isEmpty()
 
