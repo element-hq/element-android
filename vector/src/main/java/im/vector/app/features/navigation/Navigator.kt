@@ -109,4 +109,6 @@ interface Navigator {
                         view: View,
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
+
+    fun openSearch(context: Context, roomId: String)
 }

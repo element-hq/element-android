@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.session.room.tags.DefaultTagsService
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimelineService
 import org.matrix.android.sdk.internal.session.room.typing.DefaultTypingService
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultUploadsService
+import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
@@ -59,7 +60,8 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
                                                       private val taskExecutor: TaskExecutor,
-                                                      private val sendStateTask: SendStateTask) :
+                                                      private val sendStateTask: SendStateTask,
+                                                      private val searchTask: SearchTask) :
         RoomFactory {
 
     override fun create(roomId: String): Room {
@@ -81,7 +83,8 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 roomMembersService = membershipServiceFactory.create(roomId),
                 roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
                 taskExecutor = taskExecutor,
-                sendStateTask = sendStateTask
+                sendStateTask = sendStateTask,
+                searchTask = searchTask
         )
     }
 }

@@ -628,6 +628,7 @@
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
     <string name="tab_title_search_files">FILES</string>
+    <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
 
     <!-- Room recents -->
     <string name="room_recents_join">JOIN</string>
