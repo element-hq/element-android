@@ -203,27 +203,11 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
     }
 
-    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) = withState { state ->
-        if (action.searchTerm.isBlank()) {
-            setState { copy(filteredRoomMemberSummaries = null) }
-            return@withState
+    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) = withState {
+        setState {
+            copy(
+                    filter = action.searchTerm
+            )
         }
-        val roomMemberSummaries = state.roomMemberSummaries.invoke()
-        roomMemberSummaries
-                ?.mapNotNull { (powerLevelCategory, roomMemberList) ->
-                    roomMemberList
-                            .filter { it.displayName?.contains(action.searchTerm).orFalse() || it.userId.contains(action.searchTerm) }
-                            .takeIf { it.isNotEmpty() }
-                            ?.let { filteredMemberList ->
-                                Pair(powerLevelCategory, filteredMemberList)
-                            }
-                }
-                ?.also { filteredRoomMemberSummaries ->
-                    setState {
-                        copy(
-                                filteredRoomMemberSummaries = filteredRoomMemberSummaries
-                        )
-                    }
-                }
     }
 }
