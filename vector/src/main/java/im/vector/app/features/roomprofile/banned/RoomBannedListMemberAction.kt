@@ -22,4 +22,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class RoomBannedListMemberAction : VectorViewModelAction {
     data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
     data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
+    data class Filter(val filter: String) : RoomBannedListMemberAction()
 }

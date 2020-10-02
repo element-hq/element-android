@@ -623,6 +623,7 @@
     <!-- Search -->
     <string name="search_hint">Search</string>
     <string name="search_members_hint">Filter room members</string>
+    <string name="search_banned_user_hint">Filter banned users</string>
     <string name="search_no_results">No results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
