@@ -82,7 +82,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        searchView.isVisible = true
+        searchViewAppBarLayout.isVisible = true
         searchView.queryHint = getString(R.string.search_members_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
