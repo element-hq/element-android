@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.pushers.sygnal
 
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.session.pushers.SygnalFailure
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -27,7 +28,8 @@ internal interface SygnalNotifyTask : Task<SygnalNotifyTask.Params, Unit> {
     data class Params(
             val url: String,
             val appId: String,
-            val pushKey: String
+            val pushKey: String,
+            val eventId: String
     )
 }
 
@@ -47,6 +49,7 @@ internal class DefaultSygnalNotifyTask @Inject constructor(
             apiCall = sygnalApi.notify(
                     SygnalNotifyBody(
                             SygnalNotification(
+                                    eventId = params.eventId,
                                     devices = listOf(
                                             SygnalDevice(
                                                     params.appId,
@@ -59,7 +62,7 @@ internal class DefaultSygnalNotifyTask @Inject constructor(
         }
 
         if (response.rejectedPushKey.contains(params.pushKey)) {
-            throw IllegalStateException("Failure")
+            throw SygnalFailure.PusherRejected
         }
     }
 }

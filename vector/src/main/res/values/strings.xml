@@ -752,6 +752,7 @@
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_success">The application is receiving PUSH, you should see a notification.</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Failed to receive push. Solution could be to reinstall the application.</string>
+    <string name="settings_troubleshoot_test_push_notification_content">You are receiving PUSH!</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>

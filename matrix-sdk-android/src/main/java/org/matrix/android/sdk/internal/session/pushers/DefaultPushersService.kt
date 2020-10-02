@@ -50,9 +50,10 @@ internal class DefaultPushersService @Inject constructor(
     override fun testPush(url: String,
                           appId: String,
                           pushkey: String,
+                          eventId: String,
                           callback: MatrixCallback<Unit>) {
         sygnalNotifyTask
-                .configureWith(SygnalNotifyTask.Params(url, appId, pushkey)) {
+                .configureWith(SygnalNotifyTask.Params(url, appId, pushkey, eventId)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

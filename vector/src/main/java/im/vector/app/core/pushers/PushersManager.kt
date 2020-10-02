@@ -41,6 +41,7 @@ class PushersManager @Inject constructor(
                 stringProvider.getString(R.string.pusher_http_url),
                 stringProvider.getString(R.string.pusher_app_id),
                 pushKey,
+                TEST_EVENT_ID,
                 callback
         )
     }
@@ -65,5 +66,9 @@ class PushersManager @Inject constructor(
     fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
         currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id), callback)
+    }
+
+    companion object {
+        const val TEST_EVENT_ID = "\$THIS_IS_A_FAKE_EVENT_ID"
     }
 }

@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.pushers.sygnal
+package org.matrix.android.sdk.api.session.pushers
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.failure.Failure
 
-@JsonClass(generateAdapter = true)
-internal data class SygnalNotification(
-        @Json(name = "event_id")
-        val eventId: String,
-
-        /**
-         * Required. This is an array of devices that the notification should be sent to.
-         */
-        @Json(name = "devices")
-        val devices: List<SygnalDevice>
-)
+sealed class SygnalFailure : Failure.FeatureFailure() {
+    object PusherRejected : SygnalFailure()
+}

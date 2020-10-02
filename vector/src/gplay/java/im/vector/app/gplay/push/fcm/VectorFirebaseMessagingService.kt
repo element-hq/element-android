@@ -75,6 +75,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage) {
+        // Diagnostic Push
+        if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {
+            // Display the notification right now
+            notificationDrawerManager.displayDiagnosticNotification()
+            return
+        }
+
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return

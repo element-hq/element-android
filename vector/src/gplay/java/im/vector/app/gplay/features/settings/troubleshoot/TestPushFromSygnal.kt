@@ -17,11 +17,13 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.pushers.SygnalFailure
 import javax.inject.Inject
 
 /**
@@ -29,6 +31,7 @@ import javax.inject.Inject
  */
 class TestPushFromSygnal @Inject constructor(private val context: AppCompatActivity,
                                              private val stringProvider: StringProvider,
+                                             private val errorFormatter: ErrorFormatter,
                                              private val pushersManager: PushersManager)
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
@@ -39,7 +42,11 @@ class TestPushFromSygnal @Inject constructor(private val context: AppCompatActiv
         }
         pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
+                description = if (failure is SygnalFailure.PusherRejected) {
+                    stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
+                } else {
+                    errorFormatter.toHumanReadable(failure)
+                }
                 status = TestStatus.FAILED
             }
 
