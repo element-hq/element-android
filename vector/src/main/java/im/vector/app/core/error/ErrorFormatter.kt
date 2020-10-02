@@ -45,15 +45,12 @@ class DefaultErrorFormatter @Inject constructor(
                 when (throwable.ioException) {
                     is SocketTimeoutException     ->
                         stringProvider.getString(R.string.error_network_timeout)
-                    is UnknownHostException       ->
-                        // Invalid homeserver?
-                        // TODO Check network state, airplane mode, etc.
-                        stringProvider.getString(R.string.login_error_unknown_host)
                     is SSLPeerUnverifiedException ->
                         stringProvider.getString(R.string.login_error_ssl_peer_unverified)
                     is SSLException               ->
                         stringProvider.getString(R.string.login_error_ssl_other)
                     else                          ->
+                        // TODO Check network state, airplane mode, etc.
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
