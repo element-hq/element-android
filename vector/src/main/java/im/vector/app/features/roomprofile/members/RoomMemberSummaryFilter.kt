@@ -25,7 +25,7 @@ class RoomMemberSummaryFilter @Inject constructor() : Predicate<RoomMemberSummar
     var filter: String = ""
 
     override fun test(roomMemberSummary: RoomMemberSummary): Boolean {
-        if (filter.isBlank()) {
+        if (filter.isEmpty()) {
             // No filter
             return true
         }

@@ -203,7 +203,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
     }
 
-    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) = withState {
+    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) {
         setState {
             copy(
                     filter = action.searchTerm
