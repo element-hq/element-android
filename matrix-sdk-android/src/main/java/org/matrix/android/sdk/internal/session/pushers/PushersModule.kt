@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.internal.session.notification.DefaultProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.notification.DefaultPushRuleService
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
+import org.matrix.android.sdk.internal.session.pushers.sygnal.DefaultSygnalNotifyTask
+import org.matrix.android.sdk.internal.session.pushers.sygnal.SygnalNotifyTask
 import org.matrix.android.sdk.internal.session.room.notification.DefaultSetRoomNotificationStateTask
 import org.matrix.android.sdk.internal.session.room.notification.SetRoomNotificationStateTask
 import retrofit2.Retrofit
@@ -86,4 +88,7 @@ internal abstract class PushersModule {
 
     @Binds
     abstract fun bindProcessEventForPushTask(task: DefaultProcessEventForPushTask): ProcessEventForPushTask
+
+    @Binds
+    abstract fun bindSygnalNotifyTask(task: DefaultSygnalNotifyTask): SygnalNotifyTask
 }

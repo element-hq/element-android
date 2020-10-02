@@ -67,6 +67,19 @@ interface PushersService {
                       withEventIdOnly: Boolean): UUID
 
     /**
+     * Directly ask Sygnal to send a push to this device
+     * @param url the Sygnal url (full path)
+     * @param appId the application id
+     * @param pushkey the FCM token
+     * @param callback callback to know if Sygnal has accepted the request. In this case, the app should receive a Push with the provided data (TODO)
+     *
+     */
+    fun testPush(url: String,
+                 appId: String,
+                 pushkey: String,
+                 callback: MatrixCallback<Unit>)
+
+    /**
      * Remove the http pusher
      */
     fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable

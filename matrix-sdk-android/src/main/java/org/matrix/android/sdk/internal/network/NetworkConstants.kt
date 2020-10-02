@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.network
 
 internal object NetworkConstants {
-
+    // Homeserver
     private const val URI_API_PREFIX_PATH = "_matrix/client"
     const val URI_API_PREFIX_PATH_ = "$URI_API_PREFIX_PATH/"
     const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
@@ -31,5 +31,9 @@ internal object NetworkConstants {
     const val URI_IDENTITY_PREFIX_PATH = "_matrix/identity/v2"
     const val URI_IDENTITY_PATH_V2 = "$URI_IDENTITY_PREFIX_PATH/"
 
+    // Sygnal
+    const val URI_SYGNAL_PREFIX_PATH = "_matrix/push/v1/"
+
+    // Integration
     const val URI_INTEGRATION_MANAGER_PATH = "_matrix/integrations/v1/"
 }

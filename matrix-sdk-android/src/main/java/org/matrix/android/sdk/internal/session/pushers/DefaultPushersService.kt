@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.pushers.sygnal.SygnalNotifyTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -41,9 +42,21 @@ internal class DefaultPushersService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
+        private val sygnalNotifyTask: SygnalNotifyTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
+
+    override fun testPush(url: String,
+                          appId: String,
+                          pushkey: String,
+                          callback: MatrixCallback<Unit>) {
+        sygnalNotifyTask
+                .configureWith(SygnalNotifyTask.Params(url, appId, pushkey)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
 
     override fun refreshPushers() {
         getPusherTask

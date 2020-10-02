@@ -749,6 +749,10 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
 
+    <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
+    <string name="settings_troubleshoot_test_push_loop_success">The application is receiving PUSH, you should see a notification.</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Failed to receive push. Solution could be to reinstall the application.</string>
+
     <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifications Service is not running.\nTry to restart the application.</string>

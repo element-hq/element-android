@@ -34,6 +34,16 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
+    fun testPush(pushKey: String, callback: MatrixCallback<Unit>) {
+        val currentSession = activeSessionHolder.getActiveSession()
+
+        currentSession.testPush(
+                stringProvider.getString(R.string.pusher_http_url),
+                stringProvider.getString(R.string.pusher_app_id),
+                pushKey,
+                callback
+        )
+    }
 
     fun registerPusherWithFcmKey(pushKey: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
