@@ -59,7 +59,14 @@ class RoomMemberListController @Inject constructor(
         roomMemberSummaryFilter.filter = data.filter
 
         val roomMembersByPowerLevel = data.roomMemberSummaries.invoke() ?: return
-        val threePidInvites = data.threePidInvites().orEmpty()
+        val threePidInvites = data.threePidInvites()
+                ?.filter { event ->
+                    event.content.toModel<RoomThirdPartyInviteContent>()
+                            ?.takeIf {
+                                data.filter.isEmpty() || it.displayName.contains(data.filter, ignoreCase = true)
+                            } != null
+                }
+                .orEmpty()
         var threePidInvitesDone = threePidInvites.isEmpty()
 
         for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
@@ -100,12 +107,13 @@ class RoomMemberListController @Inject constructor(
                         }
                     }
             )
-            if (powerLevelCategory == RoomMemberListCategories.INVITE) {
+            if (powerLevelCategory == RoomMemberListCategories.INVITE && !threePidInvitesDone) {
                 // Display the threepid invite after the regular invite
                 dividerItem {
                     id("divider_threepidinvites")
                     color(dividerColor)
                 }
+
                 buildThreePidInvites(data)
                 threePidInvitesDone = true
             }
