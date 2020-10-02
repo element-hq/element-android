@@ -24,6 +24,7 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
+        private val shortcutCreator: ShortcutCreator,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomProfileViewState>() {
 
@@ -44,6 +46,7 @@ class RoomProfileController @Inject constructor(
         fun onBannedMemberListClicked()
         fun onNotificationsClicked()
         fun onUploadsClicked()
+        fun createShortcut()
         fun onSettingsClicked()
         fun onLeaveRoomClicked()
         fun onRoomIdClicked()
@@ -114,6 +117,16 @@ class RoomProfileController @Inject constructor(
                 icon = R.drawable.ic_room_profile_uploads,
                 action = { callback?.onUploadsClicked() }
         )
+        if (shortcutCreator.canCreateShortcut()) {
+            buildProfileAction(
+                    id = "shortcut",
+                    title = stringProvider.getString(R.string.room_settings_add_homescreen_shortcut),
+                    dividerColor = dividerColor,
+                    editable = false,
+                    icon = R.drawable.ic_add_to_home_screen_24dp,
+                    action = { callback?.createShortcut() }
+            )
+        }
         buildProfileAction(
                 id = "leave",
                 title = stringProvider.getString(if (roomSummary.isDirect) {
@@ -124,6 +137,7 @@ class RoomProfileController @Inject constructor(
                 dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
+                icon = R.drawable.ic_room_actions_leave,
                 editable = false,
                 action = { callback?.onLeaveRoomClicked() }
         )

@@ -664,7 +664,7 @@
     <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
-    <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
+    <string name="room_settings_add_homescreen_shortcut">Add to Home screen</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>

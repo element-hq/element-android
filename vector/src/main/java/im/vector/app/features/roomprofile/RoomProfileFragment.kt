@@ -27,6 +27,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -115,6 +116,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
                 RoomProfileViewEvents.OnChangeAvatarSuccess -> dismissLoadingDialog()
+                is RoomProfileViewEvents.OnShortcutReady    -> addShortcut(it)
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -230,6 +232,16 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onUploadsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomUploads)
+    }
+
+    override fun createShortcut() {
+        // Ask the view model to prepare it...
+        roomProfileViewModel.handle(RoomProfileAction.CreateShortcut)
+    }
+
+    private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {
+        // ... and propose the user to add it
+        ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
     }
 
     override fun onLeaveRoomClicked() {
