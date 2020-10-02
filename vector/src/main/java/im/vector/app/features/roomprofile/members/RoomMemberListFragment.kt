@@ -109,7 +109,7 @@ class RoomMemberListFragment @Inject constructor(
         navigator.openRoomMemberProfile(roomMember.userId, roomId = roomProfileArgs.roomId, context = requireActivity())
     }
 
-    override fun onThreePidInvites(event: Event) {
+    override fun onThreePidInviteClicked(event: Event) {
         // Display a dialog to revoke invite if power level is high enough
         val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
         val stateKey = event.stateKey ?: return

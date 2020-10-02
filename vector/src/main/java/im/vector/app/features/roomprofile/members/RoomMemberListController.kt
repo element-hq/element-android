@@ -42,7 +42,7 @@ class RoomMemberListController @Inject constructor(
 
     interface Callback {
         fun onRoomMemberClicked(roomMember: RoomMemberSummary)
-        fun onThreePidInvites(event: Event)
+        fun onThreePidInviteClicked(event: Event)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -134,7 +134,7 @@ class RoomMemberListController @Inject constructor(
                                             avatarRenderer(avatarRenderer)
                                             editable(data.actionsPermissions.canRevokeThreePidInvite)
                                             clickListener { _ ->
-                                                callback?.onThreePidInvites(event)
+                                                callback?.onThreePidInviteClicked(event)
                                             }
                                         }
                                     }
