@@ -1851,11 +1851,11 @@
     <string name="block_user">"IGNORE USER"</string>
 
     <string name="content_reported_title">"Content reported"</string>
-    <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
+    <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
     <string name="content_reported_as_spam_title">"Reported as spam"</string>
-    <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
+    <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
     <string name="content_reported_as_inappropriate_title">"Reported as inappropriate"</string>
-    <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
+    <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
 
     <string name="permissions_rationale_msg_keys_backup_export">Element needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
 
