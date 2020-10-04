@@ -78,17 +78,24 @@
             android:visibility="gone"
             tools:visibility="visible">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                style="@style/VectorSearchView"
+            <!-- Use an extra container for the margin to be taken into account by the layout_scrollFlags -->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@null"
-                android:minHeight="0dp"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                tools:queryHint="@string/search_hint" />
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchView"
+                    style="@style/VectorSearchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@null"
+                    android:minHeight="0dp"
+                    tools:queryHint="@string/search_hint" />
+
+            </FrameLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
