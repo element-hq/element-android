@@ -305,7 +305,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 navigator.openRoomsFiltering(this)
                 return true
             }
-            R.id.menu_home_setting ->{
+            R.id.menu_home_setting    -> {
                 navigator.openSettings(this)
                 return true
             }
