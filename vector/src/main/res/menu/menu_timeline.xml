@@ -15,6 +15,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/invite"
+        android:title="@string/invite"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/video_call"
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"

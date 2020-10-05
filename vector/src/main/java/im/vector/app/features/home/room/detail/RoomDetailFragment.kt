@@ -656,6 +656,10 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
                 true
             }
+            R.id.invite              -> {
+                navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
+                true
+            }
             R.id.timeline_setting    -> {
                 navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
                 true
