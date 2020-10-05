@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import javax.inject.Inject
@@ -43,7 +44,8 @@ import javax.inject.Inject
 class RoomMemberListFragment @Inject constructor(
         val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) : VectorBaseFragment(), RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
@@ -94,6 +96,13 @@ class RoomMemberListFragment @Inject constructor(
                 return true
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (roomDetailPendingActionStore.data != null) {
+            vectorBaseActivity.finish()
+        }
     }
 
     override fun onDestroyView() {

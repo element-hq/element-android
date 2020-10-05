@@ -88,4 +88,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
+    data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
 }
