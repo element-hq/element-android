@@ -65,8 +65,12 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doSafeWork(params: Params): Result {
         Timber.v("## SendEvent: Start Encrypt work for event ${params.eventId}")
-        SendPerformanceProfiler.startStage(params.eventId, SendPerformanceProfiler.Stages.ENCRYPT_WORKER)
+
+        SendPerformanceProfiler.startStage(params.eventId, SendPerformanceProfiler.Stages.GET_UP_TO_DATE_ECHO)
         val localEvent = localEchoRepository.getUpToDateEcho(params.eventId)
+        SendPerformanceProfiler.stopStage(params.eventId, SendPerformanceProfiler.Stages.GET_UP_TO_DATE_ECHO)
+
+        SendPerformanceProfiler.startStage(params.eventId, SendPerformanceProfiler.Stages.ENCRYPT_WORKER)
         if (localEvent?.eventId == null) {
             return Result.success()
         }

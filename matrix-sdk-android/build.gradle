@@ -56,11 +56,19 @@ android {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
             // Set to BODY instead of NONE to enable logging
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level." + project.property("vector.httpLogLevel")
+
+            buildConfigField "String", "PERF_TRACING_SERVER", project.property("vector.perfTracingServer")
+            buildConfigField "String", "PERF_TRACING_SERVER_TOKEN", project.property("vector.perfTracingServerToken")
+            buildConfigField "String", "PERF_TRACING_SERVER_USER", project.property("vector.perfTracingServerUser")
         }
 
         release {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
+
+            buildConfigField "String", "PERF_TRACING_SERVER", ""
+            buildConfigField "String", "PERF_TRACING_SERVER_TOKEN", ""
+            buildConfigField "String", "PERF_TRACING_SERVER_USER", ""
         }
     }
 

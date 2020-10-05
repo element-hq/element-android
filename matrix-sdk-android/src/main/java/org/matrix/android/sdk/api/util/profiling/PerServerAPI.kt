@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.send
+package org.matrix.android.sdk.api.util.profiling
 
-import org.matrix.android.sdk.api.util.profiling.BaseProfiler
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-object SendPerformanceProfiler: BaseProfiler<SendPerformanceProfiler.Stages>() {
+interface PerServerAPI {
 
-    enum class Stages() {
-        LOCAL_ECHO,
-        ENCRYPT_WORKER,
-        ENCRYPT_GET_USERS,
-        ENCRYPT_SET_ROOM_ENCRYPTION,
-        ENCRYPT_MEGOLM_SHARE_KEYS,
-        ENCRYPT_MEGOLM_ENCRYPT,
-        SEND_WORKER,
-        GET_UP_TO_DATE_ECHO,
-        SEND_REQUEST,
-        RECEIVED_IN_SYNC
-    }
-
-    override val name = "SEND_PROFILER"
+    @POST("api/result")
+    fun postReport(@Body profileResult: ProfileReport): Call<Unit>
 }

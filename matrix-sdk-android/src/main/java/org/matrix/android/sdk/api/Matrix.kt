@@ -21,11 +21,13 @@ import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import com.nikitakozlov.pury.Pury
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.util.profiling.PerfServerPlugin
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.UserAgentHolder
@@ -48,6 +50,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
+    @Inject internal lateinit var perfServerPlugin: PerfServerPlugin
 
     init {
         Monarchy.init(context)
@@ -56,6 +59,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
             WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+
+        if (!BuildConfig.PERF_TRACING_SERVER.isNullOrEmpty()) {
+            Pury.addPlugin("per-server", perfServerPlugin)
+        }
     }
 
     fun getUserAgent() = userAgentHolder.userAgent

@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.util.profiling.PerfModule
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
@@ -44,6 +45,7 @@ import java.io.File
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
+    PerfModule::class,
     NoOpTestModule::class
 ])
 @MatrixScope
