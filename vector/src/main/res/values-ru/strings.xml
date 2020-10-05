@@ -1227,7 +1227,7 @@
     <string name="settings_noisy_notifications_preferences">Настроить шумные уведомления</string>
     <string name="settings_call_notifications_preferences">Настроить уведомления о вызовах</string>
     <string name="settings_silent_notifications_preferences">Настроить беззвучные уведомления</string>
-    <string name="settings_system_preferences_summary">Выберать цвет светодиода, вибрацию, звук…</string>
+    <string name="settings_system_preferences_summary">Выбрать цвет светодиода, вибрацию, звук…</string>
 
 
     <string name="settings_cryptography_manage_keys">Управление криптографическими ключами</string>
