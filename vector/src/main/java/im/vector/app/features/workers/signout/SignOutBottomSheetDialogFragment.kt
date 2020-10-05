@@ -138,6 +138,10 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
             }
         }
 
+        signOutButton.action = {
+            onSignOut?.run()
+        }
+
         exportManuallyButton.action = {
             withState(viewModel) { state ->
                 queryExportKeys(state.userId, QUERY_EXPORT_KEYS)
