@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.net.ssl.SSLException
 import javax.net.ssl.SSLPeerUnverifiedException

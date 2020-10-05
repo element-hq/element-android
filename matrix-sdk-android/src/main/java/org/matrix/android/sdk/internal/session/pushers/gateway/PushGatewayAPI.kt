@@ -29,4 +29,3 @@ internal interface PushGatewayAPI {
     @POST(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
     fun notify(@Body body: PushGatewayNotifyBody): Call<PushGatewayNotifyResponse>
 }
-
