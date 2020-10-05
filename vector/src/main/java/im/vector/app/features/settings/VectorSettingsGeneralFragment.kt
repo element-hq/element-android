@@ -259,8 +259,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
-                SignOutUiWorker(requireActivity())
-                        .perform(requireContext())
+                SignOutUiWorker(requireActivity()).perform()
             }
 
             false

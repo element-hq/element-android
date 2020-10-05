@@ -13,6 +13,7 @@ Improvements 🙌:
  - Create home shortcut for any room (#1525)
  - Add a menu item to open the setting in room list and in room (#2171)
  - Add a menu item in the timeline as a shortcut to invite user (#2171)
+ - Drawer: move settings access and add sign out action (#2171)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
