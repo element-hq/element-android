@@ -81,7 +81,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <im.vector.app.features.workers.signout.SignoutBottomSheetActionButton
+    <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/setupRecoveryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
         app:textColor="?riotx_text_secondary" />
 
 
-    <im.vector.app.features.workers.signout.SignoutBottomSheetActionButton
+    <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/setupMegolmBackupButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         app:leftIcon="@drawable/backup_keys"
         app:textColor="?riotx_text_secondary" />
 
-    <im.vector.app.features.workers.signout.SignoutBottomSheetActionButton
+    <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/exportManuallyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
         app:leftIcon="@drawable/ic_download"
         app:textColor="?riotx_text_secondary" />
 
-    <im.vector.app.features.workers.signout.SignoutBottomSheetActionButton
+    <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/exitAnywayButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
         app:leftIcon="@drawable/ic_material_leave"
         app:textColor="@color/riotx_destructive_accent" />
 
-    <im.vector.app.features.workers.signout.SignoutBottomSheetActionButton
+    <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/signOutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
