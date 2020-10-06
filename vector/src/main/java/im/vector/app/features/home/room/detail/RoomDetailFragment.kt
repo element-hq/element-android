@@ -673,7 +673,19 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
+            R.id.search              -> {
+                handleSearchAction()
+                true
+            }
             else                     -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun handleSearchAction() {
+        if (session.getRoom(roomDetailArgs.roomId)?.isEncrypted() == false) {
+            navigator.openSearch(requireContext(), roomDetailArgs.roomId)
+        } else {
+            showDialogWithMessage(getString(R.string.search_is_not_supported_in_e2e_room))
         }
     }
 

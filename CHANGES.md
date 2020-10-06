@@ -2,6 +2,7 @@ Changes in Element 1.0.9 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Search messages in a room - phase 1 (#2110)
  - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
 
 Improvements 🙌:
@@ -11,6 +12,7 @@ Improvements 🙌:
  - Allow user to reset cross signing if he has no way to recover (#2052)
  - Create home shortcut for any room (#1525)
  - Can't confirm email due to killing by Android (#2021)
+ - Filter room member (and banned users) by name (#2184)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
@@ -20,7 +22,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Search messages in a room by using Session.searchService() or Room.search()
 
 Build 🧱:
  - Use Update Gradle Wrapper Action

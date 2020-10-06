@@ -188,6 +188,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
+            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
         }.exhaustive
     }
 
@@ -198,6 +199,14 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     stateKey = action.stateKey,
                     body = emptyMap(),
                     callback = NoOpMatrixCallback()
+            )
+        }
+    }
+
+    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) {
+        setState {
+            copy(
+                    filter = action.searchTerm
             )
         }
     }
