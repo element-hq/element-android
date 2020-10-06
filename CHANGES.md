@@ -17,6 +17,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
  - Fix Splash layout on small screens
+ - Invalid popup when pressing back (#1635)
 
 Translations 🗣:
  -

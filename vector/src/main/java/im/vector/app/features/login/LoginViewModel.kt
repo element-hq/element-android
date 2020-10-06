@@ -419,10 +419,15 @@ class LoginViewModel @AssistedInject constructor(
         loginConfig = action.loginConfig
 
         // If there is a pending email validation continue on this step
-        currentThreePid?.let {
-            if (isRegistrationStarted) {
-                handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
+        try {
+            if (registrationWizard?.isRegistrationStarted == true) {
+                currentThreePid?.let {
+                    handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
+                }
             }
+        } catch (e: Throwable) {
+            // NOOP. API is designed to use wizards in a login/registration flow,
+            // but we need to check the state anyway.
         }
     }
 
@@ -679,6 +684,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
+        authenticationService.reset()
         session.configureAndStart(applicationContext)
         setState {
             copy(
@@ -747,7 +753,7 @@ class LoginViewModel @AssistedInject constructor(
 
             override fun onSuccess(data: LoginFlowResult) {
                 when (data) {
-                    is LoginFlowResult.Success            -> {
+                    is LoginFlowResult.Success -> {
                         val loginMode = when {
                             // SSO login is taken first
                             data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
