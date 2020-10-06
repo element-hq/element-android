@@ -173,7 +173,7 @@ class RoomMemberProfileController @Inject constructor(
 
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
-            if (membership == Membership.JOIN) {
+            if (state.hasReadReceipt) {
                 buildProfileAction(
                         id = "read_receipt",
                         editable = false,
