@@ -15,14 +15,21 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model
+package org.matrix.android.sdk.internal.network.parsing
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
+import okhttp3.TlsVersion
 
-@JsonClass(generateAdapter = true)
-data class Signed(
-        @Json(name = "token") val token: String,
-        @Json(name = "signatures") val signatures: Any,
-        @Json(name = "mxid") val mxid: String
-)
+internal class TlsVersionMoshiAdapter {
+
+    @ToJson
+    fun toJson(tlsVersion: TlsVersion): String {
+        return tlsVersion.javaName
+    }
+
+    @FromJson
+    fun fromJson(tlsVersionString: String): TlsVersion {
+        return TlsVersion.forJavaName(tlsVersionString)
+    }
+}

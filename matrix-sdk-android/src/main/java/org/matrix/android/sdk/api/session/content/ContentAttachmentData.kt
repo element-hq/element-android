@@ -20,9 +20,11 @@ package org.matrix.android.sdk.api.session.content
 import android.net.Uri
 import android.os.Parcelable
 import androidx.exifinterface.media.ExifInterface
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class ContentAttachmentData(
         val size: Long = 0,
         val duration: Long? = 0,
@@ -32,10 +34,11 @@ data class ContentAttachmentData(
         val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         val name: String? = null,
         val queryUri: Uri,
-        private val mimeType: String?,
+        val mimeType: String?,
         val type: Type
 ) : Parcelable {
 
+    @JsonClass(generateAdapter = false)
     enum class Type {
         FILE,
         IMAGE,

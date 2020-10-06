@@ -15,14 +15,21 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model
+package org.matrix.android.sdk.internal.network.parsing
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
+import okhttp3.CipherSuite
 
-@JsonClass(generateAdapter = true)
-data class Signed(
-        @Json(name = "token") val token: String,
-        @Json(name = "signatures") val signatures: Any,
-        @Json(name = "mxid") val mxid: String
-)
+internal class CipherSuiteMoshiAdapter {
+
+    @ToJson
+    fun toJson(cipherSuite: CipherSuite): String {
+        return cipherSuite.javaName
+    }
+
+    @FromJson
+    fun fromJson(cipherSuiteString: String): CipherSuite {
+        return CipherSuite.forJavaName(cipherSuiteString)
+    }
+}
