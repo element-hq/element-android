@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list
+package im.vector.app.features.roomprofile.members
 
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import io.reactivex.functions.Predicate
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import javax.inject.Inject
 
-class RoomListNameFilter @Inject constructor() : Predicate<RoomSummary> {
-
+class RoomMemberSummaryFilter @Inject constructor() : Predicate<RoomMemberSummary> {
     var filter: String = ""
 
-    override fun test(roomSummary: RoomSummary): Boolean {
+    override fun test(roomMemberSummary: RoomMemberSummary): Boolean {
         if (filter.isEmpty()) {
             // No filter
             return true
         }
 
-        return roomSummary.displayName.contains(filter, ignoreCase = true)
+        return roomMemberSummary.displayName?.contains(filter, ignoreCase = true).orFalse()
+                // We should maybe exclude the domain from the userId
+                || roomMemberSummary.userId.contains(filter, ignoreCase = true)
     }
 }

@@ -19,6 +19,8 @@ package im.vector.app.features.roomprofile.banned
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -53,6 +55,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
+        setupSearchView()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 
         viewModel.observeViewEvents {
@@ -82,6 +85,21 @@ class RoomBannedMemberListFragment @Inject constructor(
     override fun onDestroyView() {
         recyclerView.cleanup()
         super.onDestroyView()
+    }
+
+    private fun setupSearchView() {
+        searchViewAppBarLayout.isVisible = true
+        searchView.queryHint = getString(R.string.search_banned_user_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.handle(RoomBannedListMemberAction.Filter(newText))
+                return true
+            }
+        })
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->

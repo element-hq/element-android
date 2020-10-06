@@ -21,6 +21,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -72,10 +74,26 @@ class RoomMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
+        setupSearchView()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
         viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
             invalidateOptionsMenu()
         }
+    }
+
+    private fun setupSearchView() {
+        searchViewAppBarLayout.isVisible = true
+        searchView.queryHint = getString(R.string.search_members_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.handle(RoomMemberListAction.FilterMemberList(newText))
+                return true
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -92,7 +110,7 @@ class RoomMemberListFragment @Inject constructor(
         navigator.openRoomMemberProfile(roomMember.userId, roomId = roomProfileArgs.roomId, context = requireActivity())
     }
 
-    override fun onThreePidInvites(event: Event) {
+    override fun onThreePidInviteClicked(event: Event) {
         // Display a dialog to revoke invite if power level is high enough
         val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
         val stateKey = event.stateKey ?: return

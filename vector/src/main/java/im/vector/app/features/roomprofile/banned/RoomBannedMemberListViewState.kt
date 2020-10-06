@@ -27,6 +27,7 @@ data class RoomBannedMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val bannedMemberSummaries: Async<List<RoomMemberSummary>> = Uninitialized,
+        val filter: String = "",
         val onGoingModerationAction: List<String> = emptyList(),
         val canUserBan: Boolean = false
 ) : MvRxState {
