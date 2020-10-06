@@ -17,12 +17,6 @@
 package im.vector.app.features.roomprofile.members
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
-import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -31,17 +25,24 @@ import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
         fun onRoomMemberClicked(roomMember: RoomMemberSummary)
-        fun onThreePidInvites(event: Event)
+        fun onThreePidInviteClicked(event: Event)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -53,17 +54,29 @@ class RoomMemberListController @Inject constructor(
     }
 
     override fun buildModels(data: RoomMemberListViewState?) {
-        val roomMembersByPowerLevel = data?.roomMemberSummaries?.invoke() ?: return
-        val threePidInvites = data.threePidInvites().orEmpty()
+        data ?: return
+
+        roomMemberSummaryFilter.filter = data.filter
+
+        val roomMembersByPowerLevel = data.roomMemberSummaries.invoke() ?: return
+        val threePidInvites = data.threePidInvites()
+                ?.filter { event ->
+                    event.content.toModel<RoomThirdPartyInviteContent>()
+                            ?.takeIf {
+                                data.filter.isEmpty() || it.displayName.contains(data.filter, ignoreCase = true)
+                            } != null
+                }
+                .orEmpty()
         var threePidInvitesDone = threePidInvites.isEmpty()
 
         for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
-            if (roomMemberList.isEmpty()) {
+            val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it) }
+            if (filteredRoomMemberList.isEmpty()) {
                 continue
             }
 
             if (powerLevelCategory == RoomMemberListCategories.USER && !threePidInvitesDone) {
-                // If there is not regular invite, display threepid invite before the regular user
+                // If there is no regular invite, display threepid invite before the regular user
                 buildProfileSection(
                         stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
                 )
@@ -75,7 +88,7 @@ class RoomMemberListController @Inject constructor(
             buildProfileSection(
                     stringProvider.getString(powerLevelCategory.titleRes)
             )
-            roomMemberList.join(
+            filteredRoomMemberList.join(
                     each = { _, roomMember ->
                         profileMatrixItem {
                             id(roomMember.userId)
@@ -94,12 +107,13 @@ class RoomMemberListController @Inject constructor(
                         }
                     }
             )
-            if (powerLevelCategory == RoomMemberListCategories.INVITE) {
+            if (powerLevelCategory == RoomMemberListCategories.INVITE && !threePidInvitesDone) {
                 // Display the threepid invite after the regular invite
                 dividerItem {
                     id("divider_threepidinvites")
                     color(dividerColor)
                 }
+
                 buildThreePidInvites(data)
                 threePidInvitesDone = true
             }
@@ -128,7 +142,7 @@ class RoomMemberListController @Inject constructor(
                                             avatarRenderer(avatarRenderer)
                                             editable(data.actionsPermissions.canRevokeThreePidInvite)
                                             clickListener { _ ->
-                                                callback?.onThreePidInvites(event)
+                                                callback?.onThreePidInviteClicked(event)
                                             }
                                         }
                                     }

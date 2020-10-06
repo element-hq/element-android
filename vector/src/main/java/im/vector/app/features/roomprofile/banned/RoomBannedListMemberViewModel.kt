@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -90,6 +91,15 @@ class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initia
         when (action) {
             is RoomBannedListMemberAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
             is RoomBannedListMemberAction.UnBanUser -> unBanUser(action.roomMemberSummary)
+            is RoomBannedListMemberAction.Filter    -> handleFilter(action)
+        }.exhaustive
+    }
+
+    private fun handleFilter(action: RoomBannedListMemberAction.Filter) {
+        setState {
+            copy(
+                    filter = action.filter
+            )
         }
     }
 
