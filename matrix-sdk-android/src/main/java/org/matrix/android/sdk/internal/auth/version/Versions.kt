@@ -105,6 +105,6 @@ private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
 private fun Versions.getMaxVersion(): HomeServerVersion {
     return supportedVersions
             ?.mapNotNull { HomeServerVersion.parse(it) }
-            ?.max()
+            ?.maxOrNull()
             ?: HomeServerVersion.r0_0_0
 }
