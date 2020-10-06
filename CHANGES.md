@@ -33,6 +33,7 @@ Build 🧱:
  - Upgrade kotlin version from `1.3.72` to `1.4.10` and kotlin coroutines version from `1.3.8` to `1.3.9`
  - Upgrade build tools from `3.5.3` to `4.0.1`
  - Upgrade com.google.gms:google-services from `4.3.2` to `4.3.4`
+ - Upgrade Moshi to `1.11.0`, Dagger to `2.29.1`, Epoxy to `4.1.0`
 
 Other changes:
  - Added registration/verification automated UI tests
