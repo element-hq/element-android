@@ -20,6 +20,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -46,8 +47,8 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents {
             when (it) {
                 is DeviceListBottomSheetViewEvents.Verify -> {

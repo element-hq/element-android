@@ -16,6 +16,7 @@
 package im.vector.app.features.home.room.detail.timeline.action
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.fragmentViewModel
@@ -51,8 +52,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         recyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false, disableItemAnimation = true)
         messageActionsEpoxyController.listener = this

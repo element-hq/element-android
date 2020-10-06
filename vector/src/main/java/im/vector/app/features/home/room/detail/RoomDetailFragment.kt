@@ -371,6 +371,10 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
             }.exhaustive
         }
+
+        if(savedInstanceState == null) {
+            handleShareData()
+        }
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -480,20 +484,17 @@ class RoomDetailFragment @Inject constructor(
         navigator.openRoom(vectorBaseActivity, action.roomId)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState == null) {
-            when (val sharedData = roomDetailArgs.sharedData) {
-                is SharedData.Text        -> {
-                    roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(sharedData.text, fromSharing = true))
-                }
-                is SharedData.Attachments -> {
-                    // open share edition
-                    onContentAttachmentsReady(sharedData.attachmentData)
-                }
-                null                      -> Timber.v("No share data to process")
-            }.exhaustive
-        }
+    private fun handleShareData() {
+        when (val sharedData = roomDetailArgs.sharedData) {
+            is SharedData.Text        -> {
+                roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(sharedData.text, fromSharing = true))
+            }
+            is SharedData.Attachments -> {
+                // open share edition
+                onContentAttachmentsReady(sharedData.attachmentData)
+            }
+            null                      -> Timber.v("No share data to process")
+        }.exhaustive
     }
 
     override fun onDestroyView() {
