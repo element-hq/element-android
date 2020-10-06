@@ -31,7 +31,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
 
-class SignoutBottomSheetActionButton @JvmOverloads constructor(
+class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -80,11 +80,11 @@ class SignoutBottomSheetActionButton @JvmOverloads constructor(
         inflate(context, R.layout.item_signout_action, this)
         ButterKnife.bind(this)
 
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SignoutBottomSheetActionButton, 0, 0)
-        title = typedArray.getString(R.styleable.SignoutBottomSheetActionButton_actionTitle) ?: ""
-        leftIcon = typedArray.getDrawable(R.styleable.SignoutBottomSheetActionButton_leftIcon)
-        tint = typedArray.getColor(R.styleable.SignoutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, android.R.attr.textColor))
-        textColor = typedArray.getColor(R.styleable.SignoutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, android.R.attr.textColor))
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton, 0, 0)
+        title = typedArray.getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""
+        leftIcon = typedArray.getDrawable(R.styleable.SignOutBottomSheetActionButton_leftIcon)
+        tint = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, android.R.attr.textColor))
+        textColor = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, android.R.attr.textColor))
 
         typedArray.recycle()
 

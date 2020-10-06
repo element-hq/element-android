@@ -12,12 +12,16 @@ Improvements 🙌:
  - Allow user to reset cross signing if he has no way to recover (#2052)
  - Create home shortcut for any room (#1525)
  - Can't confirm email due to killing by Android (#2021)
+ - Add a menu item to open the setting in room list and in room (#2171)
+ - Add a menu item in the timeline as a shortcut to invite user (#2171)
+ - Drawer: move settings access and add sign out action (#2171)
  - Filter room member (and banned users) by name (#2184)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
  - Fix Splash layout on small screens
  - Invalid popup when pressing back (#1635)
+ - Simplifies draft management and should fix bunch of draft issues (#952, #683)
 
 Translations 🗣:
  -

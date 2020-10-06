@@ -37,7 +37,12 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
  * Depending on the state the bottom toolbar will change (icons/preview/actions...)
  */
 sealed class SendMode(open val text: String) {
-    data class REGULAR(override val text: String) : SendMode(text)
+    data class REGULAR(
+            override val text: String,
+            val fromSharing: Boolean,
+            // This is necessary for forcing refresh on selectSubscribe
+            private val ts: Long = System.currentTimeMillis()
+    ) : SendMode(text)
     data class QUOTE(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
     data class EDIT(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
     data class REPLY(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
@@ -58,7 +63,7 @@ data class RoomDetailViewState(
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
         val typingMessage: String? = null,
-        val sendMode: SendMode = SendMode.REGULAR(""),
+        val sendMode: SendMode = SendMode.REGULAR("", false),
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,
@@ -67,6 +72,7 @@ data class RoomDetailViewState(
         val canShowJumpToReadMarker: Boolean = true,
         val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
         val canSendMessage: Boolean = true,
+        val canInvite: Boolean = true,
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true
 ) : MvRxState {

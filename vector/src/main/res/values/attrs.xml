@@ -60,7 +60,7 @@
         <attr name="forceStartPadding" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="SignoutBottomSheetActionButton">
+    <declare-styleable name="SignOutBottomSheetActionButton">
         <attr name="iconTint" format="color" />
         <attr name="actionTitle"/>
         <attr name="leftIcon" />

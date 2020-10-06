@@ -101,8 +101,11 @@ class RxRoom(private val room: Room) {
         return room.getEventReadReceiptsLive(eventId).asObservable()
     }
 
-    fun liveDrafts(): Observable<List<UserDraft>> {
-        return room.getDraftsLive().asObservable()
+    fun liveDraft(): Observable<Optional<UserDraft>> {
+        return room.getDraftLive().asObservable()
+                .startWithCallable {
+                    room.getDraft().toOptional()
+                }
     }
 
     fun liveNotificationState(): Observable<RoomNotificationState> {
