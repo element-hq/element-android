@@ -301,7 +301,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     // =======================================
     private fun saveRecoveryKeyToUri(os: OutputStream) = withState { state ->
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
+            runCatching {
                 os.use {
                     os.write((state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey() ?: "").toByteArray())
                 }

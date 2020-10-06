@@ -126,7 +126,7 @@ class KeyRequestHandler @Inject constructor(
                     // can we get more info on this device?
                     session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
                         postAlert(context, userId, deviceId, true, deviceInfo, it)
-                    } ?: kotlin.run {
+                    } ?: run {
                         postAlert(context, userId, deviceId, true, deviceInfo)
                     }
                 } else {

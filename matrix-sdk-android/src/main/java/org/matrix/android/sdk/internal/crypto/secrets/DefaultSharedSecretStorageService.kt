@@ -371,7 +371,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                kotlin.runCatching {
+                runCatching {
                     // decrypt from recovery key
                     withOlmDecryption { olmPkDecryption ->
                         olmPkDecryption.setPrivateKey(keySpec.privateKey)
@@ -390,7 +390,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                kotlin.runCatching {
+                runCatching {
                     decryptAesHmacSha2(keySpec, name, secretContent)
                 }.foldToCallback(callback)
             }

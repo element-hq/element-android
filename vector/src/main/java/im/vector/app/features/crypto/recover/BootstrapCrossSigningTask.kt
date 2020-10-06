@@ -139,7 +139,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             null,
                             it
                     )
-                } ?: kotlin.run {
+                } ?: run {
                     ssssService.generateKey(
                             UUID.randomUUID().toString(),
                             params.keySpec,
