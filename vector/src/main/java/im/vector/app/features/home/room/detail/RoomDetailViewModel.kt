@@ -180,11 +180,13 @@ class RoomDetailViewModel @AssistedInject constructor(
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
                     val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
                     setState {
                         copy(
                                 canSendMessage = canSendMessage,
+                                canInvite = canInvite,
                                 isAllowedToManageWidgets = isAllowedToManageWidgets,
                                 isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
                         )
@@ -538,6 +540,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 // For now always disable when not in developer mode, worker cancellation is not working properly
                 timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
             R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.timeline_setting    -> true
+            R.id.invite              -> state.canInvite
             R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps    -> true
             R.id.voice_call,

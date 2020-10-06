@@ -11,6 +11,9 @@ Improvements 🙌:
  - Small optimisation of scrolling experience in timeline (#2114)
  - Allow user to reset cross signing if he has no way to recover (#2052)
  - Create home shortcut for any room (#1525)
+ - Add a menu item to open the setting in room list and in room (#2171)
+ - Add a menu item in the timeline as a shortcut to invite user (#2171)
+ - Drawer: move settings access and add sign out action (#2171)
  - Filter room member (and banned users) by name (#2184)
 
 Bugfix 🐛:
