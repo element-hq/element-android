@@ -105,6 +105,7 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_edit"
         android:visibility="gone"
+        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
         app:layout_constraintStart_toEndOf="@+id/roomNameView"
