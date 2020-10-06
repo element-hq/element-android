@@ -417,6 +417,13 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: LoginAction.InitWith) {
         loginConfig = action.loginConfig
+
+        // If there is a pending email validation continue on this step
+        currentThreePid?.let {
+            if (isRegistrationStarted) {
+                handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
+            }
+        }
     }
 
     private fun handleResetPassword(action: LoginAction.ResetPassword) {

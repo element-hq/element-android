@@ -10,6 +10,7 @@ Improvements 🙌:
  - Small optimisation of scrolling experience in timeline (#2114)
  - Allow user to reset cross signing if he has no way to recover (#2052)
  - Create home shortcut for any room (#1525)
+ - Can't confirm email due to killing by Android (#2021)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
