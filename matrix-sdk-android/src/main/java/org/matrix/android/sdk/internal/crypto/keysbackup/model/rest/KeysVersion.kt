@@ -17,7 +17,12 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class KeysVersion(
         // the keys backup version
-        var version: String? = null
+        @Json(name = "version")
+        val version: String? = null
 )
