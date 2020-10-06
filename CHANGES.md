@@ -32,6 +32,7 @@ Build 🧱:
  - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
  - Upgrade kotlin version from `1.3.72` to `1.4.10` and kotlin coroutines version from `1.3.8` to `1.3.9`
  - Upgrade build tools from `3.5.3` to `4.0.1`
+ - Upgrade com.google.gms:google-services from `4.3.2` to `4.3.4`
 
 Other changes:
  - Added registration/verification automated UI tests
