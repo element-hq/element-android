@@ -87,8 +87,6 @@ interface Navigator {
                     activityResultLauncher: ActivityResultLauncher<Intent>,
                     pinMode: PinMode)
 
-    fun openPinCode(activity: Activity, pinMode: PinMode, activityResultLauncher: ActivityResultLauncher<Intent>)
-
     fun openTerms(context: Context,
                   activityResultLauncher: ActivityResultLauncher<Intent>,
                   serviceType: TermsService.ServiceType,

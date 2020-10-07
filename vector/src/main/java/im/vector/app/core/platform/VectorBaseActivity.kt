@@ -18,7 +18,6 @@ package im.vector.app.core.platform
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
@@ -206,7 +205,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
         pinLocker.getLiveState().observeNotNull(this) {
             if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
-                navigator.openPinCode(this, PinMode.AUTH, pinStartForActivityResult)
+                navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
         sessionListener = vectorComponent.sessionListener()

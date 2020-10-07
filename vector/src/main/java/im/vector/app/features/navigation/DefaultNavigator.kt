@@ -310,11 +310,6 @@ class DefaultNavigator @Inject constructor(
         activityResultLauncher.launch(intent)
     }
 
-    override fun openPinCode(activity: Activity, pinMode: PinMode, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val intent = PinActivity.newIntent(activity, PinArgs(pinMode))
-        activityResultLauncher.launch(intent)
-    }
-
     override fun openMediaViewer(activity: Activity,
                                  roomId: String,
                                  mediaData: AttachmentData,
