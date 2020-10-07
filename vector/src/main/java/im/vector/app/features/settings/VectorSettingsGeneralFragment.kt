@@ -51,6 +51,7 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.getSizeOfFiles
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -390,13 +391,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 }.show()
     }
 
+    private val takePhotoActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            onAvatarTypeSelected(true)
+        }
+    }
+
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
-                        if (allGranted) {
-                            onAvatarTypeSelected(true)
-                        }
-                    }) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoActivityResultLauncher)) {
                 avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
         } else {

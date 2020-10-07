@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -95,6 +96,12 @@ fun logPermissionStatuses(context: Context) {
     }
 }
 
+fun Fragment.registerForPermissionsResult(allGranted: (Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
+    return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        allGranted.invoke(result.keys.all { result[it] == true })
+    }
+}
+
 /**
  * See [.checkPermissions]
  *
@@ -106,21 +113,21 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      activity: Activity,
                      requestCode: Int,
                      @StringRes rationaleMessage: Int = 0): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, null, requestCode, rationaleMessage)
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, requestCode, rationaleMessage)
 }
 
 /**
  * See [.checkPermissions]
  *
  * @param permissionsToBeGrantedBitMap
- * @param fragment
+ * @param activityResultLauncher       from the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
-                     fragment: Fragment,
-                     @StringRes rationaleMessage: Int = 0,
-                     allGranted: (Boolean) -> Unit): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, allGranted, 0, rationaleMessage)
+                     activity: Activity,
+                     activityResultLauncher: ActivityResultLauncher<Array<String>>,
+                     @StringRes rationaleMessage: Int = 0): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, activityResultLauncher, 0, rationaleMessage)
 }
 
 /**
@@ -138,23 +145,19 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  *
  * @param permissionsToBeGrantedBitMap the permissions bit map to be granted
  * @param activity                     the calling Activity that is requesting the permissions (or fragment parent)
- * @param fragment                     the calling fragment that is requesting the permissions
+ * @param activityResultLauncher       from the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
-                             activity: Activity?,
-                             fragment: Fragment?,
-                             allGranted: ((Boolean) -> Unit)?,
+                             activity: Activity,
+                             activityResultLauncher: ActivityResultLauncher<Array<String>>?,
                              requestCode: Int,
                              @StringRes rationaleMessage: Int
 ): Boolean {
     var isPermissionGranted = false
 
     // sanity check
-    if (null == activity) {
-        Timber.w("## checkPermissions(): invalid input data")
-        isPermissionGranted = false
-    } else if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
+    if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
         isPermissionGranted = true
     } else if (PERMISSIONS_FOR_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
@@ -224,9 +227,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (permissionsListToBeGranted.isNotEmpty()) {
-                            fragment?.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-                                allGranted?.invoke(result.keys.all { result[it] == true })
-                            }
+                            activityResultLauncher
                                     ?.launch(permissionsListToBeGranted.toTypedArray())
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
@@ -267,9 +268,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             .show()
                     */
                 } else {
-                    fragment?.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-                        allGranted?.invoke(result.keys.all { result[it] == true })
-                    }
+                    activityResultLauncher
                             ?.launch(permissionsArrayToBeGranted)
                             ?: run {
                                 ActivityCompat.requestPermissions(activity, permissionsArrayToBeGranted, requestCode)

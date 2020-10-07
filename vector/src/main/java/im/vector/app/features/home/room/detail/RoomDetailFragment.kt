@@ -99,6 +99,7 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.core.utils.toast
@@ -782,40 +783,35 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(it)
+            }
+        } else {
+            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
+
     private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
         roomDetailViewModel.pendingAction = startCallAction
         if (isVideoCall) {
             if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
-                            this,
-                            R.string.permissions_rationale_msg_camera_and_audio) { allGranted ->
-                        if (allGranted) {
-                            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                                roomDetailViewModel.pendingAction = null
-                                roomDetailViewModel.handle(it)
-                            }
-                        } else {
-                            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
-                            cleanUpAfterPermissionNotGranted()
-                        }
-                    }) {
+                            requireActivity(),
+                            startCallActivityResultLauncher,
+                            R.string.permissions_rationale_msg_camera_and_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
         } else {
             if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
-                            this,
-                            R.string.permissions_rationale_msg_record_audio) { allGranted ->
-                        if (allGranted) {
-                            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                                roomDetailViewModel.pendingAction = null
-                                roomDetailViewModel.handle(it)
-                            }
-                        } else {
-                            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
-                            cleanUpAfterPermissionNotGranted()
-                        }
-                    }) {
+                            requireActivity(),
+                            startCallActivityResultLauncher,
+                            R.string.permissions_rationale_msg_record_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
@@ -1005,6 +1001,18 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val writingFileActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            val pendingUri = roomDetailViewModel.pendingUri
+            if (pendingUri != null) {
+                roomDetailViewModel.pendingUri = null
+                sendUri(pendingUri)
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
     private fun setupComposer() {
         autoCompleter.setup(composerLayout.composerEditText)
 
@@ -1037,17 +1045,7 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment) { allGranted ->
-                            if (allGranted) {
-                                val pendingUri = roomDetailViewModel.pendingUri
-                                if (pendingUri != null) {
-                                    roomDetailViewModel.pendingUri = null
-                                    sendUri(pendingUri)
-                                }
-                            } else {
-                                cleanUpAfterPermissionNotGranted()
-                            }
-                        }) {
+                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), writingFileActivityResultLauncher)) {
                     sendUri(contentUri)
                 } else {
                     roomDetailViewModel.pendingUri = contentUri
@@ -1556,18 +1554,20 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
+    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            sharedActionViewModel.pendingAction?.let {
+                handleActions(it)
+                sharedActionViewModel.pendingAction = null
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this) { allGranted ->
-                    if (allGranted) {
-                        sharedActionViewModel.pendingAction?.let {
-                            handleActions(it)
-                            sharedActionViewModel.pendingAction = null
-                        }
-                    } else {
-                        cleanUpAfterPermissionNotGranted()
-                    }
-                }) {
+                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), saveActionActivityResultLauncher)) {
             sharedActionViewModel.pendingAction = action
             return
         }
@@ -1805,18 +1805,20 @@ class RoomDetailFragment @Inject constructor(
 
 // AttachmentTypeSelectorView.Callback
 
+    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            val pendingType = attachmentsHelper.pendingType
+            if (pendingType != null) {
+                attachmentsHelper.pendingType = null
+                launchAttachmentProcess(pendingType)
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (checkPermissions(type.permissionsBit, this) { allGranted ->
-                    if (allGranted) {
-                        val pendingType = attachmentsHelper.pendingType
-                        if (pendingType != null) {
-                            attachmentsHelper.pendingType = null
-                            launchAttachmentProcess(pendingType)
-                        }
-                    } else {
-                        cleanUpAfterPermissionNotGranted()
-                    }
-                }) {
+        if (checkPermissions(type.permissionsBit, requireActivity(), typeSelectedActivityResultLauncher)) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type

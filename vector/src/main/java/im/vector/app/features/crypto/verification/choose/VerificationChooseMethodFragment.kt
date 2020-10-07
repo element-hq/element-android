@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
@@ -73,12 +74,14 @@ class VerificationChooseMethodFragment @Inject constructor(
                 state.pendingRequest.invoke()?.transactionId ?: ""))
     }
 
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            doOpenQRCodeScanner()
+        }
+    }
+
     override fun openCamera() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
-                    if (allGranted) {
-                        doOpenQRCodeScanner()
-                    }
-                }) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
             doOpenQRCodeScanner()
         }
     }

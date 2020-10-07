@@ -48,6 +48,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.copyToClipboard
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
@@ -283,14 +284,16 @@ class RoomProfileFragment @Inject constructor(
                 .show()
     }
 
+    private val takePhotoActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            onAvatarTypeSelected(true)
+        }
+    }
+
     private var avatarCameraUri: Uri? = null
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
-                        if (allGranted) {
-                            onAvatarTypeSelected(true)
-                        }
-                    }) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoActivityResultLauncher)) {
                 avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
         } else {
