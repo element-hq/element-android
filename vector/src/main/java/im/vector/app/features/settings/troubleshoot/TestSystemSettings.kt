@@ -15,6 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import im.vector.app.R
@@ -29,7 +31,7 @@ class TestSystemSettings @Inject constructor(private val context: AppCompatActiv
                                              private val stringProvider: StringProvider)
     : TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_system_settings_success)
             quickFix = null
@@ -39,7 +41,7 @@ class TestSystemSettings @Inject constructor(private val context: AppCompatActiv
             quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
                 override fun doFix() {
                     if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
-                    startNotificationSettingsIntent(context, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                    startNotificationSettingsIntent(context, activityResultLauncher)
                 }
             }
             status = TestStatus.FAILED

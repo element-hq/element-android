@@ -68,15 +68,11 @@ fun isAnimationDisabled(context: Context): Boolean {
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @TargetApi(Build.VERSION_CODES.M)
-fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?, requestCode: Int) {
+fun requestDisablingBatteryOptimization(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     intent.data = Uri.parse("package:" + activity.packageName)
-    if (fragment != null) {
-        fragment.startActivityForResult(intent, requestCode)
-    } else {
-        activity.startActivityForResult(intent, requestCode)
-    }
+    activityResultLauncher.launch(intent)
 }
 
 // ==============================================================================================================
@@ -101,7 +97,7 @@ fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = t
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: Int) {
+fun startNotificationSettingsIntent(activity: AppCompatActivity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
@@ -111,7 +107,7 @@ fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: In
         intent.putExtra("app_package", activity.packageName)
         intent.putExtra("app_uid", activity.applicationInfo?.uid)
     }
-    activity.startActivityForResult(intent, requestCode)
+    activityResultLauncher.launch(intent)
 }
 
 /**
@@ -127,11 +123,11 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
     fragment.startActivity(intent)
 }
 
-fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
+fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-        context.startActivityForResult(intent, requestCode)
+        activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }

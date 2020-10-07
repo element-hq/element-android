@@ -17,7 +17,6 @@ package im.vector.app.features.settings
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.rageshake.BugReporter
@@ -76,7 +76,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         }
 
         mRunButton.debouncedClicks {
-            testManager?.retry()
+            testManager?.retry(testStartForActivityResult)
         }
         startUI()
     }
@@ -134,7 +134,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
             }
         }
         mRecyclerView.adapter = testManager?.adapter
-        testManager?.runDiagnostic()
+        testManager?.runDiagnostic(testStartForActivityResult)
     }
 
     override fun onDestroyView() {
@@ -142,12 +142,14 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == NotificationTroubleshootTestManager.REQ_CODE_FIX) {
-            testManager?.retry()
-            return
+    private val testStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            retry()
         }
-        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun retry() {
+        testManager?.retry(testStartForActivityResult)
     }
 
     override fun onDetach() {

@@ -175,19 +175,17 @@ fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityRes
             activity = requireActivity(),
             activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = 0
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
 
-fun Activity.queryExportKeys(userId: String, requestCode: Int) {
+fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     selectTxtFileToWrite(
             activity = this,
-            activityResultLauncher = null,
+            activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = requestCode
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

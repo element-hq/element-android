@@ -15,8 +15,10 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import kotlin.properties.Delegates
 
@@ -41,7 +43,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
         test.manager = this
     }
 
-    fun runDiagnostic() {
+    fun runDiagnostic(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (isCancelled) return
         currentTestIndex = 0
         val handler = Handler(Looper.getMainLooper())
@@ -60,7 +62,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
                             // Cosmetic: Start with a small delay for UI/UX reason (better animation effect) for non async tests
                             handler.postDelayed({
                                 if (fragment.isAdded) {
-                                    troubleshootTest.perform()
+                                    troubleshootTest.perform(activityResultLauncher)
                                 }
                             }, 600)
                         } else {
@@ -72,18 +74,18 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
             }
         }
         if (fragment.isAdded) {
-            testList.firstOrNull()?.perform()
+            testList.firstOrNull()?.perform(activityResultLauncher)
         }
     }
 
-    fun retry() {
+    fun retry(activityResultLauncher: ActivityResultLauncher<Intent>) {
         for (test in testList) {
             test.cancel()
             test.description = null
             test.quickFix = null
             test.status = TroubleshootTest.TestStatus.NOT_STARTED
         }
-        runDiagnostic()
+        runDiagnostic(activityResultLauncher)
     }
 
     fun cancel() {
@@ -91,9 +93,5 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
         for (test in testList) {
             test.cancel()
         }
-    }
-
-    companion object {
-        const val REQ_CODE_FIX = 9099
     }
 }

@@ -60,6 +60,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.utils.toast
@@ -68,7 +69,6 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.pin.UnlockedActivity
@@ -206,7 +206,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
         pinLocker.getLiveState().observeNotNull(this) {
             if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
-                navigator.openPinCode(this, PinMode.AUTH)
+                navigator.openPinCode(this, PinMode.AUTH, pinStartForActivityResult)
             }
         }
         sessionListener = vectorComponent.sessionListener()
@@ -313,22 +313,20 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         uiDisposables.dispose()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    Timber.v("Pin ok, unlock app")
-                    pinLocker.unlock()
+    private val pinStartForActivityResult = registerStartForActivityResult { activityResult ->
+        when (activityResult.resultCode) {
+            Activity.RESULT_OK -> {
+                Timber.v("Pin ok, unlock app")
+                pinLocker.unlock()
 
-                    // Cancel any new started PinActivity, after a screen rotation for instance
-                    finishActivity(PinActivity.PIN_REQUEST_CODE)
-                }
-                else               -> {
-                    if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
-                        // Remove the task, to be sure that PIN code will be requested when resumed
-                        finishAndRemoveTask()
-                    }
+                // Cancel any new started PinActivity, after a screen rotation for instance
+                // FIXME I cannot use this anymore :/
+                // finishActivity(PinActivity.PIN_REQUEST_CODE)
+            }
+            else               -> {
+                if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
+                    // Remove the task, to be sure that PIN code will be requested when resumed
+                    finishAndRemoveTask()
                 }
             }
         }

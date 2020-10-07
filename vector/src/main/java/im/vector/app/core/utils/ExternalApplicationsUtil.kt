@@ -441,10 +441,9 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
         defaultFileName: String,
-        chooserHint: String,
-        requestCode: Int
+        chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -453,11 +452,7 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (activityResultLauncher != null) {
-            activityResultLauncher.launch(chooserIntent)
-        } else {
-            activity.startActivityForResult(chooserIntent, requestCode)
-        }
+        activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }

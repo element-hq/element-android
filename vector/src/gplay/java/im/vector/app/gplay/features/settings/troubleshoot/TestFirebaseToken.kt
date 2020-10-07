@@ -15,6 +15,8 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.app.R
@@ -32,7 +34,7 @@ import javax.inject.Inject
 class TestFirebaseToken @Inject constructor(private val context: AppCompatActivity,
                                             private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING
         try {
             FirebaseInstanceId.getInstance().instanceId
@@ -48,7 +50,7 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
                                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
                                     override fun doFix() {
-                                        startAddGoogleAccountIntent(context, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                                        startAddGoogleAccountIntent(context, activityResultLauncher)
                                     }
                                 }
                             } else {

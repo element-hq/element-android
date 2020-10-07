@@ -115,6 +115,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         handleSystemPreference()
     }
 
+    private val batteryStartForActivityResult = registerStartForActivityResult {
+        // Noop
+    }
+
+
     // BackgroundSyncModeChooserDialog.InteractionListener
     override fun onOptionSelected(mode: BackgroundSyncMode) {
         // option has change, need to act
@@ -123,9 +128,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
             if (!isIgnoringBatteryOptimizations(requireContext())) {
-                requestDisablingBatteryOptimization(requireActivity(),
-                        this@VectorSettingsNotificationPreferenceFragment,
-                        REQUEST_BATTERY_OPTIMIZATION)
+                requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult, 0)
             }
         }
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
@@ -335,9 +338,5 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                                 }
                             })
                 }
-    }
-
-    companion object {
-        private const val REQUEST_BATTERY_OPTIMIZATION = 500
     }
 }
