@@ -31,7 +31,7 @@ class RainbowGenerator @Inject constructor() {
 
     fun generate(text: String): String {
         val split = text.splitEmoji()
-        val frequency = 360.0 / split.size
+        val frequency = 2 * Math.PI / split.size
 
         return split
                 .mapIndexed { idx, letter ->
@@ -48,21 +48,21 @@ class RainbowGenerator @Inject constructor() {
     }
 
     private fun generateAB(hue: Double, chroma: Float): Pair<Double, Double> {
-        val radians = Math.toRadians(hue)
-
-        val a = chroma * 127 * cos(radians)
-        val b = chroma * 127 * sin(radians)
+        val a = chroma * 127 * cos(hue)
+        val b = chroma * 127 * sin(hue)
 
         return Pair(a, b)
     }
 
     private fun labToRGB(l: Int, a: Double, b: Double): RgbColor {
+        // Convert CIELAB to CIEXYZ (D65)
         var y = (l + 16) / 116.0
         val x = adjustXYZ(y + a / 500) * 0.9505
         val z = adjustXYZ(y - b / 200) * 1.0890
 
         y = adjustXYZ(y)
 
+        // Linear transformation from CIEXYZ to RGB
         val red = 3.24096994 * x - 1.53738318 * y - 0.49861076 * z
         val green = -0.96924364 * x + 1.8759675 * y + 0.04155506 * z
         val blue = 0.05563008 * x - 0.20397696 * y + 1.05697151 * z
@@ -78,6 +78,7 @@ class RainbowGenerator @Inject constructor() {
     }
 
     private fun gammaCorrection(value: Double): Double {
+        // Non-linear transformation to sRGB
         if (value <= 0.0031308) {
             return 12.92 * value
         }
