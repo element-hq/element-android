@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -136,32 +137,37 @@ fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null, requestCode: Int? = null) {
+fun startSharePlainTextIntent(fragment: Fragment,
+                              activityResultLauncher: ActivityResultLauncher<Intent>?,
+                              chooserTitle: String?,
+                              text: String,
+                              subject: String? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)
+    val intent = Intent.createChooser(share, chooserTitle)
     try {
-        if (requestCode != null) {
-            fragment.startActivityForResult(Intent.createChooser(share, chooserTitle), requestCode)
+        if (activityResultLauncher != null) {
+            activityResultLauncher.launch(intent)
         } else {
-            fragment.startActivity(Intent.createChooser(share, chooserTitle))
+            fragment.startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }
 }
 
-fun startImportTextFromFileIntent(fragment: Fragment, requestCode: Int) {
+fun startImportTextFromFileIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
     }
-    if (intent.resolveActivity(fragment.requireActivity().packageManager) != null) {
-        fragment.startActivityForResult(intent, requestCode)
+    if (intent.resolveActivity(context.packageManager) != null) {
+        activityResultLauncher.launch(intent)
     } else {
-        fragment.activity?.toast(R.string.error_no_external_application_found)
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

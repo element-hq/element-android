@@ -17,7 +17,6 @@
 package im.vector.app.features.crypto.quads
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -25,6 +24,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -61,7 +61,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                 }
                 .disposeOnDestroyView()
 
-        ssss_key_use_file.debouncedClicks { startImportTextFromFileIntent(this, IMPORT_FILE_REQ) }
+        ssss_key_use_file.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
 
         ssss_key_reset.clickableView.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
@@ -85,9 +85,9 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
         sharedViewModel.handle(SharedSecureStorageAction.SubmitKey(text))
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == IMPORT_FILE_REQ && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { dataURI ->
+    private val importFileStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            activityResult.data?.data?.let { dataURI ->
                 tryOrNull {
                     activity?.contentResolver?.openInputStream(dataURI)
                             ?.bufferedReader()
@@ -97,12 +97,6 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                             }
                 }
             }
-            return
         }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    companion object {
-        private const val IMPORT_FILE_REQ = 0
     }
 }

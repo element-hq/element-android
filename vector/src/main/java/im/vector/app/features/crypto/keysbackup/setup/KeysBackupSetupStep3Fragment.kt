@@ -144,10 +144,12 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_share)?.setOnClickListener {
-            startSharePlainTextIntent(this,
-                    context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
-                    recoveryKey,
-                    context?.getString(R.string.recovery_key))
+            startSharePlainTextIntent(
+                    fragment = this,
+                    activityResultLauncher = null,
+                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                    text = recoveryKey,
+                    subject = context?.getString(R.string.recovery_key))
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
         }

@@ -175,7 +175,6 @@ class BigImageViewerActivity : VectorBaseActivity() {
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
         private const val EXTRA_CAN_EDIT_IMAGE = "EXTRA_CAN_EDIT_IMAGE"
-        const val REQUEST_CODE = 1000
 
         fun newIntent(context: Context, title: String?, imageUrl: String, canEditImage: Boolean = false): Intent {
             return Intent(context, BigImageViewerActivity::class.java).apply {

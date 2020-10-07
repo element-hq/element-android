@@ -260,14 +260,19 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onShareRoomProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        startSharePlainTextIntent(
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = null,
+                text = permalink
+        )
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
         if (matrixItem.avatarUrl?.isNotEmpty() == true) {
             val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-            startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
+            bigImageStartForActivityResult.launch(intent, options)
         } else if (it.canChangeAvatar) {
             showAvatarSelector()
         }
@@ -333,14 +338,20 @@ class RoomProfileFragment @Inject constructor(
         }
     }
 
+    private val bigImageStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            activityResult.data?.let { onAvatarCropped(it.data) }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
+                UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
             }
         }
-        // TODO
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
     }
 

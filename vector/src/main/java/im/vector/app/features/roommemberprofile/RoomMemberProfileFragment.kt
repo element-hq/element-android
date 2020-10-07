@@ -284,7 +284,12 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        startSharePlainTextIntent(
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = null,
+                text = permalink
+        )
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
