@@ -119,7 +119,6 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         // Noop
     }
 
-
     // BackgroundSyncModeChooserDialog.InteractionListener
     override fun onOptionSelected(mode: BackgroundSyncMode) {
         // option has change, need to act

@@ -361,7 +361,7 @@ class RoomDetailFragment @Inject constructor(
             }.exhaustive
         }
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             handleShareData()
         }
     }
@@ -797,7 +797,6 @@ class RoomDetailFragment @Inject constructor(
             cleanUpAfterPermissionNotGranted()
         }
     }
-
 
     private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)

@@ -322,7 +322,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private val saveMegolmStartForActivityResult = registerStartForActivityResult {
         val uri = it.data?.data ?: return@registerStartForActivityResult
-        if (it.resultCode == Activity.RESULT_OK)
+        if (it.resultCode == Activity.RESULT_OK) {
             ExportKeysDialog().show(requireActivity(), object : ExportKeysDialog.ExportKeyDialogListener {
                 override fun onPassphrase(passphrase: String) {
                     displayLoadingView()
@@ -347,6 +347,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                                     })
                 }
             })
+        }
     }
 
     private val pinActivityResultLauncher = registerStartForActivityResult {

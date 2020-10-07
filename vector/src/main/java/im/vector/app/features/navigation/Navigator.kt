@@ -24,7 +24,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.media.AttachmentData
-import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity

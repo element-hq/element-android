@@ -279,7 +279,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
-    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {activityResult ->
+    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             avatarCameraUri?.let { uri ->
                 MultiPicker.get(MultiPicker.CAMERA)
@@ -291,7 +291,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {activityResult ->
+    private val attachmentImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
         val data = activityResult.data ?: return@registerStartForActivityResult
         if (activityResult.resultCode == Activity.RESULT_OK) {
             MultiPicker
