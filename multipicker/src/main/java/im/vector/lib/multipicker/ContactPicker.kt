@@ -25,7 +25,7 @@ import im.vector.lib.multipicker.entity.MultiPickerContactType
 /**
  * Contact Picker implementation
  */
-class ContactPicker(override val requestCode: Int) : Picker<MultiPickerContactType>(requestCode) {
+class ContactPicker : Picker<MultiPickerContactType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).

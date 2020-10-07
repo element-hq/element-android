@@ -30,6 +30,7 @@ import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -112,10 +113,10 @@ class BigImageViewerActivity : VectorBaseActivity() {
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
             if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this, takePhotoActivityResultLauncher)
             }
         } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
     }
 
@@ -127,30 +128,39 @@ class BigImageViewerActivity : VectorBaseActivity() {
                 .start(this)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(this, uri)
-                                ?.let {
-                                    onRoomAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(this, data)
-                            .firstOrNull()?.let {
-                                onRoomAvatarSelected(it)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+    private val takePhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            avatarCameraUri?.let { uri ->
+                MultiPicker.get(MultiPicker.CAMERA)
+                        .getTakenPhoto(this, uri)
+                        ?.let {
+                            onRoomAvatarSelected(it)
+                        }
             }
         }
+    }
+
+    private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            MultiPicker
+                    .get(MultiPicker.IMAGE)
+                    .getSelectedFiles(this, activityResult.data)
+                    .firstOrNull()?.let {
+                        onRoomAvatarSelected(it)
+                    }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

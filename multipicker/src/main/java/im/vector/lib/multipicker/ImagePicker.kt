@@ -25,7 +25,7 @@ import im.vector.lib.multipicker.utils.ImageUtils
 /**
  * Image Picker implementation
  */
-class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(requestCode) {
+class ImagePicker : Picker<MultiPickerImageType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).

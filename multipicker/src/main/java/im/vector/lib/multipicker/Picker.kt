@@ -16,7 +16,6 @@
 
 package im.vector.lib.multipicker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -27,7 +26,7 @@ import androidx.activity.result.ActivityResultLauncher
 /**
  * Abstract class to provide all types of Pickers
  */
-abstract class Picker<T>(open val requestCode: Int) {
+abstract class Picker<T> {
 
     protected var single = false
 
@@ -73,15 +72,7 @@ abstract class Picker<T>(open val requestCode: Int) {
     abstract fun createIntent(): Intent
 
     /**
-     * Start Storage Access Framework UI by using an Activity.
-     * @param activity Activity to handle onActivityResult().
-     */
-    fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }, requestCode)
-    }
-
-    /**
-     * Start Storage Access Framework UI by using a Fragment.
+     * Start Storage Access Framework UI by using a ActivityResultLauncher.
      * @param activityResultLauncher to handle the result.
      */
     fun startWith(activityResultLauncher: ActivityResultLauncher<Intent>) {

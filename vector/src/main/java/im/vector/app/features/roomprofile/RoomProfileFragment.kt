@@ -345,14 +345,15 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
             }
         }
-        // TODO handle this one (Ucrop lib)
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun onAvatarCropped(uri: Uri?) {

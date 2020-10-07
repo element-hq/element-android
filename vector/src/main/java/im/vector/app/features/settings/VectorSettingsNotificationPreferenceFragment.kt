@@ -128,7 +128,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
             if (!isIgnoringBatteryOptimizations(requireContext())) {
-                requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult, 0)
+                requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
         vectorPreferences.setFdroidSyncBackgroundMode(mode)

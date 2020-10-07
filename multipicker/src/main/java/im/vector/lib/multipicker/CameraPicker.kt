@@ -33,24 +33,10 @@ import java.util.Locale
 /**
  * Implementation of taking a photo with Camera
  */
-class CameraPicker(val requestCode: Int) {
+class CameraPicker {
 
     /**
-     * Start camera by using an Activity
-     * @param activity Activity to handle onActivityResult().
-     * @return Uri of taken photo or null if the operation is cancelled.
-     */
-    fun startWithExpectingFile(activity: Activity): Uri? {
-        val photoUri = createPhotoUri(activity)
-        val intent = createIntent().apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-        }
-        activity.startActivityForResult(intent, requestCode)
-        return photoUri
-    }
-
-    /**
-     * Start camera by using a Fragment
+     * Start camera by using a ActivityResultLauncher
      * @return Uri of taken photo or null if the operation is cancelled.
      */
     fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri? {

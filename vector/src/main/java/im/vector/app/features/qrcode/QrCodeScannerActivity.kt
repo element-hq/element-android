@@ -75,13 +75,6 @@ class QrCodeScannerActivity : VectorBaseActivity() {
         private const val EXTRA_OUT_TEXT = "EXTRA_OUT_TEXT"
         private const val EXTRA_OUT_IS_QR_CODE = "EXTRA_OUT_IS_QR_CODE"
 
-        const val QR_CODE_SCANNER_REQUEST_CODE = 429
-
-        // For test only
-        fun startForResult(activity: Activity, requestCode: Int = QR_CODE_SCANNER_REQUEST_CODE) {
-            activity.startActivityForResult(Intent(activity, QrCodeScannerActivity::class.java), requestCode)
-        }
-
         fun startForResult(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
             activityResultLauncher.launch(Intent(activity, QrCodeScannerActivity::class.java))
         }

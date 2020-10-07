@@ -25,7 +25,7 @@ import im.vector.lib.multipicker.entity.MultiPickerVideoType
 /**
  * Video Picker implementation
  */
-class VideoPicker(override val requestCode: Int) : Picker<MultiPickerVideoType>(requestCode) {
+class VideoPicker : Picker<MultiPickerVideoType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).

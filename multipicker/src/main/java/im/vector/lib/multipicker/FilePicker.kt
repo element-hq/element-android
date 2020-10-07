@@ -24,7 +24,7 @@ import im.vector.lib.multipicker.entity.MultiPickerFileType
 /**
  * Implementation of selecting any type of files
  */
-class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(requestCode) {
+class FilePicker : Picker<MultiPickerFileType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).

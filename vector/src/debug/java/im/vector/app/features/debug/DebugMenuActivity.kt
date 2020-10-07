@@ -28,6 +28,7 @@ import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
@@ -196,33 +197,29 @@ class DebugMenuActivity : VectorBaseActivity() {
     }
 
     private fun doScanQRCode() {
-        QrCodeScannerActivity.startForResult(this)
+        QrCodeScannerActivity.startForResult(this, qrStartForActivityResult)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
-                    toast("QrCode: " + QrCodeScannerActivity.getResultText(data) + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(data))
+    private val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            toast("QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data)
+                    + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data))
 
-                    // Also update the current QR Code (reverse operation)
-                    // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
-                    val result = QrCodeScannerActivity.getResultText(data)!!
+            // Also update the current QR Code (reverse operation)
+            // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
+            val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-                    val qrCodeData = result.toQrCodeData()
-                    Timber.e("qrCodeData: $qrCodeData")
+            val qrCodeData = result.toQrCodeData()
+            Timber.e("qrCodeData: $qrCodeData")
 
-                    if (result.length != buffer.size) {
-                        Timber.e("Error, length are not the same")
-                    } else {
-                        // Convert to ByteArray
-                        val byteArrayResult = result.toByteArray(Charsets.ISO_8859_1)
-                        for (i in byteArrayResult.indices) {
-                            if (buffer[i] != byteArrayResult[i]) {
-                                Timber.e("Error for byte $i, expecting ${buffer[i]} and get ${byteArrayResult[i]}")
-                            }
-                        }
+            if (result.length != buffer.size) {
+                Timber.e("Error, length are not the same")
+            } else {
+                // Convert to ByteArray
+                val byteArrayResult = result.toByteArray(Charsets.ISO_8859_1)
+                for (i in byteArrayResult.indices) {
+                    if (buffer[i] != byteArrayResult[i]) {
+                        Timber.e("Error for byte $i, expecting ${buffer[i]} and get ${byteArrayResult[i]}")
                     }
                 }
             }

@@ -25,7 +25,7 @@ import im.vector.lib.multipicker.entity.MultiPickerAudioType
 /**
  * Audio file picker implementation
  */
-class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(requestCode) {
+class AudioPicker : Picker<MultiPickerAudioType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
