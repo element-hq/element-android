@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -105,7 +106,7 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      activity: Activity,
                      requestCode: Int,
                      @StringRes rationaleMessage: Int = 0): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, requestCode, rationaleMessage)
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, null, requestCode, rationaleMessage)
 }
 
 /**
@@ -117,9 +118,9 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      fragment: Fragment,
-                     requestCode: Int,
-                     @StringRes rationaleMessage: Int = 0): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode, rationaleMessage)
+                     @StringRes rationaleMessage: Int = 0,
+                     allGranted: (Boolean) -> Unit): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, allGranted, 0, rationaleMessage)
 }
 
 /**
@@ -143,6 +144,7 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                              activity: Activity?,
                              fragment: Fragment?,
+                             allGranted: ((Boolean) -> Unit)?,
                              requestCode: Int,
                              @StringRes rationaleMessage: Int
 ): Boolean {
@@ -222,7 +224,10 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (permissionsListToBeGranted.isNotEmpty()) {
-                            fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
+                            fragment?.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+                                allGranted?.invoke(result.keys.all { result[it] == true })
+                            }
+                                    ?.launch(permissionsListToBeGranted.toTypedArray())
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
                                     }
@@ -262,7 +267,10 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             .show()
                     */
                 } else {
-                    fragment?.requestPermissions(permissionsArrayToBeGranted, requestCode)
+                    fragment?.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+                        allGranted?.invoke(result.keys.all { result[it] == true })
+                    }
+                            ?.launch(permissionsArrayToBeGranted)
                             ?: run {
                                 ActivityCompat.requestPermissions(activity, permissionsArrayToBeGranted, requestCode)
                             }
@@ -305,43 +313,6 @@ private fun updatePermissionsToBeGranted(activity: Activity,
         }
     }
     return isRequestPermissionRequested
-}
-
-/**
- * Helper method to process [.PERMISSIONS_FOR_AUDIO_IP_CALL]
- * on onRequestPermissionsResult() methods.
- *
- * @param context      App context
- * @param grantResults permissions granted results
- * @return true if audio IP call is permitted, false otherwise
- */
-fun onPermissionResultAudioIpCall(context: Context, grantResults: IntArray): Boolean {
-    val arePermissionsGranted = allGranted(grantResults)
-
-    if (!arePermissionsGranted) {
-        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-    }
-
-    return arePermissionsGranted
-}
-
-/**
- * Helper method to process [.PERMISSIONS_FOR_VIDEO_IP_CALL]
- * on onRequestPermissionsResult() methods.
- * For video IP calls, record audio and camera permissions are both mandatory.
- *
- * @param context      App context
- * @param grantResults permissions granted results
- * @return true if video IP call is permitted, false otherwise
- */
-fun onPermissionResultVideoIpCall(context: Context, grantResults: IntArray): Boolean {
-    val arePermissionsGranted = allGranted(grantResults)
-
-    if (!arePermissionsGranted) {
-        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-    }
-
-    return arePermissionsGranted
 }
 
 /**

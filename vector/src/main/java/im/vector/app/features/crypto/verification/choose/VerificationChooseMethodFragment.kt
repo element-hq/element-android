@@ -27,8 +27,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
@@ -76,15 +74,11 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     override fun openCamera() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-            doOpenQRCodeScanner()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
+                    if (allGranted) {
+                        doOpenQRCodeScanner()
+                    }
+                }) {
             doOpenQRCodeScanner()
         }
     }

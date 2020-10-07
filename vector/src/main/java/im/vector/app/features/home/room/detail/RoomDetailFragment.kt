@@ -91,18 +91,13 @@ import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
-import im.vector.app.core.utils.onPermissionResultAudioIpCall
-import im.vector.app.core.utils.onPermissionResultVideoIpCall
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
@@ -234,11 +229,6 @@ class RoomDetailFragment @Inject constructor(
         ActiveCallView.Callback {
 
     companion object {
-
-        private const val AUDIO_CALL_PERMISSION_REQUEST_CODE = 1
-        private const val VIDEO_CALL_PERMISSION_REQUEST_CODE = 2
-        private const val SAVE_ATTACHEMENT_REQUEST_CODE = 3
-
         /**
          * Sanitize the display name.
          *
@@ -797,15 +787,35 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.pendingAction = startCallAction
         if (isVideoCall) {
             if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
-                            this, VIDEO_CALL_PERMISSION_REQUEST_CODE,
-                            R.string.permissions_rationale_msg_camera_and_audio)) {
+                            this,
+                            R.string.permissions_rationale_msg_camera_and_audio) { allGranted ->
+                        if (allGranted) {
+                            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                                roomDetailViewModel.pendingAction = null
+                                roomDetailViewModel.handle(it)
+                            }
+                        } else {
+                            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+                            cleanUpAfterPermissionNotGranted()
+                        }
+                    }) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
         } else {
             if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
-                            this, AUDIO_CALL_PERMISSION_REQUEST_CODE,
-                            R.string.permissions_rationale_msg_record_audio)) {
+                            this,
+                            R.string.permissions_rationale_msg_record_audio) { allGranted ->
+                        if (allGranted) {
+                            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                                roomDetailViewModel.pendingAction = null
+                                roomDetailViewModel.handle(it)
+                            }
+                        } else {
+                            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+                            cleanUpAfterPermissionNotGranted()
+                        }
+                    }) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
@@ -1027,7 +1037,17 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment, PERMISSION_REQUEST_CODE_INCOMING_URI)) {
+                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment) { allGranted ->
+                            if (allGranted) {
+                                val pendingUri = roomDetailViewModel.pendingUri
+                                if (pendingUri != null) {
+                                    roomDetailViewModel.pendingUri = null
+                                    sendUri(pendingUri)
+                                }
+                            } else {
+                                cleanUpAfterPermissionNotGranted()
+                            }
+                        }) {
                     sendUri(contentUri)
                 } else {
                     roomDetailViewModel.pendingUri = contentUri
@@ -1417,52 +1437,11 @@ class RoomDetailFragment @Inject constructor(
 // //        }
 //    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            when (requestCode) {
-                SAVE_ATTACHEMENT_REQUEST_CODE           -> {
-                    sharedActionViewModel.pendingAction?.let {
-                        handleActions(it)
-                        sharedActionViewModel.pendingAction = null
-                    }
-                }
-                PERMISSION_REQUEST_CODE_INCOMING_URI    -> {
-                    val pendingUri = roomDetailViewModel.pendingUri
-                    if (pendingUri != null) {
-                        roomDetailViewModel.pendingUri = null
-                        sendUri(pendingUri)
-                    }
-                }
-                PERMISSION_REQUEST_CODE_PICK_ATTACHMENT -> {
-                    val pendingType = attachmentsHelper.pendingType
-                    if (pendingType != null) {
-                        attachmentsHelper.pendingType = null
-                        launchAttachmentProcess(pendingType)
-                    }
-                }
-                AUDIO_CALL_PERMISSION_REQUEST_CODE      -> {
-                    if (onPermissionResultAudioIpCall(requireContext(), grantResults)) {
-                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                            roomDetailViewModel.pendingAction = null
-                            roomDetailViewModel.handle(it)
-                        }
-                    }
-                }
-                VIDEO_CALL_PERMISSION_REQUEST_CODE      -> {
-                    if (onPermissionResultVideoIpCall(requireContext(), grantResults)) {
-                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                            roomDetailViewModel.pendingAction = null
-                            roomDetailViewModel.handle(it)
-                        }
-                    }
-                }
-            }
-        } else {
-            // Reset all pending data
-            roomDetailViewModel.pendingAction = null
-            roomDetailViewModel.pendingUri = null
-            attachmentsHelper.pendingType = null
-        }
+    private fun cleanUpAfterPermissionNotGranted() {
+        // Reset all pending data
+        roomDetailViewModel.pendingAction = null
+        roomDetailViewModel.pendingUri = null
+        attachmentsHelper.pendingType = null
     }
 
 //    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
@@ -1579,7 +1558,16 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, SAVE_ATTACHEMENT_REQUEST_CODE)) {
+                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this) { allGranted ->
+                    if (allGranted) {
+                        sharedActionViewModel.pendingAction?.let {
+                            handleActions(it)
+                            sharedActionViewModel.pendingAction = null
+                        }
+                    } else {
+                        cleanUpAfterPermissionNotGranted()
+                    }
+                }) {
             sharedActionViewModel.pendingAction = action
             return
         }
@@ -1818,7 +1806,17 @@ class RoomDetailFragment @Inject constructor(
 // AttachmentTypeSelectorView.Callback
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
+        if (checkPermissions(type.permissionsBit, this) { allGranted ->
+                    if (allGranted) {
+                        val pendingType = attachmentsHelper.pendingType
+                        if (pendingType != null) {
+                            attachmentsHelper.pendingType = null
+                            launchAttachmentProcess(pendingType)
+                        }
+                    } else {
+                        cleanUpAfterPermissionNotGranted()
+                    }
+                }) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type

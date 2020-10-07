@@ -46,8 +46,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -288,7 +286,11 @@ class RoomProfileFragment @Inject constructor(
     private var avatarCameraUri: Uri? = null
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
+                        if (allGranted) {
+                            onAvatarTypeSelected(true)
+                        }
+                    }) {
                 avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
         } else {
@@ -329,14 +331,6 @@ class RoomProfileFragment @Inject constructor(
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            when (requestCode) {
-                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
-            }
-        }
     }
 
     private fun onAvatarCropped(uri: Uri?) {

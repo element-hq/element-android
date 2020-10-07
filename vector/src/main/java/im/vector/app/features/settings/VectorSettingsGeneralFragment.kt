@@ -48,9 +48,7 @@ import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
@@ -279,14 +277,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onAvatarTypeSelected(true)
-            }
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -402,7 +392,11 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this) { allGranted ->
+                        if (allGranted) {
+                            onAvatarTypeSelected(true)
+                        }
+                    }) {
                 avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
             }
         } else {
