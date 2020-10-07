@@ -24,6 +24,8 @@ import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentOnAttachListener
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -38,7 +40,10 @@ import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSheetDialogFragment.ResultListener {
+class SharedSecureStorageActivity :
+        SimpleFragmentActivity(),
+        VectorBaseBottomSheetDialogFragment.ResultListener,
+        FragmentOnAttachListener {
 
     @Parcelize
     data class Args(
@@ -58,11 +63,18 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.addFragmentOnAttachListener(this)
+
         toolbar.visibility = View.GONE
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
         viewModel.subscribe(this) { renderState(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        supportFragmentManager.removeFragmentOnAttachListener(this)
     }
 
     override fun onBackPressed() {
@@ -119,8 +131,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
         }
     }
 
-    override fun onAttachFragment(fragment: Fragment) {
-        super.onAttachFragment(fragment)
+    override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
         if (fragment is VectorBaseBottomSheetDialogFragment) {
             fragment.resultListener = this
         }
