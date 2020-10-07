@@ -31,6 +31,7 @@ import android.provider.Browser
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
@@ -130,7 +131,7 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
-                      fragment: Fragment?,
+                      activityResultLauncher: ActivityResultLauncher<Intent>?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -140,8 +141,8 @@ fun openFileSelection(activity: Activity,
     fileIntent.type = "*/*"
 
     try {
-        fragment
-                ?.startActivityForResult(fileIntent, requestCode)
+        activityResultLauncher
+                ?.launch(fileIntent)
                 ?: run {
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
@@ -440,7 +441,7 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        fragment: Fragment?,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
         defaultFileName: String,
         chooserHint: String,
         requestCode: Int
@@ -452,8 +453,8 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (fragment != null) {
-            fragment.startActivityForResult(chooserIntent, requestCode)
+        if (activityResultLauncher != null) {
+            activityResultLauncher.launch(chooserIntent)
         } else {
             activity.startActivityForResult(chooserIntent, requestCode)
         }

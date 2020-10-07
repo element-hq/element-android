@@ -133,7 +133,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
                 MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
                     avatarCameraUri?.let { uri ->
                         MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(this, requestCode, resultCode, uri)
+                                .getTakenPhoto(this, uri)
                                 ?.let {
                                     onRoomAvatarSelected(it)
                                 }
@@ -142,7 +142,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
                 MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
                     MultiPicker
                             .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(this, requestCode, resultCode, data)
+                            .getSelectedFiles(this, data)
                             .firstOrNull()?.let {
                                 onRoomAvatarSelected(it)
                             }
@@ -154,6 +154,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (allGranted(grantResults)) {
             when (requestCode) {
                 PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)

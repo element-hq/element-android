@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
-import androidx.fragment.app.Fragment
+import androidx.activity.result.ActivityResultLauncher
 
 /**
  * Abstract class to provide all types of Pickers
@@ -33,11 +33,9 @@ abstract class Picker<T>(open val requestCode: Int) {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
-     * @return selected files or empty list if request code is wrong
-     * or result code is not Activity.RESULT_OK
-     * or user did not select any files.
+     * @return selected files or empty list if user did not select any files.
      */
-    abstract fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<T>
+    abstract fun getSelectedFiles(context: Context, data: Intent?): List<T>
 
     /**
      * Use this function to retrieve files which are shared from another application or internally
@@ -61,7 +59,7 @@ abstract class Picker<T>(open val requestCode: Int) {
                 context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
         }
-        return getSelectedFiles(context, requestCode, Activity.RESULT_OK, data)
+        return getSelectedFiles(context, data)
     }
 
     /**
@@ -84,10 +82,10 @@ abstract class Picker<T>(open val requestCode: Int) {
 
     /**
      * Start Storage Access Framework UI by using a Fragment.
-     * @param fragment Fragment to handle onActivityResult().
+     * @param activityResultLauncher to handle the result.
      */
-    fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }, requestCode)
+    fun startWith(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        activityResultLauncher.launch(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) })
     }
 
     protected fun getSelectedUriList(data: Intent?): List<Uri> {

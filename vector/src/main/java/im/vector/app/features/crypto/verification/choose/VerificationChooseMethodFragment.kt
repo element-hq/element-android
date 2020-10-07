@@ -16,7 +16,6 @@
 package im.vector.app.features.crypto.verification.choose
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
@@ -25,6 +24,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
@@ -91,24 +91,18 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     private fun doOpenQRCodeScanner() {
-        QrCodeScannerActivity.startForResult(this)
+        QrCodeScannerActivity.startForResult(requireActivity(), scanActivityResultLauncher)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private val scanActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val scannedQrCode = QrCodeScannerActivity.getResultText(activityResult.data)
+            val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
 
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
-                    val scannedQrCode = QrCodeScannerActivity.getResultText(data)
-                    val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(data)
-
-                    if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
-                        onRemoteQrCodeScanned(scannedQrCode)
-                    } else {
-                        Timber.w("It was not a QR code, or empty result")
-                    }
-                }
+            if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
+                onRemoteQrCodeScanned(scannedQrCode)
+            } else {
+                Timber.w("It was not a QR code, or empty result")
             }
         }
     }

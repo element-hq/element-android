@@ -298,6 +298,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE && allGranted(grantResults)) {
             start()
         } else {

@@ -212,10 +212,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             return intent
         }
 
-        fun getOutput(data: Intent): Pair<String, String>? {
-            val eventId = data.getStringExtra(EXTRA_EVENT_ID) ?: return null
-            val reaction = data.getStringExtra(EXTRA_REACTION_RESULT) ?: return null
-            return eventId to reaction
-        }
+        fun getOutputEventId(data: Intent?): String? = data?.getStringExtra(EXTRA_EVENT_ID)
+
+        fun getOutputReaction(data: Intent?): String? = data?.getStringExtra(EXTRA_REACTION_RESULT)
     }
 }

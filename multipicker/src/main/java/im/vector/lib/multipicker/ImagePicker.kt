@@ -16,7 +16,6 @@
 
 package im.vector.lib.multipicker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.provider.MediaStore
@@ -30,15 +29,9 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
-     * Returns selected image files or empty list if request code is wrong
-     * or result code is not Activity.RESULT_OK
-     * or user did not select any files.
+     * Returns selected image files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerImageType> {
-        if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
-            return emptyList()
-        }
-
+    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerImageType> {
         val imageList = mutableListOf<MultiPickerImageType>()
 
         getSelectedUriList(data).forEach { selectedUri ->

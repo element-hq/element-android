@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
@@ -73,6 +73,7 @@ import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
@@ -134,7 +135,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
-import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.invite.VectorInviteView
@@ -201,8 +201,6 @@ data class RoomDetailArgs(
         val eventId: String? = null,
         val sharedData: SharedData? = null
 ) : Parcelable
-
-private const val REACTION_SELECT_REQUEST_CODE = 0
 
 class RoomDetailFragment @Inject constructor(
         private val session: Session,
@@ -396,9 +394,14 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val integrationManagerActivityResultLauncher = registerStartForActivityResult {
+        // Noop
+    }
+
     private fun openIntegrationManager(screen: String? = null) {
         navigator.openIntegrationManager(
-                fragment = this,
+                context = requireContext(),
+                activityResultLauncher = integrationManagerActivityResultLauncher,
                 roomId = roomDetailArgs.roomId,
                 integId = null,
                 screen = screen
@@ -435,7 +438,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
-        navigator.openStickerPicker(this, roomDetailArgs.roomId, event.widget)
+        navigator.openStickerPicker(requireContext(), stickerActivityResultLauncher, roomDetailArgs.roomId, event.widget)
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
@@ -886,27 +889,63 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.SaveDraft(composerLayout.composerEditText.text.toString()))
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
-        if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
-            when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE        -> {
-                    val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
-                }
-                REACTION_SELECT_REQUEST_CODE                   -> {
-                    val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
-                    roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
-                }
-                WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE -> {
-                    val content = WidgetActivity.getOutput(data).toModel<MessageStickerContent>() ?: return
-                    roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
-                }
+    private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onImageResult(it.data)
+        }
+    }
+
+    private val attachmentAudioActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onAudioResult(it.data)
+        }
+    }
+
+    private val attachmentContactActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onContactResult(it.data)
+        }
+    }
+
+    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onImageResult(it.data)
+        }
+    }
+
+    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onPhotoResult()
+        }
+    }
+
+    private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        val data = activityResult.data ?: return@registerStartForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val sendData = AttachmentsPreviewActivity.getOutput(data)
+            val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
+        }
+    }
+
+    private val emojiActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val eventId = EmojiReactionPickerActivity.getOutputEventId(activityResult.data)
+            val reaction = EmojiReactionPickerActivity.getOutputReaction(activityResult.data)
+            if (eventId != null && reaction != null) {
+                roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
             }
         }
-        // TODO why don't we call super here?
-        // super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private val stickerActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        val data = activityResult.data ?: return@registerStartForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            WidgetActivity.getOutput(data).toModel<MessageStickerContent>()
+                    ?.let { content ->
+                        roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
+                    }
+        }
     }
 
 // PRIVATE METHODS *****************************************************************************
@@ -1600,7 +1639,7 @@ class RoomDetailFragment @Inject constructor(
                 openRoomMemberProfile(action.userId)
             }
             is EventSharedAction.AddReaction                -> {
-                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
+                emojiActivityResultLauncher.launch(EmojiReactionPickerActivity.intent(requireContext(), action.eventId))
             }
             is EventSharedAction.ViewReactions              -> {
                 ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
@@ -1827,11 +1866,11 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(this)
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(this)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentImageActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
         }.exhaustive
     }
@@ -1850,7 +1889,7 @@ class RoomDetailFragment @Inject constructor(
             }
             if (grouped.previewables.isNotEmpty()) {
                 val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
-                startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+                contentAttachmentActivityResultLauncher.launch(intent)
             }
         }
     }

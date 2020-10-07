@@ -42,6 +42,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.VectorBaseFragment
@@ -284,7 +285,7 @@ class RoomProfileFragment @Inject constructor(
                 .show()
     }
 
-    private val takePhotoActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val takePhotoPermissionActivityResultLauncher = registerForPermissionsResult { allGranted ->
         if (allGranted) {
             onAvatarTypeSelected(true)
         }
@@ -293,11 +294,11 @@ class RoomProfileFragment @Inject constructor(
     private var avatarCameraUri: Uri? = null
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoActivityResultLauncher)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoPermissionActivityResultLauncher)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(requireActivity(), takePhotoActivityResultLauncher)
             }
         } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
     }
 
@@ -309,30 +310,37 @@ class RoomProfileFragment @Inject constructor(
                 .start(requireContext(), this)
     }
 
+    private val takePhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            avatarCameraUri?.let { uri ->
+                MultiPicker.get(MultiPicker.CAMERA)
+                        .getTakenPhoto(requireContext(), uri)
+                        ?.let {
+                            onRoomAvatarSelected(it)
+                        }
+            }
+        }
+    }
+
+    private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            MultiPicker
+                    .get(MultiPicker.IMAGE)
+                    .getSelectedFiles(requireContext(), activityResult.data)
+                    .firstOrNull()?.let {
+                        onRoomAvatarSelected(it)
+                    }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onRoomAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                onRoomAvatarSelected(it)
-                            }
-                }
                 UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
                 BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
             }
         }
+        // TODO
         super.onActivityResult(requestCode, resultCode, data)
     }
 
