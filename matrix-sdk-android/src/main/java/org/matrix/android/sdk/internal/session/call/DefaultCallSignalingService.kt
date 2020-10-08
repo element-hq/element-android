@@ -36,8 +36,8 @@ import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.call.model.MxCallImpl
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.matrix.android.sdk.internal.session.room.send.RoomEventSender
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
@@ -50,7 +50,7 @@ internal class DefaultCallSignalingService @Inject constructor(
         private val userId: String,
         private val activeCallHandler: ActiveCallHandler,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val roomEventSender: RoomEventSender,
+        private val eventSenderProcessor: EventSenderProcessor,
         private val taskExecutor: TaskExecutor,
         private val turnServerTask: GetTurnServerTask
 ) : CallSignalingService {
@@ -103,7 +103,7 @@ internal class DefaultCallSignalingService @Inject constructor(
                 otherUserId = otherUserId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
-                roomEventSender = roomEventSender
+                eventSenderProcessor = eventSenderProcessor
         )
         activeCallHandler.addCall(call).also {
             return call
@@ -165,7 +165,7 @@ internal class DefaultCallSignalingService @Inject constructor(
                             otherUserId = event.senderId ?: return@let,
                             isVideoCall = content.isVideo(),
                             localEchoEventFactory = localEchoEventFactory,
-                            roomEventSender = roomEventSender
+                            eventSenderProcessor = eventSenderProcessor
                     )
                     activeCallHandler.addCall(incomingCall)
                     onCallInvite(incomingCall, content)

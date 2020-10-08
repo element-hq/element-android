@@ -43,6 +43,8 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.internal.crypto.crosssigning.ShieldTrustUpdater
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
+import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
+import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
@@ -367,4 +369,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
+
+    @Binds
+    abstract fun bindRedactEventTask(task: DefaultRedactEventTask): RedactEventTask
 }

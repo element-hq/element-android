@@ -64,6 +64,7 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
@@ -121,7 +122,8 @@ internal class DefaultSession @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
+        private val eventSenderProcessor: EventSenderProcessor
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -161,6 +163,7 @@ internal class DefaultSession @Inject constructor(
         }
         eventBus.register(this)
         timelineEventDecryptor.start()
+        eventSenderProcessor.start()
     }
 
     override fun requireBackgroundSync() {

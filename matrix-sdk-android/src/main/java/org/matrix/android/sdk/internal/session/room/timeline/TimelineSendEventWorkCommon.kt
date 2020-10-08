@@ -38,24 +38,6 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
         private val workManagerProvider: WorkManagerProvider
 ) {
 
-    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest): Cancelable {
-        return when {
-            workRequests.isEmpty() -> NoOpCancellable
-            workRequests.size == 1 -> postWork(roomId, workRequests.first())
-            else                   -> {
-                val firstWork = workRequests.first()
-                var continuation = workManagerProvider.workManager
-                        .beginUniqueWork(buildWorkName(roomId), ExistingWorkPolicy.APPEND, firstWork)
-                for (i in 1 until workRequests.size) {
-                    val workRequest = workRequests[i]
-                    continuation = continuation.then(workRequest)
-                }
-                continuation.enqueue()
-                CancelableWork(workManagerProvider.workManager, firstWork.id)
-            }
-        }
-    }
-
     fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE): Cancelable {
         workManagerProvider.workManager
                 .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
@@ -75,11 +57,6 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
 
     private fun buildWorkName(roomId: String): String {
         return "${roomId}_$SEND_WORK"
-    }
-
-    fun cancelAllWorks(roomId: String) {
-        workManagerProvider.workManager
-                .cancelUniqueWork(buildWorkName(roomId))
     }
 
     companion object {

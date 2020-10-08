@@ -48,10 +48,9 @@ import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWorkCommon
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.CancelableWork
-import org.matrix.android.sdk.internal.worker.AlwaysSuccessfulWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
@@ -63,13 +62,12 @@ private const val UPLOAD_WORK = "UPLOAD_WORK"
 internal class DefaultSendService @AssistedInject constructor(
         @Assisted private val roomId: String,
         private val workManagerProvider: WorkManagerProvider,
-        private val timelineSendEventWorkCommon: TimelineSendEventWorkCommon,
         @SessionId private val sessionId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val cryptoService: CryptoService,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository,
-        private val roomEventSender: RoomEventSender,
+        private val eventSenderProcessor: EventSenderProcessor,
         private val cancelSendTracker: CancelSendTracker
 ) : SendService {
 
@@ -93,17 +91,6 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     // For test only
-    private fun sendTextMessages(text: CharSequence, msgType: String, autoMarkdown: Boolean, times: Int): Cancelable {
-        return CancelableBag().apply {
-            // Send the event several times
-            repeat(times) { i ->
-                localEchoEventFactory.createTextEvent(roomId, msgType, "$text - $i", autoMarkdown)
-                        .also { createLocalEcho(it) }
-                        .let { sendEvent(it) }
-                        .also { add(it) }
-            }
-        }
-    }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
         return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType)
@@ -133,13 +120,14 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
-        return createRedactEventWork(event, reason)
-                .let { timelineSendEventWorkCommon.postWork(roomId, it) }
+        val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
+                .also { createLocalEcho(it) }
+        return eventSenderProcessor.postRedaction(redactionEcho, reason)
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable {
         if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
-            localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+            localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
             return sendEvent(localEcho.root)
         }
         return NoOpCancellable
@@ -153,7 +141,7 @@ internal class DefaultSendService @AssistedInject constructor(
             val url = messageContent.getFileUrl() ?: return NoOpCancellable
             if (url.startsWith("mxc://")) {
                 // We need to resend only the message as the attachment is ok
-                localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+                localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                 return sendEvent(localEcho.root)
             }
 
@@ -170,7 +158,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.IMAGE
                     )
-                    localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+                    localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageVideoContent -> {
@@ -184,7 +172,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.VIDEO
                     )
-                    localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+                    localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageFileContent  -> {
@@ -195,7 +183,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.FILE
                     )
-                    localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+                    localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageAudioContent -> {
@@ -207,7 +195,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.AUDIO
                     )
-                    localEchoRepository.updateSendState(localEcho.eventId, SendState.UNSENT)
+                    localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 else                   -> NoOpCancellable
@@ -219,25 +207,6 @@ internal class DefaultSendService @AssistedInject constructor(
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
         taskExecutor.executorScope.launch {
             localEchoRepository.deleteFailedEcho(roomId, localEcho)
-        }
-    }
-
-    override fun clearSendingQueue() {
-        timelineSendEventWorkCommon.cancelAllWorks(roomId)
-        workManagerProvider.workManager.cancelUniqueWork(buildWorkName(UPLOAD_WORK))
-
-        // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
-        workManagerProvider.matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
-                .build().let {
-                    timelineSendEventWorkCommon.postWork(roomId, it, ExistingWorkPolicy.REPLACE)
-
-                    // need to clear also image sending queue
-                    workManagerProvider.workManager
-                            .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
-                            .enqueue()
-                }
-        taskExecutor.executorScope.launch {
-            localEchoRepository.clearSendingQueue(roomId)
         }
     }
 
@@ -261,13 +230,6 @@ internal class DefaultSendService @AssistedInject constructor(
             localEchoRepository.updateSendState(roomId, eventsToResend.map { it.eventId }, SendState.UNSENT)
         }
     }
-
-//    override fun failAllPendingMessages() {
-//        taskExecutor.executorScope.launch {
-//            val eventsToResend = localEchoRepository.getAllEventsWithStates(roomId, SendState.PENDING_STATES)
-//            localEchoRepository.updateSendState(roomId, eventsToResend.map { it.eventId }, SendState.UNDELIVERED)
-//        }
-//    }
 
     override fun sendMedia(attachment: ContentAttachmentData,
                            compressBeforeSending: Boolean,
@@ -301,7 +263,7 @@ internal class DefaultSendService @AssistedInject constructor(
                         val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
 
                         workManagerProvider.workManager
-                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND_OR_REPLACE, uploadWork)
                                 .then(dispatcherWork)
                                 .enqueue()
                                 .also { operation ->
@@ -322,7 +284,7 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     private fun sendEvent(event: Event): Cancelable {
-        return roomEventSender.sendEvent(event)
+        return eventSenderProcessor.postEvent(event, cryptoService.isRoomEncrypted(event.roomId!!))
     }
 
     private fun createLocalEcho(event: Event) {
@@ -331,28 +293,6 @@ internal class DefaultSendService @AssistedInject constructor(
 
     private fun buildWorkName(identifier: String): String {
         return "${roomId}_$identifier"
-    }
-
-    private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        // Same parameter
-        return EncryptEventWorker.Params(sessionId, event.eventId ?: "")
-                .let { WorkerParamsFactory.toData(it) }
-                .let {
-                    workManagerProvider.matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
-                            .setConstraints(WorkManagerProvider.workConstraints)
-                            .setInputData(it)
-                            .startChain(startChain)
-                            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                            .build()
-                }
-    }
-
-    private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
-        return localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
-                .also { createLocalEcho(it) }
-                .let { RedactEventWorker.Params(sessionId, it.eventId!!, roomId, event.eventId, reason) }
-                .let { WorkerParamsFactory.toData(it) }
-                .let { timelineSendEventWorkCommon.createWork<RedactEventWorker>(it, true) }
     }
 
     private fun createUploadMediaWork(allLocalEchos: List<Event>,

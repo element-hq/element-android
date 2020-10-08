@@ -44,7 +44,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         val localId = event.eventId!!
 
         try {
-            localEchoRepository.updateSendState(localId, SendState.SENDING)
+            localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.send(
                         localId,
@@ -53,10 +53,10 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                         eventType = event.type
                 )
             }
-            localEchoRepository.updateSendState(localId, SendState.SENT)
+            localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)
             return executeRequest.eventId
         } catch (e: Throwable) {
-            localEchoRepository.updateSendState(localId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(localId, event.roomId, SendState.UNDELIVERED)
             throw e
         }
     }

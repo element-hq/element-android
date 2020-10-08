@@ -83,6 +83,7 @@ internal class DefaultTimeline(
 
     data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
     data class OnLocalEchoCreated(val roomId: String, val timelineEvent: TimelineEvent)
+    data class OnLocalEchoUpdated(val roomId: String, val eventId: String, val sendState: SendState)
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -103,6 +104,7 @@ internal class DefaultTimeline(
     private var prevDisplayIndex: Int? = null
     private var nextDisplayIndex: Int? = null
     private val inMemorySendingEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
+    private val inMemorySendingStates = Collections.synchronizedMap<String, SendState>(HashMap())
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
     private val backwardsState = AtomicReference(State())
@@ -166,6 +168,9 @@ internal class DefaultTimeline(
                     // Remove in memory as soon as they are known by database
                     events.forEach { te ->
                         inMemorySendingEvents.removeAll { te.eventId == it.eventId }
+                    }
+                    inMemorySendingStates.keys.removeAll { key ->
+                        events.find { it.eventId == key } == null
                     }
                     postSnapshot()
                 }
@@ -331,6 +336,18 @@ internal class DefaultTimeline(
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLocalEchoUpdated(onLocalEchoUpdated: OnLocalEchoUpdated) {
+        if (isLive && onLocalEchoUpdated.roomId == roomId) {
+            val existingState = inMemorySendingStates[onLocalEchoUpdated.eventId]
+            inMemorySendingStates[onLocalEchoUpdated.eventId] = onLocalEchoUpdated.sendState
+            if (existingState != onLocalEchoUpdated.sendState) {
+                // Timber.v("## SendEvent: onLocalEchoUpdated $onLocalEchoUpdated  in mem size = ${inMemorySendingStates.size}")
+                postSnapshot()
+            }
+        }
+    }
+
 // Private methods *****************************************************************************
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
@@ -410,7 +427,12 @@ internal class DefaultTimeline(
             builtSendingEvents.addAll(inMemorySendingEvents.filterEventsWithSettings())
             sendingEvents.forEach { timelineEventEntity ->
                 if (builtSendingEvents.find { it.eventId == timelineEventEntity.eventId } == null) {
-                    builtSendingEvents.add(timelineEventMapper.map(timelineEventEntity))
+                    val element = timelineEventMapper.map(timelineEventEntity)
+                    inMemorySendingStates[element.eventId]?.let {
+                        // Timber.v("## ${System.currentTimeMillis()} Send event refresh echo with live state ${it} from state ${element.root.sendState}")
+                        element.root.sendState = element.root.sendState.takeIf { it == SendState.SENT } ?: it
+                    }
+                    builtSendingEvents.add(element)
                 }
             }
         }
