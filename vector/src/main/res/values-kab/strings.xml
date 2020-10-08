@@ -2549,4 +2549,6 @@
     <string name="sent_verification_conclusion">Taggrayt n usenqed</string>
 
     <string name="universal_link_malformed">Aseɣwen ur yemsil ara akken iwata</string>
-</resources>
+<string name="no_permissions_to_start_webrtc_call">Ur tesɛiḍ ara tasiregt ad tebduḍ asiwel deg texxamt-a</string>
+    <string name="sent_a_reaction">Issedmer s: %s</string>
+    </resources>
