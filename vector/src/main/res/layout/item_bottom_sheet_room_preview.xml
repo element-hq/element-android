@@ -64,9 +64,10 @@
         android:contentDescription="@string/room_list_quick_actions_settings"
         android:scaleType="centerInside"
         android:src="@drawable/ic_room_actions_settings"
-        android:tint="?riotx_text_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar" />
+        app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

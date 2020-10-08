@@ -30,11 +30,12 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/actionStartSpace"
         android:scaleType="center"
-        android:tint="?riotx_text_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_room_actions_notifications_all" />
+        tools:src="@drawable/ic_room_actions_notifications_all"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/actionTitle"
@@ -61,12 +62,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_check_white_24dp"
-        android:tint="@color/riotx_accent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        app:tint="@color/riotx_accent"
+        tools:ignore="MissingPrefix" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

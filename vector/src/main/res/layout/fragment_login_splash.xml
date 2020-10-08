@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_background"
@@ -44,7 +45,8 @@
             android:layout_height="44dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/element_logotype"
-            android:tint="?colorAccent" />
+            app:tint="?colorAccent"
+            tools:ignore="MissingPrefix" />
 
     </LinearLayout>
 
@@ -93,9 +95,10 @@
             android:layout_marginStart="2dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_message_circle"
-            android:tint="?riotx_text_secondary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText1" />
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText1"
+            app:tint="?riotx_text_secondary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/loginSplashText1"
@@ -116,9 +119,10 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_lock"
-            android:tint="?riotx_text_secondary"
             app:layout_constraintStart_toStartOf="@id/loginSplashPicto1"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText2" />
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText2"
+            app:tint="?riotx_text_secondary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/loginSplashText2"
@@ -139,9 +143,10 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_sliders"
-            android:tint="?riotx_text_secondary"
             app:layout_constraintStart_toStartOf="@+id/loginSplashPicto1"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText3" />
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText3"
+            app:tint="?riotx_text_secondary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/loginSplashText3"

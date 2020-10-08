@@ -14,10 +14,11 @@
         android:layout_height="32dp"
         android:layout_marginStart="19dp"
         android:src="@drawable/ic_secure_backup"
-        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <Space
         android:id="@+id/view_keys_backup_banner_space1"
