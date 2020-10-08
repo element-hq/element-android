@@ -25,6 +25,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
     enum class TestStatus {
         NOT_STARTED,
         RUNNING,
+        WAITING_FOR_USER,
         FAILED,
         SUCCESS
     }

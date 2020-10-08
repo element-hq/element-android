@@ -104,7 +104,8 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.RUNNING     -> {
+                    TroubleshootTest.TestStatus.RUNNING,
+                    TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
                         val size = troubleshootTestManager.testListSize
                         val currentTestIndex = troubleshootTestManager.currentTestIndex
                         mSummaryDescription.text = getString(
