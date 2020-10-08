@@ -26,4 +26,3 @@
 
 ### "The Matrix.org Foundation C.I.C." copyright is required on this file, and not "New Vector Ltd"
 New Vector Ltd
-
