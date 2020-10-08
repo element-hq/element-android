@@ -63,7 +63,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
-        SendPerformanceProfiler.startStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
+        // SendPerformanceProfiler.startStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
         val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
@@ -88,7 +88,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
-            SendPerformanceProfiler.stopStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
+            //SendPerformanceProfiler.stopStage(event.eventId, SendPerformanceProfiler.Stages.LOCAL_ECHO)
         }
     }
 

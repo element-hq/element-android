@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.util.profiling.BaseProfiler
 object SendPerformanceProfiler: BaseProfiler<SendPerformanceProfiler.Stages>() {
 
     enum class Stages() {
-        LOCAL_ECHO,
+//        LOCAL_ECHO,
         ENCRYPT_WORKER,
         ENCRYPT_GET_USERS,
         ENCRYPT_SET_ROOM_ENCRYPTION,
