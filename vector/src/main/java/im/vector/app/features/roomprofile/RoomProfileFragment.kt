@@ -42,14 +42,14 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.copyToClipboard
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
@@ -260,14 +260,19 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onShareRoomProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        startSharePlainTextIntent(
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = null,
+                text = permalink
+        )
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
         if (matrixItem.avatarUrl?.isNotEmpty() == true) {
             val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-            startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
+            bigImageStartForActivityResult.launch(intent, options)
         } else if (it.canChangeAvatar) {
             showAvatarSelector()
         }
@@ -285,14 +290,20 @@ class RoomProfileFragment @Inject constructor(
                 .show()
     }
 
+    private val takePhotoPermissionActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            onAvatarTypeSelected(true)
+        }
+    }
+
     private var avatarCameraUri: Uri? = null
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoPermissionActivityResultLauncher)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(requireActivity(), takePhotoActivityResultLauncher)
             }
         } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
     }
 
@@ -304,37 +315,43 @@ class RoomProfileFragment @Inject constructor(
                 .start(requireContext(), this)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onRoomAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                onRoomAvatarSelected(it)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
+    private val takePhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            avatarCameraUri?.let { uri ->
+                MultiPicker.get(MultiPicker.CAMERA)
+                        .getTakenPhoto(requireContext(), uri)
+                        ?.let {
+                            onRoomAvatarSelected(it)
+                        }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
+    private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            MultiPicker
+                    .get(MultiPicker.IMAGE)
+                    .getSelectedFiles(requireContext(), activityResult.data)
+                    .firstOrNull()?.let {
+                        onRoomAvatarSelected(it)
+                    }
+        }
+    }
+
+    private val bigImageStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            activityResult.data?.let { onAvatarCropped(it.data) }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
+                UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
             }
         }
     }

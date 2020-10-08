@@ -33,6 +33,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
@@ -118,20 +119,16 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleEditMediaBeforeSending(event: IncomingShareViewEvents.EditMediaBeforeSending) {
         val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(event.contentAttachmentData))
-        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+        attachmentPreviewActivityResultLauncher.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
-        if (!hasBeenHandled && resultCode == Activity.RESULT_OK && data != null) {
-            when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE -> {
-                    val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
-                    viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
-                }
-            }
+    private val attachmentPreviewActivityResultLauncher = registerStartForActivityResult {
+        val data = it.data ?: return@registerStartForActivityResult
+        if (it.resultCode == Activity.RESULT_OK) {
+            val sendData = AttachmentsPreviewActivity.getOutput(data)
+            val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+            viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
+            viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
         }
     }
 

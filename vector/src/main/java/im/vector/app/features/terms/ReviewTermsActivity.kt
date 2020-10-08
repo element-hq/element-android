@@ -73,7 +73,6 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
     }
 
     companion object {
-        const val TERMS_REQUEST_CODE = 15000
         private const val EXTRA_INFO = "EXTRA_INFO"
 
         fun intent(context: Context, serviceType: TermsService.ServiceType, baseUrl: String, token: String?): Intent {

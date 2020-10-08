@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
@@ -215,11 +214,12 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
-    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
     fun saveMyDevicesInfo(info: List<DeviceInfo>)
+
     /**
      * Store the crypto algorithm for a room.
      *
@@ -367,7 +367,19 @@ internal interface IMXCryptoStore {
 
     fun saveGossipingEvent(event: Event)
 
-    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState)
+    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
+        updateGossipingRequestState(
+                requestUserId = request.userId,
+                requestDeviceId = request.deviceId,
+                requestId = request.requestId,
+                state = state
+        )
+    }
+
+    fun updateGossipingRequestState(requestUserId: String?,
+                                    requestDeviceId: String?,
+                                    requestId: String?,
+                                    state: GossipingRequestState)
 
     /**
      * Search an IncomingRoomKeyRequest
@@ -411,7 +423,7 @@ internal interface IMXCryptoStore {
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
 
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
-    fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+    fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
     fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?)
@@ -421,12 +433,13 @@ internal interface IMXCryptoStore {
     fun updateUsersTrust(check: (String) -> Boolean)
 
     fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
-    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
-    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String) : SharedSessionResult
+    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): SharedSessionResult
     data class SharedSessionResult(val found: Boolean, val chainIndex: Int?)
-    fun getSharedWithInfo(roomId: String?, sessionId: String) : MXUsersDevicesMap<Int>
+
+    fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     // Dev tools
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>

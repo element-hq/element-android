@@ -15,6 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import kotlin.properties.Delegates
 
@@ -37,7 +39,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     var manager: NotificationTroubleshootTestManager? = null
 
-    abstract fun perform()
+    abstract fun perform(activityResultLauncher: ActivityResultLauncher<Intent>)
 
     fun isFinished(): Boolean = (status == TestStatus.FAILED || status == TestStatus.SUCCESS)
 

@@ -24,9 +24,10 @@
             android:layout_height="@dimen/layout_touch_size"
             android:scaleType="center"
             android:src="@drawable/ic_settings_x"
-            android:tint="@color/riotx_accent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/riotx_accent"
+            tools:ignore="MissingPrefix" />
 
         <ImageView
             android:id="@+id/homeDrawerHeaderAvatarView"

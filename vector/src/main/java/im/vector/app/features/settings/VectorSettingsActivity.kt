@@ -107,7 +107,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
 
         if (oFragment != null) {
-            oFragment.setTargetFragment(caller, 0)
+            // Deprecated, I comment it, I think it is useless
+            // oFragment.setTargetFragment(caller, 0)
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)

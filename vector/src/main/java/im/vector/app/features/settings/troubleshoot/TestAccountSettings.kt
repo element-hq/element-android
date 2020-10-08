@@ -15,6 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
@@ -30,7 +32,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                                               private val activeSessionHolder: ActiveSessionHolder)
     : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val defaultRule = session.getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
@@ -49,11 +51,11 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                         session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
                                                            object : MatrixCallback<Unit> {
                                                                override fun onSuccess(data: Unit) {
-                                                                   manager?.retry()
+                                                                   manager?.retry(activityResultLauncher)
                                                                }
 
                                                                override fun onFailure(failure: Throwable) {
-                                                                   manager?.retry()
+                                                                   manager?.retry(activityResultLauncher)
                                                                }
                                                            })
                     }

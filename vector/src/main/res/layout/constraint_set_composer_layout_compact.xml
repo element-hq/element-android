@@ -75,11 +75,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="38dp"
         android:alpha="0"
-        android:tint="?riotx_text_primary"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_edit" />
+        tools:ignore="MissingConstraints,MissingPrefix"
+        tools:src="@drawable/ic_edit"
+        app:tint="?riotx_text_primary" />
 
 
     <ImageButton
@@ -88,11 +88,12 @@
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_close_round"
-        android:tint="@color/riotx_notice"
+        app:tint="@color/riotx_notice"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintStart_toEndOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/composer_avatar_view"
@@ -130,10 +131,11 @@
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_attachment"
-        android:tint="?attr/colorAccent"
+        app:tint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@id/composerEditText" />
+        app:layout_constraintStart_toEndOf="@id/composerEditText"
+        tools:ignore="MissingPrefix" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/composer_preview_barrier"
@@ -151,10 +153,11 @@
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_send"
-        android:tint="?attr/colorAccent"
+        app:tint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/attachmentButton" />
+        app:layout_constraintStart_toEndOf="@id/attachmentButton"
+        tools:ignore="MissingPrefix" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"

@@ -18,7 +18,6 @@ package im.vector.app.features.workers.signout
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +38,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
@@ -77,9 +77,6 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
 
     companion object {
         fun newInstance() = SignOutBottomSheetDialogFragment()
-
-        private const val EXPORT_REQ = 0
-        private const val QUERY_EXPORT_KEYS = 1
     }
 
     init {
@@ -104,8 +101,8 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         viewModel.refreshRemoteStateIfNeeded()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setupRecoveryButton.action = {
             BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
@@ -130,12 +127,12 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
 
         exportManuallyButton.action = {
             withState(viewModel) { state ->
-                queryExportKeys(state.userId, QUERY_EXPORT_KEYS)
+                queryExportKeys(state.userId, manualExportKeysActivityResultLauncher)
             }
         }
 
         setupMegolmBackupButton.action = {
-            startActivityForResult(KeysBackupSetupActivity.intent(requireContext(), true), EXPORT_REQ)
+            setupBackupActivityResultLauncher.launch(KeysBackupSetupActivity.intent(requireContext(), true))
         }
 
         viewModel.observeViewEvents {
@@ -289,25 +286,25 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         return dialog
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private val manualExportKeysActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val uri = it.data?.data
+            if (uri != null) {
+                activity?.let { activity ->
+                    ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                        override fun onPassphrase(passphrase: String) {
+                            viewModel.handle(SignoutCheckViewModel.Actions.ExportKeys(passphrase, uri))
+                        }
+                    })
+                }
+            }
+        }
+    }
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == QUERY_EXPORT_KEYS) {
-                val uri = data?.data
-                if (resultCode == Activity.RESULT_OK && uri != null) {
-                    activity?.let { activity ->
-                        ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
-                            override fun onPassphrase(passphrase: String) {
-                                viewModel.handle(SignoutCheckViewModel.Actions.ExportKeys(passphrase, uri))
-                            }
-                        })
-                    }
-                }
-            } else if (requestCode == EXPORT_REQ) {
-                if (data?.getBooleanExtra(KeysBackupSetupActivity.MANUAL_EXPORT, false) == true) {
-                    viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
-                }
+    private val setupBackupActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            if (it.data?.getBooleanExtra(KeysBackupSetupActivity.MANUAL_EXPORT, false) == true) {
+                viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
             }
         }
     }

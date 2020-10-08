@@ -17,7 +17,6 @@ package im.vector.app.features.crypto.verification
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -35,6 +34,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
@@ -108,12 +108,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             when (it) {
                 is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    startActivityForResult(SharedSecureStorageActivity.newIntent(
+                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newIntent(
                             requireContext(),
                             null, // use default key
                             listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
                             SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
-                    ), SECRET_REQUEST_CODE)
+                    ))
                 }
                 is VerificationBottomSheetViewEvents.ModalError        -> {
                     AlertDialog.Builder(requireContext())
@@ -145,10 +145,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
-            val result = data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
-            val reset = data?.getBooleanExtra(SharedSecureStorageActivity.EXTRA_DATA_RESET, false) ?: false
+    private val secretStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val result = activityResult.data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
+            val reset = activityResult.data?.getBooleanExtra(SharedSecureStorageActivity.EXTRA_DATA_RESET, false) ?: false
             if (result != null) {
                 viewModel.handle(VerificationAction.GotResultFromSsss(result, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
             } else if (reset) {
@@ -156,11 +156,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 viewModel.handle(VerificationAction.SecuredStorageHasBeenReset)
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
                 avatarRenderer.render(matrixItem, otherUserAvatarImageView)
@@ -347,9 +345,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-
-        const val SECRET_REQUEST_CODE = 101
-
         fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {

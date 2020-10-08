@@ -65,9 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
-        android:drawableStart="@drawable/ic_user"
         android:drawablePadding="8dp"
-        android:drawableTint="?riotx_text_secondary"
         android:gravity="center_vertical"
         android:minWidth="56dp"
         android:textColor="?riotx_text_secondary"
@@ -75,7 +73,9 @@
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
-        tools:text="148" />
+        tools:text="148"
+        app:drawableTint="?riotx_text_secondary"
+        app:drawableStartCompat="@drawable/ic_user" />
 
     <TextView
         android:id="@+id/itemPublicRoomAlias"

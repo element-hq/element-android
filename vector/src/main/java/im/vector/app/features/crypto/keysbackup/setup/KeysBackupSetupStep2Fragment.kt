@@ -16,6 +16,7 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -77,8 +78,8 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 

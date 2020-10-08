@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -67,15 +68,11 @@ fun isAnimationDisabled(context: Context): Boolean {
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @TargetApi(Build.VERSION_CODES.M)
-fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?, requestCode: Int) {
+fun requestDisablingBatteryOptimization(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     intent.data = Uri.parse("package:" + activity.packageName)
-    if (fragment != null) {
-        fragment.startActivityForResult(intent, requestCode)
-    } else {
-        activity.startActivityForResult(intent, requestCode)
-    }
+    activityResultLauncher.launch(intent)
 }
 
 // ==============================================================================================================
@@ -100,7 +97,7 @@ fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = t
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: Int) {
+fun startNotificationSettingsIntent(activity: AppCompatActivity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
@@ -110,7 +107,7 @@ fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: In
         intent.putExtra("app_package", activity.packageName)
         intent.putExtra("app_uid", activity.applicationInfo?.uid)
     }
-    activity.startActivityForResult(intent, requestCode)
+    activityResultLauncher.launch(intent)
 }
 
 /**
@@ -126,42 +123,47 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
     fragment.startActivity(intent)
 }
 
-fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
+fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-        context.startActivityForResult(intent, requestCode)
+        activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null, requestCode: Int? = null) {
+fun startSharePlainTextIntent(fragment: Fragment,
+                              activityResultLauncher: ActivityResultLauncher<Intent>?,
+                              chooserTitle: String?,
+                              text: String,
+                              subject: String? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)
+    val intent = Intent.createChooser(share, chooserTitle)
     try {
-        if (requestCode != null) {
-            fragment.startActivityForResult(Intent.createChooser(share, chooserTitle), requestCode)
+        if (activityResultLauncher != null) {
+            activityResultLauncher.launch(intent)
         } else {
-            fragment.startActivity(Intent.createChooser(share, chooserTitle))
+            fragment.startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }
 }
 
-fun startImportTextFromFileIntent(fragment: Fragment, requestCode: Int) {
+fun startImportTextFromFileIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
     }
-    if (intent.resolveActivity(fragment.requireActivity().packageManager) != null) {
-        fragment.startActivityForResult(intent, requestCode)
+    if (intent.resolveActivity(context.packageManager) != null) {
+        activityResultLauncher.launch(intent)
     } else {
-        fragment.activity?.toast(R.string.error_no_external_application_found)
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

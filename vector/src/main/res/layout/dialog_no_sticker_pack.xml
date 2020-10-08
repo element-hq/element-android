@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:drawableBottom="@drawable/stickerpack_rabbit"
     android:drawablePadding="16dp"
     android:gravity="center_horizontal"
     android:maxWidth="300dp"
     android:paddingTop="16dp"
-    android:text="@string/no_sticker_application_dialog_content" />
+    android:text="@string/no_sticker_application_dialog_content"
+    app:drawableBottomCompat="@drawable/stickerpack_rabbit" />

@@ -47,7 +47,9 @@ internal class SendGossipWorker(context: Context,
     internal data class Params(
             override val sessionId: String,
             val secretValue: String,
-            val request: IncomingSecretShareRequest,
+            val requestUserId: String?,
+            val requestDeviceId: String?,
+            val requestId: String?,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -67,16 +69,21 @@ internal class SendGossipWorker(context: Context,
         val eventType: String = EventType.SEND_SECRET
 
         val toDeviceContent = SecretSendEventContent(
-                requestId = params.request.requestId ?: "",
+                requestId = params.requestId ?: "",
                 secretValue = params.secretValue
         )
 
-        val requestingUserId = params.request.userId ?: ""
-        val requestingDeviceId = params.request.deviceId ?: ""
+        val requestingUserId = params.requestUserId ?: ""
+        val requestingDeviceId = params.requestDeviceId ?: ""
         val deviceInfo = cryptoStore.getUserDevice(requestingUserId, requestingDeviceId)
                 ?: return buildErrorResult(params, "Unknown deviceInfo, cannot send message").also {
-                    cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
-                    Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.request.deviceId}")
+                    cryptoStore.updateGossipingRequestState(
+                            requestUserId = params.requestUserId,
+                            requestDeviceId = params.requestDeviceId,
+                            requestId = params.requestId,
+                            state = GossipingRequestState.FAILED_TO_ACCEPTED
+                    )
+                    Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.requestDeviceId}")
                 }
 
         val sendToDeviceMap = MXUsersDevicesMap<Any>()
@@ -88,7 +95,12 @@ internal class SendGossipWorker(context: Context,
             // no session with this device, probably because there
             // were no one-time keys.
             return buildErrorResult(params, "no session with this device").also {
-                cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
+                cryptoStore.updateGossipingRequestState(
+                        requestUserId = params.requestUserId,
+                        requestDeviceId = params.requestDeviceId,
+                        requestId = params.requestId,
+                        state = GossipingRequestState.FAILED_TO_ACCEPTED
+                )
                 Timber.e("no session with this device, probably because there were no one-time keys.")
             }
         }
@@ -121,13 +133,23 @@ internal class SendGossipWorker(context: Context,
                             transactionId = localId
                     )
             )
-            cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.ACCEPTED)
+            cryptoStore.updateGossipingRequestState(
+                    requestUserId = params.requestUserId,
+                    requestDeviceId = params.requestDeviceId,
+                    requestId = params.requestId,
+                    state = GossipingRequestState.ACCEPTED
+            )
             return Result.success()
         } catch (throwable: Throwable) {
             return if (throwable.shouldBeRetried()) {
                 Result.retry()
             } else {
-                cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
+                cryptoStore.updateGossipingRequestState(
+                        requestUserId = params.requestUserId,
+                        requestDeviceId = params.requestDeviceId,
+                        requestId = params.requestId,
+                        state = GossipingRequestState.FAILED_TO_ACCEPTED
+                )
                 buildErrorResult(params, throwable.localizedMessage ?: "error")
             }
         }

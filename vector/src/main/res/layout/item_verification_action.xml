@@ -20,13 +20,14 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="center"
-        android:tint="?riotx_text_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_share"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
 
     <TextView
@@ -66,10 +67,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="center"
-        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_arrow_right" />
+        tools:src="@drawable/ic_arrow_right"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

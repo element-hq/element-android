@@ -42,9 +42,11 @@ abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : V
      * This method does the same thing as the execute function, but it doesn't subscribe to the stream
      * so you can use this in a switchMap or a flatMap
      */
+    // False positive
+    @Suppress("USELESS_CAST")
     fun <T> Single<T>.toAsync(stateReducer: S.(Async<T>) -> S): Single<Async<T>> {
         setState { stateReducer(Loading()) }
-        return this.map { Success(it) as Async<T> }
+        return map { Success(it) as Async<T> }
                 .onErrorReturn { Fail(it) }
                 .doOnSuccess { setState { stateReducer(it) } }
     }
@@ -53,9 +55,11 @@ abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : V
      * This method does the same thing as the execute function, but it doesn't subscribe to the stream
      * so you can use this in a switchMap or a flatMap
      */
+    // False positive
+    @Suppress("USELESS_CAST")
     fun <T> Observable<T>.toAsync(stateReducer: S.(Async<T>) -> S): Observable<Async<T>> {
         setState { stateReducer(Loading()) }
-        return this.map { Success(it) as Async<T> }
+        return map { Success(it) as Async<T> }
                 .onErrorReturn { Fail(it) }
                 .doOnNext { setState { stateReducer(it) } }
     }

@@ -27,6 +27,7 @@
     <issue id="DisableBaselineAlignment" severity="error" />
     <issue id="ScrollViewSize" severity="error" />
     <issue id="NegativeMargin" severity="error" />
+    <issue id="UseCompatTextViewDrawableXml" severity="error" />
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />

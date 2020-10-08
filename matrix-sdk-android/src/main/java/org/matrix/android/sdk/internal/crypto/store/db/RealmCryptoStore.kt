@@ -1134,12 +1134,15 @@ internal class RealmCryptoStore @Inject constructor(
 //        }
 //    }
 
-    override fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
+    override fun updateGossipingRequestState(requestUserId: String?,
+                                             requestDeviceId: String?,
+                                             requestId: String?,
+                                             state: GossipingRequestState) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, request.userId)
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, request.deviceId)
-                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_ID, request.requestId)
+                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, requestUserId)
+                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, requestDeviceId)
+                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_ID, requestId)
                     .findAll().forEach {
                         it.requestState = state
                     }

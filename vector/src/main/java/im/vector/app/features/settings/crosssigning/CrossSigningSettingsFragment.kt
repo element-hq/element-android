@@ -41,8 +41,9 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     private val viewModel: CrossSigningSettingsViewModel by fragmentViewModel()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         viewModel.observeViewEvents {
             when (it) {
                 is CrossSigningSettingsViewEvents.Failure -> {
@@ -60,11 +61,6 @@ class CrossSigningSettingsFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.encryption_information_cross_signing_state)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

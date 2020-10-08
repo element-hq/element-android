@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +15,21 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk
+package org.matrix.android.sdk.internal.network.parsing
 
-import okreplay.OkReplayConfig
-import okreplay.PermissionRule
-import okreplay.RecorderRule
-import org.junit.rules.RuleChain
-import org.junit.rules.TestRule
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
+import okhttp3.TlsVersion
 
-class OkReplayRuleChainNoActivity(
-        private val configuration: OkReplayConfig) {
+internal class TlsVersionMoshiAdapter {
 
-    fun get(): TestRule {
-        return RuleChain.outerRule(PermissionRule(configuration))
-                .around(RecorderRule(configuration))
+    @ToJson
+    fun toJson(tlsVersion: TlsVersion): String {
+        return tlsVersion.javaName
+    }
+
+    @FromJson
+    fun fromJson(tlsVersionString: String): TlsVersion {
+        return TlsVersion.forJavaName(tlsVersionString)
     }
 }

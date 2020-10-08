@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 
 /**
- * IncomingRoomKeyRequest class defines the incoming room keys request.
+ * IncomingSecretShareRequest class defines the incoming secret keys request.
  */
 data class IncomingSecretShareRequest(
         /**

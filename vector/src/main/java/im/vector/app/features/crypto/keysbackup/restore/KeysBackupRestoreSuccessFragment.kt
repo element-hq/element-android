@@ -16,6 +16,7 @@
 package im.vector.app.features.crypto.keysbackup.restore
 
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
 import butterknife.BindView
@@ -36,8 +37,8 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
         if (compareValues(sharedViewModel.importKeyResult?.totalNumberOfKeys, 0) > 0) {

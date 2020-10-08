@@ -31,12 +31,12 @@ import android.provider.Browser
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
@@ -130,7 +130,7 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
-                      fragment: Fragment?,
+                      activityResultLauncher: ActivityResultLauncher<Intent>?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -140,8 +140,8 @@ fun openFileSelection(activity: Activity,
     fileIntent.type = "*/*"
 
     try {
-        fragment
-                ?.startActivityForResult(fileIntent, requestCode)
+        activityResultLauncher
+                ?.launch(fileIntent)
                 ?: run {
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
@@ -440,10 +440,9 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        fragment: Fragment?,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
         defaultFileName: String,
-        chooserHint: String,
-        requestCode: Int
+        chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -452,11 +451,7 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (fragment != null) {
-            fragment.startActivityForResult(chooserIntent, requestCode)
-        } else {
-            activity.startActivityForResult(chooserIntent, requestCode)
-        }
+        activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }

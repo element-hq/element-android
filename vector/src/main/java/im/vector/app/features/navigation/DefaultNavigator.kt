@@ -21,11 +21,11 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.Window
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
@@ -45,7 +45,6 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
-import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.media.AttachmentData
@@ -266,21 +265,32 @@ class DefaultNavigator @Inject constructor(
                 }
     }
 
-    override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
-        val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
-        fragment.startActivityForResult(intent, requestCode)
+    override fun openTerms(context: Context,
+                           activityResultLauncher: ActivityResultLauncher<Intent>,
+                           serviceType: TermsService.ServiceType,
+                           baseUrl: String,
+                           token: String?) {
+        val intent = ReviewTermsActivity.intent(context, serviceType, baseUrl, token)
+        activityResultLauncher.launch(intent)
     }
 
-    override fun openStickerPicker(fragment: Fragment, roomId: String, widget: Widget, requestCode: Int) {
+    override fun openStickerPicker(context: Context,
+                                   activityResultLauncher: ActivityResultLauncher<Intent>,
+                                   roomId: String,
+                                   widget: Widget) {
         val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
-        val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
-        fragment.startActivityForResult(intent, WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE)
+        val intent = WidgetActivity.newIntent(context, widgetArgs)
+        activityResultLauncher.launch(intent)
     }
 
-    override fun openIntegrationManager(fragment: Fragment, roomId: String, integId: String?, screen: String?) {
+    override fun openIntegrationManager(context: Context,
+                                        activityResultLauncher: ActivityResultLauncher<Intent>,
+                                        roomId: String,
+                                        integId: String?,
+                                        screen: String?) {
         val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
-        val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
-        fragment.startActivityForResult(intent, WidgetRequestCodes.INTEGRATION_MANAGER_REQUEST_CODE)
+        val intent = WidgetActivity.newIntent(context, widgetArgs)
+        activityResultLauncher.launch(intent)
     }
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
@@ -293,14 +303,11 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int) {
-        val intent = PinActivity.newIntent(fragment.requireContext(), PinArgs(pinMode))
-        fragment.startActivityForResult(intent, requestCode)
-    }
-
-    override fun openPinCode(activity: Activity, pinMode: PinMode, requestCode: Int) {
-        val intent = PinActivity.newIntent(activity, PinArgs(pinMode))
-        activity.startActivityForResult(intent, requestCode)
+    override fun openPinCode(context: Context,
+                             activityResultLauncher: ActivityResultLauncher<Intent>,
+                             pinMode: PinMode) {
+        val intent = PinActivity.newIntent(context, PinArgs(pinMode))
+        activityResultLauncher.launch(intent)
     }
 
     override fun openMediaViewer(activity: Activity,

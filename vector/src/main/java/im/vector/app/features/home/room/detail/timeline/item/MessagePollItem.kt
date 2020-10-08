@@ -84,7 +84,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
             }
         } else {
             holder.resultWrapper.isVisible = true
-            val maxCount = votes?.maxBy { it.value }?.value ?: 0
+            val maxCount = votes?.maxByOrNull { it.value }?.value ?: 0
             optionsContent?.options?.forEachIndexed { index, item ->
                 if (index < resultLines.size) {
                     val optionCount = votes?.get(index) ?: 0

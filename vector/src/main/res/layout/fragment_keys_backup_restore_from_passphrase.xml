@@ -17,10 +17,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:src="@drawable/key_big"
-            android:tint="?riotx_text_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/keys_backup_restore_with_passphrase"
@@ -68,10 +69,11 @@
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
             android:src="@drawable/ic_eye"
-            android:tint="?colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/keys_backup_passphrase_enter_til"
-            app:layout_constraintTop_toTopOf="@+id/keys_backup_passphrase_enter_til" />
+            app:layout_constraintTop_toTopOf="@+id/keys_backup_passphrase_enter_til"
+            app:tint="?colorAccent"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/keys_backup_passphrase_help_with_link"

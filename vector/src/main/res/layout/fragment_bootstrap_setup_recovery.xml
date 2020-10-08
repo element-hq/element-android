@@ -83,8 +83,8 @@
         android:layout_marginEnd="16dp"
         android:text="@string/reset_secure_backup_warning"
         android:textColor="@color/riotx_destructive_accent"
-        android:drawableStart="@drawable/ic_warning_badge"
         android:drawablePadding="4dp"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ic_warning_badge" />
 
 </LinearLayout>
