@@ -107,6 +107,16 @@ internal class DefaultReadService @AssistedInject constructor(
         }
     }
 
+    override fun getUserReadReceipt(userId: String): String? {
+        var eventId: String? = null
+        monarchy.doWithRealm {
+            eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = userId)
+                    .findFirst()
+                    ?.eventId
+        }
+        return eventId
+    }
+
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
         val liveRealmData = monarchy.findAllMappedWithChanges(
                 { ReadReceiptsSummaryEntity.where(it, eventId) },

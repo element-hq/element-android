@@ -172,13 +172,16 @@ class RoomMemberProfileController @Inject constructor(
             val membership = state.asyncMembership() ?: return
 
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-            buildProfileAction(
-                    id = "read_receipt",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
-                    dividerColor = dividerColor,
-                    action = { callback?.onJumpToReadReceiptClicked() }
-            )
+
+            if (state.hasReadReceipt) {
+                buildProfileAction(
+                        id = "read_receipt",
+                        editable = false,
+                        title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
+                        dividerColor = dividerColor,
+                        action = { callback?.onJumpToReadReceiptClicked() }
+                )
+            }
 
             val ignoreActionTitle = state.buildIgnoreActionTitle()
 

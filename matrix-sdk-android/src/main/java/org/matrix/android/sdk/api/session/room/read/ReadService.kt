@@ -64,6 +64,14 @@ interface ReadService {
     fun getMyReadReceiptLive(): LiveData<Optional<String>>
 
     /**
+     * Get the eventId where the read receipt for the provided user is
+     * @param userId the id of the user to look for
+     *
+     * @return the eventId where the read receipt for the provided user is attached, or null if not found
+     */
+    fun getUserReadReceipt(userId: String): String?
+
+    /**
      * Returns a live list of read receipts for a given event
      * @param eventId: the event
      */

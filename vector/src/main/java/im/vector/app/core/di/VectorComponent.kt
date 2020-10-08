@@ -36,6 +36,7 @@ import im.vector.app.features.crypto.verification.IncomingVerificationRequestHan
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
@@ -113,6 +114,8 @@ interface VectorComponent {
     fun homeRoomListObservableStore(): HomeRoomListDataSource
 
     fun selectedGroupStore(): SelectedGroupDataSource
+
+    fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
 
     fun activeSessionObservableStore(): ActiveSessionDataSource
 

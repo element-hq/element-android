@@ -274,7 +274,13 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RemoveWidget -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend -> handleCancel(action)
+            is RoomDetailAction.JumpToReadReceipt -> handleJumpToReadReceipt(action)
         }.exhaustive
+    }
+
+    private fun handleJumpToReadReceipt(action: RoomDetailAction.JumpToReadReceipt) {
+        room.getUserReadReceipt(action.userId)
+                ?.let { handleNavigateToEvent(RoomDetailAction.NavigateToEvent(it, true)) }
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
