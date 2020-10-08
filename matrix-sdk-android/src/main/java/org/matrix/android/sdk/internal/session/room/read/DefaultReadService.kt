@@ -107,10 +107,10 @@ internal class DefaultReadService @AssistedInject constructor(
         }
     }
 
-    override fun getUserReadReceipt(otherUserId: String): String? {
+    override fun getUserReadReceipt(userId: String): String? {
         var eventId: String? = null
         monarchy.doWithRealm {
-            eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = otherUserId)
+            eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = userId)
                     .findFirst()
                     ?.eventId
         }

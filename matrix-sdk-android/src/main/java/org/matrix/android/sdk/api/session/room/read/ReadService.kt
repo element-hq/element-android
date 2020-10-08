@@ -65,11 +65,11 @@ interface ReadService {
 
     /**
      * Get the eventId where the read receipt for the provided user is
-     * @param otherUserId the userId param to look for
+     * @param userId the id of the user to look for
      *
      * @return the eventId where the read receipt for the provided user is attached, or null if not found
      */
-    fun getUserReadReceipt(otherUserId: String): String?
+    fun getUserReadReceipt(userId: String): String?
 
     /**
      * Returns a live list of read receipts for a given event
