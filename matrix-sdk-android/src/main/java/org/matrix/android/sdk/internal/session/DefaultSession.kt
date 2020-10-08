@@ -207,6 +207,7 @@ internal class DefaultSession @Inject constructor(
         cryptoService.get().close()
         isOpen = false
         eventBus.unregister(this)
+        eventSenderProcessor.interrupt()
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()
