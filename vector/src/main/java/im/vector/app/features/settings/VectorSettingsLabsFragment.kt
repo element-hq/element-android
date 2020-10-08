@@ -16,8 +16,11 @@
 
 package im.vector.app.features.settings
 
+import androidx.preference.Preference
 import im.vector.app.R
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
@@ -35,5 +38,25 @@ class VectorSettingsLabsFragment @Inject constructor(
                 it.parent?.removePreference(it)
             }
         }
+
+        val systemDarkThemePreTenPref = findPreference<VectorSwitchPreference>(ThemeUtils.SYSTEM_DARK_THEME_PRE_TEN)
+        systemDarkThemePreTenPref?.let {
+            if (ThemeUtils.darkThemeDefinitivelyPossible()) {
+                it.parent?.removePreference(it)
+            }
+        }
+        /*
+        systemDarkThemePreTenPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            if (newValue is Boolean) {
+                if (ThemeUtils.shouldUseDarkTheme(requireContext())) {
+                    // Restart the Activity | TODO: we need to do this AFTER the value is persisted...
+                    activity?.restart()
+                }
+                true
+            } else {
+                false
+            }
+        }
+         */
     }
 }

@@ -39,6 +39,7 @@ object ThemeUtils {
     // preference key
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
     const val APPLICATION_DARK_THEME_KEY = "APPLICATION_DARK_THEME_KEY"
+    const val SYSTEM_DARK_THEME_PRE_TEN = "SYSTEM_DARK_THEME_PRE_TEN"
 
     // the theme possible values
     private const val THEME_DARK_VALUE = "dark"
@@ -63,13 +64,18 @@ object ThemeUtils {
     /**
      * @return Whether a system-wide dark mode is available on this device
      */
-    fun darkThemePossible(): Boolean {
+    fun darkThemePossible(context: Context): Boolean {
+        // On Lineage, available since 15.1: https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/209022
+        return darkThemeDefinitivelyPossible() || DefaultSharedPreferences.getInstance(context).getBoolean(SYSTEM_DARK_THEME_PRE_TEN, false)
+    }
+
+    fun darkThemeDefinitivelyPossible(): Boolean {
         // Available since Android 10: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
 
     fun shouldUseDarkTheme(context: Context): Boolean {
-        if (!darkThemePossible()) {
+        if (!darkThemePossible(context)) {
             return false
         }
         val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

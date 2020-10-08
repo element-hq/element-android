@@ -66,7 +66,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
-        if (ThemeUtils.darkThemePossible()) {
+        if (ThemeUtils.darkThemePossible(requireContext())) {
             lightThemePref.title = getString(R.string.settings_light_theme)
             darkThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {

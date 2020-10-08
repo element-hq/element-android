@@ -15,6 +15,8 @@
 
     <string name="settings_light_theme">Helles Design</string>
     <string name="settings_dark_theme">Dunkles Design</string>
+    <string name="settings_system_dark_theme_pre_ten">Folge dem Systemdesign</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Erlaube die separate Konfiguration eines hellen und dunklen Anwendungsdesigns. Deine aktuelle Android-Version unterstützt den Wechsel womöglich nicht!</string>
     <string name="sc_light_theme">SC Hell</string>
     <string name="sc_theme">SC Schwarz</string>
     <string name="sc_dark_theme">SC Dunkel</string>
