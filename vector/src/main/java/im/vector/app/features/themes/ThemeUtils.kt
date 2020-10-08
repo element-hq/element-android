@@ -91,8 +91,12 @@ object ThemeUtils {
     }
 
     fun invalidateNightMode(context: Context) {
-        mThemeInitialized = false;
-        setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context))
+        val lightTheme = getApplicationLightTheme(context)
+        val darkTheme = getApplicationDarkTheme(context)
+        if (lightTheme != darkTheme && darkThemePossible(context)) {
+            mThemeInitialized = false;
+            setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context))
+        }
     }
 
     // init the theme
