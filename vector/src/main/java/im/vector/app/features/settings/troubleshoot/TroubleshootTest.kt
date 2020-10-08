@@ -51,4 +51,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     open fun cancel() {
     }
+
+    open fun onNotificationClicked() {
+    }
 }

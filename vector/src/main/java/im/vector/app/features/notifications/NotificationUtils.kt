@@ -51,6 +51,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -90,6 +91,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
         const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
         private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
+        const val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
 
         /* ==========================================================================================
          * IDs for channels
@@ -847,6 +849,15 @@ class NotificationUtils @Inject constructor(private val context: Context,
     }
 
     fun displayDiagnosticNotification() {
+        val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
+        testActionIntent.action = DIAGNOSTIC_ACTION
+        val testPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                testActionIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         notificationManager.notify(
                 "DIAGNOSTIC",
                 888,
@@ -859,6 +870,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setCategory(NotificationCompat.CATEGORY_STATUS)
                         .setAutoCancel(true)
+                        .setContentIntent(testPendingIntent)
                         .build()
         )
     }

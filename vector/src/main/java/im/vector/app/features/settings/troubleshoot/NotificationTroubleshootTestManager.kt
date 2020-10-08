@@ -94,4 +94,10 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
             test.cancel()
         }
     }
+
+    fun onDiagnosticNotificationClicked() {
+        testList.forEach {
+            it.onNotificationClicked()
+        }
+    }
 }
