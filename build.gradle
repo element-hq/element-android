@@ -64,7 +64,8 @@ allprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         // Warnings are potential errors, so stop ignoring them
-        kotlinOptions.allWarningsAsErrors = true
+        // You can override by passing `-PallWarningsAsErrors=false` in the command line
+        kotlinOptions.allWarningsAsErrors = project.properties['allWarningsAsErrors']?.toBoolean() ?: true
     }
 
 }

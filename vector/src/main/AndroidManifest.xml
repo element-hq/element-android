@@ -232,9 +232,11 @@
             </intent-filter>
         </service>
 
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
             android:name=".core.services.VectorSyncService"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
 
         <service
             android:name=".features.call.telecom.VectorConnectionService"
