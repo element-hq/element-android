@@ -21,7 +21,6 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequest
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.startChain

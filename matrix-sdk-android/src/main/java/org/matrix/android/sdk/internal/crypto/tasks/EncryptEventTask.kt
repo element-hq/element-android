@@ -44,7 +44,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         // don't want to wait for any query
-        //if (!params.crypto.isRoomEncrypted(params.roomId)) return params.event
+        // if (!params.crypto.isRoomEncrypted(params.roomId)) return params.event
         val localEvent = params.event
         if (localEvent.eventId == null) {
             throw IllegalArgumentException()

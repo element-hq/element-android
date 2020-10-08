@@ -43,7 +43,6 @@ internal class RedactQueuedTask(
         localEchoRepository.updateSendState(redactionLocalEchoId, roomId, SendState.UNDELIVERED)
     }
 
-
     override fun isCancelled(): Boolean {
         return _isCancelled || cancelSendTracker.isCancelRequestedFor(redactionLocalEchoId, roomId)
     }

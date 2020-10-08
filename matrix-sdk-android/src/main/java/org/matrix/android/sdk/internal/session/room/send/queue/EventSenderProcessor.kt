@@ -153,7 +153,7 @@ internal class EventSenderProcessor @Inject constructor(
                             // SendPerformanceProfiler.startStage(task.event.eventId!!, SendPerformanceProfiler.Stages.SEND_WORKER)
                             Timber.v("## SendThread retryLoop for $task retryCount ${task.retryCount}")
                             task.execute()
-                            //sendEventTask.execute(SendEventTask.Params(task.event, task.encrypt, cryptoService))
+                            // sendEventTask.execute(SendEventTask.Params(task.event, task.encrypt, cryptoService))
                             // SendPerformanceProfiler.stopStage(task.event.eventId, SendPerformanceProfiler.Stages.SEND_WORKER)
                             break@retryLoop
                         } catch (exception: Throwable) {
@@ -161,19 +161,17 @@ internal class EventSenderProcessor @Inject constructor(
                                 exception is IOException || exception is Failure.NetworkConnection                         -> {
                                     canReachServer = false
                                     task.retryCount++
-                                    if (task.retryCount >= 3) task.onTaskFailed() //localEchoRepository.updateSendState(task.event.eventId!!, task.event.roomId, SendState.UNDELIVERED)
+                                    if (task.retryCount >= 3) task.onTaskFailed()
                                     while (!canReachServer) {
                                         Timber.v("## SendThread retryLoop cannot reach server, wait ts:${System.currentTimeMillis()}")
                                         // schedule to retry
                                         waitForNetwork()
-                                        // if thread as been killed meanwhile
-                                        // if (state == State.KILLING) break
                                     }
                                 }
                                 (exception is Failure.ServerError && exception.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
                                     task.retryCount++
-                                    if (task.retryCount >= 3) task.onTaskFailed() //localEchoRepository.updateSendState(task.event.eventId!!, task.event.roomId, SendState.UNDELIVERED)
-                                    Timber.v("## SendThread retryLoop retryable error for ${task} reason: ${exception.localizedMessage}")
+                                    if (task.retryCount >= 3) task.onTaskFailed()
+                                    Timber.v("## SendThread retryLoop retryable error for $task reason: ${exception.localizedMessage}")
                                     // wait a bit
                                     // Todo if its a quota exception can we get timout?
                                     sleep(3_000)
@@ -183,7 +181,6 @@ internal class EventSenderProcessor @Inject constructor(
                                     Timber.v("## SendThread retryLoop retryable TOKEN error, interrupt")
                                     // we can exit the loop
                                     task.onTaskFailed()
-                                    // localEchoRepository.updateSendState(task.event.eventId!!, task.event.roomId, SendState.UNDELIVERED)
                                     throw InterruptedException()
                                 }
                                 else                                                                                       -> {
@@ -199,7 +196,7 @@ internal class EventSenderProcessor @Inject constructor(
             }
         } catch (interruptionException: InterruptedException) {
             // will be thrown is thread is interrupted while seeping
-            interrupt();
+            interrupt()
             Timber.v("## InterruptedException!! ${interruptionException.localizedMessage}")
         }
 //        state = State.KILLED
@@ -212,7 +209,7 @@ internal class EventSenderProcessor @Inject constructor(
         retryNoNetworkTask = Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_WAIT_TIME_MS) {
             synchronized(networkAvailableLock) {
                 canReachServer = checkHostAvailable().also {
-                    Timber.v("## SendThread checkHostAvailable ${it}")
+                    Timber.v("## SendThread checkHostAvailable $it")
                 }
                 networkAvailableLock.notify()
             }

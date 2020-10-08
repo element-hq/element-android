@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import android.content.Context
-import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
@@ -31,7 +30,6 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**

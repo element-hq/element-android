@@ -851,24 +851,23 @@ internal class DefaultTimeline(
         fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated): Boolean {
             var postSnapshot = false
             if (isLive && onLocalEchoCreated.roomId == roomId) {
-
                 // Manage some ui echos (do it before filter because actual event could be filtered out)
                 when (onLocalEchoCreated.timelineEvent.root.getClearType()) {
                     EventType.REDACTION -> {
-
                     }
                     EventType.REACTION  -> {
                         val content = onLocalEchoCreated.timelineEvent.root.content?.toModel<ReactionContent>()
                         if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                             val reaction = content.relatesTo.key
                             val relatedEventID = content.relatesTo.eventId
-                            (inMemoryReactions.getOrPut(relatedEventID) { mutableListOf() }).add(
-                                    ReactionUiEchoData(
-                                            localEchoId = onLocalEchoCreated.timelineEvent.eventId,
-                                            reactedOnEventId = relatedEventID,
-                                            reaction = reaction
+                            inMemoryReactions.getOrPut(relatedEventID) { mutableListOf() }
+                                    .add(
+                                            ReactionUiEchoData(
+                                                    localEchoId = onLocalEchoCreated.timelineEvent.eventId,
+                                                    reactedOnEventId = relatedEventID,
+                                                    reaction = reaction
+                                            )
                                     )
-                            )
                             postSnapshot = rebuildEvent(relatedEventID) {
                                 decorateEventWithReactionUiEcho(it)
                             } || postSnapshot

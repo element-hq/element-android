@@ -23,13 +23,10 @@ import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
-import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
@@ -90,7 +87,7 @@ internal class SendEventWorker(context: Context,
 
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
         return try {
-            sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId) , cryptoService))
+            sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId), cryptoService))
             Result.success()
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
@@ -107,5 +104,4 @@ internal class SendEventWorker(context: Context,
     override fun buildErrorParams(params: Params, message: String): Params {
         return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
-
 }

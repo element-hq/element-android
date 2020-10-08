@@ -1061,7 +1061,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-
     private fun handleResendAll() {
         room.resendAllFailedMessages()
     }

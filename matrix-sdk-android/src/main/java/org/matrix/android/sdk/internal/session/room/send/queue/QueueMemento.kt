@@ -84,7 +84,7 @@ internal class QueueMemento @Inject constructor(context: Context,
     suspend fun restoreTasks(eventProcessor: EventSenderProcessor) {
         // events should be restarted in correct order
         storage.getStringSet("ManagedBySender", null)?.let { pending ->
-            Timber.d("## Send - Recovering unsent events ${pending}")
+            Timber.d("## Send - Recovering unsent events $pending")
             pending.mapNotNull { tryOrNull { TaskInfo.map(it) } }
         }
                 ?.sortedBy { it.order }
@@ -95,7 +95,7 @@ internal class QueueMemento @Inject constructor(context: Context,
                                 localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
                                     if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
                                         localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)
-                                        Timber.d("## Send -Reschedule send ${info}")
+                                        Timber.d("## Send -Reschedule send $info")
                                         eventProcessor.postTask(queuedTaskFactory.createSendTask(it, info.encrypt ?: cryptoService.isRoomEncrypted(it.roomId)))
                                     }
                                 }
@@ -106,15 +106,15 @@ internal class QueueMemento @Inject constructor(context: Context,
                                     // try to get reason
                                     val reason = it.content?.get("reason") as? String
                                     if (it.redacts != null && it.roomId != null) {
-                                        Timber.d("## Send -Reschedule redact ${info}")
+                                        Timber.d("## Send -Reschedule redact $info")
                                         eventProcessor.postTask(queuedTaskFactory.createRedactTask(it.eventId, it.redacts, it.roomId, reason))
                                     }
                                 }
-                                //postTask(queuedTaskFactory.createRedactTask(info.eventToRedactId, info.)
+                                // postTask(queuedTaskFactory.createRedactTask(info.eventToRedactId, info.)
                             }
                         }
                     } catch (failure: Throwable) {
-                        Timber.e("failed to restore task ${info}")
+                        Timber.e("failed to restore task $info")
                     }
                 }
     }
