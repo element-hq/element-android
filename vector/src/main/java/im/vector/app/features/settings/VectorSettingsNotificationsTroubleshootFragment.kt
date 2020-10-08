@@ -41,6 +41,7 @@ import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.NotificationTroubleshootTestManagerFactory
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
@@ -92,8 +93,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
     }
 
     private fun startUI() {
-        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
-                0, 0)
+        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
         testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
@@ -105,9 +105,8 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.RUNNING     -> {
-                        // Forces int type because it's breaking lint
-                        val size: Int = troubleshootTestManager.testList.size
-                        val currentTestIndex: Int = troubleshootTestManager.currentTestIndex
+                        val size = troubleshootTestManager.testListSize
+                        val currentTestIndex = troubleshootTestManager.currentTestIndex
                         mSummaryDescription.text = getString(
                                 R.string.settings_troubleshoot_diagnostic_running_status,
                                 currentTestIndex,
@@ -118,16 +117,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                     }
                     TroubleshootTest.TestStatus.FAILED      -> {
                         // check if there are quick fixes
-                        // TODO Rewrite using firstOrNull
-                        var hasQuickFix = false
-                        testManager?.testList?.let {
-                            for (test in it) {
-                                if (test.status == TroubleshootTest.TestStatus.FAILED && test.quickFix != null) {
-                                    hasQuickFix = true
-                                    break
-                                }
-                            }
-                        }
+                        val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
                             mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
                         } else {

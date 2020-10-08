@@ -79,7 +79,7 @@ interface PushersService {
                  appId: String,
                  pushkey: String,
                  eventId: String,
-                 callback: MatrixCallback<Unit>)
+                 callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Remove the http pusher

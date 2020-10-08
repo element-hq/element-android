@@ -26,6 +26,7 @@ import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
+import org.matrix.android.sdk.api.util.Cancelable
 import javax.inject.Inject
 
 /**
@@ -37,12 +38,14 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
                                                   private val pushersManager: PushersManager)
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
+    private var action: Cancelable? = null
+
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
         }
-        pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
+        action = pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 description = if (failure is PushGatewayFailure.PusherRejected) {
                     stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
@@ -63,5 +66,9 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     override fun onNotificationClicked() {
         description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_notification_clicked)
         status = TestStatus.SUCCESS
+    }
+
+    override fun cancel() {
+        action?.cancel()
     }
 }

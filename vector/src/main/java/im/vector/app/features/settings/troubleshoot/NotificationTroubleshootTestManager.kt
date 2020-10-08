@@ -23,13 +23,19 @@ import androidx.fragment.app.Fragment
 import kotlin.properties.Delegates
 
 class NotificationTroubleshootTestManager(val fragment: Fragment) {
+    private val testList = ArrayList<TroubleshootTest>()
 
-    val testList = ArrayList<TroubleshootTest>()
+    val testListSize: Int
+        get() = testList.size
+
     var isCancelled = false
+        private set
 
     var currentTestIndex by Delegates.observable(0) { _, _, _ ->
         statusListener?.invoke(this)
     }
+        private set
+
     val adapter = NotificationTroubleshootRecyclerViewAdapter(testList)
 
     var statusListener: ((NotificationTroubleshootTestManager) -> Unit)? = null
@@ -37,6 +43,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
     var diagStatus: TroubleshootTest.TestStatus by Delegates.observable(TroubleshootTest.TestStatus.NOT_STARTED) { _, _, _ ->
         statusListener?.invoke(this)
     }
+        private set
 
     fun addTest(test: TroubleshootTest) {
         testList.add(test)
@@ -79,25 +86,27 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
     }
 
     fun retry(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        for (test in testList) {
-            test.cancel()
-            test.description = null
-            test.quickFix = null
-            test.status = TroubleshootTest.TestStatus.NOT_STARTED
+        testList.forEach {
+            it.cancel()
+            it.description = null
+            it.quickFix = null
+            it.status = TroubleshootTest.TestStatus.NOT_STARTED
         }
         runDiagnostic(activityResultLauncher)
     }
 
-    fun cancel() {
-        isCancelled = true
-        for (test in testList) {
-            test.cancel()
+    fun hasQuickFix(): Boolean {
+        return testList.any { test ->
+            test.status == TroubleshootTest.TestStatus.FAILED && test.quickFix != null
         }
     }
 
+    fun cancel() {
+        isCancelled = true
+        testList.forEach { it.cancel() }
+    }
+
     fun onDiagnosticNotificationClicked() {
-        testList.forEach {
-            it.onNotificationClicked()
-        }
+        testList.forEach { it.onNotificationClicked() }
     }
 }

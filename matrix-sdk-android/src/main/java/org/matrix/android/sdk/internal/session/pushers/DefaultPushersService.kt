@@ -51,8 +51,8 @@ internal class DefaultPushersService @Inject constructor(
                           appId: String,
                           pushkey: String,
                           eventId: String,
-                          callback: MatrixCallback<Unit>) {
-        pushGatewayNotifyTask
+                          callback: MatrixCallback<Unit>): Cancelable {
+        return pushGatewayNotifyTask
                 .configureWith(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId)) {
                     this.callback = callback
                 }

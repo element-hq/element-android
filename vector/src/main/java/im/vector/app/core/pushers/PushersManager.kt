@@ -22,6 +22,7 @@ import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.util.Cancelable
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -34,10 +35,10 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
-    fun testPush(pushKey: String, callback: MatrixCallback<Unit>) {
+    fun testPush(pushKey: String, callback: MatrixCallback<Unit>): Cancelable {
         val currentSession = activeSessionHolder.getActiveSession()
 
-        currentSession.testPush(
+        return currentSession.testPush(
                 stringProvider.getString(R.string.pusher_http_url),
                 stringProvider.getString(R.string.pusher_app_id),
                 pushKey,
