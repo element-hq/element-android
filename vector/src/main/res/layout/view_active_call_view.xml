@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/returnToCallButton"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/ic_call"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -23,7 +22,8 @@
         android:paddingBottom="12dp"
         android:text="@string/active_call"
         android:textColor="@color/white"
-        app:drawableTint="@color/white" />
+        app:drawableTint="@color/white"
+        app:drawableStartCompat="@drawable/ic_call" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/returnToCallButton"

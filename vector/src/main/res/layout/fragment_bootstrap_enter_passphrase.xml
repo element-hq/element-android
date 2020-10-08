@@ -54,12 +54,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_alert_triangle"
             android:drawablePadding="4dp"
-            android:drawableTint="@color/riotx_destructive_accent"
             android:gravity="center_vertical"
             android:text="@string/bootstrap_dont_reuse_pwd"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:drawableStartCompat="@drawable/ic_alert_triangle"
+            app:drawableTint="@color/riotx_destructive_accent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
