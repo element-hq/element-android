@@ -15,6 +15,8 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
@@ -35,7 +37,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
                                                   private val pushersManager: PushersManager)
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
