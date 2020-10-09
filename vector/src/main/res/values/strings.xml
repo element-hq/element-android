@@ -2124,6 +2124,7 @@
     <string name="direct_room_profile_not_encrypted_subtitle">Messages here are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="direct_room_profile_encrypted_subtitle">Messages here are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
+    <string name="room_profile_section_topic">Topic</string>
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
