@@ -17,6 +17,7 @@
 package im.vector.app.core.epoxy
 
 import android.animation.ObjectAnimator
+import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.doOnPreDraw
@@ -63,19 +64,21 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
 
     private fun expand(holder: Holder) {
         ObjectAnimator.ofInt(holder.content, "maxLines", expandedLines)
-                .apply { duration = 500 }
+                .apply { duration = 200 }
                 .also { it.start() }
 
+        holder.content.ellipsize = null
         holder.arrow.setImageResource(R.drawable.ic_expand_less)
         isExpanded = true
     }
 
     private fun collapse(holder: Holder) {
         ObjectAnimator.ofInt(holder.content, "maxLines", maxLines)
-                .apply { duration = 500 }
+                .apply { duration = 200 }
                 .also { it.start() }
 
-        holder.arrow.setImageResource(R.drawable.ic_expand_more)
+        holder.content.ellipsize = TextUtils.TruncateAt.END
+                holder.arrow.setImageResource(R.drawable.ic_expand_more)
         isExpanded = false
     }
 
