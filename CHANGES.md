@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Rework sending Event management (#154)
 
 Bugfix 🐛:
  -
