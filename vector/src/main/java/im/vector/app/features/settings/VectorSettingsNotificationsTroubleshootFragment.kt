@@ -166,7 +166,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiver, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
+                    .registerReceiver(broadcastReceiverPush, IntentFilter(NotificationUtils.PUSH_ACTION))
+        }
+        tryOrNull("Unable to register the receiver") {
+            LocalBroadcastManager.getInstance(requireContext())
+                    .registerReceiver(broadcastReceiverNotification, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
         }
     }
 
@@ -174,11 +178,21 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onPause()
         tryOrNull {
            LocalBroadcastManager.getInstance(requireContext())
-                   .unregisterReceiver(broadcastReceiver)
+                   .unregisterReceiver(broadcastReceiverPush)
+        }
+        tryOrNull {
+           LocalBroadcastManager.getInstance(requireContext())
+                   .unregisterReceiver(broadcastReceiverNotification)
         }
     }
 
-    private val broadcastReceiver = object : BroadcastReceiver() {
+    private val broadcastReceiverPush = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            testManager?.onDiagnosticPushReceived()
+        }
+    }
+
+    private val broadcastReceiverNotification = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             testManager?.onDiagnosticNotificationClicked()
         }

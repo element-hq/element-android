@@ -106,6 +106,10 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
         testList.forEach { it.cancel() }
     }
 
+    fun onDiagnosticPushReceived() {
+        testList.forEach { it.onPushReceived() }
+    }
+
     fun onDiagnosticNotificationClicked() {
         testList.forEach { it.onNotificationClicked() }
     }

@@ -97,15 +97,15 @@ fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = t
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun startNotificationSettingsIntent(activity: AppCompatActivity, activityResultLauncher: ActivityResultLauncher<Intent>) {
+fun startNotificationSettingsIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
     } else {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra("app_package", activity.packageName)
-        intent.putExtra("app_uid", activity.applicationInfo?.uid)
+        intent.putExtra("app_package", context.packageName)
+        intent.putExtra("app_uid", context.applicationInfo?.uid)
     }
     activityResultLauncher.launch(intent)
 }

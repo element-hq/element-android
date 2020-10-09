@@ -92,6 +92,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
         private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
         const val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
+        const val PUSH_ACTION = "${BuildConfig.APPLICATION_ID}.PUSH"
 
         /* ==========================================================================================
          * IDs for channels

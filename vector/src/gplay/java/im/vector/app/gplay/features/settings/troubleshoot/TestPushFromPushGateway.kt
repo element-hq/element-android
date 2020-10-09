@@ -56,15 +56,15 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
             }
 
             override fun onSuccess(data: Unit) {
-                // Wait for user to click on the notification
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
-                status = TestStatus.WAITING_FOR_USER
+                // Wait for the push to be received
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
+                status = TestStatus.RUNNING
             }
         })
     }
 
-    override fun onNotificationClicked() {
-        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_notification_clicked)
+    override fun onPushReceived() {
+        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
         status = TestStatus.SUCCESS
     }
 
