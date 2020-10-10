@@ -28,8 +28,11 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     EMOTE("/me", "<message>", R.string.command_description_emote),
     BAN_USER("/ban", "<user-id> [reason]", R.string.command_description_ban_user),
     UNBAN_USER("/unban", "<user-id> [reason]", R.string.command_description_unban_user),
+    IGNORE_USER("/ignore", "<user-id> [reason]", R.string.command_description_ignore_user),
+    UNIGNORE_USER("/unignore", "<user-id>", R.string.command_description_unignore_user),
     SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
     RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
+    ROOM_NAME("/roomname", "<user-id> [reason]", R.string.command_description_room_name),
     INVITE("/invite", "<user-id> [reason]", R.string.command_description_invite_user),
     JOIN_ROOM("/join", "<room-alias> [reason]", R.string.command_description_join_room),
     PART("/part", "<room-alias> [reason]", R.string.command_description_part_room),
@@ -42,8 +45,10 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
     SPOILER("/spoiler", "<message>", R.string.command_description_spoiler),
     POLL("/poll", "Question | Option 1 | Option 2 ...", R.string.command_description_poll),
-    SHRUG("/shrug", "<message>", R.string.command_description_shrug),
+    SHRUG("/shrug", "[<message>]", R.string.command_description_shrug),
+    LENNY("/lenny", "[<message>]", R.string.command_description_lenny),
     PLAIN("/plain", "<message>", R.string.command_description_plain),
+    WHOIS("/whois", "<user-id>", R.string.command_description_whois),
     DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session);
 
     val length
