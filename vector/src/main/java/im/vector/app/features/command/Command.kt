@@ -39,6 +39,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     TOPIC("/topic", "<topic>", R.string.command_description_topic),
     KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
+    CHANGE_DISPLAY_NAME_FOR_ROOM("/myroomnick", "<display-name>", R.string.command_description_room_nick),
     MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
     RAINBOW("/rainbow", "<message>", R.string.command_description_rainbow),
     RAINBOW_EMOTE("/rainbowme", "<message>", R.string.command_description_rainbow_emote),

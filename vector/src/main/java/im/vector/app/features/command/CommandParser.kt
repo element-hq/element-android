@@ -60,7 +60,7 @@ object CommandParser {
             }
 
             return when (val slashCommand = messageParts.first()) {
-                Command.PLAIN.command                  -> {
+                Command.PLAIN.command                        -> {
                     val text = textMessage.substring(Command.PLAIN.command.length).trim()
 
                     if (text.isNotEmpty()) {
@@ -69,7 +69,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.PLAIN)
                     }
                 }
-                Command.CHANGE_DISPLAY_NAME.command    -> {
+                Command.CHANGE_DISPLAY_NAME.command          -> {
                     val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()
 
                     if (newDisplayName.isNotEmpty()) {
@@ -78,7 +78,16 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME)
                     }
                 }
-                Command.TOPIC.command                  -> {
+                Command.CHANGE_DISPLAY_NAME_FOR_ROOM.command -> {
+                    val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME_FOR_ROOM.command.length).trim()
+
+                    if (newDisplayName.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayNameForRoom(newDisplayName)
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME_FOR_ROOM)
+                    }
+                }
+                Command.TOPIC.command                        -> {
                     val newTopic = textMessage.substring(Command.TOPIC.command.length).trim()
 
                     if (newTopic.isNotEmpty()) {
@@ -87,22 +96,22 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.TOPIC)
                     }
                 }
-                Command.EMOTE.command                  -> {
+                Command.EMOTE.command                        -> {
                     val message = textMessage.subSequence(Command.EMOTE.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendEmote(message)
                 }
-                Command.RAINBOW.command                -> {
+                Command.RAINBOW.command                      -> {
                     val message = textMessage.subSequence(Command.RAINBOW.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbow(message)
                 }
-                Command.RAINBOW_EMOTE.command          -> {
+                Command.RAINBOW_EMOTE.command                -> {
                     val message = textMessage.subSequence(Command.RAINBOW_EMOTE.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbowEmote(message)
                 }
-                Command.JOIN_ROOM.command            -> {
+                Command.JOIN_ROOM.command                    -> {
                     if (messageParts.size >= 2) {
                         val roomAlias = messageParts[1]
 

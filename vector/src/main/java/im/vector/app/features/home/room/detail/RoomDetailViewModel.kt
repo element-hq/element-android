@@ -74,6 +74,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -675,6 +676,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                             handleChangeDisplayNameSlashCommand(slashCommandResult)
                             popDraft()
                         }
+                        is ParsedCommand.ChangeDisplayNameForRoom -> {
+                            handleChangeDisplayNameForRoomSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.ShowUser                 -> {
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             handleWhoisSlashCommand(slashCommandResult)
@@ -833,6 +838,16 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
         launchSlashCommandFlow {
             session.setDisplayName(session.myUserId, changeDisplayName.displayName, it)
+        }
+    }
+
+    private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
+        val content = room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
+                ?.content?.toModel<RoomMemberContent>()
+                ?: RoomMemberContent(membership = Membership.JOIN)
+
+        launchSlashCommandFlow {
+            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, content.copy(displayName = changeDisplayName.displayName).toContent(), it)
         }
     }
 

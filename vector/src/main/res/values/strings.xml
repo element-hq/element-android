@@ -1298,6 +1298,7 @@
     <string name="command_description_topic">Set the room topic</string>
     <string name="command_description_kick_user">Kicks user with given id</string>
     <string name="command_description_nick">Changes your display nickname</string>
+    <string name="command_description_room_nick">Changes your display nickname</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
     <string name="command_description_whois">Displays information about a user</string>
