@@ -19,6 +19,7 @@ package im.vector.app.features.share
 import android.app.Activity
 import android.content.ClipDescription
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -71,13 +72,28 @@ class IncomingShareFragment @Inject constructor(
         setupToolbar(incomingShareToolbar)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
+        viewModel.observeViewEvents {
+            when (it) {
+                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
+                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
+            }.exhaustive
+        }
+
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND -> {
+            Intent.ACTION_SEND          -> {
                 var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }
+
+                // Direct share
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+                    val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
+                    sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
+                }
+
                 isShareManaged
             }
             Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
@@ -100,13 +116,6 @@ class IncomingShareFragment @Inject constructor(
         })
         sendShareButton.setOnClickListener { _ ->
             handleSendShare()
-        }
-        viewModel.observeViewEvents {
-            when (it) {
-                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
-                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
-                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
         }
     }
 

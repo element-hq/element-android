@@ -16,6 +16,7 @@ Improvements 🙌:
  - Drawer: move settings access and add sign out action (#2171)
  - Filter room member (and banned users) by name (#2184)
  - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
+ - Direct share (#2029)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)

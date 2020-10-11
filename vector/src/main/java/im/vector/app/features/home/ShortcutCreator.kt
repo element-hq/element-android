@@ -33,6 +33,7 @@ import javax.inject.Inject
 private val useAdaptiveIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 private const val adaptiveIconSizeDp = 108
 private const val adaptiveIconOuterSidesDp = 18
+private const val directShareCategory = "im.vector.app.SHORTCUT_SHARE"
 
 class ShortcutCreator @Inject constructor(
         private val context: Context,
@@ -65,6 +66,10 @@ class ShortcutCreator @Inject constructor(
                 .setShortLabel(roomSummary.displayName)
                 .setIcon(bitmap?.toProfileImageIcon())
                 .setIntent(intent)
+
+                // Make it show up in the direct share menu
+                .setCategories(setOf(directShareCategory))
+
                 .build()
     }
 
