@@ -17,13 +17,11 @@
 
 package org.matrix.android.sdk.api.auth.data
 
-// Either a list of supported login types, or an error if the homeserver is outdated
 sealed class LoginFlowResult {
     data class Success(
             val supportedLoginTypes: List<String>,
             val isLoginAndRegistrationSupported: Boolean,
-            val homeServerUrl: String
+            val homeServerUrl: String,
+            val isOutdatedHomeserver: Boolean
     ) : LoginFlowResult()
-
-    object OutdatedHomeserver : LoginFlowResult()
 }

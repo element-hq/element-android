@@ -19,17 +19,17 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import android.content.Context
 import androidx.work.BackoffPolicy
-import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWorkCommon
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
 import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -42,7 +42,7 @@ import javax.inject.Inject
  * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -56,22 +56,20 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     @Inject lateinit var timelineSendEventWorkCommon: TimelineSendEventWorkCommon
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
-    override suspend fun doWork(): Result {
-        Timber.v("## SendEvent: Start dispatch sending multiple event work")
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
-
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
-
-        if (params.lastFailureMessage != null) {
-            params.localEchoIds.forEach { localEchoIds ->
-                localEchoRepository.updateSendState(localEchoIds.eventId, SendState.UNDELIVERED)
-            }
-            // Transmit the error if needed?
-            return Result.success(inputData)
-                    .also { Timber.e("## SendEvent: Work cancelled due to input error from parent ${params.lastFailureMessage}") }
+    override fun doOnError(params: Params): Result {
+        params.localEchoIds.forEach { localEchoIds ->
+            localEchoRepository.updateSendState(localEchoIds.eventId, SendState.UNDELIVERED)
         }
+
+        return super.doOnError(params)
+    }
+
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
+
+    override suspend fun doSafeWork(params: Params): Result {
+        Timber.v("## SendEvent: Start dispatch sending multiple event work")
         // Create a work for every event
         params.localEchoIds.forEach { localEchoIds ->
             val roomId = localEchoIds.roomId
@@ -92,6 +90,10 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
         }
 
         return Result.success()
+    }
+
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 
     private fun createEncryptEventWork(sessionId: String, eventId: String, startChain: Boolean): OneTimeWorkRequest {

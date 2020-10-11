@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_background">
 
-    <!-- Missing attributes are in the style -->
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/LoginFormScrollView"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         tools:ignore="MissingConstraints">
+
+        <ImageView
+            style="@style/LoginLogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/loginTermsTitle"
             style="@style/TextAppearance.Vector.Login.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
             android:paddingStart="36dp"
             android:paddingEnd="36dp"
             android:text="@string/login_terms_title"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/loginLogo" />
 
         <TextView
             android:id="@+id/loginTermsNotice"
@@ -53,5 +59,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 

@@ -1048,7 +1048,7 @@
 \nKas sa oled ikka kindel\?</string>
 
     <string name="room_participants_power_level_demote_warning_title">Kas vähendad enda õigusi\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Kuna sa vähendad enda õigusi, siis sul ei pruugi enam olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.</string>
     <string name="room_participants_power_level_demote">Vähenda enda õigusi</string>
 
 
@@ -1277,7 +1277,7 @@
     <string name="settings_messages_sent_by_bot">Robotite saadetud sõnumid</string>
 
     <string name="settings_background_sync">Andmete sünkroniseerimine taustal</string>
-    <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim (katseline)</string>
+    <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
 \nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.</string>
@@ -2331,8 +2331,8 @@
     <string name="sent_an_audio_file">Helifail</string>
     <string name="sent_a_file">Fail</string>
     <string name="room_profile_not_encrypted_subtitle">Sõnumid siin jututoas on läbivalt krüptitud.</string>
-    <string name="room_profile_encrypted_subtitle">Sõnumid siis jututoas kasutavad läbivat krüptimist.
-\n
+    <string name="room_profile_encrypted_subtitle">Sõnumid siin jututoas kasutavad läbivat krüptimist. 
+\n 
 \nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.</string>
     <string name="room_profile_section_security">Turvalisus</string>
     <string name="room_profile_section_security_learn_more">Lisateave</string>
@@ -2544,4 +2544,17 @@
 
     <string name="error_opening_banned_room">Ei ole võimalik avada sellise jututoa vaadet, kus sulle on seatud suhtluskeeld.</string>
     <string name="room_error_not_found">Ei leia sellist jututuba. Palun kontrolli, et ta ikka olemas on.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekundit</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Näita jututoa liikmete olekusündmusi</string>
+    <string name="settings_show_room_member_state_events_summary">Sealhulgas kutsumisi, liitumisi, lahkumisi, müksamisi, keelamisi ning tunnuspildi ja kuvatava nime muutusi.</string>
+    <string name="sent_a_poll">Küsitlus</string>
+    <string name="sent_a_bot_buttons">Robotinupud</string>
+    <string name="sent_a_reaction">Reageeris: %s</string>
+    <string name="sent_verification_conclusion">Verifitseerimise tulemus</string>
+
+    <string name="universal_link_malformed">Link oli vigane</string>
 </resources>

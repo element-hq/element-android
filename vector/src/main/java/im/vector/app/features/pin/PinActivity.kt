@@ -28,7 +28,6 @@ import im.vector.app.core.platform.VectorBaseActivity
 class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
 
     companion object {
-
         const val PIN_REQUEST_CODE = 17890
 
         fun newIntent(context: Context, args: PinArgs): Intent {

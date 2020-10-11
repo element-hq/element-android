@@ -22,12 +22,14 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// 2 minutes, when enabled
 private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
 
 /**
@@ -35,24 +37,22 @@ private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
  * It automatically locks when entering background/foreground with a grace period.
  * You can force to unlock with unlock method, use it whenever the pin code has been validated.
  */
-
 @Singleton
-class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : LifecycleObserver {
+class PinLocker @Inject constructor(
+        private val pinCodeStore: PinCodeStore,
+        private val vectorPreferences: VectorPreferences
+) : LifecycleObserver {
 
     enum class State {
         // App is locked, can be unlock
         LOCKED,
 
-        // App is blocked and can't be unlocked as long as the app is in foreground
-        BLOCKED,
-
-        // is unlocked, the app can be used
+        // App is unlocked, the app can be used
         UNLOCKED
     }
 
     private val liveState = MutableLiveData<State>()
 
-    private var isBlocked = false
     private var shouldBeLocked = true
     private var entersBackgroundTs = 0L
 
@@ -62,13 +62,13 @@ class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : Li
 
     private fun computeState() {
         GlobalScope.launch {
-            val state = if (isBlocked) {
-                State.BLOCKED
-            } else if (shouldBeLocked && pinCodeStore.hasEncodedPin()) {
+            val state = if (shouldBeLocked && pinCodeStore.hasEncodedPin()) {
                 State.LOCKED
             } else {
                 State.UNLOCKED
             }
+                    .also { Timber.v("New state: $it") }
+
             if (liveState.value != state) {
                 liveState.postValue(state)
             }
@@ -81,23 +81,25 @@ class PinLocker @Inject constructor(private val pinCodeStore: PinCodeStore) : Li
         computeState()
     }
 
-    fun block() {
-        Timber.v("Block app")
-        isBlocked = true
-        computeState()
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         val timeElapsedSinceBackground = SystemClock.elapsedRealtime() - entersBackgroundTs
-        shouldBeLocked = shouldBeLocked || timeElapsedSinceBackground >= PERIOD_OF_GRACE_IN_MS
-        Timber.v("App enters foreground after $timeElapsedSinceBackground ms spent in background")
+        shouldBeLocked = shouldBeLocked || timeElapsedSinceBackground >= getGracePeriod()
+        Timber.v("App enters foreground after $timeElapsedSinceBackground ms spent in background shouldBeLocked: $shouldBeLocked")
         computeState()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
-        isBlocked = false
+        Timber.v("App enters background")
         entersBackgroundTs = SystemClock.elapsedRealtime()
+    }
+
+    private fun getGracePeriod(): Long {
+        return if (vectorPreferences.useGracePeriod()) {
+            PERIOD_OF_GRACE_IN_MS
+        } else {
+            0L
+        }
     }
 }
