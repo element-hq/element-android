@@ -53,6 +53,7 @@ sealed class ParsedCommand {
     class KickUser(val userId: String, val reason: String?) : ParsedCommand()
     class ChangeDisplayName(val displayName: String) : ParsedCommand()
     class ChangeDisplayNameForRoom(val displayName: String) : ParsedCommand()
+    class ChangeAvatarForRoom(val url: String) : ParsedCommand()
     class SetMarkdown(val enable: Boolean) : ParsedCommand()
     object ClearScalarToken : ParsedCommand()
     class SendSpoiler(val message: String) : ParsedCommand()

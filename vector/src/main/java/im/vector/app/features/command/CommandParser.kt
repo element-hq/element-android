@@ -87,6 +87,19 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME_FOR_ROOM)
                     }
                 }
+                Command.CHANGE_AVATAR_FOR_ROOM.command       -> {
+                    if (messageParts.size == 2) {
+                        val url = messageParts[1]
+
+                        if (url.isNotEmpty()) {
+                            ParsedCommand.ChangeAvatarForRoom(url)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.CHANGE_AVATAR_FOR_ROOM)
+                        }
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.CHANGE_AVATAR_FOR_ROOM)
+                    }
+                }
                 Command.TOPIC.command                        -> {
                     val newTopic = textMessage.substring(Command.TOPIC.command.length).trim()
 
@@ -129,7 +142,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.JOIN_ROOM)
                     }
                 }
-                Command.PART.command                 -> {
+                Command.PART.command                         -> {
                     if (messageParts.size >= 2) {
                         val roomAlias = messageParts[1]
 
@@ -147,7 +160,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
-                Command.ROOM_NAME.command            -> {
+                Command.ROOM_NAME.command                    -> {
                     val newRoomName = textMessage.substring(Command.ROOM_NAME.command.length).trim()
 
                     if (newRoomName.isNotEmpty()) {
@@ -156,7 +169,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.ROOM_NAME)
                     }
                 }
-                Command.INVITE.command               -> {
+                Command.INVITE.command                       -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -183,7 +196,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
                     }
                 }
-                Command.KICK_USER.command              -> {
+                Command.KICK_USER.command                    -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -201,7 +214,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.KICK_USER)
                     }
                 }
-                Command.BAN_USER.command             -> {
+                Command.BAN_USER.command                     -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -219,7 +232,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.BAN_USER)
                     }
                 }
-                Command.UNBAN_USER.command           -> {
+                Command.UNBAN_USER.command                   -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -237,7 +250,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
                     }
                 }
-                Command.IGNORE_USER.command          -> {
+                Command.IGNORE_USER.command                  -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -250,7 +263,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.IGNORE_USER)
                     }
                 }
-                Command.UNIGNORE_USER.command        -> {
+                Command.UNIGNORE_USER.command                -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -263,7 +276,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.UNIGNORE_USER)
                     }
                 }
-                Command.SET_USER_POWER_LEVEL.command -> {
+                Command.SET_USER_POWER_LEVEL.command         -> {
                     if (messageParts.size == 3) {
                         val userId = messageParts[1]
                         if (MatrixPatterns.isUserId(userId)) {
@@ -283,7 +296,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
                 }
-                Command.RESET_USER_POWER_LEVEL.command -> {
+                Command.RESET_USER_POWER_LEVEL.command       -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -296,7 +309,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
                 }
-                Command.MARKDOWN.command             -> {
+                Command.MARKDOWN.command                     -> {
                     if (messageParts.size == 2) {
                         when {
                             "on".equals(messageParts[1], true)  -> ParsedCommand.SetMarkdown(true)
@@ -307,28 +320,28 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                     }
                 }
-                Command.CLEAR_SCALAR_TOKEN.command   -> {
+                Command.CLEAR_SCALAR_TOKEN.command           -> {
                     if (messageParts.size == 1) {
                         ParsedCommand.ClearScalarToken
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CLEAR_SCALAR_TOKEN)
                     }
                 }
-                Command.SPOILER.command              -> {
+                Command.SPOILER.command                      -> {
                     val message = textMessage.substring(Command.SPOILER.command.length).trim()
                     ParsedCommand.SendSpoiler(message)
                 }
-                Command.SHRUG.command                -> {
+                Command.SHRUG.command                        -> {
                     val message = textMessage.substring(Command.SHRUG.command.length).trim()
 
                     ParsedCommand.SendShrug(message)
                 }
-                Command.LENNY.command                -> {
+                Command.LENNY.command                        -> {
                     val message = textMessage.substring(Command.LENNY.command.length).trim()
 
                     ParsedCommand.SendLenny(message)
                 }
-                Command.POLL.command                 -> {
+                Command.POLL.command                         -> {
                     val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
                     val split = rawCommand.split("|").map { it.trim() }
                     if (split.size > 2) {
@@ -337,10 +350,10 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.POLL)
                     }
                 }
-                Command.DISCARD_SESSION.command      -> {
+                Command.DISCARD_SESSION.command              -> {
                     ParsedCommand.DiscardSession
                 }
-                Command.WHOIS.command                -> {
+                Command.WHOIS.command                        -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -353,7 +366,7 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.WHOIS)
                     }
                 }
-                else                                 -> {
+                else                                         -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
                 }

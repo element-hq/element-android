@@ -680,6 +680,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                             handleChangeDisplayNameForRoomSlashCommand(slashCommandResult)
                             popDraft()
                         }
+                        is ParsedCommand.ChangeAvatarForRoom      -> {
+                            handleChangeAvatarForRoomSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.ShowUser                 -> {
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             handleWhoisSlashCommand(slashCommandResult)
@@ -841,13 +845,21 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
-        val content = room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
+    private fun getLastMemberEvent(): RoomMemberContent {
+        return room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
                 ?.content?.toModel<RoomMemberContent>()
                 ?: RoomMemberContent(membership = Membership.JOIN)
+    }
 
+    private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
         launchSlashCommandFlow {
-            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, content.copy(displayName = changeDisplayName.displayName).toContent(), it)
+            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, getLastMemberEvent().copy(displayName = changeDisplayName.displayName).toContent(), it)
+        }
+    }
+
+    private fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
+        launchSlashCommandFlow {
+            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, getLastMemberEvent().copy(avatarUrl = changeAvatar.url).toContent(), it)
         }
     }
 
