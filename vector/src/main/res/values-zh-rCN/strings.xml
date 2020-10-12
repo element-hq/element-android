@@ -1696,7 +1696,6 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="room_directory_search_hint">名称或 ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">在时间线中启用滑动回复</string>
-    <string name="labs_merge_e2e_in_timeline">在时间线中合并解密失败消息</string>
     <string name="labs_show_unread_notifications_as_tab">在主屏幕上添加未读通知选项卡。</string>
 
     <string name="link_copied_to_clipboard">链接已复制到剪贴板</string>
@@ -2578,10 +2577,10 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 
     <string name="error_opening_banned_room">无法打开您被封禁的聊天室。</string>
     <string name="room_error_not_found">无法找到此聊天室。请确认它存在。</string>
-<string name="no_permissions_to_start_webrtc_call">您没有权限在此聊天室发起通话</string>
+    <string name="no_permissions_to_start_webrtc_call">您没有权限在此聊天室发起通话</string>
     <plurals name="seconds">
-	<item quantity="other">%d 秒</item>
-</plurals>
+        <item quantity="other">%d 秒</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">显示聊天室成员状态事件</string>
     <string name="settings_show_room_member_state_events_summary">包括邀请/加入/离开/踢掉/封禁事件和头像/昵称变更。</string>

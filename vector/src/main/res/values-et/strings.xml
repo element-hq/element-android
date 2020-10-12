@@ -2217,7 +2217,6 @@
 \n
 \n%s</string>
 
-    <string name="labs_merge_e2e_in_timeline">Ei õnnestunud dekrüptida ajajoonel leiduvat sõnumit</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Sa parasjagu jagad oma e-posti aadressi ja telefoninumbrit isikutuvastusserveriga %1$s. Selleks, et lõpetada see jagamine, pead uuesti looma ühenduse isikutuvastusserveriga %2$s.</string>
     <string name="labs_allow_extended_logging_summary">Detailne logimine võimaldab arendajatel saada rohkem teadet kui sa peale nutiseadme tõsist raputamist saadad veateate. Kui ka detailne logimine on kasutusel, siis rakendus ei logi sõnumite sisu ega isiklikke andmeid.</string>
 
@@ -2557,9 +2556,9 @@
     <string name="sent_verification_conclusion">Verifitseerimise tulemus</string>
 
     <string name="universal_link_malformed">Link oli vigane</string>
-<string name="no_permissions_to_start_webrtc_call">Sul ei ole õigusi siin jututoas helistamiseks</string>
+    <string name="no_permissions_to_start_webrtc_call">Sul ei ole õigusi siin jututoas helistamiseks</string>
     <string name="delete_account_data_warning">Kas kustutame %1$s tüüpi kasutajakonto andmed\?
 \n
 \nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.</string>
 
-    </resources>
+</resources>

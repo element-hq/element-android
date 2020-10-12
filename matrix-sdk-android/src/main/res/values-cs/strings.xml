@@ -105,7 +105,7 @@
     <string name="notice_room_leave_with_reason">%1$s opustil místnost. Důvod: %2$s</string>
     <string name="notice_event_redacted">Zpráva odstraněna</string>
     <string name="notice_event_redacted_by">Zprávu odstranil/a %1$s</string>
-<string name="summary_you_sent_image">Poslali jste obrázek.</string>
+    <string name="summary_you_sent_image">Poslali jste obrázek.</string>
     <string name="summary_you_sent_sticker">Poslali jste nálepku.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Vaše pozvání</string>
@@ -188,28 +188,28 @@
     <string name="notice_room_withdraw_with_reason_by_you">Zrušili jste pozvání od %1$s. Důvod: %2$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s přidali %2$s jako adresu pro tuto místnost.</item>
-	<item quantity="few">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
-	<item quantity="other">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
-</plurals>
+        <item quantity="one">%1$s přidali %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Přidali jste %1$s jako adresu pro tuto místnost.</item>
-	<item quantity="few">Přidali jste %1$s jako adresy pro tuto místnost.</item>
-	<item quantity="other">Přidali jste %1$s jako adresy pro tuto místnost.</item>
-</plurals>
+        <item quantity="one">Přidali jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s odstranili %2$s jako adresu pro tuto místnost.</item>
-	<item quantity="few">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
-	<item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
-</plurals>
+        <item quantity="one">%1$s odstranili %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Odstranili jste %2$s jako adresu pro tuto místnost.</item>
-	<item quantity="few">Odstranili jste %2$s jako adresuy pro tuto místnost.</item>
-	<item quantity="other">Odstranili jste %2$s jako adresy pro tuto místnost.</item>
-</plurals>
+        <item quantity="one">Odstranili jste %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste %2$s jako adresuy pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s přidali %2$ a odstranili %3$s jako adresy pro tuto místnost.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Přidali jste %1$s a odstranili %2$s jako adresy pro tuto místnost.</string>

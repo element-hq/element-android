@@ -2512,7 +2512,6 @@
 
     <string name="secure_backup_setup">Imposta il Backup Sicuro</string>
 
-    <string name="labs_merge_e2e_in_timeline">Decifrazione del messaggio nella timeline fallita</string>
     <string name="labs_show_unread_notifications_as_tab">Aggiungi una scheda dedicata per le notifiche non lette nella schermata principale.</string>
 
     <string name="room_list_quick_actions_favorite_add">Aggiungi ai preferiti</string>
@@ -2669,11 +2668,11 @@
 
     <string name="error_opening_banned_room">Impossibile aprire una stanza dove sei stato bandito.</string>
     <string name="room_error_not_found">Impossibile trovare questa stanza. Assicurati che esista.</string>
-<string name="no_permissions_to_start_webrtc_call">Non hai il permesso di avviare una chiamata in questa stanza</string>
+    <string name="no_permissions_to_start_webrtc_call">Non hai il permesso di avviare una chiamata in questa stanza</string>
     <plurals name="seconds">
-	<item quantity="one">%d secondo</item>
-	<item quantity="other">%d secondi</item>
-</plurals>
+        <item quantity="one">%d secondo</item>
+        <item quantity="other">%d secondi</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">Mostra eventi di stato dei membri della stanza</string>
     <string name="settings_show_room_member_state_events_summary">Includi eventi di invito/entrata/uscita/kick/ban e modifiche di avatar/nome.</string>

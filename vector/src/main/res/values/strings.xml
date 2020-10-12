@@ -1750,7 +1750,6 @@
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
-    <string name="labs_merge_e2e_in_timeline">Merge failed to decrypt message in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>

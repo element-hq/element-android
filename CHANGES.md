@@ -30,7 +30,7 @@ Bugfix 🐛:
  - Very long topic cannot be fully visible (#1957)
 
 Translations 🗣:
- -
+ - Move store data to `/fastlane/metadata/android` (#812)
 
 SDK API changes ⚠️:
  - Search messages in a room by using Session.searchService() or Room.search()
