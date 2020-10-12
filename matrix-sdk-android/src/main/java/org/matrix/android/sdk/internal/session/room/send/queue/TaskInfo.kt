@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
  * Info that need to be persisted by the sender thread
  * With polymorphic moshi parsing
  */
-interface TaskInfo {
+internal interface TaskInfo {
     val type: String
     val order: Int
 
@@ -55,7 +55,7 @@ interface TaskInfo {
 }
 
 @JsonClass(generateAdapter = true)
-data class SendEventTaskInfo(
+internal data class SendEventTaskInfo(
         @Json(name = "type") override val type: String = TaskInfo.TYPE_SEND,
         @Json(name = "localEchoId") val localEchoId: String,
         @Json(name = "encrypt") val encrypt: Boolean?,
@@ -63,14 +63,14 @@ data class SendEventTaskInfo(
 ) : TaskInfo
 
 @JsonClass(generateAdapter = true)
-data class RedactEventTaskInfo(
+internal data class RedactEventTaskInfo(
         @Json(name = "type") override val type: String = TaskInfo.TYPE_REDACT,
         @Json(name = "redactionLocalEcho") val redactionLocalEcho: String?,
         @Json(name = "order") override val order: Int
 ) : TaskInfo
 
 @JsonClass(generateAdapter = true)
-data class FallbackTaskInfo(
+internal data class FallbackTaskInfo(
         @Json(name = "type") override val type: String = TaskInfo.TYPE_REDACT,
         @Json(name = "order") override val order: Int
 ) : TaskInfo

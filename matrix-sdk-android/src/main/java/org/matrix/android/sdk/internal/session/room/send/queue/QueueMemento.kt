@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.session.room.send.queue
 
 import android.content.Context
-import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,12 +34,12 @@ import javax.inject.Inject
  * reschedule them (and only them) on next restart
  */
 internal class QueueMemento @Inject constructor(context: Context,
-                                                sessionParams: SessionParams,
+                                                @SessionId sessionId: String,
                                                 private val queuedTaskFactory: QueuedTaskFactory,
                                                 private val localEchoRepository: LocalEchoRepository,
                                                 private val cryptoService: CryptoService) {
 
-    private val storage = context.getSharedPreferences("QueueMemento_${sessionParams.credentials.sessionId()}", Context.MODE_PRIVATE)
+    private val storage = context.getSharedPreferences("QueueMemento_$sessionId", Context.MODE_PRIVATE)
     private val managedTaskInfos = mutableListOf<QueuedTask>()
 
     fun track(task: QueuedTask) {

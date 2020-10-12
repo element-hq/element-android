@@ -46,7 +46,7 @@ import kotlin.concurrent.schedule
  * Each send is retried 3 times, if there is no network (e.g if cannot ping home server) it will wait and
  * periodically test reachability before resume (does not count as a retry)
  *
- * If the app is killed before all event were sent, on next wakeup the sheduled events will be re posted
+ * If the app is killed before all event were sent, on next wakeup the scheduled events will be re posted
  */
 @SessionScope
 internal class EventSenderProcessor @Inject constructor(
