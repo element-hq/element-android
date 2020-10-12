@@ -95,7 +95,7 @@ class CallRingPlayerOutgoing(
             } else {
                 mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
+                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                         .build())
             }
             return mediaPlayer
