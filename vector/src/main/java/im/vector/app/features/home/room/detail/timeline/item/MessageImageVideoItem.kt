@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -94,6 +95,18 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     override fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
         return 0
     }
+
+    override fun setBubbleLayout(holder: Holder, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+        super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
+
+        // Case: ImageContentRenderer.processSize only sees width=height=0 -> width of the ImageView not adapted to the actual content
+        // -> Align image within ImageView to same side as message bubbles
+        holder.imageView.scaleType = if (reverseBubble) ImageView.ScaleType.FIT_END else ImageView.ScaleType.FIT_START
+        // Case: Message information (sender name + date) makes the containing view wider than the ImageView
+        // -> Align ImageView within its parent to the same side as message bubbles
+        (holder.imageView.layoutParams as ConstraintLayout.LayoutParams).horizontalBias = if (reverseBubble) 1f else 0f
+    }
+
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
