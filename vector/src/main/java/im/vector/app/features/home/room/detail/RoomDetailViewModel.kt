@@ -74,6 +74,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -680,6 +681,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                             handleChangeDisplayNameForRoomSlashCommand(slashCommandResult)
                             popDraft()
                         }
+                        is ParsedCommand.ChangeRoomAvatar         -> {
+                            handleChangeRoomAvatarSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.ChangeAvatarForRoom      -> {
                             handleChangeAvatarForRoomSlashCommand(slashCommandResult)
                             popDraft()
@@ -854,6 +859,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
         launchSlashCommandFlow {
             room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, getLastMemberEvent().copy(displayName = changeDisplayName.displayName).toContent(), it)
+        }
+    }
+
+    private fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
+        launchSlashCommandFlow {
+            room.sendStateEvent(EventType.STATE_ROOM_AVATAR, null, RoomAvatarContent(changeAvatar.url).toContent(), it)
         }
     }
 
