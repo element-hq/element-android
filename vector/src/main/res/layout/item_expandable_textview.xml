@@ -25,7 +25,6 @@
         android:layout_marginTop="4dp"
         android:autoLink="web"
         android:fontFamily="sans-serif"
-        android:gravity="center"
         android:src="@drawable/ic_expand_more"
         android:textSize="14sp"
         android:textStyle="normal"
