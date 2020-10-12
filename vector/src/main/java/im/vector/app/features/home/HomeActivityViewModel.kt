@@ -27,6 +27,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -38,9 +41,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.rx.asObservable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class HomeActivityViewModel @AssistedInject constructor(
@@ -67,11 +68,39 @@ class HomeActivityViewModel @AssistedInject constructor(
     }
 
     private var checkBootstrap = false
+    private var onceTrusted = false
 
     init {
         observeInitialSync()
         mayBeInitializeCrossSigning()
         checkSessionPushIsOn()
+        observeCrossSigningReset()
+    }
+
+    private fun observeCrossSigningReset() {
+        val safeActiveSession = activeSessionHolder.getSafeActiveSession()
+        val crossSigningService = safeActiveSession
+                ?.cryptoService()
+                ?.crossSigningService()
+        onceTrusted = crossSigningService
+                ?.allPrivateKeysKnown() ?: false
+
+        safeActiveSession
+                ?.rx()
+                ?.liveCrossSigningInfo(safeActiveSession.myUserId)
+                ?.subscribe {
+                    val isVerified = it.getOrNull()?.isTrusted() ?: false
+                    if (!isVerified && onceTrusted) {
+                        // cross signing keys have been reset
+                        // Tigger a popup to re-verify
+                        _viewEvents.post(
+                                HomeActivityViewEvents.OnCrossSignedInvalidated(
+                                        safeActiveSession.getUser(safeActiveSession.myUserId)?.toMatrixItem()
+                                )
+                        )
+                    }
+                    onceTrusted = isVerified
+                }?.disposeOnClear()
     }
 
     private fun observeInitialSync() {
