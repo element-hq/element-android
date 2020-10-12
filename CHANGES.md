@@ -21,6 +21,7 @@ Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
  - Fix Splash layout on small screens
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
+ - Very long topic cannot be fully visible (#1957)
 
 Translations 🗣:
  -
