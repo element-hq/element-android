@@ -26,6 +26,7 @@ Bugfix 🐛:
  - Invalid popup when pressing back (#1635)
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
  - Very long topic cannot be fully visible (#1957)
+ - Properly detect cross signing keys reset
 
 Translations 🗣:
  -
