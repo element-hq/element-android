@@ -58,6 +58,15 @@ class RoomMemberListFragment @Inject constructor(
         setupSearchView()
         setupInviteUsersButton()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
+            invalidateOptionsMenu()
+        }
+    }
+
+    private fun setupInviteUsersButton() {
+        inviteUsersButton.debouncedClicks {
+            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+        }
         // Hide FAB when list is scrolling
         recyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
@@ -76,15 +85,6 @@ class RoomMemberListFragment @Inject constructor(
                     }
                 }
         )
-        viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
-            invalidateOptionsMenu()
-        }
-    }
-
-    private fun setupInviteUsersButton() {
-        inviteUsersButton.debouncedClicks {
-            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
-        }
     }
 
     private fun setupSearchView() {
@@ -110,6 +110,7 @@ class RoomMemberListFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { viewState ->
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
+        inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
     }
 
     override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
@@ -137,6 +138,5 @@ class RoomMemberListFragment @Inject constructor(
             roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
         }
-        inviteUsersButton.isVisible = state.actionsPermissions.canInvite
     }
 }
