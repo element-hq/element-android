@@ -194,18 +194,18 @@ internal class DefaultCryptoService @Inject constructor(
     private val lastNewSessionForcedDates = MXUsersDevicesMap<Long>()
 
     fun onStateEvent(roomId: String, event: Event) {
-        when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+        when (event.getClearType()) {
+            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
-        when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+        when (event.getClearType()) {
+            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
