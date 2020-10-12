@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
 import org.matrix.android.sdk.MatrixTest
-import org.amshove.kluent.shouldEqualTo
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
 
 @FixMethodOrder(MethodSorters.JVM)
-class BinaryStringTest: MatrixTest {
+class BinaryStringTest : MatrixTest {
 
     /**
      * I want to put bytes to a String, and vice versa
@@ -37,17 +37,17 @@ class BinaryStringTest: MatrixTest {
 
         val str = byteArray.toString(Charsets.ISO_8859_1)
 
-        str.length shouldEqualTo 256
+        str.length shouldBeEqualTo 256
 
         // Ok convert back to bytearray
 
         val result = str.toByteArray(Charsets.ISO_8859_1)
 
-        result.size shouldEqualTo 256
+        result.size shouldBeEqualTo 256
 
         for (i in 0..255) {
-            result[i] shouldEqualTo i.toByte()
-            result[i] shouldEqualTo byteArray[i]
+            result[i] shouldBeEqualTo i.toByte()
+            result[i] shouldBeEqualTo byteArray[i]
         }
     }
 }
