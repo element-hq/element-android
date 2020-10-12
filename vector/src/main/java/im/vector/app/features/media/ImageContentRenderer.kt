@@ -101,7 +101,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
         createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
-                .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                .transform(RoundedCorners(dimensionConverter.dpToPx(3)))
                 .thumbnail(0.3f)
                 .into(imageView)
     }
