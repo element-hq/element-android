@@ -1511,7 +1511,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="settings_add_3pid_authentication_needed">需要身份认证</string>
 
 
-    <string name="settings_background_fdroid_sync_mode">后台同步模式（实验性）</string>
+    <string name="settings_background_fdroid_sync_mode">后台同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">电池优化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element 将在后台以保留设备有限资源（电池）的方式同步。
 \n取决于您的设备资源状态，同步可能被操作系统推迟。</string>
@@ -2578,4 +2578,21 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
 
     <string name="error_opening_banned_room">无法打开您被封禁的聊天室。</string>
     <string name="room_error_not_found">无法找到此聊天室。请确认它存在。</string>
+<string name="no_permissions_to_start_webrtc_call">您没有权限在此聊天室发起通话</string>
+    <plurals name="seconds">
+	<item quantity="other">%d 秒</item>
+</plurals>
+
+    <string name="settings_show_room_member_state_events">显示聊天室成员状态事件</string>
+    <string name="settings_show_room_member_state_events_summary">包括邀请/加入/离开/踢掉/封禁事件和头像/昵称变更。</string>
+    <string name="sent_a_poll">轮询</string>
+    <string name="sent_a_bot_buttons">机器人按钮</string>
+    <string name="sent_a_reaction">回应：%s</string>
+    <string name="sent_verification_conclusion">验证结果</string>
+
+    <string name="delete_account_data_warning">是否删除类型 %1$s 的账户数据？
+\n
+\n小心使用，它可能导致意外行为。</string>
+
+    <string name="universal_link_malformed">链接格式不正确</string>
 </resources>

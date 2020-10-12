@@ -2557,4 +2557,9 @@
     <string name="sent_verification_conclusion">Verifitseerimise tulemus</string>
 
     <string name="universal_link_malformed">Link oli vigane</string>
-</resources>
+<string name="no_permissions_to_start_webrtc_call">Sul ei ole õigusi siin jututoas helistamiseks</string>
+    <string name="delete_account_data_warning">Kas kustutame %1$s tüüpi kasutajakonto andmed\?
+\n
+\nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.</string>
+
+    </resources>

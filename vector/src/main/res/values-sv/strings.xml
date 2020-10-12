@@ -2560,4 +2560,9 @@
     <string name="sent_verification_conclusion">Verifieringsavslutning</string>
 
     <string name="universal_link_malformed">Länken var felformaterad</string>
-</resources>
+<string name="no_permissions_to_start_webrtc_call">Du har inte behörighet att starta ett samtal i det här rummet</string>
+    <string name="delete_account_data_warning">Radera kontodata av typen %1$s\?
+\n
+\nAnvänd varsamt, det kan leda till oväntat beteende.</string>
+
+    </resources>
