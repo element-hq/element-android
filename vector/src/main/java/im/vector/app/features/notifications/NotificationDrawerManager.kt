@@ -590,6 +590,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
     }
 
+    fun displayDiagnosticNotification() {
+        notificationUtils.displayDiagnosticNotification()
+    }
+
     companion object {
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
