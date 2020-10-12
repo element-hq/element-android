@@ -98,9 +98,11 @@
         </activity>
         <activity android:name=".features.media.ImageMediaViewerActivity" />
 
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.Transparent"
+            tools:ignore="Instantiatable" />
 
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
@@ -258,6 +260,10 @@
 
         <receiver
             android:name=".features.call.service.CallHeadsUpActionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".features.settings.troubleshoot.TestNotificationReceiver"
             android:exported="false" />
 
         <!-- Exported false, should only be accessible from this app!! -->

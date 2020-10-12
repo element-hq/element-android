@@ -113,8 +113,4 @@ constructor(trustPinned: Array<TrustManager>, acceptedTlsVersions: List<TlsVersi
         }
         return socket
     }
-
-    companion object {
-        private val LOG_TAG = TLSSocketFactory::class.java.simpleName
-    }
 }

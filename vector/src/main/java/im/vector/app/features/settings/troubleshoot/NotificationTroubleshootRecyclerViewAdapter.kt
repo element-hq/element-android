@@ -77,6 +77,16 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test)
                 }
+                TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
+                    progressBar.visibility = View.INVISIBLE
+                    statusIconImage.visibility = View.VISIBLE
+                    val infoColor = ContextCompat.getColor(context, R.color.vector_info_color)
+                    val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_notification_privacy_warning)?.apply {
+                        ThemeUtils.tintDrawableWithColor(this, infoColor)
+                    }
+                    statusIconImage.setImageDrawable(drawable)
+                    descriptionText.setTextColor(infoColor)
+                }
                 TroubleshootTest.TestStatus.RUNNING     -> {
                     progressBar.visibility = View.VISIBLE
                     statusIconImage.visibility = View.INVISIBLE
