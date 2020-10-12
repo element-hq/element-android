@@ -2574,9 +2574,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="sent_verification_conclusion">驗證結論</string>
 
     <string name="universal_link_malformed">連結格式錯誤</string>
-<string name="no_permissions_to_start_webrtc_call">您沒有在此聊天室開始通話的權限</string>
+    <string name="no_permissions_to_start_webrtc_call">您沒有在此聊天室開始通話的權限</string>
     <string name="delete_account_data_warning">刪除類型為 %1$s 的帳號資料？
 \n
 \n小心使用，它可能會導致意料之外的行為。</string>
 
-    </resources>
+</resources>

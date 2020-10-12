@@ -750,7 +750,7 @@
     <string name="dialog_title_success">موفقیت</string>
 
     <string name="bottom_action_notification">اعلان‌ها</string>
-<string name="dismiss">خاتمه</string>
+    <string name="dismiss">خاتمه</string>
 
 
     <string name="no_permissions_to_start_conf_call">اجازهٔ شروع تماس کنفرانسی در این اتاق را ندارید</string>
@@ -781,9 +781,9 @@
     <string name="auth_msisdn_already_defined">این شماره تلفن از پیش تعریف شده.</string>
     <string name="login_error_ssl_other">خطای SSL.</string>
     <plurals name="membership_changes">
-	<item quantity="one">۱ عضویت تغییر کرد</item>
-	<item quantity="other">%d عضویت تغییر کردند</item>
-</plurals>
+        <item quantity="one">۱ عضویت تغییر کرد</item>
+        <item quantity="other">%d عضویت تغییر کردند</item>
+    </plurals>
 
     <string name="settings_call_show_confirmation_dialog_title">پیش‌گیری از تماس تصادفی</string>
     <string name="settings_call_show_confirmation_dialog_summary">خواستن تأیید پیش از شروع تماس</string>
@@ -833,9 +833,9 @@
     <string name="room_message_file_not_found">پرونده پیدا نشد</string>
     <string name="room_do_not_have_permission_to_post">اجازهٔ فرستادن در این اتاق را ندارید</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">۱ پیام جدید</item>
-	<item quantity="other">%d پیام جدید</item>
-</plurals>
+        <item quantity="one">۱ پیام جدید</item>
+        <item quantity="other">%d پیام جدید</item>
+    </plurals>
 
     <string name="ssl_trust">اعتماد کردن</string>
     <string name="ssl_do_not_trust">اعتماد نکردن</string>
@@ -938,9 +938,9 @@
     <string name="settings_set_sync_timeout">پایان زمان درخواست همگام‌سازی</string>
     <string name="settings_set_workmanager_delay">دورهٔ همگام‌سازی ترجیحی</string>
     <plurals name="seconds">
-	<item quantity="one">%d ثانیه</item>
-	<item quantity="other">%d ثانیه</item>
-</plurals>
+        <item quantity="one">%d ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
 
     <string name="settings_integrations_summary">برای مدیریت بات‌ها، پل‌ها، ابزارک‌ها و بسته‌های برچسب از یک مدیر یکپارچگی استفاده کنید.
 \nمدیرهای یکپارچگی، داده‌های پیکربندی را دریافت کرده و می‌توانند از طرف شما ابزارک‌ها را تغییر داده، دعوت‌های اتاق فرستاده و سطوح قدرت را تنظیم کنند.</string>
@@ -997,9 +997,9 @@
     <string name="room_settings_read_history_entry_members_only_joined">فقط اعضا (از زمان پیوستنشان)</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d کاربر مسدود</item>
-	<item quantity="other">%d کاربر مسدود</item>
-</plurals>
+        <item quantity="one">%d کاربر مسدود</item>
+        <item quantity="other">%d کاربر مسدود</item>
+    </plurals>
 
     <string name="room_settings_labs_warning_message">این‌ها ویژگی‌های آزمایشی‌ای هستند که ممکن است به روش‌های نامنتظره‌ای حراب شوندا. با احتیاط استفاده کنید.</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">هرگز پیام‌های رمزشده از این نشست به نشست‌های تأییدنشده در این اتاق فرستاده نشود.</string>
@@ -1052,17 +1052,17 @@
     <string name="lock_screen_hint">این‌جا بنویسید…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">۱ پیام آگاهی نخوانده</item>
-	<item quantity="other">%d پیام آگاهی نخوانده</item>
-</plurals>
+        <item quantity="one">۱ پیام آگاهی نخوانده</item>
+        <item quantity="other">%d پیام آگاهی نخوانده</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">۱ پیام آگاهی نخوانده</item>
-	<item quantity="other">%d پیام آگاهی نخوانده</item>
-</plurals>
+        <item quantity="one">۱ پیام آگاهی نخوانده</item>
+        <item quantity="other">%d پیام آگاهی نخوانده</item>
+    </plurals>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: ۱ پیام</item>
-	<item quantity="other">%1$s: %2$d پیام</item>
-</plurals>
+        <item quantity="one">%1$s: ۱ پیام</item>
+        <item quantity="other">%1$s: %2$d پیام</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s در %2$s</string>
     <string name="notification_unknown_new_event">رویداد جدید</string>
     <string name="notification_unknown_room_name">اتاق</string>
@@ -1087,9 +1087,9 @@
     <string name="settings_labs_create_conference_with_jitsi">ایجاد تماس کنفرانسی با جیتسی</string>
     <string name="widget_delete_message_confirmation">مطمئنید که می‌خواهید ابزارک را از این اتاق حذف کنید؟</string>
     <plurals name="active_widgets">
-	<item quantity="one">۱ ابزارک فعّال</item>
-	<item quantity="other">%d ابزارک فعّال</item>
-</plurals>
+        <item quantity="one">۱ ابزارک فعّال</item>
+        <item quantity="other">%d ابزارک فعّال</item>
+    </plurals>
     <string name="active_widget_view_action">نما</string>
     <string name="active_widgets_title">ابزارک‌های فعّال</string>
 
@@ -1162,9 +1162,9 @@
     <string name="joined">پیوست</string>
     <string name="invited">دعوت شد</string>
     <plurals name="group_members">
-	<item quantity="one">۱ عضو</item>
-	<item quantity="other">%d عضو</item>
-</plurals>
+        <item quantity="one">۱ عضو</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
 
     <string name="deactivate_account_title">غیرفعّال‌سازی حساب</string>
     <string name="deactivate_account_submit">غیرفعّال‌سازی حساب</string>
@@ -1405,9 +1405,9 @@
     <string name="room_profile_section_admin">کنش‌های مدیر</string>
     <string name="room_profile_section_more_settings">تنظمیات اتاق</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">۱ نفر</item>
-	<item quantity="other">%1$d نفر</item>
-</plurals>
+        <item quantity="one">۱ نفر</item>
+        <item quantity="other">%1$d نفر</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">بارگذاری‌ها</string>
     <string name="room_profile_section_more_leave">ترک اتاق</string>
     <string name="room_profile_leaving_room">ترک کردن اتاق…</string>
@@ -1471,13 +1471,13 @@
 
     <string name="settings_account_data">داده‌های حساب</string>
     <plurals name="poll_info">
-	<item quantity="one">%d رأی</item>
-	<item quantity="other">%d رأی</item>
-</plurals>
+        <item quantity="one">%d رأی</item>
+        <item quantity="other">%d رأی</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d رأی - نتایج نهایی</item>
-	<item quantity="other">%d رأی - نتایج نهایی</item>
-</plurals>
+        <item quantity="one">%d رأی - نتایج نهایی</item>
+        <item quantity="other">%d رأی - نتایج نهایی</item>
+    </plurals>
     <string name="poll_item_selected_aria">انتخاب گزیده</string>
     <string name="command_description_poll">ایجاد نظرسنجی‌ای ساده</string>
     <string name="verification_cannot_access_other_session">استفاده از یک کلید یا عبارت بازیابی</string>
@@ -1489,9 +1489,9 @@
     <string name="message_action_item_redact">برداشتن…</string>
     <string name="share_confirm_room">می‌خواهید این پیوست را به %1$s بفرستید؟</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">فرستادن تصویر با اندازهٔ اصلی</item>
-	<item quantity="other">فرستادن تصویرها با اندازهٔ اصلی</item>
-</plurals>
+        <item quantity="one">فرستادن تصویر با اندازهٔ اصلی</item>
+        <item quantity="other">فرستادن تصویرها با اندازهٔ اصلی</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">تأیید برداشت</string>
     <string name="delete_event_dialog_reason_checkbox">آوردن دلیل</string>
@@ -1564,9 +1564,9 @@
     <string name="invitation_sent_to_one_user">دعوت برای %1$s فرستاده شد</string>
     <string name="invitations_sent_to_two_users">دعوت برای %1$s و %2$s فرستاده شد</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">دعوت برای %1$s و یک نفر دیگر فرستاده شد</item>
-	<item quantity="other">دعوت برای %1$s و %2$d نفر دیگر فرستاده شد</item>
-</plurals>
+        <item quantity="one">دعوت برای %1$s و یک نفر دیگر فرستاده شد</item>
+        <item quantity="other">دعوت برای %1$s و %2$d نفر دیگر فرستاده شد</item>
+    </plurals>
     <string name="choose_locale_current_locale_title">زبان جاری</string>
     <string name="choose_locale_other_locales_title">دیگر زبان‌های موجود</string>
     <string name="choose_locale_loading_locales">بار کردن زبان‌های موچود…</string>
@@ -1587,4 +1587,4 @@
     <string name="element_login_splash_brand">المنت</string>
 
 
-    </resources>
+</resources>

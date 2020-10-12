@@ -2377,7 +2377,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="identity_server_set_alternative_notice_no_default">Renseignez l’URL d’un serveur d’identité</string>
     <string name="identity_server_set_alternative_submit">Valider</string>
 
-<string name="play_video">Lancer</string>
+    <string name="play_video">Lancer</string>
     <string name="pause_video">Pause</string>
     <string name="dismiss">Ignorer</string>
 
@@ -2427,4 +2427,4 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="room_participants_ban_title">Bloquer l\'utilisateur</string>
     <string name="room_participants_ban_reason">Motif du blocage</string>
     <string name="room_participants_unban_title">Débloquer l\'utilisateur</string>
-    </resources>
+</resources>

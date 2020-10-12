@@ -137,7 +137,7 @@
     <string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
     <string name="notice_profile_change_redacted">%1$s نمایه‌اش را به‌روز کرد %2$s</string>
     <string name="could_not_redact">نمی‌توان ویرایش کرد</string>
-<string name="summary_you_sent_image">تصویری فرستادید.</string>
+    <string name="summary_you_sent_image">تصویری فرستادید.</string>
     <string name="summary_you_sent_sticker">برچسبی فرستادید.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">دعوتتان</string>
@@ -209,14 +209,14 @@
     <string name="notice_room_withdraw_with_reason_by_you">دعوت %1$s را رد کردید. دلیل: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">نشانی %1$s را به این اتاق افزودید.</item>
-	<item quantity="other">نشانی‌های %1$s را به این اتاق افزودید.</item>
-</plurals>
+        <item quantity="one">نشانی %1$s را به این اتاق افزودید.</item>
+        <item quantity="other">نشانی‌های %1$s را به این اتاق افزودید.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">نشانی %1$s ار از این اتاق برداشتید.</item>
-	<item quantity="other">نشانی‌های %1$s ار از این اتاق برداشتید.</item>
-</plurals>
+        <item quantity="one">نشانی %1$s ار از این اتاق برداشتید.</item>
+        <item quantity="other">نشانی‌های %1$s ار از این اتاق برداشتید.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">نشانی %1$s ار افزوده و %2$s را از این اتاق برداشتید.</string>
 
@@ -229,4 +229,4 @@
     <string name="notice_end_to_end_ok_by_you">رمزنگاری سرتاسری را روشن کردید.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">رمزنگاری سرتاسری را روشن کردید (الگوریتم ناشناخته %1$s).</string>
 
-    </resources>
+</resources>

@@ -1523,9 +1523,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="keys_backup_restore_success_title">Backup restaurado %s !</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">O backup restaurou %d chave.</item>
-	<item quantity="other">O backup restaurou %d chaves.</item>
-</plurals>
+        <item quantity="one">O backup restaurou %d chave.</item>
+        <item quantity="other">O backup restaurou %d chaves.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d nova chave foi adicionada a esta sessão.</item>
         <item quantity="other">%d novas chaves foram adicionadas a esta sessão.</item>
@@ -1583,9 +1583,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="keys_backup_info_keys_all_backup_up">O backup de todas as chaves foi concluído</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Fazendo o backup de %d chave…</item>
-	<item quantity="other">Fazendo o backup de %d chaves…</item>
-</plurals>
+        <item quantity="one">Fazendo o backup de %d chave…</item>
+        <item quantity="other">Fazendo o backup de %d chaves…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versão</string>
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
@@ -2643,7 +2643,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Atenção! Última tentativa restante antes de você ser desconectada/o!</string>
     <string name="too_many_pin_failures">Muitos erros, você foi desconectada/o</string>
-<string name="no_permissions_to_start_webrtc_call">Você não tem permissão para iniciar uma chamada nesta sala</string>
+    <string name="no_permissions_to_start_webrtc_call">Você não tem permissão para iniciar uma chamada nesta sala</string>
     <string name="settings_phone_number_empty">Nenhum número de telefone foi adicionado à sua conta</string>
     <string name="settings_emails">Endereços de e-mail</string>
     <string name="settings_emails_empty">Nenhum e-mail foi adicionado à sua conta</string>
@@ -2652,9 +2652,9 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="error_threepid_auth_failed">Certifique-se de ter clicado no link do e-mail que enviamos para você.</string>
 
     <plurals name="seconds">
-	<item quantity="one">%d segundo</item>
-	<item quantity="other">%d segundos</item>
-</plurals>
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events_summary">Mostrar quando alguém for convidado/entrar/sair/banido e mostrar alterações de foto de perfil e de nome e sobrenome.</string>
     <string name="settings_emails_and_phone_numbers_title">E-mails e números de telefone</string>
@@ -2667,7 +2667,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_error_not_found">Não foi possível encontrar esta sala. Certifique-se de que ela existe.</string>
 
     <string name="universal_link_malformed">O link não está correto</string>
-<string name="auth_msisdn_already_defined">Este número de telefone já foi adicionado.</string>
+    <string name="auth_msisdn_already_defined">Este número de telefone já foi adicionado.</string>
     <string name="settings_show_room_member_state_events">Mostrar eventos de status dos integrantes da sala</string>
     <string name="sent_a_poll">Votação</string>
     <string name="sent_a_bot_buttons">Botões do bot</string>
@@ -2680,4 +2680,4 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 
     <string name="error_sso_flow_not_supported_yet">Desculpe, esta funcionalidade ainda não está disponível para contas conectadas via acesso único.</string>
 
-    </resources>
+</resources>

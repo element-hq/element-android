@@ -138,7 +138,7 @@
     <string name="key_verification_request_fallback_message">%s po kërkon të verifikojë kyçin tuaj, por klienti juaj nuk mbulon verifikim kyçesh brenda fjalosjeje. Që të verifikoni kyça, do t’ju duhet të përdorni verifikim të dikurshëm kyçesh.</string>
 
     <string name="notice_room_created">%1$s krijo dhomën</string>
-<string name="summary_you_sent_image">Dërguat një figurë.</string>
+    <string name="summary_you_sent_image">Dërguat një figurë.</string>
     <string name="summary_you_sent_sticker">Dërguat një ngjitës.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Ftesa juaj</string>
@@ -210,14 +210,14 @@
     <string name="notice_room_withdraw_with_reason_by_you">Tërhoqët mbrapsht ftesën për %1$s. Arsye: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Shtuat %1$s si një adresë për këtë dhomë.</item>
-	<item quantity="other">Shtuat %1$s si adresa për këtë dhomë.</item>
-</plurals>
+        <item quantity="one">Shtuat %1$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">Shtuat %1$s si adresa për këtë dhomë.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Hoqët %1$s si një adresë për këtë dhomë.</item>
-	<item quantity="other">Hoqët %1$s si adresa për këtë dhomë.</item>
-</plurals>
+        <item quantity="one">Hoqët %1$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">Hoqët %1$s si adresa për këtë dhomë.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">Shtuat %1$s dhe hoqët %2$s si adresa për këtë dhomë.</string>
 
@@ -230,4 +230,4 @@
     <string name="notice_end_to_end_ok_by_you">Aktivizuat fshehtëzimin skaj-më-skaj.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Aktivizuat fshehtëzimin skaj-më-skaj (algoritëm %1$s i panjohur).</string>
 
-    </resources>
+</resources>

@@ -2207,7 +2207,7 @@
 
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
 
-    <string name="settings_rageshake"/>
+    <string name="settings_rageshake" />
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
 
@@ -2333,7 +2333,7 @@
     <string name="identity_server_set_alternative_submit">Parashtroje</string>
 
     <string name="open_terms_of">Hap termat e %s</string>
-<string name="play_video">Luaje</string>
+    <string name="play_video">Luaje</string>
     <string name="pause_video">Pauzë</string>
     <string name="dismiss">Hidhe poshtë</string>
 
@@ -2409,9 +2409,9 @@
     <string name="error_threepid_auth_failed">Sigurohuni që keni klikuar te lidhja në email-in që ju kemi dërguar.</string>
 
     <plurals name="seconds">
-	<item quantity="one">%d sekondë</item>
-	<item quantity="other">%d sekonda</item>
-</plurals>
+        <item quantity="one">%d sekondë</item>
+        <item quantity="other">%d sekonda</item>
+    </plurals>
 
     <string name="settings_show_room_member_state_events">Shfaq akte gjendjeje përdoruesish të dhomës</string>
     <string name="settings_show_room_member_state_events_summary">Përfshin akte ftimi/pjesëmarrjeje/ikjeje/përzënieje/dëbimi dhe ndryshime emri avatari/shfaqjeje.</string>
@@ -2431,16 +2431,16 @@
     <string name="settings_emails_and_phone_numbers_summary">Administroni email-e dhe numra telefonash të lidhur me llogarinë tuaj Matrix</string>
 
     <plurals name="room_settings_banned_users_count">
-	<item quantity="one">%d përdorues i dëbuar</item>
-	<item quantity="other">%d përdorues të dëbuar</item>
-</plurals>
+        <item quantity="one">%d përdorues i dëbuar</item>
+        <item quantity="other">%d përdorues të dëbuar</item>
+    </plurals>
 
     <string name="encryption_exported_successfully">Kyçet u eksportuan me sukses</string>
 
     <plurals name="encryption_import_room_keys_success">
-	<item quantity="one">%1$d/%2$d kyç i importuar me sukses.</item>
-	<item quantity="other">%1$d/%2$d kyçe të importuar me sukses.</item>
-</plurals>
+        <item quantity="one">%1$d/%2$d kyç i importuar me sukses.</item>
+        <item quantity="other">%1$d/%2$d kyçe të importuar me sukses.</item>
+    </plurals>
 
     <string name="active_widget_view_action">SHIHENI</string>
     <string name="active_widgets_title">Widget-e aktivë</string>
@@ -2463,9 +2463,9 @@
 
     <string name="settings_text_message_sent_hint">Kod</string>
     <plurals name="two_and_some_others_read">
-	<item quantity="one">%1$s, %2$s dhe %3$d tjetër i lexuar</item>
-	<item quantity="other">%1$s, %2$s dhe %3$d të tjerë të lexuar</item>
-</plurals>
+        <item quantity="one">%1$s, %2$s dhe %3$d tjetër i lexuar</item>
+        <item quantity="other">%1$s, %2$s dhe %3$d të tjerë të lexuar</item>
+    </plurals>
     <string name="room_list_quick_actions_favorite_add">Shtoje te të parapëlqyerit</string>
     <string name="room_list_quick_actions_favorite_remove">Hiqe prej të parapëlqyerve</string>
     <string name="notice_member_no_changes_by_you">S’bëtë ndryshime</string>
@@ -2572,9 +2572,9 @@
     <string name="alert_push_are_disabled_title">Njoftimet push janë të çaktivizuar</string>
     <string name="alert_push_are_disabled_description">Që të aktivizoni njoftimet push, shihni te rregullimet tuaja</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-	<item quantity="one">Kod i gabuar, edhe %d provë</item>
-	<item quantity="other">Kod i gabuar, edhe %d prova</item>
-</plurals>
+        <item quantity="one">Kod i gabuar, edhe %d provë</item>
+        <item quantity="other">Kod i gabuar, edhe %d prova</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Kujdes! Prova e fundit e mbetur, përpara daljes!</string>
     <string name="too_many_pin_failures">Shumë gabime, u nxorët nga llogaria</string>
     <string name="create_pin_title">Zgjidhni një PIN për siguri</string>
