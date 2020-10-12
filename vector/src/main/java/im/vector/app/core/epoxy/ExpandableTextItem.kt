@@ -56,6 +56,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
                         expand(holder)
                     }
                 }
+                holder.arrow.isVisible = true
             } else {
                 holder.arrow.isVisible = false
             }
@@ -63,22 +64,26 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     }
 
     private fun expand(holder: Holder) {
-        ObjectAnimator.ofInt(holder.content, "maxLines", expandedLines)
-                .apply { duration = 200 }
-                .also { it.start() }
+        ObjectAnimator
+                .ofInt(holder.content, "maxLines", expandedLines)
+                .setDuration(200)
+                .start()
 
         holder.content.ellipsize = null
         holder.arrow.setImageResource(R.drawable.ic_expand_less)
+        holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_collapse)
         isExpanded = true
     }
 
     private fun collapse(holder: Holder) {
-        ObjectAnimator.ofInt(holder.content, "maxLines", maxLines)
-                .apply { duration = 200 }
-                .also { it.start() }
+        ObjectAnimator
+                .ofInt(holder.content, "maxLines", maxLines)
+                .setDuration(200)
+                .start()
 
         holder.content.ellipsize = TextUtils.TruncateAt.END
-                holder.arrow.setImageResource(R.drawable.ic_expand_more)
+        holder.arrow.setImageResource(R.drawable.ic_expand_more)
+        holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_expand)
         isExpanded = false
     }
 

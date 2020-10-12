@@ -62,12 +62,12 @@ class RoomProfileController @Inject constructor(
         // Topic
         roomSummary
                 .topic
-                .takeIf { it.isNotBlank() }
+                .takeIf { it.isNotEmpty() }
                 ?.let {
-                    buildProfileSection(stringProvider.getString(R.string.room_profile_section_topic))
+                    buildProfileSection(stringProvider.getString(R.string.room_settings_topic))
                     expandableTextItem {
                         id("topic")
-                        content(roomSummary.topic)
+                        content(it)
                         maxLines(2)
                     }
                 }
