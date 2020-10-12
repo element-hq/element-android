@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
@@ -34,14 +33,8 @@ internal class CryptoStoreHelper {
                         .modules(RealmCryptoStoreModule())
                         .build(),
                 crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
-                credentials = createCredential())
+                userId = "userId_" + Random.nextInt(),
+                deviceId = "deviceId_sample"
+        )
     }
-
-    fun createCredential() = Credentials(
-            userId = "userId_" + Random.nextInt(),
-            homeServer = "http://matrix.org",
-            accessToken = "access_token",
-            refreshToken = null,
-            deviceId = "deviceId_sample"
-    )
 }
