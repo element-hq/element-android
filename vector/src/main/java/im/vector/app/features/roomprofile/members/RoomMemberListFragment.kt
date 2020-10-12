@@ -88,7 +88,6 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        searchViewAppBarLayout.isVisible = true
         searchView.queryHint = getString(R.string.search_members_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -111,6 +110,8 @@ class RoomMemberListFragment @Inject constructor(
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
         inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
+        // Display filter only if there are more than 2 members in this room
+        searchViewAppBarLayout.isVisible = viewState.roomSummary()?.otherMemberIds.orEmpty().size > 1
     }
 
     override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
