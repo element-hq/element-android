@@ -19,7 +19,6 @@ package im.vector.app.features.share
 import android.app.Activity
 import android.content.ClipDescription
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -89,7 +88,7 @@ class IncomingShareFragment @Inject constructor(
                 }
 
                 // Direct share
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+                if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
                     val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
                     sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
                 }
