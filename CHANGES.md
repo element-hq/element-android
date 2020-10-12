@@ -17,6 +17,7 @@ Improvements 🙌:
  - Drawer: move settings access and add sign out action (#2171)
  - Filter room member (and banned users) by name (#2184)
  - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
+ - Add FAB to room members list (#2226)
  - Add Sygnal API implementation to test is Push are correctly received
  - Add PushGateway API implementation to test if Push are correctly received
  - Cross signing: shouldn't offer to verify with other session when there is not. (#2227)

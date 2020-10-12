@@ -17,12 +17,11 @@
 package im.vector.app.features.roomprofile.members
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -37,6 +36,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import kotlinx.android.synthetic.main.fragment_room_member_list.*
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import javax.inject.Inject
 
@@ -49,36 +49,42 @@ class RoomMemberListFragment @Inject constructor(
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_setting_generic
-
-    override fun getMenuRes() = R.menu.menu_room_member_list
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val canInvite = withState(viewModel) {
-            it.actionsPermissions.canInvite
-        }
-        menu.findItem(R.id.menu_room_member_list_add_member).isVisible = canInvite
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_room_member_list_add_member -> {
-                navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+    override fun getLayoutResId() = R.layout.fragment_room_member_list
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
         setupSearchView()
+        setupInviteUsersButton()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
         viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
             invalidateOptionsMenu()
         }
+    }
+
+    private fun setupInviteUsersButton() {
+        inviteUsersButton.debouncedClicks {
+            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+        }
+        // Hide FAB when list is scrolling
+        recyclerView.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                                if (withState(viewModel) { it.actionsPermissions.canInvite }) {
+                                    inviteUsersButton.show()
+                                }
+                            }
+                            RecyclerView.SCROLL_STATE_DRAGGING,
+                            RecyclerView.SCROLL_STATE_SETTLING -> {
+                                inviteUsersButton.hide()
+                            }
+                        }
+                    }
+                }
+        )
     }
 
     private fun setupSearchView() {
@@ -104,6 +110,7 @@ class RoomMemberListFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { viewState ->
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
+        inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
     }
 
     override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
