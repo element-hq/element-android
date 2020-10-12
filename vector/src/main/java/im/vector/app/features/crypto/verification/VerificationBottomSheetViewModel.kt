@@ -76,7 +76,8 @@ data class VerificationBottomSheetViewState(
         val userWantsToCancel: Boolean = false,
         val userThinkItsNotHim: Boolean = false,
         val quadSContainsSecrets: Boolean = true,
-        val quadSHasBeenReset: Boolean = false
+        val quadSHasBeenReset: Boolean = false,
+        val hasAnyOtherSession: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -119,6 +120,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             session.cryptoService().verificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
         }
 
+        val hasAnyOtherSession = session.cryptoService()
+                .getCryptoDeviceInfo(session.myUserId)
+                .any {
+                    it.deviceId != session.sessionParams.deviceId
+                }
+
         setState {
             copy(
                     otherUserMxItem = userItem?.toMatrixItem(),
@@ -130,7 +137,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     roomId = args.roomId,
                     isMe = args.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup()
+                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                    hasAnyOtherSession = hasAnyOtherSession
             )
         }
 
