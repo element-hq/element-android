@@ -53,7 +53,6 @@ class VerificationRequestController @Inject constructor(
 
         if (state.selfVerificationMode) {
             if (state.hasAnyOtherSession) {
-
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(stringProvider.getString(R.string.verification_open_other_to_verify))
