@@ -2623,4 +2623,9 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
 
     <string name="universal_link_malformed">Odkaz byl chybně zformován</string>
-</resources>
+<string name="no_permissions_to_start_webrtc_call">K zahájení hovoru v této místnosti nemáte oprávnění</string>
+    <string name="delete_account_data_warning">Smazat údaje účtu typu %1$s\?
+\n
+\nOpatrně, může vést k neočekávanému chování.</string>
+
+    </resources>

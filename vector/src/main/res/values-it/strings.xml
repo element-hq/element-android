@@ -1635,7 +1635,7 @@
     <string name="settings_call_ringtone_use_default_stun">Permetti chiamate dal Server di appoggio</string>
     <string name="settings_call_ringtone_use_default_stun_sum">"Se il tuo Home Server non ne ha un proprio Server d\'appoggio verrà usato %s  (il Server d\'appoggio verrà a conoscenza del tuo indirizzo IP durante le chiamate)"</string>
     <string name="invite_no_identity_server_error">Per poterlo fare, aggiungi un Identity Server nelle Impostazioni.</string>
-    <string name="settings_background_fdroid_sync_mode">Modalità sync in background (Sperimentale)</string>
+    <string name="settings_background_fdroid_sync_mode">Modalità sync in background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element si sincronizzerà in background in modo da non consumare la poca batteria disponibile.
 \nA seconda del livello della batteria, il sistema operativo potrebbe ritardare la sincronizzazione.</string>
@@ -2669,4 +2669,22 @@
 
     <string name="error_opening_banned_room">Impossibile aprire una stanza dove sei stato bandito.</string>
     <string name="room_error_not_found">Impossibile trovare questa stanza. Assicurati che esista.</string>
+<string name="no_permissions_to_start_webrtc_call">Non hai il permesso di avviare una chiamata in questa stanza</string>
+    <plurals name="seconds">
+	<item quantity="one">%d secondo</item>
+	<item quantity="other">%d secondi</item>
+</plurals>
+
+    <string name="settings_show_room_member_state_events">Mostra eventi di stato dei membri della stanza</string>
+    <string name="settings_show_room_member_state_events_summary">Includi eventi di invito/entrata/uscita/kick/ban e modifiche di avatar/nome.</string>
+    <string name="sent_a_poll">Sondaggio</string>
+    <string name="sent_a_bot_buttons">Pulsanti bot</string>
+    <string name="sent_a_reaction">Reagito con: %s</string>
+    <string name="sent_verification_conclusion">Conclusione della verifica</string>
+
+    <string name="delete_account_data_warning">Eliminare i dati dell\'account di tipo %1$s\?
+\n
+\nUsalo con attenzione, può avere comportamenti imprevisti.</string>
+
+    <string name="universal_link_malformed">Il collegamento non è corretto</string>
 </resources>

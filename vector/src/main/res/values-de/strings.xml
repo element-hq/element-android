@@ -96,9 +96,9 @@
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 Benutzer</item>
-        <item quantity="other">%d Benutzer</item>
-    </plurals>
+	<item quantity="one">1 Benutzer</item>
+	<item quantity="other">%d Benutzer/in</item>
+</plurals>
 
     <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
@@ -312,7 +312,7 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
-    <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
+    <string name="room_participants_action_set_default_power_level">Zum/r normalen Benutzer/in herabstufen</string>
     <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
     <string name="room_participants_action_ignore">Alle Nachrichten dieses Nutzers verbergen</string>
@@ -320,8 +320,7 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dasselbe Berechtigungslevel wie du selbst erhalten wirst.
-Bist du sicher?</string>
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzer!n dasselbe Berechtigungslevel wie du selbst erhalten wirst. Bist du sicher\?</string>
 
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
 
@@ -2654,7 +2653,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
         <item quantity="other">Falscher code, %d verbleibende Versuche</item>
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warnung! Letzter Versuch bevor du ausgeloggt wirst!</string>
-    <string name="too_many_pin_failures">Zu viele Fehler, du bist ausgeloggt worden</string>
+    <string name="too_many_pin_failures">Zu viele Fehler. Du wurdest ausgeloggt</string>
     <string name="auth_msisdn_already_defined">Diese Telefonnummer ist bereits registriert.</string>
     <string name="settings_phone_number_empty">Deinem Konto wurde keine Telefonnummer hinzugefügt</string>
     <string name="settings_emails">E-mail-Adressen</string>
@@ -2683,5 +2682,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_bot_buttons">Bot-Schaltflächen</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
-    <string name="universal_link_malformed">Der Link war nicht korrekt</string>
-</resources>
+    <string name="universal_link_malformed">Der Link war fehlerhaft</string>
+<string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu starten</string>
+    <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
+
+    <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
+\n
+\nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
+
+    </resources>

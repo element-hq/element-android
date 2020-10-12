@@ -99,7 +99,7 @@
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -833,13 +833,13 @@
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -847,7 +847,7 @@
         <item quantity="one">%d активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -857,45 +857,45 @@
         <item quantity="one">%d активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s комната найдена для %2$s</item>
         <item quantity="few">%1$s комнаты найдено для %2$s</item>
         <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
@@ -1030,20 +1030,20 @@
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="group_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1181,7 +1181,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
 
     <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
-    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Райот.</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Element.</string>
     <string name="settings_troubleshoot_test_battery_failed">Если пользователь оставляет устройство в отключенном от сети и в неподвижном состоянии в течение некоторого времени при выключенном экране, устройство переходит в режим Doze. Это предотвращает доступ приложений к сети и откладывает выполнение заданий, синхронизацию и передачу стандартных аварийных сигналов.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
 
@@ -1196,7 +1196,7 @@
     <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
 
-    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
+    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
     <string name="generic_label">%1$s:</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
@@ -1227,7 +1227,7 @@
     <string name="settings_noisy_notifications_preferences">Настроить шумные уведомления</string>
     <string name="settings_call_notifications_preferences">Настроить уведомления о вызовах</string>
     <string name="settings_silent_notifications_preferences">Настроить беззвучные уведомления</string>
-    <string name="settings_system_preferences_summary">Выберать цвет светодиода, вибрацию, звук…</string>
+    <string name="settings_system_preferences_summary">Выбрать цвет светодиода, вибрацию, звук…</string>
 
 
     <string name="settings_cryptography_manage_keys">Управление криптографическими ключами</string>
@@ -1304,7 +1304,7 @@
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
         <item quantity="few">%d новых ключа были добавлены к этому устройству.</item>
         <item quantity="many">%d новых ключей были добавлены к этому устройству.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="keys_backup_restore_success_description_part1">
@@ -1355,7 +1355,7 @@
         <item quantity="one">Резервное копирование %d ключа…</item>
         <item quantity="few">Резервное копирование %d ключей…</item>
         <item quantity="many">Резервное копирование %d ключей…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_keys_all_backup_up">Все ключи сохранены</string>
@@ -2730,4 +2730,9 @@
     <string name="sent_verification_conclusion">Результат проверки</string>
 
     <string name="universal_link_malformed">Ссылка была искажена</string>
-</resources>
+<string name="no_permissions_to_start_webrtc_call">У вас нет разрешения на запуск звонка в этой комнате</string>
+    <string name="delete_account_data_warning">Удалить данные учетной записи типа %1$s\?
+\n
+\nИспользуйте с осторожностью, это может привести к неожиданному поведению.</string>
+
+    </resources>
