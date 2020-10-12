@@ -58,9 +58,6 @@ class RoomMemberListFragment @Inject constructor(
         setupSearchView()
         setupInviteUsersButton()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
-        viewModel.selectSubscribe(this, RoomMemberListViewState::actionsPermissions) {
-            invalidateOptionsMenu()
-        }
     }
 
     private fun setupInviteUsersButton() {
