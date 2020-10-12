@@ -129,7 +129,6 @@ class RoomProfileFragment @Inject constructor(
     private fun setupLongClicks() {
         roomProfileNameView.copyOnLongClick()
         roomProfileAliasView.copyOnLongClick()
-        roomProfileTopicView.copyOnLongClick()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,7 +186,6 @@ class RoomProfileFragment @Inject constructor(
                 roomProfileNameView.text = it.displayName
                 matrixProfileToolbarTitleView.text = it.displayName
                 roomProfileAliasView.setTextOrHide(it.canonicalAlias)
-                roomProfileTopicView.setTextOrHide(it.topic)
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)

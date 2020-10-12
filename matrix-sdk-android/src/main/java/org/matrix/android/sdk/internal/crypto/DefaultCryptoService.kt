@@ -50,7 +50,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
@@ -953,7 +953,7 @@ internal class DefaultCryptoService @Inject constructor(
         roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
 
         event.stateKey?.let { userId ->
-            val roomMember: RoomMemberSummary? = event.content.toModel()
+            val roomMember: RoomMemberContent? = event.content.toModel()
             val membership = roomMember?.membership
             if (membership == Membership.JOIN) {
                 // make sure we are tracking the deviceList for this user.

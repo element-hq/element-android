@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
-package org.matrix.android.sdk.internal.crypto.model.rest
+import org.matrix.android.sdk.internal.network.NetworkConstants
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-internal data class SendToDeviceBody(
-        /**
-         * `Any` should implement [SendToDeviceObject], but we cannot use interface here because of Json serialization
-         *
-         * The messages to send. A map from user ID, to a map from device ID to message body.
-         * The device ID may also be *, meaning all known devices for the user.
-         */
-        val messages: Map<String, Map<String, Any>>?
-)
+internal interface PushGatewayAPI {
+    /**
+     * Ask the Push Gateway to send a push to the current device.
+     *
+     * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#post-matrix-push-v1-notify
+     */
+    @POST(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
+    fun notify(@Body body: PushGatewayNotifyBody): Call<PushGatewayNotifyResponse>
+}

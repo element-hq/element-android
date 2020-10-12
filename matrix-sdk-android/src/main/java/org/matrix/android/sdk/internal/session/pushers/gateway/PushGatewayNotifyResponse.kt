@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model.rest
+package org.matrix.android.sdk.internal.session.pushers.gateway
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SendToDeviceBody(
-        /**
-         * `Any` should implement [SendToDeviceObject], but we cannot use interface here because of Json serialization
-         *
-         * The messages to send. A map from user ID, to a map from device ID to message body.
-         * The device ID may also be *, meaning all known devices for the user.
-         */
-        val messages: Map<String, Map<String, Any>>?
+internal data class PushGatewayNotifyResponse(
+        @Json(name = "rejected")
+        val rejectedPushKeys: List<String>
 )

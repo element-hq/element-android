@@ -91,19 +91,19 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             addFirstFragment()
         }
 
-        // Get config extra
-        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
-        if (loginConfig != null && isFirstCreation()) {
-            // TODO Check this
-            loginViewModel.handle(LoginAction.InitWith(loginConfig))
-        }
-
         loginViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
 
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+
+        // Get config extra
+        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
+        if (isFirstCreation()) {
+            // TODO Check this
+            loginViewModel.handle(LoginAction.InitWith(loginConfig))
+        }
     }
 
     protected open fun addFirstFragment() {

@@ -11,17 +11,23 @@ Improvements 🙌:
  - Small optimisation of scrolling experience in timeline (#2114)
  - Allow user to reset cross signing if he has no way to recover (#2052)
  - Create home shortcut for any room (#1525)
+ - Can't confirm email due to killing by Android (#2021)
  - Add a menu item to open the setting in room list and in room (#2171)
  - Add a menu item in the timeline as a shortcut to invite user (#2171)
  - Drawer: move settings access and add sign out action (#2171)
  - Filter room member (and banned users) by name (#2184)
  - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
  - Add FAB to room members list (#2226)
+ - Add Sygnal API implementation to test is Push are correctly received
+ - Add PushGateway API implementation to test if Push are correctly received
+ - Cross signing: shouldn't offer to verify with other session when there is not. (#2227)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
  - Fix Splash layout on small screens
+ - Invalid popup when pressing back (#1635)
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
+ - Very long topic cannot be fully visible (#1957)
 
 Translations 🗣:
  -

@@ -52,25 +52,32 @@ class VerificationRequestController @Inject constructor(
         val matrixItem = viewState?.otherUserMxItem ?: return
 
         if (state.selfVerificationMode) {
-            bottomSheetVerificationNoticeItem {
-                id("notice")
-                notice(stringProvider.getString(R.string.verification_open_other_to_verify))
-            }
+            if (state.hasAnyOtherSession) {
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    notice(stringProvider.getString(R.string.verification_open_other_to_verify))
+                }
 
-            bottomSheetSelfWaitItem {
-                id("waiting")
-            }
+                bottomSheetSelfWaitItem {
+                    id("waiting")
+                }
 
-            dividerItem {
-                id("sep")
+                dividerItem {
+                    id("sep")
+                }
             }
 
             if (state.quadSContainsSecrets) {
+                val subtitle = if (state.hasAnyOtherSession) {
+                    stringProvider.getString(R.string.verification_use_passphrase)
+                } else {
+                    null
+                }
                 bottomSheetVerificationActionItem {
                     id("passphrase")
                     title(stringProvider.getString(R.string.verification_cannot_access_other_session))
                     titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                    subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                    subTitle(subtitle)
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
                     listener { listener?.onClickRecoverFromPassphrase() }
@@ -122,13 +129,13 @@ class VerificationRequestController @Inject constructor(
                         listener { listener?.onClickOnVerificationStart() }
                     }
                 }
-                is Loading       -> {
+                is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
                         title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
                     }
                 }
-                is Success       -> {
+                is Success -> {
                     if (!pr.invoke().isReady) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {

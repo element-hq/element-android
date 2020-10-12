@@ -27,8 +27,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -36,6 +38,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
@@ -47,8 +50,8 @@ import im.vector.app.features.call.service.CallHeadsUpActionReceiver
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
-import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -61,7 +64,6 @@ import kotlin.random.Random
 @Singleton
 class NotificationUtils @Inject constructor(private val context: Context,
                                             private val stringProvider: StringProvider,
-                                            private val pinLocker: PinLocker,
                                             private val vectorPreferences: VectorPreferences) {
 
     companion object {
@@ -89,6 +91,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
         const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
         const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
         private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
+        const val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
+        const val PUSH_ACTION = "${BuildConfig.APPLICATION_ID}.PUSH"
 
         /* ==========================================================================================
          * IDs for channels
@@ -843,6 +847,43 @@ class NotificationUtils @Inject constructor(private val context: Context,
         } catch (e: Exception) {
             Timber.e(e, "## cancelAllNotifications() failed")
         }
+    }
+
+    fun displayDiagnosticNotification() {
+        val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
+        testActionIntent.action = DIAGNOSTIC_ACTION
+        val testPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                testActionIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        notificationManager.notify(
+                "DIAGNOSTIC",
+                888,
+                NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+                        .setContentTitle(stringProvider.getString(R.string.app_name))
+                        .setContentText(stringProvider.getString(R.string.settings_troubleshoot_test_push_notification_content))
+                        .setSmallIcon(R.drawable.ic_status_bar)
+                        .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
+                        .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setCategory(NotificationCompat.CATEGORY_STATUS)
+                        .setAutoCancel(true)
+                        .setContentIntent(testPendingIntent)
+                        .build()
+        )
+    }
+
+    private fun getBitmap(context: Context, @DrawableRes drawableRes: Int): Bitmap? {
+        val drawable = ResourcesCompat.getDrawable(context.resources, drawableRes, null) ?: return null
+        val canvas = Canvas()
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        canvas.setBitmap(bitmap)
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        drawable.draw(canvas)
+        return bitmap
     }
 
     /**

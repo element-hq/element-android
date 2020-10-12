@@ -19,6 +19,7 @@ package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
@@ -57,6 +58,20 @@ class RoomProfileController @Inject constructor(
             return
         }
         val roomSummary = data.roomSummary() ?: return
+
+        // Topic
+        roomSummary
+                .topic
+                .takeIf { it.isNotEmpty() }
+                ?.let {
+                    buildProfileSection(stringProvider.getString(R.string.room_settings_topic))
+                    expandableTextItem {
+                        id("topic")
+                        content(it)
+                        maxLines(2)
+                    }
+                }
+
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
         val learnMoreSubtitle = if (roomSummary.isEncrypted) {
