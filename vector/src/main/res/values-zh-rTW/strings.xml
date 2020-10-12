@@ -2408,7 +2408,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="secure_backup_setup">設定安全備份</string>
 
-    <string name="labs_merge_e2e_in_timeline">合併未能在時間軸中解密訊息</string>
     <string name="labs_show_unread_notifications_as_tab">在主畫面上新增專用的未讀通知分頁。</string>
 
     <string name="room_list_quick_actions_favorite_add">新增到最愛</string>

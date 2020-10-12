@@ -2483,7 +2483,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \n
 \n%s</string>
 
-    <string name="labs_merge_e2e_in_timeline">Sloučení nemohlo dešifrovat zprávy v časové ose</string>
     <string name="labs_show_unread_notifications_as_tab">Přidat panel věnovaný nepřečteným oznámením na hlavní obrazovku.</string>
 
     <string name="settings_text_message_sent_hint">Kód</string>

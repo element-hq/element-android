@@ -2512,7 +2512,6 @@
 
     <string name="secure_backup_setup">Imposta il Backup Sicuro</string>
 
-    <string name="labs_merge_e2e_in_timeline">Decifrazione del messaggio nella timeline fallita</string>
     <string name="labs_show_unread_notifications_as_tab">Aggiungi una scheda dedicata per le notifiche non lette nella schermata principale.</string>
 
     <string name="room_list_quick_actions_favorite_add">Aggiungi ai preferiti</string>

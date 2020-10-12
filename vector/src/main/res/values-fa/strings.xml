@@ -1222,7 +1222,6 @@
     <string name="room_filtering_footer_title">نمی‌توانید کسی که به دنبالش هستید را بیابید؟</string>
     <string name="room_filtering_footer_open_room_directory">مشاهدهٔ شاخهٔ اتاق</string>
 
-    <string name="labs_merge_e2e_in_timeline">ادغام پیام‌های شکست‌خورده در رمزگشایی در خط زمانی</string>
     <string name="labs_show_unread_notifications_as_tab">افزودن زبانه‌ای اختصاصی روی صفحهٔ اصلی برای آگاهی‌های خوانده‌نشده.</string>
 
     <string name="link_copied_to_clipboard">پیوند در تخته‌گیره رونشت شد</string>

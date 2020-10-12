@@ -1766,7 +1766,6 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_directory_search_hint">Nome ou ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Ativar o recurso de deslizar para responder nas conversas</string>
-    <string name="labs_merge_e2e_in_timeline">Alertar apenas uma vez em uma conversa de que não é possível descriptografar as mensagens, em vez de alertar para cada mensagem</string>
     <string name="labs_show_unread_notifications_as_tab">Adicione uma aba dedicada para notificações não lidas na tela principal.</string>
 
     <string name="link_copied_to_clipboard">Link copiado para a memória</string>

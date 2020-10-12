@@ -1930,7 +1930,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_participants_unban_prompt_msg">Desbanear usuario y permitir entrar a la sala nuevamente.</string>
 
     <string name="push_gateway_item_device_name">nombre_session:</string>
-    <string name="labs_merge_e2e_in_timeline">Error al descifrar el mensaje en la línea de tiempo</string>
     <string name="labs_show_unread_notifications_as_tab">Adicionar pestaña dedicada para notificaciones no leidas en la pantalla principal.</string>
 
     <string name="bug_report_error_too_short">Descripcion muy corta</string>

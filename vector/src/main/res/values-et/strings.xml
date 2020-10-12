@@ -2217,7 +2217,6 @@
 \n
 \n%s</string>
 
-    <string name="labs_merge_e2e_in_timeline">Ei õnnestunud dekrüptida ajajoonel leiduvat sõnumit</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Sa parasjagu jagad oma e-posti aadressi ja telefoninumbrit isikutuvastusserveriga %1$s. Selleks, et lõpetada see jagamine, pead uuesti looma ühenduse isikutuvastusserveriga %2$s.</string>
     <string name="labs_allow_extended_logging_summary">Detailne logimine võimaldab arendajatel saada rohkem teadet kui sa peale nutiseadme tõsist raputamist saadad veateate. Kui ka detailne logimine on kasutusel, siis rakendus ei logi sõnumite sisu ega isiklikke andmeid.</string>
 

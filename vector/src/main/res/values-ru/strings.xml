@@ -2163,7 +2163,6 @@
 
     <string name="secure_backup_setup">Настроить безопасное резервное копирование</string>
 
-    <string name="labs_merge_e2e_in_timeline">Слиянию не удаётся расшифровать сообщение на временной шкале</string>
     <string name="labs_show_unread_notifications_as_tab">Добавьте специальную вкладку для непрочитанных уведомлений на главном экране.</string>
 
     <plurals name="fallback_users_read">
