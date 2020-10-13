@@ -211,11 +211,19 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
-        return if (contentInBubble && attributes.informationData.showInformation) {
+        return if (contentInBubble && (attributes.informationData.showInformation || attributes.informationData.forceShowTimestamp)) {
             // Guess text width for name and time
-            val text = holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+            val text = if (attributes.informationData.showInformation) {
+                holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+            } else {
+                holder.bubbleTimeView.text.toString()
+            }
             val paint = Paint()
-            paint.textSize = max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
+            paint.textSize = if (attributes.informationData.showInformation) {
+                max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
+            } else {
+                holder.bubbleTimeView.textSize
+            }
             round(paint.measureText(text)).toInt()
         } else {
             0
