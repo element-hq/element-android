@@ -32,7 +32,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     UNIGNORE_USER("/unignore", "<user-id>", R.string.command_description_unignore_user),
     SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
     RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
-    ROOM_NAME("/roomname", "<user-id>", R.string.command_description_room_name),
+    ROOM_NAME("/roomname", "<name>", R.string.command_description_room_name),
     INVITE("/invite", "<user-id> [reason]", R.string.command_description_invite_user),
     JOIN_ROOM("/join", "<room-alias> [reason]", R.string.command_description_join_room),
     PART("/part", "<room-alias> [reason]", R.string.command_description_part_room),

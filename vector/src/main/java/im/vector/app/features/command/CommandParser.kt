@@ -91,7 +91,7 @@ object CommandParser {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
-                        if (url.isNotEmpty() && url.startsWith("mxc://")) {
+                        if (url.startsWith("mxc://")) {
                             ParsedCommand.ChangeRoomAvatar(url)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.ROOM_AVATAR)
@@ -104,7 +104,7 @@ object CommandParser {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
-                        if (url.isNotEmpty() && url.startsWith("mxc://")) {
+                        if (url.startsWith("mxc://")) {
                             ParsedCommand.ChangeAvatarForRoom(url)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.CHANGE_AVATAR_FOR_ROOM)
