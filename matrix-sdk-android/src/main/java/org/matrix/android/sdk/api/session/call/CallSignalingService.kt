@@ -32,7 +32,7 @@ interface CallSignalingService {
 
     fun removeCallListener(listener: CallsListener)
 
-    fun getCallWithId(callId: String) : MxCall?
+    fun getCallWithId(callId: String): MxCall?
 
     fun isThereAnyActiveCall(): Boolean
 }

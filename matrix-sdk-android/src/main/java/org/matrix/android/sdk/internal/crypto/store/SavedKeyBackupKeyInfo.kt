@@ -17,6 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.store
 
 data class SavedKeyBackupKeyInfo(
-        val recoveryKey : String,
+        val recoveryKey: String,
         val version: String
 )

@@ -531,8 +531,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         when (args.setUpMode) {
                             SetupMode.CROSS_SIGNING_ONLY,
-                            SetupMode.NORMAL              -> BootstrapViewEvents.SkipBootstrap()
-                            else                          -> BootstrapViewEvents.Dismiss(success = false)
+                            SetupMode.NORMAL -> BootstrapViewEvents.SkipBootstrap()
+                            else             -> BootstrapViewEvents.Dismiss(success = false)
                         }
                 )
             }

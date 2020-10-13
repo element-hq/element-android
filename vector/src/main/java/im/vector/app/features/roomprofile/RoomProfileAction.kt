@@ -21,8 +21,8 @@ import android.net.Uri
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class RoomProfileAction: VectorViewModelAction {
-    object LeaveRoom: RoomProfileAction()
+sealed class RoomProfileAction : VectorViewModelAction {
+    object LeaveRoom : RoomProfileAction()
     data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
     data class ChangeRoomAvatar(val uri: Uri, val fileName: String?) : RoomProfileAction()
     object ShareRoomProfile : RoomProfileAction()

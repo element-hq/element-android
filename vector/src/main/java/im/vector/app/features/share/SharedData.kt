@@ -20,11 +20,11 @@ import android.os.Parcelable
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import kotlinx.android.parcel.Parcelize
 
-sealed class SharedData: Parcelable {
+sealed class SharedData : Parcelable {
 
     @Parcelize
-    data class Text(val text: String): SharedData()
+    data class Text(val text: String) : SharedData()
 
     @Parcelize
-    data class Attachments(val attachmentData: List<ContentAttachmentData>): SharedData()
+    data class Attachments(val attachmentData: List<ContentAttachmentData>) : SharedData()
 }

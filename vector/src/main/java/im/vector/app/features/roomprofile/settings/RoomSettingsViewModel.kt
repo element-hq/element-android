@@ -102,12 +102,12 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomSettingsViewState.ActionPermissions(
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
-                            canChangeTopic =  powerLevelsHelper.isUserAllowedToSend(session.myUserId,  true, EventType.STATE_ROOM_TOPIC),
+                            canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_CANONICAL_ALIAS),
                             canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canEnableEncryption =  powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
                     setState { copy(actionPermissions = permissions) }
                 }

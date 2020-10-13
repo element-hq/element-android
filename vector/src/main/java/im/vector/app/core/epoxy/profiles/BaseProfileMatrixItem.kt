@@ -30,6 +30,7 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var editable: Boolean = true
+
     @EpoxyAttribute
     var userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var clickListener: View.OnClickListener? = null

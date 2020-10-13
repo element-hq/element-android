@@ -71,7 +71,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
                             VectorSettingsDevicesFragment::class.java,
                             null,
                             FRAGMENT_TAG)
-                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                -> {
+                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
@@ -136,7 +136,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
     }
 
-    fun <T: Fragment> navigateTo(fragmentClass: Class<T>) {
+    fun <T : Fragment> navigateTo(fragmentClass: Class<T>) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
                 .replace(R.id.vector_settings_page, fragmentClass, null)

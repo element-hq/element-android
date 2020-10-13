@@ -96,7 +96,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         }
     }
 
-    var resultListener : ResultListener? = null
+    var resultListener: ResultListener? = null
     var bottomSheetResult: Int = ResultListener.RESULT_CANCEL
     var bottomSheetResultData: Any? = null
 

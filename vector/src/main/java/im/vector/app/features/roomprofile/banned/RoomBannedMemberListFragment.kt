@@ -75,7 +75,7 @@ class RoomBannedMemberListFragment @Inject constructor(
                             }
                             .show()
                 }
-                is RoomBannedViewEvents.ToastError -> {
+                is RoomBannedViewEvents.ToastError     -> {
                     requireActivity().toast(it.info)
                 }
             }

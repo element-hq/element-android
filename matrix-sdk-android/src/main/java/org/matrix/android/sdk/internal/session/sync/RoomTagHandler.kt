@@ -33,7 +33,7 @@ internal class RoomTagHandler @Inject constructor() {
             RoomTagEntity(tagName, params["order"] as? Double)
         }
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
+                ?: RoomSummaryEntity(roomId)
 
         roomSummaryEntity.tags.clear()
         roomSummaryEntity.tags.addAll(tags)

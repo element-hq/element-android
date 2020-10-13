@@ -29,16 +29,19 @@ enum class RoomHistoryVisibility {
      * participating homeserver with anyone, regardless of whether they have ever joined the room.
      */
     @Json(name = "world_readable") WORLD_READABLE,
+
     /**
      * Previous events are always accessible to newly joined members. All events in the
      * room are accessible, even those sent when the member was not a part of the room.
      */
     @Json(name = "shared") SHARED,
+
     /**
      * Events are accessible to newly joined members from the point they were invited onwards.
      * Events stop being accessible when the member's state changes to something other than invite or join.
      */
     @Json(name = "invited") INVITED,
+
     /**
      * Events are accessible to newly joined members from the point they joined the room onwards.
      * Events stop being accessible when the member's state changes to something other than join.

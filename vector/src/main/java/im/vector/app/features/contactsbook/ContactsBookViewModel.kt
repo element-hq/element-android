@@ -44,7 +44,7 @@ import timber.log.Timber
 private typealias PhoneBookSearch = String
 
 class ContactsBookViewModel @AssistedInject constructor(@Assisted
-                                                     initialState: ContactsBookViewState,
+                                                        initialState: ContactsBookViewState,
                                                         private val contactsDataSource: ContactsDataSource,
                                                         private val session: Session)
     : VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {

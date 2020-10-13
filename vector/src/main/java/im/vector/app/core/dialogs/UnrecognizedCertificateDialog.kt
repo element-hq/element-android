@@ -72,12 +72,12 @@ class UnrecognizedCertificateDialog @Inject constructor(
      * @param callback                callback to fire when the user makes a decision
      */
     private fun internalShow(activity: Activity,
-                      unrecognizedFingerprint: Fingerprint,
-                      existing: Boolean,
-                      callback: Callback,
-                      userId: String?,
-                      homeServerUrl: String,
-                      homeServerConnectionConfigHasFingerprints: Boolean) {
+                             unrecognizedFingerprint: Fingerprint,
+                             existing: Boolean,
+                             callback: Callback,
+                             userId: String?,
+                             homeServerUrl: String,
+                             homeServerConnectionConfigHasFingerprints: Boolean) {
         val dialogId = userId ?: homeServerUrl + unrecognizedFingerprint.displayableHexRepr
 
         if (openDialogIds.contains(dialogId)) {

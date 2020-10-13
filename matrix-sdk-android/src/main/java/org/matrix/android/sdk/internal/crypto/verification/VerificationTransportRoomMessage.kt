@@ -118,7 +118,7 @@ internal class VerificationTransportRoomMessage(
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
                             when (wInfo.state) {
-                                WorkInfo.State.FAILED -> {
+                                WorkInfo.State.FAILED    -> {
                                     tx?.cancel(onErrorReason)
                                     workLiveData.removeObserver(this)
                                 }
@@ -135,7 +135,7 @@ internal class VerificationTransportRoomMessage(
                                     }
                                     workLiveData.removeObserver(this)
                                 }
-                                else -> {
+                                else                     -> {
                                     // nop
                                 }
                             }

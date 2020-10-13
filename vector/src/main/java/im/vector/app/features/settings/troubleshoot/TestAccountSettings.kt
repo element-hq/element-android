@@ -49,15 +49,15 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
                         session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
-                                                           object : MatrixCallback<Unit> {
-                                                               override fun onSuccess(data: Unit) {
-                                                                   manager?.retry(activityResultLauncher)
-                                                               }
+                                object : MatrixCallback<Unit> {
+                                    override fun onSuccess(data: Unit) {
+                                        manager?.retry(activityResultLauncher)
+                                    }
 
-                                                               override fun onFailure(failure: Throwable) {
-                                                                   manager?.retry(activityResultLauncher)
-                                                               }
-                                                           })
+                                    override fun onFailure(failure: Throwable) {
+                                        manager?.retry(activityResultLauncher)
+                                    }
+                                })
                     }
                 }
                 status = TestStatus.FAILED

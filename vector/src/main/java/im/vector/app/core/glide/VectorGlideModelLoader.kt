@@ -118,7 +118,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
                 url = data.url,
                 fileName = data.filename,
                 elementToDecrypt = data.elementToDecrypt,
-                callback = object: MatrixCallback<File> {
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         callback.onDataReady(data.inputStream())
                     }

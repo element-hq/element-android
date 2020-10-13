@@ -181,7 +181,7 @@ public class HomeServerConnectionConfig {
                 if (!TextUtils.isEmpty(jitsiServerUrl)) {
                     // add trailing "/"
                     if (!jitsiServerUrl.endsWith("/")) {
-                        jitsiServerUrl =jitsiServerUrl + "/";
+                        jitsiServerUrl = jitsiServerUrl + "/";
                     }
 
                     Timber.d("Overriding jitsi server url to " + jitsiServerUrl);

@@ -42,4 +42,4 @@ interface MatrixCallback<in T> {
 /**
  * Basic no op implementation
  */
-class NoOpMatrixCallback<T>: MatrixCallback<T>
+class NoOpMatrixCallback<T> : MatrixCallback<T>

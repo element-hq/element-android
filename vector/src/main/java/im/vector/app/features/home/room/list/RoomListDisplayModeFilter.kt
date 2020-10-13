@@ -31,8 +31,8 @@ class RoomListDisplayModeFilter(private val displayMode: RoomListDisplayMode) : 
             RoomListDisplayMode.NOTIFICATIONS ->
                 roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE || roomSummary.userDrafts.isNotEmpty()
             RoomListDisplayMode.PEOPLE        -> roomSummary.isDirect && roomSummary.membership.isActive()
-            RoomListDisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership.isActive()
-            RoomListDisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN
+            RoomListDisplayMode.ROOMS         -> !roomSummary.isDirect && roomSummary.membership.isActive()
+            RoomListDisplayMode.FILTERED      -> roomSummary.membership == Membership.JOIN
         }
     }
 }

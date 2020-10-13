@@ -104,7 +104,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                         senderCurve25519Key = olmDecryptionResult.senderKey,
                                         claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
                                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
-                                               .orEmpty()
+                                                .orEmpty()
                                 )
                             } else {
                                 throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)

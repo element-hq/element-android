@@ -32,10 +32,13 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
 
     @EpoxyAttribute
     lateinit var reactionKey: CharSequence
+
     @EpoxyAttribute
     lateinit var authorDisplayName: CharSequence
+
     @EpoxyAttribute
     var timeStamp: CharSequence? = null
+
     @EpoxyAttribute
     var userClicked: (() -> Unit)? = null
 

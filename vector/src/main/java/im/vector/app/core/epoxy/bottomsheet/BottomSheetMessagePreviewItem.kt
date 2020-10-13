@@ -37,14 +37,19 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
+
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
+
     @EpoxyAttribute
     lateinit var body: CharSequence
+
     @EpoxyAttribute
     var time: CharSequence? = null
+
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
+
     @EpoxyAttribute
     var userClicked: (() -> Unit)? = null
 

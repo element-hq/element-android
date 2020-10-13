@@ -43,6 +43,7 @@ sealed class SendMode(open val text: String) {
             // This is necessary for forcing refresh on selectSubscribe
             private val ts: Long = System.currentTimeMillis()
     ) : SendMode(text)
+
     data class QUOTE(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
     data class EDIT(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
     data class REPLY(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)

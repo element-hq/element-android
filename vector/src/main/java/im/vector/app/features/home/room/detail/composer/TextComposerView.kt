@@ -54,18 +54,25 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     @BindView(R.id.composer_related_message_sender)
     lateinit var composerRelatedMessageTitle: TextView
+
     @BindView(R.id.composer_related_message_preview)
     lateinit var composerRelatedMessageContent: TextView
+
     @BindView(R.id.composer_related_message_avatar_view)
     lateinit var composerRelatedMessageAvatar: ImageView
+
     @BindView(R.id.composer_related_message_action_image)
     lateinit var composerRelatedMessageActionIcon: ImageView
+
     @BindView(R.id.composer_related_message_close)
     lateinit var composerRelatedMessageCloseButton: ImageButton
+
     @BindView(R.id.composerEditText)
     lateinit var composerEditText: ComposerEditText
+
     @BindView(R.id.composer_avatar_view)
     lateinit var composerAvatarImageView: ImageView
+
     @BindView(R.id.composer_shield)
     lateinit var composerShieldImageView: ImageView
 

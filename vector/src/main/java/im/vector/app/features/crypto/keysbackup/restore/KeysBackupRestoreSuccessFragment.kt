@@ -32,6 +32,7 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
     @BindView(R.id.keys_backup_restore_success)
     lateinit var mSuccessText: TextView
+
     @BindView(R.id.keys_backup_restore_success_info)
     lateinit var mSuccessDetailsText: TextView
 

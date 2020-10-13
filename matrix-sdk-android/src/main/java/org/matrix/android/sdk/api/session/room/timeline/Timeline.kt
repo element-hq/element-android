@@ -128,6 +128,7 @@ interface Timeline {
          * It represents future events.
          */
         FORWARDS,
+
         /**
          * It represents past events.
          */

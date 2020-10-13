@@ -33,10 +33,12 @@ data class IntegrationManagerConfig(
          * Defined in UserAccountData
          */
         ACCOUNT,
+
         /**
          * Defined in Wellknown
          */
         HOMESERVER,
+
         /**
          * Fallback value, hardcoded by the SDK
          */

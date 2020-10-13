@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class WidgetViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable): WidgetViewEvents()
+    data class Failure(val throwable: Throwable) : WidgetViewEvents()
     data class Close(val content: Content? = null) : WidgetViewEvents()
     data class DisplayIntegrationManager(val integId: String?, val integType: String?) : WidgetViewEvents()
     data class OnURLFormatted(val formattedURL: String) : WidgetViewEvents()

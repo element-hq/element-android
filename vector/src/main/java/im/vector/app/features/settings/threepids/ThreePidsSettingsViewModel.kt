@@ -141,13 +141,13 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: ThreePidsSettingsAction) {
         when (action) {
-            is ThreePidsSettingsAction.AddThreePid -> handleAddThreePid(action)
+            is ThreePidsSettingsAction.AddThreePid      -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
-            is ThreePidsSettingsAction.SubmitCode -> handleSubmitCode(action)
-            is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
-            is ThreePidsSettingsAction.AccountPassword -> handleAccountPassword(action)
-            is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
-            is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
+            is ThreePidsSettingsAction.SubmitCode       -> handleSubmitCode(action)
+            is ThreePidsSettingsAction.CancelThreePid   -> handleCancelThreePid(action)
+            is ThreePidsSettingsAction.AccountPassword  -> handleAccountPassword(action)
+            is ThreePidsSettingsAction.DeleteThreePid   -> handleDeleteThreePid(action)
+            is ThreePidsSettingsAction.ChangeUiState    -> handleChangeUiState(action)
         }.exhaustive
     }
 

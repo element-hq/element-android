@@ -90,7 +90,7 @@ class SearchFragment @Inject constructor(
                 is Loading -> {
                     stateView.state = StateView.State.Loading
                 }
-                is Fail -> {
+                is Fail    -> {
                     stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {

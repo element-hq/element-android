@@ -43,7 +43,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
-): SessionLifecycleObserver {
+) : SessionLifecycleObserver {
 
     companion object {
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")

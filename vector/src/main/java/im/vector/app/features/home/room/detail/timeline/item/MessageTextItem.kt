@@ -30,10 +30,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var searchForPills: Boolean = false
+
     @EpoxyAttribute
     var message: CharSequence? = null
+
     @EpoxyAttribute
     var useBigFont: Boolean = false
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
