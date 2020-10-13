@@ -102,7 +102,7 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction -> {
+            R.id.attachmentsPreviewEditAction   -> {
                 handleEditAction()
                 true
             }

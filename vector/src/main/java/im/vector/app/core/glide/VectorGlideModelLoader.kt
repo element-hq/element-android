@@ -33,8 +33,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 
 class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
     : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
@@ -118,7 +116,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
                 url = data.url,
                 fileName = data.filename,
                 elementToDecrypt = data.elementToDecrypt,
-                callback = object: MatrixCallback<File> {
+                callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         callback.onDataReady(data.inputStream())
                     }

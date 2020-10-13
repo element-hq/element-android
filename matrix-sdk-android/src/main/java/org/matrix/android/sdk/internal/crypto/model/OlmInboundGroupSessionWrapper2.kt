@@ -80,6 +80,7 @@ class OlmInboundGroupSessionWrapper2 : Serializable {
     constructor() {
         // empty
     }
+
     /**
      * Create a new instance from the provided keys map.
      *

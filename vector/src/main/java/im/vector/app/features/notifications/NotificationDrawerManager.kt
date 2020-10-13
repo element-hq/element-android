@@ -245,8 +245,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             roomEvents.add(event)
                         }
                     }
-                    is InviteNotifiableEvent -> invitationEvents.add(event)
-                    is SimpleNotifiableEvent -> simpleEvents.add(event)
+                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is SimpleNotifiableEvent  -> simpleEvents.add(event)
                     else                      -> Timber.w("Type not handled")
                 }
             }

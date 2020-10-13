@@ -428,7 +428,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val sharedDataItem = sharedDataItems[0]
 
             val uri = when (sharedDataItem) {
-                is ExternalIntentData.IntentDataUri -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
                 else                                     -> null
             }

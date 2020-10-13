@@ -33,6 +33,7 @@ interface MxCallDetail {
 interface MxCall : MxCallDetail {
 
     var state: CallState
+
     /**
      * Pick Up the incoming call
      * It has no effect on outgoing call

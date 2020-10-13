@@ -35,7 +35,7 @@ data class PollSummaryContent(
         return votes?.size ?: 0
     }
 
-    fun voteCountForOption(optionIndex: Int) : Int {
+    fun voteCountForOption(optionIndex: Int): Int {
         return votes?.filter { it.optionIndex == optionIndex }?.count() ?: 0
     }
 }

@@ -115,7 +115,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume {  addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
             }
         }
     }

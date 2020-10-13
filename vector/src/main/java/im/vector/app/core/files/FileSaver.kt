@@ -59,7 +59,7 @@ fun addEntryToDownloadManager(context: Context,
                               file: File,
                               mimeType: String,
                               title: String = file.name,
-                              description: String = file.name) : Uri? {
+                              description: String = file.name): Uri? {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
@@ -71,16 +71,16 @@ fun addEntryToDownloadManager(context: Context,
             return context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
                     ?.let { uri ->
                         Timber.v("## addEntryToDownloadManager(): $uri")
-                val source = file.inputStream().source().buffer()
-                context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
-                    source.use { input ->
-                        sink.use { output ->
-                            output.writeAll(input)
+                        val source = file.inputStream().source().buffer()
+                        context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
+                            source.use { input ->
+                                sink.use { output ->
+                                    output.writeAll(input)
+                                }
+                            }
                         }
-                    }
-                }
                         uri
-            } ?: run {
+                    } ?: run {
                 Timber.v("## addEntryToDownloadManager(): context.contentResolver.insert failed")
 
                 null

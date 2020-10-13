@@ -40,5 +40,5 @@ interface TimelineService {
 
     fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>>
 
-    fun getAttachmentMessages() : List<TimelineEvent>
+    fun getAttachmentMessages(): List<TimelineEvent>
 }

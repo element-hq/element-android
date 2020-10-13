@@ -228,53 +228,53 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
-            is RoomDetailAction.UserIsTyping -> handleUserIsTyping(action)
-            is RoomDetailAction.SaveDraft -> handleSaveDraft(action)
-            is RoomDetailAction.SendMessage -> handleSendMessage(action)
-            is RoomDetailAction.SendMedia -> handleSendMedia(action)
-            is RoomDetailAction.SendSticker -> handleSendSticker(action)
-            is RoomDetailAction.TimelineEventTurnsVisible -> handleEventVisible(action)
-            is RoomDetailAction.TimelineEventTurnsInvisible -> handleEventInvisible(action)
-            is RoomDetailAction.LoadMoreTimelineEvents -> handleLoadMore(action)
-            is RoomDetailAction.SendReaction -> handleSendReaction(action)
-            is RoomDetailAction.AcceptInvite -> handleAcceptInvite()
-            is RoomDetailAction.RejectInvite -> handleRejectInvite()
-            is RoomDetailAction.RedactAction -> handleRedactEvent(action)
-            is RoomDetailAction.UndoReaction -> handleUndoReact(action)
-            is RoomDetailAction.UpdateQuickReactAction -> handleUpdateQuickReaction(action)
-            is RoomDetailAction.EnterRegularMode -> handleEnterRegularMode(action)
-            is RoomDetailAction.EnterEditMode -> handleEditAction(action)
-            is RoomDetailAction.EnterQuoteMode -> handleQuoteAction(action)
-            is RoomDetailAction.EnterReplyMode -> handleReplyAction(action)
-            is RoomDetailAction.DownloadOrOpen -> handleOpenOrDownloadFile(action)
-            is RoomDetailAction.NavigateToEvent -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent -> handleTombstoneEvent(action)
-            is RoomDetailAction.ResendMessage -> handleResendEvent(action)
-            is RoomDetailAction.RemoveFailedEcho -> handleRemove(action)
-            is RoomDetailAction.ClearSendQueue -> handleClearSendQueue()
-            is RoomDetailAction.ResendAll -> handleResendAll()
-            is RoomDetailAction.MarkAllAsRead -> handleMarkAllAsRead()
-            is RoomDetailAction.ReportContent -> handleReportContent(action)
-            is RoomDetailAction.IgnoreUser -> handleIgnoreUser(action)
+            is RoomDetailAction.UserIsTyping                     -> handleUserIsTyping(action)
+            is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
+            is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
+            is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
+            is RoomDetailAction.SendSticker                      -> handleSendSticker(action)
+            is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
+            is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
+            is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
+            is RoomDetailAction.SendReaction                     -> handleSendReaction(action)
+            is RoomDetailAction.AcceptInvite                     -> handleAcceptInvite()
+            is RoomDetailAction.RejectInvite                     -> handleRejectInvite()
+            is RoomDetailAction.RedactAction                     -> handleRedactEvent(action)
+            is RoomDetailAction.UndoReaction                     -> handleUndoReact(action)
+            is RoomDetailAction.UpdateQuickReactAction           -> handleUpdateQuickReaction(action)
+            is RoomDetailAction.EnterRegularMode                 -> handleEnterRegularMode(action)
+            is RoomDetailAction.EnterEditMode                    -> handleEditAction(action)
+            is RoomDetailAction.EnterQuoteMode                   -> handleQuoteAction(action)
+            is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
+            is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
+            is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
+            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
+            is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
+            is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
+            is RoomDetailAction.ClearSendQueue                   -> handleClearSendQueue()
+            is RoomDetailAction.ResendAll                        -> handleResendAll()
+            is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
+            is RoomDetailAction.ReportContent                    -> handleReportContent(action)
+            is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
-            is RoomDetailAction.ExitTrackingUnreadMessagesState -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToOptions -> handleReplyToOptions(action)
-            is RoomDetailAction.AcceptVerificationRequest -> handleAcceptVerification(action)
-            is RoomDetailAction.DeclineVerificationRequest -> handleDeclineVerification(action)
-            is RoomDetailAction.RequestVerification -> handleRequestVerification(action)
-            is RoomDetailAction.ResumeVerification -> handleResumeRequestVerification(action)
-            is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
-            is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
-            is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
-            is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
-            is RoomDetailAction.StartCall -> handleStartCall(action)
-            is RoomDetailAction.EndCall -> handleEndCall()
-            is RoomDetailAction.ManageIntegrations -> handleManageIntegrations()
-            is RoomDetailAction.AddJitsiWidget -> handleAddJitsiConference(action)
-            is RoomDetailAction.RemoveWidget -> handleDeleteWidget(action.widgetId)
-            is RoomDetailAction.EnsureNativeWidgetAllowed -> handleCheckWidgetAllowed(action)
-            is RoomDetailAction.CancelSend -> handleCancel(action)
-            is RoomDetailAction.JumpToReadReceipt -> handleJumpToReadReceipt(action)
+            is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
+            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
+            is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
+            is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
+            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
+            is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
+            is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
+            is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
+            is RoomDetailAction.StartCall                        -> handleStartCall(action)
+            is RoomDetailAction.EndCall                          -> handleEndCall()
+            is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
+            is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
+            is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
+            is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
+            is RoomDetailAction.CancelSend                       -> handleCancel(action)
+            is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
         }.exhaustive
     }
 
@@ -695,7 +695,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }.exhaustive
                 }
-                is SendMode.EDIT -> {
+                is SendMode.EDIT    -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
                             ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
@@ -721,7 +721,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.QUOTE -> {
+                is SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                                     ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
@@ -744,7 +744,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.REPLY -> {
+                is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(RoomDetailViewEvents.MessageSent)

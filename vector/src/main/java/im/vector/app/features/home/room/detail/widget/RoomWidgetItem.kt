@@ -36,6 +36,7 @@ abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
 
     @EpoxyAttribute lateinit var widget: Widget
     @EpoxyAttribute var widgetClicked: ClickListener? = null
+
     @DrawableRes
     @EpoxyAttribute var iconRes: Int? = null
 

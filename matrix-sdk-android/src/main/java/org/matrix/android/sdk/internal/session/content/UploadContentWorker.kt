@@ -312,7 +312,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newImageAttributes)
                 is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
-                is MessageFileContent -> messageContent.update(url, encryptedFileInfo)
+                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
                 else                   -> messageContent
             }

@@ -51,12 +51,16 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
 
         @BindView(R.id.troubleshootTestTitle)
         lateinit var titleText: TextView
+
         @BindView(R.id.troubleshootTestDescription)
         lateinit var descriptionText: TextView
+
         @BindView(R.id.troubleshootStatusIcon)
         lateinit var statusIconImage: ImageView
+
         @BindView(R.id.troubleshootProgressBar)
         lateinit var progressBar: ProgressBar
+
         @BindView(R.id.troubleshootTestButton)
         lateinit var fixButton: Button
 
@@ -70,7 +74,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
             descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
             when (test.status) {
-                TroubleshootTest.TestStatus.NOT_STARTED -> {
+                TroubleshootTest.TestStatus.NOT_STARTED      -> {
                     titleText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
                     progressBar.visibility = View.INVISIBLE
@@ -87,11 +91,11 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     statusIconImage.setImageDrawable(drawable)
                     descriptionText.setTextColor(infoColor)
                 }
-                TroubleshootTest.TestStatus.RUNNING     -> {
+                TroubleshootTest.TestStatus.RUNNING          -> {
                     progressBar.visibility = View.VISIBLE
                     statusIconImage.visibility = View.INVISIBLE
                 }
-                TroubleshootTest.TestStatus.FAILED      -> {
+                TroubleshootTest.TestStatus.FAILED           -> {
                     progressBar.visibility = View.INVISIBLE
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test_ko)
@@ -100,7 +104,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
 
                     descriptionText.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
                 }
-                TroubleshootTest.TestStatus.SUCCESS     -> {
+                TroubleshootTest.TestStatus.SUCCESS          -> {
                     progressBar.visibility = View.INVISIBLE
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test_ok)

@@ -27,10 +27,10 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import me.gujun.android.span.Span
 import me.gujun.android.span.image
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 
 /**
  * A emoji list for bottom sheet.

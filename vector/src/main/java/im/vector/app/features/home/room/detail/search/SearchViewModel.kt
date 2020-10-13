@@ -63,8 +63,8 @@ class SearchViewModel @AssistedInject constructor(
     override fun handle(action: SearchAction) {
         when (action) {
             is SearchAction.SearchWith -> handleSearchWith(action)
-            is SearchAction.LoadMore -> handleLoadMore()
-            is SearchAction.Retry -> handleRetry()
+            is SearchAction.LoadMore   -> handleLoadMore()
+            is SearchAction.Retry      -> handleRetry()
         }.exhaustive
     }
 

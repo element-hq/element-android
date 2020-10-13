@@ -91,9 +91,9 @@ internal class ReadReceiptHandler @Inject constructor() {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-                                      ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
-                                          this.roomId = roomId
-                                      }
+                    ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
+                        this.roomId = roomId
+                    }
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0

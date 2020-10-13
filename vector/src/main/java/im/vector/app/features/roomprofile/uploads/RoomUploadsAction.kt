@@ -16,8 +16,8 @@
 
 package im.vector.app.features.roomprofile.uploads
 
-import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 
 sealed class RoomUploadsAction : VectorViewModelAction {
     data class Download(val uploadEvent: UploadEvent) : RoomUploadsAction()

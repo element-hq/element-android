@@ -16,8 +16,8 @@
 
 package im.vector.app.features.share
 
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class IncomingShareAction : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary, val enableMultiSelect: Boolean) : IncomingShareAction()

@@ -24,8 +24,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -34,6 +32,8 @@ import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListFragment @Inject constructor(
@@ -75,7 +75,7 @@ class RoomBannedMemberListFragment @Inject constructor(
                             }
                             .show()
                 }
-                is RoomBannedViewEvents.ToastError -> {
+                is RoomBannedViewEvents.ToastError     -> {
                     requireActivity().toast(it.info)
                 }
             }

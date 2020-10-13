@@ -73,7 +73,7 @@ class IncomingShareFragment @Inject constructor(
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND -> {
+            Intent.ACTION_SEND          -> {
                 var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
@@ -103,7 +103,7 @@ class IncomingShareFragment @Inject constructor(
         }
         viewModel.observeViewEvents {
             when (it) {
-                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
+                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
             }.exhaustive

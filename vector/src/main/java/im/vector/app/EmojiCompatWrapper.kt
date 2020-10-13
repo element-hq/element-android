@@ -24,7 +24,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EmojiCompatWrapper @Inject constructor(private val context: Context)  {
+class EmojiCompatWrapper @Inject constructor(private val context: Context) {
 
     private var initialized = false
 

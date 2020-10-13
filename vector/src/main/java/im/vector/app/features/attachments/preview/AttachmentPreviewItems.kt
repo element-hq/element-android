@@ -55,8 +55,10 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
 abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<AttachmentMiniaturePreviewItem.Holder>() {
 
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
+
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
+
     @EpoxyAttribute
     var checked: Boolean = false
 

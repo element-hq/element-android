@@ -83,7 +83,7 @@ class ThreePidsSettingsController @Inject constructor(
                     loadingText(stringProvider.getString(R.string.loading))
                 }
             }
-            is Fail -> {
+            is Fail    -> {
                 genericFooterItem {
                     id("fail")
                     text(data.threePids.error.localizedMessage)
@@ -243,7 +243,7 @@ class ThreePidsSettingsController @Inject constructor(
         }
 
         when (threePid) {
-            is ThreePid.Email -> {
+            is ThreePid.Email  -> {
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(stringProvider.getString(R.string.account_email_validation_message))

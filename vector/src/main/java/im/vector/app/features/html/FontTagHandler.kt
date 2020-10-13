@@ -16,8 +16,8 @@
 package im.vector.app.features.html
 
 import android.graphics.Color
-import android.text.style.ForegroundColorSpan
 import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.RenderProps
 import io.noties.markwon.html.HtmlTag

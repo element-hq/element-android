@@ -52,6 +52,6 @@ data class MessageVideoContent(
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageWithAttachmentContent {
-        override val mimeType: String?
-                get() = encryptedFileInfo?.mimetype ?: videoInfo?.mimeType
+    override val mimeType: String?
+        get() = encryptedFileInfo?.mimetype ?: videoInfo?.mimeType
 }

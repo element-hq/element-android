@@ -51,6 +51,7 @@ abstract class RecyclerViewPresenter<T>(context: Context?) : AutocompletePresent
     }
 
     override fun onViewShown() {}
+
     @CallSuper
     override fun onViewHidden() {
         observer?.also {

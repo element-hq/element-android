@@ -57,7 +57,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    private fun RoomSummary?.isDm()  = this?.isDirect.orFalse()
+    private fun RoomSummary?.isDm() = this?.isDirect.orFalse()
 
     fun format(timelineEvent: TimelineEvent, rs: RoomSummary?): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {

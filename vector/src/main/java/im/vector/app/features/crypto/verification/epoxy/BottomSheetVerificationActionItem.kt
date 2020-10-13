@@ -38,12 +38,16 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = -1
+
     @EpoxyAttribute
     var title: CharSequence = ""
+
     @EpoxyAttribute
     var subTitle: CharSequence? = null
+
     @EpoxyAttribute
     var titleColor: Int = 0
+
     @EpoxyAttribute
     var iconColor: Int = -1
 

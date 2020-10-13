@@ -21,9 +21,6 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.EmptyItem_
 import im.vector.app.core.epoxy.loadingItem
@@ -31,6 +28,9 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class KnownUsersController @Inject constructor(private val session: Session,

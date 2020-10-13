@@ -39,6 +39,7 @@ sealed class LoginAction : VectorViewModelAction {
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
+
     // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
     data class ValidateThreePid(val code: String) : RegisterAction()
 

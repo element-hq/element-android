@@ -36,7 +36,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-import org.matrix.android.sdk.api.Matrix
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -45,6 +44,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
+import org.matrix.android.sdk.api.Matrix
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
