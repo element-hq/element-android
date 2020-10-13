@@ -177,7 +177,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.i("onCreate Activity ${this.javaClass.simpleName}")
+        Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
         screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
         val timeForInjection = measureTimeMillis {
@@ -305,7 +305,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.i("onDestroy Activity ${this.javaClass.simpleName}")
+        Timber.i("onDestroy Activity ${javaClass.simpleName}")
         unBinder?.unbind()
         unBinder = null
 
@@ -333,7 +333,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onResume() {
         super.onResume()
-        Timber.i("onResume Activity ${this.javaClass.simpleName}")
+        Timber.i("onResume Activity ${javaClass.simpleName}")
 
         configurationViewModel.onActivityResumed()
 
@@ -373,7 +373,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onPause() {
         super.onPause()
-        Timber.i("onPause Activity ${this.javaClass.simpleName}")
+        Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()
 

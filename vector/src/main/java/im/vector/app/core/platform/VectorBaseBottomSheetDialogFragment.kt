@@ -141,7 +141,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     override fun onResume() {
         super.onResume()
-        Timber.i("onResume BottomSheet ${this.javaClass.simpleName}")
+        Timber.i("onResume BottomSheet ${javaClass.simpleName}")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
