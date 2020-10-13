@@ -51,9 +51,7 @@ import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.media.BigImageViewerActivity
-import im.vector.app.features.media.ImageMediaViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
-import im.vector.app.features.media.VideoMediaViewerActivity
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.permalink.PermalinkHandlerActivity
 import im.vector.app.features.pin.PinLocker
@@ -125,10 +123,8 @@ interface ScreenComponent {
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)
     fun inject(activity: BugReportActivity)
-    fun inject(activity: ImageMediaViewerActivity)
     fun inject(activity: FilteredRoomsActivity)
     fun inject(activity: CreateRoomActivity)
-    fun inject(activity: VideoMediaViewerActivity)
     fun inject(activity: CreateDirectRoomActivity)
     fun inject(activity: IncomingShareActivity)
     fun inject(activity: SoftLogoutActivity)
