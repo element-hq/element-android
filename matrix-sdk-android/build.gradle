@@ -35,6 +35,10 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
+        // Seems that the build tools 4.1.0 does not generate BuildConfig.VERSION_NAME anymore.
+        // Add it manually here. We may remove this trick in the future
+        buildConfigField "String", "VERSION_NAME", "\"0.0.1\""
+
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
