@@ -17,9 +17,9 @@
 package im.vector.app.features.home.room.list
 
 import im.vector.app.features.home.RoomListDisplayMode
+import io.reactivex.functions.Predicate
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import io.reactivex.functions.Predicate
 
 class RoomListDisplayModeFilter(private val displayMode: RoomListDisplayMode) : Predicate<RoomSummary> {
 

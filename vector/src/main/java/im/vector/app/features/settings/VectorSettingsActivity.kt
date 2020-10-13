@@ -21,14 +21,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import org.matrix.android.sdk.api.failure.GlobalError
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import kotlinx.android.synthetic.main.activity_vector_settings.*
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 

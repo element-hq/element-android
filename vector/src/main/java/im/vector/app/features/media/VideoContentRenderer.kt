@@ -25,10 +25,10 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.utils.isLocalFile
+import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import java.io.File
 import java.net.URLEncoder

@@ -32,11 +32,11 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
 
 enum class TextInputFormFragmentMode {

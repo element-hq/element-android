@@ -33,8 +33,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 
 class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
     : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {

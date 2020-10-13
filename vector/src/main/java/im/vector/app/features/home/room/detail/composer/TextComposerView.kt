@@ -34,8 +34,8 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.app.R
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**
  * Encapsulate the timeline composer UX.

@@ -16,8 +16,8 @@
 
 package im.vector.app.features.roomprofile.settings
 
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
 sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetRoomName(val newName: String) : RoomSettingsAction()

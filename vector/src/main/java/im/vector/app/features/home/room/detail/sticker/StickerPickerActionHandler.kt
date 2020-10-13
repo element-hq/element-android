@@ -17,10 +17,10 @@
 package im.vector.app.features.home.room.detail.sticker
 
 import im.vector.app.features.home.room.detail.RoomDetailViewEvents
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import javax.inject.Inject
 
 class StickerPickerActionHandler @Inject constructor(private val session: Session) {

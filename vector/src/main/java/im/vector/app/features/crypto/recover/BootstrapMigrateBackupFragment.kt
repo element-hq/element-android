@@ -37,11 +37,11 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
 import kotlinx.android.synthetic.main.fragment_bootstrap_migrate_backup.*
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

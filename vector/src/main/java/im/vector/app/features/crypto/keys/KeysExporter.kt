@@ -18,14 +18,14 @@ package im.vector.app.features.crypto.keys
 
 import android.content.Context
 import android.net.Uri
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.extensions.foldToCallback
-import org.matrix.android.sdk.internal.util.awaitCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.extensions.foldToCallback
+import org.matrix.android.sdk.internal.util.awaitCallback
 
 class KeysExporter(private val session: Session) {
 

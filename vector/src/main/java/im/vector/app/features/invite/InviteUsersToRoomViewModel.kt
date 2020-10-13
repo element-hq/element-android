@@ -25,9 +25,9 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingInvitee
+import io.reactivex.Observable
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.rx.rx
-import io.reactivex.Observable
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                                                              initialState: InviteUsersToRoomViewState,

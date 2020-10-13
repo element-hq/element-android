@@ -18,10 +18,10 @@ package im.vector.app.features.session
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.matrix.android.sdk.api.failure.GlobalError
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.extensions.postLiveEvent
 import im.vector.app.core.utils.LiveEvent
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 import javax.inject.Singleton
 

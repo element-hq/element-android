@@ -18,8 +18,8 @@
 package im.vector.app.features.roomprofile
 
 import android.net.Uri
-import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 sealed class RoomProfileAction : VectorViewModelAction {
     object LeaveRoom : RoomProfileAction()

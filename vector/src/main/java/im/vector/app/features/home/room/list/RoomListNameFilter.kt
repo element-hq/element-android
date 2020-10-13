@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home.room.list
 
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import io.reactivex.functions.Predicate
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class RoomListNameFilter @Inject constructor() : Predicate<RoomSummary> {

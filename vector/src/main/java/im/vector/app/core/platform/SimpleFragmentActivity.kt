@@ -25,8 +25,8 @@ import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
-import org.matrix.android.sdk.api.session.Session
 import kotlinx.android.synthetic.main.activity.*
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**

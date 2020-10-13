@@ -28,17 +28,17 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.crypto.keys.KeysExporter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorViewEvents
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.crypto.keys.KeysExporter
 import org.matrix.android.sdk.rx.rx
 
 data class SignoutCheckViewState(

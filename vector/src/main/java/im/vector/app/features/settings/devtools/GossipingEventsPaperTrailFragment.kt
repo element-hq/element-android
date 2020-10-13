@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.events.model.Event
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -29,6 +28,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
+import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(

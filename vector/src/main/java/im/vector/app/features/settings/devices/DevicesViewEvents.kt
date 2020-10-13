@@ -17,10 +17,10 @@
 
 package im.vector.app.features.settings.devices
 
+import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import im.vector.app.core.platform.VectorViewEvents
 
 /**
  * Transient events for Ignored users screen
