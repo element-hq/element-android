@@ -428,6 +428,9 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
     }
 
     private fun formatRoomEncryptionEvent(event: Event, senderName: String?): CharSequence? {
+        if (!event.isStateEvent()) {
+            return null
+        }
         val content = event.content.toModel<EncryptionEventContent>() ?: return null
         return when (content.algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM ->
