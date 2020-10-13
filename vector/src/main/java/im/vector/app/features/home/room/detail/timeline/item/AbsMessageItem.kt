@@ -63,83 +63,87 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     override fun bind(holder: H) {
         super.bind(holder)
         val contentInBubble = infoInBubbles(holder.memberNameView.context)
-        if (attributes.informationData.showInformation and (!contentInBubble || !attributes.informationData.sentByMe)) {
-            holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
-                height = attributes.avatarSize
-                width = attributes.avatarSize
-            }
-            //holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.setOnClickListener(_avatarClickListener)
-            //holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.setOnClickListener(_memberNameClickListener)
-            holder.bubbleMemberNameView.setOnClickListener(_memberNameClickListener)
-            //holder.timeView.visibility = View.VISIBLE
-            holder.timeView.text = attributes.informationData.time
-            holder.bubbleTimeView.text = attributes.informationData.time
-            holder.memberNameView.text = attributes.informationData.memberName
-            holder.bubbleMemberNameView.text = attributes.informationData.memberName
-            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
-            holder.bubbleMemberNameView.setTextColor(attributes.getMemberNameColor())
-            attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
-            holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
-            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
-            holder.bubbleMemberNameView.setOnLongClickListener(attributes.itemLongClickListener)
-            if (hideSenderInformation()) {
-                holder.memberNameView.visibility = View.GONE
-                holder.timeView.visibility = View.GONE
-                holder.bubbleMemberNameView.visibility = View.GONE
-                holder.bubbleTimeView.visibility = View.GONE
-                if (attributes.informationData.isDirect) {
-                    holder.avatarImageView.visibility = View.GONE
-                } else {
-                    holder.avatarImageView.visibility = View.VISIBLE
-                }
-            } else if (contentInBubble) {
-                holder.memberNameView.visibility = View.GONE
-                holder.timeView.visibility = View.GONE
-                holder.bubbleMemberNameView.visibility = View.VISIBLE
-                holder.bubbleTimeView.visibility = View.VISIBLE
-                if (attributes.informationData.isDirect) {
-                    holder.avatarImageView.visibility = View.GONE
-                } else {
-                    holder.avatarImageView.visibility = View.VISIBLE
-                }
+
+        val avatarImageView: ImageView?
+        val memberNameView: TextView?
+        val timeView: TextView?
+        val hiddenViews = ArrayList<View>()
+        val invisibleViews = ArrayList<View>()
+
+        // Select which views are visible, based on bubble style and other criteria
+        if (attributes.informationData.showInformation) {
+            if (contentInBubble) {
+                memberNameView = holder.bubbleMemberNameView
+                timeView = holder.bubbleTimeView
+                hiddenViews.add(holder.memberNameView)
+                hiddenViews.add(holder.timeView)
             } else {
-                holder.memberNameView.visibility = View.VISIBLE
-                holder.timeView.visibility = View.VISIBLE
-                holder.bubbleMemberNameView.visibility = View.GONE
-                holder.bubbleTimeView.visibility = View.GONE
-                holder.avatarImageView.visibility = View.VISIBLE
+                memberNameView = holder.memberNameView
+                timeView = holder.timeView
+                hiddenViews.add(holder.bubbleMemberNameView)
+                hiddenViews.add(holder.bubbleTimeView)
+            }
+        } else if (attributes.informationData.forceShowTimestamp) {
+            memberNameView = null
+            //hiddenViews.add(holder.memberNameView) // this one get's some special hiding treatment below
+            hiddenViews.add(holder.bubbleMemberNameView)
+            if (contentInBubble) {
+                timeView = holder.bubbleTimeView
+                hiddenViews.add(holder.timeView)
+
+                hiddenViews.add(holder.memberNameView)
+            } else {
+                timeView = holder.timeView
+                hiddenViews.add(holder.bubbleTimeView)
+
+                // Set to INVISIBLE instead of adding to hiddenViews, which are set to GONE
+                // (upstream sets memberNameView.isInvisible = true here, which is effectively the same)
+                invisibleViews.add(holder.memberNameView)
             }
         } else {
-            holder.avatarImageView.setOnClickListener(null)
-            holder.memberNameView.setOnClickListener(null)
-            holder.avatarImageView.visibility = View.GONE
-            if (attributes.informationData.forceShowTimestamp) {
-                holder.memberNameView.isInvisible = true
-                holder.timeView.isVisible = true
-                holder.timeView.text = attributes.informationData.time
-            } else {
-                holder.memberNameView.isVisible = false
-                holder.timeView.isVisible = false
-            }
-            holder.avatarImageView.setOnLongClickListener(null)
-            holder.memberNameView.setOnLongClickListener(null)
-            if (attributes.informationData.showInformation && !hideSenderInformation()/* && contentInBubble && attributes.informationData.sentByMe */) {
-                holder.bubbleTimeView.visibility = View.VISIBLE
-                holder.bubbleTimeView.text = attributes.informationData.time
-                holder.bubbleMemberNameView.visibility = View.VISIBLE
-                holder.bubbleMemberNameView.setOnClickListener(_memberNameClickListener)
-                holder.bubbleMemberNameView.text = attributes.informationData.memberName
-                holder.bubbleMemberNameView.setTextColor(attributes.getMemberNameColor())
-                holder.bubbleMemberNameView.setOnLongClickListener(attributes.itemLongClickListener)
-            } else {
-                holder.bubbleTimeView.visibility = View.GONE
-                holder.bubbleMemberNameView.setOnClickListener(null)
-                holder.bubbleMemberNameView.visibility = View.GONE
-                holder.bubbleMemberNameView.setOnLongClickListener(null)
-            }
+            memberNameView = null
+            hiddenViews.add(holder.memberNameView)
+            hiddenViews.add(holder.bubbleMemberNameView)
+            timeView = null
+            hiddenViews.add(holder.timeView)
+            hiddenViews.add(holder.bubbleTimeView)
         }
+        // Dual-side bubbles: hide own avatar, and all in direct chats
+        if ((!attributes.informationData.showInformation) ||
+                (contentInBubble && (attributes.informationData.sentByMe || attributes.informationData.isDirect))) {
+            avatarImageView = null
+            hiddenViews.add(holder.avatarImageView)
+        } else {
+            avatarImageView = holder.avatarImageView
+        }
+
+        hiddenViews.forEach {
+            // Same as it.isVisible = false
+            it.visibility = View.GONE
+        }
+        invisibleViews.forEach {
+            // Same as it.isInvisible = true
+            it.visibility = View.INVISIBLE
+        }
+
+        // Views available in upstream Element
+        avatarImageView?.layoutParams = avatarImageView?.layoutParams?.apply {
+            height = attributes.avatarSize
+            width = attributes.avatarSize
+        }
+        avatarImageView?.visibility = View.VISIBLE
+        avatarImageView?.setOnClickListener(_avatarClickListener)
+        memberNameView?.visibility = View.VISIBLE
+        memberNameView?.setOnClickListener(_memberNameClickListener)
+        timeView?.visibility = View.VISIBLE
+        timeView?.text = attributes.informationData.time
+        memberNameView?.text = attributes.informationData.memberName
+        memberNameView?.setTextColor(attributes.getMemberNameColor())
+        if (avatarImageView != null) attributes.avatarRenderer.render(attributes.informationData.matrixItem, avatarImageView)
+        avatarImageView?.setOnLongClickListener(attributes.itemLongClickListener)
+        memberNameView?.setOnLongClickListener(attributes.itemLongClickListener)
+
+        // Views added by Schildi
         holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
     }
 
@@ -225,10 +229,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     override fun shouldReverseBubble(): Boolean {
         return attributes.informationData.sentByMe
-    }
-
-    private fun hideSenderInformation(): Boolean {
-        return pseudoBubbleAllowed() && false
     }
 
     open fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
