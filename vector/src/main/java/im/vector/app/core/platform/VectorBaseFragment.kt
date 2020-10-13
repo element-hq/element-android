@@ -58,7 +58,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
 
-    val vectorBaseActivity: VectorBaseActivity by lazy {
+    protected val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
     }
 
