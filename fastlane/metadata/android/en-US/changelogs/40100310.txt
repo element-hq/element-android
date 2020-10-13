@@ -1,0 +1,6 @@
+- Add labs setting for following system dark mode < Android 10
+- Don't reload theme if light and dark theme are identical
+- Fix direct chats sometimes being formatted as group chats
+- Adapt image round corners to look similar to bubble round corners
+- Fix some image alignment
+- Fix setting to always show timestamps with dual-side bubbles
