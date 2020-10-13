@@ -78,7 +78,7 @@ internal class TimelineTest : InstrumentedTest {
 //            }
 //        }
 //        latch.await()
-//        timelineEvents.size shouldEqual initialLoad + paginationCount
+//        timelineEvents.size shouldBeEqualTo initialLoad + paginationCount
 //        timeline.dispose()
 //    }
 }

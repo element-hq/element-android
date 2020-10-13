@@ -148,7 +148,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         var hasEncryption = false
         var encryptionAlgorithm: String? = null
         while (prevEvent != null && prevEvent.isRoomConfiguration(null)) {
-            if (prevEvent.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION) {
+            if (prevEvent.root.isStateEvent() && prevEvent.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION) {
                 hasEncryption = true
                 encryptionAlgorithm = prevEvent.root.getClearContent()?.toModel<EncryptionEventContent>()?.algorithm
             }

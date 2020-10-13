@@ -55,7 +55,7 @@ fun TimelineEvent.canBeMerged(): Boolean {
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
-    return when (root.getClearType()) {
+    return root.isStateEvent() && when (root.getClearType()) {
         EventType.STATE_ROOM_GUEST_ACCESS,
         EventType.STATE_ROOM_HISTORY_VISIBILITY,
         EventType.STATE_ROOM_JOIN_RULES,

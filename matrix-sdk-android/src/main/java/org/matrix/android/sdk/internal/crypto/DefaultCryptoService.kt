@@ -194,18 +194,18 @@ internal class DefaultCryptoService @Inject constructor(
     private val lastNewSessionForcedDates = MXUsersDevicesMap<Long>()
 
     fun onStateEvent(roomId: String, event: Event) {
-        when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+        when (event.getClearType()) {
+            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
-        when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+        when (event.getClearType()) {
+            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
@@ -615,6 +615,7 @@ internal class DefaultCryptoService @Inject constructor(
         val encryptionEvent = monarchy.fetchCopied { realm ->
             EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
                     .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                    .isNotNull(EventEntityFields.STATE_KEY)
                     .findFirst()
         }
         return encryptionEvent != null
@@ -915,6 +916,11 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
+        if (!event.isStateEvent()) {
+            // Ignore
+            Timber.w("Invalid encryption event")
+            return
+        }
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val params = LoadRoomMembersTask.Params(roomId)
             try {
