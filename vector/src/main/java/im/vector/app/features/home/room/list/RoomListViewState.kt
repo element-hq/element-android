@@ -67,8 +67,8 @@ data class RoomListViewState(
     val hasUnread: Boolean
         get() = asyncFilteredRooms.invoke()
                 ?.flatMap { it.value }
-                .filter { it.membership == Membership.JOIN }
-                .any { it.hasUnreadMessages }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.any { it.hasUnreadMessages }
                 ?: false
 }
 

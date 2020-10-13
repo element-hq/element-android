@@ -158,10 +158,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     private fun handleMarkAllRoomsRead() = withState { state ->
         state.asyncFilteredRooms.invoke()
                 ?.flatMap { it.value }
-                .filter { it.membership == Membership.JOIN }
-                .map { it.roomId }
-                .toList()
-                .let { session.markAllAsRead(it, NoOpMatrixCallback()) }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.map { it.roomId }
+                ?.toList()
+                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
