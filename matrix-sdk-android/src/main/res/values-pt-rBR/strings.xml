@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s enviou uma foto.</string>
-
     <string name="notice_room_invite_no_invitee">convite de %s</string>
     <string name="notice_room_invite">%1$s convidou %2$s</string>
     <string name="notice_room_invite_you">%1$s convidou você</string>
@@ -31,64 +29,45 @@
     <string name="notice_room_visibility_world_readable">qualquer pessoa.</string>
     <string name="notice_room_visibility_unknown">desconhecido (%s).</string>
     <string name="notice_end_to_end">%1$s ativou a criptografia de ponta a ponta (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s deseja iniciar uma chamada em grupo</string>
     <string name="notice_voip_started">Chamada em grupo iniciada</string>
     <string name="notice_voip_finished">Chamada em grupo encerrada</string>
-
     <string name="notice_avatar_changed_too">(a foto de perfil também foi alterada)</string>
     <string name="notice_room_name_removed">%1$s removeu o nome da sala</string>
     <string name="notice_room_topic_removed">%1$s removeu a descrição da sala</string>
     <string name="notice_profile_change_redacted">%1$s atualizou o perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s enviou um convite para %2$s entrar na sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Não foi possível descriptografar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">O aparelho do remetente não nos enviou as chaves para esta mensagem.</string>
-
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível redigir</string>
     <string name="unable_to_send_message">Não foi possível enviar a mensagem</string>
-
     <string name="message_failed_to_upload">O envio da imagem falhou</string>
-
     <!-- general errors -->
     <string name="network_error">Erro de conexão à internet</string>
     <string name="matrix_error">Erro no servidor Matrix</string>
-
     <!-- Home Screen -->
-
     <!-- Last seen time -->
-
     <!-- call events -->
-
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Atualmente, não é possível entrar novamente em uma sala vazia.</string>
-
     <string name="encrypted_message">Mensagem criptografada</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">Endereço de e-mail</string>
     <string name="medium_phone_number">Número de telefone</string>
-
-
     <string name="summary_user_sent_sticker">%1$s enviou uma figurinha.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Convite de %s</string>
     <string name="room_displayname_room_invite">Convite para sala</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
     <string name="room_displayname_empty_room">Sala vazia</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s e 1 outro</item>
         <item quantity="other">%1$s e %2$d outros</item>
     </plurals>
-
-
     <string name="summary_you_sent_image">Você enviou uma foto.</string>
     <string name="summary_you_sent_sticker">Você enviou uma figurinha.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Seu convite</string>
     <string name="notice_room_created">%1$s criou a sala</string>
     <string name="notice_room_created_by_you">Você criou a sala</string>
@@ -118,7 +97,6 @@
     <string name="notice_end_to_end_by_you">Você ativou a criptografia de ponta a ponta (%1$s)</string>
     <string name="notice_room_update">%s atualizou esta sala.</string>
     <string name="notice_room_update_by_you">Você atualizou esta sala.</string>
-
     <string name="notice_requested_voip_conference_by_you">Você solicitou uma chamada em grupo</string>
     <string name="notice_room_name_removed_by_you">Você removeu o nome da sala</string>
     <string name="notice_room_topic_removed_by_you">Você removeu a descrição da sala</string>
@@ -133,24 +111,20 @@
     <string name="notice_room_third_party_revoked_invite">%1$s cancelou o convite a %2$s para entrar na sala</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Você cancelou o convite a %1$s para entrar na sala</string>
     <string name="notice_room_third_party_registered_invite_by_you">Você aceitou o convite para %1$s</string>
-
     <string name="notice_widget_added">%1$s adicionou o widget %2$s</string>
     <string name="notice_widget_added_by_you">Você adicionou o widget %1$s</string>
     <string name="notice_widget_removed">%1$s removeu o widget %2$s</string>
     <string name="notice_widget_removed_by_you">Você removeu o widget %1$s</string>
     <string name="notice_widget_modified">%1$s editou o widget %2$s</string>
     <string name="notice_widget_modified_by_you">Você editou o widget %1$s</string>
-
     <string name="power_level_admin">Administrador</string>
     <string name="power_level_moderator">Moderador</string>
     <string name="power_level_default">Padrão</string>
     <string name="power_level_custom">Personalizado (%1$d)</string>
     <string name="power_level_custom_no_value">Personalizado</string>
-
     <string name="notice_power_level_changed_by_you">Você alterou o nível de permissão de %1$s.</string>
     <string name="notice_power_level_changed">%1$s alterou o nível de permissão de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s para %3$s</string>
-
     <string name="initial_sync_start_importing_account">Primeira sincronização:
 \nImportando a conta…</string>
     <string name="initial_sync_start_importing_account_crypto">Primeira sincronização:
@@ -167,10 +141,8 @@
 \nImportando as comunidades</string>
     <string name="initial_sync_start_importing_account_data">Primeira sincronização:
 \nImportando os dados da conta</string>
-
     <string name="event_status_sending_message">Enviando mensagem…</string>
     <string name="clear_timeline_send_queue">Limpar a fila de envio</string>
-
     <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Motivo: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">O seu convite. Motivo: %1$s</string>
     <string name="notice_room_invite_with_reason">%1$s convidou %2$s. Motivo: %3$s</string>
@@ -196,45 +168,57 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Você aceitou o convite para %1$s. Motivo: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s desfez o convite de %2$s. Motivo: %3$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Você desfez o convite de %1$s. Motivo: %2$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s adicionou %2$s como um endereço desta sala.</item>
         <item quantity="other">%1$s adicionou %2$s como endereços desta sala.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Você adicionou %1$s como um endereço desta sala.</item>
         <item quantity="other">Você adicionou %1$s como endereços desta sala.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s removeu %2$s como um endereço desta sala.</item>
         <item quantity="other">%1$s removeu %3$s como endereços desta sala.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Você removeu %1$s como um endereço desta sala.</item>
         <item quantity="other">Você removeu %2$s como endereços desta sala.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s adicionou %2$s e removeu %3$s como endereços desta sala.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Você adicionou %1$s e removeu %2$s como endereços desta sala.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s definiu o endereço principal desta sala como %2$s.</string>
     <string name="notice_room_canonical_alias_set_by_you">Você definiu o endereço principal desta sala como %1$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s removeu o endereço principal desta sala.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Você removeu o endereço principal desta sala.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s permitiu que convidados entrem na sala.</string>
     <string name="notice_room_guest_access_can_join_by_you">Você permitiu que convidados entrem na sala.</string>
     <string name="notice_room_guest_access_forbidden">%1$s impediu que convidados entrassem na sala.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Você impediu que convidados entrassem na sala.</string>
-
     <string name="notice_end_to_end_ok">%1$s ativou a criptografia de ponta a ponta.</string>
     <string name="notice_end_to_end_ok_by_you">Você ativou a criptografia de ponta a ponta.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ativou a criptografia de ponta a ponta (algoritmo não reconhecido %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Você ativou a criptografia de ponta a ponta (algoritmo não reconhecido %1$s).</string>
-
     <string name="key_verification_request_fallback_message">%s deseja confirmar a sua chave, mas o seu aplicativo não suporta a confirmação da chave da conversa. Você precisará usar a confirmação tradicional de chaves para confirmar chaves.</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Você impediu que desconhecidos entrem na sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s impediu que desconhecidos entrem na sala.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Você permitiu que desconhecidos entrem aqui.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s permitiu que desconhecidos entrem aqui.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s saiu. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Você entrou. Motivo: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s entrou. Motivo: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Você cancelou o convite para %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s cancelou o convite para %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Você convidou %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s convidou %2$s</string>
+    <string name="notice_direct_room_update_by_you">Você atualizou esta sala.</string>
+    <string name="notice_direct_room_update">%s atualizou esta sala.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Você definiu que as mensagens enviadas a partir do presente momento estarão disponíveis para %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s definiu que as mensagens enviadas a partir do presente momento estarão disponíveis para %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
+    <string name="notice_direct_room_leave">%1$s saiu da sala</string>
+    <string name="notice_direct_room_join_by_you">Você entrou</string>
+    <string name="notice_direct_room_join">%1$s entrou</string>
+    <string name="notice_direct_room_created_by_you">Você criou a sala</string>
+    <string name="notice_direct_room_created">%1$s criou a sala</string>
 </resources>
