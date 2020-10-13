@@ -32,8 +32,8 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.navigation.Navigator
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**

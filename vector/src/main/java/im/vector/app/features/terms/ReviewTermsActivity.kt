@@ -20,13 +20,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.viewModel
-import org.matrix.android.sdk.api.session.terms.TermsService
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class ReviewTermsActivity : SimpleFragmentActivity() {

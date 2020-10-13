@@ -16,8 +16,8 @@
 
 package im.vector.app.features.widgets
 
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {

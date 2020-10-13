@@ -21,15 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
-import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -42,6 +33,15 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemHeader
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
+import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
+import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
+import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
+import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
+import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import javax.inject.Inject
 
 class GossipingEventsEpoxyController @Inject constructor(

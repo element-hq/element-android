@@ -35,7 +35,7 @@ interface GossipingRequestListener {
      * Returns the secret value to be shared
      * @return true if is handled
      */
-    fun onSecretShareRequest(request: IncomingSecretShareRequest) : Boolean
+    fun onSecretShareRequest(request: IncomingSecretShareRequest): Boolean
 
     /**
      * A room key request cancellation has been received.

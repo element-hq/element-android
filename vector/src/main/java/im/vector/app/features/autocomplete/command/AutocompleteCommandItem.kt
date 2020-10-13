@@ -29,10 +29,13 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
 
     @EpoxyAttribute
     var name: CharSequence? = null
+
     @EpoxyAttribute
     var parameters: CharSequence? = null
+
     @EpoxyAttribute
     var description: CharSequence? = null
+
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
 

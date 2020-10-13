@@ -42,8 +42,10 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
+
     // Used only for diff calculation
     @EpoxyAttribute lateinit var lastEvent: String
+
     // We use DoNotHash here as Spans are not implementing equals/hashcode
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence

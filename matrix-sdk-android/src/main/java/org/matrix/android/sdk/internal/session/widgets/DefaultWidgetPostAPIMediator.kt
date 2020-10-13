@@ -67,6 +67,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
         Timber.d("BRIDGE onWidgetEvent : $jsonEventData")
         try {
             val dataAsDict = jsonAdapter.fromJson(jsonEventData)
+
             @Suppress("UNCHECKED_CAST")
             val eventData = (dataAsDict?.get("event.data") as? JsonDict) ?: return
             onWidgetMessage(eventData)

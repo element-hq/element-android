@@ -93,7 +93,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     // Expose to handle Realm migration to riotX
-    fun getRealmEncryptionKey(alias: String) : ByteArray {
+    fun getRealmEncryptionKey(alias: String): ByteArray {
         val key = if (hasKeyForDatabase(alias)) {
             Timber.i("Found key for alias:$alias")
             extractKeyForDatabase(alias)

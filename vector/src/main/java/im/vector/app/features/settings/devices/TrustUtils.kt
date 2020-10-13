@@ -17,8 +17,8 @@
 package im.vector.app.features.settings.devices
 
 import androidx.annotation.DrawableRes
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.app.R
+import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 
 object TrustUtils {
 

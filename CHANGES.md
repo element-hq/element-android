@@ -18,8 +18,10 @@ Improvements 🙌:
  - Filter room member (and banned users) by name (#2184)
  - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
  - Direct share (#2029)
+ - Add FAB to room members list (#2226)
  - Add Sygnal API implementation to test is Push are correctly received
  - Add PushGateway API implementation to test if Push are correctly received
+ - Cross signing: shouldn't offer to verify with other session when there is not. (#2227)
 
 Bugfix 🐛:
  - Improve support for image/audio/video/file selection with intent changes (#1376)
@@ -27,9 +29,10 @@ Bugfix 🐛:
  - Invalid popup when pressing back (#1635)
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
  - Very long topic cannot be fully visible (#1957)
+ - Properly detect cross signing keys reset
 
 Translations 🗣:
- -
+ - Move store data to `/fastlane/metadata/android` (#812)
 
 SDK API changes ⚠️:
  - Search messages in a room by using Session.searchService() or Room.search()

@@ -35,14 +35,19 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     @EpoxyAttribute
     lateinit var mediaData: ImageContentRenderer.Data
+
     @EpoxyAttribute
     var playable: Boolean = false
+
     @EpoxyAttribute
     var mode = ImageContentRenderer.Mode.THUMBNAIL
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: View.OnClickListener? = null
+
     @EpoxyAttribute
     lateinit var imageContentRenderer: ImageContentRenderer
+
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 

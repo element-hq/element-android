@@ -53,6 +53,6 @@ data class MessageImageContent(
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
-        override val mimeType: String?
-                get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: "image/*"
+    override val mimeType: String?
+        get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: "image/*"
 }

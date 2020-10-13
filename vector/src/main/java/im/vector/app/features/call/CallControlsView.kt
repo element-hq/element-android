@@ -27,8 +27,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.app.R
-import org.matrix.android.sdk.api.session.call.CallState
 import kotlinx.android.synthetic.main.view_call_controls.view.*
+import org.matrix.android.sdk.api.session.call.CallState
 import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(

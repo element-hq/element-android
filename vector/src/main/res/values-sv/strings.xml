@@ -1046,7 +1046,6 @@
     <string name="downloaded_file">Filen %1$s har laddats ner!</string>
 
     <string name="message_edits">Meddelanderedigeringar</string>
-    <string name="labs_merge_e2e_in_timeline">Sammanfogaren misslyckades med att avkryptera ett meddelande i tidslinjen</string>
     <string name="add_by_matrix_id">Lägg till med Matrix-ID</string>
     <string name="direct_room_no_known_users">Inga resultat hittade, använd \"Lägg till med Matrix-ID\" för att söka på servern.</string>
     <string name="terms_description_for_integration_manager">Använd bottar, bryggor, widgets och dekalpaket</string>
@@ -2560,4 +2559,9 @@
     <string name="sent_verification_conclusion">Verifieringsavslutning</string>
 
     <string name="universal_link_malformed">Länken var felformaterad</string>
+    <string name="no_permissions_to_start_webrtc_call">Du har inte behörighet att starta ett samtal i det här rummet</string>
+    <string name="delete_account_data_warning">Radera kontodata av typen %1$s\?
+\n
+\nAnvänd varsamt, det kan leda till oväntat beteende.</string>
+
 </resources>

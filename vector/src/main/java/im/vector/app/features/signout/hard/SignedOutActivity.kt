@@ -19,11 +19,11 @@ package im.vector.app.features.signout.hard
 import android.content.Context
 import android.content.Intent
 import butterknife.OnClick
-import org.matrix.android.sdk.api.failure.GlobalError
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 
 /**

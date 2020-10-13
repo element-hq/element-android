@@ -97,11 +97,11 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomProfileAction) {
         when (action) {
-            RoomProfileAction.LeaveRoom -> handleLeaveRoom()
+            RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
-            is RoomProfileAction.ChangeRoomAvatar -> handleChangeAvatar(action)
-            RoomProfileAction.CreateShortcut -> handleCreateShortcut()
+            is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
+            is RoomProfileAction.ChangeRoomAvatar            -> handleChangeAvatar(action)
+            RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
         }.exhaustive
     }
 

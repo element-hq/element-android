@@ -101,9 +101,9 @@ interface CryptoService {
 
     fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
 
-    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
     fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
 
@@ -148,6 +148,6 @@ interface CryptoService {
     fun getGossipingEventsTrail(): List<Event>
 
     // For testing shared session
-    fun getSharedWithInfo(roomId: String?, sessionId: String) : MXUsersDevicesMap<Int>
-    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
+    fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 }

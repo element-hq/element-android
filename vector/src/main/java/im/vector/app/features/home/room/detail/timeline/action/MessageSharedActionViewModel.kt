@@ -22,5 +22,5 @@ import javax.inject.Inject
  * Activity shared view model to handle message actions
  */
 class MessageSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<EventSharedAction>() {
-    var pendingAction : EventSharedAction? = null
+    var pendingAction: EventSharedAction? = null
 }

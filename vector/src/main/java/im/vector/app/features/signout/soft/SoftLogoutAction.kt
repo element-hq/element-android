@@ -16,8 +16,8 @@
 
 package im.vector.app.features.signout.soft
 
-import org.matrix.android.sdk.api.auth.data.Credentials
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.auth.data.Credentials
 
 sealed class SoftLogoutAction : VectorViewModelAction {
     // In case of failure to get the login flow

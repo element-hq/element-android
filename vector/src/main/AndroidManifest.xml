@@ -96,7 +96,6 @@
                 <data android:host="element" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.media.ImageMediaViewerActivity" />
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
@@ -112,7 +111,6 @@
             android:name=".features.settings.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.media.VideoMediaViewerActivity" />
         <activity
             android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />

@@ -253,6 +253,7 @@ fun Event.isFileMessage(): Boolean {
         else                     -> false
     }
 }
+
 fun Event.isAttachmentMessage(): Boolean {
     return getClearType() == EventType.MESSAGE
             && when (getClearContent()?.toModel<MessageContent>()?.msgType) {

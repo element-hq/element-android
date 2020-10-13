@@ -24,12 +24,12 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
-import org.matrix.android.sdk.internal.util.awaitCallback
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.terms.GetTermsResponse
+import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 class ReviewTermsViewModel @AssistedInject constructor(

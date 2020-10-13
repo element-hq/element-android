@@ -16,11 +16,11 @@
 
 package im.vector.app.features.widgets
 
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 
 class WidgetAPICallback(private val postAPIMediator: WidgetPostAPIMediator,
                         private val eventData: JsonDict,

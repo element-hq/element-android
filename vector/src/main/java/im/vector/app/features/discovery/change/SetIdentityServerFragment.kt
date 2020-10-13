@@ -34,8 +34,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-import org.matrix.android.sdk.api.session.terms.TermsService
 import kotlinx.android.synthetic.main.fragment_set_identity_server.*
+import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(

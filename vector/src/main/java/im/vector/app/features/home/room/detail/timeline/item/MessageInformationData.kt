@@ -17,10 +17,10 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.room.VerificationState
-import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class MessageInformationData(
@@ -28,7 +28,7 @@ data class MessageInformationData(
         val senderId: String,
         val sendState: SendState,
         val time: CharSequence? = null,
-        val ageLocalTS : Long?,
+        val ageLocalTS: Long?,
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true,
@@ -41,7 +41,7 @@ data class MessageInformationData(
         val hasPendingEdits: Boolean = false,
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
-        val sentByMe : Boolean,
+        val sentByMe: Boolean,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
 

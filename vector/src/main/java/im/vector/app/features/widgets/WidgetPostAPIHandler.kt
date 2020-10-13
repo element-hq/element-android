@@ -19,8 +19,11 @@ package im.vector.app.features.widgets
 import android.text.TextUtils
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -31,9 +34,6 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap

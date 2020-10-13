@@ -38,6 +38,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
 
     @EpoxyAttribute
     lateinit var title: String
+
     @EpoxyAttribute
     var subtitle: String? = null
 

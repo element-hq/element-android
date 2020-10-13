@@ -21,7 +21,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.preference.Preference
 import im.vector.app.BuildConfig
-import org.matrix.android.sdk.api.Matrix
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.copyToClipboard
@@ -29,6 +28,7 @@ import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.openOssLicensesMenuActivity
+import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
 class VectorSettingsHelpAboutFragment @Inject constructor(

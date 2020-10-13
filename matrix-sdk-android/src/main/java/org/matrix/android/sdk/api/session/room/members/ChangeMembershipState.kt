@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.members
 
-sealed class ChangeMembershipState() {
+sealed class ChangeMembershipState {
     object Unknown : ChangeMembershipState()
     object Joining : ChangeMembershipState()
     data class FailedJoining(val throwable: Throwable) : ChangeMembershipState()

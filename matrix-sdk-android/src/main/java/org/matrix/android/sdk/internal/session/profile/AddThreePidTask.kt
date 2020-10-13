@@ -41,7 +41,7 @@ internal class DefaultAddThreePidTask @Inject constructor(
 
     override suspend fun execute(params: Params) {
         when (params.threePid) {
-            is ThreePid.Email -> addEmail(params.threePid)
+            is ThreePid.Email  -> addEmail(params.threePid)
             is ThreePid.Msisdn -> addMsisdn(params.threePid)
         }
     }

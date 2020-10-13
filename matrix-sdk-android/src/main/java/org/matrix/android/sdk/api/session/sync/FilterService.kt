@@ -20,6 +20,7 @@ interface FilterService {
 
     enum class FilterPreset {
         NoFilter,
+
         /**
          * Filter for Riot, will include only known event type
          */

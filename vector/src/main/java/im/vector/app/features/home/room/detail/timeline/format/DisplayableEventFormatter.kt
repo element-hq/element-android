@@ -54,16 +54,16 @@ class DisplayableEventFormatter @Inject constructor(
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         when (timelineEvent.root.getClearType()) {
-            EventType.STICKER         -> {
+            EventType.STICKER               -> {
                 return simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
             }
-            EventType.REACTION        -> {
+            EventType.REACTION              -> {
                 timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
                     val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                     return simpleFormat(senderName, emojiSpanned, appendAuthor)
                 }
             }
-            EventType.MESSAGE         -> {
+            EventType.MESSAGE               -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
@@ -126,10 +126,10 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_MAC,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
-            EventType.CALL_CANDIDATES -> {
+            EventType.CALL_CANDIDATES       -> {
                 return span { }
             }
-            else                      -> {
+            else                            -> {
                 return span {
                     text = noticeEventFormatter.format(timelineEvent, roomSummary) ?: ""
                     textStyle = "italic"

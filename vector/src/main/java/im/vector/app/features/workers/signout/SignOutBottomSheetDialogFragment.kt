@@ -207,7 +207,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
                     signOutButton.isVisible = true
                 }
                 KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp -> {
+                KeysBackupState.BackingUp     -> {
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
@@ -221,7 +221,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
                     exitAnywayButton.isVisible = true
                     signOutButton.isVisible = false
                 }
-                KeysBackupState.NotTrusted -> {
+                KeysBackupState.NotTrusted    -> {
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     backingUpStatusGroup.isVisible = false

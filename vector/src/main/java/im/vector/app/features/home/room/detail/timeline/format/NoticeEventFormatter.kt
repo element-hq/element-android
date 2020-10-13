@@ -57,7 +57,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    private fun RoomSummary?.isDm()  = this?.isDirect.orFalse()
+    private fun RoomSummary?.isDm() = this?.isDirect.orFalse()
 
     fun format(timelineEvent: TimelineEvent, rs: RoomSummary?): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -428,6 +428,9 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
     }
 
     private fun formatRoomEncryptionEvent(event: Event, senderName: String?): CharSequence? {
+        if (!event.isStateEvent()) {
+            return null
+        }
         val content = event.content.toModel<EncryptionEventContent>() ?: return null
         return when (content.algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM ->

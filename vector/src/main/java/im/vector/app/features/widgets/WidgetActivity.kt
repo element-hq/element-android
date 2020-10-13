@@ -23,7 +23,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import org.matrix.android.sdk.api.session.events.model.Content
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -34,6 +33,7 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 import kotlinx.android.synthetic.main.activity_widget.*
+import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 import javax.inject.Inject
 

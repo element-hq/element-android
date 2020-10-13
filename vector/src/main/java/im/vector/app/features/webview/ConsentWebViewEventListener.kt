@@ -16,10 +16,10 @@
 
 package im.vector.app.features.webview
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.weak
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 private const val SUCCESS_URL_SUFFIX = "/_matrix/consent"

@@ -99,7 +99,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
             if (isAdded) {
                 TransitionManager.beginDelayedTransition(mBottomView)
                 when (troubleshootTestManager.diagStatus) {
-                    TroubleshootTest.TestStatus.NOT_STARTED -> {
+                    TroubleshootTest.TestStatus.NOT_STARTED      -> {
                         mSummaryDescription.text = ""
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
@@ -116,7 +116,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.GONE
                     }
-                    TroubleshootTest.TestStatus.FAILED      -> {
+                    TroubleshootTest.TestStatus.FAILED           -> {
                         // check if there are quick fixes
                         val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
@@ -127,7 +127,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.SUCCESS     -> {
+                    TroubleshootTest.TestStatus.SUCCESS          -> {
                         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE
@@ -177,12 +177,12 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
         tryOrNull {
-           LocalBroadcastManager.getInstance(requireContext())
-                   .unregisterReceiver(broadcastReceiverPush)
+            LocalBroadcastManager.getInstance(requireContext())
+                    .unregisterReceiver(broadcastReceiverPush)
         }
         tryOrNull {
-           LocalBroadcastManager.getInstance(requireContext())
-                   .unregisterReceiver(broadcastReceiverNotification)
+            LocalBroadcastManager.getInstance(requireContext())
+                    .unregisterReceiver(broadcastReceiverNotification)
         }
     }
 

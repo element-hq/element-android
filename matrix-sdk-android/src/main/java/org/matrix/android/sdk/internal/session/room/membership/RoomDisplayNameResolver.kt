@@ -108,9 +108,9 @@ internal class RoomDisplayNameResolver @Inject constructor(
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
-                0 -> stringProvider.getString(R.string.room_displayname_empty_room)
-                1 -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
-                2 -> stringProvider.getString(R.string.room_displayname_two_members,
+                0    -> stringProvider.getString(R.string.room_displayname_empty_room)
+                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                2    -> stringProvider.getString(R.string.room_displayname_two_members,
                         resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                         resolveRoomMemberName(otherMembersSubset[1], roomMembers)
                 )

@@ -1181,7 +1181,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
 
     <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
-    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Райот.</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Element.</string>
     <string name="settings_troubleshoot_test_battery_failed">Если пользователь оставляет устройство в отключенном от сети и в неподвижном состоянии в течение некоторого времени при выключенном экране, устройство переходит в режим Doze. Это предотвращает доступ приложений к сети и откладывает выполнение заданий, синхронизацию и передачу стандартных аварийных сигналов.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
 
@@ -1196,7 +1196,7 @@
     <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
 
-    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
+    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
     <string name="generic_label">%1$s:</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
@@ -1227,7 +1227,7 @@
     <string name="settings_noisy_notifications_preferences">Настроить шумные уведомления</string>
     <string name="settings_call_notifications_preferences">Настроить уведомления о вызовах</string>
     <string name="settings_silent_notifications_preferences">Настроить беззвучные уведомления</string>
-    <string name="settings_system_preferences_summary">Выберать цвет светодиода, вибрацию, звук…</string>
+    <string name="settings_system_preferences_summary">Выбрать цвет светодиода, вибрацию, звук…</string>
 
 
     <string name="settings_cryptography_manage_keys">Управление криптографическими ключами</string>
@@ -2163,7 +2163,6 @@
 
     <string name="secure_backup_setup">Настроить безопасное резервное копирование</string>
 
-    <string name="labs_merge_e2e_in_timeline">Слиянию не удаётся расшифровать сообщение на временной шкале</string>
     <string name="labs_show_unread_notifications_as_tab">Добавьте специальную вкладку для непрочитанных уведомлений на главном экране.</string>
 
     <plurals name="fallback_users_read">
@@ -2730,4 +2729,9 @@
     <string name="sent_verification_conclusion">Результат проверки</string>
 
     <string name="universal_link_malformed">Ссылка была искажена</string>
+    <string name="no_permissions_to_start_webrtc_call">У вас нет разрешения на запуск звонка в этой комнате</string>
+    <string name="delete_account_data_warning">Удалить данные учетной записи типа %1$s\?
+\n
+\nИспользуйте с осторожностью, это может привести к неожиданному поведению.</string>
+
 </resources>

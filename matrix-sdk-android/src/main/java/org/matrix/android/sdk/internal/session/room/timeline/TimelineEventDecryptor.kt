@@ -58,6 +58,7 @@ internal class TimelineEventDecryptor @Inject constructor(
 
     // Set of eventIds which are currently decrypting
     private val existingRequests = mutableSetOf<DecryptionRequest>()
+
     // sessionId -> list of eventIds
     private val unknownSessionsFailure = mutableMapOf<String, MutableSet<DecryptionRequest>>()
 
