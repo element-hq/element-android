@@ -60,7 +60,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk: ChunkEntity = realm.createObject()
 
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
             chunk.timelineEvents.size shouldBeEqualTo 1
@@ -72,7 +72,7 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
@@ -142,7 +142,7 @@ internal class ChunkEntityTest : InstrumentedTest {
                                    direction: PaginationDirection) {
         events.forEach { event ->
             val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
         }
