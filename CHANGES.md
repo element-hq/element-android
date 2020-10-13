@@ -29,6 +29,7 @@ Bugfix 🐛:
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
  - Very long topic cannot be fully visible (#1957)
  - Properly detect cross signing keys reset
+ - Don't set presence when handling a push notification or polling (#2156)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
