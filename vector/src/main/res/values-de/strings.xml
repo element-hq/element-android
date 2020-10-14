@@ -2173,4 +2173,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
 \nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
+    <string name="reset">Zurücksetzen</string>
 </resources>
