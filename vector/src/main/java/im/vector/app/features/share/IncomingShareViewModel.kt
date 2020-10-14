@@ -96,6 +96,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         when (action) {
             is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
             is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
+            is IncomingShareAction.ShareToRoom          -> handleShareToRoom(action)
             is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
             is IncomingShareAction.FilterWith           -> handleFilter(action)
             is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
@@ -132,6 +133,11 @@ class IncomingShareViewModel @AssistedInject constructor(
                 }
             }.exhaustive
         }
+    }
+
+    private fun handleShareToRoom(action: IncomingShareAction.ShareToRoom) = withState { state ->
+        val sharedData = state.sharedData ?: return@withState
+        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = false))
     }
 
     private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
