@@ -29,6 +29,7 @@ Bugfix 🐛:
  - Simplifies draft management and should fix bunch of draft issues (#952, #683)
  - Very long topic cannot be fully visible (#1957)
  - Properly detect cross signing keys reset
+ - Don't set presence when handling a push notification or polling (#2156)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
@@ -40,7 +41,7 @@ Build 🧱:
  - Use Update Gradle Wrapper Action
  - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
  - Upgrade kotlin version from `1.3.72` to `1.4.10` and kotlin coroutines version from `1.3.8` to `1.3.9`
- - Upgrade build tools from `3.5.3` to `4.0.1`
+ - Upgrade build tools from `3.5.3` to `4.0.1`, then to `4.1.0`
  - Upgrade com.google.gms:google-services from `4.3.2` to `4.3.4`
  - Upgrade Moshi to `1.11.0`, Dagger to `2.29.1`, Epoxy to `4.1.0`
 

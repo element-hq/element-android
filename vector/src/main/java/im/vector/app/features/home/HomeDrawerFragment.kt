@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 import org.matrix.android.sdk.api.session.Session
@@ -56,6 +57,11 @@ class HomeDrawerFragment @Inject constructor(
                 homeDrawerUsernameView.text = user.displayName
                 homeDrawerUserIdView.text = user.userId
             }
+        }
+        // Profile
+        homeDrawerHeader.debouncedClicks {
+            sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+            navigator.openSettings(requireActivity(), directAccess = VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
         }
         // Settings
         homeDrawerHeaderSettingsView.debouncedClicks {
