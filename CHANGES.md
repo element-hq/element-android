@@ -31,6 +31,7 @@ Bugfix 🐛:
  - Very long topic cannot be fully visible (#1957)
  - Properly detect cross signing keys reset
  - Don't set presence when handling a push notification or polling (#2156)
+ - Be robust against `StrandHogg` task injection
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
