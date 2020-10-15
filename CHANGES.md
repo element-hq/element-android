@@ -32,6 +32,7 @@ Bugfix 🐛:
  - Properly detect cross signing keys reset
  - Don't set presence when handling a push notification or polling (#2156)
  - Be robust against `StrandHogg` task injection
+ - Clear alerts if user sign out
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)

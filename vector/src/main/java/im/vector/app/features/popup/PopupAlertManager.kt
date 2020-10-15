@@ -78,6 +78,21 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         }
     }
 
+    /**
+     * Cancel all alerts, after a sign out for instance
+     */
+    fun cancelAll() {
+        synchronized(alertFiFo) {
+            alertFiFo.clear()
+        }
+
+        // Cancel any displayed alert
+        weakCurrentActivity?.get()?.runOnUiThread {
+            Alerter.hide()
+            currentIsDismissed()
+        }
+    }
+
     fun onNewActivityDisplayed(activity: Activity) {
         // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
