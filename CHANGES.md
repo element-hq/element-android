@@ -33,9 +33,12 @@ Bugfix 🐛:
  - Very long topic cannot be fully visible (#1957)
  - Properly detect cross signing keys reset
  - Don't set presence when handling a push notification or polling (#2156)
+ - Be robust against `StrandHogg` task injection
+ - Clear alerts if user sign out
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
+ - Weblate is now hosted at https://translate.element.io
 
 SDK API changes ⚠️:
  - Search messages in a room by using Session.searchService() or Room.search()
@@ -137,7 +140,7 @@ Bugfix 🐛:
  - Replies to poll appears in timeline as unsupported events during sending (#1004)
 
 Translations 🗣:
- - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.element.io/projects/matrix-doc/) (#1909)
  - New translation to kabyle
 
 Build 🧱:

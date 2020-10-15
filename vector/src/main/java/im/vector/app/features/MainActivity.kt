@@ -36,6 +36,7 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
@@ -89,6 +90,7 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
+    @Inject lateinit var popupAlertManager: PopupAlertManager
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -115,6 +117,9 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
         // Also clear the dynamic shortcuts
         shortcutsHandler.clearShortcuts()
+
+        // Also clear the alerts
+        popupAlertManager.cancelAll()
     }
 
     private fun parseArgs(): MainActivityArgs {
