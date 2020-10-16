@@ -48,10 +48,10 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
-private data class NewImageAttributes(
-        val newWidth: Int?,
-        val newHeight: Int?,
-        val newFileSize: Int
+private data class NewAttachmentAttributes(
+        val newWidth: Int? = null,
+        val newHeight: Int? = null,
+        val newFileSize: Long
 )
 
 /**
@@ -145,7 +145,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
             return try {
                 val fileToUpload: File
-                var newImageAttributes: NewImageAttributes? = null
+                var newAttachmentAttributes = NewAttachmentAttributes(
+                        params.attachment.width?.toInt(),
+                        params.attachment.height?.toInt(),
+                        params.attachment.size
+                )
 
                 if (attachment.type == ContentAttachmentData.Type.IMAGE && params.compressBeforeSending) {
                     fileToUpload = imageCompressor.compress(context, workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
@@ -154,8 +158,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                 compressedFile.inputStream().use {
                                     val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                                     val bitmap = BitmapFactory.decodeStream(it, null, options)
-                                    val fileSize = bitmap?.byteCount ?: 0
-                                    newImageAttributes = NewImageAttributes(
+                                    val fileSize = bitmap?.byteCount?.toLong() ?: compressedFile.length()
+                                    newAttachmentAttributes = NewAttachmentAttributes(
                                             options.outWidth,
                                             options.outHeight,
                                             fileSize
@@ -200,12 +204,17 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.e(failure, "## FileService: Failed to update file cache")
                 }
 
+                // Fix: OpenableColumns.SIZE may return -1 or 0
+                if (params.attachment.size <= 0) {
+                    newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
+                }
+
                 handleSuccess(params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
                         uploadThumbnailResult?.uploadedThumbnailUrl,
                         uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
-                        newImageAttributes)
+                        newAttachmentAttributes)
             } catch (t: Throwable) {
                 Timber.e(t, "## FileService: ERROR ${t.localizedMessage}")
                 handleFailure(params, t)
@@ -285,10 +294,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                       encryptedFileInfo: EncryptedFileInfo?,
                                       thumbnailUrl: String?,
                                       thumbnailEncryptedFileInfo: EncryptedFileInfo?,
-                                      newImageAttributes: NewImageAttributes?): Result {
+                                      newAttachmentAttributes: NewAttachmentAttributes): Result {
         notifyTracker(params) { contentUploadStateTracker.setSuccess(it) }
         params.localEchoIds.forEach {
-            updateEvent(it.eventId, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newImageAttributes)
+            updateEvent(it.eventId, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newAttachmentAttributes)
         }
 
         val sendParams = MultipleEventSendingDispatcherWorker.Params(
@@ -306,14 +315,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     encryptedFileInfo: EncryptedFileInfo?,
                                     thumbnailUrl: String? = null,
                                     thumbnailEncryptedFileInfo: EncryptedFileInfo?,
-                                    newImageAttributes: NewImageAttributes?) {
+                                    newAttachmentAttributes: NewAttachmentAttributes) {
         localEchoRepository.updateEcho(eventId) { _, event ->
             val messageContent: MessageContent? = event.asDomain().content.toModel()
             val updatedContent = when (messageContent) {
-                is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newImageAttributes)
+                is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
                 is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
-                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo)
-                is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
+                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
+                is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 else                   -> messageContent
             }
             event.content = ContentMapper.map(updatedContent.toContent())
@@ -326,14 +335,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
     private fun MessageImageContent.update(url: String,
                                            encryptedFileInfo: EncryptedFileInfo?,
-                                           newImageAttributes: NewImageAttributes?): MessageImageContent {
+                                           newAttachmentAttributes: NewAttachmentAttributes?): MessageImageContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
                 encryptedFileInfo = encryptedFileInfo?.copy(url = url),
                 info = info?.copy(
-                        width = newImageAttributes?.newWidth ?: info.width,
-                        height = newImageAttributes?.newHeight ?: info.height,
-                        size = newImageAttributes?.newFileSize ?: info.size
+                        width = newAttachmentAttributes?.newWidth ?: info.width,
+                        height = newAttachmentAttributes?.newHeight ?: info.height,
+                        size = newAttachmentAttributes?.newFileSize?.toInt() ?: info.size
                 )
         )
     }
@@ -353,18 +362,22 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     }
 
     private fun MessageFileContent.update(url: String,
-                                          encryptedFileInfo: EncryptedFileInfo?): MessageFileContent {
+                                          encryptedFileInfo: EncryptedFileInfo?,
+                                          size: Long): MessageFileContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
-                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url),
+                info = info?.copy(size = size)
         )
     }
 
     private fun MessageAudioContent.update(url: String,
-                                           encryptedFileInfo: EncryptedFileInfo?): MessageAudioContent {
+                                           encryptedFileInfo: EncryptedFileInfo?,
+                                           size: Long): MessageAudioContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
-                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url),
+                audioInfo = audioInfo?.copy(size = size)
         )
     }
 
