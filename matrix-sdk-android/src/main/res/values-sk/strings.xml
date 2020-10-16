@@ -1,8 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s poslal/a obrázok.</string>
-
     <string name="notice_room_invite_no_invitee">Pozvanie od %s</string>
     <string name="notice_room_invite">%1$s pozval/a %2$s</string>
     <string name="notice_room_invite_you">%1$s vás pozval/a</string>
@@ -30,58 +29,42 @@
     <string name="notice_room_visibility_world_readable">pre každého.</string>
     <string name="notice_room_visibility_unknown">neznámym (%s).</string>
     <string name="notice_end_to_end">%1$s povolil/a E2E šifrovanie (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s požiadal/a o VoIP konferenciu</string>
     <string name="notice_voip_started">Začala sa VoIP konferencia</string>
     <string name="notice_voip_finished">Skončila sa VoIP konferencia</string>
-
     <string name="notice_avatar_changed_too">(aj obrázok v profile)</string>
     <string name="notice_room_name_removed">%1$s odstránil/a názov miestnosti</string>
     <string name="notice_room_topic_removed">%1$s odstránil/a tému miestnosti</string>
     <string name="notice_profile_change_redacted">%1$s aktualizoval/a svoj profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s pozval/a %2$s vstúpiť do miestnosti</string>
     <string name="notice_room_third_party_registered_invite">%1$s prijal/a pozvanie pre %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Nie je možné dešifrovať: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Zo zariadenia odosieľateľa nebolo možné získať kľúče potrebné na dešifrovanie tejto správy.</string>
-
     <string name="could_not_redact">Nie je možné vymazať</string>
     <string name="unable_to_send_message">Nie je možné odoslať správu</string>
-
     <string name="message_failed_to_upload">Nepodarilo sa nahrať obrázok</string>
-
     <string name="network_error">Chyba siete</string>
     <string name="matrix_error">Chyba Matrix</string>
-
     <string name="room_error_join_failed_empty_room">V súčasnosti nie je možné znovu vstúpiť do prázdnej miestnosti.</string>
-
     <string name="encrypted_message">Šifrovaná správa</string>
-
     <string name="medium_email">Emailová adresa</string>
     <string name="medium_phone_number">Telefónne číslo</string>
-
     <string name="summary_user_sent_sticker">%1$s poslal/a nálepku.</string>
-
     <string name="room_displayname_invite_from">Pozvanie od %s</string>
     <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
     <string name="room_displayname_two_members">%1$s a %2$s</string>
     <string name="room_displayname_empty_room">Prázdna miestnosť</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s a 1 ďalší</item>
         <item quantity="few">%1$s a %2$d ďalší</item>
         <item quantity="many">%1$s a %2$d ďalších</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
-
-
     <string name="notice_room_update">%s aktualizoval/a túto miestnosť.</string>
-
     <string name="notice_event_redacted">Odstránená správa</string>
     <string name="notice_event_redacted_by">Odstránená správa používateľom %1$s</string>
     <string name="notice_event_redacted_with_reason">Odstránená správa [dôvod: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Odstránená správa používateľom %1$s [dôvod: %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Úvodná synchronizácia:
 \nPrebieha import účtu…</string>
     <string name="initial_sync_start_importing_account_crypto">Úvodná synchronizácia:
@@ -98,10 +81,8 @@
 \nPrebieha import komunít</string>
     <string name="initial_sync_start_importing_account_data">Úvodná synchronizácia:
 \nPrebieha import údajov účtu</string>
-
     <string name="event_status_sending_message">Odosielanie správy…</string>
     <string name="clear_timeline_send_queue">Vymazať správy na odoslanie</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s zamietol/a pozvanie používateľa %2$s vstúpiť do miestnosti</string>
     <string name="notice_room_invite_no_invitee_with_reason">Pozvanie od %1$s. Dôvod: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s pozval/a %2$s. Dôvod: %3$s</string>
@@ -116,28 +97,22 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s zamietol/a pozvanie používateľa %2$s vstúpiť do miestnosti. Dôvod: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s prijal/a pozvanie pre %2$s. Dôvod: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s vzal/a späť pozvanie %2$s. Dôvod: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s pridal/a adresu %2$s pre túto miestnosť.</item>
         <item quantity="few">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
         <item quantity="other">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
         <item quantity="few">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
         <item quantity="other">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s pridal/a adresy %2$s a odstránil/a adresy %3$s pre túto miestnosť.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s nastavil/a hlavnú adresu tejto miestnosti %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s odstránil/a hlavnú adresu tejto miestnosti.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s povolil/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
     <string name="summary_you_sent_image">Poslali ste obrázok.</string>
     <string name="summary_you_sent_sticker">Poslali ste nálepku.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Pozvanie od vás</string>
     <string name="notice_room_created">%1$s vytvoril/a miestnosť</string>
     <string name="notice_room_created_by_you">Vytvorili ste miestnosť</string>
@@ -166,7 +141,6 @@
     <string name="notice_made_future_room_visibility_by_you">Sprístupnili ste budúcu históriu miestnosti %1$s</string>
     <string name="notice_end_to_end_by_you">Povolili ste E2E šifrovanie (%1$s)</string>
     <string name="notice_room_update_by_you">Aktualizovali ste túto miestnosť.</string>
-
     <string name="notice_requested_voip_conference_by_you">Požiadali ste o VoIP konferenciu</string>
     <string name="notice_room_name_removed_by_you">Odstránili ste názov miestnosti</string>
     <string name="notice_room_topic_removed_by_you">Odstránili ste tému miestnosti</string>
@@ -174,26 +148,22 @@
     <string name="notice_room_avatar_removed_by_you">Odstránili ste obrázok miestnosti</string>
     <string name="notice_profile_change_redacted_by_you">Aktualizovali ste svoj profil %1$s</string>
     <string name="notice_room_third_party_invite_by_you">Pozvali ste %1$s vstúpiť do miestnosti</string>
-    <string name="notice_room_third_party_revoked_invite_by_you">Zamietli ste pozvanie používateľa %2$s vstúpiť do miestnosti</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Zamietli ste pozvanie používateľa %1$s vstúpiť do miestnosti</string>
     <string name="notice_room_third_party_registered_invite_by_you">Prijali ste pozvanie pre %1$s</string>
-
     <string name="notice_widget_added">%1$s pridal/a widget %2$s</string>
     <string name="notice_widget_added_by_you">Pridali ste widget %1$s</string>
     <string name="notice_widget_removed">%1$s odstránil/a widget %2$s</string>
     <string name="notice_widget_removed_by_you">Odstránili ste widget %1$s</string>
     <string name="notice_widget_modified">%1$s upravil/a widget %2$s</string>
     <string name="notice_widget_modified_by_you">Upravili ste widget %1$s</string>
-
     <string name="power_level_admin">Správca</string>
     <string name="power_level_moderator">Moderátor</string>
     <string name="power_level_default">Predvolený</string>
     <string name="power_level_custom">Vlastná úroveň (%1$d)</string>
     <string name="power_level_custom_no_value">Vlastná úroveň</string>
-
     <string name="notice_power_level_changed_by_you">Zmenili ste úroveň moci používateľa %1$s.</string>
     <string name="notice_power_level_changed">%1$s zmenil úroveň moci používateľa %2$s.</string>
     <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Pozvanie od vás. Dôvod: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Pozvali ste %1$s. Dôvod: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Vstúpili ste do miestnosti. Dôvod: %1$s</string>
@@ -206,33 +176,25 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Zamietli ste pozvanie používateľa %1$s vstúpiť do miestnosti. Dôvod: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Prijali ste pozvanie pre %1$s. Dôvod: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Vzali ste späť pozvanie %1$s. Dôvod: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Pridali ste adresu %1$s pre túto miestnosť.</item>
         <item quantity="few">Pridali ste adresy %1$s pre túto miestnosť.</item>
         <item quantity="other">Pridali ste adresy %1$s pre túto miestnosť.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Odstránili ste adresu %1$s pre túto miestnosť.</item>
         <item quantity="few">Odstránili ste adresy %2$s pre túto miestnosť.</item>
         <item quantity="other">Odstránili ste adresy %2$s pre túto miestnosť.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Pridali ste %1$s a odstránili adresy %2$s pre túto miestnosť.</string>
-
-    <string name="notice_room_canonical_alias_set_by_you">Nastavili ste hlavnú adresu tejto miestnosti %2$s.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Nastavili ste hlavnú adresu tejto miestnosti %1$s.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Odstránili ste hlavnú adresu tejto miestnosti.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Povolili ste hosťom///návštevníkom prístup do tejto miestnosti.</string>
     <string name="notice_room_guest_access_forbidden">%1$s zakázal/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Zakázali ste hosťom///návštevníkom prístup do tejto miestnosti.</string>
-
     <string name="notice_end_to_end_ok">%1$s povolil/a E2E šifrovanie.</string>
     <string name="notice_end_to_end_ok_by_you">Povolili ste E2E šifrovanie.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s povolil/a E2E šifrovanie (Nerozpoznaný algorytmus %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Povolili ste E2E šifrovanie (Nerozpoznaný algorytmus %1$s).</string>
-
     <string name="key_verification_request_fallback_message">%s požaduje overenie vašich šifrovacích kľúčov, ale váš klient nepodporuje overenie kľúčov v konverzácii. Budete musieť použiť zastaralú metódu overenia.</string>
-
 </resources>
