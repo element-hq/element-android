@@ -300,11 +300,24 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         sendIntent.type = mediaMimeType
         sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
 
-        try {
-            context.startActivity(sendIntent)
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
-        }
+        sendShareIntent(context, sendIntent)
+    }
+}
+
+fun shareText(context: Context, text: String) {
+    val sendIntent = Intent()
+    sendIntent.action = Intent.ACTION_SEND
+    sendIntent.type = "text/plain"
+    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+
+    sendShareIntent(context, sendIntent)
+}
+
+private fun sendShareIntent(context: Context, intent: Intent) {
+    try {
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

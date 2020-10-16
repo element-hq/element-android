@@ -103,6 +103,7 @@ import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
+import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
@@ -1587,21 +1588,25 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        session.fileService().downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                id = action.eventId,
-                fileName = action.messageContent.body,
-                mimeType = action.messageContent.mimeType,
-                url = action.messageContent.getFileUrl(),
-                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        if (isAdded) {
-                            shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+        if (action.messageContent is MessageTextContent) {
+            shareText(requireContext(), action.messageContent.body)
+        } else if (action.messageContent is MessageWithAttachmentContent) {
+            session.fileService().downloadFile(
+                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                    id = action.eventId,
+                    fileName = action.messageContent.body,
+                    mimeType = action.messageContent.mimeType,
+                    url = action.messageContent.getFileUrl(),
+                    elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    callback = object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            if (isAdded) {
+                                shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
     }
 
     private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted ->

@@ -4,12 +4,14 @@ Changes in Element 1.0.9 (2020-XX-XX)
 Features ✨:
  - Search messages in a room - phase 1 (#2110)
  - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
+ - Changed rainbow algorithm
 
 Improvements 🙌:
  - Wording differentiation for direct rooms (#2176)
  - PIN code: request PIN code if phone has been locked
  - Small optimisation of scrolling experience in timeline (#2114)
  - Allow user to reset cross signing if he has no way to recover (#2052)
+ - Ability to share text
  - Create home shortcut for any room (#1525)
  - Can't confirm email due to killing by Android (#2021)
  - Add a menu item to open the setting in room list and in room (#2171)
@@ -31,9 +33,12 @@ Bugfix 🐛:
  - Very long topic cannot be fully visible (#1957)
  - Properly detect cross signing keys reset
  - Don't set presence when handling a push notification or polling (#2156)
+ - Be robust against `StrandHogg` task injection
+ - Clear alerts if user sign out
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
+ - Weblate is now hosted at https://translate.element.io
 
 SDK API changes ⚠️:
  - Search messages in a room by using Session.searchService() or Room.search()
@@ -135,7 +140,7 @@ Bugfix 🐛:
  - Replies to poll appears in timeline as unsupported events during sending (#1004)
 
 Translations 🗣:
- - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.element.io/projects/matrix-doc/) (#1909)
  - New translation to kabyle
 
 Build 🧱:
