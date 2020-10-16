@@ -35,6 +35,7 @@ Bugfix 🐛:
  - Don't set presence when handling a push notification or polling (#2156)
  - Be robust against `StrandHogg` task injection
  - Clear alerts if user sign out
+ - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
