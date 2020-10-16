@@ -2259,7 +2259,7 @@
     <string name="direct_room_profile_not_encrypted_subtitle">Сообщения здесь не зашифрованы.</string>
     <string name="login_error_outdated_homeserver_warning_content">На этом домашнем сервере работает старая версия. Попросите администратора вашего домашнего сервера выполнить обновление. Вы можете продолжить, но некоторые функции могут работать некорректно.</string>
     <string name="direct_room_join_rules_invite_by_you">Вы сделали доступ только по приглашению.</string>
-    <string name="direct_room_join_rules_invite">%@ сделал(а) доступ только по приглашению.</string>
+    <string name="direct_room_join_rules_invite">%1$s сделал(а) доступ только по приглашению.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Показать полную историю в зашифрованных комнатах</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s и %2$s</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s в %2$s и %3$s</string>
