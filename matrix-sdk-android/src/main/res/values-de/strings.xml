@@ -199,7 +199,7 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s hat die Einladung für %2$s zurückgezogen</string>
     <string name="notice_direct_room_third_party_invite_by_you">Du hast %1$s eingeladen</string>
     <string name="notice_direct_room_third_party_invite">%1$s hat %2$s eingeladen</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Du hast zukünftige Nachrichten für %2$s sichtbar gemacht</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du hast zukünftige Nachrichten für %1$s sichtbar gemacht</string>
     <string name="notice_made_future_direct_room_visibility">%1$s hat zukünftige Nachrichten für %2$s sichtbar gemacht</string>
     <string name="notice_direct_room_leave_by_you">Du hast den Raum verlassen</string>
     <string name="notice_direct_room_leave">%1$s hat den Raum verlassen</string>
