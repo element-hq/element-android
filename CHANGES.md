@@ -36,6 +36,7 @@ Bugfix 🐛:
  - Be robust against `StrandHogg` task injection
  - Clear alerts if user sign out
  - Fix rows are hidden in Textinput (#2234)
+ - Uploading a file to a room caused it to have a info.size of -1 (#2141)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)
