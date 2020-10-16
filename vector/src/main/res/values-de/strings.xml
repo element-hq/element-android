@@ -2174,4 +2174,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
     <string name="reset">Zurücksetzen</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Pushempfang fehlgeschlagen. Lösung könnte eine Neuinstallation der Applikation sein.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Die Applikation empfängt den PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
+    <string name="search_is_not_supported_in_e2e_room">Die Suche in verschlüsselten Räumen wird noch nicht unterstützt.</string>
+    <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu starten</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
 </resources>
