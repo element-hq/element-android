@@ -862,7 +862,7 @@
     </plurals>
     <string name="room_participants_now">Сейчас %1$s</string>
     <string name="room_participants_ago">%1$s %2$s назад</string>
-    <string name="room_participants_invite_join_names">"%1$S "</string>
+    <string name="room_participants_invite_join_names">"%1$s "</string>
     <string name="room_participants_invite_join_names_and">%1$s и %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <plurals name="room_details_selected">

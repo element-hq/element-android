@@ -729,8 +729,8 @@
         <item quantity="other">%dwussan</item>
     </plurals>
 
-    <string name="room_participants_now">%1$S tura</string>
-    <string name="room_participants_ago">Seg %1$S %2$S</string>
+    <string name="room_participants_now">%1$s tura</string>
+    <string name="room_participants_ago">Seg %1$s %2$s</string>
 
     <string name="room_participants_header_admin_tools">IFECKA N UNEDBAL</string>
     <string name="room_participants_header_call">SIWEL</string>
