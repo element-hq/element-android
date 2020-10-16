@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s saatis pildi.</string>
     <string name="summary_user_sent_sticker">%1$s saatis kleepsu.</string>
-
     <string name="notice_room_invite_no_invitee">Kasutaja %s kutse</string>
     <string name="notice_room_invite">%1$s kutsus kasutajat %2$s</string>
     <string name="notice_room_invite_you">%1$s kutsus sind</string>
@@ -30,11 +29,9 @@
     <string name="notice_room_visibility_unknown">teadmata (%s).</string>
     <string name="notice_end_to_end">%1$s lülitas sisse läbiva krüptimise (%2$s)</string>
     <string name="notice_room_update">%s uuendas seda jututuba.</string>
-
     <string name="notice_requested_voip_conference">%1$s saatis VoIP konverentsi kutse</string>
     <string name="notice_voip_started">VoIP-konverents algas</string>
     <string name="notice_voip_finished">VoIP-konverents lõppes</string>
-
     <string name="notice_avatar_changed_too">(samuti sai avatar muudetud)</string>
     <string name="notice_room_name_removed">%1$s eemaldas jututoa nime</string>
     <string name="notice_room_topic_removed">%1$s eemaldas jututoa teema</string>
@@ -46,37 +43,25 @@
     <string name="notice_room_third_party_invite">%1$s saatis jututoaga liitumiseks kutse kasutajale %2$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s võttis vastu kutse %2$s nimel</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Ei õnnestu dekrüptida: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Sõnumi saatja seade ei ole selle sõnumi jaoks saatnud dekrüptimisvõtmeid.</string>
-
     <string name="could_not_redact">Ei saanud muuta sõnumit</string>
     <string name="unable_to_send_message">Sõnumi saatmine ei õnnestunud</string>
-
     <string name="message_failed_to_upload">Faili üles laadimine ei õnnestunud</string>
-
     <string name="network_error">Võrguühenduse viga</string>
     <string name="matrix_error">Matrix\'i viga</string>
-
     <string name="room_error_join_failed_empty_room">Hetkel ei ole võimalik uuesti liituda tühja jututoaga.</string>
-
     <string name="encrypted_message">Krüptitud sõnum</string>
-
     <string name="medium_email">E-posti aadress</string>
     <string name="medium_phone_number">Telefoninumber</string>
-
     <string name="room_displayname_invite_from">Kutse kasutajalt %s</string>
     <string name="room_displayname_room_invite">Kutse jututuppa</string>
-
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s ja üks muu</item>
         <item quantity="other">%1$s ja %2$d muud</item>
     </plurals>
-
     <string name="room_displayname_empty_room">Tühi jututuba</string>
-
     <string name="initial_sync_start_importing_account">Alglaadimine:
 \nImpordin kontot…</string>
     <string name="initial_sync_start_importing_account_crypto">Alglaadimine:
@@ -93,10 +78,8 @@
 \nImpordin kogukondi</string>
     <string name="initial_sync_start_importing_account_data">Alglaadimine:
 \nImpordin kontoandmeid</string>
-
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="clear_timeline_send_queue">Tühjenda saatmisjärjekord</string>
-
     <string name="notice_room_invite_no_invitee_with_reason">Kasutaja %1$s kutse. Põhjus: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s kutsus kasutajat %2$s. Põhjus: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s kutsus sind. Põhjus: %2$s</string>
@@ -108,34 +91,25 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s tühistas kasutajale %2$s saadetud kutse jututoaga liitumiseks. Põhjus: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s võttis vastu kutse %2$s jututoaga liitumiseks. Põhjus: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s võttis tagasi kasutajale %2$s saadetud kutse. Põhjus: %3$s</string>
-
     <string name="notice_end_to_end_ok">%1$s lülitas sisse läbiva krüptimise.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s lülitas sisse läbiva krüptimise (tundmatu algoritm %2$s).</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s lisas %2$s selle jututoa aadressiks.</item>
         <item quantity="other">%1$s lisas %2$s selle jututoa aadressideks.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s eemaldas %2$s kui selle jututoa aadressi.</item>
         <item quantity="other">%1$s eemaldas %2$s selle jututoa aadresside hulgast.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s lisas %2$s ja eemaldas %3$s selle jututoa aadresside loendist.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s seadistas selle jututoa põhiaadressiks %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s eemaldas selle jututoa põhiaadressi.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s lubas külalistel selle jututoaga liituda.</string>
     <string name="notice_room_guest_access_forbidden">%1$s seadistas, et külalised ei või selle jututoaga liituda.</string>
-
     <string name="key_verification_request_fallback_message">%s soovib verifitseerida sinu võtmeid, kuid sinu kasutatav klient ei oska vestluse-sisest verifitseerimist teha. Sa pead kasutama traditsioonilist verifitseerimislahendust.</string>
-
     <string name="notice_room_created">Kasutaja %1$s lõi jututoa</string>
     <string name="summary_you_sent_image">Sina saatsid pildi.</string>
     <string name="summary_you_sent_sticker">Sina saatsid kleepsu.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Sinu kutse</string>
     <string name="notice_room_created_by_you">Sa lõid jututoa</string>
     <string name="notice_room_invite_by_you">Sina kutsusid kasutajat %1$s</string>
@@ -145,7 +119,7 @@
     <string name="notice_room_kick_by_you">Sina müksasid %1$s välja</string>
     <string name="notice_room_unban">%1$s taastas %2$s ligipääsu</string>
     <string name="notice_room_unban_by_you">Sina taastasid %1$s ligipääsu</string>
-    <string name="notice_room_ban">%1$s keelas %1$s ligipääsu</string>
+    <string name="notice_room_ban">%1$s keelas %2$s ligipääsu</string>
     <string name="notice_room_ban_by_you">Sina keelasid %1$s ligipääsu</string>
     <string name="notice_room_withdraw_by_you">Sina võtsid tagasi %1$s kutse</string>
     <string name="notice_avatar_url_changed_by_you">Sina muutsid oma tunnuspilti</string>
@@ -165,7 +139,6 @@
     <string name="notice_made_future_room_visibility_by_you">Sa seadistasid, et tulevane jututoa ajalugu on nähtav kasutajale %1$s</string>
     <string name="notice_end_to_end_by_you">Sa lülitasid sisse läbiva krüptimise (%1$s)</string>
     <string name="notice_room_update_by_you">Sa uuendasid seda jututuba.</string>
-
     <string name="notice_requested_voip_conference_by_you">Sa algatasid VoIP rühmakõne</string>
     <string name="notice_room_name_removed_by_you">Sa eemaldasid jututoa nime</string>
     <string name="notice_room_topic_removed_by_you">Sa eemaldasid jututoa teema</string>
@@ -175,26 +148,22 @@
     <string name="notice_room_third_party_invite_by_you">Sina saatsid kasutajale %1$s kutse jututoaga liitumiseks</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">Sina võtsid vastu kutse %1$s nimel</string>
-
     <string name="notice_widget_added">%1$s lisas %2$s vidina</string>
     <string name="notice_widget_added_by_you">Sina lisasid %1$s vidina</string>
     <string name="notice_widget_removed">%1$s eemaldas %2$s vidina</string>
     <string name="notice_widget_removed_by_you">Sina eemdaldasid %1$s vidina</string>
     <string name="notice_widget_modified">%1$s muutis %2$s vidinat</string>
     <string name="notice_widget_modified_by_you">Sa muutsid %1$s vidinat</string>
-
     <string name="power_level_admin">Peakasutaja</string>
     <string name="power_level_moderator">Moderaator</string>
     <string name="power_level_default">Tavakasutaja</string>
-    <string name="power_level_custom">Kohandatud kasutajaõigused (%1$s)</string>
+    <string name="power_level_custom">Kohandatud kasutajaõigused (%1$d)</string>
     <string name="power_level_custom_no_value">Kohandatud õigused</string>
-
     <string name="notice_power_level_changed_by_you">Sina muutsid kasutaja %1$s õigusi.</string>
     <string name="notice_power_level_changed">%1$s muutis kasutaja %2$s õigusi.</string>
     <string name="notice_power_level_diff">%1$s õiguste muutus %2$s -&gt; %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Sinu kutse. Põhjus %1$s</string>
-    <string name="notice_room_invite_with_reason_by_you">Sina kutsusid kasutajat %1$s. Põhjus: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Sina kutsusid kasutajat %1$s. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Sina liitusid jututoaga. Põhjus: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Sina lahkusid jututoast. Põhjus: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Sina lükkasid kutse tagasi. Põhjus: %1$s</string>
@@ -207,26 +176,41 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s. Põhjus: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Sina võtsid vastu kutse %1$s nimel. Põhjus: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Sina võtsid tagasi kasutaja %1$s kutse. Põhjus: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Sina lisasid %1$s selle jututoa aadressiks.</item>
         <item quantity="other">Sina lisasid %1$s selle jututoa aadressideks.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Sina eemaldasid %1$s, kui selle jututoa aadressi.</item>
         <item quantity="other">Sina eemaldasid %1$s selle jututoa aadresside hulgast.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Sina lisasid %1$s selle jututoa aadressiks ning eemaldasid %2$s aadresside hulgast.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">Sina seadistasid selle jututoa põhiaadressiks %1$s.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Sina eemaldasid selle jututoa põhiaadressi.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Sina lubasid külalistel selle jututoaga liituda.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Sina seadistasid, et külalised ei või selle jututoaga liituda.</string>
-
     <string name="notice_end_to_end_ok_by_you">Sa lülitasid sisse läbiva krüptimise.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Sa lülitasid sisse läbiva krüptimise (kasutusel on tundmatu algoritm %1$s).</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Sina seadistasid, et külalised ei või selle jututoaga liituda.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s seadistas, et külalised ei või selle jututoaga liituda.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Sina lubasid külalistel selle jututoaga liituda.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s lubas külalistel selle jututoaga liituda.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Sina lahkusid jututoast. Põhjus: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s lahkus jututoast. Põhjus: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Sina liitusid jututoaga. Põhjus: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Sina kutsusid kasutajat %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s kutsus kasutajat %2$s</string>
+    <string name="notice_direct_room_update_by_you">Sa uuendasid seda jututuba.</string>
+    <string name="notice_direct_room_update">%s uuendas seda jututuba.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Sina seadistasid, et tulevased jututoa sõnumid on nähtavad kasutajale %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s seadistas, et tulevased jututoa sõnumid on nähtavad kasutajale %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Sina lahkusid jututoast</string>
+    <string name="notice_direct_room_leave">%1$s lahkus jututoast</string>
+    <string name="notice_direct_room_join_by_you">Sina liitusid</string>
+    <string name="notice_direct_room_join">%1$s liitus</string>
+    <string name="notice_direct_room_created_by_you">Sina alustasid vestlust</string>
+    <string name="notice_direct_room_created">%1$s alustas vestlust</string>
 </resources>
