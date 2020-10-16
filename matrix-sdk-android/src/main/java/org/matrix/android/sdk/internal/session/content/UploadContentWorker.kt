@@ -157,18 +157,21 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                 // Get new Bitmap size
                                 compressedFile.inputStream().use {
                                     val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                                    val bitmap = BitmapFactory.decodeStream(it, null, options)
-                                    val fileSize = bitmap?.byteCount?.toLong() ?: compressedFile.length()
+                                    BitmapFactory.decodeStream(it, null, options)
                                     newAttachmentAttributes = NewAttachmentAttributes(
-                                            options.outWidth,
-                                            options.outHeight,
-                                            fileSize
+                                            newWidth = options.outWidth,
+                                            newHeight = options.outHeight,
+                                            newFileSize = compressedFile.length()
                                     )
                                 }
                             }
                             .also { filesToDelete.add(it) }
                 } else {
                     fileToUpload = workingFile
+                    // Fix: OpenableColumns.SIZE may return -1 or 0
+                    if (params.attachment.size <= 0) {
+                        newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
+                    }
                 }
 
                 val contentUploadResponse = if (params.isEncrypted) {
@@ -202,11 +205,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.v("## FileService: cache storage updated")
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## FileService: Failed to update file cache")
-                }
-
-                // Fix: OpenableColumns.SIZE may return -1 or 0
-                if (params.attachment.size <= 0) {
-                    newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
                 }
 
                 handleSuccess(params,
@@ -320,7 +318,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val messageContent: MessageContent? = event.asDomain().content.toModel()
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
-                is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
+                is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo,
+                        newAttachmentAttributes.newFileSize)
                 is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 else                   -> messageContent
@@ -350,13 +349,15 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     private fun MessageVideoContent.update(url: String,
                                            encryptedFileInfo: EncryptedFileInfo?,
                                            thumbnailUrl: String?,
-                                           thumbnailEncryptedFileInfo: EncryptedFileInfo?): MessageVideoContent {
+                                           thumbnailEncryptedFileInfo: EncryptedFileInfo?,
+                                           size: Long): MessageVideoContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
                 encryptedFileInfo = encryptedFileInfo?.copy(url = url),
                 videoInfo = videoInfo?.copy(
                         thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
-                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl)
+                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl),
+                        size = size
                 )
         )
     }
