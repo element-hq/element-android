@@ -176,7 +176,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Hai mandato un invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Hai revocato l\'invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Hai accettato l\'invito per %1$s. Motivo: %2$s</string>
-    <string name="notice_room_withdraw_with_reason_by_you">Hai ritirato l\'invito di %2$s. Motivo: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Hai ritirato l\'invito di %1$s. Motivo: %2$s</string>
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Hai aggiunto %1$s come indirizzo per questa stanza.</item>
         <item quantity="other">Hai aggiunto %1$s come indirizzi per questa stanza.</item>
