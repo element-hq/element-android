@@ -23,6 +23,7 @@ import im.vector.app.core.resources.StringProvider
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
@@ -40,7 +41,7 @@ class DisplayableEventFormatter @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter
 ) {
 
-    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
+    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean, roomSummary: RoomSummary?): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -53,16 +54,16 @@ class DisplayableEventFormatter @Inject constructor(
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         when (timelineEvent.root.getClearType()) {
-            EventType.STICKER         -> {
+            EventType.STICKER               -> {
                 return simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
             }
-            EventType.REACTION        -> {
+            EventType.REACTION              -> {
                 timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
                     val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                     return simpleFormat(senderName, emojiSpanned, appendAuthor)
                 }
             }
-            EventType.MESSAGE         -> {
+            EventType.MESSAGE               -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
@@ -125,12 +126,12 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_MAC,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
-            EventType.CALL_CANDIDATES -> {
+            EventType.CALL_CANDIDATES       -> {
                 return span { }
             }
-            else                      -> {
+            else                            -> {
                 return span {
-                    text = noticeEventFormatter.format(timelineEvent) ?: ""
+                    text = noticeEventFormatter.format(timelineEvent, roomSummary) ?: ""
                     textStyle = "italic"
                 }
             }

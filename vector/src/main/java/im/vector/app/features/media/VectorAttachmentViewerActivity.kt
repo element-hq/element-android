@@ -74,7 +74,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.i("onCreate Activity ${this.javaClass.simpleName}")
+        Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
         screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
         val timeForInjection = measureTimeMillis {
@@ -152,6 +152,16 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.i("onResume Activity ${javaClass.simpleName}")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause Activity ${javaClass.simpleName}")
     }
 
     private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview

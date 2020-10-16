@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="LoginContainer">
-        <item name="android:paddingTop">32dp</item>
-        <item name="android:paddingBottom">32dp</item>
-        <item name="android:paddingStart">36dp</item>
-        <item name="android:paddingEnd">36dp</item>
-    </style>
-
     <item name="loginLogo" type="id" />
     <item name="loginFormScrollView" type="id" />
     <item name="loginFormContainer" type="id" />

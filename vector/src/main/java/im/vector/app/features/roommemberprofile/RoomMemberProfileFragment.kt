@@ -43,6 +43,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailPendingAction
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.android.parcel.Parcelize
@@ -61,7 +63,8 @@ data class RoomMemberProfileArgs(
 class RoomMemberProfileFragment @Inject constructor(
         val viewModelFactory: RoomMemberProfileViewModel.Factory,
         private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) : VectorBaseFragment(), RoomMemberProfileController.Callback {
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
@@ -276,15 +279,22 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onJumpToReadReceiptClicked() {
-        vectorBaseActivity.notImplemented("Jump to read receipts")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     override fun onMentionClicked() {
-        vectorBaseActivity.notImplemented("Mention")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.MentionUser(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        startSharePlainTextIntent(
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = null,
+                text = permalink
+        )
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {

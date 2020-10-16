@@ -62,11 +62,12 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_matrix_org"
-                    android:tint="?riotx_text_primary"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceMatrixOrgText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:tint="?riotx_text_primary"
+                    tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/loginServerChoiceMatrixOrgText"
@@ -103,11 +104,12 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_element_matrix_services"
-                    android:tint="?riotx_text_primary"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceEmsText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:tint="?riotx_text_primary"
+                    tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsText"

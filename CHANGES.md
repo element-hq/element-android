@@ -1,3 +1,62 @@
+Changes in Element 1.0.9 (2020-10-16)
+===================================================
+
+Features ✨:
+ - Search messages in a room - phase 1 (#2110)
+ - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
+ - Changed rainbow algorithm
+
+Improvements 🙌:
+ - Wording differentiation for direct rooms (#2176)
+ - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
+ - Allow user to reset cross signing if he has no way to recover (#2052)
+ - Ability to share text
+ - Create home shortcut for any room (#1525)
+ - Can't confirm email due to killing by Android (#2021)
+ - Add a menu item to open the setting in room list and in room (#2171)
+ - Add a menu item in the timeline as a shortcut to invite user (#2171)
+ - Drawer: move settings access and add sign out action (#2171)
+ - Filter room member (and banned users) by name (#2184)
+ - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
+ - Direct share (#2029)
+ - Add FAB to room members list (#2226)
+ - Add Sygnal API implementation to test is Push are correctly received
+ - Add PushGateway API implementation to test if Push are correctly received
+ - Cross signing: shouldn't offer to verify with other session when there is not. (#2227)
+
+Bugfix 🐛:
+ - Improve support for image/audio/video/file selection with intent changes (#1376)
+ - Fix Splash layout on small screens
+ - Invalid popup when pressing back (#1635)
+ - Simplifies draft management and should fix bunch of draft issues (#952, #683)
+ - Very long topic cannot be fully visible (#1957)
+ - Properly detect cross signing keys reset
+ - Don't set presence when handling a push notification or polling (#2156)
+ - Be robust against `StrandHogg` task injection
+ - Clear alerts if user sign out
+ - Fix rows are hidden in Textinput (#2234)
+ - Uploading a file to a room caused it to have a info.size of -1 (#2141)
+
+Translations 🗣:
+ - Move store data to `/fastlane/metadata/android` (#812)
+ - Weblate is now hosted at https://translate.element.io
+
+SDK API changes ⚠️:
+ - Search messages in a room by using Session.searchService() or Room.search()
+
+Build 🧱:
+ - Use Update Gradle Wrapper Action
+ - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
+ - Upgrade kotlin version from `1.3.72` to `1.4.10` and kotlin coroutines version from `1.3.8` to `1.3.9`
+ - Upgrade build tools from `3.5.3` to `4.0.1`, then to `4.1.0`
+ - Upgrade com.google.gms:google-services from `4.3.2` to `4.3.4`
+ - Upgrade Moshi to `1.11.0`, Dagger to `2.29.1`, Epoxy to `4.1.0`
+
+Other changes:
+ - Added registration/verification automated UI tests
+ - Create a script to help getting public information form any homeserver
+
 Changes in Element 1.0.8 (2020-09-25)
 ===================================================
 
@@ -83,7 +142,7 @@ Bugfix 🐛:
  - Replies to poll appears in timeline as unsupported events during sending (#1004)
 
 Translations 🗣:
- - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.riot.im/projects/matrix-doc/) (#1909)
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.element.io/projects/matrix-doc/) (#1909)
  - New translation to kabyle
 
 Build 🧱:

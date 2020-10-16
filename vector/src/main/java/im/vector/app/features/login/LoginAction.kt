@@ -27,7 +27,7 @@ sealed class LoginAction : VectorViewModelAction {
     data class UpdateSignMode(val signMode: SignMode) : LoginAction()
     data class LoginWithToken(val loginToken: String) : LoginAction()
     data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
-    data class InitWith(val loginConfig: LoginConfig) : LoginAction()
+    data class InitWith(val loginConfig: LoginConfig?) : LoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
     object ResetPasswordMailConfirmed : LoginAction()
 
@@ -39,6 +39,7 @@ sealed class LoginAction : VectorViewModelAction {
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
+
     // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
     data class ValidateThreePid(val code: String) : RegisterAction()
 

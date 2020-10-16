@@ -19,8 +19,8 @@ package im.vector.app.features.crypto.recover
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class BootstrapViewEvents : VectorViewEvents {
-    object Dismiss : BootstrapViewEvents()
+    data class Dismiss(val success: Boolean) : BootstrapViewEvents()
     data class ModalError(val error: String) : BootstrapViewEvents()
-    object RecoveryKeySaved: BootstrapViewEvents()
-    data class SkipBootstrap(val genKeyOption: Boolean = true): BootstrapViewEvents()
+    object RecoveryKeySaved : BootstrapViewEvents()
+    data class SkipBootstrap(val genKeyOption: Boolean = true) : BootstrapViewEvents()
 }

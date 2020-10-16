@@ -1583,7 +1583,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_call_ringtone_use_default_stun">Autoriser le serveur d’assistance d’appel de secours</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Utilisera %s comme assistant quand votre serveur d’accueil n’en offre pas (votre adresse IP sera partagée lors d’un appel)</string>
     <string name="invite_no_identity_server_error">Ajoutez un serveur d’identité dans vos paramètres pour réaliser cette action.</string>
-    <string name="settings_background_fdroid_sync_mode">Mode de synchronisation en arrière-plan (expérimental)</string>
+    <string name="settings_background_fdroid_sync_mode">Mode de synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimisé pour la batterie</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element se synchronisera en arrière-plan de façon à préserver les ressources limitées de l’appareil (batterie).
 \nSelon l’état des ressources de votre appareil, la synchronisation peut être retardée par le système d’exploitation.</string>
@@ -2377,4 +2377,54 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="identity_server_set_alternative_notice_no_default">Renseignez l’URL d’un serveur d’identité</string>
     <string name="identity_server_set_alternative_submit">Valider</string>
 
+    <string name="play_video">Lancer</string>
+    <string name="pause_video">Pause</string>
+    <string name="dismiss">Ignorer</string>
+
+
+    <string name="no_permissions_to_start_conf_call">Vous n\'avez pas la permission de commencer une téléconférence dans ce salon</string>
+    <string name="no_permissions_to_start_webrtc_call">Vous n\'avez pas la permission de commencer un appel dans ce salon</string>
+    <string name="conference_call_in_progress">Une téléconférence est déjà en cours !</string>
+    <string name="video_meeting">Commencer une réunion vidéo</string>
+    <string name="audio_meeting">Commencer une réunion audio</string>
+    <string name="audio_video_meeting_description">Les réunions utilisent les règles de sécurités et les permissions de Jitsi. Toutes les personnes actuellement dans ce salon recevrons une invitation à participer à la réunion.</string>
+    <string name="cannot_call_yourself">Vous ne pouvez pas passer un appel avec vous-même</string>
+    <string name="cannot_call_yourself_with_invite">Vous ne pouvez pas passer un appel avec vous-même, attendez que les participants accepte l\'invitation</string>
+    <string name="failed_to_add_widget">Échec de l\'ajout du module d\'information (widget)</string>
+    <string name="failed_to_remove_widget">Échec de la suppression du module d\'information (widget)</string>
+    <string name="call_notification_answer">Accepter</string>
+    <string name="call_notification_reject">Refuser</string>
+    <string name="call_notification_hangup">Raccrocher</string>
+
+    <string name="action_copy">Copier</string>
+    <string name="dialog_title_success">Succès</string>
+
+    <string name="bottom_action_notification">Notifications</string>
+    <string name="call_failed_no_connection_description">Impossible d\'établir une connexion en temps réel.
+\nVeuillez demander à l\'administrateur de votre serveur domestique de configurer un serveur TURN afin que les appels fonctionnent de manière fiable.</string>
+
+    <string name="call_select_sound_device">Sélectionner un appareil audio</string>
+    <string name="sound_device_phone">Téléphone</string>
+    <string name="sound_device_speaker">Hauts-parleurs</string>
+    <string name="sound_device_headset">Écouteurs</string>
+    <string name="sound_device_wireless_headset">Écouteurs sans fil</string>
+    <string name="call_switch_camera">Changer de caméra</string>
+    <string name="auth_msisdn_already_defined">Le numéro de téléphone est déjà défini.</string>
+    <string name="login_error_ssl_peer_unverified">Erreur SSL : l\'identité du pair n\'a pas été vérifiée.</string>
+    <string name="login_error_ssl_other">Erreur SSL.</string>
+    <string name="settings_call_show_confirmation_dialog_title">Prévenir les appels accidentels</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Demandez une confirmation avant de commencer un appel</string>
+    <string name="active_call_with_duration">Appel actif (%s)</string>
+    <string name="return_to_call">Retour à l\'appel</string>
+
+    <string name="room_participants_action_cancel_invite">Annuler l\'invitation</string>
+    <string name="room_participants_action_ignore_title">Ignorer l\'utilisateur</string>
+    <string name="room_participants_action_ignore_prompt_msg">Ignorer cet utilisateur aura pour effet de supprimer ses messages des espaces que vous partagez.
+\n
+\nVous pouvez annuler cette action à tout moment dans les paramètres généraux.</string>
+    <string name="room_participants_action_cancel_invite_title">Annuler l\'invitation</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Êtes-vous sûr de vouloir annuler l\'invitation pour cet utilisateur \?</string>
+    <string name="room_participants_ban_title">Bloquer l\'utilisateur</string>
+    <string name="room_participants_ban_reason">Motif du blocage</string>
+    <string name="room_participants_unban_title">Débloquer l\'utilisateur</string>
 </resources>

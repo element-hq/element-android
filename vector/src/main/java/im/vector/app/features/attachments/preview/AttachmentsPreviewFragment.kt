@@ -81,6 +81,10 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == RESULT_OK) {
             if (requestCode == UCrop.REQUEST_CROP && data != null) {
                 Timber.v("Crop success")
@@ -98,7 +102,7 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction -> {
+            R.id.attachmentsPreviewEditAction   -> {
                 handleEditAction()
                 true
             }

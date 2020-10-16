@@ -50,18 +50,28 @@ import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
+private const val DEFAULT_PREFETCH_THRESHOLD = 30
+
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
+                                                  private val vectorPreferences: VectorPreferences,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
+                                                  private val session: Session,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
@@ -113,9 +123,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
+    private var hasReachedInvite: Boolean = false
+    private var hasUTD: Boolean = false
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
+    private var previousModelsSize = 0
 
     var callback: Callback? = null
     var timeline: Timeline? = null
@@ -191,6 +204,29 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 models.add(position, readMarker)
             }
         }
+        val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
+        if (shouldAddBackwardPrefetch) {
+            val indexOfPrefetchBackward = (previousModelsSize - 1)
+                    .coerceAtMost(models.size - DEFAULT_PREFETCH_THRESHOLD)
+                    .coerceAtLeast(0)
+
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
+
+            models.add(indexOfPrefetchBackward, loadingItem)
+        }
+        val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
+        if (shouldAddForwardPrefetch) {
+            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(models.size - 1)
+            val loadingItem = LoadingItem_()
+                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
+                    .showLoader(false)
+                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
+            models.add(indexOfPrefetchForward, loadingItem)
+        }
+        previousModelsSize = models.size
     }
 
     fun update(viewState: RoomDetailViewState) {
@@ -241,7 +277,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
         val timelineModels = getModels()
         add(timelineModels)
-
+        if (hasReachedInvite && hasUTD) {
+            return
+        }
         // Avoid displaying two loaders if there is no elements between them
         val showBackwardsLoader = !showingForwardLoader || timelineModels.isNotEmpty()
         // We can hide the loader but still add the item to controller so it can trigger backwards pagination
@@ -301,6 +339,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private fun buildCacheItemsIfNeeded() = synchronized(modelCache) {
+        hasUTD = false
+        hasReachedInvite = false
+
         if (modelCache.isEmpty()) {
             return
         }
@@ -316,12 +357,20 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
-        val date = event.root.localDateTime()
-        val nextDate = nextEvent?.root?.localDateTime()
-        val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+        if (hasReachedInvite && hasUTD) {
+            return CacheItemData(event.localId, event.root.eventId, null, null, null)
+        }
+        updateUTDStates(event, nextEvent)
         val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
+        }
+        val addDaySeparator = if (hasReachedInvite && hasUTD) {
+            true
+        } else {
+            val date = event.root.localDateTime()
+            val nextDate = nextEvent?.root?.localDateTime()
+            date.toLocalDate() != nextDate?.toLocalDate()
         }
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
                 nextEvent = nextEvent,
@@ -346,6 +395,27 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
+    private fun updateUTDStates(event: TimelineEvent, nextEvent: TimelineEvent?) {
+        if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
+            return
+        }
+        if (event.root.type == EventType.STATE_ROOM_MEMBER
+                && event.root.stateKey == session.myUserId) {
+            val content = event.root.content.toModel<RoomMemberContent>()
+            if (content?.membership == Membership.INVITE) {
+                hasReachedInvite = true
+            } else if (content?.membership == Membership.JOIN) {
+                val prevContent = event.root.resolvedPrevContent().toModel<RoomMemberContent>()
+                if (prevContent?.membership?.isActive() == false) {
+                    hasReachedInvite = true
+                }
+            }
+        }
+        if (nextEvent?.root?.getClearType() == EventType.ENCRYPTED) {
+            hasUTD = true
+        }
+    }
+
     /**
      * Return true if added
      */
@@ -355,9 +425,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         return shouldAdd
     }
 
-    /**
-     * Return true if added
-     */
     private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
         return onVisibilityStateChanged { _, _, visibilityState ->
             if (visibilityState == VisibilityState.VISIBLE) {

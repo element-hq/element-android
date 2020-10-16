@@ -29,9 +29,9 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginViewState
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_terms.*
+import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 @Parcelize

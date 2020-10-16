@@ -28,6 +28,7 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
 
     @EpoxyAttribute
     var message: CharSequence? = null
+
     @EpoxyAttribute
     var editedSpan: CharSequence? = null
 

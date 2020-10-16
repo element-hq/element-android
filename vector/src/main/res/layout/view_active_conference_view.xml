@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/deleteWidgetButton"
-        android:drawableStart="@drawable/ic_call"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -22,7 +21,8 @@
         android:textColor="@color/white"
         android:textColorLink="@color/white"
         app:drawableTint="@color/white"
-        tools:text="@string/ongoing_conference_call" />
+        tools:text="@string/ongoing_conference_call"
+        app:drawableStartCompat="@drawable/ic_call" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteWidgetButton"

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,7 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
@@ -95,6 +95,7 @@ internal class DefaultSession @Inject constructor(
         private val pushRuleService: Lazy<PushRuleService>,
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
+        private val searchService: Lazy<SearchService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
         private val permalinkService: Lazy<PermalinkService>,
@@ -263,6 +264,8 @@ internal class DefaultSession @Inject constructor(
     override fun integrationManagerService() = integrationManagerService
 
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
+
+    override fun searchService(): SearchService = searchService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

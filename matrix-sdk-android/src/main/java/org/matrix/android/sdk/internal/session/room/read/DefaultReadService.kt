@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,6 +104,16 @@ internal class DefaultReadService @AssistedInject constructor(
         return Transformations.map(liveRealmData) {
             it.firstOrNull().toOptional()
         }
+    }
+
+    override fun getUserReadReceipt(userId: String): String? {
+        var eventId: String? = null
+        monarchy.doWithRealm {
+            eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = userId)
+                    .findFirst()
+                    ?.eventId
+        }
+        return eventId
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {

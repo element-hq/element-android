@@ -28,11 +28,12 @@
         android:focusable="true"
         android:padding="6dp"
         android:scaleType="centerInside"
-        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintStart_toStartOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
-        app:srcCompat="@drawable/ic_back_24dp" />
+        app:srcCompat="@drawable/ic_back_24dp"
+        app:tint="@color/white"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/overlayCounterText"
@@ -77,11 +78,12 @@
         android:contentDescription="@string/share"
         android:focusable="true"
         android:padding="6dp"
-        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
-        app:srcCompat="@drawable/ic_share" />
+        app:srcCompat="@drawable/ic_share"
+        app:tint="@color/white"
+        tools:ignore="MissingPrefix" />
 
 
     <androidx.constraintlayout.widget.Group
@@ -111,11 +113,12 @@
         android:focusable="true"
         android:padding="6dp"
         android:scaleType="centerInside"
-        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
         app:layout_constraintStart_toStartOf="@id/overlayBottomBackground"
         app:layout_constraintTop_toTopOf="@id/overlayBottomBackground"
-        app:srcCompat="@drawable/ic_play_arrow" />
+        app:srcCompat="@drawable/ic_play_arrow"
+        app:tint="@color/white"
+        tools:ignore="MissingPrefix" />
 
     <SeekBar
         android:id="@+id/overlaySeekBar"

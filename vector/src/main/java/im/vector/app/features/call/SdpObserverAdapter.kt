@@ -22,7 +22,7 @@ import timber.log.Timber
 
 open class SdpObserverAdapter : SdpObserver {
     override fun onSetFailure(p0: String?) {
-       Timber.e("## SdpObserver: onSetFailure $p0")
+        Timber.e("## SdpObserver: onSetFailure $p0")
     }
 
     override fun onSetSuccess() {

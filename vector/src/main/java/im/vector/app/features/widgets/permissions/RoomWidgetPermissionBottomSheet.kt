@@ -23,7 +23,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs
@@ -31,6 +30,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
 import kotlinx.android.synthetic.main.bottom_sheet_room_widget_permission.*
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {

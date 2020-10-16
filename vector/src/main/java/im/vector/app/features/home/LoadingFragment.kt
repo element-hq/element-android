@@ -24,7 +24,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_loading.*
 import javax.inject.Inject
 
-class LoadingFragment @Inject constructor(): VectorBaseFragment() {
+class LoadingFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_loading
 

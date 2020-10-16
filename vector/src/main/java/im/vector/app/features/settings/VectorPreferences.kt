@@ -1,6 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -153,7 +151,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
-        private const val SETTINGS_LABS_MERGE_E2E_ERRORS = "SETTINGS_LABS_MERGE_E2E_ERRORS"
+        private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
         const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
 
         // analytics
@@ -285,8 +283,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, true)
     }
 
-    fun mergeUTDinTimeline(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_MERGE_E2E_ERRORS, false)
+    fun labShowCompleteHistoryInEncryptedRoom(): Boolean {
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM, false)
     }
 
     fun labAllowedExtendedLogging(): Boolean {

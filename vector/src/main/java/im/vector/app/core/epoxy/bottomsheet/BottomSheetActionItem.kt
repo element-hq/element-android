@@ -42,18 +42,25 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
+
     @EpoxyAttribute
     var textRes: Int = 0
+
     @EpoxyAttribute
     var showExpand = false
+
     @EpoxyAttribute
     var expanded = false
+
     @EpoxyAttribute
     var selected = false
+
     @EpoxyAttribute
     var subMenuItem = false
+
     @EpoxyAttribute
     var destructive = false
+
     @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 

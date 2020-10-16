@@ -190,7 +190,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
-                noticeEventFormatter.format(timelineEvent)
+                noticeEventFormatter.format(timelineEvent, room?.roomSummary())
             }
             else                  -> null
         } ?: ""
@@ -275,8 +275,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
-                    if (canShare(msgType) && messageContent is MessageWithAttachmentContent) {
-                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
+                    if (canShare(msgType)) {
+                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
                     }
 
                     if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
@@ -409,6 +409,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canShare(msgType: String?): Boolean {
         return when (msgType) {
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_LOCATION,
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_VIDEO,

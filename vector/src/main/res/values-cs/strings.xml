@@ -2483,7 +2483,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \n
 \n%s</string>
 
-    <string name="labs_merge_e2e_in_timeline">Sloučení nemohlo dešifrovat zprávy v časové ose</string>
     <string name="labs_show_unread_notifications_as_tab">Přidat panel věnovaný nepřečteným oznámením na hlavní obrazovku.</string>
 
     <string name="settings_text_message_sent_hint">Kód</string>
@@ -2623,4 +2622,9 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
 
     <string name="universal_link_malformed">Odkaz byl chybně zformován</string>
+    <string name="no_permissions_to_start_webrtc_call">K zahájení hovoru v této místnosti nemáte oprávnění</string>
+    <string name="delete_account_data_warning">Smazat údaje účtu typu %1$s\?
+\n
+\nOpatrně, může vést k neočekávanému chování.</string>
+
 </resources>

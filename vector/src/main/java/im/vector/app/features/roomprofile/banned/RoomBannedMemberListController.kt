@@ -17,8 +17,6 @@
 package im.vector.app.features.roomprofile.banned
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -28,11 +26,15 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.roomprofile.members.RoomMemberSummaryFilter
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomBannedMemberListViewState>() {
 
@@ -63,34 +65,37 @@ class RoomBannedMemberListController @Inject constructor(
         } else {
             buildProfileSection(quantityString)
 
-            bannedList.join(
-                    each = { _, roomMember ->
-                        val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
-                        profileMatrixItemWithProgress {
-                            id(roomMember.userId)
-                            matrixItem(roomMember.toMatrixItem())
-                            avatarRenderer(avatarRenderer)
-                            apply {
-                                if (actionInProgress) {
-                                    inProgress(true)
-                                    editable(false)
-                                } else {
-                                    inProgress(false)
-                                    editable(true)
-                                    clickListener { _ ->
-                                        callback?.onUnbanClicked(roomMember)
+            roomMemberSummaryFilter.filter = data.filter
+            bannedList
+                    .filter { roomMemberSummaryFilter.test(it) }
+                    .join(
+                            each = { _, roomMember ->
+                                val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
+                                profileMatrixItemWithProgress {
+                                    id(roomMember.userId)
+                                    matrixItem(roomMember.toMatrixItem())
+                                    avatarRenderer(avatarRenderer)
+                                    apply {
+                                        if (actionInProgress) {
+                                            inProgress(true)
+                                            editable(false)
+                                        } else {
+                                            inProgress(false)
+                                            editable(true)
+                                            clickListener { _ ->
+                                                callback?.onUnbanClicked(roomMember)
+                                            }
+                                        }
                                     }
                                 }
+                            },
+                            between = { _, roomMemberBefore ->
+                                dividerItem {
+                                    id("divider_${roomMemberBefore.userId}")
+                                    color(dividerColor)
+                                }
                             }
-                        }
-                    },
-                    between = { _, roomMemberBefore ->
-                        dividerItem {
-                            id("divider_${roomMemberBefore.userId}")
-                            color(dividerColor)
-                        }
-                    }
-            )
+                    )
         }
     }
 }

@@ -23,8 +23,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import kotlinx.android.synthetic.main.dialog_edit_power_level.view.*
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 

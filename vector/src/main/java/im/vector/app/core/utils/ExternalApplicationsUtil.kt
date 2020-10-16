@@ -31,22 +31,22 @@ import android.provider.Browser
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okio.buffer
 import okio.sink
 import okio.source
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -130,7 +130,7 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
-                      fragment: Fragment?,
+                      activityResultLauncher: ActivityResultLauncher<Intent>?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -140,8 +140,8 @@ fun openFileSelection(activity: Activity,
     fileIntent.type = "*/*"
 
     try {
-        fragment
-                ?.startActivityForResult(fileIntent, requestCode)
+        activityResultLauncher
+                ?.launch(fileIntent)
                 ?: run {
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
@@ -300,11 +300,24 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         sendIntent.type = mediaMimeType
         sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
 
-        try {
-            context.startActivity(sendIntent)
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
-        }
+        sendShareIntent(context, sendIntent)
+    }
+}
+
+fun shareText(context: Context, text: String) {
+    val sendIntent = Intent()
+    sendIntent.action = Intent.ACTION_SEND
+    sendIntent.type = "text/plain"
+    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+
+    sendShareIntent(context, sendIntent)
+}
+
+private fun sendShareIntent(context: Context, intent: Intent) {
+    try {
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 
@@ -440,10 +453,9 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        fragment: Fragment?,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
         defaultFileName: String,
-        chooserHint: String,
-        requestCode: Int
+        chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -452,11 +464,7 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (fragment != null) {
-            fragment.startActivityForResult(chooserIntent, requestCode)
-        } else {
-            activity.startActivityForResult(chooserIntent, requestCode)
-        }
+        activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }

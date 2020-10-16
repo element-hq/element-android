@@ -52,10 +52,11 @@
         android:background="?attr/selectableItemBackground"
         android:scaleType="center"
         android:src="@drawable/ic_eye"
-        android:tint="?attr/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/importDialogTil"
-        app:layout_constraintTop_toTopOf="@id/importDialogTil" />
+        app:layout_constraintTop_toTopOf="@id/importDialogTil"
+        app:tint="?attr/colorAccent"
+        tools:ignore="MissingPrefix" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_e2e_keys_import_button"

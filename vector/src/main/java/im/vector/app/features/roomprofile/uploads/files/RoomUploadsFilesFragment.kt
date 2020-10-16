@@ -24,7 +24,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -34,6 +33,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
+import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
 class RoomUploadsFilesFragment @Inject constructor(

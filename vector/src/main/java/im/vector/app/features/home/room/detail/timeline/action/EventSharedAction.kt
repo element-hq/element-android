@@ -21,6 +21,7 @@ import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.core.platform.VectorSharedAction
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 
 sealed class EventSharedAction(@StringRes val titleRes: Int,
@@ -47,7 +48,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Reply(val eventId: String) :
             EventSharedAction(R.string.reply, R.drawable.ic_reply)
 
-    data class Share(val eventId: String, val messageContent: MessageWithAttachmentContent) :
+    data class Share(val eventId: String, val messageContent: MessageContent) :
             EventSharedAction(R.string.share, R.drawable.ic_share)
 
     data class Save(val eventId: String, val messageContent: MessageWithAttachmentContent) :

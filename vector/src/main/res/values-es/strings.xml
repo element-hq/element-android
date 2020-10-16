@@ -1811,7 +1811,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="login_splash_submit">Empieza</string>
 
     <string name="login_server_title">Selecciona un servidor</string>
-    <string name="login_server_text">Como el correo electrónico, las cuantas tienen un hogar, aunque se puede hablar con cualquiera</string>
+    <string name="login_server_text">Como el correo electrónico, las cuentas tienen un hogar, aunque se puede hablar con cualquiera</string>
     <string name="login_server_modular_text">Alojamiento de pago para organizaciones</string>
     <string name="login_server_modular_learn_more">Saber más</string>
     <string name="login_server_other_title">Otro</string>
@@ -1930,7 +1930,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="room_participants_unban_prompt_msg">Desbanear usuario y permitir entrar a la sala nuevamente.</string>
 
     <string name="push_gateway_item_device_name">nombre_session:</string>
-    <string name="labs_merge_e2e_in_timeline">Error al descifrar el mensaje en la línea de tiempo</string>
     <string name="labs_show_unread_notifications_as_tab">Adicionar pestaña dedicada para notificaciones no leidas en la pantalla principal.</string>
 
     <string name="bug_report_error_too_short">Descripcion muy corta</string>

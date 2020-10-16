@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,43 +19,67 @@ package org.matrix.android.sdk.internal.session.room.draft
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.kotlin.createObject
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.room.send.UserDraft
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.DraftMapper
-import org.matrix.android.sdk.internal.database.model.DraftEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.UserDraftsEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
-class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                   private val realmSessionProvider: RealmSessionProvider) {
 
     suspend fun saveDraft(roomId: String, userDraft: UserDraft) {
         monarchy.awaitTransaction {
-            saveDraft(it, userDraft, roomId)
+            saveDraftInDb(it, userDraft, roomId)
         }
     }
 
     suspend fun deleteDraft(roomId: String) {
         monarchy.awaitTransaction {
-            deleteDraft(it, roomId)
+            deleteDraftFromDb(it, roomId)
         }
     }
 
-    private fun deleteDraft(realm: Realm, roomId: String) {
-        UserDraftsEntity.where(realm, roomId).findFirst()?.let { userDraftsEntity ->
-            if (userDraftsEntity.userDrafts.isNotEmpty()) {
-                userDraftsEntity.userDrafts.removeAt(userDraftsEntity.userDrafts.size - 1)
-            }
+    fun getDraft(roomId: String): UserDraft? {
+        return realmSessionProvider.withRealm { realm ->
+            UserDraftsEntity.where(realm, roomId).findFirst()
+                    ?.userDrafts
+                    ?.firstOrNull()
+                    ?.let {
+                        DraftMapper.map(it)
+                    }
         }
     }
 
-    private fun saveDraft(realm: Realm, draft: UserDraft, roomId: String) {
+    fun getDraftsLive(roomId: String): LiveData<Optional<UserDraft>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { UserDraftsEntity.where(it, roomId) },
+                {
+                    it.userDrafts.map { draft ->
+                        DraftMapper.map(draft)
+                    }
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull()?.firstOrNull().toOptional()
+        }
+    }
+
+    private fun deleteDraftFromDb(realm: Realm, roomId: String) {
+        UserDraftsEntity.where(realm, roomId).findFirst()?.userDrafts?.clear()
+    }
+
+    private fun saveDraftInDb(realm: Realm, draft: UserDraft, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
                 ?: realm.createObject(roomId)
 
@@ -68,62 +91,15 @@ class DraftRepository @Inject constructor(@SessionDatabase private val monarchy:
         userDraftsEntity.let { userDraftEntity ->
             // Save only valid draft
             if (draft.isValid()) {
-                // Add a new draft or update the current one?
+                // Replace the current draft
                 val newDraft = DraftMapper.map(draft)
-
-                // Is it an update of the top draft?
-                val topDraft = userDraftEntity.userDrafts.lastOrNull()
-
-                if (topDraft == null) {
-                    Timber.d("Draft: create a new draft ${privacySafe(draft)}")
-                    userDraftEntity.userDrafts.add(newDraft)
-                } else if (topDraft.draftMode == DraftEntity.MODE_EDIT) {
-                    // top draft is an edit
-                    if (newDraft.draftMode == DraftEntity.MODE_EDIT) {
-                        if (topDraft.linkedEventId == newDraft.linkedEventId) {
-                            // Update the top draft
-                            Timber.d("Draft: update the top edit draft ${privacySafe(draft)}")
-                            topDraft.content = newDraft.content
-                        } else {
-                            // Check a previously EDIT draft with the same id
-                            val existingEditDraftOfSameEvent = userDraftEntity.userDrafts.find {
-                                it.draftMode == DraftEntity.MODE_EDIT && it.linkedEventId == newDraft.linkedEventId
-                            }
-
-                            if (existingEditDraftOfSameEvent != null) {
-                                // Ignore the new text, restore what was typed before, by putting the draft to the top
-                                Timber.d("Draft: restore a previously edit draft ${privacySafe(draft)}")
-                                userDraftEntity.userDrafts.remove(existingEditDraftOfSameEvent)
-                                userDraftEntity.userDrafts.add(existingEditDraftOfSameEvent)
-                            } else {
-                                Timber.d("Draft: add a new edit draft ${privacySafe(draft)}")
-                                userDraftEntity.userDrafts.add(newDraft)
-                            }
-                        }
-                    } else {
-                        // Add a new regular draft to the top
-                        Timber.d("Draft: add a new draft ${privacySafe(draft)}")
-                        userDraftEntity.userDrafts.add(newDraft)
-                    }
-                } else {
-                    // Top draft is not an edit
-                    if (newDraft.draftMode == DraftEntity.MODE_EDIT) {
-                        Timber.d("Draft: create a new edit draft ${privacySafe(draft)}")
-                        userDraftEntity.userDrafts.add(newDraft)
-                    } else {
-                        // Update the top draft
-                        Timber.d("Draft: update the top draft ${privacySafe(draft)}")
-                        topDraft.draftMode = newDraft.draftMode
-                        topDraft.content = newDraft.content
-                        topDraft.linkedEventId = newDraft.linkedEventId
-                    }
-                }
+                Timber.d("Draft: create a new draft ${privacySafe(draft)}")
+                userDraftEntity.userDrafts.clear()
+                userDraftEntity.userDrafts.add(newDraft)
             } else {
                 // There is no draft to save, so the composer was clear
                 Timber.d("Draft: delete a draft")
-
                 val topDraft = userDraftEntity.userDrafts.lastOrNull()
-
                 if (topDraft == null) {
                     Timber.d("Draft: nothing to do")
                 } else {
@@ -132,20 +108,6 @@ class DraftRepository @Inject constructor(@SessionDatabase private val monarchy:
                     userDraftEntity.userDrafts.remove(topDraft)
                 }
             }
-        }
-    }
-
-    fun getDraftsLive(roomId: String): LiveData<List<UserDraft>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { UserDraftsEntity.where(it, roomId) },
-                {
-                    it.userDrafts.map { draft ->
-                        DraftMapper.map(draft)
-                    }
-                }
-        )
-        return Transformations.map(liveData) {
-            it.firstOrNull().orEmpty()
         }
     }
 

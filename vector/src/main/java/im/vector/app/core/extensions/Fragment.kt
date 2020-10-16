@@ -17,7 +17,11 @@
 package im.vector.app.core.extensions
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Parcelable
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
@@ -25,6 +29,10 @@ import im.vector.app.core.utils.selectTxtFileToWrite
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+fun Fragment.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
+    return registerForActivityResult(ActivityResultContracts.StartActivityForResult(), onResult)
+}
 
 fun VectorBaseFragment.addFragment(
         frameId: Int,
@@ -160,26 +168,24 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
 
-fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
+fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     selectTxtFileToWrite(
             activity = requireActivity(),
-            fragment = this,
+            activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = requestCode
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
 
-fun Activity.queryExportKeys(userId: String, requestCode: Int) {
+fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     selectTxtFileToWrite(
             activity = this,
-            fragment = null,
+            activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = requestCode
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

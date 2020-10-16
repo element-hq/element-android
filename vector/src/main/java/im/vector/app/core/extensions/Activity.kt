@@ -17,10 +17,19 @@
 package im.vector.app.core.extensions
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Parcelable
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import im.vector.app.core.platform.VectorBaseActivity
+
+fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
+    return registerForActivityResult(ActivityResultContracts.StartActivityForResult(), onResult)
+}
 
 fun VectorBaseActivity.addFragment(
         frameId: Int,

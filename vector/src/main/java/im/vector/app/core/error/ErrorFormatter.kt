@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.net.ssl.SSLException
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -45,60 +44,57 @@ class DefaultErrorFormatter @Inject constructor(
                 when (throwable.ioException) {
                     is SocketTimeoutException     ->
                         stringProvider.getString(R.string.error_network_timeout)
-                    is UnknownHostException       ->
-                        // Invalid homeserver?
-                        // TODO Check network state, airplane mode, etc.
-                        stringProvider.getString(R.string.login_error_unknown_host)
                     is SSLPeerUnverifiedException ->
                         stringProvider.getString(R.string.login_error_ssl_peer_unverified)
                     is SSLException               ->
                         stringProvider.getString(R.string.login_error_ssl_other)
                     else                          ->
+                        // TODO Check network state, airplane mode, etc.
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
             is Failure.ServerError       -> {
                 when {
-                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN         -> {
+                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN          -> {
                         // Special case for terms and conditions
                         stringProvider.getString(R.string.error_terms_not_accepted)
                     }
-                    throwable.isInvalidPassword()                                   -> {
+                    throwable.isInvalidPassword()                                    -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
-                    throwable.error.code == MatrixError.M_USER_IN_USE               -> {
+                    throwable.error.code == MatrixError.M_USER_IN_USE                -> {
                         stringProvider.getString(R.string.login_signup_error_user_in_use)
                     }
-                    throwable.error.code == MatrixError.M_BAD_JSON                  -> {
+                    throwable.error.code == MatrixError.M_BAD_JSON                   -> {
                         stringProvider.getString(R.string.login_error_bad_json)
                     }
-                    throwable.error.code == MatrixError.M_NOT_JSON                  -> {
+                    throwable.error.code == MatrixError.M_NOT_JSON                   -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_DENIED           -> {
+                    throwable.error.code == MatrixError.M_THREEPID_DENIED            -> {
                         stringProvider.getString(R.string.login_error_threepid_denied)
                     }
-                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED            -> {
+                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED             -> {
                         limitExceededError(throwable.error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND        -> {
+                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND         -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
                     }
-                    throwable.error.code == MatrixError.M_USER_DEACTIVATED          -> {
+                    throwable.error.code == MatrixError.M_USER_DEACTIVATED           -> {
                         stringProvider.getString(R.string.auth_invalid_login_deactivated_account)
                     }
                     throwable.error.code == MatrixError.M_THREEPID_IN_USE
-                            && throwable.error.message == "Email is already in use" -> {
+                            && throwable.error.message == "Email is already in use"  -> {
                         stringProvider.getString(R.string.account_email_already_used_error)
                     }
                     throwable.error.code == MatrixError.M_THREEPID_IN_USE
                             && throwable.error.message == "MSISDN is already in use" -> {
                         stringProvider.getString(R.string.account_phone_number_already_used_error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED      -> {
+                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED       -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
-                    else                                                            -> {
+                    else                                                             -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
                     }

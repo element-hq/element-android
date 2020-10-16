@@ -23,6 +23,7 @@ enum class JoinState {
     NOT_JOINED,
     JOINING,
     JOINING_ERROR,
+
     // Room is joined and this is confirmed by the sync
     JOINED
 }

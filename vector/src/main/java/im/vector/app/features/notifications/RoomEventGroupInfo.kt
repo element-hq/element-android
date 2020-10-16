@@ -26,6 +26,7 @@ data class RoomEventGroupInfo(
 ) {
     // An event in the list has not yet been display
     var hasNewEvent: Boolean = false
+
     // true if at least one on the not yet displayed event is noisy
     var shouldBing: Boolean = false
     var customSound: String? = null

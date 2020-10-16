@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +30,7 @@ import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
@@ -148,7 +148,7 @@ abstract class SyncService : Service() {
 
     private suspend fun doSync() {
         Timber.v("## Sync: Execute sync request with timeout $syncTimeoutSeconds seconds")
-        val params = SyncTask.Params(syncTimeoutSeconds * 1000L)
+        val params = SyncTask.Params(syncTimeoutSeconds * 1000L, SyncPresence.Offline)
         try {
             // never do that in foreground, let the syncThread work
             syncTask.execute(params)

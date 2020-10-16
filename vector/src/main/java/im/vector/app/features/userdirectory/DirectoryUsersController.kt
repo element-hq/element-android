@@ -21,10 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -32,6 +28,10 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class DirectoryUsersController @Inject constructor(private val session: Session,

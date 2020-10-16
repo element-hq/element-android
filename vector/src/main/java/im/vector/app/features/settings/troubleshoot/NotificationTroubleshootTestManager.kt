@@ -15,19 +15,27 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import kotlin.properties.Delegates
 
 class NotificationTroubleshootTestManager(val fragment: Fragment) {
+    private val testList = ArrayList<TroubleshootTest>()
 
-    val testList = ArrayList<TroubleshootTest>()
+    val testListSize: Int
+        get() = testList.size
+
     var isCancelled = false
+        private set
 
     var currentTestIndex by Delegates.observable(0) { _, _, _ ->
         statusListener?.invoke(this)
     }
+        private set
+
     val adapter = NotificationTroubleshootRecyclerViewAdapter(testList)
 
     var statusListener: ((NotificationTroubleshootTestManager) -> Unit)? = null
@@ -35,13 +43,14 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
     var diagStatus: TroubleshootTest.TestStatus by Delegates.observable(TroubleshootTest.TestStatus.NOT_STARTED) { _, _, _ ->
         statusListener?.invoke(this)
     }
+        private set
 
     fun addTest(test: TroubleshootTest) {
         testList.add(test)
         test.manager = this
     }
 
-    fun runDiagnostic() {
+    fun runDiagnostic(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (isCancelled) return
         currentTestIndex = 0
         val handler = Handler(Looper.getMainLooper())
@@ -60,7 +69,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
                             // Cosmetic: Start with a small delay for UI/UX reason (better animation effect) for non async tests
                             handler.postDelayed({
                                 if (fragment.isAdded) {
-                                    troubleshootTest.perform()
+                                    troubleshootTest.perform(activityResultLauncher)
                                 }
                             }, 600)
                         } else {
@@ -72,28 +81,36 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
             }
         }
         if (fragment.isAdded) {
-            testList.firstOrNull()?.perform()
+            testList.firstOrNull()?.perform(activityResultLauncher)
         }
     }
 
-    fun retry() {
-        for (test in testList) {
-            test.cancel()
-            test.description = null
-            test.quickFix = null
-            test.status = TroubleshootTest.TestStatus.NOT_STARTED
+    fun retry(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        testList.forEach {
+            it.cancel()
+            it.description = null
+            it.quickFix = null
+            it.status = TroubleshootTest.TestStatus.NOT_STARTED
         }
-        runDiagnostic()
+        runDiagnostic(activityResultLauncher)
+    }
+
+    fun hasQuickFix(): Boolean {
+        return testList.any { test ->
+            test.status == TroubleshootTest.TestStatus.FAILED && test.quickFix != null
+        }
     }
 
     fun cancel() {
         isCancelled = true
-        for (test in testList) {
-            test.cancel()
-        }
+        testList.forEach { it.cancel() }
     }
 
-    companion object {
-        const val REQ_CODE_FIX = 9099
+    fun onDiagnosticPushReceived() {
+        testList.forEach { it.onPushReceived() }
+    }
+
+    fun onDiagnosticNotificationClicked() {
+        testList.forEach { it.onNotificationClicked() }
     }
 }

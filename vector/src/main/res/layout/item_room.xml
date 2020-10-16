@@ -42,8 +42,9 @@
             android:layout_height="56dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
-            android:tint="@android:color/white"
-            android:visibility="visible" />
+            android:visibility="visible"
+            app:tint="@android:color/white"
+            tools:ignore="MissingPrefix" />
 
     </FrameLayout>
 
@@ -109,7 +110,9 @@
         app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
         app:layout_constraintStart_toEndOf="@+id/roomNameView"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"

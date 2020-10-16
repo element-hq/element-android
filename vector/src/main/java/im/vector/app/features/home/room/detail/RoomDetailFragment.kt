@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
@@ -53,6 +53,8 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.epoxy.addGlidePreloader
+import com.airbnb.epoxy.glidePreloader
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -71,10 +73,12 @@ import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -88,21 +92,18 @@ import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
-import im.vector.app.core.utils.onPermissionResultAudioIpCall
-import im.vector.app.core.utils.onPermissionResultVideoIpCall
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
+import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
@@ -135,7 +136,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
-import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.invite.VectorInviteView
@@ -203,8 +203,6 @@ data class RoomDetailArgs(
         val sharedData: SharedData? = null
 ) : Parcelable
 
-private const val REACTION_SELECT_REQUEST_CODE = 0
-
 class RoomDetailFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
@@ -218,7 +216,9 @@ class RoomDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val notificationUtils: NotificationUtils,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val imageContentRenderer: ImageContentRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -230,11 +230,6 @@ class RoomDetailFragment @Inject constructor(
         ActiveCallView.Callback {
 
     companion object {
-
-        private const val AUDIO_CALL_PERMISSION_REQUEST_CODE = 1
-        private const val VIDEO_CALL_PERMISSION_REQUEST_CODE = 2
-        private const val SAVE_ATTACHEMENT_REQUEST_CODE = 3
-
         /**
          * Sanitize the display name.
          *
@@ -367,6 +362,10 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
             }.exhaustive
         }
+
+        if (savedInstanceState == null) {
+            handleShareData()
+        }
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -397,9 +396,14 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val integrationManagerActivityResultLauncher = registerStartForActivityResult {
+        // Noop
+    }
+
     private fun openIntegrationManager(screen: String? = null) {
         navigator.openIntegrationManager(
-                fragment = this,
+                context = requireContext(),
+                activityResultLauncher = integrationManagerActivityResultLauncher,
                 roomId = roomDetailArgs.roomId,
                 integId = null,
                 screen = screen
@@ -436,7 +440,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
-        navigator.openStickerPicker(this, roomDetailArgs.roomId, event.widget)
+        navigator.openStickerPicker(requireContext(), stickerActivityResultLauncher, roomDetailArgs.roomId, event.widget)
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
@@ -476,21 +480,17 @@ class RoomDetailFragment @Inject constructor(
         navigator.openRoom(vectorBaseActivity, action.roomId)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState == null) {
-            when (val sharedData = roomDetailArgs.sharedData) {
-                is SharedData.Text        -> {
-                    // Save a draft to set the shared text to the composer
-                    roomDetailViewModel.handle(RoomDetailAction.SaveDraft(sharedData.text))
-                }
-                is SharedData.Attachments -> {
-                    // open share edition
-                    onContentAttachmentsReady(sharedData.attachmentData)
-                }
-                null                      -> Timber.v("No share data to process")
-            }.exhaustive
-        }
+    private fun handleShareData() {
+        when (val sharedData = roomDetailArgs.sharedData) {
+            is SharedData.Text        -> {
+                roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(sharedData.text, fromSharing = true))
+            }
+            is SharedData.Attachments -> {
+                // open share edition
+                onContentAttachmentsReady(sharedData.attachmentData)
+            }
+            null                      -> Timber.v("No share data to process")
+        }.exhaustive
     }
 
     override fun onDestroyView() {
@@ -614,8 +614,8 @@ class RoomDetailFragment @Inject constructor(
         withState(roomDetailViewModel) { state ->
             // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
             val callButtonsEnabled = when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
-                1 -> false
-                2 -> state.isAllowedToStartWebRTCCall
+                1    -> false
+                2    -> state.isAllowedToStartWebRTCCall
                 else -> state.isAllowedToManageWidgets
             }
             setOf(R.id.voice_call, R.id.video_call).forEach {
@@ -652,6 +652,14 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
                 true
             }
+            R.id.invite              -> {
+                navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
+                true
+            }
+            R.id.timeline_setting    -> {
+                navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+                true
+            }
             R.id.resend_all          -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
                 true
@@ -669,7 +677,19 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
+            R.id.search              -> {
+                handleSearchAction()
+                true
+            }
             else                     -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun handleSearchAction() {
+        if (session.getRoom(roomDetailArgs.roomId)?.isEncrypted() == false) {
+            navigator.openSearch(requireContext(), roomDetailArgs.roomId)
+        } else {
+            showDialogWithMessage(getString(R.string.search_is_not_supported_in_e2e_room))
         }
     }
 
@@ -700,7 +720,13 @@ class RoomDetailFragment @Inject constructor(
                     //                            safeStartCall(it, isVideoCall)
                     //                        }
                 } else if (!state.isAllowedToStartWebRTCCall) {
-                    showDialogWithMessage(getString(R.string.no_permissions_to_start_webrtc_call))
+                    showDialogWithMessage(getString(
+                            if (state.isDm()) {
+                                R.string.no_permissions_to_start_webrtc_call_in_direct_room
+                            } else {
+                                R.string.no_permissions_to_start_webrtc_call
+                            })
+                    )
                 } else {
                     safeStartCall(isVideoCall)
                 }
@@ -710,7 +736,13 @@ class RoomDetailFragment @Inject constructor(
                 // can you add widgets??
                 if (!state.isAllowedToManageWidgets) {
                     // You do not have permission to start a conference call in this room
-                    showDialogWithMessage(getString(R.string.no_permissions_to_start_conf_call))
+                    showDialogWithMessage(getString(
+                            if (state.isDm()) {
+                                R.string.no_permissions_to_start_conf_call_in_direct_room
+                            } else {
+                                R.string.no_permissions_to_start_conf_call
+                            }
+                    ))
                 } else {
                     if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
                         // A conference is already in progress!
@@ -756,19 +788,33 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(it)
+            }
+        } else {
+            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
     private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
         roomDetailViewModel.pendingAction = startCallAction
         if (isVideoCall) {
             if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
-                            this, VIDEO_CALL_PERMISSION_REQUEST_CODE,
+                            requireActivity(),
+                            startCallActivityResultLauncher,
                             R.string.permissions_rationale_msg_camera_and_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
         } else {
             if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
-                            this, AUDIO_CALL_PERMISSION_REQUEST_CODE,
+                            requireActivity(),
+                            startCallActivityResultLauncher,
                             R.string.permissions_rationale_msg_record_audio)) {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
@@ -834,6 +880,17 @@ class RoomDetailFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
+        roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
+        roomDetailPendingActionStore.data = null
+    }
+
+    private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
+        when (roomDetailPendingAction) {
+            is RoomDetailPendingAction.JumpToReadReceipt ->
+                roomDetailViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
+            is RoomDetailPendingAction.MentionUser       ->
+                insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
+        }.exhaustive
     }
 
     override fun onPause() {
@@ -844,27 +901,63 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.SaveDraft(composerLayout.composerEditText.text.toString()))
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
-        if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
-            when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE        -> {
-                    val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
-                }
-                REACTION_SELECT_REQUEST_CODE                   -> {
-                    val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
-                    roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
-                }
-                WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE -> {
-                    val content = WidgetActivity.getOutput(data).toModel<MessageStickerContent>() ?: return
-                    roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
-                }
+    private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onImageResult(it.data)
+        }
+    }
+
+    private val attachmentAudioActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onAudioResult(it.data)
+        }
+    }
+
+    private val attachmentContactActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onContactResult(it.data)
+        }
+    }
+
+    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onImageResult(it.data)
+        }
+    }
+
+    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onPhotoResult()
+        }
+    }
+
+    private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        val data = activityResult.data ?: return@registerStartForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val sendData = AttachmentsPreviewActivity.getOutput(data)
+            val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
+        }
+    }
+
+    private val emojiActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val eventId = EmojiReactionPickerActivity.getOutputEventId(activityResult.data)
+            val reaction = EmojiReactionPickerActivity.getOutputReaction(activityResult.data)
+            if (eventId != null && reaction != null) {
+                roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
             }
         }
-        // TODO why don't we call super here?
-        // super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private val stickerActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        val data = activityResult.data ?: return@registerStartForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            WidgetActivity.getOutput(data).toModel<MessageStickerContent>()
+                    ?.let { content ->
+                        roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
+                    }
+        }
     }
 
 // PRIVATE METHODS *****************************************************************************
@@ -921,6 +1014,16 @@ class RoomDetailFragment @Inject constructor(
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
+        recyclerView.addGlidePreloader(
+                epoxyController = timelineEventController,
+                requestManager = GlideApp.with(this),
+                preloader = glidePreloader { requestManager, epoxyModel: MessageImageVideoItem, _ ->
+                    imageContentRenderer.createGlideRequest(
+                            epoxyModel.mediaData,
+                            ImageContentRenderer.Mode.THUMBNAIL,
+                            requestManager as GlideRequests
+                    )
+                })
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
@@ -946,6 +1049,18 @@ class RoomDetailFragment @Inject constructor(
                 }
                 jumpToReadMarkerView?.isVisible = showJumpToUnreadBanner
             }
+        }
+    }
+
+    private val writingFileActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            val pendingUri = roomDetailViewModel.pendingUri
+            if (pendingUri != null) {
+                roomDetailViewModel.pendingUri = null
+                sendUri(pendingUri)
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
         }
     }
 
@@ -976,12 +1091,12 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onCloseRelatedMessage() {
-                roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.text.toString()))
+                roomDetailViewModel.handle(RoomDetailAction.EnterRegularMode(composerLayout.text.toString(), false))
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment, PERMISSION_REQUEST_CODE_INCOMING_URI)) {
+                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), writingFileActivityResultLauncher)) {
                     sendUri(contentUri)
                 } else {
                     roomDetailViewModel.pendingUri = contentUri
@@ -1109,12 +1224,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: RoomDetailViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is RoomDetailViewEvents.MessageSent                -> {
-                updateComposerText("")
-            }
             is RoomDetailViewEvents.SlashCommandHandled        -> {
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
-                updateComposerText("")
             }
             is RoomDetailViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -1375,52 +1486,11 @@ class RoomDetailFragment @Inject constructor(
 // //        }
 //    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            when (requestCode) {
-                SAVE_ATTACHEMENT_REQUEST_CODE           -> {
-                    sharedActionViewModel.pendingAction?.let {
-                        handleActions(it)
-                        sharedActionViewModel.pendingAction = null
-                    }
-                }
-                PERMISSION_REQUEST_CODE_INCOMING_URI    -> {
-                    val pendingUri = roomDetailViewModel.pendingUri
-                    if (pendingUri != null) {
-                        roomDetailViewModel.pendingUri = null
-                        sendUri(pendingUri)
-                    }
-                }
-                PERMISSION_REQUEST_CODE_PICK_ATTACHMENT -> {
-                    val pendingType = attachmentsHelper.pendingType
-                    if (pendingType != null) {
-                        attachmentsHelper.pendingType = null
-                        launchAttachmentProcess(pendingType)
-                    }
-                }
-                AUDIO_CALL_PERMISSION_REQUEST_CODE      -> {
-                    if (onPermissionResultAudioIpCall(requireContext(), grantResults)) {
-                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                            roomDetailViewModel.pendingAction = null
-                            roomDetailViewModel.handle(it)
-                        }
-                    }
-                }
-                VIDEO_CALL_PERMISSION_REQUEST_CODE      -> {
-                    if (onPermissionResultVideoIpCall(requireContext(), grantResults)) {
-                        (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                            roomDetailViewModel.pendingAction = null
-                            roomDetailViewModel.handle(it)
-                        }
-                    }
-                }
-            }
-        } else {
-            // Reset all pending data
-            roomDetailViewModel.pendingAction = null
-            roomDetailViewModel.pendingUri = null
-            attachmentsHelper.pendingType = null
-        }
+    private fun cleanUpAfterPermissionNotGranted() {
+        // Reset all pending data
+        roomDetailViewModel.pendingAction = null
+        roomDetailViewModel.pendingUri = null
+        attachmentsHelper.pendingType = null
     }
 
 //    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
@@ -1518,26 +1588,41 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        session.fileService().downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                id = action.eventId,
-                fileName = action.messageContent.body,
-                mimeType = action.messageContent.mimeType,
-                url = action.messageContent.getFileUrl(),
-                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        if (isAdded) {
-                            shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+        if (action.messageContent is MessageTextContent) {
+            shareText(requireContext(), action.messageContent.body)
+        } else if (action.messageContent is MessageWithAttachmentContent) {
+            session.fileService().downloadFile(
+                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                    id = action.eventId,
+                    fileName = action.messageContent.body,
+                    mimeType = action.messageContent.mimeType,
+                    url = action.messageContent.getFileUrl(),
+                    elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    callback = object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            if (isAdded) {
+                                shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
+    }
+
+    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            sharedActionViewModel.pendingAction?.let {
+                handleActions(it)
+                sharedActionViewModel.pendingAction = null
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
+        }
     }
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, SAVE_ATTACHEMENT_REQUEST_CODE)) {
+                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), saveActionActivityResultLauncher)) {
             sharedActionViewModel.pendingAction = action
             return
         }
@@ -1570,7 +1655,7 @@ class RoomDetailFragment @Inject constructor(
                 openRoomMemberProfile(action.userId)
             }
             is EventSharedAction.AddReaction                -> {
-                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
+                emojiActivityResultLauncher.launch(EmojiReactionPickerActivity.intent(requireContext(), action.eventId))
             }
             is EventSharedAction.ViewReactions              -> {
                 ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
@@ -1775,8 +1860,20 @@ class RoomDetailFragment @Inject constructor(
 
 // AttachmentTypeSelectorView.Callback
 
+    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            val pendingType = attachmentsHelper.pendingType
+            if (pendingType != null) {
+                attachmentsHelper.pendingType = null
+                launchAttachmentProcess(pendingType)
+            }
+        } else {
+            cleanUpAfterPermissionNotGranted()
+        }
+    }
+
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
+        if (checkPermissions(type.permissionsBit, requireActivity(), typeSelectedActivityResultLauncher)) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type
@@ -1785,11 +1882,11 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(this)
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(this)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentImageActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
         }.exhaustive
     }
@@ -1808,7 +1905,7 @@ class RoomDetailFragment @Inject constructor(
             }
             if (grouped.previewables.isNotEmpty()) {
                 val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
-                startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+                contentAttachmentActivityResultLauncher.launch(intent)
             }
         }
     }

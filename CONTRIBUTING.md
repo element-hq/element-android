@@ -40,7 +40,7 @@ For now, the Matrix SDK and the Element application are in the same project. So 
 ## I want to help translating Element
 
 If you want to fix an issue with an English string, please submit a PR.
-If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.riot.im/projects/element-android/).
+If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.element.io/projects/element-android/).
 
 ## I want to submit a PR to fix an issue
 

@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +35,7 @@ data class PollSummaryContent(
         return votes?.size ?: 0
     }
 
-    fun voteCountForOption(optionIndex: Int) : Int {
+    fun voteCountForOption(optionIndex: Int): Int {
         return votes?.filter { it.optionIndex == optionIndex }?.count() ?: 0
     }
 }

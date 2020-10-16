@@ -19,8 +19,9 @@
                 android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tint="?riotx_text_primary"
-                tools:src="@drawable/ic_logo_matrix_org" />
+                tools:src="@drawable/ic_logo_matrix_org"
+                app:tint="?riotx_text_primary"
+                tools:ignore="MissingPrefix" />
 
             <TextView
                 android:id="@+id/loginTitle"
@@ -94,8 +95,9 @@
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
                     android:src="@drawable/ic_eye"
-                    android:tint="?attr/colorAccent"
-                    tools:contentDescription="@string/a11y_show_password" />
+                    tools:contentDescription="@string/a11y_show_password"
+                    app:tint="?attr/colorAccent"
+                    tools:ignore="MissingPrefix" />
 
             </FrameLayout>
 

@@ -27,6 +27,7 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
@@ -114,6 +115,10 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         handleSystemPreference()
     }
 
+    private val batteryStartForActivityResult = registerStartForActivityResult {
+        // Noop
+    }
+
     // BackgroundSyncModeChooserDialog.InteractionListener
     override fun onOptionSelected(mode: BackgroundSyncMode) {
         // option has change, need to act
@@ -122,9 +127,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
             if (!isIgnoringBatteryOptimizations(requireContext())) {
-                requestDisablingBatteryOptimization(requireActivity(),
-                        this@VectorSettingsNotificationPreferenceFragment,
-                        REQUEST_BATTERY_OPTIMIZATION)
+                requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
@@ -210,27 +213,22 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, vectorPreferences.getNotificationRingTone())
                 }
 
-                startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
+                ringtoneStartForActivityResult.launch(intent)
                 false
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_NOTIFICATION_RINGTONE -> {
-                    vectorPreferences.setNotificationRingTone(data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
+    private val ringtoneStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            vectorPreferences.setNotificationRingTone(activityResult.data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
-                    // test if the selected ring tone can be played
-                    val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
-                    if (null != notificationRingToneName) {
-                        vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
-                                .summary = notificationRingToneName
-                    }
-                }
+            // test if the selected ring tone can be played
+            val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
+            if (null != notificationRingToneName) {
+                vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
+                findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
+                        .summary = notificationRingToneName
             }
         }
     }
@@ -339,10 +337,5 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                                 }
                             })
                 }
-    }
-
-    companion object {
-        private const val REQUEST_NOTIFICATION_RINGTONE = 888
-        private const val REQUEST_BATTERY_OPTIMIZATION = 500
     }
 }

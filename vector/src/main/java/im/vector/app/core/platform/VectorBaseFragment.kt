@@ -58,7 +58,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
 
-    val vectorBaseActivity: VectorBaseActivity by lazy {
+    protected val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
     }
 
@@ -112,7 +112,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Timber.i("onCreateView Fragment ${this.javaClass.simpleName}")
+        Timber.i("onCreateView Fragment ${javaClass.simpleName}")
         return inflater.inflate(getLayoutResId(), container, false)
     }
 
@@ -122,7 +122,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onResume() {
         super.onResume()
-        Timber.i("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.i("onResume Fragment ${javaClass.simpleName}")
     }
 
     @CallSuper
@@ -142,7 +142,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.i("onDestroyView Fragment ${this.javaClass.simpleName}")
+        Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         mUnBinder?.unbind()
         mUnBinder = null
         uiDisposables.clear()

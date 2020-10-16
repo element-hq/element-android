@@ -16,9 +16,9 @@
 package im.vector.app.features.crypto.keysbackup.restore
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Observer
@@ -27,18 +27,14 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import timber.log.Timber
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class KeysBackupRestoreFromKeyFragment @Inject constructor()
     : VectorBaseFragment() {
-
-    companion object {
-
-        private const val REQUEST_TEXT_FILE_GET = 1
-    }
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_key
 
@@ -47,11 +43,12 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
 
     @BindView(R.id.keys_backup_key_enter_til)
     lateinit var mKeyInputLayout: TextInputLayout
+
     @BindView(R.id.keys_restore_key_enter_edittext)
     lateinit var mKeyTextEdit: EditText
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromKeyViewModel::class.java)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         mKeyTextEdit.setText(viewModel.recoveryCode.value)
@@ -88,29 +85,23 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
 
     @OnClick(R.id.keys_backup_import)
     fun onImport() {
-        startImportTextFromFileIntent(this, REQUEST_TEXT_FILE_GET)
+        startImportTextFromFileIntent(requireContext(), textFileStartForActivityResult)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_TEXT_FILE_GET && resultCode == Activity.RESULT_OK) {
-            val dataURI = data?.data
-            if (dataURI != null) {
-                try {
-                    activity
-                            ?.contentResolver
-                            ?.openInputStream(dataURI)
-                            ?.bufferedReader()
-                            ?.use { it.readText() }
-                            ?.let {
-                                mKeyTextEdit.setText(it)
-                                mKeyTextEdit.setSelection(it.length)
-                            }
-                } catch (e: Exception) {
-                    Timber.e(e, "Failed to read recovery kay from text")
-                }
+    private val textFileStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val dataURI = activityResult.data?.data ?: return@registerStartForActivityResult
+            tryOrNull(message = "Failed to read recovery kay from text") {
+                activity
+                        ?.contentResolver
+                        ?.openInputStream(dataURI)
+                        ?.bufferedReader()
+                        ?.use { it.readText() }
+                        ?.let {
+                            mKeyTextEdit.setText(it)
+                            mKeyTextEdit.setSelection(it.length)
+                        }
             }
-            return
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -17,15 +17,20 @@
 
 package im.vector.app.features.roomprofile
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -36,10 +41,12 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import java.util.UUID
 
-class RoomProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomProfileViewState,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session)
-    : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
+class RoomProfileViewModel @AssistedInject constructor(
+        @Assisted private val initialState: RoomProfileViewState,
+        private val stringProvider: StringProvider,
+        private val shortcutCreator: ShortcutCreator,
+        private val session: Session
+) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -88,11 +95,24 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted private val ini
                 }
     }
 
-    override fun handle(action: RoomProfileAction) = when (action) {
-        RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
-        is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-        is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
-        is RoomProfileAction.ChangeRoomAvatar            -> handleChangeAvatar(action)
+    override fun handle(action: RoomProfileAction) {
+        when (action) {
+            RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
+            is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+            is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
+            is RoomProfileAction.ChangeRoomAvatar            -> handleChangeAvatar(action)
+            RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
+        }.exhaustive
+    }
+
+    private fun handleCreateShortcut() {
+        viewModelScope.launch(Dispatchers.IO) {
+            withState { state ->
+                state.roomSummary()
+                        ?.let { shortcutCreator.create(it) }
+                        ?.let { _viewEvents.post(RoomProfileViewEvents.OnShortcutReady(it)) }
+            }
+        }
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {

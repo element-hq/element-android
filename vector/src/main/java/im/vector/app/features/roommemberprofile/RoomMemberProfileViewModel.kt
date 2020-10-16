@@ -85,7 +85,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         setState {
             copy(
                     isMine = session.myUserId == this.userId,
-                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized
+                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized,
+                    hasReadReceipt = room?.getUserReadReceipt(initialState.userId) != null
             )
         }
         observeIgnoredState()

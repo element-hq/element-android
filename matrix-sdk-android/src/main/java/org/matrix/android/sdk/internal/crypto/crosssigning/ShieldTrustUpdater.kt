@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +43,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
-): SessionLifecycleObserver {
+) : SessionLifecycleObserver {
 
     companion object {
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")

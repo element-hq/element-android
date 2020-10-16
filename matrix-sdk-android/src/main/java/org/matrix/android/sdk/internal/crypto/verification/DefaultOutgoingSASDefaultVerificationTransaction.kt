@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -139,7 +138,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 
     override fun onVerificationAccept(accept: ValidVerificationInfoAccept) {
         Timber.v("## SAS O: onVerificationAccept id:$transactionId")
-        if (state != VerificationTxState.Started && state !=  VerificationTxState.SendingStart) {
+        if (state != VerificationTxState.Started && state != VerificationTxState.SendingStart) {
             Timber.e("## SAS O: received accept request from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
@@ -213,7 +212,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
                 // - the Matrix ID of the user who sent the m.key.verification.accept message,
                 // - he device ID of the device that sent the m.key.verification.accept message
                 // - the transaction ID.
-                val sasInfo =  "MATRIX_KEY_VERIFICATION_SAS$userId$deviceId$otherUserId$otherDeviceId$transactionId"
+                val sasInfo = "MATRIX_KEY_VERIFICATION_SAS$userId$deviceId$otherUserId$otherDeviceId$transactionId"
 
                 // decimal: generate five bytes by using HKDF.
                 // emoji: generate six bytes by using HKDF.
@@ -221,7 +220,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
             }
             KEY_AGREEMENT_V2 -> {
                 // Adds the SAS public key, and separate by |
-                val sasInfo =  "MATRIX_KEY_VERIFICATION_SAS|$userId|$deviceId|${getSAS().publicKey}|$otherUserId|$otherDeviceId|$otherKey|$transactionId"
+                val sasInfo = "MATRIX_KEY_VERIFICATION_SAS|$userId|$deviceId|${getSAS().publicKey}|$otherUserId|$otherDeviceId|$otherKey|$transactionId"
                 return getSAS().generateShortCode(sasInfo, 6)
             }
             else             -> {

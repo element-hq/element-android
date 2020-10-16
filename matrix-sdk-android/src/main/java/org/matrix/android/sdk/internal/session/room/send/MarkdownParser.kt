@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,8 +68,8 @@ internal class MarkdownParser @Inject constructor(
         return this
                 // Remove extra space before and after the content
                 .trim()
-                // There is no need to include new line in an html-like source
-                // But new line can be in embedded code block, so do not remove them
-                // .replace("\n", "")
+        // There is no need to include new line in an html-like source
+        // But new line can be in embedded code block, so do not remove them
+        // .replace("\n", "")
     }
 }

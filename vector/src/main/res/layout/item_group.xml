@@ -45,10 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="21dp"
         android:src="@drawable/ic_arrow_right"
-        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <View
         android:id="@+id/groupBottomSeparator"

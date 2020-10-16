@@ -18,19 +18,22 @@
 package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import im.vector.app.R
+import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
+        private val shortcutCreator: ShortcutCreator,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomProfileViewState>() {
 
@@ -44,6 +47,7 @@ class RoomProfileController @Inject constructor(
         fun onBannedMemberListClicked()
         fun onNotificationsClicked()
         fun onUploadsClicked()
+        fun createShortcut()
         fun onSettingsClicked()
         fun onLeaveRoomClicked()
         fun onRoomIdClicked()
@@ -54,12 +58,26 @@ class RoomProfileController @Inject constructor(
             return
         }
         val roomSummary = data.roomSummary() ?: return
+
+        // Topic
+        roomSummary
+                .topic
+                .takeIf { it.isNotEmpty() }
+                ?.let {
+                    buildProfileSection(stringProvider.getString(R.string.room_settings_topic))
+                    expandableTextItem {
+                        id("topic")
+                        content(it)
+                        maxLines(2)
+                    }
+                }
+
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
         val learnMoreSubtitle = if (roomSummary.isEncrypted) {
-            R.string.room_profile_encrypted_subtitle
+            if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
         } else {
-            R.string.room_profile_not_encrypted_subtitle
+            if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
         }
         genericFooterItem {
             id("e2e info")
@@ -71,7 +89,11 @@ class RoomProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
                 id = "settings",
-                title = stringProvider.getString(R.string.room_profile_section_more_settings),
+                title = stringProvider.getString(if (roomSummary.isDirect) {
+                    R.string.direct_room_profile_section_more_settings
+                } else {
+                    R.string.room_profile_section_more_settings
+                }),
                 dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
@@ -110,12 +132,27 @@ class RoomProfileController @Inject constructor(
                 icon = R.drawable.ic_room_profile_uploads,
                 action = { callback?.onUploadsClicked() }
         )
+        if (shortcutCreator.canCreateShortcut()) {
+            buildProfileAction(
+                    id = "shortcut",
+                    title = stringProvider.getString(R.string.room_settings_add_homescreen_shortcut),
+                    dividerColor = dividerColor,
+                    editable = false,
+                    icon = R.drawable.ic_add_to_home_screen_24dp,
+                    action = { callback?.createShortcut() }
+            )
+        }
         buildProfileAction(
                 id = "leave",
-                title = stringProvider.getString(R.string.room_profile_section_more_leave),
+                title = stringProvider.getString(if (roomSummary.isDirect) {
+                    R.string.direct_room_profile_section_more_leave
+                } else {
+                    R.string.room_profile_section_more_leave
+                }),
                 dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
+                icon = R.drawable.ic_room_actions_leave,
                 editable = false,
                 action = { callback?.onLeaveRoomClicked() }
         )

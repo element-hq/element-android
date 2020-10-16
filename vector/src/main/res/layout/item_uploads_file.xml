@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:src="@drawable/ic_file"
-        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/uploadsFileTitle"
@@ -55,10 +56,11 @@
         android:layout_height="@dimen/layout_touch_size"
         android:scaleType="center"
         android:src="@drawable/ic_download"
-        android:tint="?colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionShare"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorAccent"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/uploadsFileActionShare"
@@ -67,9 +69,10 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:scaleType="center"
         android:src="@drawable/ic_material_share"
-        android:tint="?colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorAccent"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

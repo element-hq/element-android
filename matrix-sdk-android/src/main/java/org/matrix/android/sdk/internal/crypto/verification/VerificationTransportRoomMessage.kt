@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,7 +118,7 @@ internal class VerificationTransportRoomMessage(
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
                             when (wInfo.state) {
-                                WorkInfo.State.FAILED -> {
+                                WorkInfo.State.FAILED    -> {
                                     tx?.cancel(onErrorReason)
                                     workLiveData.removeObserver(this)
                                 }
@@ -136,7 +135,7 @@ internal class VerificationTransportRoomMessage(
                                     }
                                     workLiveData.removeObserver(this)
                                 }
-                                else -> {
+                                else                     -> {
                                     // nop
                                 }
                             }

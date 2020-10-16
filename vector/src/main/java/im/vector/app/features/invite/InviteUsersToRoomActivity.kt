@@ -112,9 +112,10 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume {  addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
             }
         }
     }

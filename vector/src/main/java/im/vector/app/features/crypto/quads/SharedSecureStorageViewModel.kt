@@ -33,6 +33,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
@@ -40,19 +43,26 @@ import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 data class SharedSecureStorageViewState(
         val ready: Boolean = false,
         val hasPassphrase: Boolean = true,
-        val useKey: Boolean = false,
         val passphraseVisible: Boolean = false,
-        val checkingSSSSAction: Async<Unit> = Uninitialized
-) : MvRxState
+        val checkingSSSSAction: Async<Unit> = Uninitialized,
+        val step: Step = Step.EnterPassphrase,
+        val activeDeviceCount: Int = 0,
+        val showResetAllAction: Boolean = false,
+        val userId: String = ""
+) : MvRxState {
+    enum class Step {
+        EnterPassphrase,
+        EnterKey,
+        ResetAll
+    }
+}
 
 class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted initialState: SharedSecureStorageViewState,
@@ -67,6 +77,10 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     }
 
     init {
+
+        setState {
+            copy(userId = session.myUserId)
+        }
         val isValid = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(args.requestedSecrets, args.keyId) is IntegrityResult.Success
         if (!isValid) {
             _viewEvents.post(
@@ -86,20 +100,30 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             if (info.content.passphrase != null) {
                 setState {
                     copy(
-                            ready = true,
                             hasPassphrase = true,
-                            useKey = false
+                            ready = true,
+                            step = SharedSecureStorageViewState.Step.EnterPassphrase
                     )
                 }
             } else {
                 setState {
                     copy(
+                            hasPassphrase = false,
                             ready = true,
-                            hasPassphrase = false
+                            step = SharedSecureStorageViewState.Step.EnterKey
                     )
                 }
             }
         }
+
+        session.rx()
+                .liveUserCryptoDevices(session.myUserId)
+                .distinctUntilChanged()
+                .execute {
+                    copy(
+                            activeDeviceCount = it.invoke()?.size ?: 0
+                    )
+                }
     }
 
     override fun handle(action: SharedSecureStorageAction) = withState {
@@ -110,27 +134,52 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             SharedSecureStorageAction.UseKey                      -> handleUseKey()
             is SharedSecureStorageAction.SubmitKey                -> handleSubmitKey(action)
             SharedSecureStorageAction.Back                        -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll              -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll                  -> handleDoResetAll()
         }.exhaustive
+    }
+
+    private fun handleDoResetAll() {
+        _viewEvents.post(SharedSecureStorageViewEvent.ShowResetBottomSheet)
+    }
+
+    private fun handleResetAll() {
+        setState {
+            copy(
+                    step = SharedSecureStorageViewState.Step.ResetAll
+            )
+        }
     }
 
     private fun handleUseKey() {
         setState {
             copy(
-                    useKey = true
+                    step = SharedSecureStorageViewState.Step.EnterKey
             )
         }
     }
 
     private fun handleBack() = withState { state ->
         if (state.checkingSSSSAction is Loading) return@withState // ignore
-        if (state.hasPassphrase && state.useKey) {
-            setState {
-                copy(
-                        useKey = false
-                )
+        when (state.step) {
+            SharedSecureStorageViewState.Step.EnterKey -> {
+                setState {
+                    copy(
+                            step = SharedSecureStorageViewState.Step.EnterPassphrase
+                    )
+                }
             }
-        } else {
-            _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
+            SharedSecureStorageViewState.Step.ResetAll -> {
+                setState {
+                    copy(
+                            step = if (state.hasPassphrase) SharedSecureStorageViewState.Step.EnterPassphrase
+                            else SharedSecureStorageViewState.Step.EnterKey
+                    )
+                }
+            }
+            else                                       -> {
+                _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
+            }
         }
     }
 
@@ -158,6 +207,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 val keySpec = RawBytesKeySpec.fromRecoveryKey(recoveryKey) ?: return@launch Unit.also {
                     _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
+                    setState { copy(checkingSSSSAction = Fail(IllegalArgumentException(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))) }
                 }
 
                 withContext(Dispatchers.IO) {

@@ -4,47 +4,47 @@
     <string name="summary_user_sent_image">Uživatel %1$s poslal obrázek.</string>
     <string name="summary_user_sent_sticker">Uživatel %1$s poslal nálepku.</string>
 
-    <string name="notice_room_invite_no_invitee">Pozvánka od uživatele %s</string>
+    <string name="notice_room_invite_no_invitee">Pozvání od uživatele %s</string>
     <string name="notice_room_invite">Uživatel %1$s pozval uživatele %2$s</string>
     <string name="notice_room_invite_you">Uživatel %1$s vás pozval</string>
-    <string name="notice_room_join">Uživatel %1$s se připojil</string>
+    <string name="notice_room_join">%1$s vstoupil do místnosti</string>
     <string name="notice_room_leave">Uživatel %1$s odešel</string>
-    <string name="notice_room_reject">Uživatel %1$s odmítl pozvání</string>
-    <string name="notice_room_kick">Uživatel %1$s vykopl uživatele %2$s</string>
-    <string name="notice_room_unban">Uživatel %1$s znovu povolil vstup uživateli %2$s</string>
-    <string name="notice_room_ban">Uživatel %1$s vykázal uživatele %2$s</string>
-    <string name="notice_room_withdraw">Uživatel %1$s zrušil pozvání pro uživatele %2$s</string>
-    <string name="notice_avatar_url_changed">Uživatel %1$s změnil svůj profilový obrázek</string>
-    <string name="notice_display_name_set">Uživatel %1$s nastavil své zobrazované jméno na %2$s</string>
-    <string name="notice_display_name_changed_from">Uživatel %1$s změnil své zobrazované jméno z %2$s na %3$s</string>
-    <string name="notice_display_name_removed">Uživatel %1$s odstranil své zobrazované jméno (%2$s)</string>
-    <string name="notice_room_topic_changed">Uživatel %1$s změnil téma na: %2$s</string>
-    <string name="notice_room_name_changed">Uživatel %1$s změnil název místnosti na: %2$s</string>
-    <string name="notice_placed_video_call">Uživatel %s uskutečnil videohovor.</string>
-    <string name="notice_placed_voice_call">Uživatel %s uskutečnil hlasový hovor.</string>
-    <string name="notice_answered_call">Uživatel %s přijal hovor.</string>
-    <string name="notice_ended_call">Uživatel %s ukončil hovor.</string>
-    <string name="notice_made_future_room_visibility">Uživatel %1$s nastavit viditelnost budoucích zpráv v místnosti pro %2$s</string>
+    <string name="notice_room_reject">%1$s odmítli pozvání</string>
+    <string name="notice_room_kick">%1$s vykopli %2$s</string>
+    <string name="notice_room_unban">%1$s zrušil vykázání %2$s</string>
+    <string name="notice_room_ban">%1$s vykázali %2$s</string>
+    <string name="notice_room_withdraw">%1$s zrušili pozvání pro %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s změnili svůj profilový obrázek</string>
+    <string name="notice_display_name_set">%1$s nastavili své veřejné jméno na %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s změnili své veřejné jméno z %2$s na %3$s</string>
+    <string name="notice_display_name_removed">%1$s odstranili své veřejné jméno (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s změnili téma na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s změnili název místnosti na: %2$s</string>
+    <string name="notice_placed_video_call">%s uskutečnili videohovor.</string>
+    <string name="notice_placed_voice_call">%s uskutečnili hlasový hovor.</string>
+    <string name="notice_answered_call">%s přijali hovor.</string>
+    <string name="notice_ended_call">%s ukončili hovor.</string>
+    <string name="notice_made_future_room_visibility">%1$s nastavili viditelnost budoucí historie místnosti pro %2$s</string>
     <string name="notice_room_visibility_invited">všechny členy místnosti od chvíle, kdy budou pozváni.</string>
     <string name="notice_room_visibility_joined">všechny členy místnosti od chvíle, kdy se připojí.</string>
     <string name="notice_room_visibility_shared">všechny členy místnosti.</string>
     <string name="notice_room_visibility_world_readable">kohokoliv.</string>
     <string name="notice_room_visibility_unknown">neznámým (%s).</string>
-    <string name="notice_end_to_end">Uživatel %1$s zapnul end-to-end šifrování (%2$s)</string>
+    <string name="notice_end_to_end">%1$s zapnuli end-to-end šifrování (%2$s)</string>
 
-    <string name="notice_requested_voip_conference">Uživatel %1$s požádal o VoIP konferenci</string>
+    <string name="notice_requested_voip_conference">%1$s požádali o VoIP konferenci</string>
     <string name="notice_voip_started">Začala VoIP konference</string>
     <string name="notice_voip_finished">VoIP konference skončila</string>
 
     <string name="notice_avatar_changed_too">(profilový obrázek byl také změněn)</string>
-    <string name="notice_room_name_removed">Uživatel %1$s odstranil název místnosti</string>
-    <string name="notice_room_topic_removed">Uživatel %1$s odstranil téma místnosti</string>
-    <string name="notice_profile_change_redacted">Uživatel %1$s aktualizoval svůj profil %2$s</string>
-    <string name="notice_room_third_party_invite">Uživatel %1$s do této místnosti pozval uživatele %2$s</string>
-    <string name="notice_room_third_party_registered_invite">Uživatel %1$s přijal pozvání pro %2$s</string>
+    <string name="notice_room_name_removed">%1$s odstranili název místnosti</string>
+    <string name="notice_room_topic_removed">%1$s odstranili téma místnosti</string>
+    <string name="notice_profile_change_redacted">%1$s aktualizovali svůj profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s do této místnosti pozvali %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s přijali pozvání pro %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Nelze dešifrovat: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Odesílatelovo zařízení neposlalo klíče pro tuto zprávu.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Odesílatelovo zařízení nám neposlalo klíče pro tuto zprávu.</string>
 
     <string name="could_not_redact">Nelze vymazat</string>
     <string name="unable_to_send_message">Zprávu nelze odeslat</string>
@@ -54,7 +54,7 @@
     <string name="network_error">Chyba sítě</string>
     <string name="matrix_error">Chyba v Matrixu</string>
 
-    <string name="room_error_join_failed_empty_room">V současnosti není možné se znovu připojit do prázdné místnosti.</string>
+    <string name="room_error_join_failed_empty_room">V současnosti není možné znovu vstoupit do prázdné místnosti.</string>
 
     <string name="encrypted_message">Šifrovaná zpráva</string>
 
@@ -74,35 +74,161 @@
 
     <string name="room_displayname_empty_room">Prázdná místnost</string>
 
-    <string name="notice_room_update">Uživatel %s upgradoval tuto místnost.</string>
+    <string name="notice_room_update">%s povýšili tuto místnost.</string>
 
     <string name="notice_event_redacted_with_reason">Zpráva byla smazána [důvod: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Zpráva smazána uživatelem %1$s [důvod: %2$s]</string>
-    <string name="notice_room_third_party_revoked_invite">Uživatel %1$s obnovil pozvánku do místnosti pro uživatele %2$s</string>
-    <string name="initial_sync_start_importing_account">Úvodní synchronizace:
-\nImport účtu…</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s zrušili pozvánku do místnosti pro %2$s</string>
+    <string name="initial_sync_start_importing_account">Úvodní synchronizace: 
+\nImportuji účet…</string>
     <string name="initial_sync_start_importing_account_crypto">Úvodní synchronizace: 
-\nImport klíčů</string>
+\nImportuji klíče</string>
     <string name="initial_sync_start_importing_account_rooms">Úvodní synchronizace: 
-\nImport místností</string>
+\nImportuji místnosti</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Úvodní synchronizace: 
-\nImport místností, kterými jste členy</string>
+\nImportuji místností, jichž jste členy</string>
     <string name="initial_sync_start_importing_account_left_rooms">Úvodní synchronizace: 
-\nImport opuštěných místností</string>
+\nImportuji místnost, jež jste opustili</string>
     <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace: 
-\nImport skupin</string>
+\nImportuji komunity</string>
     <string name="initial_sync_start_importing_account_data">Úvodní synchronizace: 
-\nImport dat účtu</string>
+\nImportuji data účtu</string>
 
-    <string name="event_status_sending_message">Odesílání zprávy…</string>
+    <string name="event_status_sending_message">Odesílám zprávu…</string>
 
-    <string name="initial_sync_start_importing_account_invited_rooms">Úvodní synchronizace:
-\nImport pozvánek</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Úvodní synchronizace: 
+\nImportuji pozvání</string>
     <string name="clear_timeline_send_queue">Vymazat frontu neodeslaných zpráv</string>
 
-    <string name="notice_room_invite_with_reason">Uživatel %1$s pozval uživatele %2$s. Důvod: %3$s</string>
-    <string name="notice_room_invite_you_with_reason">Uživatel %1$s váš pozval. Důvod: %2$s</string>
-    <string name="notice_room_leave_with_reason">Uživatel %1$s odešel. Důvod: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s pozvali %2$s. Důvod: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s vás pozvali. Důvod: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s opustil místnost. Důvod: %2$s</string>
     <string name="notice_event_redacted">Zpráva odstraněna</string>
     <string name="notice_event_redacted_by">Zprávu odstranil/a %1$s</string>
+    <string name="summary_you_sent_image">Poslali jste obrázek.</string>
+    <string name="summary_you_sent_sticker">Poslali jste nálepku.</string>
+
+    <string name="notice_room_invite_no_invitee_by_you">Vaše pozvání</string>
+    <string name="notice_room_created">%1$s založil místnost</string>
+    <string name="notice_room_created_by_you">Vy jste založili místnost</string>
+    <string name="notice_room_invite_by_you">Pozvali jste %1$s</string>
+    <string name="notice_room_join_by_you">Vstoupili jste do místnosti</string>
+    <string name="notice_room_leave_by_you">Opustili jste místnost</string>
+    <string name="notice_room_reject_by_you">Odmítli jste pozvání</string>
+    <string name="notice_room_kick_by_you">Vykopli jste %1$s</string>
+    <string name="notice_room_unban_by_you">Zrušili jste vykázání pro %1$s</string>
+    <string name="notice_room_ban_by_you">Vykázali jste %1$s</string>
+    <string name="notice_room_withdraw_by_you">Stáhli jste pozvánku od %1$s zpět</string>
+    <string name="notice_avatar_url_changed_by_you">Změnili jste svůj profilový obrázek</string>
+    <string name="notice_display_name_set_by_you">Změnili jste své veřejné jméno na %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Změnili jste své veřejné jméno z %1$s na %2$s</string>
+    <string name="notice_display_name_removed_by_you">Odstranili jste své veřejné jméno (%1$s)</string>
+    <string name="notice_room_topic_changed_by_you">Změnili jste téma na: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s změnili obrázek místnosti</string>
+    <string name="notice_room_avatar_changed_by_you">Změnili jste obrázek místnosti</string>
+    <string name="notice_room_name_changed_by_you">Změnili jste jméno místnosti na: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Zahájili jste video hovor.</string>
+    <string name="notice_placed_voice_call_by_you">Zahájili jste hlasový hovor.</string>
+    <string name="notice_call_candidates">%s poslali data, aby mohli zahájit hovor.</string>
+    <string name="notice_call_candidates_by_you">Poslali jste data, abyste mohli zahájit hovor.</string>
+    <string name="notice_answered_call_by_you">Přijali jste hovor.</string>
+    <string name="notice_ended_call_by_you">Ukončili jste hovor.</string>
+    <string name="notice_made_future_room_visibility_by_you">Učinili jste budoucí historii místnosti viditelnou pro %1$s</string>
+    <string name="notice_end_to_end_by_you">Zapnuli jste end-to-end šifrování (%1$s)</string>
+    <string name="notice_room_update_by_you">Povýšili jste tuto místnost.</string>
+
+    <string name="notice_requested_voip_conference_by_you">Požádali jste o VoIP konferenci</string>
+    <string name="notice_room_name_removed_by_you">Odstranili jste jméno místnosti</string>
+    <string name="notice_room_topic_removed_by_you">Odstranili jste téma místnosti</string>
+    <string name="notice_room_avatar_removed">%1$s odstranili obrázek místnosti</string>
+    <string name="notice_room_avatar_removed_by_you">Odstranili jste obrázek místnosti</string>
+    <string name="notice_profile_change_redacted_by_you">Aktualizovali jste svů profil %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Poslali jste %1$s pozvání ke vstupu do místnosti</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Zrušili jste pozvánku ke vstupu do místnosti pro %1$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Přijali jste pozvání pro %1$s</string>
+
+    <string name="notice_widget_added">%1$s přidali widget %2$s</string>
+    <string name="notice_widget_added_by_you">Přidali jste widget %1$s</string>
+    <string name="notice_widget_removed">%1$s odstranili widget %2$s</string>
+    <string name="notice_widget_removed_by_you">Odstranili jste widget %1$s</string>
+    <string name="notice_widget_modified">%1$s změnil widget %2$s</string>
+    <string name="notice_widget_modified_by_you">Změnili jste widget %1$s</string>
+
+    <string name="power_level_admin">Správce</string>
+    <string name="power_level_moderator">Moderátor</string>
+    <string name="power_level_default">Výchozí</string>
+    <string name="power_level_custom">Vlastní (%1$d)</string>
+    <string name="power_level_custom_no_value">Vlastní</string>
+
+    <string name="notice_power_level_changed_by_you">Změnili jste %1$s stupeň oprávnění.</string>
+    <string name="notice_power_level_changed">%1$s změnili %2$s stupeň oprávnění.</string>
+    <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
+
+    <string name="notice_room_invite_no_invitee_with_reason">Pozvání od %1$s. Důvod: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Vaše pozvání. Důvod: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Pozvali jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s vstoupili do místnosti. Důvod: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Vstoupili jste do místnosti. Důvod: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Opustili jste místnost. Důvod: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s pozvání odmítli. Důvod: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Odmítli jste pozvání. Důvod: %1$s</string>
+    <string name="notice_room_kick_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s zrušili %2$s vykázání. Důvod: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Zrušili jste %1$s vykázání. Důvod: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s vykázali %2$s. Důvod: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Vykázali jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s poslali %2$s pozvání, aby vstoupili do místnosti. Důvod: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">"Poslali jste %1$s pozvání, aby  vstoupili do místnosti. Důvod: %2$s"</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s zrušili pozvání do místnosti pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Zrušili jste pozvání do místnosti pro %1$s. Důvod: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s přijali pozvání pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Přijali jste pozvání pro %1$s. Důvod: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s zrušili pozvání pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Zrušili jste pozvání od %1$s. Důvod: %2$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s přidali %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Přidali jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s odstranili %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Odstranili jste %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste %2$s jako adresuy pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s přidali %2$ a odstranili %3$s jako adresy pro tuto místnost.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Přidali jste %1$s a odstranili %2$s jako adresy pro tuto místnost.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s nastavili hlavní adresu této místnosti na %2$s.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Nastavili jste %1$s na hlavní adresu této místnosti.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s odstranili hlavní adresu této místnosti.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Odstranili jste hlavní adresu této místnosti.</string>
+
+    <string name="notice_room_guest_access_can_join">"%1$s  povolili hostům vstoupit do místnosti."</string>
+    <string name="notice_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit do místnosti.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s zamezili hostům vstoupit do místnosti.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do místnosti.</string>
+
+    <string name="notice_end_to_end_ok">%1$s zapnuli end-to-end šifrování.</string>
+    <string name="notice_end_to_end_ok_by_you">Zapnuli jste end-to-end šifrování.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli end-to-end šifrování (neznámý algoritmus %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste end-to-end šifrování (neznámý algoritmus %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s žádá ověření Vašeho klíče, ale Váš klient nepodporuje ověření klíče v chatu. Budete muset k ověření klíčů použít zastaralý způsob ověření.</string>
+
 </resources>

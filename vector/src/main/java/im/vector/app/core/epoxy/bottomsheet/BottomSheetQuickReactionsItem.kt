@@ -33,10 +33,13 @@ abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuick
 
     @EpoxyAttribute
     lateinit var fontProvider: EmojiCompatFontProvider
+
     @EpoxyAttribute
     lateinit var texts: List<String>
+
     @EpoxyAttribute
     lateinit var selecteds: List<Boolean>
+
     @EpoxyAttribute
     var listener: Listener? = null
 

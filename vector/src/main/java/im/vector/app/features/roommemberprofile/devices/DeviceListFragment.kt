@@ -17,6 +17,7 @@
 package im.vector.app.features.roommemberprofile.devices
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -41,8 +42,8 @@ class DeviceListFragment @Inject constructor(
     @BindView(R.id.bottomSheetRecyclerView)
     lateinit var recyclerView: RecyclerView
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         recyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
         recyclerView.configureWith(
                 epoxyController,

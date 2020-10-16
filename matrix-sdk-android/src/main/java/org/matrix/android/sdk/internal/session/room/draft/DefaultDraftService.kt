@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +23,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
@@ -55,7 +55,11 @@ internal class DefaultDraftService @AssistedInject constructor(@Assisted private
         }
     }
 
-    override fun getDraftsLive(): LiveData<List<UserDraft>> {
+    override fun getDraft(): UserDraft? {
+        return draftRepository.getDraft(roomId)
+    }
+
+    override fun getDraftLive(): LiveData<Optional<UserDraft>> {
         return draftRepository.getDraftsLive(roomId)
     }
 }

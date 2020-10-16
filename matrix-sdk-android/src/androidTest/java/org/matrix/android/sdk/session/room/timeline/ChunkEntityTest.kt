@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,14 @@ package org.matrix.android.sdk.session.room.timeline
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.kotlin.createObject
+import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeTrue
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -29,14 +37,6 @@ import org.matrix.android.sdk.internal.database.model.SessionRealmModule
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeListOfEvents
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMessageEvent
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.kotlin.createObject
-import org.amshove.kluent.shouldBeTrue
-import org.amshove.kluent.shouldEqual
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 internal class ChunkEntityTest : InstrumentedTest {
@@ -60,10 +60,10 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk: ChunkEntity = realm.createObject()
 
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
-            chunk.timelineEvents.size shouldEqual 1
+            chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
 
@@ -72,11 +72,11 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
             chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
-            chunk.timelineEvents.size shouldEqual 1
+            chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
 
@@ -88,7 +88,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.timelineEvents.size shouldEqual 60
+            chunk1.timelineEvents.size shouldBeEqualTo 60
         }
     }
 
@@ -104,7 +104,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll(ROOM_ID, eventsForChunk1, PaginationDirection.FORWARDS)
             chunk2.addAll(ROOM_ID, eventsForChunk2, PaginationDirection.BACKWARDS)
             chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.timelineEvents.size shouldEqual 40
+            chunk1.timelineEvents.size shouldBeEqualTo 40
             chunk1.isLastForward.shouldBeTrue()
         }
     }
@@ -119,7 +119,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge(ROOM_ID, chunk2, PaginationDirection.FORWARDS)
-            chunk1.prevToken shouldEqual prevToken
+            chunk1.prevToken shouldBeEqualTo prevToken
         }
     }
 
@@ -133,7 +133,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.nextToken shouldEqual nextToken
+            chunk1.nextToken shouldBeEqualTo nextToken
         }
     }
 
@@ -142,7 +142,7 @@ internal class ChunkEntityTest : InstrumentedTest {
                                    direction: PaginationDirection) {
         events.forEach { event ->
             val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
-                realm.copyToRealmOrUpdate(it)
+                realm.copyToRealm(it)
             }
             addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
         }

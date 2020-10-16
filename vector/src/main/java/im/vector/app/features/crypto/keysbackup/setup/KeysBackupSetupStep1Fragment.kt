@@ -40,8 +40,8 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
     @BindView(R.id.keys_backup_setup_step1_manualExport)
     lateinit var manualExportButton: Button
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
