@@ -120,7 +120,7 @@
     <string name="user_directory_header">Kasutajate kataloog</string>
     <string name="matrix_only_filter">Vaid need, kellel on Matrixi konto</string>
     <string name="no_conversation_placeholder">Vestlusi ei leidu</string>
-    <string name="no_contact_access_placeholder">Sa pole Element\'ile andnud ligipääsu kohalikele kontaktidele</string>
+    <string name="no_contact_access_placeholder">Sa pole SchildiChat\'ile andnud ligipääsu kohalikele kontaktidele</string>
     <string name="no_result_placeholder">Tulemusi ei ole</string>
     <string name="people_no_identity_server">Isikutuvastusserver ei ole seadistatud.</string>
     <string name="rooms_header">Jututoad</string>
@@ -275,7 +275,7 @@
     <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
     <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Palun käivita Element mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Palun käivita SchildiChat mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
     <string name="read_receipts_list">Lugemisteatiste loend</string>
     <string name="groups_list">Gruppide loend</string>
     <plurals name="membership_changes">
@@ -296,7 +296,7 @@
     <string name="room_info_room_name">Jututoa nimi</string>
     <string name="room_info_room_topic">Jututoa teema</string>
     <string name="settings_call_category">Kõned</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Kasuta saabuvate kõnede jaoks Element\'i vaikimisi helinat</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Kasuta saabuvate kõnede jaoks SchildiChat\'i vaikimisi helinat</string>
     <string name="settings_call_ringtone_use_default_stun">Kasuta kõnehõlbustusserverit</string>
     <string name="settings_call_ringtone_title">Saabuva kõne helin</string>
     <string name="settings_call_ringtone_dialog_title">Vali helin kõnede jaoks:</string>
@@ -318,18 +318,18 @@
     <string name="media_picker_both_capture_title">Tee foto või video</string>
     <string name="media_picker_cannot_record_video">Video salvestamine ei õnnestu</string>
     <string name="permissions_rationale_popup_title">Lisateave õiguste kohta</string>
-    <string name="permissions_rationale_msg_storage">Element vajab õigusi sinu foto- ja videokataloogide lugemiseks ning manuste salvestamiseks.
+    <string name="permissions_rationale_msg_storage">SchildiChat vajab õigusi sinu foto- ja videokataloogide lugemiseks ning manuste salvestamiseks.
 \n
 \nSelleks, et saaksid oma nutiseadmest faile saata palun anna järgmisel lehel vajalikud õigused.</string>
-    <string name="permissions_rationale_msg_camera">Fotode ja videote salvestamiseks ning videokõnede tegemiseks vajab Element õigusi kasutada sinu kaamerat.</string>
+    <string name="permissions_rationale_msg_camera">Fotode ja videote salvestamiseks ning videokõnede tegemiseks vajab SchildiChat õigusi kasutada sinu kaamerat.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
-    <string name="permissions_rationale_msg_record_audio">Kõnede tegemiseks vajab Element õigusi kasutada sinu mikrofoni.</string>
+    <string name="permissions_rationale_msg_record_audio">Kõnede tegemiseks vajab SchildiChat õigusi kasutada sinu mikrofoni.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.</string>
     <string name="permissions_action_not_performed_missing_permissions">Vabandust. Kuna vastavaid õigusi ei olnud, siis toimingut ei saanud teha</string>
@@ -545,7 +545,7 @@
     <string name="please_wait">Palun oota…</string>
     <string name="group_all_communities">Kõik kogukonnad</string>
     <string name="room_preview_no_preview">Sellel jututoal puudub eelvaade</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element ei toeta veel kõigile nähtavate jututubade eelvaadet</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">SchildiChat ei toeta veel kõigile nähtavate jututubade eelvaadet</string>
     <string name="fab_menu_create_room">Jututoad</string>
     <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
     <string name="create_room_title">Uus jututuba</string>
@@ -591,7 +591,7 @@
     <string name="settings_active_sessions_signout_device">Logi sellest sessioonist välja</string>
     <string name="settings_failed_to_get_crypto_device_info">Teave krüptograafia kohta puudub</string>
     <string name="settings_active_sessions_verified_device_desc">Kuna sina oled selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
-    <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. Element toetab aga vaid API versiooni 2.</string>
+    <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. SchildiChat toetab aga vaid API versiooni 2.</string>
     <string name="identity_server_error_outdated_home_server">See tegevus ei ole võimalik. Koduserveri versioon on liiga vana.</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d jututuba</item>
@@ -628,7 +628,7 @@
     <string name="settings_app_info_link_title">Rakenduse teave</string>
     <string name="settings_app_info_link_summary">Näita rakenduse teavet süsteemi seadistustes.</string>
     <string name="settings_add_3pid_confirm_password_title">Kinnitage oma salasõna</string>
-    <string name="settings_add_3pid_flow_not_supported">Seda tegevust ei saa teha Element\'i nutirakendusest</string>
+    <string name="settings_add_3pid_flow_not_supported">Seda tegevust ei saa teha SchildiChat\'i nutirakendusest</string>
     <string name="settings_add_3pid_authentication_needed">Autentimine on nõutav</string>
     <string name="settings_notification_advanced">Teavituste lisaseadistused</string>
     <string name="settings_notification_by_event">Teavituse olulisus sündmuse alusel</string>
@@ -642,7 +642,7 @@
     <string name="settings_troubleshoot_test_device_settings_title">Sessiooni seadistused.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Selles sessioonis on teavitused kasutusel.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Selles sessioonis ei ole teavitusi kasutusel.
-\nSeda saad muuta Element\'i seadistuses.</string>
+\nSeda saad muuta SchildiChat\'i seadistuses.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Võta kasutusele</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Kohandatud seadistused.</string>
     <string name="settings_12_24_timestamps">Näita ajatempleid 12-tunnises vormingus</string>
@@ -749,8 +749,8 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services teenuse aadress</string>
     <string name="login_server_url_form_other_hint">Aadress</string>
     <string name="login_server_url_form_modular_text">Tasuline Matrix\'i majutusteenus organisatsioonidele</string>
-    <string name="login_server_url_form_modular_notice">Sisesta Modular Element teenuse või muu serveri aadress, mida sa soovid kasutada</string>
-    <string name="login_server_url_form_other_notice">Sisesta serveri või Element\'i aadress, mida sa soovid kasutada</string>
+    <string name="login_server_url_form_modular_notice">Sisesta Modular SchildiChat teenuse või muu serveri aadress, mida sa soovid kasutada</string>
+    <string name="login_server_url_form_other_notice">Sisesta serveri või SchildiChat\'i aadress, mida sa soovid kasutada</string>
     <string name="login_server_url_form_common_notice">Sisesta serveri aadress, mida sa soovid kasutada</string>
     <string name="login_sso_error_message">Lehe laadimisel tekkis viga %1$s (%2$d)</string>
     <string name="login_mode_not_supported">See rakendus ei saa sisse logida antud koduserverisse. See koduserver toetab järgmisi sisselogimise tüüp(e): %1$s.
@@ -969,7 +969,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Palun kontrolli seadistusi</string>
     <string name="settings_troubleshoot_test_play_services_title">Goolge Play teenuste kontrollimine</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on kättesaadav ja uuendatud.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Paranda Google Play teenused</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase tunnusluba</string>
@@ -978,11 +978,11 @@
     <string name="settings_troubleshoot_test_fcm_failed">FCM tunnusloa laadimine ei õnnestunud:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nSee viga on väljaspool Element\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.</string>
+\nSee viga on väljaspool SchildiChat\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nSee viga on väljaspool Element\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).</string>
+\nSee viga on väljaspool SchildiChat\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nSee viga on väljaspool Element\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.</string>
+\nSee viga on väljaspool SchildiChat\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisa Google\'i konto</string>
     <string name="settings_troubleshoot_test_token_registration_title">Tunnusloa registreerimine</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM tunnusloa registreerimine koduserveris õnnestus.</string>
@@ -991,14 +991,14 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Teavituste teenus</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Teavituste teenus töötab.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Teavituste teenus ei tööta.
-\nProovi, kas Element\'i uuesti käivitamine aitab.</string>
+\nProovi, kas SchildiChat\'i uuesti käivitamine aitab.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käivita teenus</string>
     <string name="settings_troubleshoot_test_service_restart_title">Teavituste teenuse automaatne taaskäivitamine</string>
     <string name="settings_troubleshoot_test_service_restart_success">Teenus suleti ja käivitati automaatselt uuesti.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Teenuse uuesti käivitamine ei õnnestunud</string>
     <string name="settings_troubleshoot_test_service_boot_title">Käivita teenus seadme käivitamisel</string>
     <string name="settings_troubleshoot_test_service_boot_success">Teenus käivitatakse nutiseadme käivitamisel.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui Element on vähemalt korra avatud.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui SchildiChat on vähemalt korra avatud.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Käivita teenus nutiseadme käivitamisel</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrolli taustapiiranguid</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
@@ -1046,8 +1046,8 @@
     <string name="settings_labs_native_camera_summary">Käivita kohandatud vaate asemel süsteemne kaamera vaade.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Kasuta reavahetuse klahvi sõnumi saatmiseks</string>
     <string name="settings_labs_enable_send_voice">Saada häälsõnumeid</string>
-    <string name="permissions_rationale_msg_contacts">Element saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadressi ja telefoninumbrite põhjal. Kui sa nõustud oma aadressiraamatut sel eesmärgil jagama, luba juurdepääs järgmisel hüpikaknal.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadresside ja telefoninumbrite põhjal.
+    <string name="permissions_rationale_msg_contacts">SchildiChat saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadressi ja telefoninumbrite põhjal. Kui sa nõustud oma aadressiraamatut sel eesmärgil jagama, luba juurdepääs järgmisel hüpikaknal.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadresside ja telefoninumbrite põhjal.
 \n
 \nKas sa oled nõus oma aadressiraamatut sel eesmärgil jagama\?</string>
     <string name="room_event_action_report_prompt_ignore_user">Kas sa soovid peita selle kasutaja kõik sõnumid\?
@@ -1060,7 +1060,7 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Keela piirangud</string>
     <string name="settings_troubleshoot_test_battery_title">Aku optimeerimine</string>
-    <string name="settings_troubleshoot_test_battery_success">Aku optimeerimine ei mõjuta Elementi.</string>
+    <string name="settings_troubleshoot_test_battery_success">Aku optimeerimine ei mõjuta SchildiChati.</string>
     <string name="settings_troubleshoot_test_battery_failed">Kui kasutaja jätab seadme mõneks ajaks vooluvõrgust välja ja ühele kohale paigale ning ekraan on välja lülitatud, lülitub seade Doze režiimi. See takistab rakendustel juurdepääsu võrgule ja lükkab edasi nende töö, sünkroonimise ja tavalised teated.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Eira optimeerimist</string>
     <string name="settings_notification_privacy_normal">Tavaline</string>
@@ -1090,11 +1090,11 @@
     <string name="settings_background_sync">Andmete sünkroniseerimine taustal</string>
     <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
 \nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimeeritud reaalajas</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
-\nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et Element kuulab sündmusi.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
+\nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et SchildiChat kuulab sündmusi.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Taustasünkroonimine puudub</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Kui rakendus töötab taustal, siis sa ei saa saabunud sõnumite kohta teavitusi.</string>
     <string name="settings_background_sync_update_error">Seadistuste uuendamine ei õnnestunud.</string>
@@ -1161,17 +1161,17 @@
     <string name="settings_discovery_category">Leia kasutajaid</string>
     <string name="settings_discovery_manage">Halda kasutajate otsingu seadistusi.</string>
     <string name="startup_notification_privacy_title">Teavituste privaatsus</string>
-    <string name="startup_notification_privacy_message">Element võib taustal töötamise ajal hallata sinu teavitusi turvaliselt ja privaatselt. Aga see võib mõjutada akukasutust.</string>
+    <string name="startup_notification_privacy_message">SchildiChat võib taustal töötamise ajal hallata sinu teavitusi turvaliselt ja privaatselt. Aga see võib mõjutada akukasutust.</string>
     <string name="startup_notification_privacy_button_grant">Anna õigused</string>
     <string name="startup_notification_privacy_button_other">Tee muu valik</string>
     <string name="startup_notification_fdroid_battery_optim_title">Taustaühendus</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Selleks et teavitused toimiksid korralikult peab Element kasutama vähese kõrvalmõjuga taustaühendust.
-\nKui järgmisel lehel sinult küsitakse kas lubada, et Element töötab kogu aeg taustal, siis palun nõustu.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Selleks et teavitused toimiksid korralikult peab SchildiChat kasutama vähese kõrvalmõjuga taustaühendust.
+\nKui järgmisel lehel sinult küsitakse kas lubada, et SchildiChat töötab kogu aeg taustal, siis palun nõustu.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Anna õigused</string>
     <string name="settings_analytics">Analüütika</string>
     <string name="settings_opt_in_of_analytics">Saada arendajatele analüütikat</string>
-    <string name="settings_opt_in_of_analytics_summary">Võimaldamaks meil rakendust parandada kogub Element anonüümset teavet rakenduse kasutuse kohta.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Selleks, et saaksime Element\'i paremaks teha, palun luba analüütika.</string>
+    <string name="settings_opt_in_of_analytics_summary">Võimaldamaks meil rakendust parandada kogub SchildiChat anonüümset teavet rakenduse kasutuse kohta.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Selleks, et saaksime SchildiChat\'i paremaks teha, palun luba analüütika.</string>
     <string name="settings_opt_in_of_analytics_ok">Jah, ma soovin aidata!</string>
     <string name="settings_data_save_mode">Võrguliikluse mahu säästmise režiim</string>
     <string name="settings_data_save_mode_summary">Võrguliikluse andmemahu säästmiseks kasutatakse filtrit, mille puhul kasutajate olekuid ei uuendata ja sõnumite kirjutamise teavitusi ei laeta.</string>
@@ -1385,7 +1385,7 @@
     <string name="passphrase_passphrase_does_not_match">Paroolifraasid ei klappi mitte</string>
     <string name="passphrase_empty_error_message">Palun sisesta paroolifraas</string>
     <string name="passphrase_passphrase_too_weak">Paroolifraas on liiga nõrk</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">"Kui sa soovid, et Element looks taastevõtme, siis  palun kustuta paroolifraas."</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">"Kui sa soovid, et SchildiChat looks taastevõtme, siis  palun kustuta paroolifraas."</string>
     <string name="keys_backup_no_session_error">Matrix\'i sessioone ei leidu</string>
     <string name="keys_backup_setup_step1_title">Ära kunagi kaota krüptitud sõnumeid</string>
     <string name="keys_backup_setup_step1_description">Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.
@@ -1470,7 +1470,7 @@
     <string name="keys_backup_info_title_signature">Allkiri</string>
     <string name="autodiscover_invalid_response">Vigane vastus koduserveri tuvastamise päringule</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveriseadistuste automaatne sõnalõpetus</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element tuvastas kohandatud serveriseadistused sinu kasutajanime domeenis „%1$s“:
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat tuvastas kohandatud serveriseadistused sinu kasutajanime domeenis „%1$s“:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Kasuta seadistusi</string>
     <string name="invalid_or_expired_credentials">Oled kehtetu või aegunud kasutajanime või salasõna tõttu välja logitud.</string>
@@ -1642,7 +1642,7 @@
     <string name="devices_other_devices">Muud sessioonid</string>
     <string name="autocomplete_limited_results">Kuvan vaid esimesi tulemusi, kirjuta natuke pikemalt…</string>
     <string name="settings_developer_mode_fail_fast_title">Kiire lõppmäng</string>
-    <string name="settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib Element sagedamini kokku joosta</string>
+    <string name="settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib SchildiChat sagedamini kokku joosta</string>
     <string name="command_description_shrug">Lisa ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse</string>
     <string name="create_room_encryption_title">Võta jututoas krüptimine kasutusele</string>
     <string name="create_room_encryption_description">"Kui krüptimine on  juba kasutusele võetud, siis ei saa seda enam eemaldada."</string>
@@ -1718,7 +1718,7 @@
     <string name="disconnect_identity_server_dialog_content">Kas katkestame ühenduse isikutuvastusserveriga %s\?</string>
     <string name="identity_server_error_no_identity_server_configured">Palun esmalt seadista isikutuvastusserver.</string>
     <string name="identity_server_error_terms_not_signed">Palun esmalt nõustu seadistustes isikutuvastusserveri kasutustingimustega.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab Element e-posti aadressid ja telefoninumbrid serverisse vaid räsituna.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab SchildiChat e-posti aadressid ja telefoninumbrid serverisse vaid räsituna.</string>
     <string name="identity_server_error_binding_error">Seoste loomine ei õnnestunud.</string>
     <string name="identity_server_error_no_current_binding_error">Selle tunnusega ei ole hetkel ühtegi seost.</string>
     <string name="identity_server_set_default_notice">Sinu koduserver (%1$s) soovitab kasutada sinu isikutuvastusserverina %2$s teenust</string>
@@ -1760,7 +1760,7 @@
     <string name="crypto_error_withheld_unverified">Sa ei saa seda sõnumit lugeda, kuna saatja ei usalda sinu sessiooni</string>
     <string name="crypto_error_withheld_generic">Sa ei saa seda sõnumit lugeda, kuna saatja teadlikult ei saatnud vajalikke võtmeid</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Ootan krüptimise ajalugu</string>
-    <string name="element_disclaimer_title">Riot\'i uus nimi on Element!</string>
+    <string name="element_disclaimer_title">Riot\'i uus nimi on SchildiChat!</string>
     <string name="element_disclaimer_content">Meil on hea meel teatada, et oleme muutnud nime! Sinu rakendus on uuendatud ning sa oled oma kontole sisse logitud.</string>
     <string name="element_disclaimer_negative_button">Selge lugu</string>
     <string name="element_disclaimer_positive_button">Vaata lisateavet</string>
@@ -1889,7 +1889,7 @@
     <string name="content_reported_as_inappropriate_content">Haldaja sai nüüd teate, et see sisu ei ole sobilik. 
 \n 
 \nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Läbiva krüptograafia jaoks vajalike võtmete salvestamiseks kohalikule andmekandjale vaajab Element sinu luba.
+    <string name="permissions_rationale_msg_keys_backup_export">Läbiva krüptograafia jaoks vajalike võtmete salvestamiseks kohalikule andmekandjale vaajab SchildiChat sinu luba.
 \n
 \nSelleks et saaksid võtmed käsitsi eksportida, siis palun anna selleks järgmises vaates luba.</string>
     <string name="no_network_indicator">Hetkel puudub võrguühendus</string>
@@ -1926,7 +1926,7 @@
 \n• Sinu koduserveri haldaja on turvakaalutlustel keelanud sinu ligipääsu.</string>
     <string name="signed_out_submit">Logi uuesti sisse</string>
     <string name="soft_logout_title">Sa oled loginud välja</string>
-    <string name="soft_logout_sso_not_same_user_error">Praegune sessioon kuulub kasutajale %1$s, kuid sina üritad siseneda kasutaajaga %2$s. Sellist võimalust Element hetkel ei toeta.
+    <string name="soft_logout_sso_not_same_user_error">Praegune sessioon kuulub kasutajale %1$s, kuid sina üritad siseneda kasutaajaga %2$s. Sellist võimalust SchildiChat hetkel ei toeta.
 \nPalun eemalda kõik andmed ning siis logi sisse muu kontoga.</string>
     <string name="verification_conclusion_compromised">Mõni järgnevatest võib olla sattunud valedesse kätesse:
 \n 
@@ -1965,9 +1965,9 @@
     <string name="room_member_power_level_default_in">Vaikimisi õigused jututoas %1$s</string>
     <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$d) jututoas %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hüppa lugemisteatise juurde</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element ei oska käsitleda %1$s-tüüpi sündmusi</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element ei oska käsitleda %1$s-tüüpi sünumeid</string>
-    <string name="rendering_event_error_exception">Tekkis viga, kui Element üritas töödelda sõnumi %1$s sisu</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat ei oska käsitleda %1$s-tüüpi sündmusi</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat ei oska käsitleda %1$s-tüüpi sünumeid</string>
+    <string name="rendering_event_error_exception">Tekkis viga, kui SchildiChat üritas töödelda sõnumi %1$s sisu</string>
     <string name="call_notification_answer">Võta vastu</string>
     <string name="call_notification_reject">Keeldu</string>
     <string name="call_notification_hangup">Lõpeta kõne</string>
@@ -2016,7 +2016,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Kasutaja kustutas sündmuse, põhjusena %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Jututoa haldur on sündmust modereerinud, põhjusena %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Krüptovõtmed on juba uuendatud!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Päringud võtmete laadimiseks</string>
     <string name="e2e_use_keybackup">Võta krüptitud sõnumite ajalugu lukust lahti</string>
     <string name="refresh">Värskenda</string>
@@ -2074,13 +2074,13 @@
     <string name="error_adding_media_file_to_gallery">Meediafaili galeriisse lisamine ei õnnestunud</string>
     <string name="error_saving_media_file">Meediafaili salvestamine ei õnnestunud</string>
     <string name="change_password_summary">Määra kontole uus salasõna…</string>
-    <string name="use_other_session_content_description">Kasuta kõige uuemat Element\'i versioon mõnes muus seadmes, nagu näiteks Element Web, Element Desktop, Element iOS, Element Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist</string>
+    <string name="use_other_session_content_description">Kasuta kõige uuemat SchildiChat/Element\'i versioon mõnes muus seadmes, nagu näiteks Element Web, Element Desktop, Element iOS, SchildiChat Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist</string>
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="or_other_mx_capabale_client">või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist</string>
-    <string name="use_latest_app">Kasuta oma muus seadmes kõige uuemat Element\'i versiooni:</string>
+    <string name="use_latest_app">Kasuta oma muus seadmes kõige uuemat SchildiChat\'i versiooni:</string>
     <string name="command_description_discard_session">Sunnib loobuma praeguse krüptitud jututoa rühmavestluse seansist</string>
     <string name="command_description_discard_session_not_handled">Funktsionaalsus on toetatud ainult krüptitud jututubades</string>
     <string name="enter_secret_storage_passphrase_or_key">Jätkamiseks kasuta kas oma %1$s või %2$s.</string>
@@ -2123,13 +2123,13 @@
     <string name="delete_account_data_warning">Kas kustutame %1$s tüüpi kasutajakonto andmed\?
 \n
 \nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kood on nõutav alati, kui sa Element\'i avad.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kood on nõutav, kui sa kahe minuti jooksul pole Element\'i kasutanud.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kood on nõutav alati, kui sa SchildiChat\'i avad.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kood on nõutav, kui sa kahe minuti jooksul pole SchildiChat\'i kasutanud.</string>
     <string name="settings_security_pin_code_grace_period_title">Kahe minuti möödumisel küsi uuesti PIN-koodi</string>
     <string name="settings_security_pin_code_notifications_summary_off">Näita vaid napi teavitusena lugemata sõnumite arvu.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Näita täpsemat teavet nagu jututoa nimi ja sõnumi sisu.</string>
     <string name="settings_security_pin_code_notifications_title">Näita teavitustes sisu</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kood on ainus võimalus, kuidas sa saad Element\'i lukust lahti.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kood on ainus võimalus, kuidas sa saad SchildiChat\'i lukust lahti.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Kasuta selles seadmes leiduvaid biomeetrilise tuvastuse võimalusi nagu sõrmejälgede lugejat või näotuvastust.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Kasuta biomeetrilist tuvastust</string>
     <string name="settings_security_application_protection_screen_title">Seadista</string>
