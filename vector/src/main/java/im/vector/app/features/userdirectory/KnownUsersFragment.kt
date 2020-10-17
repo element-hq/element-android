@@ -16,11 +16,13 @@
 
 package im.vector.app.features.userdirectory
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -33,19 +35,24 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.main.fragment_known_users.*
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.session.Session
+import java.util.Locale
 import javax.inject.Inject
 
 class KnownUsersFragment @Inject constructor(
         val userDirectoryViewModelFactory: UserDirectoryViewModel.Factory,
         private val knownUsersController: KnownUsersController,
         private val dimensionConverter: DimensionConverter,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
+        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory,
+        val session: Session
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
     private val args: KnownUsersFragmentArgs by args()
@@ -68,6 +75,7 @@ class KnownUsersFragment @Inject constructor(
         setupRecyclerView()
         setupFilterView()
         setupAddByMatrixIdView()
+        setupAddByQrCodeView()
         setupAddFromPhoneBookView()
         setupCloseView()
 
@@ -104,6 +112,43 @@ class KnownUsersFragment @Inject constructor(
     private fun setupAddByMatrixIdView() {
         addByMatrixId.debouncedClicks {
             sharedActionViewModel.post(UserDirectorySharedAction.OpenUsersDirectory)
+        }
+    }
+
+    private fun setupAddByQrCodeView() {
+        val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
+            if (activityResult.resultCode == Activity.RESULT_OK) {
+
+                val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
+
+                // TODO: Make this less ugly
+                if (result.startsWith("https://matrix.to/#/@")) {
+
+                    val mxid = result.removePrefix("https://matrix.to/#/")
+                    val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+
+                    // TODO: Switch to DM if exists
+                    //val a = session.getExistingDirectRoomWithUser()
+
+                    // https://matrix.to/#/!xYvNcQPhnkrdUmYczI:matrix.org/$YmwnJPQ30qTSCOOSN6umeIVuUEHECsPWyaYj5IxZW-0?via=matrix.org&via=privacytools.io&via=feneas.org
+                    // ^ Seemed inconclusive so the following assumes non-case-sensitivity. Change if needed
+                    if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
+                        withState(viewModel) {
+                            viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Cannot invite yourself!", Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    Toast.makeText(requireContext(), "Invalid QR code (Invalid URI)!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Error while scanning QR code!", Toast.LENGTH_SHORT).show()
+            }
+        }
+        addByQrCode.debouncedClicks {
+            QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
         }
     }
 

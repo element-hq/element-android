@@ -1755,6 +1755,7 @@
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="add_by_qr_code">Add by QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
