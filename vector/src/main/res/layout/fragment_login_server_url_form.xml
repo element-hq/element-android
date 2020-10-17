@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_logo_element_matrix_services"
-                android:tint="?riotx_text_primary" />
+                app:tint="?riotx_text_primary"
+                tools:ignore="MissingPrefix" />
 
             <TextView
                 android:id="@+id/loginServerUrlFormTitle"

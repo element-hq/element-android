@@ -16,7 +16,7 @@
 
 package im.vector.app.features.crypto.recover
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +25,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -65,43 +66,46 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
 
         try {
             sharedViewModel.handle(BootstrapActions.SaveReqQueryStarted)
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step3_please_make_copy)), REQUEST_CODE_SAVE)
+            saveStartForActivityResult.launch(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step3_please_make_copy)))
         } catch (activityNotFoundException: ActivityNotFoundException) {
             requireActivity().toast(R.string.error_no_external_application_found)
             sharedViewModel.handle(BootstrapActions.SaveReqFailed)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_SAVE) {
-            val uri = data?.data
-            if (resultCode == RESULT_OK && uri != null) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
-                    } catch (failure: Throwable) {
-                        sharedViewModel.handle(BootstrapActions.SaveReqFailed)
-                    }
+    private val saveStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val uri = activityResult.data?.data ?: return@registerStartForActivityResult
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
+                } catch (failure: Throwable) {
+                    sharedViewModel.handle(BootstrapActions.SaveReqFailed)
                 }
-            } else {
-                // result code seems to be always cancelled here.. so act as if it was saved
-                sharedViewModel.handle(BootstrapActions.SaveReqFailed)
             }
-            return
-        } else if (requestCode == REQUEST_CODE_COPY) {
+        } else {
+            // result code seems to be always cancelled here.. so act as if it was saved
+            sharedViewModel.handle(BootstrapActions.SaveReqFailed)
+        }
+    }
+
+    private val copyStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
             sharedViewModel.handle(BootstrapActions.RecoveryKeySaved)
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun shareRecoveryKey() = withState(sharedViewModel) { state ->
         val recoveryKey = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
                 ?: return@withState
 
-        startSharePlainTextIntent(this,
+        startSharePlainTextIntent(
+                this,
+                copyStartForActivityResult,
                 context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                 recoveryKey,
-                context?.getString(R.string.recovery_key), REQUEST_CODE_COPY)
+                context?.getString(R.string.recovery_key)
+        )
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
@@ -110,10 +114,5 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
 
         recoveryContinue.isVisible = step.isSaved
         bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
-    }
-
-    companion object {
-        const val REQUEST_CODE_SAVE = 123
-        const val REQUEST_CODE_COPY = 124
     }
 }

@@ -18,11 +18,11 @@ package im.vector.app.features.settings.push
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()

@@ -21,7 +21,6 @@ import android.view.View
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
-import org.matrix.android.sdk.api.session.user.model.User
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -31,6 +30,7 @@ import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.recyclerView
 import kotlinx.android.synthetic.main.fragment_user_directory.*
+import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 class UserDirectoryFragment @Inject constructor(

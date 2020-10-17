@@ -25,6 +25,8 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -36,11 +38,15 @@ class EncryptionItemFactory @Inject constructor(
         private val messageColorProvider: MessageColorProvider,
         private val stringProvider: StringProvider,
         private val informationDataFactory: MessageInformationDataFactory,
-        private val avatarSizeProvider: AvatarSizeProvider) {
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val session: Session) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): StatusTileTimelineItem? {
+        if (!event.root.isStateEvent()) {
+            return null
+        }
         val algorithm = event.root.getClearContent().toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(event, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)
@@ -51,7 +57,13 @@ class EncryptionItemFactory @Inject constructor(
         val shield: StatusTileTimelineItem.ShieldUIState
         if (isSafeAlgorithm) {
             title = stringProvider.getString(R.string.encryption_enabled)
-            description = stringProvider.getString(R.string.encryption_enabled_tile_description)
+            description = stringProvider.getString(
+                    if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
+                        R.string.direct_room_encryption_enabled_tile_description
+                    } else {
+                        R.string.encryption_enabled_tile_description
+                    }
+            )
             shield = StatusTileTimelineItem.ShieldUIState.BLACK
         } else {
             title = stringProvider.getString(R.string.encryption_not_enabled)

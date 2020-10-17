@@ -62,6 +62,8 @@
 
         <activity
             android:name=".features.MainActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
             android:theme="@style/AppTheme.Launcher.SC" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
@@ -73,6 +75,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity-alias>
 
         <activity android:name=".features.home.HomeActivity" />
@@ -91,11 +97,12 @@
                 <data android:host="element" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.media.ImageMediaViewerActivity" />
 
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.Transparent"
+            tools:ignore="Instantiatable" />
 
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
@@ -105,7 +112,6 @@
             android:name=".features.settings.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.media.VideoMediaViewerActivity" />
         <activity
             android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />
@@ -171,6 +177,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
         </activity>
 
         <activity android:name=".features.roomprofile.RoomProfileActivity" />
@@ -220,6 +230,7 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
         <activity android:name=".features.pin.PinActivity" />
+        <activity android:name=".features.home.room.detail.search.SearchActivity" />
 
         <!-- Services -->
 
@@ -232,9 +243,11 @@
             </intent-filter>
         </service>
 
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
             android:name=".core.services.VectorSyncService"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
 
         <service
             android:name=".features.call.telecom.VectorConnectionService"
@@ -248,6 +261,10 @@
 
         <receiver
             android:name=".features.call.service.CallHeadsUpActionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".features.settings.troubleshoot.TestNotificationReceiver"
             android:exported="false" />
 
         <!-- Exported false, should only be accessible from this app!! -->

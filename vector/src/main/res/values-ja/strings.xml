@@ -1227,4 +1227,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     </plurals>
 
     <string name="cannot_call_yourself">自分自身には通話できません</string>
+    <string name="settings_send_markdown">マークダウン書式</string>
+    <string name="settings_send_markdown_summary">メッセージ送信前にマークダウン書式を適用します。これにより、アスタリスクを使用して斜体のテキストを表示するなどの高度な書式設定が利用できます。</string>
+    <string name="preference_voice_and_video">音声とビデオ</string>
 </resources>

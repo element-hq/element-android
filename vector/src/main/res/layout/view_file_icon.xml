@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.RelativeLayout"
     android:layout_width="50dp"
@@ -18,7 +19,8 @@
         android:layout_height="20dp"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_download"
-        android:tint="?vctr_notice_secondary"
-        tools:src="@drawable/ic_paperclip" />
+        tools:src="@drawable/ic_paperclip"
+        app:tint="?vctr_notice_secondary"
+        tools:ignore="MissingPrefix" />
 
 </merge>

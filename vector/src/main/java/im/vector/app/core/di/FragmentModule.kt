@@ -27,6 +27,7 @@ import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
+import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
 import im.vector.app.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
@@ -51,6 +52,7 @@ import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.RoomDetailFragment
+import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
@@ -532,6 +534,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(SharedSecuredStorageResetAllFragment::class)
+    fun bindSharedSecuredStorageResetAllFragment(fragment: SharedSecuredStorageResetAllFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(SetIdentityServerFragment::class)
     fun bindSetIdentityServerFragment(fragment: SetIdentityServerFragment): Fragment
 
@@ -564,4 +571,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomBannedMemberListFragment::class)
     fun bindRoomBannedMemberListFragment(fragment: RoomBannedMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SearchFragment::class)
+    fun bindSearchFragment(fragment: SearchFragment): Fragment
 }

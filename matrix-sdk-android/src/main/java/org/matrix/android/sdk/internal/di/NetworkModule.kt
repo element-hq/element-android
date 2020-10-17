@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,6 @@ import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingIntercept
 import org.matrix.android.sdk.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okreplay.OkReplayInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -42,12 +40,6 @@ internal object NetworkModule {
         val interceptor = HttpLoggingInterceptor(logger)
         interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
         return interceptor
-    }
-
-    @Provides
-    @JvmStatic
-    fun providesOkReplayInterceptor(): OkReplayInterceptor {
-        return OkReplayInterceptor()
     }
 
     @Provides
@@ -71,8 +63,7 @@ internal object NetworkModule {
                              timeoutInterceptor: TimeOutInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
-                             curlLoggingInterceptor: CurlLoggingInterceptor,
-                             okReplayInterceptor: OkReplayInterceptor): OkHttpClient {
+                             curlLoggingInterceptor: CurlLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -93,7 +84,6 @@ internal object NetworkModule {
                         proxy(it)
                     }
                 }
-                .addInterceptor(okReplayInterceptor)
                 .build()
     }
 

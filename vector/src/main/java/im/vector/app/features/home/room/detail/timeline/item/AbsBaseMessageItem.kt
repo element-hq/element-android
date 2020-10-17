@@ -136,8 +136,10 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         val messageColorProvider: MessageColorProvider
         val itemLongClickListener: View.OnLongClickListener?
         val itemClickListener: View.OnClickListener?
+
         //        val memberClickListener: View.OnClickListener?
         val reactionPillCallback: TimelineEventController.ReactionPillCallback?
+
         //        val avatarCallback: TimelineEventController.AvatarCallback?
         val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback?
 //        val emojiTypeFace: Typeface?

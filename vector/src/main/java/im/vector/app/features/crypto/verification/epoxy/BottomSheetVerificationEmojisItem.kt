@@ -27,10 +27,10 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import me.gujun.android.span.Span
 import me.gujun.android.span.image
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 
 /**
  * A emoji list for bottom sheet.
@@ -72,7 +72,7 @@ abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetV
             view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = false
             view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = true
             view.findViewById<ImageView>(R.id.item_emoji_image).setImageDrawable(ContextCompat.getDrawable(view.context, it))
-        } ?: kotlin.run {
+        } ?: run {
             view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = true
             view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = false
             view.findViewById<TextView>(R.id.item_emoji_tv).text = rep.emoji

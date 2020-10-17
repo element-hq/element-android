@@ -16,7 +16,6 @@
 package im.vector.app.features.discovery.change
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -28,15 +27,15 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-import im.vector.app.features.terms.ReviewTermsActivity
-import org.matrix.android.sdk.api.session.terms.TermsService
 import kotlinx.android.synthetic.main.fragment_set_identity_server.*
+import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
@@ -121,7 +120,8 @@ class SetIdentityServerFragment @Inject constructor(
                 is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
                 is SetIdentityServerViewEvents.ShowTerms     -> {
                     navigator.openTerms(
-                            this,
+                            requireContext(),
+                            termsActivityResultLauncher,
                             TermsService.ServiceType.IdentityService,
                             it.identityServerUrl,
                             null)
@@ -150,15 +150,12 @@ class SetIdentityServerFragment @Inject constructor(
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.identity_server)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
-            if (Activity.RESULT_OK == resultCode) {
-                processIdentityServerChange()
-            } else {
-                // add some error?
-            }
+    private val termsActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            processIdentityServerChange()
+        } else {
+            // add some error?
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun processIdentityServerChange() {

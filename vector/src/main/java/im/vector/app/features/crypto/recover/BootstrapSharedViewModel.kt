@@ -34,6 +34,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.ReAuthHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
@@ -41,8 +43,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.OutputStream
 
 class BootstrapSharedViewModel @AssistedInject constructor(
@@ -69,45 +69,51 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     init {
 
-        if (args.forceReset4S) {
-            setState {
-                copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, reset = true))
-            }
-        } else if (args.initCrossSigningOnly) {
-            // Go straight to account password
-            setState {
-                copy(step = BootstrapStep.AccountPassword(false))
-            }
-        } else {
-            // need to check if user have an existing keybackup
-            setState {
-                copy(step = BootstrapStep.CheckingMigration)
-            }
-
-            // We need to check if there is an existing backup
-            viewModelScope.launch(Dispatchers.IO) {
-                val version = awaitCallback<KeysVersionResult?> {
-                    session.cryptoService().keysBackupService().getCurrentVersion(it)
+        when (args.setUpMode) {
+            SetupMode.PASSPHRASE_RESET,
+            SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET,
+            SetupMode.HARD_RESET         -> {
+                setState {
+                    copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, reset = true))
                 }
-                if (version == null) {
-                    // we just resume plain bootstrap
-                    doesKeyBackupExist = false
-                    setState {
-                        copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+            }
+            SetupMode.CROSS_SIGNING_ONLY -> {
+                // Go straight to account password
+                setState {
+                    copy(step = BootstrapStep.AccountPassword(false))
+                }
+            }
+            SetupMode.NORMAL             -> {
+                // need to check if user have an existing keybackup
+                setState {
+                    copy(step = BootstrapStep.CheckingMigration)
+                }
+
+                // We need to check if there is an existing backup
+                viewModelScope.launch(Dispatchers.IO) {
+                    val version = awaitCallback<KeysVersionResult?> {
+                        session.cryptoService().keysBackupService().getCurrentVersion(it)
                     }
-                } else {
-                    // we need to get existing backup passphrase/key and convert to SSSS
-                    val keyVersion = awaitCallback<KeysVersionResult?> {
-                        session.cryptoService().keysBackupService().getVersion(version.version ?: "", it)
-                    }
-                    if (keyVersion == null) {
-                        // strange case... just finish?
-                        _viewEvents.post(BootstrapViewEvents.Dismiss)
-                    } else {
-                        doesKeyBackupExist = true
-                        isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                    if (version == null) {
+                        // we just resume plain bootstrap
+                        doesKeyBackupExist = false
                         setState {
                             copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+                        }
+                    } else {
+                        // we need to get existing backup passphrase/key and convert to SSSS
+                        val keyVersion = awaitCallback<KeysVersionResult?> {
+                            session.cryptoService().keysBackupService().getVersion(version.version ?: "", it)
+                        }
+                        if (keyVersion == null) {
+                            // strange case... just finish?
+                            _viewEvents.post(BootstrapViewEvents.Dismiss(false))
+                        } else {
+                            doesKeyBackupExist = true
+                            isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                            setState {
+                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
+                            }
                         }
                     }
                 }
@@ -234,7 +240,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             BootstrapActions.Completed                           -> {
-                _viewEvents.post(BootstrapViewEvents.Dismiss)
+                _viewEvents.post(BootstrapViewEvents.Dismiss(true))
             }
             BootstrapActions.GoToCompleted                       -> {
                 setState {
@@ -295,7 +301,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     // =======================================
     private fun saveRecoveryKeyToUri(os: OutputStream) = withState { state ->
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
+            runCatching {
                 os.use {
                     os.write((state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey() ?: "").toByteArray())
                 }
@@ -395,16 +401,16 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             bootstrapTask.invoke(this,
                     Params(
                             userPasswordAuth = userPasswordAuth,
-                            initOnlyCrossSigning = args.initCrossSigningOnly,
                             progressListener = progressListener,
                             passphrase = state.passphrase,
-                            keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } }
+                            keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } },
+                            setupMode = args.setUpMode
                     )
             ) { bootstrapResult ->
                 when (bootstrapResult) {
-                    is BootstrapResult.SuccessCrossSigningOnly                 -> {
+                    is BootstrapResult.SuccessCrossSigningOnly -> {
                         // TPD
-                        _viewEvents.post(BootstrapViewEvents.Dismiss)
+                        _viewEvents.post(BootstrapViewEvents.Dismiss(true))
                     }
                     is BootstrapResult.Success                 -> {
                         setState {
@@ -428,7 +434,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     }
                     is BootstrapResult.UnsupportedAuthFlow     -> {
                         _viewEvents.post(BootstrapViewEvents.ModalError(stringProvider.getString(R.string.auth_flow_not_supported)))
-                        _viewEvents.post(BootstrapViewEvents.Dismiss)
+                        _viewEvents.post(BootstrapViewEvents.Dismiss(false))
                     }
                     is BootstrapResult.InvalidPasswordError    -> {
                         // it's a bad password
@@ -522,7 +528,13 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
             BootstrapStep.CheckingMigration                  -> Unit
             is BootstrapStep.FirstForm                       -> {
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+                _viewEvents.post(
+                        when (args.setUpMode) {
+                            SetupMode.CROSS_SIGNING_ONLY,
+                            SetupMode.NORMAL -> BootstrapViewEvents.SkipBootstrap()
+                            else             -> BootstrapViewEvents.Dismiss(success = false)
+                        }
+                )
             }
             is BootstrapStep.GetBackupSecretForMigration     -> {
                 setState {
@@ -558,7 +570,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
             val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             val args: BootstrapBottomSheet.Args = fragment.arguments?.getParcelable(BootstrapBottomSheet.EXTRA_ARGS)
-                    ?: BootstrapBottomSheet.Args(initCrossSigningOnly = true, forceReset4S = false)
+                    ?: BootstrapBottomSheet.Args(SetupMode.CROSS_SIGNING_ONLY)
             return fragment.bootstrapViewModelFactory.create(state, args)
         }
     }

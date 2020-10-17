@@ -1110,4 +1110,28 @@
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
 
     <string name="action_mark_room_read">Позначити як прочитане</string>
+    <string name="resources_script">Cyrl</string>
+
+    <string name="notification_sync_init">Запуск сервісу</string>
+    <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
+    <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>
+    <string name="room_list_people_empty_body">Тут буде список Ваших прямих чатів</string>
+    <string name="event_redacted">Повідомлення видалено</string>
+    <string name="fab_menu_create_chat">Прямі чати</string>
+
+    <string name="bottom_action_people_x">Прямі чати</string>
+
+    <string name="room_filtering_footer_create_new_direct_message">Відправити нове пряме повідомлення</string>
+    <string name="command_description_shrug">Додає ¯\\_(ツ)_/¯ перед текстовим повідомленням</string>
+
+    <string name="rendering_event_error_type_of_message_not_handled">Element не підтримує повідомлення типу \'%1$s\'</string>
+    <string name="command_description_rainbow">Відправляє повідомлення розмальоване веселково</string>
+    <string name="settings_category_composer">Редактор повідомлень</string>
+
+    <string name="command_description_plain">Відправляє повідомлення як текст без інтерпретації його як Markdown</string>
+
+    <string name="room_message_placeholder">Повідомлення…</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">Ви не маєте доступу до цього повідомлення</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Очікуємо повідомлення, це може тривати певний час</string>
 </resources>

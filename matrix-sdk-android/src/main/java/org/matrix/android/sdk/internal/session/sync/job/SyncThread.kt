@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.Timer
@@ -162,7 +162,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 // No timeout after a pause
                 val timeout = state.let { if (it is SyncState.Running && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
                 Timber.v("Execute sync request with timeout $timeout")
-                val params = SyncTask.Params(timeout)
+                val params = SyncTask.Params(timeout, SyncPresence.Online)
                 val sync = syncScope.launch {
                     doSync(params)
                 }

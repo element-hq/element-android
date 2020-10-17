@@ -62,7 +62,7 @@
     <TextView
         android:id="@+id/composer_related_message_preview"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_message_text_color"
@@ -79,12 +79,13 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="38dp"
         android:alpha="1"
-        android:tint="?riotx_text_primary"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/composer_related_message_avatar_view"
         app:layout_constraintStart_toStartOf="@id/composer_related_message_avatar_view"
         app:layout_constraintTop_toBottomOf="@id/composer_related_message_avatar_view"
-        tools:src="@drawable/ic_edit" />
+        tools:src="@drawable/ic_edit"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
 
     <ImageButton
@@ -93,10 +94,11 @@
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_close_round"
-        android:tint="@color/riotx_notice"
+        app:tint="@color/riotx_notice"
         app:layout_constraintBottom_toBottomOf="@id/composer_related_message_preview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/composer_related_message_preview" />
+        app:layout_constraintTop_toTopOf="@id/composer_related_message_preview"
+        tools:ignore="MissingPrefix" />
 
 
     <ImageView
@@ -111,8 +113,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/composer_shield"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
         tools:src="@tools:sample/avatars" />
 
 
@@ -124,9 +124,7 @@
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintBottom_toBottomOf="@id/composer_avatar_view"
         app:layout_constraintStart_toEndOf="@+id/composer_avatar_view"
-        tools:src="@drawable/ic_shield_black"
-        tools:visibility="visible"
-        />
+        tools:src="@drawable/ic_shield_black" />
 
 
 
@@ -136,9 +134,10 @@
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_attachment"
-        android:tint="?attr/colorAccent"
+        app:tint="?attr/colorAccent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:ignore="MissingPrefix" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/composer_preview_barrier"
@@ -156,12 +155,12 @@
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_send"
-        android:tint="?attr/colorAccent"
+        app:tint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintVertical_bias="1"
+        tools:ignore="MissingPrefix" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
@@ -172,8 +171,8 @@
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@id/composer_avatar_view"
+        app:layout_constraintStart_toEndOf="@id/composer_shield"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem/random" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ package im.vector.app.features.settings.devices
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -58,8 +59,8 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(
                 controller,
                 showDivider = false,

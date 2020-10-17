@@ -10,13 +10,19 @@
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
     <string name="notice_room_created_by_you">You created the room</string>
+    <string name="notice_direct_room_created">%1$s created the discussion</string>
+    <string name="notice_direct_room_created_by_you">You created the discussion</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_by_you">You invited %1$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
     <string name="notice_room_join">%1$s joined the room</string>
     <string name="notice_room_join_by_you">You joined the room</string>
+    <string name="notice_direct_room_join">%1$s joined</string>
+    <string name="notice_direct_room_join_by_you">You joined</string>
     <string name="notice_room_leave">%1$s left the room</string>
     <string name="notice_room_leave_by_you">You left the room</string>
+    <string name="notice_direct_room_leave">%1$s left the room</string>
+    <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
     <string name="notice_room_kick">%1$s kicked %2$s</string>
@@ -53,6 +59,8 @@
     <string name="notice_ended_call_by_you">You ended the call.</string>
     <string name="notice_made_future_room_visibility">%1$s made future room history visible to %2$s</string>
     <string name="notice_made_future_room_visibility_by_you">You made future room history visible to %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s made future messages visible to %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">You made future messages visible to %1$s</string>
     <string name="notice_room_visibility_invited">all room members, from the point they are invited.</string>
     <string name="notice_room_visibility_joined">all room members, from the point they joined.</string>
     <string name="notice_room_visibility_shared">all room members.</string>
@@ -62,6 +70,8 @@
     <string name="notice_end_to_end_by_you">You turned on end-to-end encryption (%1$s)</string>
     <string name="notice_room_update">%s upgraded this room.</string>
     <string name="notice_room_update_by_you">You upgraded this room.</string>
+    <string name="notice_direct_room_update">%s upgraded here.</string>
+    <string name="notice_direct_room_update_by_you">You upgraded here.</string>
 
     <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
     <string name="notice_requested_voip_conference_by_you">You requested a VoIP conference</string>
@@ -83,8 +93,12 @@
     <string name="notice_profile_change_redacted_by_you">You updated your profile %1$s</string>
     <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
     <string name="notice_room_third_party_invite_by_you">You sent an invitation to %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_invite">%1$s invited %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">You invited %1$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s to join the room</string>
     <string name="notice_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">You accepted the invitation for %1$s</string>
 
@@ -171,8 +185,12 @@
     <string name="notice_room_invite_you_with_reason">%1$s invited you. Reason: %2$s</string>
     <string name="notice_room_join_with_reason">%1$s joined the room. Reason: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">You joined the room. Reason: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s joined. Reason: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">You joined. Reason: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s left the room. Reason: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">You left the room. Reason: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s left. Reason: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
     <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
@@ -220,8 +238,12 @@
 
     <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
     <string name="notice_room_guest_access_can_join_by_you">"You have allowed guests to join the room."</string>
+    <string name="notice_direct_room_guest_access_can_join">"%1$s has allowed guests to join here."</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">"You have allowed guests to join here."</string>
     <string name="notice_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
     <string name="notice_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
 
     <string name="notice_end_to_end_ok">%1$s turned on end-to-end encryption.</string>
     <string name="notice_end_to_end_ok_by_you">You turned on end-to-end encryption.</string>

@@ -22,8 +22,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.failure.GlobalError
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -38,6 +36,7 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
@@ -47,6 +46,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -89,6 +90,7 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
+    @Inject lateinit var popupAlertManager: PopupAlertManager
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -115,6 +117,9 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
         // Also clear the dynamic shortcuts
         shortcutsHandler.clearShortcuts()
+
+        // Also clear the alerts
+        popupAlertManager.cancelAll()
     }
 
     private fun parseArgs(): MainActivityArgs {

@@ -139,6 +139,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -180,6 +181,17 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 R.string.security_prompt_text
         ) {
             it.navigator.upgradeSessionSecurity(it, true)
+        }
+    }
+
+    private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
+        // We need to ask
+        promptSecurityEvent(
+                event.userItem,
+                R.string.crosssigning_verify_this_session,
+                R.string.confirm_your_identity
+        ) {
+            it.navigator.waitSessionVerification(it)
         }
     }
 
@@ -308,6 +320,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
              */
             R.id.menu_home_filter     -> {
                 navigator.openRoomsFiltering(this)
+                return true
+            }
+            R.id.menu_home_setting    -> {
+                navigator.openSettings(this)
                 return true
             }
         }

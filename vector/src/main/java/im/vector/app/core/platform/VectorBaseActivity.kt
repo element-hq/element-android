@@ -18,7 +18,6 @@ package im.vector.app.core.platform
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
@@ -60,6 +59,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.utils.toast
@@ -68,7 +68,6 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.pin.UnlockedActivity
@@ -178,7 +177,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.i("onCreate Activity ${this.javaClass.simpleName}")
+        Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
         screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
         val timeForInjection = measureTimeMillis {
@@ -206,7 +205,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
         pinLocker.getLiveState().observeNotNull(this) {
             if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
-                navigator.openPinCode(this, PinMode.AUTH)
+                navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
         sessionListener = vectorComponent.sessionListener()
@@ -306,29 +305,27 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.i("onDestroy Activity ${this.javaClass.simpleName}")
+        Timber.i("onDestroy Activity ${javaClass.simpleName}")
         unBinder?.unbind()
         unBinder = null
 
         uiDisposables.dispose()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    Timber.v("Pin ok, unlock app")
-                    pinLocker.unlock()
+    private val pinStartForActivityResult = registerStartForActivityResult { activityResult ->
+        when (activityResult.resultCode) {
+            Activity.RESULT_OK -> {
+                Timber.v("Pin ok, unlock app")
+                pinLocker.unlock()
 
-                    // Cancel any new started PinActivity, after a screen rotation for instance
-                    finishActivity(PinActivity.PIN_REQUEST_CODE)
-                }
-                else               -> {
-                    if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
-                        // Remove the task, to be sure that PIN code will be requested when resumed
-                        finishAndRemoveTask()
-                    }
+                // Cancel any new started PinActivity, after a screen rotation for instance
+                // FIXME I cannot use this anymore :/
+                // finishActivity(PinActivity.PIN_REQUEST_CODE)
+            }
+            else               -> {
+                if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
+                    // Remove the task, to be sure that PIN code will be requested when resumed
+                    finishAndRemoveTask()
                 }
             }
         }
@@ -336,7 +333,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onResume() {
         super.onResume()
-        Timber.i("onResume Activity ${this.javaClass.simpleName}")
+        Timber.i("onResume Activity ${javaClass.simpleName}")
 
         configurationViewModel.onActivityResumed()
 
@@ -376,7 +373,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onPause() {
         super.onPause()
-        Timber.i("onPause Activity ${this.javaClass.simpleName}")
+        Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()
 

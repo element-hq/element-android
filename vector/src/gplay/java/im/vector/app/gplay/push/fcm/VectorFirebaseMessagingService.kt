@@ -19,10 +19,12 @@
 
 package im.vector.app.gplay.push.fcm
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import im.vector.app.BuildConfig
@@ -34,6 +36,7 @@ import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -60,11 +63,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationDrawerManager = vectorComponent().notificationDrawerManager()
-        notifiableEventResolver = vectorComponent().notifiableEventResolver()
-        pusherManager = vectorComponent().pusherManager()
-        activeSessionHolder = vectorComponent().activeSessionHolder()
-        vectorPreferences = vectorComponent().vectorPreferences()
+        with(vectorComponent()) {
+            notificationDrawerManager = notificationDrawerManager()
+            notifiableEventResolver = notifiableEventResolver()
+            pusherManager = pusherManager()
+            activeSessionHolder = activeSessionHolder()
+            vectorPreferences = vectorPreferences()
+        }
     }
 
     /**
@@ -73,6 +78,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage) {
+        // Diagnostic Push
+        if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {
+            val intent = Intent(NotificationUtils.PUSH_ACTION)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            return
+        }
+
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,6 +80,7 @@ class OlmInboundGroupSessionWrapper2 : Serializable {
     constructor() {
         // empty
     }
+
     /**
      * Create a new instance from the provided keys map.
      *

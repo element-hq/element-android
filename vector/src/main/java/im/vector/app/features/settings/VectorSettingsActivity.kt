@@ -21,14 +21,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import org.matrix.android.sdk.api.failure.GlobalError
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import kotlinx.android.synthetic.main.activity_vector_settings.*
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -71,7 +71,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
                             VectorSettingsDevicesFragment::class.java,
                             null,
                             FRAGMENT_TAG)
-                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                -> {
+                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
@@ -107,7 +107,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
 
         if (oFragment != null) {
-            oFragment.setTargetFragment(caller, 0)
+            // Deprecated, I comment it, I think it is useless
+            // oFragment.setTargetFragment(caller, 0)
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
@@ -135,7 +136,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
     }
 
-    fun <T: Fragment> navigateTo(fragmentClass: Class<T>) {
+    fun <T : Fragment> navigateTo(fragmentClass: Class<T>) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
                 .replace(R.id.vector_settings_page, fragmentClass, null)

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -36,8 +37,6 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -327,7 +326,9 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 val params = SendGossipWorker.Params(
                         sessionId = sessionId,
                         secretValue = secretValue,
-                        request = request
+                        requestUserId = request.userId,
+                        requestDeviceId = request.deviceId,
+                        requestId = request.requestId
                 )
 
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)
@@ -351,7 +352,9 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             val params = SendGossipWorker.Params(
                     sessionId = userId,
                     secretValue = secretValue,
-                    request = request
+                    requestUserId = request.userId,
+                    requestDeviceId = request.deviceId,
+                    requestId = request.requestId
             )
 
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)

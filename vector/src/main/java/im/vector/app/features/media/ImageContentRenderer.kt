@@ -33,13 +33,14 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
+import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -51,6 +52,7 @@ interface AttachmentData : Parcelable {
     val mimeType: String?
     val url: String?
     val elementToDecrypt: ElementToDecrypt?
+
     // If true will load non mxc url, be careful to set it only for attachments sent by you
     val allowNonMxcUrls: Boolean
 }
@@ -206,12 +208,14 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+    fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+        return createGlideRequest(data, mode, GlideApp.with(imageView), size)
+    }
+
+    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode)): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
-            GlideApp
-                    .with(imageView)
-                    .load(data)
+            glideRequests.load(data)
         } else {
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
@@ -223,15 +227,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             // Fallback to base url
                     ?: data.url.takeIf { it?.startsWith("content://") == true }
 
-            GlideApp
-                    .with(imageView)
+            glideRequests
                     .load(resolvedUrl)
                     .apply {
                         if (mode == Mode.THUMBNAIL) {
                             error(
-                                    GlideApp
-                                            .with(imageView)
-                                            .load(resolveUrl(data))
+                                    glideRequests.load(resolveUrl(data))
                             )
                         }
                     }

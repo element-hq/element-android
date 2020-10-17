@@ -91,7 +91,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
-            val body = displayableEventFormatter.format(event, false)
+            val body = displayableEventFormatter.format(event, false, null)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
@@ -124,7 +124,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 }
             }
 
-            val body = displayableEventFormatter.format(event, false).toString()
+            val body = displayableEventFormatter.format(event, false, room.roomSummary()).toString()
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
@@ -165,7 +165,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         val roomId = event.roomId ?: return null
         val dName = event.senderId?.let { session.getUser(it)?.displayName }
         if (Membership.INVITE == content.membership) {
-            val body = noticeEventFormatter.format(event, dName)
+            val body = noticeEventFormatter.format(event, dName, session.getRoomSummary(roomId))
                     ?: stringProvider.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
                     session.myUserId,

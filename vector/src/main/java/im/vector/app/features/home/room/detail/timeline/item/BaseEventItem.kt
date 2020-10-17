@@ -43,6 +43,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
     var highlighted: Boolean = false
+
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 

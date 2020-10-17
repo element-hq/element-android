@@ -17,7 +17,6 @@ package im.vector.app.features.reactions
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.observe
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment

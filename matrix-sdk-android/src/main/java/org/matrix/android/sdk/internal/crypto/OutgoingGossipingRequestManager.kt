@@ -1,6 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,7 +70,9 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             delay(1500)
             cryptoStore.getOrAddOutgoingSecretShareRequest(secretName, recipients)?.let {
                 // TODO check if there is already one that is being sent?
-                if (it.state == OutgoingGossipingRequestState.SENDING /**|| it.state == OutgoingGossipingRequestState.SENT*/) {
+                if (it.state == OutgoingGossipingRequestState.SENDING
+                /**|| it.state == OutgoingGossipingRequestState.SENT*/
+                ) {
                     Timber.v("## CRYPTO - GOSSIP sendSecretShareRequest() : we are already sending for that session: $it")
                     return@launch
                 }
@@ -126,7 +126,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param request the request
      */
     private fun sendOutgoingGossipingRequest(request: OutgoingGossipingRequest) {
-        Timber.v("## CRYPTO - GOSSIP sendOutgoingRoomKeyRequest() : Requesting keys $request")
+        Timber.v("## CRYPTO - GOSSIP sendOutgoingGossipingRequest() : Requesting keys $request")
 
         val params = SendGossipRequestWorker.Params(
                 sessionId = sessionId,

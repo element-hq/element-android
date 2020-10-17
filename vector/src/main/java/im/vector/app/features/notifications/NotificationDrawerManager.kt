@@ -245,8 +245,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             roomEvents.add(event)
                         }
                     }
-                    is InviteNotifiableEvent -> invitationEvents.add(event)
-                    is SimpleNotifiableEvent -> simpleEvents.add(event)
+                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is SimpleNotifiableEvent  -> simpleEvents.add(event)
                     else                      -> Timber.w("Type not handled")
                 }
             }
@@ -588,6 +588,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         if (file.exists()) {
             file.delete()
         }
+    }
+
+    fun displayDiagnosticNotification() {
+        notificationUtils.displayDiagnosticNotification()
     }
 
     companion object {

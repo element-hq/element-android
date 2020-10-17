@@ -62,7 +62,8 @@ abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() 
             val eventId: String,
             val userId: String,
             val memberName: String,
-            val avatarUrl: String?
+            val avatarUrl: String?,
+            val isDirectRoom: Boolean
     )
 
     fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)

@@ -16,7 +16,6 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -31,6 +30,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
@@ -48,10 +48,6 @@ import javax.inject.Inject
 
 class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() {
 
-    companion object {
-        private const val SAVE_RECOVERY_KEY_REQUEST_CODE = 2754
-    }
-
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
     @BindView(R.id.keys_backup_setup_step3_button)
@@ -65,8 +61,8 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
         viewModel.shouldPromptOnBack = false
@@ -138,19 +134,20 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
             val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             selectTxtFileToWrite(
                     activity = requireActivity(),
-                    fragment = this,
+                    activityResultLauncher = saveRecoveryActivityResultLauncher,
                     defaultFileName = "recovery-key-$userId-$timestamp.txt",
-                    chooserHint = getString(R.string.save_recovery_key_chooser_hint),
-                    requestCode = SAVE_RECOVERY_KEY_REQUEST_CODE
+                    chooserHint = getString(R.string.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_share)?.setOnClickListener {
-            startSharePlainTextIntent(this,
-                    context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
-                    recoveryKey,
-                    context?.getString(R.string.recovery_key))
+            startSharePlainTextIntent(
+                    fragment = this,
+                    activityResultLauncher = null,
+                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                    text = recoveryKey,
+                    subject = context?.getString(R.string.recovery_key))
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
         }
@@ -202,15 +199,11 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            SAVE_RECOVERY_KEY_REQUEST_CODE -> {
-                val uri = data?.data
-                if (resultCode == Activity.RESULT_OK && uri != null) {
-                    viewModel.recoveryKey.value?.let {
-                        exportRecoveryKeyToFile(uri, it)
-                    }
-                }
+    private val saveRecoveryActivityResultLauncher = registerStartForActivityResult { activityRessult ->
+        val uri = activityRessult.data?.data ?: return@registerStartForActivityResult
+        if (activityRessult.resultCode == Activity.RESULT_OK) {
+            viewModel.recoveryKey.value?.let {
+                exportRecoveryKeyToFile(uri, it)
             }
         }
     }

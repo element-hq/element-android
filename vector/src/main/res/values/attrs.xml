@@ -52,6 +52,7 @@
 
     <declare-styleable name="BottomSheetActionButton">
         <attr name="tint" format="color" />
+        <attr name="titleTextColor" format="color" />
         <attr name="actionTitle" format="string" />
         <attr name="actionDescription" format="string" />
         <attr name="leftIcon" format="reference" />
@@ -59,7 +60,7 @@
         <attr name="forceStartPadding" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="SignoutBottomSheetActionButton">
+    <declare-styleable name="SignOutBottomSheetActionButton">
         <attr name="iconTint" format="color" />
         <attr name="actionTitle"/>
         <attr name="leftIcon" />

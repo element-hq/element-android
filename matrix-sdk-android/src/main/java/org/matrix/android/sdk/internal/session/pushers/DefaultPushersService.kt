@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +28,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.pushers.gateway.PushGatewayNotifyTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -42,9 +42,22 @@ internal class DefaultPushersService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
+        private val pushGatewayNotifyTask: PushGatewayNotifyTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
+
+    override fun testPush(url: String,
+                          appId: String,
+                          pushkey: String,
+                          eventId: String,
+                          callback: MatrixCallback<Unit>): Cancelable {
+        return pushGatewayNotifyTask
+                .configureWith(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
 
     override fun refreshPushers() {
         getPusherTask

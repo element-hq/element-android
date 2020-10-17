@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s отправил(а) изображение.</string>
-
     <string name="notice_room_invite_no_invitee">%s приглашение</string>
     <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
     <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
@@ -31,67 +29,49 @@
     <string name="notice_room_visibility_world_readable">всем.</string>
     <string name="notice_room_visibility_unknown">неизвестно (%s).</string>
     <string name="notice_end_to_end">%1$s включил(а) сквозное шифрование (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s запросил(а) VoIP конференцию</string>
     <string name="notice_voip_started">VoIP-конференция начата</string>
     <string name="notice_voip_finished">VoIP-конференция завершена</string>
-
     <string name="notice_avatar_changed_too">(аватар также был изменен)</string>
     <string name="notice_room_name_removed">%1$s удалил(а) название комнаты</string>
     <string name="notice_room_topic_removed">%1$s удалил(а) тему комнаты</string>
     <string name="notice_profile_change_redacted">%1$s обновил(а) свой профиль %2$s</string>
     <string name="notice_room_third_party_invite">%1$s отправил(а) приглашение %2$s присоединиться к комнате</string>
     <string name="notice_room_third_party_registered_invite">%1$s принял(а) приглашение от %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Невозможно расшифровать: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Устройство отправителя не предоставило нам ключ для расшифровки этого сообщения.</string>
-
     <!-- Room Screen -->
     <string name="could_not_redact">Не удалось изменить</string>
     <string name="unable_to_send_message">Не удалось отправить сообщение</string>
-
     <string name="message_failed_to_upload">Не удалось загрузить изображение</string>
-
     <!-- general errors -->
     <string name="network_error">Сетевая ошибка</string>
     <string name="matrix_error">Ошибка Matrix</string>
-
     <!-- Home Screen -->
-
     <!-- Last seen time -->
-
     <!-- call events -->
-
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">В настоящее время невозможно вновь присоединиться к пустой комнате.</string>
-
     <string name="encrypted_message">Зашифрованное сообщение</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">Адрес электронной почты</string>
     <string name="medium_phone_number">Номер телефона</string>
-
     <string name="summary_user_sent_sticker">%1$s отправил стикер.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Приглашение от %s</string>
     <string name="room_displayname_room_invite">Приглашение в комнату</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
     <string name="room_displayname_empty_room">Пустая комната</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s и 1 другой</item>
         <item quantity="few">%1$s и %2$d другие</item>
         <item quantity="many">%1$s и %2$d других</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
-
-
     <string name="notice_event_redacted">Сообщение удалено</string>
     <string name="notice_event_redacted_by">%1$s удалил(а) сообщение</string>
     <string name="notice_event_redacted_with_reason">Сообщение удалено [причина: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">%1$s удалил(а) сообщение [причина: %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Начальная синхронизация:
 \nИмпорт учетной записи…</string>
     <string name="initial_sync_start_importing_account_crypto">Начальная синхронизация:
@@ -108,12 +88,9 @@
 \nИмпорт сообществ</string>
     <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
 \nИмпорт данных учетной записи</string>
-
     <string name="notice_room_update">%s обновил эту комнату.</string>
-
     <string name="event_status_sending_message">Отправка сообщения…</string>
     <string name="clear_timeline_send_queue">Очистить очередь отправки</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
     <string name="notice_room_invite_no_invitee_with_reason">Приглашение %1$s. Причина: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s приглашен %2$s. Причина: %3$s</string>
@@ -128,36 +105,27 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s отозвал приглашение %2$s присоединиться к комнате. Причина: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s принял приглашение для %2$s. Причина: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s отозвал приглашение %2$s. Причина: %3$s</string>
-
     <string name="notice_room_created">%1$s создал(а) комнату</string>
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s добавил(а) %2$s в качестве адреса для этой комнаты.</item>
         <item quantity="few">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
         <item quantity="many">%1$s добавил(а) %2$s в качестве адресов для этой комнаты.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s удалил(а) адрес %2$s для комнаты.</item>
         <item quantity="few">%1$s удалил(а) адреса %2$s для комнаты.</item>
         <item quantity="many">%1$s удалил(а) адреса %2$s для комнаты.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s добавил(а) адреса %2$s и удалил(а) %3$s для комнаты.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s сделал(а) %2$s главным адресом комнаты.</string>
     <string name="notice_room_canonical_alias_unset">%1$s удалил(а) главный адрес комнаты.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s разрешил(а) гостям входить в комнату.</string>
     <string name="notice_room_guest_access_forbidden">%1$s запретил(а) гостям входить в комнату.</string>
-
     <string name="notice_end_to_end_ok">%1$s включил(а) сквозное шифрование.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s включил(а) сквозное шифрование (неизвестный алгоритм %2$s).</string>
-
     <string name="key_verification_request_fallback_message">%s запрашивает подтверждение вашего ключа, но ваш клиент не поддерживает подтверждение в чате. Используйте устаревшую проверку для сверки ключей.</string>
-
     <string name="summary_you_sent_image">Вы отправили изображение.</string>
     <string name="summary_you_sent_sticker">Вы отправили стикер.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Ваше приглашение</string>
     <string name="notice_room_created_by_you">Вы создали комнату</string>
     <string name="notice_room_invite_by_you">Вы пригласили %1$s</string>
@@ -181,7 +149,6 @@
     <string name="notice_made_future_room_visibility_by_you">Вы сделали будущую историю комнаты видимой для %1$s</string>
     <string name="notice_end_to_end_by_you">Вы включили сквозное шифрование (%1$s)</string>
     <string name="notice_room_update_by_you">Вы обновили эту комнату.</string>
-
     <string name="notice_requested_voip_conference_by_you">Вы начали групповой звонок</string>
     <string name="notice_room_name_removed_by_you">Вы удалили название комнаты</string>
     <string name="notice_room_topic_removed_by_you">Вы удалили тему комнаты</string>
@@ -189,24 +156,20 @@
     <string name="notice_room_third_party_invite_by_you">Вы отправили %1$s приглашение в эту комнату</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Вы отозвали у %1$s приглашение в эту комнату</string>
     <string name="notice_room_third_party_registered_invite_by_you">Вы приняли приглашение для %1$s</string>
-
     <string name="notice_widget_added">%1$s добавил(а) виджет %2$s</string>
     <string name="notice_widget_added_by_you">Вы добавили виджет %1$s</string>
     <string name="notice_widget_removed">%1$s удалил(а) виджет %2$s</string>
     <string name="notice_widget_removed_by_you">Вы удалили виджет %1$s</string>
     <string name="notice_widget_modified">%1$s изменил(а) виджет %2$s</string>
     <string name="notice_widget_modified_by_you">Вы изменили виджет %1$s</string>
-
     <string name="power_level_admin">Администратор</string>
     <string name="power_level_moderator">Модератор</string>
     <string name="power_level_default">По умолчанию</string>
     <string name="power_level_custom">Пользовательский (%1$d)</string>
     <string name="power_level_custom_no_value">Пользовательский</string>
-
     <string name="notice_power_level_changed_by_you">Вы изменили уровни доступа %1$s.</string>
     <string name="notice_power_level_changed">%1$s изменил(а) уровни доступа %2$s.</string>
     <string name="notice_power_level_diff">%1$s с %2$s на %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваше приглашение. Причина: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Вы пригласили %1$s. Причина: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Вы вошли в комнату. Причина: %1$s</string>
@@ -219,35 +182,47 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Вы отозвали у %1$s приглашение в эту комнату. Причина: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Вы приняли приглашение для %1$s. Причина: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Вы отозвали приглашение %1$s. Причина: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Вы добавили адрес %1$s для этой комнаты.</item>
         <item quantity="few">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
         <item quantity="many">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Вы удалили адрес этой комнаты: %1$s.</item>
         <item quantity="few">Вы удалили адреса этой комнаты: %1$s.</item>
         <item quantity="many">Вы удалили адреса этой комнаты: %1$s.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Вы добавили адреса %1$s и удалили %2$s для этой комнаты.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">Вы задали главный адрес этой комнаты %1$s.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Вы удалили главный адрес этой комнаты.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Вы разрешили гостям входить в комнату.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Вы запретили гостям входить в комнату.</string>
-
     <string name="notice_end_to_end_ok_by_you">Вы включили сквозное шифрование.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Вы включили сквозное шифрование (неизвестный алгоритм %1$s).</string>
-
     <string name="notice_room_avatar_changed">%1$s изменил(а) аватар комнаты</string>
     <string name="notice_room_avatar_changed_by_you">Вы изменили аватар комнаты</string>
     <string name="notice_call_candidates">%s отправил(а) данные для начала звонка.</string>
     <string name="notice_call_candidates_by_you">Вы отправили данные для начала звонка.</string>
     <string name="notice_room_avatar_removed">%1$s удалил(а) аватар комнаты</string>
     <string name="notice_room_avatar_removed_by_you">Вы удалили аватар комнаты</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Вы запретили гостям входить в комнату.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s запретил(а) гостям входить в комнату.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Вы разрешили гостям присоединяться сюда.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s разрешил(а) гостям присоединиться сюда.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Вы вышли. Причина: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s вышел(-ла). Причина: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Вы вошли. Причина: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s вошел(-ла). Причина: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Вы отозвали приглашение %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s отозвал(а) приглашение %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Вы пригласили %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s пригласил(а) %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Вы сделали будущие сообщения видимыми для %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s сделал(а) будущие сообщения видимыми для %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Вы покинули комнату</string>
+    <string name="notice_direct_room_leave">%1$s покинул(а) комнату</string>
+    <string name="notice_direct_room_join_by_you">Вы вошли</string>
+    <string name="notice_direct_room_join">%1$s вошел(ла)</string>
+    <string name="notice_direct_room_created_by_you">Вы создали обсуждение</string>
+    <string name="notice_direct_room_created">%1$s создал(а) обсуждение</string>
 </resources>

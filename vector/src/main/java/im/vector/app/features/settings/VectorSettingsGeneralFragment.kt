@@ -41,6 +41,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
@@ -48,11 +49,10 @@ import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.getSizeOfFiles
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -259,8 +259,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
-                SignOutUiWorker(requireActivity())
-                        .perform(requireContext())
+                SignOutUiWorker(requireActivity()).perform()
             }
 
             false
@@ -280,89 +279,38 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onAvatarTypeSelected(true)
+    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            avatarCameraUri?.let { uri ->
+                MultiPicker.get(MultiPicker.CAMERA)
+                        .getTakenPhoto(requireContext(), uri)
+                        ?.let {
+                            onAvatarSelected(it)
+                        }
             }
         }
     }
 
+    private val attachmentImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        val data = activityResult.data ?: return@registerStartForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            MultiPicker
+                    .get(MultiPicker.IMAGE)
+                    .getSelectedFiles(requireContext(), data)
+                    .firstOrNull()?.let {
+                        onAvatarSelected(it)
+                    }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_NEW_PHONE_NUMBER            -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY           -> onPhonebookCountryUpdate(data)
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                onAvatarSelected(it)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                /* TODO
-                    VectorUtils.TAKE_IMAGE -> {
-                        val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
-
-                        if (null != thumbnailUri) {
-                            displayLoadingView()
-
-                            val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
-
-                            if (null != resource) {
-                                session.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
-
-                                    override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
-                                        activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }
-                                    }
-
-                                    override fun onUploadComplete(uploadId: String?, contentUri: String?) {
-                                        activity?.runOnUiThread {
-                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
-                                                override fun onSuccess(info: Void?) {
-                                                    onCommonDone(null)
-                                                    refreshDisplay()
-                                                }
-
-                                                override fun onNetworkError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-
-                                                override fun onMatrixError(e: MatrixError) {
-                                                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
-                                                        activity?.runOnUiThread {
-                                                            hideLoadingView()
-                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
-                                                        }
-                                                    } else {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-                                                }
-
-                                                override fun onUnexpectedError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-                                            })
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    */
+                UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
             }
         }
     }
@@ -401,13 +349,19 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 }.show()
     }
 
+    private val takePhotoActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            onAvatarTypeSelected(true)
+        }
+    }
+
     private fun onAvatarTypeSelected(isCamera: Boolean) {
         if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoActivityResultLauncher)) {
+                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(requireActivity(), attachmentPhotoActivityResultLauncher)
             }
         } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+            MultiPicker.get(MultiPicker.IMAGE).single().startWith(attachmentImageActivityResultLauncher)
         }
     }
 
@@ -465,28 +419,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-    private fun onPhonebookCountryUpdate(data: Intent?) {
-        /* TODO
-        if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-                && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)) {
-            val countryCode = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)
-            if (!TextUtils.equals(countryCode, PhoneNumberUtils.getCountryCode(activity))) {
-                PhoneNumberUtils.setCountryCode(activity, countryCode)
-                mContactPhonebookCountryPreference.summary = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-            }
-        }
-        */
-    }
-
     // ==============================================================================================================
     // Phone number management
     // ==============================================================================================================
-
-    /**
-     * Refresh phone number list
-     */
-    private fun refreshPhoneNumbersList() {
-    }
 
     /**
      * Update the password.
@@ -646,10 +581,5 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 }
             })
         }
-    }
-
-    companion object {
-        private const val REQUEST_NEW_PHONE_NUMBER = 456
-        private const val REQUEST_PHONEBOOK_COUNTRY = 789
     }
 }

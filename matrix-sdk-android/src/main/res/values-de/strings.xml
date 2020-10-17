@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s hat ein Bild gesendet.</string>
-
     <string name="notice_room_invite_no_invitee">Einladung von %s</string>
     <string name="notice_room_invite">%1$s hat %2$s eingeladen</string>
     <string name="notice_room_invite_you">%1$s hat dich eingeladen</string>
@@ -31,69 +29,50 @@
     <string name="notice_room_visibility_world_readable">Jeder.</string>
     <string name="notice_room_visibility_unknown">Unbekannt (%s).</string>
     <string name="notice_end_to_end">%1$s hat die Ende-zu-Ende-Verschlüsselung aktiviert (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s möchte eine VoIP-Konferenz beginnen</string>
     <string name="notice_voip_started">VoIP-Konferenz gestartet</string>
     <string name="notice_voip_finished">VoIP-Konferenz beendet</string>
-
     <string name="notice_avatar_changed_too">(Profilbild wurde ebenfalls geändert)</string>
     <string name="notice_room_name_removed">%1$s hat den Raumnamen entfernt</string>
     <string name="notice_room_topic_removed">%1$s hat das Raum-Thema entfernt</string>
     <string name="notice_profile_change_redacted">%1$s hat das Benutzerprofil aktualisiert %2$s</string>
     <string name="notice_room_third_party_invite">%1$s hat eine Einladung an %2$s gesendet</string>
     <string name="notice_room_third_party_registered_invite">%1$s hat die Einladung in %2$s akzeptiert</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Nicht entschlüsselbar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Das absendende Gerät hat uns keine Schlüssel für diese Nachricht übermittelt.</string>
-
     <!-- Room Screen -->
     <string name="could_not_redact">Entfernen nicht möglich</string>
     <string name="unable_to_send_message">Nachricht kann nicht gesendet werden</string>
-
     <string name="message_failed_to_upload">Bild konnte nicht hochgeladen werden</string>
-
     <!-- general errors -->
     <string name="network_error">Netzwerk-Fehler</string>
     <string name="matrix_error">Matrix-Fehler</string>
-
     <!-- Home Screen -->
-
     <!-- Last seen time -->
-
     <!-- call events -->
-
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Es ist aktuell nicht möglich, einen leeren Raum erneut zu betreten.</string>
-
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">E-Mail-Adresse</string>
     <string name="medium_phone_number">Telefonnummer</string>
-
     <string name="summary_user_sent_sticker">%1$s sandte einen Sticker.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Einladung von %s</string>
     <string name="room_displayname_room_invite">Raumeinladung</string>
     <string name="room_displayname_two_members">%1$s und %2$s</string>
     <string name="room_displayname_empty_room">Leerer Raum</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s und 1 andere(r)</item>
         <item quantity="other">%1$s und %2$d andere</item>
     </plurals>
-
-
     <string name="notice_event_redacted">Nachricht entfernt</string>
     <string name="notice_event_redacted_by">Nachricht entfernt von %1$s</string>
     <string name="notice_event_redacted_with_reason">Nachricht entfernt [Grund: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Nachricht entfernt von %1$s [Grund: %2$s]</string>
     <string name="notice_room_update">%s hat diesen Raum aufgewertet.</string>
-
     <string name="event_status_sending_message">Sende eine Nachricht…</string>
     <string name="clear_timeline_send_queue">Sendewarteschlange leeren</string>
-
     <string name="initial_sync_start_importing_account">Erste Synchronisation: Importiere Benutzerkonto…</string>
     <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation: Importiere Cryptoschlüssel</string>
     <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation: Importiere Räume</string>
@@ -102,7 +81,6 @@
     <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation: Importiere verlassene Räume</string>
     <string name="initial_sync_start_importing_account_groups">Erste Synchronisation: Importiere Gemeinschaften</string>
     <string name="initial_sync_start_importing_account_data">Erste Synchronisation: Importiere Benutzerdaten</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s Einladung. Grund: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s hat %2$s eingeladen. Grund: %3$s</string>
@@ -117,33 +95,24 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s hat Einladung an %2$s zu Betreten dieses Raumes zurückgezogen. Grund: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s hat die Einladung für %2$s angenommen. Grund: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s hat Einladung für %2$s verworfen. Grund: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s fügt %2$s als eine Adresse für diesen Raum hinzu.</item>
         <item quantity="other">%1$s fügt %2$s als Adressen für diesen Raum hinzu.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s entfernt %2$s als eine Adresse für diesen Raum.</item>
         <item quantity="other">%1$s entfernt %2$s als Adressen für diesen Raum.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s fügt %2$s als Adresse für diesen Raum hinzu und entfernt %3$s.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s legt die Hauptadresse fest für diesen Raum als %2$s fest.</string>
     <string name="notice_room_canonical_alias_unset">%1$s entfernt die Hauptadresse für diesen Raum.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s hat Gästen erlaubt den Raum zu betreten.</string>
     <string name="notice_room_guest_access_forbidden">%1$s hat Gäste unterbunden den Raum zu betreten.</string>
-
     <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivierte Ende-zu-Ende-Verschlüsselung (unbekannter Algorithmus %2$s).</string>
-
     <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung deines Schlüssels auf, jedoch unterstützt dein Client nicht die Schlüsselüberprüfung im Chat. Du musst die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
-
     <string name="summary_you_sent_image">Du hast ein Bild gesendet.</string>
     <string name="summary_you_sent_sticker">Du hast einen Sticker gesendet.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Deine Einladung</string>
     <string name="notice_room_created">%1$s hat den Raum erstellt</string>
     <string name="notice_room_created_by_you">Du hast den Raum erstellt</string>
@@ -170,7 +139,6 @@
     <string name="notice_made_future_room_visibility_by_you">Du hast den zukünftigen Nachrichtenverlauf für %1$s sichtbar gemacht</string>
     <string name="notice_end_to_end_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert (%1$s)</string>
     <string name="notice_room_update_by_you">Du hast den Raum aufgwertet.</string>
-
     <string name="notice_requested_voip_conference_by_you">Du hast eine VoIP-Konferenz angefordert</string>
     <string name="notice_room_name_removed_by_you">Du hast den Raumnamen entfernt</string>
     <string name="notice_room_topic_removed_by_you">Du hast das Raumthema entfernt</string>
@@ -180,24 +148,20 @@
     <string name="notice_room_third_party_invite_by_you">Du hast %1$s in den Raum eingeladen</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Du hast die Einladung für %1$s zurückgenommen</string>
     <string name="notice_room_third_party_registered_invite_by_you">Du hast die Einladung für %1$s akzeptiert</string>
-
     <string name="notice_widget_added">%1$s hat das %2$s Widget hinzugefügt</string>
     <string name="notice_widget_added_by_you">Du hast das %1$s Widget hinzugefügt</string>
     <string name="notice_widget_removed">%1$s hat das %2$s Widget entfernt</string>
     <string name="notice_widget_removed_by_you">Du hast das %1$s Widget entfernt</string>
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
-
     <string name="power_level_admin">Administrator</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
-
     <string name="notice_power_level_changed_by_you">Du hast die Berechtigungsstufe von %1$s geändert.</string>
     <string name="notice_power_level_changed">%1$s hat die Berechtigungsstufe von %2$s geändert.</string>
     <string name="notice_power_level_diff">%1$s von %2$s zu %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Deine Einladung. Grund: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Du hast %1$s eingeladen. Grund: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Du bist dem Raum beigetreten. Grund: %1$s</string>
@@ -210,28 +174,37 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Du hast die Einladung für %1$s zurückgenommen. Grund: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Du hast die Einladung von %1$s angenommen. Grund: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Du hast die Einladung von %1$s abgelehnt. Grund: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Du hast die Raumaddresse %1$s hinzugefügt.</item>
         <item quantity="other">Du hast die Raumaddressen %1$s hinzugefügt.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">Du hast die Raumaddresse %1$s vom Raum entfernt.</item>
-        <item quantity="other">Du hast die Raumaddressen %1$s vom Raum entfernt.</item>
+        <item quantity="one">Du hast die Raum-Adresse %1$s vom Raum entfernt.</item>
+        <item quantity="other">Du hast die Raum-Adressen %1$s vom Raum entfernt.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Du hast den Raumaddressen %1$s hinzugefügt und %2$s entfernt.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">Du hast die Hauptaddresse für diesen Raum auf %1$s gesetzt.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Du hast die Hauptaddresse des Raums entfernt.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Du hast Gästen erlaubt dem Raum beizutreten.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Du hast Gästen untersagt dem Raum beizutreten.</string>
-
     <string name="notice_end_to_end_ok_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Du hast Ende-zu-Ende-Verschlüsselung aktiviert (unbekannter Algorithmus %1$s).</string>
-
     <string name="notice_call_candidates">%s hat Daten gesendet, um einen Anruf zu starten.</string>
     <string name="notice_call_candidates_by_you">Du hast Daten geschickt, um eine Anruf zu starten.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Du hast Gästen erlaubt hier beizutreten.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s hat Gästen erlaubt hier beizutreten.</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Du bist beigetreten. Grund: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s ist beigetreten. Grund: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Du hast die Einladung für %1$s zurückgezogen</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s hat die Einladung für %2$s zurückgezogen</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Du hast %1$s eingeladen</string>
+    <string name="notice_direct_room_third_party_invite">%1$s hat %2$s eingeladen</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du hast zukünftige Nachrichten für %2$s sichtbar gemacht</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s hat zukünftige Nachrichten für %2$s sichtbar gemacht</string>
+    <string name="notice_direct_room_leave_by_you">Du hast den Raum verlassen</string>
+    <string name="notice_direct_room_leave">%1$s hat den Raum verlassen</string>
+    <string name="notice_direct_room_join_by_you">Du bist beigetreten</string>
+    <string name="notice_direct_room_join">%1$s ist beigetreten</string>
+    <string name="notice_direct_room_created_by_you">Du hast eine Diskussion erstellt</string>
+    <string name="notice_direct_room_created">%1$s hat eine Diskussion erstellt</string>
 </resources>

@@ -54,12 +54,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_alert_triangle"
             android:drawablePadding="4dp"
-            android:drawableTint="@color/riotx_destructive_accent"
             android:gravity="center_vertical"
             android:text="@string/bootstrap_dont_reuse_pwd"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:drawableStartCompat="@drawable/ic_alert_triangle"
+            app:drawableTint="@color/riotx_destructive_accent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,10 +71,11 @@
         android:background="?attr/selectableItemBackground"
         android:scaleType="center"
         android:src="@drawable/ic_eye"
-        android:tint="?colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ssss_passphrase_enter_til"
-        app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til" />
+        app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til"
+        app:tint="?colorAccent"
+        tools:ignore="MissingPrefix" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bootstrapSubmit"

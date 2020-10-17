@@ -19,11 +19,11 @@ package im.vector.app.features.roomprofile.banned
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -32,6 +32,8 @@ import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListFragment @Inject constructor(
@@ -53,6 +55,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
+        setupSearchView()
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 
         viewModel.observeViewEvents {
@@ -72,7 +75,7 @@ class RoomBannedMemberListFragment @Inject constructor(
                             }
                             .show()
                 }
-                is RoomBannedViewEvents.ToastError -> {
+                is RoomBannedViewEvents.ToastError     -> {
                     requireActivity().toast(it.info)
                 }
             }
@@ -82,6 +85,21 @@ class RoomBannedMemberListFragment @Inject constructor(
     override fun onDestroyView() {
         recyclerView.cleanup()
         super.onDestroyView()
+    }
+
+    private fun setupSearchView() {
+        searchViewAppBarLayout.isVisible = true
+        searchView.queryHint = getString(R.string.search_banned_user_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.handle(RoomBannedListMemberAction.Filter(newText))
+                return true
+            }
+        })
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->

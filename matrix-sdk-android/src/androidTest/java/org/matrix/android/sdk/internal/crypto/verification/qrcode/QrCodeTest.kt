@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
-import org.amshove.kluent.shouldEqual
-import org.amshove.kluent.shouldEqualTo
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -66,32 +65,32 @@ class QrCodeTest : InstrumentedTest {
 
     @Test
     fun testEncoding1() {
-        qrCode1.toEncodedString() shouldEqual value1
+        qrCode1.toEncodedString() shouldBeEqualTo value1
     }
 
     @Test
     fun testEncoding2() {
-        qrCode2.toEncodedString() shouldEqual value2
+        qrCode2.toEncodedString() shouldBeEqualTo value2
     }
 
     @Test
     fun testEncoding3() {
-        qrCode3.toEncodedString() shouldEqual value3
+        qrCode3.toEncodedString() shouldBeEqualTo value3
     }
 
     @Test
     fun testSymmetry1() {
-        qrCode1.toEncodedString().toQrCodeData() shouldEqual qrCode1
+        qrCode1.toEncodedString().toQrCodeData() shouldBeEqualTo qrCode1
     }
 
     @Test
     fun testSymmetry2() {
-        qrCode2.toEncodedString().toQrCodeData() shouldEqual qrCode2
+        qrCode2.toEncodedString().toQrCodeData() shouldBeEqualTo qrCode2
     }
 
     @Test
     fun testSymmetry3() {
-        qrCode3.toEncodedString().toQrCodeData() shouldEqual qrCode3
+        qrCode3.toEncodedString().toQrCodeData() shouldBeEqualTo qrCode3
     }
 
     @Test
@@ -102,7 +101,7 @@ class QrCodeTest : InstrumentedTest {
         checkHeader(byteArray)
 
         // Mode
-        byteArray[7] shouldEqualTo 0
+        byteArray[7] shouldBeEqualTo 0
 
         checkSizeAndTransaction(byteArray)
 
@@ -120,7 +119,7 @@ class QrCodeTest : InstrumentedTest {
         checkHeader(byteArray)
 
         // Mode
-        byteArray[7] shouldEqualTo 1
+        byteArray[7] shouldBeEqualTo 1
 
         checkSizeAndTransaction(byteArray)
         compareArray(byteArray.copyOfRange(23, 23 + 32), kte_byteArray)
@@ -137,7 +136,7 @@ class QrCodeTest : InstrumentedTest {
         checkHeader(byteArray)
 
         // Mode
-        byteArray[7] shouldEqualTo 2
+        byteArray[7] shouldBeEqualTo 2
 
         checkSizeAndTransaction(byteArray)
         compareArray(byteArray.copyOfRange(23, 23 + 32), tlx_byteArray)
@@ -156,10 +155,10 @@ class QrCodeTest : InstrumentedTest {
         val result = qrCode.toEncodedString()
         val expected = value1.replace("\u0000\u000DMaTransaction", "\u0007\u00D0$longTransactionId")
 
-        result shouldEqual expected
+        result shouldBeEqualTo expected
 
         // Reverse operation
-        expected.toQrCodeData() shouldEqual qrCode
+        expected.toQrCodeData() shouldBeEqualTo qrCode
     }
 
     @Test
@@ -170,7 +169,7 @@ class QrCodeTest : InstrumentedTest {
             val qrCode = qrCode1.copy(transactionId = longTransactionId)
 
             // Symmetric operation
-            qrCode.toEncodedString().toQrCodeData() shouldEqual qrCode
+            qrCode.toEncodedString().toQrCodeData() shouldBeEqualTo qrCode
         }
     }
 
@@ -218,32 +217,32 @@ class QrCodeTest : InstrumentedTest {
     }
 
     private fun compareArray(actual: ByteArray, expected: ByteArray) {
-        actual.size shouldEqual expected.size
+        actual.size shouldBeEqualTo expected.size
 
         for (i in actual.indices) {
-            actual[i] shouldEqualTo expected[i]
+            actual[i] shouldBeEqualTo expected[i]
         }
     }
 
     private fun checkHeader(byteArray: ByteArray) {
         // MATRIX
-        byteArray[0] shouldEqualTo 'M'.toByte()
-        byteArray[1] shouldEqualTo 'A'.toByte()
-        byteArray[2] shouldEqualTo 'T'.toByte()
-        byteArray[3] shouldEqualTo 'R'.toByte()
-        byteArray[4] shouldEqualTo 'I'.toByte()
-        byteArray[5] shouldEqualTo 'X'.toByte()
+        byteArray[0] shouldBeEqualTo 'M'.toByte()
+        byteArray[1] shouldBeEqualTo 'A'.toByte()
+        byteArray[2] shouldBeEqualTo 'T'.toByte()
+        byteArray[3] shouldBeEqualTo 'R'.toByte()
+        byteArray[4] shouldBeEqualTo 'I'.toByte()
+        byteArray[5] shouldBeEqualTo 'X'.toByte()
 
         // Version
-        byteArray[6] shouldEqualTo 2
+        byteArray[6] shouldBeEqualTo 2
     }
 
     private fun checkSizeAndTransaction(byteArray: ByteArray) {
         // Size
-        byteArray[8] shouldEqualTo 0
-        byteArray[9] shouldEqualTo 13
+        byteArray[8] shouldBeEqualTo 0
+        byteArray[9] shouldBeEqualTo 13
 
         // Transaction
-        byteArray.copyOfRange(10, 10 + "MaTransaction".length).toString(Charsets.ISO_8859_1) shouldEqual "MaTransaction"
+        byteArray.copyOfRange(10, 10 + "MaTransaction".length).toString(Charsets.ISO_8859_1) shouldBeEqualTo "MaTransaction"
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +29,7 @@ object MessageType {
     const val MSGTYPE_RESPONSE = "org.matrix.response"
     const val MSGTYPE_POLL_CLOSED = "org.matrix.poll_closed"
     const val MSGTYPE_VERIFICATION_REQUEST = "m.key.verification.request"
+
     // Add, in local, a fake message type in order to StickerMessage can inherit Message class
     // Because sticker isn't a message type but a event type without msgtype field
     const val MSGTYPE_STICKER_LOCAL = "org.matrix.android.sdk.sticker"
