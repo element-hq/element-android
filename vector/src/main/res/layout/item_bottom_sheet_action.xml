@@ -67,7 +67,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible"
-        app:tint="@color/riotx_accent"
         app:tint="?colorAccent"
         tools:ignore="MissingPrefix" />
 
