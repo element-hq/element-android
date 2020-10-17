@@ -39,10 +39,12 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.isValidUrl
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import java.net.URL
 import kotlinx.android.synthetic.main.fragment_known_users.*
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.Session
@@ -124,10 +126,11 @@ class KnownUsersFragment @Inject constructor(
 
                 val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-                // TODO: This feels ugly and error-prone. Some URL parser should probably be used instead
-                if (result.startsWith("https://matrix.to/#/@")) {
+                // Latter condition to be replaced by URL(result).protocol == "matrix" when MSC2312 is complete
+                if (result.isValidUrl() && URL(result).host == "matrix.to") {
 
-                    val mxid = result.removePrefix("https://matrix.to/#/")
+                    // Remove query string parameters and initial slash from URL().ref to get MXID
+                    val mxid = URL(result).ref.split("?")[0].drop(1)
 
                     val existingDm = session.getExistingDirectRoomWithUser(mxid)
 
