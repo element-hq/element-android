@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s : %2$s</string>
     <string name="summary_user_sent_image">%1$s a envoyé une image.</string>
-
     <string name="notice_room_invite_no_invitee">invitation de %s</string>
     <string name="notice_room_invite">%1$s a invité %2$s</string>
     <string name="notice_room_invite_you">%1$s vous a invité</string>
@@ -31,54 +29,39 @@
     <string name="notice_room_visibility_world_readable">n’importe qui.</string>
     <string name="notice_room_visibility_unknown">inconnu (%s).</string>
     <string name="notice_end_to_end">%1$s a activé le chiffrement de bout en bout (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s a demandé une téléconférence VoIP</string>
     <string name="notice_voip_started">Téléconférence VoIP démarrée</string>
     <string name="notice_voip_finished">Téléconférence VoIP terminée</string>
-
     <string name="notice_avatar_changed_too">(l’avatar a aussi changé)</string>
     <string name="notice_room_name_removed">%1$s a supprimé le nom du salon</string>
     <string name="notice_room_topic_removed">%1$s a supprimé le sujet du salon</string>
     <string name="notice_profile_change_redacted">%1$s a mis à jour son profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s a envoyé une invitation à %2$s pour rejoindre le salon</string>
     <string name="notice_room_third_party_registered_invite">%1$s a accepté l’invitation pour %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
-
     <string name="could_not_redact">Effacement impossible</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
-
     <string name="message_failed_to_upload">L’envoi de l’image a échoué</string>
-
     <string name="network_error">Erreur de réseau</string>
     <string name="matrix_error">Erreur de Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Il est impossible pour le moment de revenir dans un salon vide.</string>
-
     <string name="encrypted_message">Message chiffré</string>
-
     <string name="medium_email">Adresse e-mail</string>
     <string name="medium_phone_number">Numéro de téléphone</string>
-
     <string name="summary_user_sent_sticker">%1$s a envoyé un sticker.</string>
-
     <string name="room_displayname_invite_from">Invitation de %s</string>
     <string name="room_displayname_room_invite">Invitation au salon</string>
     <string name="room_displayname_empty_room">Salon vide</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s et 1 autre</item>
         <item quantity="other">%1$s et %2$d autres</item>
     </plurals>
-
-
     <string name="notice_event_redacted">Message supprimé</string>
     <string name="notice_event_redacted_by">Message supprimé par %1$s</string>
     <string name="notice_event_redacted_with_reason">Message supprimé [motif : %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Message supprimé par %1$s [motif : %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Synchronisation initiale :
 \nImportation du compte…</string>
     <string name="initial_sync_start_importing_account_crypto">Synchronisation initiale :
@@ -95,12 +78,9 @@
 \nImportation des communautés</string>
     <string name="initial_sync_start_importing_account_data">Synchronisation initiale :
 \nImportation des données du compte</string>
-
     <string name="notice_room_update">%s a mis à niveau ce salon.</string>
-
     <string name="event_status_sending_message">Envoi du message…</string>
     <string name="clear_timeline_send_queue">Vider la file d’envoi</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s a révoqué l’invitation pour %2$s à rejoindre le salon</string>
     <string name="notice_room_invite_no_invitee_with_reason">Invitation de %1$s. Raison : %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s a invité %2$s. Raison : %3$s</string>
@@ -115,29 +95,39 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s a révoqué l’invitation de %2$s à rejoindre le salon. Raison : %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s a accepté l’invitation pour %2$s. Raison : %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s a annulé l’invitation de %2$s. Raison : %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s a ajouté %2$s comme adresse pour ce salon.</item>
         <item quantity="other">%1$s a ajouté %2$s comme adresses pour ce salon.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s a supprimé %2$s comme adresse pour ce salon.</item>
         <item quantity="other">%1$s a supprimé %3$s comme adresses pour ce salon.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s a ajouté %2$s et supprimé %3$s comme adresses pour ce salon.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s a défini %2$s comme adresse principale pour ce salon.</string>
     <string name="notice_room_canonical_alias_unset">%1$s a supprimé l’adresse principale de ce salon.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s a autorisé les visiteurs à rejoindre le salon.</string>
     <string name="notice_room_guest_access_forbidden">%1$s a empêché les visiteurs de rejoindre le salon.</string>
-
     <string name="notice_end_to_end_ok">%1$s a activé le chiffrement de bout en bout.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s a activé le chiffrement de bout en bout (algorithme %2$s inconnu).</string>
-
     <string name="key_verification_request_fallback_message">%s demande à vérifier votre clé, mais votre client ne supporte pas la vérification de clés dans les discussions. Vous devrez utiliser l’ancienne vérification de clés pour vérifier les clés.</string>
-
     <string name="notice_room_created">%1$s a créé le salon</string>
+    <string name="notice_direct_room_update_by_you">Vous avez mis cet endroit à niveau.</string>
+    <string name="notice_direct_room_update">%s a mis cet endroit à niveau.</string>
+    <string name="notice_room_update_by_you">Vous avez mis à niveau ce salon.</string>
+    <string name="notice_room_kick_by_you">Vous avez expulsé %1$s</string>
+    <string name="notice_room_reject_by_you">Vous avez rejeté l\'invitation</string>
+    <string name="notice_direct_room_leave_by_you">Vous avez quitté le salon</string>
+    <string name="notice_direct_room_leave">%1$s a quitté le salon</string>
+    <string name="notice_room_leave_by_you">Vous avez quitté le salon</string>
+    <string name="notice_direct_room_join_by_you">Vous avez rejoint le salon</string>
+    <string name="notice_direct_room_join">%1$s a rejoint le salon</string>
+    <string name="notice_room_join_by_you">Vous avez rejoint le salon</string>
+    <string name="notice_room_invite_by_you">Vous avez invité %1$s</string>
+    <string name="notice_direct_room_created_by_you">Vous avez créé la discussion</string>
+    <string name="notice_direct_room_created">%1$s a créé la discussion</string>
+    <string name="notice_room_created_by_you">Vous avez créé le salon</string>
+    <string name="notice_room_invite_no_invitee_by_you">Votre invitation</string>
+    <string name="summary_you_sent_sticker">Vous avez envoyé un autocollant.</string>
+    <string name="summary_you_sent_image">Vous avez envoyé une image.</string>
 </resources>
