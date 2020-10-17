@@ -121,23 +121,28 @@ class KnownUsersFragment @Inject constructor(
 
                 val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-                // TODO: Make this less ugly
+                // TODO: This feels ugly and error-prone. Some URL parser should probably be used
                 if (result.startsWith("https://matrix.to/#/@")) {
 
                     val mxid = result.removePrefix("https://matrix.to/#/")
                     val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
-                    // TODO: Switch to DM if exists
-                    //val a = session.getExistingDirectRoomWithUser()
+                    val existingDm = session.getExistingDirectRoomWithUser(mxid)
 
-                    // https://matrix.to/#/!xYvNcQPhnkrdUmYczI:matrix.org/$YmwnJPQ30qTSCOOSN6umeIVuUEHECsPWyaYj5IxZW-0?via=matrix.org&via=privacytools.io&via=feneas.org
-                    // ^ Seemed inconclusive so the following assumes non-case-sensitivity. Change if needed
-                    if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
-                        withState(viewModel) {
-                            viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                    if (existingDm == null) {
+
+                        // https://matrix.to/#/!xYvNcQPhnkrdUmYczI:matrix.org/$YmwnJPQ30qTSCOOSN6umeIVuUEHECsPWyaYj5IxZW-0?via=matrix.org&via=privacytools.io&via=feneas.org
+                        // ^ Seemed inconclusive so the following assumes non-case-sensitivity. Change if needed
+                        if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
+                            withState(viewModel) {
+                                viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Cannot invite yourself!", Toast.LENGTH_SHORT).show()
                         }
+
                     } else {
-                        Toast.makeText(requireContext(), "Cannot invite yourself!", Toast.LENGTH_SHORT).show()
+                        navigator.openRoom(requireContext(), existingDm.roomId, null, false)
                     }
 
                 } else {
