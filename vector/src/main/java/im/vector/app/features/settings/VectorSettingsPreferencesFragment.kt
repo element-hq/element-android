@@ -56,8 +56,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         val darkThemePref = findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
         lightThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
+                ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
                 if (!ThemeUtils.shouldUseDarkTheme(requireContext())) {
-                    ThemeUtils.setApplicationLightTheme(requireContext().applicationContext, newValue)
                     // Restart the Activity
                     activity?.restart()
                 }
@@ -70,8 +70,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             lightThemePref.title = getString(R.string.settings_light_theme)
             darkThemePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
+                    ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
                     if (ThemeUtils.shouldUseDarkTheme(requireContext())) {
-                        ThemeUtils.setApplicationDarkTheme(requireContext().applicationContext, newValue)
                         // Restart the Activity
                         activity?.restart()
                     }
