@@ -132,7 +132,7 @@
     <string name="user_directory_header">Brûkerskatalogus</string>
     <string name="matrix_only_filter">Allinnich Matrix-kontakten</string>
     <string name="no_conversation_placeholder">Gjin petearen</string>
-    <string name="no_contact_access_placeholder">Jo hawwe SchildiChat gjin tagong ta jo lokale kontakten jûn</string>
+    <string name="no_contact_access_placeholder">Jo hawwe Element gjin tagong ta jo lokale kontakten jûn</string>
     <string name="no_result_placeholder">Gjin resultaten</string>
     <string name="people_no_identity_server">Gjin identiteitsserver konfigurearre.</string>
 
