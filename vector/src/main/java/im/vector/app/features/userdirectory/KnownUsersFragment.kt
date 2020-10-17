@@ -39,6 +39,8 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.main.fragment_known_users.*
@@ -61,7 +63,8 @@ class KnownUsersFragment @Inject constructor(
 
     override fun getMenuRes() = args.menuResId
 
-    private val viewModel: UserDirectoryViewModel by activityViewModel()
+    private val userDirViewModel: UserDirectoryViewModel by activityViewModel()
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
     private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
 
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
@@ -83,7 +86,7 @@ class KnownUsersFragment @Inject constructor(
             knownUsersE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
+        userDirViewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
             renderSelectedUsers(it)
         }
     }
@@ -95,7 +98,7 @@ class KnownUsersFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        withState(viewModel) {
+        withState(userDirViewModel) {
             val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
@@ -104,7 +107,7 @@ class KnownUsersFragment @Inject constructor(
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(userDirViewModel) {
         sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
         return@withState true
     }
@@ -135,14 +138,14 @@ class KnownUsersFragment @Inject constructor(
                             // Try to get user from known users and fall back to creating a User object from MXID
                             val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
-                            withState(viewModel) {
-                                viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(qrInvitee)))
-                            }
+                            createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee))))
+
                         } else {
                             Toast.makeText(requireContext(), "Cannot DM yourself!", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
+                        requireActivity().finish()
                     }
                 } else {
                     Toast.makeText(requireContext(), "Invalid QR code (Invalid URI)!", Toast.LENGTH_SHORT).show()
@@ -180,7 +183,7 @@ class KnownUsersFragment @Inject constructor(
                     } else {
                         UserDirectoryAction.FilterKnownUsers(filterValue.toString())
                     }
-                    viewModel.handle(action)
+                    userDirViewModel.handle(action)
                 }
                 .disposeOnDestroyView()
 
@@ -194,7 +197,7 @@ class KnownUsersFragment @Inject constructor(
         }
     }
 
-    override fun invalidate() = withState(viewModel) {
+    override fun invalidate() = withState(userDirViewModel) {
         knownUsersController.setData(it)
     }
 
@@ -225,12 +228,12 @@ class KnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
+            userDirViewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
         }
     }
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
+        userDirViewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
     }
 }
