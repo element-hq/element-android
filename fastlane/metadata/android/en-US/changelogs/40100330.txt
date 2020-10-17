@@ -1,0 +1,2 @@
+- Update codebase to Element 1.0.9
+- Fix changing inactive theme setting
