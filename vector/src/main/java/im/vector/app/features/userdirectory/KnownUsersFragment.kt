@@ -121,30 +121,29 @@ class KnownUsersFragment @Inject constructor(
 
                 val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-                // TODO: This feels ugly and error-prone. Some URL parser should probably be used
+                // TODO: This feels ugly and error-prone. Some URL parser should probably be used instead
                 if (result.startsWith("https://matrix.to/#/@")) {
 
                     val mxid = result.removePrefix("https://matrix.to/#/")
-                    val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
                     val existingDm = session.getExistingDirectRoomWithUser(mxid)
 
                     if (existingDm == null) {
-
-                        // https://matrix.to/#/!xYvNcQPhnkrdUmYczI:matrix.org/$YmwnJPQ30qTSCOOSN6umeIVuUEHECsPWyaYj5IxZW-0?via=matrix.org&via=privacytools.io&via=feneas.org
-                        // ^ Seemed inconclusive so the following assumes non-case-sensitivity. Change if needed
+                        // The following assumes MXIDs are case insensitive. Change if needed
                         if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
+
+                            // Try to get user from known users and fall back to creating a User object from MXID
+                            val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+
                             withState(viewModel) {
                                 viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(qrInvitee)))
                             }
                         } else {
-                            Toast.makeText(requireContext(), "Cannot invite yourself!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Cannot DM yourself!", Toast.LENGTH_SHORT).show()
                         }
-
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
                     }
-
                 } else {
                     Toast.makeText(requireContext(), "Invalid QR code (Invalid URI)!", Toast.LENGTH_SHORT).show()
                 }
