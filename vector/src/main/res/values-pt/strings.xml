@@ -60,7 +60,7 @@
     <string name="bottom_action_home">Início</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Pessoas</string>
-    <string name="bottom_action_rooms">Groupos</string>
+    <string name="bottom_action_rooms">Salas</string>
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Pesquisar salas</string>
     <string name="home_filter_placeholder_favorites">Pesquisar favoritos</string>
@@ -386,8 +386,8 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="settings_enable_all_notif">Ativar notificações para esta conta</string>
     <string name="settings_enable_this_device">Ativar notificações para este dispositivo</string>
     <string name="settings_turn_screen_on">Ligar o ecrã durante 3 segundos</string>
-    <string name="settings_messages_in_one_to_one">Msgs em conversas diretas</string>
-    <string name="settings_messages_in_group_chat">Msgs em conversas de grupo</string>
+    <string name="settings_messages_in_one_to_one">Mensagens em conversas diretas</string>
+    <string name="settings_messages_in_group_chat">Mensagens em conversas de grupo</string>
     <string name="settings_invited_to_room">Quando eu sou convidado para uma sala</string>
     <string name="settings_call_invitations">Convites para chamadas</string>
     <string name="settings_messages_sent_by_bot">Mensagens enviadas por "bot"</string>
@@ -621,7 +621,7 @@ Dispositivos desconhecidos:</string>
     <string name="widget_integration_missing_user_id">O user_id está em falta no pedido.</string>
     <string name="widget_integration_room_not_visible">Sala %s não se encontra visível.</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
-    <string name="notification_sync_in_progress">A sincronizar</string>
+    <string name="notification_sync_in_progress">A sincronizar…</string>
     <string name="notification_listening_for_events">À escuta de eventos</string>
     <string name="status_theme">Tema Status.im</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
@@ -968,4 +968,5 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
     <string name="notification_sync_init">A iniciar o serviço</string>
     <string name="title_activity_verify_device">Verificar sessão</string>
+    <string name="resources_script">Latn</string>
 </resources>
