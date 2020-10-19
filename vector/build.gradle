@@ -39,9 +39,9 @@ def generateVersionCodeFromVersionName() {
 
 def getVersionCode() {
     if (gitBranchName() == "develop") {
-        return generateVersionCodeFromTimestamp()
+        return generateVersionCodeFromTimestamp() * 10
     } else {
-        return generateVersionCodeFromVersionName()
+        return generateVersionCodeFromVersionName() * 10
     }
 }
 
@@ -169,7 +169,10 @@ android {
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
+                print "ABI " + output.getFilter(OutputFile.ABI) + " \tvariant.versionCode " + variant.versionCode
+                // See https://issuetracker.google.com/issues/171133218
+                output.versionCodeOverride = variant.versionCode + baseAbiVersionCode
+                print " \t-> VersionCode = " + output.versionCodeOverride + "\n"
             }
         }
 
