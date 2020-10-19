@@ -169,7 +169,15 @@ android {
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
+                print "ABI " + output.getFilter(OutputFile.ABI) + " \tvariant.versionCode " + variant.versionCode
+                // See https://issuetracker.google.com/issues/171133218
+                if (variant.versionCode > 40_000_000) {
+                    // * 10 already done...
+                    output.versionCodeOverride = variant.versionCode + baseAbiVersionCode
+                } else {
+                    output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
+                }
+                print " \t-> VersionCode = " + output.versionCodeOverride + "\n"
             }
         }
 
