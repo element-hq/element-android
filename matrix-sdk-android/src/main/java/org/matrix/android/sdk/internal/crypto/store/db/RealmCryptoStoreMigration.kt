@@ -73,10 +73,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     }
 
     private fun RealmObjectSchema.setRequiredIfNotAlready(fieldName: String, isRequired: Boolean): RealmObjectSchema {
-        if (isRequired && !isRequired(fieldName)) {
-            setRequired(fieldName, true)
-        } else if (!isRequired && isRequired(fieldName)) {
-            setRequired(fieldName, false)
+        if (isRequired != isRequired(fieldName)) {
+            setRequired(fieldName, isRequired)
         }
         return this
     }
