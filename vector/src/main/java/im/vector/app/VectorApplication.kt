@@ -17,7 +17,10 @@
 package im.vector.app
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
@@ -92,6 +95,15 @@ class VectorApplication :
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
+    private val powerKeyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF
+                    && vectorPreferences.useFlagPinCode()) {
+                pinLocker.screenIsOff()
+            }
+        }
+    }
+
     override fun onCreate() {
         enableStrictModeIfNeeded()
         super.onCreate()
@@ -163,6 +175,12 @@ class VectorApplication :
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
+
+        applicationContext.registerReceiver(powerKeyReceiver, IntentFilter().apply {
+            // Looks like i cannot receive OFF, if i don't have both ON and OFF
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        })
     }
 
     private fun enableStrictModeIfNeeded() {

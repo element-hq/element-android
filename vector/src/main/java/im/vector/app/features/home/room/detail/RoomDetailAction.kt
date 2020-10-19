@@ -51,7 +51,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class ExitSpecialMode(val text: String) : RoomDetailAction()
+    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : RoomDetailAction()
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
@@ -81,11 +81,13 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()
-    object OpenIntegrationManager: RoomDetailAction()
-    object ManageIntegrations: RoomDetailAction()
-    data class AddJitsiWidget(val withVideo: Boolean): RoomDetailAction()
-    data class RemoveWidget(val widgetId: String): RoomDetailAction()
+    object OpenIntegrationManager : RoomDetailAction()
+    object ManageIntegrations : RoomDetailAction()
+    data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
+    data class RemoveWidget(val widgetId: String) : RoomDetailAction()
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
+    data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
 }

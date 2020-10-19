@@ -23,12 +23,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:importantForAccessibility="no"
-                android:tint="?riotx_text_primary"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/loginLogo"
                 tools:src="@drawable/ic_logo_matrix_org"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                app:tint="?riotx_text_primary"
+                tools:ignore="MissingPrefix,UnknownId" />
 
             <TextView
                 android:id="@+id/loginSignupSigninTitle"

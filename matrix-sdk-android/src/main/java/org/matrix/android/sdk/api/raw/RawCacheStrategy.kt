@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,12 +18,12 @@ package org.matrix.android.sdk.api.raw
 
 sealed class RawCacheStrategy {
     // Data is always fetched from the server
-    object NoCache: RawCacheStrategy()
+    object NoCache : RawCacheStrategy()
 
     // Once data is retrieved, it is stored for the provided amount of time.
     // In case of error, and if strict is set to false, the cache can be returned if available
-    data class TtlCache(val validityDurationInMillis: Long, val strict: Boolean): RawCacheStrategy()
+    data class TtlCache(val validityDurationInMillis: Long, val strict: Boolean) : RawCacheStrategy()
 
     // Once retrieved, the data is stored in cache and will be always get from the cache
-    object InfiniteCache: RawCacheStrategy()
+    object InfiniteCache : RawCacheStrategy()
 }

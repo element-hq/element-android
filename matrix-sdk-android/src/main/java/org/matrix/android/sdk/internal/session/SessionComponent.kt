@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +49,7 @@ import org.matrix.android.sdk.internal.session.room.send.EncryptEventWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
+import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
@@ -86,7 +86,8 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             ProfileModule::class,
             SessionAssistedInjectModule::class,
             AccountModule::class,
-            CallModule::class
+            CallModule::class,
+            SearchModule::class
         ]
 )
 @SessionScope

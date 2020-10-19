@@ -81,6 +81,11 @@ class PinLocker @Inject constructor(
         computeState()
     }
 
+    fun screenIsOff() {
+        shouldBeLocked = true
+        computeState()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         val timeElapsedSinceBackground = SystemClock.elapsedRealtime() - entersBackgroundTs

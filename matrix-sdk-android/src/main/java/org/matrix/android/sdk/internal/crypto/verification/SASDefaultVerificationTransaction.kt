@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,10 +68,13 @@ internal abstract class SASDefaultVerificationTransaction(
         // Deprecated maybe removed later, use V2
         const val KEY_AGREEMENT_V1 = "curve25519"
         const val KEY_AGREEMENT_V2 = "curve25519-hkdf-sha256"
+
         // ordered by preferred order
         val KNOWN_AGREEMENT_PROTOCOLS = listOf(KEY_AGREEMENT_V2, KEY_AGREEMENT_V1)
+
         // ordered by preferred order
         val KNOWN_HASHES = listOf("sha256")
+
         // ordered by preferred order
         val KNOWN_MACS = listOf(SAS_MAC_SHA256, SAS_MAC_SHA256_LONGKDF)
 
@@ -102,6 +104,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     // Visible for test
     var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
+
     // Visible for test
     var accepted: ValidVerificationInfoAccept? = null
     protected var otherKey: String? = null

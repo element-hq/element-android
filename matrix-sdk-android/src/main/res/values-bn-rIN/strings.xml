@@ -1,8 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_user_sent_image">%1$s একটি ফটো পাঠিয়েছে।</string>
     <string name="summary_user_sent_sticker">%1$s একটি স্তিকার পাঠিয়েছে।</string>
-
     <string name="notice_room_invite_no_invitee">%s এর আমন্ত্রণ</string>
     <string name="notice_room_invite">%1$s %2$s কে আমন্ত্রণ করেছে</string>
     <string name="notice_room_invite_you">%1$s আপনাকে আমন্ত্রণ করেছে</string>
@@ -24,7 +23,6 @@
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_you_sent_image">আপনি একটি ছবি প্রেরণ করেছেন।</string>
     <string name="summary_you_sent_sticker">আপনি একটি স্তিকার পাঠিয়েছেন।</string>
-
     <string name="notice_room_invite_no_invitee_by_you">আপনার আমন্ত্রণ</string>
     <string name="notice_room_created">%1$s কক্ষটি তৈরি করেছেন</string>
     <string name="notice_room_created_by_you">আপনি কক্ষটি তৈরি করেছেন</string>
@@ -63,12 +61,10 @@
     <string name="notice_end_to_end_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (%1$s)</string>
     <string name="notice_room_update">%s এই কক্ষটিকে আপগ্রেড করেছে।</string>
     <string name="notice_room_update_by_you">আপনি এই কক্ষটি আপগ্রেড করেছেন।</string>
-
     <string name="notice_requested_voip_conference">%1$s একটি ভিওআইপি সম্মেলনের জন্য অনুরোধ করেছে</string>
     <string name="notice_requested_voip_conference_by_you">আপনি একটি ভিওআইপি সম্মেলনের অনুরোধ করেছেন</string>
     <string name="notice_voip_started">ভিওআইপি সম্মেলন শুরু হয়েছে</string>
     <string name="notice_voip_finished">ভিওআইপি সম্মেলন শেষ হয়েছে</string>
-
     <string name="notice_avatar_changed_too">(আবতারটিও পরিবর্তন করা হয়েছিল)</string>
     <string name="notice_room_name_removed">%1$s কক্ষের নাম সরিয়েছে</string>
     <string name="notice_room_name_removed_by_you">আপনি কক্ষের নাম সরিয়েছেন</string>
@@ -88,54 +84,39 @@
     <string name="notice_room_third_party_revoked_invite_by_you">আপনি %1$s এর কক্ষে যোগদানের জন্য আমন্ত্রণটি বাতিল করেছেন</string>
     <string name="notice_room_third_party_registered_invite">%1$s %2$s এর জন্য আমন্ত্রণটি গ্রহণ করেছে</string>
     <string name="notice_room_third_party_registered_invite_by_you">আপনি %1$s এর জন্য আমন্ত্রণটি গ্রহণ করেছেন</string>
-
     <string name="notice_widget_added">%1$s %2$s উইজেট যুক্ত করেছে</string>
     <string name="notice_widget_added_by_you">আপনি %1$s উইজেট যুক্ত করেছেন</string>
     <string name="notice_widget_removed">%1$s %2$s উইজেট সরিয়ে দিয়েছেন</string>
     <string name="notice_widget_removed_by_you">আপনি %1$s উইজেট সরিয়েছেন</string>
     <string name="notice_widget_modified">%1$s %2$s উইজেট পরিবর্তন করেছেন</string>
     <string name="notice_widget_modified_by_you">আপনি %1$s উইজেট পরিবর্তন করেছেন</string>
-
     <string name="power_level_admin">অ্যাডমিন</string>
     <string name="power_level_moderator">নিয়ামক</string>
     <string name="power_level_default">ডিফল্ট</string>
     <string name="power_level_custom">কাস্টম (%1$d)</string>
     <string name="power_level_custom_no_value">কাস্টম</string>
-
     <string name="notice_power_level_changed_by_you">আপনি %1$s এর পাওয়ার স্তর পরিবর্তন করেছেন।</string>
     <string name="notice_power_level_changed">%1$s %2$s এর পাওয়ার স্তর পরিবর্তন করেছে।</string>
     <string name="notice_power_level_diff">%1$s %2$s থেকে %3$s পর্যন্ত</string>
-
     <string name="notice_crypto_unable_to_decrypt">** ডিক্রিপ্ট করতে অক্ষম: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">প্রেরকের ডিভাইস আমাদের এই বার্তার জন্য কীগুলি প্রেরণ করেনি।</string>
-
     <string name="could_not_redact">পুনরায় প্রতিক্রিয়া করতে পারেনি</string>
     <string name="unable_to_send_message">বার্তা পাঠাতে অক্ষম</string>
-
     <string name="message_failed_to_upload">চিত্র আপলোড করতে ব্যর্থ</string>
-
     <string name="network_error">নেটওয়ার্ক ত্রুটি</string>
     <string name="matrix_error">ম্যাট্রিক্স ত্রুটি</string>
-
     <string name="room_error_join_failed_empty_room">খালি কক্ষে পুনরায় যোগদান করা বর্তমানে সম্ভব নয়।</string>
-
     <string name="encrypted_message">এনক্রিপ্ট করা বার্তা</string>
-
     <string name="medium_email">ইমেল ঠিকানা</string>
     <string name="medium_phone_number">ফোন নম্বর</string>
-
     <string name="room_displayname_invite_from">%s থেকে আমন্ত্রণ করুন</string>
     <string name="room_displayname_room_invite">কক্ষ আমন্ত্রণ</string>
-
     <string name="room_displayname_two_members">%1$s এবং %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s এবং অন্য ১ জন</item>
         <item quantity="other">%1$s এবং অন্যান্য %2$d জন</item>
     </plurals>
-
     <string name="room_displayname_empty_room">খালি কক্ষ</string>
-
     <string name="initial_sync_start_importing_account">প্রাথমিক সিঙ্ক:
 \nঅ্যাকাউন্ট আমদানি করা হচ্ছে…</string>
     <string name="initial_sync_start_importing_account_crypto">প্রাথমিক সিঙ্ক:
@@ -152,10 +133,8 @@
 \nসম্প্রদায়গুলি আমদানি করা হচ্ছে</string>
     <string name="initial_sync_start_importing_account_data">প্রাথমিক সিঙ্ক:
 \nঅ্যাকাউন্ট ডেটা আমদানি করা হচ্ছে</string>
-
     <string name="event_status_sending_message">বার্তা প্রেরণ করা হচ্ছে …</string>
     <string name="clear_timeline_send_queue">প্রেরণ সারি পরিষ্কার করুন</string>
-
     <string name="notice_room_invite_no_invitee_with_reason">%1$s এর আমন্ত্রণ। কারণ: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">আপনার আমন্ত্রণ। কারণ: %1$s</string>
     <string name="notice_room_invite_with_reason">%1$s আমন্ত্রিত করেছেন %2$s কে। কারণ: %3$s</string>
@@ -167,7 +146,7 @@
     <string name="notice_room_leave_with_reason_by_you">আপনি কক্ষ ছেড়ে দিয়েছেন। কারণ: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s আমন্ত্রণ বাতিল করেছেন। কারণ: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">আপনি আমন্ত্রণটি বাতিল করেছেন। কারণ: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s %2$s কে কিক করেছে। কারণ: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s %2$s কে কিক করেছে। কারণ: %3$s</string>
     <string name="notice_room_kick_with_reason_by_you">আপনি %1$s কে কীক করেছেন। কারণ: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে। কারণ: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">আপনি %1$s কে নিষিদ্ধ মুক্ত করেছেন। কারণ: %2$s</string>
@@ -181,45 +160,35 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">আপনি %1$s এর জন্য আমন্ত্রণটি গ্রহণ করেছেন। কারণ: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s %2$s এর আমন্ত্রণ ফেরত নিয়েছে। কারণ: %3$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">আপনি %1$s এর আমন্ত্রণ প্রত্যাহার করেছেন। কারণ: %2$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s যুক্ত করেছে।</item>
         <item quantity="other">%1$s এই ঘরের ঠিকানাগুলি হিসাবে %2$s যুক্ত করেছে।</item>
     </plurals>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">আপনি এই কক্ষের জন্য ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
         <item quantity="other">আপনি এই কক্ষের ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s সরানো হয়েছে।</item>
         <item quantity="other">%1$s %3$s কে এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">আপনি এই ঘরের ঠিকানা হিসাবে %1$s সরিয়েছেন।</item>
         <item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %2$s গুলি সরিয়েছেন।</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s %2$s যোগ করেছে এবং %3$s গুলি এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</string>
     <string name="notice_room_aliases_added_and_removed_by_you">আপনি %1$s যোগ করেছেন এবং %2$s কে এই ঘরের ঠিকানা হিসাবে সরিয়ে দিয়েছেন।</string>
-
     <string name="notice_room_canonical_alias_set">%1$s এই ঘরের মূল ঠিকানাটি %2$s তে সেট করে।</string>
     <string name="notice_room_canonical_alias_set_by_you">আপনি এই ঘরের মূল ঠিকানাটি %1$s তে সেট করেছেন।</string>
     <string name="notice_room_canonical_alias_unset">%1$s এই ঘরের মূল ঠিকানা সরিয়ে নিয়েছে।</string>
     <string name="notice_room_canonical_alias_unset_by_you">আপনি এই ঘরের মূল ঠিকানা সরিয়েছেন।</string>
-
     <string name="notice_room_guest_access_can_join">%1$s অতিথিদের ঘরে যোগদানের অনুমতি দিয়েছে।</string>
     <string name="notice_room_guest_access_can_join_by_you">আপনি অতিথিদের ঘরে যোগদানের অনুমতি দিয়েছেন।</string>
     <string name="notice_room_guest_access_forbidden">%1$s অতিথিদের ঘরে যোগদান করতে বাধা দিয়েছে।</string>
     <string name="notice_room_guest_access_forbidden_by_you">আপনি অতিথিদের ঘরে যোগদান করতে বাধা দিয়েছেন।</string>
-
     <string name="notice_end_to_end_ok">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে।</string>
     <string name="notice_end_to_end_ok_by_you">আপনি শেষ থেকে শেষ এনক্রিপশন চালু করেছেন।</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে (অজানা অ্যালগরিদম %2$s)।</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (অজানা অ্যালগরিদম %1$s )।</string>
-
     <string name="key_verification_request_fallback_message">%s আপনার কীটি যাচাই করার জন্য অনুরোধ করছে, তবে আপনার ক্লায়েন্ট ইন-চ্যাট কী যাচাইকরণ সমর্থন করে না। কীগুলি যাচাই করতে আপনাকে লিগ্যাসি কী যাচাইকরণ ব্যবহার করতে হবে।</string>
-
 </resources>

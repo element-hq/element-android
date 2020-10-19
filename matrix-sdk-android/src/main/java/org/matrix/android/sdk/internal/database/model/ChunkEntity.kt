@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +23,12 @@ import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 
 internal open class ChunkEntity(@Index var prevToken: String? = null,
-                                // Because of gaps we can have several chunks with nextToken == null
+        // Because of gaps we can have several chunks with nextToken == null
                                 @Index var nextToken: String? = null,
                                 var stateEvents: RealmList<EventEntity> = RealmList(),
                                 var timelineEvents: RealmList<TimelineEventEntity> = RealmList(),
                                 var numberOfTimelineEvents: Long = 0,
-                                // Only one chunk will have isLastForward == true
+        // Only one chunk will have isLastForward == true
                                 @Index var isLastForward: Boolean = false,
                                 @Index var isLastBackward: Boolean = false
 ) : RealmObject() {

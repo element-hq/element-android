@@ -54,27 +54,9 @@
         android:textAppearance="@style/Vector.Toolbar.Title"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/roomProfileTopicView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomProfileNameView"
         tools:text="@sample/matrix.json/data/roomAlias" />
-
-    <TextView
-        android:id="@+id/roomProfileTopicView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:autoLink="web"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomProfileAliasView"
-        tools:text="@sample/matrix.json/data/roomTopic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

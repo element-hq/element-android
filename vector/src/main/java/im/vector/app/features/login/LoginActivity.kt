@@ -91,19 +91,19 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             addFirstFragment()
         }
 
-        // Get config extra
-        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
-        if (loginConfig != null && isFirstCreation()) {
-            // TODO Check this
-            loginViewModel.handle(LoginAction.InitWith(loginConfig))
-        }
-
         loginViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
 
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+
+        // Get config extra
+        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
+        if (isFirstCreation()) {
+            // TODO Check this
+            loginViewModel.handle(LoginAction.InitWith(loginConfig))
+        }
     }
 
     protected open fun addFirstFragment() {
@@ -146,8 +146,10 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
                             findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            // Disable transition of text
+                            // findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            // No transition here now actually
+                            // findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })

@@ -36,7 +36,6 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
-        android:drawableEnd="@drawable/ic_arrow_right"
         android:drawablePadding="8dp"
         android:duplicateParentState="true"
         android:ellipsize="end"
@@ -49,7 +48,8 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomInvitationAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/matrix.json/data/displayName"
+        app:drawableEndCompat="@drawable/ic_arrow_right" />
 
     <TextView
         android:id="@+id/roomInvitationSubTitle"

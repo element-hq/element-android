@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ssss__root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/reset_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="8dp"
+            android:text="@string/secure_backup_reset_all"
+            android:textColor="?riotx_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:tint="?riot_primary_text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableTint="?riot_primary_text_color"
+            app:drawableStartCompat="@drawable/ic_alert_triangle" />
+
+        <TextView
+            android:id="@+id/ssss_reset_all_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/secure_backup_reset_all_no_other_devices"
+            android:textColor="?riotx_text_primary"
+            app:layout_constraintBottom_toTopOf="@id/ssss_reset_other_devices"
+            app:layout_constraintTop_toBottomOf="@id/reset_title" />
+
+
+        <TextView
+            android:id="@+id/ssss_reset_other_devices"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:textSize="17sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/ssss_reset_all_description"
+            tools:text="Show 2 devices you can verify with now"
+            tools:visibility="visible"
+            app:drawableStartCompat="@drawable/ic_smartphone" />
+
+        <TextView
+            android:id="@+id/ssss_reset_text3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/secure_backup_reset_if_you_reset_all"
+            android:textColor="@color/riotx_destructive_accent"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:tint="?riot_primary_text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ssss_reset_other_devices" />
+
+        <TextView
+            android:id="@+id/ssss_reset_text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/secure_backup_reset_no_history"
+            android:textColor="?riotx_text_primary"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/ssss_reset_text3" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ssss_reset_button_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            tools:ignore="MissingConstraints" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ssss_reset_button_reset"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/ssss_passphrase_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:layout_marginBottom="16dp"
+            app:constraint_referenced_ids="ssss_reset_button_cancel, ssss_reset_button_reset"
+            app:flow_horizontalStyle="spread_inside"
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ssss_reset_text4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

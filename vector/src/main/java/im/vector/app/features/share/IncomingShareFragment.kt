@@ -33,6 +33,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
@@ -70,13 +71,28 @@ class IncomingShareFragment @Inject constructor(
         setupToolbar(incomingShareToolbar)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
+        viewModel.observeViewEvents {
+            when (it) {
+                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
+                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
+            }.exhaustive
+        }
+
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND -> {
+            Intent.ACTION_SEND          -> {
                 var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }
+
+                // Direct share
+                if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+                    val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
+                    sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
+                }
+
                 isShareManaged
             }
             Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
@@ -100,13 +116,6 @@ class IncomingShareFragment @Inject constructor(
         sendShareButton.setOnClickListener { _ ->
             handleSendShare()
         }
-        viewModel.observeViewEvents {
-            when (it) {
-                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
-                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
-                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
-        }
     }
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
@@ -118,20 +127,16 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleEditMediaBeforeSending(event: IncomingShareViewEvents.EditMediaBeforeSending) {
         val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(event.contentAttachmentData))
-        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+        attachmentPreviewActivityResultLauncher.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
-        if (!hasBeenHandled && resultCode == Activity.RESULT_OK && data != null) {
-            when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE -> {
-                    val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
-                    viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
-                }
-            }
+    private val attachmentPreviewActivityResultLauncher = registerStartForActivityResult {
+        val data = it.data ?: return@registerStartForActivityResult
+        if (it.resultCode == Activity.RESULT_OK) {
+            val sendData = AttachmentsPreviewActivity.getOutput(data)
+            val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+            viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
+            viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
         }
     }
 

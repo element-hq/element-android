@@ -16,7 +16,6 @@
 package im.vector.app.features.discovery
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -27,16 +26,16 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.terms.ReviewTermsActivity
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
 class DiscoverySettingsFragment @Inject constructor(
@@ -92,22 +91,19 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.Refresh)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
-            if (Activity.RESULT_OK == resultCode) {
-                viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
-            } else {
-                // add some error?
-            }
+    private val termsActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
+        } else {
+            // add some error?
         }
-
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun openIdentityServerTerms() = withState(viewModel) { state ->
         if (state.termsNotSigned) {
             navigator.openTerms(
-                    this,
+                    requireContext(),
+                    termsActivityResultLauncher,
                     TermsService.ServiceType.IdentityService,
                     state.identityServer()?.ensureProtocol() ?: "",
                     null)

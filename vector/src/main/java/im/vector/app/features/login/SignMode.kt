@@ -18,10 +18,13 @@ package im.vector.app.features.login
 
 enum class SignMode {
     Unknown,
+
     // Account creation
     SignUp,
+
     // Login
     SignIn,
+
     // Login directly with matrix Id
     SignInWithMatrixId
 }

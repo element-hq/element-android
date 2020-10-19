@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -254,6 +253,7 @@ fun Event.isFileMessage(): Boolean {
         else                     -> false
     }
 }
+
 fun Event.isAttachmentMessage(): Boolean {
     return getClearType() == EventType.MESSAGE
             && when (getClearContent()?.toModel<MessageContent>()?.msgType) {

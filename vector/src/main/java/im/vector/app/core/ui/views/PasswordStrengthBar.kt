@@ -56,15 +56,19 @@ class PasswordStrengthBar @JvmOverloads constructor(
     @BindColor(R.color.password_strength_bar_undefined)
     @JvmField
     var colorBackground: Int = 0
+
     @BindColor(R.color.password_strength_bar_weak)
     @JvmField
     var colorWeak: Int = 0
+
     @BindColor(R.color.password_strength_bar_low)
     @JvmField
     var colorLow: Int = 0
+
     @BindColor(R.color.password_strength_bar_ok)
     @JvmField
     var colorOk: Int = 0
+
     @BindColor(R.color.password_strength_bar_strong)
     @JvmField
     var colorStrong: Int = 0

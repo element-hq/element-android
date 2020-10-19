@@ -28,6 +28,8 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
+import org.matrix.android.sdk.api.failure.Failure
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
@@ -115,7 +117,13 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     override fun onError(throwable: Throwable) {
-        loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(throwable)
+        loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection
+                && throwable.ioException is UnknownHostException) {
+            // Invalid homeserver?
+            getString(R.string.login_error_homeserver_not_found)
+        } else {
+            errorFormatter.toHumanReadable(throwable)
+        }
     }
 
     override fun updateWithState(state: LoginViewState) {

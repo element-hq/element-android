@@ -38,6 +38,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.HomeModule
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
+import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
@@ -50,9 +51,7 @@ import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.media.BigImageViewerActivity
-import im.vector.app.features.media.ImageMediaViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
-import im.vector.app.features.media.VideoMediaViewerActivity
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.permalink.PermalinkHandlerActivity
 import im.vector.app.features.pin.PinLocker
@@ -124,10 +123,8 @@ interface ScreenComponent {
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)
     fun inject(activity: BugReportActivity)
-    fun inject(activity: ImageMediaViewerActivity)
     fun inject(activity: FilteredRoomsActivity)
     fun inject(activity: CreateRoomActivity)
-    fun inject(activity: VideoMediaViewerActivity)
     fun inject(activity: CreateDirectRoomActivity)
     fun inject(activity: IncomingShareActivity)
     fun inject(activity: SoftLogoutActivity)
@@ -142,6 +139,7 @@ interface ScreenComponent {
     fun inject(activity: VectorCallActivity)
     fun inject(activity: VectorAttachmentViewerActivity)
     fun inject(activity: VectorJitsiActivity)
+    fun inject(activity: SearchActivity)
 
     /* ==========================================================================================
      * BottomSheets

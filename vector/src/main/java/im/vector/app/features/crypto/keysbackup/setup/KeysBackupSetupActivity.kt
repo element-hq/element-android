@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.queryExportKeys
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.utils.toast
@@ -93,7 +94,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .show()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
-                    queryExportKeys(session.myUserId, REQUEST_CODE_SAVE_MEGOLM_EXPORT)
+                    queryExportKeys(session.myUserId, saveStartForActivityResult)
                 }
             }
         }
@@ -125,10 +126,10 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_SAVE_MEGOLM_EXPORT) {
-            val uri = data?.data
-            if (resultCode == Activity.RESULT_OK && uri != null) {
+    private val saveStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val uri = activityResult.data?.data
+            if (uri != null) {
                 ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
                     override fun onPassphrase(passphrase: String) {
                         showWaitingView()
@@ -163,7 +164,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 hideWaitingView()
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
@@ -198,7 +198,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         const val KEYS_VERSION = "KEYS_VERSION"
         const val MANUAL_EXPORT = "MANUAL_EXPORT"
         const val EXTRA_SHOW_MANUAL_EXPORT = "SHOW_MANUAL_EXPORT"
-        const val REQUEST_CODE_SAVE_MEGOLM_EXPORT = 101
 
         fun intent(context: Context, showManualExport: Boolean): Intent {
             val intent = Intent(context, KeysBackupSetupActivity::class.java)

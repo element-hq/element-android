@@ -47,12 +47,12 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.FabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
 
 @Parcelize
@@ -140,8 +140,8 @@ class RoomListFragment @Inject constructor(
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE        -> createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
-            else                       -> Unit // No button in this mode
+            RoomListDisplayMode.ROOMS         -> createGroupRoomButton.isVisible = true
+            else                              -> Unit // No button in this mode
         }
 
         createChatRoomButton.debouncedClicks {
@@ -166,8 +166,8 @@ class RoomListFragment @Inject constructor(
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS  -> createGroupRoomButton.hide()
-                                    else                       -> Unit
+                                    RoomListDisplayMode.ROOMS         -> createGroupRoomButton.hide()
+                                    else                              -> Unit
                                 }
                             }
                         }
@@ -209,8 +209,8 @@ class RoomListFragment @Inject constructor(
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE        -> createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS  -> createGroupRoomButton.show()
-                else                       -> Unit
+                RoomListDisplayMode.ROOMS         -> createGroupRoomButton.show()
+                else                              -> Unit
             }
         }
     }
@@ -302,19 +302,19 @@ class RoomListFragment @Inject constructor(
                             getString(R.string.room_list_catchup_empty_body))
                 }
             }
-            RoomListDisplayMode.PEOPLE ->
+            RoomListDisplayMode.PEOPLE        ->
                 StateView.State.Empty(
                         getString(R.string.room_list_people_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
                         getString(R.string.room_list_people_empty_body)
                 )
-            RoomListDisplayMode.ROOMS  ->
+            RoomListDisplayMode.ROOMS         ->
                 StateView.State.Empty(
                         getString(R.string.room_list_rooms_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
                         getString(R.string.room_list_rooms_empty_body)
                 )
-            else                       ->
+            else                              ->
                 // Always display the content in this mode, because if the footer
                 StateView.State.Content
         }

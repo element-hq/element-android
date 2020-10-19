@@ -566,7 +566,7 @@
     <string name="encryption_information_sender_device_information">Të dhëna sesioni dërguesi</string>
     <string name="encryption_information_device_name">Emër publik</string>
     <string name="encryption_information_name">Emër publik</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">ID Sesioni</string>
     <string name="encryption_information_device_key">Kyç sesioni</string>
     <string name="encryption_information_verification">Verifikim</string>
     <string name="encryption_information_ed25519_fingerprint">Shenja gishtash Ed25519</string>
@@ -1536,7 +1536,7 @@
     <string name="login_error_homeserver_not_found">S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Do të përdoret %s si ndihmë kur shërbyesi juaj Home nuk ofron të tillë (gjatë thirrjes, adresa juaj IP do të ndahet me të tjerë)</string>
     <string name="invite_no_identity_server_error">Që të kryhet ky veprim, shtoni një shërbyes identitetesh, që nga rregullimet tuaja.</string>
-    <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë (Eksperimentale)</string>
+    <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
     <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
 \nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.</string>
@@ -1629,7 +1629,7 @@
     <string name="report_content_custom_title">Raportojeni këtë lëndë</string>
     <string name="report_content_custom_hint">Arsye për raportimin e kësaj lënde</string>
     <string name="report_content_custom_submit">RAPORTOJENI</string>
-    <string name="block_user">BLLOKOJENI PËRDORUESIN</string>
+    <string name="block_user">SHPËRFILLE PËRDORUESIN</string>
 
     <string name="content_reported_title">Lënda u raportua</string>
     <string name="content_reported_content">Kjo lëndë është raportuar.
@@ -1690,7 +1690,7 @@
     <string name="sas_error_m_mismatched_commitment">Hashi i lëndës s’u përputh me atë që pritej</string>
     <string name="error_handling_incoming_share">S’trajtoi dot të dhëna ndarjeje</string>
 
-    <string name="message_ignore_user">Bllokoje përdoruesin</string>
+    <string name="message_ignore_user">Shpërfille përdoruesin</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Krejt mesazhet (e zhurmshme)</string>
     <string name="room_list_quick_actions_notifications_all">Krejt mesazhet</string>
@@ -2333,4 +2333,263 @@
     <string name="identity_server_set_alternative_submit">Parashtroje</string>
 
     <string name="open_terms_of">Hap termat e %s</string>
+    <string name="play_video">Luaje</string>
+    <string name="pause_video">Pauzë</string>
+    <string name="dismiss">Hidhe poshtë</string>
+
+
+    <string name="no_permissions_to_start_conf_call">S’keni leje të nisni një thirrje konferencë në këtë dhomë</string>
+    <string name="no_permissions_to_start_webrtc_call">S’keni leje të nisni thirrje në këtë dhomë</string>
+    <string name="conference_call_in_progress">Ka tashmë një konferencë në ecuri e sipër!</string>
+    <string name="video_meeting">Nis mbledhje video</string>
+    <string name="audio_meeting">Nis mbledhje audio</string>
+    <string name="audio_video_meeting_description">Mbledhjet përdorin siguri dhe rregulla lejesh Jitsi. Krejt personat aktualisht në dhomë do të shohin një ftesë për të marrë pjesë, teksa mbahet mbledhja juaj.</string>
+    <string name="cannot_call_yourself">S’mund të bëni thirrje me vetveten</string>
+    <string name="cannot_call_yourself_with_invite">S’mund të bëni thirrje me vetveten, prisni për pjesëmarrësit të pranojnë ftesën</string>
+    <string name="failed_to_add_widget">S’u arrit të shtohej widget</string>
+    <string name="failed_to_remove_widget">S’u arrit të hiqej widget</string>
+    <string name="call_notification_answer">Pranoje</string>
+    <string name="call_notification_reject">Hidhe poshtë</string>
+    <string name="call_notification_hangup">Mbylle</string>
+
+    <string name="action_copy">Kopjoje</string>
+    <string name="dialog_title_success">Sukses</string>
+
+    <string name="bottom_action_notification">Njoftime</string>
+    <string name="call_failed_no_connection">Thirrja Element Dështoi</string>
+    <string name="call_failed_no_connection_description">S’u arrit të vendosej lidhje e atypëratyshme.
+\nQë thirrjet të punojnë mirë, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home të formësojë një shërbyes TURN.</string>
+
+    <string name="call_select_sound_device">Përzgjidhni Pajisje Zëri</string>
+    <string name="sound_device_phone">Telefon</string>
+    <string name="sound_device_speaker">Altoparlant</string>
+    <string name="call_switch_camera">Ndërroni Kamera</string>
+    <string name="call_camera_front">Ballore</string>
+    <string name="call_camera_back">E pasme</string>
+    <string name="call_format_turn_hd_off">Mbyllni HD-në</string>
+    <string name="call_format_turn_hd_on">Hapni HD-në</string>
+
+    <string name="auth_msisdn_already_defined">Ky numër telefoni është i përcaktuar tashmë.</string>
+    <string name="login_error_ssl_peer_unverified">Gabim SSL: identiteti i ortakut s’është verifikuar.</string>
+    <string name="login_error_ssl_other">Gabim SSL.</string>
+    <string name="settings_call_show_confirmation_dialog_title">Parandalo thirrje aksidentale</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Kërko për ripohim, para se të fillohet një thirrje</string>
+    <string name="active_call_with_duration">Thirrje Aktive (%s)</string>
+    <string name="return_to_call">Kthehu te thirrje</string>
+
+    <string name="room_participants_action_cancel_invite">Anuloje ftesën</string>
+    <string name="room_participants_power_level_demote_warning_title">Të zhgradohet vetja\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">S’do të jeni në gjendje ta zhbëni këtë ndryshim, teksa zhgradoni veten, nëse jeni përdoruesi i fundit i privilegjuar, s’do të jetë e mundur të rifitoni privilegjet.</string>
+    <string name="room_participants_power_level_demote">Zhgradoje</string>
+
+
+    <string name="room_participants_action_ignore_title">Shpërfille përdoruesin</string>
+    <string name="room_participants_action_ignore_prompt_msg">Shpërfillja e këtij përdoruesi do të heqë mesazhet e tij prej dhomave që ndani me të.
+\n
+\nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.</string>
+    <string name="room_participants_action_unignore_title">Hiqe shpërfilljen e përdoruesit</string>
+    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
+    <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
+    <string name="room_participants_kick_title">Përzëre përdoruesin</string>
+    <string name="room_participants_kick_reason">Arsye për përzënie</string>
+    <string name="room_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
+\n
+\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
+    <string name="room_participants_ban_title">Dëboje përdoruesin</string>
+    <string name="room_participants_ban_reason">Arsye për dëbim</string>
+    <string name="room_participants_unban_title">Hiqja dëbimin përdoruesit</string>
+    <string name="room_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në dhomë.</string>
+
+    <string name="settings_phone_number_empty">Te llogaria juaj s’është shtuar ndonjë numër telefoni</string>
+    <string name="settings_emails">Adresa email</string>
+    <string name="settings_emails_empty">Te llogaria juaj s’është shtuar ndonjë email</string>
+    <string name="settings_phone_numbers">Numra telefoni</string>
+    <string name="settings_remove_three_pid_confirmation_content">Të hiqet %s\?</string>
+    <string name="error_threepid_auth_failed">Sigurohuni që keni klikuar te lidhja në email-in që ju kemi dërguar.</string>
+
+    <plurals name="seconds">
+        <item quantity="one">%d sekondë</item>
+        <item quantity="other">%d sekonda</item>
+    </plurals>
+
+    <string name="settings_show_room_member_state_events">Shfaq akte gjendjeje përdoruesish të dhomës</string>
+    <string name="settings_show_room_member_state_events_summary">Përfshin akte ftimi/pjesëmarrjeje/ikjeje/përzënieje/dëbimi dhe ndryshime emri avatari/shfaqjeje.</string>
+    <string name="settings_secure_backup_section_title">Kopjeruajtje e Sigurt</string>
+    <string name="settings_secure_backup_manage">Administroni</string>
+    <string name="settings_secure_backup_setup">Ujdisni Kopjeruajtje të Sigurt</string>
+    <string name="settings_secure_backup_reset">Riktheje Kopjeruajtjen e Sigurt te Parazgjedhjet</string>
+    <string name="settings_secure_backup_enter_to_setup">Ujdise në këtë pajisje</string>
+    <string name="settings_secure_backup_section_info">Ruhuni nga humbja e hyrjes te mesazhe &amp; të dhëna të fshehtëzuara, duke kopjeruajtur kyçe fshehtëzimi në shërbyesin tuaj.</string>
+    <string name="reset_secure_backup_title">Prodhoni një Kyç të ri Sigurie ose caktoni një Frazë të re Sigurie për kopjeruajtjen tuaj ekzistuese.</string>
+    <string name="reset_secure_backup_warning">Kjo do të zëvendësojë Kyçin ose Frazën tuaj aktuale.</string>
+
+    <string name="disabled_integration_dialog_title">Integrimet janë të çaktivizuara</string>
+    <string name="disabled_integration_dialog_content">Që të bëhet kjo, aktivizoni “Lejo integrime”, te Rregullimet.</string>
+
+    <string name="settings_emails_and_phone_numbers_title">Email-e dhe numra telefonash</string>
+    <string name="settings_emails_and_phone_numbers_summary">Administroni email-e dhe numra telefonash të lidhur me llogarinë tuaj Matrix</string>
+
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d përdorues i dëbuar</item>
+        <item quantity="other">%d përdorues të dëbuar</item>
+    </plurals>
+
+    <string name="encryption_exported_successfully">Kyçet u eksportuan me sukses</string>
+
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d kyç i importuar me sukses.</item>
+        <item quantity="other">%1$d/%2$d kyçe të importuar me sukses.</item>
+    </plurals>
+
+    <string name="active_widget_view_action">SHIHENI</string>
+    <string name="active_widgets_title">Widget-e aktivë</string>
+
+
+    <string name="room_manage_integrations">Administroni Integrime</string>
+    <string name="room_no_active_widgets">S’ka widget-e aktivë</string>
+    <string name="recovery_key_export_saved">Kyçi i rikthimeve u ruajt.</string>
+
+    <string name="secure_backup_banner_setup_line1">Kopjeruajtje e Sigur</string>
+    <string name="secure_backup_banner_setup_line2">Ruhuni nga humbja e hyrjes në mesazhe &amp; të dhëna të fshehtëzuara</string>
+
+    <string name="secure_backup_setup">Ujdisni Kopjeruajtje të Sigurt</string>
+
+    <string name="create_room_federation_error">Dhoma është krijuar, por disa ftesa s’janë dërguar, për arsyen vijuese:
+\n
+\n%s</string>
+
+    <string name="labs_show_unread_notifications_as_tab">Shtoni një skedë enkas për njoftime të palexuar në skenën kryesore.</string>
+
+    <string name="settings_text_message_sent_hint">Kod</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s dhe %3$d tjetër i lexuar</item>
+        <item quantity="other">%1$s, %2$s dhe %3$d të tjerë të lexuar</item>
+    </plurals>
+    <string name="room_list_quick_actions_favorite_add">Shtoje te të parapëlqyerit</string>
+    <string name="room_list_quick_actions_favorite_remove">Hiqe prej të parapëlqyerve</string>
+    <string name="notice_member_no_changes_by_you">S’bëtë ndryshime</string>
+    <string name="room_join_rules_public_by_you">E bëtë dhomën publike për këdo që di lidhjen.</string>
+    <string name="room_join_rules_invite_by_you">E bëtë dhomën vetëm me ftesa.</string>
+    <string name="login_server_url_form_common_notice">Jepni adresën e shërbyesit që doni të përdoret</string>
+
+    <string name="login_msisdn_notice">Ju lutemi, përdorni formatin ndërkombëtar (numrat e telefonave duhet të fillojnë me \'+\')</string>
+    <string name="login_signin_matrix_id_password_notice">Nëse s’e dini fjalëkalimin, kthehuni mbrapsht që ta ricaktoni.</string>
+    <string name="send_a_sticker">Ngjitës</string>
+    <string name="sent_a_poll">Pyetësor</string>
+    <string name="sent_a_bot_buttons">Butona Roboti</string>
+    <string name="sent_a_reaction">Reagoi me: %s</string>
+    <string name="sent_verification_conclusion">Përfundim Verifikimi</string>
+
+    <string name="room_profile_section_admin">Veprime Përgjegjësi</string>
+    <string name="room_member_power_level_default_in">%1$s, si parazgjedhje</string>
+    <string name="settings_hs_admin_e2e_disabled">Përgjegjësi i shërbyesit tuaj ka çaktivizuar, si parazgjedhje, fshehtëzim skaj-më-skaj në dhoma private &amp; Mesazhe të Drejtpërdrejtë.</string>
+    <string name="delete_account_data_warning">Të fshihen të dhënat e llogarisë të llojit %1$s\?
+\n
+\nPërdoreni me kujdes, mund të shpjerë në sjellje të papritura.</string>
+
+    <string name="bootstrap_info_text_2">Jepni një frazë sigurie që e dini vetëm ju, e përdorur për të siguruar të fshehta në shërbyesin tuaj.</string>
+
+    <string name="bootstrap_cancel_text">Nëse e anuloni tani, mund të humbni mesazhe &amp; të dhëna të fshehtëzuara, nëse humbni hyrje te kredencialet tuaja.
+\n
+\nMundeni edhe të ujdisni Kopjeruajtje të Sigurt &amp; të administroni kyçet tuaj, te Rregullimet.</string>
+
+    <string name="room_created_summary_item_by_you">Krijuat dhe formësuat dhomën.</string>
+
+    <string name="auth_invalid_login_deactivated_account">Kjo llogari është çaktivizuar.</string>
+
+    <string name="error_saving_media_file">S’u ruajt dot kartelë media</string>
+    <string name="confirm_your_identity_quad_s">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjeje, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
+    <string name="error_sso_flow_not_supported_yet">Na ndjeni, ky veprim s’është ende i mundshëm për llogari të lidhura duke përdorur Hyrje Njëshe.</string>
+
+    <string name="identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, Element-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
+    <string name="power_level_edit_title">Caktoni rol</string>
+    <string name="power_level_title">Rol</string>
+    <string name="a11y_open_chat">Hapni fjalosje</string>
+    <string name="a11y_mute_microphone">Mbylle mikrofonin</string>
+    <string name="a11y_unmute_microphone">Hape mikrofonin</string>
+    <string name="a11y_stop_camera">Ndale kamerën</string>
+    <string name="a11y_start_camera">Nise kamerën</string>
+
+    <string name="settings_setup_secure_backup">Ujdisni Kopjeruajtje të Sigurt</string>
+
+    <string name="bottom_sheet_setup_secure_backup_title">Kopjeruajtje e sigurt</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Ruhuni nga humbja e hyrjes te mesazhe &amp; të dhëna të fshehtëzuara, duke kopjeruajtur në shërbyesin tuaj kyçet e fshehtëzimit.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Ujdiseni</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Përdor një Kyç Sigurie</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Prodhoni një kyç sigurie që të depozitohet diku në një vend të parrezik, bie fjala, në një përgjegjës fjalëkalimesh ose kasafortë.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Përdor një Frazë Sigurie</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Jepni një frazë të fshehtë që e dini vetëm ju, dhe prodhoni një kyç për kopjeruajtjen.</string>
+
+    <string name="bottom_sheet_save_your_recovery_key_title">Ruani Kyçin tuaj të Sigurisë</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Depozitojeni Kyçin tuaj të Sigurisë në një vend të parrezik, bie fjala, një përgjegjës fjalëkalimesh ose një kasafortë.</string>
+
+    <string name="set_a_security_phrase_title">Caktoni një Frazë Sigurie</string>
+    <string name="set_a_security_phrase_notice">Jepni një frazë sigurie që e dini vetëm ju, e përdorur për të siguruar të fshehta në shërbyesin tuaj.</string>
+    <string name="set_a_security_phrase_hint">Frazë Sigurie</string>
+    <string name="set_a_security_phrase_again_notice">Rijepni Frazën tuaj të Sigurisë, për ta ripohuar.</string>
+
+    <string name="save_your_security_key_title">Ruani Kyçin tuaj të Sigurisë</string>
+    <string name="save_your_security_key_notice">Depozitojeni Kyçin tuaj të Sigurisë në një vend të parrezik, bie fjala, një përgjegjës fjalëkalimesh ose një kasafortë.</string>
+
+    <string name="room_settings_name_hint">Emër Dhome</string>
+    <string name="room_settings_topic_hint">Temë</string>
+    <string name="room_settings_save_success">Ndryshuat me sukses rregullimet për dhomën</string>
+
+    <string name="notice_crypto_unable_to_decrypt_final">S’mund të hapni këtë mesazh</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Po pritet për këtë mesazh, kjo mund të zgjasë ca</string>
+    <string name="crypto_utd">Nuk Shfshehtëzohet Dot</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Për shkak të fshehtëzimit skaj-më-skaj, mund t’ju duhet të prisni që të mbërrijë mesazhi i dikujt, ngaqë kyçet e fshehtëzimit s’qenë ujdisur si duhet për ju.</string>
+    <string name="crypto_error_withheld_blacklisted">S’mund ta hapni këtë mesazh, ngaqë jeni bllokuar nga dërguesi</string>
+    <string name="crypto_error_withheld_unverified">S’mund të hapni këtë mesazh, ngaqë sesionit tuaj nuk i zihet besë nga dërguesi</string>
+    <string name="crypto_error_withheld_generic">S’mund ta hapni këtë mesazh, ngaqë dërguesi qëllimisht nuk ju dërgoi kyçet</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Po pritet për historik fshehtëzimesh</string>
+
+    <string name="element_disclaimer_title">Riot-i tanimë quhet Element!</string>
+    <string name="element_disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
+    <string name="element_disclaimer_negative_button">E MORA VESH</string>
+    <string name="element_disclaimer_positive_button">MËSONI MË TEPËR</string>
+
+    <string name="element_login_splash_brand">element</string>
+
+
+    <string name="save_recovery_key_chooser_hint">Ruaje kyçin e rimarrjeve te</string>
+
+    <string name="add_from_phone_book">Shto prej numëratorit tim telefonik</string>
+    <string name="empty_phone_book">Numëratori juaj telefonik është i zbrazët</string>
+    <string name="phone_book_title">Numërator telefonik</string>
+    <string name="search_in_my_contacts">Kërko te kontaktet e mia</string>
+    <string name="loading_contact_book">Po merren kontaktet tuaja…</string>
+    <string name="empty_contact_book">Numëratori juaj telefonik është i zbrazët</string>
+    <string name="contacts_book_title">Libër adresash</string>
+
+    <string name="three_pid_revoke_invite_dialog_title">Shfuqizo ftesën</string>
+    <string name="three_pid_revoke_invite_dialog_content">Të shfuqizohet ftesa për %1$s\?</string>
+
+    <string name="member_banned_by">Dëbuar nga %1$s</string>
+    <string name="failed_to_unban">S’u arrit të Hiqej Dëbimi i përdoruesit</string>
+
+    <string name="alert_push_are_disabled_title">Njoftimet push janë të çaktivizuar</string>
+    <string name="alert_push_are_disabled_description">Që të aktivizoni njoftimet push, shihni te rregullimet tuaja</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Kod i gabuar, edhe %d provë</item>
+        <item quantity="other">Kod i gabuar, edhe %d prova</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Kujdes! Prova e fundit e mbetur, përpara daljes!</string>
+    <string name="too_many_pin_failures">Shumë gabime, u nxorët nga llogaria</string>
+    <string name="create_pin_title">Zgjidhni një PIN për siguri</string>
+    <string name="create_pin_confirm_title">Ripohoni PIN-in</string>
+    <string name="create_pin_confirm_failure">S’u arrit të vlerësohet pin-i, ju lutemi, jepni një të ri.</string>
+    <string name="auth_pin_title">Jepni PIN-in tuaj</string>
+    <string name="auth_pin_forgot">Harruat PIN-in\?</string>
+    <string name="auth_pin_reset_title">Ricaktoni pin-in</string>
+    <string name="auth_pin_new_pin_action">Pin i ri</string>
+    <string name="auth_pin_reset_content">Që të ricaktoni PIN-in tuaj, do t’ju duhet të ribëni hyrjen dhe të krijoni një të ri.</string>
+    <string name="settings_security_pin_code_title">Aktivizo PIN-in</string>
+    <string name="settings_security_pin_code_summary">Nëse doni të ricaktoni PIN-in tuaj, prekni “Harrova PIN-in”, që të bëhet dalja nga llogaria dhe ricaktimi.</string>
+    <string name="auth_pin_confirm_to_disable_title">Që të çaktivizohet PIN-i, ripohoni PIN-in</string>
+    <string name="error_opening_banned_room">S’mund të hapet një dhomë prej të cilës jeni dëbuar.</string>
+    <string name="room_error_not_found">S’gjendet dot kjo dhomë. Sigurohuni që ekziston.</string>
+
+    <string name="universal_link_malformed">Lidhja qe e keqformësuar</string>
 </resources>

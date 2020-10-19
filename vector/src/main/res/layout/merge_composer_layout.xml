@@ -70,8 +70,8 @@
         android:id="@+id/composer_related_message_action_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:tint="?riotx_text_primary"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,MissingPrefix"
+        app:tint="?riotx_text_primary" />
 
     <ImageButton
         android:id="@+id/composer_related_message_close"

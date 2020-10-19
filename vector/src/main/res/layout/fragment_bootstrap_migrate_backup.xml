@@ -71,10 +71,11 @@
         android:background="?attr/selectableItemBackground"
         android:scaleType="center"
         android:src="@drawable/ic_eye"
-        android:tint="?colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bootstrapRecoveryKeyEnterTil"
-        app:layout_constraintTop_toTopOf="@+id/bootstrapRecoveryKeyEnterTil" />
+        app:layout_constraintTop_toTopOf="@+id/bootstrapRecoveryKeyEnterTil"
+        app:tint="?colorAccent"
+        tools:ignore="MissingPrefix" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bootstrapMigrateContinueButton"

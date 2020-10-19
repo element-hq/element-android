@@ -23,7 +23,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EmojiCompatFontProvider @Inject constructor(): FontsContractCompat.FontRequestCallback() {
+class EmojiCompatFontProvider @Inject constructor() : FontsContractCompat.FontRequestCallback() {
 
     var typeface: Typeface? = null
         set(value) {

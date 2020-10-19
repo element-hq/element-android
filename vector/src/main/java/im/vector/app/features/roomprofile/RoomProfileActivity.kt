@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
@@ -60,6 +61,9 @@ class RoomProfileActivity :
 
     @Inject
     lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
+
+    @Inject
+    lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
         return requireActiveMembershipViewModelFactory.create(initialState)
@@ -94,6 +98,13 @@ class RoomProfileActivity :
             when (it) {
                 is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (roomDetailPendingActionStore.data != null) {
+            finish()
         }
     }
 

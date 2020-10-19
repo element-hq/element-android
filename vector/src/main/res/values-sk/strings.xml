@@ -1757,7 +1757,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="room_directory_search_hint">Názov alebo ID (#priklad:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Povoliť odpovedať švihnutím na časovej osy</string>
-    <string name="labs_merge_e2e_in_timeline">Zlúčiť správy nepodarilo sa dešifrovať na časovej osy</string>
     <string name="labs_show_unread_notifications_as_tab">Zobrazovať záložku oznámenia na hlavnej obrazovke.</string>
 
     <string name="link_copied_to_clipboard">Odkaz skopírovaný do schránky</string>

@@ -18,7 +18,9 @@ package im.vector.app.features.roommemberprofile.devices
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -29,6 +31,7 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -44,8 +47,8 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents {
             when (it) {
                 is DeviceListBottomSheetViewEvents.Verify -> {
@@ -104,10 +107,16 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
     }
 
+    @Parcelize
+    data class Args(
+            val userId: String,
+            val allowDeviceAction: Boolean
+    ) : Parcelable
+
     companion object {
-        fun newInstance(userId: String): DeviceListBottomSheet {
+        fun newInstance(userId: String, allowDeviceAction: Boolean = true): DeviceListBottomSheet {
             val args = Bundle()
-            args.putString(MvRx.KEY_ARG, userId)
+            args.putParcelable(MvRx.KEY_ARG, Args(userId, allowDeviceAction))
             return DeviceListBottomSheet().apply { arguments = args }
         }
     }

@@ -70,7 +70,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     .apply {
                         invitees.forEach {
                             when (it) {
-                                is PendingInvitee.UserPendingInvitee -> invitedUserIds.add(it.user.userId)
+                                is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
                                 is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
                             }.exhaustive
                         }

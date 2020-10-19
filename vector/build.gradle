@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 8
+ext.versionPatch = 9
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -172,6 +172,19 @@ android {
                 output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
             }
         }
+
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        // Disables animations during instrumented tests you run from the command line…
+        // This property does not affect tests that you run using Android Studio.”
+        animationsDisabled = true
+
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     signingConfigs {
@@ -267,19 +280,23 @@ android {
 
 dependencies {
 
-    def epoxy_version = '3.11.0'
-    def fragment_version = '1.2.5'
+    def epoxy_version = '4.1.0'
+    def fragment_version = '1.3.0-beta01'
     def arrow_version = "0.8.2"
-    def coroutines_version = "1.3.8"
     def markwon_version = '4.1.2'
     def big_image_viewer_version = '1.6.2'
     def glide_version = '4.11.0'
-    def moshi_version = '1.8.0'
-    def daggerVersion = '2.25.4'
+    def moshi_version = '1.11.0'
+    def daggerVersion = '2.29.1'
     def autofill_version = "1.0.0"
     def work_version = '2.4.0'
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
+
+    // Tests
+    def kluent_version = '1.61'
+    def androidxTest_version = '1.3.0'
+    def espresso_version = '3.3.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -289,16 +306,16 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha06"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    // Keep at 2.0.0-beta4 at the moment, as updating is breaking some UI
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
-    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation "androidx.sharetarget:sharetarget:1.0.0"
+    implementation 'androidx.core:core-ktx:1.3.2'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
@@ -326,9 +343,10 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
+    implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
-    implementation 'com.airbnb.android:mvrx:1.3.0'
+    implementation 'com.airbnb.android:mvrx:1.5.1'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -344,7 +362,7 @@ dependencies {
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
     implementation 'me.gujun.android:span:1.7'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
@@ -379,7 +397,7 @@ dependencies {
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
@@ -396,7 +414,7 @@ dependencies {
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
 
     // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:20.2.4') {
+    gplayImplementation('com.google.firebase:firebase-messaging:20.3.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -420,20 +438,22 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // TESTS
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+    testImplementation 'junit:junit:4.13'
+    testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
-    androidTestImplementation 'androidx.test:core:1.2.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
+    androidTestImplementation "androidx.test:core:$androidxTest_version"
+    androidTestImplementation "androidx.test:runner:$androidxTest_version"
+    androidTestImplementation "androidx.test:rules:$androidxTest_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    androidTestImplementation "org.amshove.kluent:kluent-android:$kluent_version"
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'

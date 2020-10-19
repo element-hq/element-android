@@ -30,8 +30,6 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
-        const val REQUEST_CODE = 55
-
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
         private const val ATTACHMENTS_PREVIEW_RESULT = "ATTACHMENTS_PREVIEW_RESULT"
         private const val KEEP_ORIGINAL_IMAGES_SIZE = "KEEP_ORIGINAL_IMAGES_SIZE"

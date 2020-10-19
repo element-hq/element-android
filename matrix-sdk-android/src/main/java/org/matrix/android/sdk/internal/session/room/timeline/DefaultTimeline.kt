@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -424,14 +423,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState.get()
+            Timeline.Direction.FORWARDS  -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState
+            Timeline.Direction.FORWARDS  -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -742,10 +741,10 @@ internal class DefaultTimeline(
         return object : MatrixCallback<TokenChunkEventPersistor.Result> {
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
-                    TokenChunkEventPersistor.Result.SUCCESS -> {
+                    TokenChunkEventPersistor.Result.SUCCESS           -> {
                         Timber.v("Success fetching $limit items $direction from pagination request")
                     }
-                    TokenChunkEventPersistor.Result.REACHED_END -> {
+                    TokenChunkEventPersistor.Result.REACHED_END       -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->

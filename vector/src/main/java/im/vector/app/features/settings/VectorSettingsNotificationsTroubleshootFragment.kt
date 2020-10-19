@@ -16,13 +16,16 @@
 package im.vector.app.features.settings
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,12 +33,16 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.NotificationTroubleshootTestManagerFactory
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
@@ -45,12 +52,16 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
     @BindView(R.id.troubleshoot_test_recycler_view)
     lateinit var mRecyclerView: RecyclerView
+
     @BindView(R.id.troubleshoot_bottom_view)
     lateinit var mBottomView: ViewGroup
+
     @BindView(R.id.toubleshoot_summ_description)
     lateinit var mSummaryDescription: TextView
+
     @BindView(R.id.troubleshoot_summ_button)
     lateinit var mSummaryButton: Button
+
     @BindView(R.id.troubleshoot_run_button)
     lateinit var mRunButton: Button
 
@@ -76,28 +87,27 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         }
 
         mRunButton.debouncedClicks {
-            testManager?.retry()
+            testManager?.retry(testStartForActivityResult)
         }
         startUI()
     }
 
     private fun startUI() {
-        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
-                0, 0)
+        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
         testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
                 TransitionManager.beginDelayedTransition(mBottomView)
                 when (troubleshootTestManager.diagStatus) {
-                    TroubleshootTest.TestStatus.NOT_STARTED -> {
+                    TroubleshootTest.TestStatus.NOT_STARTED      -> {
                         mSummaryDescription.text = ""
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.RUNNING     -> {
-                        // Forces int type because it's breaking lint
-                        val size: Int = troubleshootTestManager.testList.size
-                        val currentTestIndex: Int = troubleshootTestManager.currentTestIndex
+                    TroubleshootTest.TestStatus.RUNNING,
+                    TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
+                        val size = troubleshootTestManager.testListSize
+                        val currentTestIndex = troubleshootTestManager.currentTestIndex
                         mSummaryDescription.text = getString(
                                 R.string.settings_troubleshoot_diagnostic_running_status,
                                 currentTestIndex,
@@ -106,17 +116,9 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.GONE
                     }
-                    TroubleshootTest.TestStatus.FAILED      -> {
+                    TroubleshootTest.TestStatus.FAILED           -> {
                         // check if there are quick fixes
-                        var hasQuickFix = false
-                        testManager?.testList?.let {
-                            for (test in it) {
-                                if (test.status == TroubleshootTest.TestStatus.FAILED && test.quickFix != null) {
-                                    hasQuickFix = true
-                                    break
-                                }
-                            }
-                        }
+                        val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
                             mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
                         } else {
@@ -125,7 +127,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.SUCCESS     -> {
+                    TroubleshootTest.TestStatus.SUCCESS          -> {
                         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE
@@ -134,7 +136,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
             }
         }
         mRecyclerView.adapter = testManager?.adapter
-        testManager?.runDiagnostic()
+        testManager?.runDiagnostic(testStartForActivityResult)
     }
 
     override fun onDestroyView() {
@@ -142,12 +144,14 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == NotificationTroubleshootTestManager.REQ_CODE_FIX) {
-            testManager?.retry()
-            return
+    private val testStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            retry()
         }
-        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun retry() {
+        testManager?.retry(testStartForActivityResult)
     }
 
     override fun onDetach() {
@@ -159,6 +163,39 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
+
+        tryOrNull("Unable to register the receiver") {
+            LocalBroadcastManager.getInstance(requireContext())
+                    .registerReceiver(broadcastReceiverPush, IntentFilter(NotificationUtils.PUSH_ACTION))
+        }
+        tryOrNull("Unable to register the receiver") {
+            LocalBroadcastManager.getInstance(requireContext())
+                    .registerReceiver(broadcastReceiverNotification, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tryOrNull {
+            LocalBroadcastManager.getInstance(requireContext())
+                    .unregisterReceiver(broadcastReceiverPush)
+        }
+        tryOrNull {
+            LocalBroadcastManager.getInstance(requireContext())
+                    .unregisterReceiver(broadcastReceiverNotification)
+        }
+    }
+
+    private val broadcastReceiverPush = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            testManager?.onDiagnosticPushReceived()
+        }
+    }
+
+    private val broadcastReceiverNotification = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            testManager?.onDiagnosticNotificationClicked()
+        }
     }
 
     override fun onAttach(context: Context) {

@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -107,6 +108,12 @@ class BottomSheetActionButton @JvmOverloads constructor(
             leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
+    var titleTextColor: Int? = null
+        set(value) {
+            field = value
+            value?.let { actionTextView.setTextColor(it) }
+        }
+
     init {
         inflate(context, R.layout.item_verification_action, this)
         ButterKnife.bind(this)
@@ -120,6 +127,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
             rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
 
             tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
+            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ContextCompat.getColor(context, R.color.riotx_accent))
         }
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -217,7 +216,7 @@ interface KeysBackupService {
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
-    fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+    fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
 }

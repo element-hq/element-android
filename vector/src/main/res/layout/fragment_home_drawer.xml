@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?riotx_background"
     android:clickable="true"
     android:focusable="true">
 
@@ -23,9 +24,10 @@
             android:layout_height="@dimen/layout_touch_size"
             android:scaleType="center"
             android:src="@drawable/ic_settings_x"
-            android:tint="@color/riotx_accent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/riotx_accent"
+            tools:ignore="MissingPrefix" />
 
         <ImageView
             android:id="@+id/homeDrawerHeaderAvatarView"
@@ -42,11 +44,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?riotx_text_primary"
             android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
             tools:text="@sample/matrix.json/data/displayName" />
@@ -55,28 +58,17 @@
             android:id="@+id/homeDrawerUserIdView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:layout_marginBottom="17dp"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
             tools:text="@sample/matrix.json/data/mxid" />
-
-        <ImageView
-            android:id="@+id/homeDrawerHeaderSettingsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/room_sliding_menu_settings"
-            android:padding="16dp"
-            android:src="@drawable/ic_settings_x"
-            android:tint="?riotx_text_secondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,10 +76,53 @@
         android:id="@+id/homeDrawerGroupListContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?riotx_background"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/homeDrawerBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeader" />
+
+    <View
+        android:id="@+id/homeDrawerBottomSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/vctr_list_divider_color"
+        app:layout_constraintBottom_toTopOf="@+id/homeDrawerHeaderSettingsView" />
+
+    <TextView
+        android:id="@+id/homeDrawerHeaderSettingsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:drawablePadding="9dp"
+        android:gravity="center_vertical"
+        android:minWidth="120dp"
+        android:minHeight="52dp"
+        android:padding="16dp"
+        android:text="@string/settings"
+        android:textSize="14sp"
+        android:tint="?riotx_android_secondary"
+        app:drawableStartCompat="@drawable/ic_settings_18dp"
+        app:drawableTint="?riotx_android_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/homeDrawerHeaderSignoutView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:drawablePadding="9dp"
+        android:gravity="center_vertical"
+        android:minWidth="120dp"
+        android:minHeight="52dp"
+        android:padding="16dp"
+        android:text="@string/logout"
+        android:textSize="14sp"
+        android:tint="?riotx_android_secondary"
+        app:drawableStartCompat="@drawable/ic_signout_18dp"
+        app:drawableTint="?riotx_android_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

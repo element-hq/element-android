@@ -54,5 +54,5 @@ sealed class ParsedCommand {
     class SendSpoiler(val message: String) : ParsedCommand()
     class SendShrug(val message: CharSequence) : ParsedCommand()
     class SendPoll(val question: String, val options: List<String>) : ParsedCommand()
-    object DiscardSession: ParsedCommand()
+    object DiscardSession : ParsedCommand()
 }

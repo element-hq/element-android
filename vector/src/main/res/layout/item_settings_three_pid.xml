@@ -13,11 +13,12 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:scaleType="center"
-        android:tint="?riotx_text_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_phone" />
+        tools:src="@drawable/ic_phone"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/item_settings_three_pid_title"
@@ -39,9 +40,10 @@
         android:layout_height="@dimen/layout_touch_size"
         android:scaleType="center"
         android:src="@drawable/ic_trash_24"
-        android:tint="@color/riotx_destructive_accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/riotx_destructive_accent"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

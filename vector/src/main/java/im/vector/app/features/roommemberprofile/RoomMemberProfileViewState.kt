@@ -39,6 +39,7 @@ data class RoomMemberProfileViewState(
         val allDevicesAreTrusted: Boolean = false,
         val allDevicesAreCrossSignedTrusted: Boolean = false,
         val asyncMembership: Async<Membership> = Uninitialized,
+        val hasReadReceipt: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 

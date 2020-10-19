@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,7 +93,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     // Expose to handle Realm migration to riotX
-    fun getRealmEncryptionKey(alias: String) : ByteArray {
+    fun getRealmEncryptionKey(alias: String): ByteArray {
         val key = if (hasKeyForDatabase(alias)) {
             Timber.i("Found key for alias:$alias")
             extractKeyForDatabase(alias)

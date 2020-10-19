@@ -16,6 +16,7 @@
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
@@ -55,8 +56,8 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(
                 epoxyController,
                 showDivider = true,

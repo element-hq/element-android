@@ -18,17 +18,16 @@ package im.vector.app.features.navigation
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
-import androidx.fragment.app.Fragment
-import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.media.AttachmentData
-import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
-import im.vector.app.features.terms.ReviewTermsActivity
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -71,6 +70,8 @@ interface Navigator {
 
     fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
 
+    fun open4SSetup(context: Context, setupMode: SetupMode)
+
     fun openKeysBackupManager(context: Context)
 
     fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
@@ -81,22 +82,26 @@ interface Navigator {
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 
-    fun openPinCode(fragment: Fragment, pinMode: PinMode, requestCode: Int = PinActivity.PIN_REQUEST_CODE)
+    fun openPinCode(context: Context,
+                    activityResultLauncher: ActivityResultLauncher<Intent>,
+                    pinMode: PinMode)
 
-    fun openPinCode(activity: Activity, pinMode: PinMode, requestCode: Int = PinActivity.PIN_REQUEST_CODE)
-
-    fun openTerms(fragment: Fragment,
+    fun openTerms(context: Context,
+                  activityResultLauncher: ActivityResultLauncher<Intent>,
                   serviceType: TermsService.ServiceType,
                   baseUrl: String,
-                  token: String?,
-                  requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
+                  token: String?)
 
-    fun openStickerPicker(fragment: Fragment,
+    fun openStickerPicker(context: Context,
+                          activityResultLauncher: ActivityResultLauncher<Intent>,
                           roomId: String,
-                          widget: Widget,
-                          requestCode: Int = WidgetRequestCodes.STICKER_PICKER_REQUEST_CODE)
+                          widget: Widget)
 
-    fun openIntegrationManager(fragment: Fragment, roomId: String, integId: String?, screen: String?)
+    fun openIntegrationManager(context: Context,
+                               activityResultLauncher: ActivityResultLauncher<Intent>,
+                               roomId: String,
+                               integId: String?,
+                               screen: String?)
 
     fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
 
@@ -106,4 +111,6 @@ interface Navigator {
                         view: View,
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
+
+    fun openSearch(context: Context, roomId: String)
 }

@@ -19,7 +19,7 @@ package im.vector.app.features.qrcode
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.activity.result.ActivityResultLauncher
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
@@ -75,15 +75,8 @@ class QrCodeScannerActivity : VectorBaseActivity() {
         private const val EXTRA_OUT_TEXT = "EXTRA_OUT_TEXT"
         private const val EXTRA_OUT_IS_QR_CODE = "EXTRA_OUT_IS_QR_CODE"
 
-        const val QR_CODE_SCANNER_REQUEST_CODE = 429
-
-        // For test only
-        fun startForResult(activity: Activity, requestCode: Int = QR_CODE_SCANNER_REQUEST_CODE) {
-            activity.startActivityForResult(Intent(activity, QrCodeScannerActivity::class.java), requestCode)
-        }
-
-        fun startForResult(fragment: Fragment, requestCode: Int = QR_CODE_SCANNER_REQUEST_CODE) {
-            fragment.startActivityForResult(Intent(fragment.requireActivity(), QrCodeScannerActivity::class.java), requestCode)
+        fun startForResult(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
+            activityResultLauncher.launch(Intent(activity, QrCodeScannerActivity::class.java))
         }
 
         fun getResultText(data: Intent?): String? {

@@ -183,7 +183,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun addIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
         if (renderer == null) return
-        val exists = list.firstOrNull() {
+        val exists = list.firstOrNull {
             it.get() == renderer
         } != null
         if (!exists) {

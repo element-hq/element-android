@@ -22,6 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.DataSource
+import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
-import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import javax.inject.Inject

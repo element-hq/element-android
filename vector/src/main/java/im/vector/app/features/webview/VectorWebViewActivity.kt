@@ -21,11 +21,11 @@ import android.content.Intent
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.CallSuper
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_vector_web_view.*
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**

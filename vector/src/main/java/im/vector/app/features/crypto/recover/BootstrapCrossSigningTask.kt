@@ -69,10 +69,10 @@ interface BootstrapProgressListener {
 
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
-        val initOnlyCrossSigning: Boolean = false,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
-        val keySpec: SsssKeySpec? = null
+        val keySpec: SsssKeySpec? = null,
+        val setupMode: SetupMode
 )
 
 // TODO Rename to CreateServerRecovery
@@ -84,9 +84,13 @@ class BootstrapCrossSigningTask @Inject constructor(
     override suspend fun execute(params: Params): BootstrapResult {
         val crossSigningService = session.cryptoService().crossSigningService()
 
-        Timber.d("## BootstrapCrossSigningTask: initXSOnly:${params.initOnlyCrossSigning} Starting...")
+        Timber.d("## BootstrapCrossSigningTask: mode:${params.setupMode} Starting...")
         // Ensure cross-signing is initialized. Due to migration it is maybe not always correctly initialized
-        if (!crossSigningService.isCrossSigningInitialized()) {
+
+        val shouldSetCrossSigning = !crossSigningService.isCrossSigningInitialized()
+                || (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !crossSigningService.allPrivateKeysKnown())
+                || (params.setupMode == SetupMode.HARD_RESET)
+        if (shouldSetCrossSigning) {
             Timber.d("## BootstrapCrossSigningTask: Cross signing not enabled, so initialize")
             params.progressListener?.onProgress(
                     WaitingViewData(
@@ -99,7 +103,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 awaitCallback<Unit> {
                     crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
                 }
-                if (params.initOnlyCrossSigning) {
+                if (params.setupMode == SetupMode.CROSS_SIGNING_ONLY) {
                     return BootstrapResult.SuccessCrossSigningOnly
                 }
             } catch (failure: Throwable) {
@@ -107,7 +111,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             }
         } else {
             Timber.d("## BootstrapCrossSigningTask: Cross signing already setup, go to 4S setup")
-            if (params.initOnlyCrossSigning) {
+            if (params.setupMode == SetupMode.CROSS_SIGNING_ONLY) {
                 // not sure how this can happen??
                 return handleInitializeXSigningError(IllegalArgumentException("Cross signing already setup"))
             }
@@ -135,7 +139,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             null,
                             it
                     )
-                } ?: kotlin.run {
+                } ?: run {
                     ssssService.generateKey(
                             UUID.randomUUID().toString(),
                             params.keySpec,
@@ -236,7 +240,13 @@ class BootstrapCrossSigningTask @Inject constructor(
             val serverVersion = awaitCallback<KeysVersionResult?> {
                 session.cryptoService().keysBackupService().getCurrentVersion(it)
             }
-            if (serverVersion == null) {
+
+            val knownMegolmSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
+            val isMegolmBackupSecretKnown = knownMegolmSecret != null && knownMegolmSecret.version == serverVersion?.version
+            val shouldCreateKeyBackup = serverVersion == null
+                    || (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !isMegolmBackupSecretKnown)
+                    || (params.setupMode == SetupMode.HARD_RESET)
+            if (shouldCreateKeyBackup) {
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
                 val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
                     session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
@@ -260,16 +270,15 @@ class BootstrapCrossSigningTask @Inject constructor(
             } else {
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Existing megolm backup found")
                 // ensure we store existing backup secret if we have it!
-                val knownSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
-                if (knownSecret != null && knownSecret.version == serverVersion.version) {
+                if (isMegolmBackupSecretKnown) {
                     // check it matches
                     val isValid = awaitCallback<Boolean> {
-                        session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownSecret.recoveryKey, it)
+                        session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownMegolmSecret!!.recoveryKey, it)
                     }
                     if (isValid) {
                         Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key valid and known")
                         awaitCallback<Unit> {
-                            extractCurveKeyFromRecoveryKey(knownSecret.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                            extractCurveKeyFromRecoveryKey(knownMegolmSecret!!.recoveryKey)?.toBase64NoPadding()?.let { secret ->
                                 ssssService.storeSecret(
                                         KEYBACKUP_SECRET_SSSS_NAME,
                                         secret,
@@ -286,7 +295,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
         }
 
-        Timber.d("## BootstrapCrossSigningTask: initXSOnly:${params.initOnlyCrossSigning} Finished")
+        Timber.d("## BootstrapCrossSigningTask: mode:${params.setupMode} Finished")
         return BootstrapResult.Success(keyInfo)
     }
 

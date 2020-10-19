@@ -23,23 +23,21 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_uploads.*
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomUploadsFragment @Inject constructor(
         private val viewModelFactory: RoomUploadsViewModel.Factory,
-        private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val notificationUtils: NotificationUtils
 ) : VectorBaseFragment(), RoomUploadsViewModel.Factory by viewModelFactory {
@@ -58,8 +56,8 @@ class RoomUploadsFragment @Inject constructor(
 
         TabLayoutMediator(roomUploadsTabs, roomUploadsViewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = stringProvider.getString(R.string.uploads_media_title)
-                1 -> tab.text = stringProvider.getString(R.string.uploads_files_title)
+                0 -> tab.text = getString(R.string.uploads_media_title)
+                1 -> tab.text = getString(R.string.uploads_files_title)
             }
         }.attach()
 

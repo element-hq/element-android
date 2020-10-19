@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,8 +100,11 @@ class RxRoom(private val room: Room) {
         return room.getEventReadReceiptsLive(eventId).asObservable()
     }
 
-    fun liveDrafts(): Observable<List<UserDraft>> {
-        return room.getDraftsLive().asObservable()
+    fun liveDraft(): Observable<Optional<UserDraft>> {
+        return room.getDraftLive().asObservable()
+                .startWithCallable {
+                    room.getDraft().toOptional()
+                }
     }
 
     fun liveNotificationState(): Observable<RoomNotificationState> {

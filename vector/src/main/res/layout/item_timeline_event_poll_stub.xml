@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +17,8 @@
             android:layout_gravity="center"
             android:layout_margin="4dp"
             android:src="@drawable/ic_poll"
-            android:tint="@color/riotx_accent" />
+            app:tint="@color/riotx_accent"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/pollLabelText"

@@ -1,20 +1,17 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="resources_language">sv</string>
     <string name="resources_country_code">SE</string>
     <string name="resources_script">Latn</string>
-
     <string name="light_theme">Ljust tema</string>
     <string name="dark_theme">Mörkt tema</string>
     <string name="black_them">Svart tema</string>
     <string name="status_theme">Status.im-tema</string>
-
     <string name="notification_sync_init">Initialiserar tjänst</string>
     <string name="notification_sync_in_progress">Synkroniserar…</string>
     <string name="notification_listening_for_events">Lyssnar efter händelser</string>
     <string name="notification_noisy_notifications">Högljudda aviseringar</string>
     <string name="notification_silent_notifications">Tysta aviseringar</string>
-
     <string name="title_activity_home">Meddelanden</string>
     <string name="title_activity_room">Rum</string>
     <string name="title_activity_settings">Inställningar</string>
@@ -26,7 +23,6 @@
     <string name="title_activity_keys_backup_setup">Säkerhetskopiering av nycklar</string>
     <string name="title_activity_keys_backup_restore">Använd nyckelsäkerhetskopiering</string>
     <string name="title_activity_verify_device">Verifiera session</string>
-
     <string name="keys_backup_is_not_finished_please_wait">Säkerhetskopiering av nycklar är inte färdig, vänligen vänta…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Du kommer att förlora dina krypterade meddelanden om du loggar ut nu</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Säkerhetskopiering av nycklar pågår. Om du loggar ut nu så kommer du att förlora åtkomst till dina krypterade meddelanden.</string>
@@ -37,11 +33,8 @@
     <string name="are_you_sure">Är du säker\?</string>
     <string name="backup">Säkerhetskopiera</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du kommer att förlora åtkomst till dina krypterade meddelanden om du inte säkerhetskopierar dina nycklar innan du loggar ut.</string>
-
     <string name="dialog_title_third_party_licences">Tredjepartslicenser</string>
-
     <string name="loading">Laddar…</string>
-
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="save">Spara</string>
@@ -90,7 +83,6 @@
     <string name="ignore">Ignorera</string>
     <string name="review">Granska</string>
     <string name="decline">Avslå</string>
-
     <string name="action_exit">Avsluta</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logga ut</string>
@@ -106,27 +98,22 @@
     <string name="action_close">Stäng</string>
     <string name="copied_to_clipboard">Kopierat till klippbordet</string>
     <string name="disable">Stäng av</string>
-
     <string name="dialog_title_confirmation">Bekräftelse</string>
     <string name="dialog_title_warning">Varning</string>
     <string name="dialog_title_error">Fel</string>
-
     <string name="bottom_action_home">Hem</string>
     <string name="bottom_action_favourites">Favoriter</string>
     <string name="bottom_action_people">Personer</string>
     <string name="bottom_action_rooms">Rum</string>
     <string name="bottom_action_groups">Gemenskaper</string>
-
     <string name="home_filter_placeholder_home">Filtrera rumsnamn</string>
     <string name="home_filter_placeholder_favorites">Filtrera favoriter</string>
     <string name="home_filter_placeholder_people">Filtrera personer</string>
     <string name="home_filter_placeholder_rooms">Filtrera rumsnamn</string>
     <string name="home_filter_placeholder_groups">Filtrera gemenskapsnamn</string>
-
     <string name="invitations_header">Inbjudningar</string>
     <string name="low_priority_header">Låg prioritet</string>
     <string name="system_alerts_header">Systemvarningar</string>
-
     <string name="direct_chats_header">Konversationer</string>
     <string name="local_address_book_header">Lokal adressbok</string>
     <string name="user_directory_header">Användarkatalog</string>
@@ -135,20 +122,17 @@
     <string name="no_contact_access_placeholder">Du gav inte Element tillgång till dina lokala kontakter</string>
     <string name="no_result_placeholder">Inga resultat</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurerad.</string>
-
     <string name="rooms_header">Rum</string>
     <string name="rooms_directory_header">Rumskatalog</string>
     <string name="no_room_placeholder">Inga rum</string>
     <string name="no_public_room_placeholder">Inga offentliga rum tillgängliga</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 användare</item>
+        <item quantity="one">%d användare</item>
         <item quantity="other">%d användare</item>
     </plurals>
-
     <string name="groups_invite_header">Bjud in</string>
     <string name="groups_header">Gemenskaper</string>
     <string name="no_group_placeholder">Inga grupper</string>
-
     <string name="send_bug_report_include_logs">Skicka loggar</string>
     <string name="send_bug_report_include_crash_logs">Skicka kraschloggar</string>
     <string name="send_bug_report_include_screenshot">Skicka skärmdump</string>
@@ -160,14 +144,11 @@
     <string name="send_bug_report_alert_message">Du verkar skaka din telefon i frustration. Vill du skicka en buggrapport\?</string>
     <string name="send_bug_report_app_crashed">Appen kraschade senaste gången. Vill du skicka en buggrapport\?</string>
     <string name="send_bug_report_rage_shake">Raseriskaka för att rapportera bugg</string>
-
     <string name="send_bug_report_sent">Buggrapporten har skickats framgångsrikt</string>
     <string name="send_bug_report_failed">Sändning av buggrapporten misslyckades (%s)</string>
     <string name="send_bug_report_progress">Framsteg (%s%%)</string>
-
     <string name="send_files_in">Skicka in i</string>
     <string name="read_receipt">Läs</string>
-
     <string name="join_room">Gå med i rummet</string>
     <string name="username">Användarnamn</string>
     <string name="create_account">Skapa konto</string>
@@ -176,13 +157,10 @@
     <string name="hs_url">URL för hemserver</string>
     <string name="identity_url">URL för identitetsserver</string>
     <string name="search">Sök</string>
-
     <string name="start_new_chat">Starta ny chatt</string>
     <string name="start_voice_call">Starta röstsamtal</string>
     <string name="start_video_call">Starta videosamtal</string>
-
     <string name="option_send_voice">Skicka röst</string>
-
     <string name="start_new_chat_prompt_msg">Är du säker på att du vill skapa en ny chatt med %s\?</string>
     <string name="start_voice_call_prompt_msg">Är du säker på att du vill starta ett röstsamtal\?</string>
     <string name="start_video_call_prompt_msg">Är du säker på att du vill skapa ett videosamtal\?</string>
@@ -192,20 +170,16 @@
 \nAlternativt så kan du försöka använda den publika servern på %2$s, men detta kommer inte att vara lika pålitligt, och kommer att dela din IP-adress med den servern. Du kan också hantera detta i inställningarna.</string>
     <string name="call_failed_no_ice_use_alt">Försök med %s</string>
     <string name="call_failed_dont_ask_again">Fråga mig inte igen</string>
-
     <string name="option_send_files">Skicka filer</string>
     <string name="option_send_sticker">Skicka dekal</string>
     <string name="option_take_photo_video">Ta foto eller video</string>
     <string name="option_take_photo">Ta ett foto</string>
     <string name="option_take_video">Ta en video</string>
-
     <string name="no_sticker_application_dialog_content">Du har för närvarande inga dekalpaket aktiva. 
 \n 
 \nLägg till några nu\?</string>
-
     <string name="go_on_with">fortsätt med…</string>
     <string name="error_no_external_application_found">Tyvärr har ingen extern applikation hittats som kan fullfölja denna handling.</string>
-
     <string name="auth_login">Logga in</string>
     <string name="auth_login_sso">Logga in med externt konto</string>
     <string name="auth_register">Skapa konto</string>
@@ -259,7 +233,6 @@
 \n 
 \nDu har loggats ut ur alla sessioner och kommer inte längre motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet.</string>
     <string name="auth_accept_policies">Vänligen granska och acceptera villkoren för denna hemserver:</string>
-
     <string name="login_error_must_start_http">URLen måste börja med http[s]://</string>
     <string name="login_error_network_error">Kan inte logga in: Nätverksfel</string>
     <string name="login_error_unable_login">Kan inte logga in</string>
@@ -271,7 +244,6 @@
     <string name="login_error_no_homeserver_found">Det här är inte en giltig Matrixserveradress</string>
     <string name="login_error_homeserver_not_found">Kan inte nå en hemserver på den här URLen, vänligen kolla den</string>
     <string name="login_error_ssl_handshake">Din enhet använder ett utdaterat TLS-protokoll, sårbart för anfall, så för din säkerhets skull så kommer du inte kunna ansluta</string>
-
     <string name="login_error_forbidden">Felaktigt användarnamn/lösenord</string>
     <string name="login_error_unknown_token">Den åtkomsttoken du specificerade kändes inte igen</string>
     <string name="login_error_bad_json">Felformaterad JSON</string>
@@ -279,47 +251,35 @@
     <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
     <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
     <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
-
     <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
-
     <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
-
     <string name="e2e_re_request_encryption_key_dialog_title">Förfrågan har skickats</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Vänligen öppna Element på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
-
     <string name="read_receipts_list">Läsindikationslista</string>
-
     <string name="groups_list">Grupplista</string>
-
     <plurals name="membership_changes">
-        <item quantity="one">1 medlemsskapsändring</item>
+        <item quantity="one">%d medlemsskapsändring</item>
         <item quantity="other">%s medlemsskapsändringar</item>
     </plurals>
-
     <string name="compression_options">Skicka som</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Stor</string>
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Liten</string>
-
     <string name="attachment_cancel_download">Avbryt nedladdningen\?</string>
     <string name="attachment_cancel_upload">Avbryt uppladdningen\?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-
     <string name="yesterday">Igår</string>
     <string name="today">Idag</string>
-
     <string name="room_info_room_name">Rumsnamn</string>
     <string name="room_info_room_topic">Rumsämne</string>
-
     <string name="settings_call_category">Samtal</string>
     <string name="settings_call_ringtone_use_app_ringtone">Använd förvald Element-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_dialog_title">Välj ringsignal för samtal:</string>
-
     <string name="call">Ring</string>
     <string name="call_connected">Samtal anslutet</string>
     <string name="call_connecting">Samtal ansluter…</string>
@@ -330,15 +290,12 @@
     <string name="incoming_voice_call">Inkommande röstsamtal</string>
     <string name="call_in_progress">Samtal pågår…</string>
     <string name="video_call_in_progress">Videosamtal pågår…</string>
-
     <string name="call_error_user_not_responding">Den andra parten svarade inte.</string>
     <string name="call_error_ice_failed">Mediaanslutning misslyckades</string>
     <string name="call_error_camera_init_failed">Kan inte initialisera kameran</string>
     <string name="call_error_answered_elsewhere">samtal besvarat någon annanstans</string>
-
     <string name="media_picker_both_capture_title">Ta en bild eller en video</string>
     <string name="media_picker_cannot_record_video">Kan inte spela in video</string>
-
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_storage">Element behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor. 
 \n 
@@ -358,25 +315,20 @@
     <string name="permissions_msg_contacts_warning_other_androids">Element kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
 \n
 \nVill du dela din adressbok för detta ändamål\?</string>
-
     <string name="permissions_action_not_performed_missing_permissions">Tyvärr. Handlingen utfördes inte på grund av saknade rättigheter</string>
-
     <string name="media_slider_saved">Sparad</string>
     <string name="media_slider_saved_message">Spara till nedladdningar\?</string>
     <string name="yes">JA</string>
     <string name="no">NEJ</string>
     <string name="_continue">Fortsätt</string>
-
     <string name="remove">Ta bort</string>
     <string name="join">Gå med</string>
     <string name="preview">Förhandsvisning</string>
     <string name="reject">Avslå</string>
-
     <string name="list_members">Lista medlemmar</string>
     <string name="open_chat_header">Öppna rubrik</string>
     <string name="room_sync_in_progress">Synkroniserar…</string>
     <string name="room_jump_to_first_unread">Hoppa till det första olästa meddelandet.</string>
-
     <string name="room_preview_invitation_format">Du har blivit inbjuden till det här rummet av %s</string>
     <string name="room_preview_unlinked_email_warning">Denna inbjudan skickades till %s, vilket inte är associerat med det här kontot.
 \nDu kanske vill logga in på ett annat konto eller lägga till den här e-postadressen till det här kontot.</string>
@@ -387,48 +339,43 @@
     <string name="room_creation_title">Ny chatt</string>
     <string name="room_creation_add_member">Lägg till medlem</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="one">%d aktiv medlem</item>
         <item quantity="other">%d aktiva medlemmar</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 medlem</item>
+        <item quantity="one">%d medlem</item>
         <item quantity="other">%d medlemmar</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
-
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1t</item>
+        <item quantity="one">%dt</item>
         <item quantity="other">%dt</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
-
     <string name="room_participants_leave_prompt_title">Lämna rum</string>
     <string name="room_participants_leave_prompt_msg">Är du säker på att du vill lämna rummet\?</string>
     <string name="room_participants_remove_prompt_msg">Är du säker på att du vill ta bort %s från den här chatten\?</string>
     <string name="room_participants_create">Skapa</string>
-
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Inaktiv</string>
     <string name="room_participants_now">%1$s nu</string>
     <string name="room_participants_ago">%1$s för %2$s sen</string>
-
     <string name="room_participants_header_admin_tools">ADMINISTRATIONSVERKTYG</string>
     <string name="room_participants_header_call">RING</string>
     <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
     <string name="room_participants_header_devices">SESSIONER</string>
-
     <string name="room_participants_action_invite">Bjud in</string>
     <string name="room_participants_action_leave">Lämna det här rummet</string>
     <string name="room_participants_action_remove">Ta bort från det här rummet</string>
@@ -443,7 +390,7 @@
     <string name="tab_title_search_rooms">RUM</string>
     <string name="room_recents_conversations">RUM</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 rum</item>
+        <item quantity="one">%d rum</item>
         <item quantity="other">%d rum</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -454,25 +401,20 @@
     <string name="settings_pin_missed_notifications">Fäst rum med missade aviseringar</string>
     <string name="settings_pin_unread_messages">Fäst rum med olästa meddelanden</string>
     <string name="settings_data_save_mode_summary">Datasparningsläge använder ett specifikt filter så att närvarouppdateringar och \"skriver\"-statusar filtreras ut.</string>
-
     <string name="failed_to_load_timeline_position">%s försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.</string>
-
     <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över offentliga rum från</string>
     <string name="directory_server_all_rooms_on_server">Alla rum på %s-servern</string>
     <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 rum</item>
+        <item quantity="one">%d rum</item>
         <item quantity="other">%d rum</item>
     </plurals>
-
     <string name="group_details_rooms">Rum</string>
     <string name="rooms">Rum</string>
     <string name="filter_group_members">Filtrera gruppmedlemmar</string>
     <string name="filter_group_rooms">Filtrera grupprum</string>
-
     <plurals name="group_rooms">
-        <item quantity="one">1 rum</item>
+        <item quantity="one">%d rum</item>
         <item quantity="other">%d rum</item>
     </plurals>
     <string name="deactivate_account_content">Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte kunna logga in, och ingen kommer kunna registrera sig med samma användar-ID. Detta kommer att få ditt konto att lämna alla rum det är med i, och det kommer att ta bort din kontoinformation från din identitetsserver. <b>Den här handlingen går inte att ångra</b>.
@@ -486,36 +428,27 @@
     <string name="room_list_catchup_empty_body">Du har inga olästa meddelanden kvar</string>
     <string name="room_list_rooms_empty_title">Rum</string>
     <string name="room_list_rooms_empty_body">Dina rum kommer att visas här</string>
-
     <string name="create_new_room">Skapa ett nytt rum</string>
     <string name="fab_menu_create_room">Rum</string>
     <string name="fab_menu_create_chat">Direktmeddelanden</string>
-
     <string name="send_suggestion">Ge ett förslag</string>
     <string name="send_suggestion_content">Vänligen skriv ditt förslag nedan.</string>
     <string name="send_suggestion_report_placeholder">Beskriv ditt förslag här</string>
     <string name="send_suggestion_sent">Tack, ditt förslag har skickats framgångsrikt</string>
     <string name="send_suggestion_failed">Förslaget misslyckades att skickas (%s)</string>
-
     <string name="bottom_action_people_x">Direktmeddelanden</string>
-
     <string name="room_filtering_filter_hint">Filtrera konversationer…</string>
     <string name="room_filtering_footer_title">Kan du inte hitta det du letar efter\?</string>
     <string name="room_filtering_footer_create_new_room">Skapa ett nytt rum</string>
     <string name="room_filtering_footer_create_new_direct_message">Skicka ett nytt direktmeddelande</string>
     <string name="room_filtering_footer_open_room_directory">Se rumskatalogen</string>
-
     <string name="direct_room_filter_hint">Filtrera efter användarnamn eller ID…</string>
-
     <string name="a11y_create_direct_message">Skapa en ny direktkonversation</string>
     <string name="a11y_create_room">Skapa ett nytt rum</string>
     <string name="reaction_search_type_hint">Skriv nyckelord för att hitta en reaktion.</string>
-
     <string name="autodiscover_well_known_error">Kan inte hitta en giltig hemserver. Vänligen kontrollera din identifierare</string>
-
     <string name="room_list_sharing_header_recent_rooms">Nyliga rum</string>
     <string name="room_list_sharing_header_other_rooms">Andra rum</string>
-
     <string name="enter_secret_storage_invalid">Kan inte hitta hemligheter i lagringen</string>
     <string name="settings_when_rooms_are_upgraded">När rum uppgraderas</string>
     <string name="command_description_discard_session_not_handled">Stöds endast I krypterade rum</string>
@@ -539,7 +472,6 @@
     <string name="settings_fail_to_update_password_invalid_current_password">Lösenordet är ogiltigt</string>
     <string name="settings_password_updated">Ditt lösenord har uppdaterats</string>
     <string name="settings_without_flair">Du är för närvarande inte medlem in någon gemenskap.</string>
-
     <string name="encryption_information_verify_device_warning">Bekräfta genom att jämföra följande nyckel med användarinställningarna i din andra session:</string>
     <string name="room_widget_permission_display_name">Ditt visningsnamn</string>
     <string name="deactivate_account_prompt_password">För att fortsätta, skriv in ditt lösenord:</string>
@@ -554,16 +486,12 @@
 \n
 \nOm det inte var du som satte upp den nya återställningsmetoden så kan det vara en angripare som försöker komma åt ditt konto. Ändra ditt kontolösenord och sätt en ny återställningsmetod omedelbart i inställningarna.</string>
     <string name="identity_server_not_defined_for_password_reset">Ingen identitetsserver är konfigurerad, vilket krävs för att återställa ditt lösenord.</string>
-
     <string name="change_room_directory_network">Byt nätverk</string>
     <string name="group_all_communities">Alla gemenskaper</string>
-
     <string name="settings_general_title">Allmänt</string>
     <string name="settings_preferences">Alternativ</string>
     <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
-
     <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>
-
     <string name="encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade. Lär dig mer och verifiera användare i deras profiler.</string>
     <string name="room_participants_action_unignore">Avignorera</string>
     <string name="room_participants_invite_prompt_msg">Är du säker på att du vill bjuda in %s till den här chatten\?</string>
@@ -571,7 +499,6 @@
     <string name="people_search_invite_by_id_dialog_title">Bjud in användare med ID</string>
     <string name="people_search_invite_by_id_dialog_description">Vänligen skriv in en eller flera e-postadresser eller Matrix-IDn</string>
     <string name="people_search_invite_by_id_dialog_hint">E-postadress eller Matrix-ID</string>
-
     <string name="ssl_could_not_verify">Kunde inte verifiera den externa serverns identitet.</string>
     <string name="room_details_title">Rumsdetaljer</string>
     <string name="room_details_people">Personer</string>
@@ -582,7 +509,6 @@
 \nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
     <string name="tab_title_search_people">PERSONER</string>
     <string name="tab_title_search_files">FILER</string>
-
     <string name="room_settings_all_messages_noisy">Alla meddelanden (högljutt)</string>
     <string name="room_settings_all_messages">Alla meddelanden</string>
     <string name="room_settings_mention_only">Endast omnämnande</string>
@@ -597,19 +523,16 @@
     <string name="settings_app_info_link_summary">Visa info om appen i systeminställningarna.</string>
     <string name="settings_notification_advanced">Avancerade aviseringsinställningar</string>
     <string name="settings_notification_by_event">Aviseringsprioritet för händelser</string>
-
     <string name="settings_notification_privacy">Aviseringssekretess</string>
     <string name="settings_notification_troubleshoot">Felsök aviseringar</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Grundläggande felsökning lyckades. Om du fortfarande inte får aviseringar, vänligen skicka en buggrapport för att hjälpa oss att undersöka.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ett eller flera tester har misslyckats, testa de föreslagna fixarna.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ett eller flera tester har misslyckats, vänligen skicka en buggrapport för att hjälpa oss att undersöka.</string>
-
     <string name="settings_troubleshoot_test_system_settings_success">Aviseringar är aktiverade i systeminställningarna.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Aviseringar är inaktiverade i systeminställningarna.
 \nVänligen kolla systeminställningarna.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Aviseringar är aktiverade för ditt konto.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Aviseringar är inaktiverade för ditt konto.
-\n
 \nVänligen kolla kontoinställningarna.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Aviseringar är aktiverade för den här sessionen.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Aviseringar är inaktiverade för den här sessionen.
@@ -624,7 +547,6 @@
     <string name="settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens Element har öppnats en gång.</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för Element.
 \nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.
-\n
 \n%1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">Om en användare lämnar sin enhet urkopplad och stilla en längre tid, med skärmen av, så går enheten in i Doze-läget. Detta hindrar appar från att komma åt nätverket och skjuter upp deras uppgifter, synkroniseringar och standardlarm.</string>
     <string name="settings_notification_privacy_fcm">• Aviseringar skickas via Firebase Cloud Messaging</string>
@@ -632,7 +554,6 @@
     <string name="settings_notification_privacy_secure_message_content">• Meddelandeinnehåll i aviseringen <b>hämtas på ett säkert sätt från Matrix-hemservern</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Aviseringar innehåller <b>meta- och meddeladedata</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Aviseringar kommer <b>inte att visa meddelandeinnehåll</b></string>
-
     <string name="settings_notification_ringtone">Aviseringsljud</string>
     <string name="settings_enable_all_notif">Aktivera aviseringar för det här kontot</string>
     <string name="settings_enable_this_device">Aktivera aviseringar för den här sessionen</string>
@@ -640,8 +561,6 @@
     <string name="settings_call_notifications_preferences">Konfigurera samtalsaviseringar</string>
     <string name="settings_silent_notifications_preferences">Konfigurera tysta aviseringar</string>
     <string name="settings_system_preferences_summary">Välj LED-färg, vibration, ljud…</string>
-
-
     <string name="settings_containing_my_user_name">Meddelanden innehållande mitt användarnamn</string>
     <string name="settings_messages_in_one_to_one">Meddelanden i direktchattar</string>
     <string name="settings_messages_in_group_chat">Meddelanden i gruppchattar</string>
@@ -652,7 +571,6 @@
     <string name="settings_keep_media">Behåll media</string>
     <string name="settings_clear_cache">Rensa cache</string>
     <string name="settings_clear_media_cache">Rensa mediacache</string>
-
     <string name="settings_notifications">Aviseringar</string>
     <string name="settings_ignored_users">Ignorerade användare</string>
     <string name="settings_advanced">Avancerat</string>
@@ -678,12 +596,10 @@
     <string name="account_email_already_used_error">Den här e-postadressen är upptagen.</string>
     <string name="account_email_not_found_error">Den här e-postadressen kunde inte hittas.</string>
     <string name="account_email_error">Ett fel hände vid verifiering av din e-postadress.</string>
-
     <string name="settings_unignore_user">Visa alla meddelanden från %s\?
 \n
 \nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
     <string name="settings_delete_notification_targets_confirmation">Är du säker på att du vill ta bort det här aviseringsmålet\?</string>
-
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Förvald mediakälla</string>
     <string name="settings_flair">Emblem</string>
@@ -694,37 +610,29 @@
     <string name="room_settings_labs_end_to_end">Totalsträckskryptering</string>
     <string name="room_settings_labs_end_to_end_is_active">Totalsträckskryptering är aktiv</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner i det här rummet från den här sessionen.</string>
-
     <string name="room_settings_no_flair">Det här rummet visar inte emblem för några gemenskaper</string>
     <string name="room_settings_addresses_e2e_enabled">Kryptering är aktiverat i det här rummet.</string>
     <string name="encryption_information_title">Totalsträckskrypteringsinformation</string>
-
     <string name="encryption_information_device_name_with_warning">Publikt namn (synligt för folk som du pratar med)</string>
     <string name="device_name_warning">En sessions publika namn är synligt för personer du pratar med</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner från den här sessionen.</string>
-
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d avisering</item>
         <item quantity="other">%d aviseringar</item>
     </plurals>
-
     <string name="room_widget_webview_read_protected_media">Läs DRM-skyddad media</string>
-
     <string name="command_problem_with_parameters">Kommandot \"%s\" behöver fler parametrar, eller så är några av parametrarna felaktiga.</string>
     <string name="command_description_part_room">Lämna rummet</string>
     <string name="command_description_markdown">På/av Markdown</string>
     <string name="notification_off">Av</string>
     <string name="notification_silent">Tysta</string>
     <string name="notification_noisy">Högljudda</string>
-
     <string name="group_details_people">Personer</string>
     <string name="deactivate_account_title">Inaktivera konto</string>
     <string name="deactivate_account_delete_checkbox">Vänligen glöm alla meddelanden jag har skickat när mitt konto avaktiveras (varning: detta får framtida användare att se en inkomplett vy av konversationer)</string>
     <string name="deactivate_account_submit">Inaktivera konto</string>
-
     <string name="no_valid_google_play_services_apk">Ingen giltig \"Google Play-tjänster\"-APK hittades. Aviseringar kanske inte funkar ordentligt.</string>
-
     <string name="keys_backup_setup_step1_title">Bli aldrig av med krypterade meddelanden</string>
     <string name="keys_backup_setup_step1_description">Meddelanden i krypterade rum är säkrade med totalsträckskryptering. Bara du och mottagaren har nycklarna för att läsa dessa meddelanden.
 \n
@@ -740,17 +648,13 @@
     <string name="keys_backup_info_title_version">Version</string>
     <string name="autodiscover_invalid_response">Ogiltigt hemserversvar</string>
     <string name="invalid_or_expired_credentials">Du har blivit utloggad på grund av ogiltiga eller utgångna uppgifter.</string>
-
     <string name="sas_incoming_request_description">Verifiera den här sessionen för att markera den som betrodd. Att lita på folks sessioner ger dig extra sinnesro när du skickar totalsträckskrypterade meddelanden.</string>
     <string name="sas_verified_successful_description">Säkra meddelanden mellan dig och den här användaren är totalsträckskrypterade och kommer inte att vara läsbara för tredje parter.</string>
     <string name="identity_server_not_defined">Du använder ingen identitetsserver</string>
-
     <string name="settings_sdk_version">Matrix-SDK-version</string>
     <string name="settings_security_and_privacy">Säkerhet och sekretess</string>
     <string name="preference_voice_and_video">Röst &amp; video</string>
     <string name="preference_root_help_about">Hjälp &amp; om</string>
-
-
     <string name="terms_description_for_identity_server">Bli upptäckbar av andra</string>
     <string name="identity_server">Identitetsserver</string>
     <string name="disconnect_identity_server">Koppla bort identitetsserver</string>
@@ -772,54 +676,42 @@
     <string name="settings_discovery_no_terms">Identitetsservern du har valt har inga användarvillkor. Fortsätt endast om du litar på ägaren av servern</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Du delar för närvarande e-postadresser och telefonnummer på hemservern %1$s. Du kommer behöva återansluta till %2$s för att sluta dela dem.</string>
     <string name="settings_agree_to_terms">Acceptera identitetsserverns (%s) användarvillkor för att låta dig själv vara upptäckbar med e-postadress eller telefonnummer.</string>
-
     <string name="labs_allow_extended_logging_summary">Mångordiga loggar kommer att hjälpa utvecklare genom att skicka mer loggar när du skickar en raseriskakning. Även när det är aktiverat, så loggar appen inga meddelandeinnehåll eller annan privat data.</string>
-
-
     <string name="a11y_show_password">Visa lösenord</string>
     <string name="a11y_hide_password">Dölj lösenord</string>
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">Det finns ingen media i det här rummet</string>
     <string name="uploads_files_title">FILER</string>
     <string name="uploads_files_no_result">Det finns inga filer i det här rummet</string>
-
     <string name="content_reported_content">Det här innehållet rapporterades.
 \n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
+\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.</string>
     <string name="content_reported_as_spam_content">Det här innehållet rapporterades som spam.
 \n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
+\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.</string>
     <string name="content_reported_as_inappropriate_content">Det här innehållet rapporterades som olämpligt.
 \n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
-
+\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Alla meddelanden (högljutt)</string>
     <string name="room_list_quick_actions_notifications_all">Alla meddelanden</string>
     <string name="room_list_quick_actions_notifications_mentions">Endast omnämnande</string>
     <string name="room_list_quick_actions_notifications_mute">Tysta</string>
     <string name="room_list_quick_actions_leave">Lämna rummet</string>
     <string name="help_long_click_on_room_for_more_options">Långklicka på ett rum för att se fler alternativ</string>
-
-
     <string name="room_join_rules_invite">%1$s ändrade rummet till endast inbjudna.</string>
     <string name="login_splash_text1">Chatta med folk direkt eller i grupp</string>
     <string name="login_server_text">Precis som med e-post så har konton ett hem, fast du kan prata med vem som helst</string>
     <string name="login_server_modular_learn_more">Lär dig mer</string>
     <string name="login_server_other_text">Anpassade &amp; avancerade inställningar</string>
-
     <string name="login_login_with_email_error">Den här e-postadressen är inte associerad med något konto.</string>
-
     <string name="login_reset_password_on">Återställ lösenordet på %1$s</string>
     <string name="login_reset_password_notice">Ett verifikations-e-brev kommer att skickas till din inkorg för att bekräfta bytet av ditt lösenord.</string>
     <string name="login_reset_password_email_hint">E-post</string>
     <string name="login_reset_password_password_hint">Nytt lösenord</string>
-
     <string name="login_reset_password_warning_content">Att ändra ditt lösenord kommer att återställa alla nycklar för totalsträckskryptering på alla dina sessioner, och göra krypterad chatthistorik oläslig. Sätt upp nyckelsäkerhetskopiering eller exportera dina rumsnycklar från en annan session innan du återställer ditt lösenord.</string>
     <string name="login_reset_password_error_not_found">Den här e-postadressen är inte länkad till något konto</string>
-
     <string name="login_reset_password_mail_confirmation_notice">Ett verifikations-e-brev skickades till %1$s.</string>
     <string name="login_reset_password_mail_confirmation_submit">Jag har verifierat min e-postadress</string>
-
     <string name="login_reset_password_success_notice_2">Du har blivit utloggad ur alla sessioner och kommer inte längre motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet.</string>
     <string name="login_set_email_title">Sätt e-postadress</string>
     <string name="login_set_email_notice">Sätt en e-postadress för att kunna återförva ditt konto. Senare kan du valfritt låta personer du känner upptäcka dig med din e-postadress.</string>
@@ -831,19 +723,14 @@
     <string name="login_wait_for_email_notice">Vi skickade just ett e-brev till %1$s. 
 \nKlicka på länken i det för att fortsätta med kontoskapandet.</string>
     <string name="login_error_outdated_homeserver_content">Den här hemservern kör en för gammal version för att ansluta till. Be administratören för hemservern att uppdatera.</string>
-
     <string name="soft_logout_signin_e2e_warning_notice">Logga in för att återfå krypteringsnycklar som endast lagras på den här enheten. Du behöver dem för att läsa alla dina säkra meddelanden på andra enheter.</string>
     <string name="soft_logout_clear_data_dialog_content">Rensa all data lagrad på den här enheten\?
 \nLogga in igen för att komma åt din kontodata och dina meddelanden.</string>
     <string name="settings_advanced_settings">Avancerade inställningar</string>
     <string name="autocomplete_limited_results">Visar endast de första resultaten, skriv mer…</string>
-
     <string name="settings_developer_mode_fail_fast_summary">Element kan krascha mer när ett oväntat fel inträffar</string>
-
     <string name="create_room_encryption_description">Efter aktivering så kan kryptering inte avaktiveras.</string>
-
     <string name="login_error_threepid_denied">Din e-postdomän är inte auktoriserad för att registrera på den här servern</string>
-
     <string name="room_profile_not_encrypted_subtitle">Meddelanden i det här rummet är inte totalsträckskrypterade.</string>
     <string name="room_profile_encrypted_subtitle">Meddelanden i det här rummet är totalsträckskrypterade.
 \n
@@ -862,36 +749,26 @@
     <string name="room_member_power_level_moderators">Moderatorer</string>
     <string name="verify_cannot_cross_sign">Den här sessionen kan inte dela den här verifikationen med dina andra sessioner.
 \nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.</string>
-
     <string name="room_settings_enable_encryption">Aktivera totalsträckskryptering</string>
     <string name="room_settings_enable_encryption_warning">Efter aktivering så kan kryptering inte avaktiveras.</string>
-
     <string name="room_settings_enable_encryption_dialog_content">Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan kan göra att många bottar och bryggor inte funkar ordentligt.</string>
     <string name="verification_conclusion_ok_notice">Meddelanden mellan dig och den här användaren är totalsträckskrypterade och kan inte läsas av tredje parter.</string>
     <string name="verification_conclusion_ok_self_notice">Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd.</string>
-
-
     <string name="settings_active_sessions_unverified_device_desc">Verifiera den här sessionen gör att markera den som betrodd och ge den tillgång till dina krypterade meddelanden. Om det inte var du som loggade in i den här sessionen så kan ditt konto vara kapat:</string>
-
     <string name="verification_open_other_to_verify">Använd en existerande session för att verifiera den här och ge den tillgång till krypterade meddelanden.</string>
-
-
     <string name="bootstrap_cross_signing_success">Din %2$s &amp; %1$s är nu satta.
 \n
 \nHåll dem säkra! Du kommer att behöva dem för att låsa upp krypterade meddelanden och säker information om du förlorar alla dina aktiva sessioner.</string>
-
     <string name="encryption_enabled">Kryptering aktiverat</string>
     <string name="encryption_not_enabled">Kryptering inte aktiverat</string>
     <string name="settings_notification_configuration">Aviseringskonfiguration</string>
     <string name="settings_messages_at_room">Meddelanden som innehåller @room</string>
     <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet för händelser</string>
-
     <string name="media_file_added_to_gallery">Mediafiler tillagda till galleriet</string>
     <string name="error_adding_media_file_to_gallery">Kunde inte lägga till mediafilen till galleriet</string>
     <string name="review_logins">Granska var du är inloggad</string>
     <string name="verify_other_sessions">Verifiera alla dina sessioner för att se till att ditt konto och dina meddelanden är säkra</string>
     <string name="create_room_dm_failure">Vi kunde inte skapa ditt DM. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
-
     <string name="invite_users_to_room_action_invite">BJUD IN</string>
     <string name="invite_users_to_room_title">Bjud in användare</string>
     <plurals name="invitations_sent_to_one_and_more_users">
@@ -899,7 +776,6 @@
         <item quantity="other">Inbjudan skickad till %1$s och %2$d till</item>
     </plurals>
     <string name="invite_users_to_room_failure">Vi kunde inte bjuda in användarna. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
-
     <string name="disconnect_identity_server_dialog_content">Koppla bort från identitetsservern %s\?</string>
     <string name="identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. Element stöder endast API V2.</string>
     <string name="identity_server_error_no_identity_server_configured">Vänligen konfigurera en identitetsserver.</string>
@@ -908,7 +784,6 @@
     <string name="identity_server_set_alternative_notice">Alternativt så kan du skriva in en annan identitetsserver-URL</string>
     <string name="identity_server_set_alternative_notice_no_default">Skriv in URL för en identitetsserver</string>
     <string name="e2e_use_keybackup">Lås upp krypterad meddelandehistorik</string>
-
     <string name="verify_new_session_notice">Använd den här sessionen för att verifiera din nya och ge den tillgång till krypterade meddelanden.</string>
     <string name="verify_cancel_self_verification_from_untrusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på den här enheten, och andra användare kommer inte att lita på den</string>
     <string name="verify_cancel_self_verification_from_trusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på din nya enhet, och andra användare kommer inte att lita på den</string>
@@ -917,31 +792,22 @@
 \n
 \nOm du inte vill sätta ett meddelandelösenord, generera en meddelandenyckel istället.</string>
     <string name="bootstrap_skip_text_no_gen_key">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.</string>
-
-
     <string name="settings_invited_to_room">När jag bjuds in till ett rum</string>
     <string name="settings_call_invitations">Samtalsinbjudningar</string>
     <string name="settings_messages_sent_by_bot">Meddelanden skickade av en bott</string>
-
     <string name="settings_user_interface">Användargränssnitt</string>
     <string name="settings_interface_language">Språk</string>
     <string name="settings_select_language">Välj språk</string>
-
     <string name="settings_theme">Tema</string>
-
     <string name="room_widget_permission_theme">Ditt tema</string>
     <string name="choose_locale_current_locale_title">Nuvarande språk</string>
     <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
     <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
-
     <string name="play_video">Spela</string>
     <string name="pause_video">Pausa</string>
     <string name="dismiss">Avfärda</string>
-
-
     <string name="action_copy">Kopiera</string>
     <string name="dialog_title_success">Framgång</string>
-
     <string name="bottom_action_notification">Aviseringar</string>
     <string name="call_switch_camera">Byt kamera</string>
     <string name="room_participants_action_ignore_prompt_msg">Att ignorera den här användaren kommer att ta bort hens meddelanden från rum ni delar.
@@ -951,33 +817,28 @@
     <string name="room_message_placeholder_not_encrypted">Skicka ett meddelande (okrypterat)…</string>
     <string name="room_message_file_not_found">Filen hittades inte</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 nytt meddelande</item>
+        <item quantity="one">%d nytt meddelande</item>
         <item quantity="other">%d nya meddelanden</item>
     </plurals>
-
     <string name="ssl_expected_existing_expl">Certifikatet har ändrats från ett betrott till ett som inte är betrott. Servern kan ha förnyat sitt certifikat. Kontakta serveradministratören för det förväntade fingeravtrycket.</string>
     <string name="room_details_settings">Inställningar</string>
     <string name="room_sliding_menu_settings">Inställningar</string>
     <string name="settings_troubleshoot_test_system_settings_title">Systeminställningar.</string>
     <string name="open_settings">Öppna inställningar</string>
-
     <string name="settings_troubleshoot_test_account_settings_title">Kontoinställningar.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sessionsinställningar.</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Anpassade inställningar.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kolla inställningar</string>
-
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_integrations">Integrationer</string>
     <string name="settings_integrations_summary">Använd en integrationshanterare för att hantera bottar, bryggor, widgets och dekalpaket. 
 \nIntegrationshanterare får konfigurationsdata, och kan ändra widgets, skicka rumsinbjudningar, och ändra behörighetsnivåer å dina vägnar.</string>
     <string name="settings_send_message_with_enter">Skicka meddelande med retur</string>
     <string name="settings_send_message_with_enter_summary">Returtangenten på mjukvarutangentbordet kommer att skicka ett meddelande istället för att lägga till ett radslut</string>
-
     <string name="settings_secure_backup_section_info">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data genom att säkerhetskopiera krypteringsnycklarna på din server.</string>
     <string name="settings_integration_allow">Tillåt integrationer</string>
     <string name="disabled_integration_dialog_title">Integrationer är avstängda</string>
     <string name="disabled_integration_dialog_content">Aktivera \'Tillåt integrationer\' I inställningarna för att göra detta.</string>
-
     <string name="encryption_export_room_keys_summary">Exportera nycklarna till en lokal fil</string>
     <string name="encryption_export_saved_as">Krypteringsnycklarna har sparats till \'%s\'.
 \n
@@ -988,18 +849,17 @@
 \nVi rekommenderar att du går igenom verifieringsprocessen för varje session innan du fortsätter, men du kan skicka meddelandet utan att verifiera om du föredrar.
 \n
 \nOkända sessioner:</string>
-
     <string name="select_room_directory">Välj en rumskatalog</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="one">%d oläst aviserat meddelande</item>
         <item quantity="other">%s olästa aviserade meddelanden</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 oläst aviserat meddelande</item>
+        <item quantity="one">%d oläst aviserat meddelande</item>
         <item quantity="other">%s olästa aviserade meddelanden</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 meddelande</item>
+        <item quantity="one">%1$s: %2$d meddelande</item>
         <item quantity="other">%1$s: %2$d meddelanden</item>
     </plurals>
     <string name="font_size">Teckenstorlek</string>
@@ -1010,50 +870,37 @@
     <string name="larger">Större</string>
     <string name="largest">Störst</string>
     <string name="huge">Enorm</string>
-
     <string name="room_widget_webview_access_camera">Använd kameran</string>
     <string name="room_add_matrix_apps">Lägg till Matrix-appar</string>
     <string name="settings_labs_native_camera">Använd den inbyggda kameran</string>
     <string name="settings_labs_native_camera_summary">Starta systemets kamera istället för den inbyggda kameraskärmen.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Använd returtangenten för att skicka meddelande</string>
     <string name="encrypted_message">Krypterat meddelande</string>
-
     <string name="resource_limit_contact_action">Kontakta administratören</string>
-
     <string name="resource_limit_contact_admin">kontakta din tjänstadministratör</string>
-
     <string name="keys_backup_setup_step3_save_button_title">Spara som fil</string>
     <string name="recovery_key_export_saved_as_warning">Återställningsnyckeln har sparats till \'%s\'.
 \n
 \nVarning: den har filen kan komma att raderas om appen avinstalleras.</string>
     <string name="keys_backup_restore_setup_recovery_key">Meddelandeåterställning</string>
-
     <string name="keys_backup_settings_delete_confirm_message">Radera dina säkerhetskopierade krypteringsnycklar från servern\? Du kommer inte längre kunna använda din återställningsnyckel för att läsa krypterad meddelandehistorik.</string>
-
     <string name="secure_backup_banner_setup_line2">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data</string>
-
     <string name="keys_backup_banner_update_line1">Nya säkra meddelandenycklar</string>
     <string name="sas_error_m_unexpected_message">Den här sessionen fick ett oväntat meddelande</string>
     <string name="sas_error_m_invalid_message">Ett ogiltigt meddelande mottogs</string>
     <string name="room_list_people_empty_body">Dina direktmeddelandekonversationer kommer att visas här</string>
     <string name="event_redacted">Meddelande raderat</string>
     <string name="import_e2e_keys_from_file">Importera krypteringsnycklar från filen \"%1$s\".</string>
-
     <string name="send_file_step_encrypting_file">Krypterar fil…</string>
     <string name="send_file_step_sending_file">Skickar fil (%1$s / %2$s)</string>
-
     <string name="downloading_file">Laddar ner filen %1$s…</string>
     <string name="downloaded_file">Filen %1$s har laddats ner!</string>
-
     <string name="message_edits">Meddelanderedigeringar</string>
-    <string name="labs_merge_e2e_in_timeline">Sammanfogaren misslyckades med att avkryptera ett meddelande i tidslinjen</string>
     <string name="add_by_matrix_id">Lägg till med Matrix-ID</string>
     <string name="direct_room_no_known_users">Inga resultat hittade, använd \"Lägg till med Matrix-ID\" för att söka på servern.</string>
     <string name="terms_description_for_integration_manager">Använd bottar, bryggor, widgets och dekalpaket</string>
-
     <string name="settings_text_message_sent">Ett textmeddelande har skickats till %s. Vänligen skriv in verifieringskoden det innehåller.</string>
     <string name="error_file_too_big">Filen \'%1$s\' (%2$s) är för stor för att laddas upp. Gränsen är %3$s.</string>
-
     <string name="attachment_type_file">Fil</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamera</string>
@@ -1063,38 +910,28 @@
     <string name="command_description_spoiler">Skickar det valda meddelandet som en spoiler</string>
     <string name="login_server_matrix_org_text">Gå med miljontals användare gratis på den största publika servern</string>
     <string name="command_description_shrug">Lägger till ¯\\_(ツ)_/¯ till början av ett textmeddelande</string>
-
     <string name="sent_an_audio_file">Ljud</string>
     <string name="sent_a_file">Fil</string>
     <string name="send_a_sticker">Dekal</string>
-
     <string name="rendering_event_error_type_of_message_not_handled">Element hanterar inte meddelanden av typen \'%1$s\'</string>
     <string name="command_description_rainbow">Skickar det valda meddelandet I regnbågsfärger</string>
     <string name="settings_category_composer">Meddelanderedigering</string>
-
     <string name="message_key">Meddelandenyckel</string>
     <string name="generate_message_key">Generera en meddelandenyckel</string>
-
     <string name="bootstrap_cancel_text">Om du avbryter nu så kan du komma att förlora krypterade meddelanden och data om du förlorar åtkomst till dina inloggade sessioner.
 \n
 \nDu kan också sätta upp säker säkerhetskopiering och hantera dina nycklar in inställningarna.</string>
-
     <string name="settings_messages_in_e2e_one_to_one">Krypterade meddelanden i en-till-en-chattar</string>
     <string name="settings_messages_in_e2e_group_chat">Krypterade meddelanden i gruppchattar</string>
     <string name="settings_troubleshoot_title">Felsökning</string>
     <string name="command_description_plain">Skicka ett meddelande som vanlig text, utan att tolka det som Markdown</string>
-
     <string name="room_message_placeholder">Meddelande…</string>
-
     <string name="use_file">Använd fil</string>
-
     <string name="error_saving_media_file">Kunde inte spara mediefil</string>
     <string name="change_password_summary">Sätt ett nytt kontolösenord…</string>
-
     <string name="confirm_your_identity">Bekräfta din identitet genom att verifiera den här inloggningen från en av dina andra sessioner, och ge den åtkomst till dina krypterade meddelanden.</string>
     <string name="a11y_stop_camera">Stoppa kameran</string>
     <string name="a11y_start_camera">Starta kameran</string>
-
     <string name="bottom_sheet_setup_secure_backup_subtitle">Skydda dig mot att tappa åtkomst till krypterade meddelanden och data genom att säkerhetskopiera krypteringsnycklarna på din server.</string>
     <string name="notice_crypto_unable_to_decrypt_final">Du kan inte komma åt det här meddelandet</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Väntar på det här meddelandet, det här kan ta ett tag</string>
@@ -1116,7 +953,6 @@
     <string name="call_failed_no_connection">Elementsamtal misslyckades</string>
     <string name="call_failed_no_connection_description">Misslyckades att upprätta en realtidsuppkoppling.
 \nVänligen be administratören för din hemserver att konfigurera en TURN-server för att samtal ska fungera pålitligt.</string>
-
     <string name="call_select_sound_device">Välj ljudenhet</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Högtalare</string>
@@ -1126,25 +962,20 @@
     <string name="call_camera_back">Bak</string>
     <string name="call_format_turn_hd_off">Stäng av HD</string>
     <string name="call_format_turn_hd_on">Sätt på HD</string>
-
     <string name="login_error_ssl_peer_unverified">SSL-fel: andra partens identitet har inte verifierats.</string>
     <string name="login_error_ssl_other">SSL-fel.</string>
     <string name="settings_call_show_confirmation_dialog_title">Förhindra oavsiktligt samtal</string>
     <string name="settings_call_show_confirmation_dialog_summary">Fråga efter bekräftelse innan ett samtal startas</string>
     <string name="active_call_with_duration">Aktivt samtal (%s)</string>
     <string name="return_to_call">Återgå till samtal</string>
-
     <string name="room_participants_action_cancel_invite">Avbryt inbjudan</string>
     <string name="room_participants_action_mention">Omnämn</string>
     <string name="room_participants_action_devices_list">Visa sessionslista</string>
     <string name="room_participants_power_level_prompt">Du kommer inte kunna ångra den här ändringen eftersom du befordrar användaren till samma behörighetsnivå som dig själv.
 \nÄr du säker\?</string>
-
     <string name="room_participants_power_level_demote_warning_title">Degradera dig själv\?</string>
     <string name="room_participants_power_level_demote_warning_prompt">Du kommer inte kunna ångra den här ändringen eftersom du degraderar dig själv. Om du är den sista privilegierade användaren i det här rummet så kommer det att vara omöjligt att återfå privilegier.</string>
     <string name="room_participants_power_level_demote">Degradera</string>
-
-
     <string name="room_participants_action_ignore_title">Ignorera användare</string>
     <string name="room_participants_action_unignore_title">Avignorera användare</string>
     <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från hen igen.</string>
@@ -1160,17 +991,13 @@
     <string name="room_participants_unban_title">Avbanna användaren</string>
     <string name="room_participants_ban_prompt_msg">Att banna användaren kommer att kicka hen från det här rummet och hindra hen från att gå med igen.</string>
     <string name="room_participants_unban_prompt_msg">Att avbanna användaren kommer att låta hen gå med i rummet igen.</string>
-
     <string name="reason_hint">Anledning</string>
-
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s och %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
-
     <string name="people_search_local_contacts">LOKALA KONTAKTER (%d)</string>
     <string name="people_search_user_directory">ANVÄNDARKATALOG (%s)</string>
     <string name="people_search_filter_text">Endast Matrixanvändare</string>
-
     <string name="room_menu_search">Sök</string>
     <string name="room_one_user_is_typing">%s skriver…</string>
     <string name="room_two_users_are_typing">%1$s och %2$s skriver…</string>
@@ -1194,18 +1021,15 @@
     <string name="ssl_cert_new_account_expl">Om serveradministratören har sagt att detta är förväntat, försäkra att fingeravtrycket nedan matchar fingeravtrycket de angav.</string>
     <string name="ssl_unexpected_existing_expl">Certifikatet har ändrats från ett som var betrott av din mobil. Detta är HÖGST OVANLIGT. Du rekommenderas att INTE ACCEPTERA det nya certifikatet.</string>
     <string name="ssl_only_accept">Acceptera endast certifikatet om serveradministratören har publicerat ett fingeravtryck som matchar det ovan.</string>
-
     <plurals name="room_details_selected">
-        <item quantity="one">1 valt</item>
+        <item quantity="one">%d valt</item>
         <item quantity="other">%d valda</item>
     </plurals>
     <string name="room_details_people_invited_group_name">INBJUDNA</string>
     <string name="room_details_people_present_group_name">ANSLUTNA</string>
-
     <string name="room_event_action_report_prompt_reason">Anledning för att rapportera det här innehållet</string>
     <string name="room_event_action_cancel_upload">Avbryt uppladdning</string>
     <string name="room_event_action_cancel_download">Avbryt nedladdning</string>
-
     <string name="search_hint">Sök</string>
     <string name="search_no_results">Inga resultat</string>
     <string name="tab_title_search_messages">MEDDELANDEN</string>
@@ -1219,40 +1043,31 @@
     <string name="room_recents_join_room">Gå med i rum</string>
     <string name="room_recents_join_room_title">Gå med i ett rum</string>
     <string name="room_recents_join_room_prompt">Skriv ett rums-ID eller ett rumsalias</string>
-
     <string name="directory_search_results_title">Bläddra i katalogen</string>
     <string name="directory_searching_title">Söker i katalog…</string>
-
     <string name="room_settings_favourite">Favorit</string>
     <string name="room_settings_de_prioritize">Nedprioritera</string>
     <string name="room_settings_forget">Glöm</string>
-    <string name="room_settings_add_homescreen_shortcut">Lägg till en genväg på hemskärmen</string>
-
+    <string name="room_settings_add_homescreen_shortcut">Lägg till på hemskärmen</string>
     <string name="room_sliding_menu_messages">Meddelanden</string>
     <string name="room_sliding_menu_term_and_conditions">Användarvillkor</string>
     <string name="room_sliding_menu_third_party_notices">Meddelanden från tredje part</string>
     <string name="room_sliding_menu_copyright">Upphovsrätt</string>
     <string name="room_sliding_menu_privacy_policy">Integritetspolicy</string>
-
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_3pid_flow_not_supported">Du kan inte göra detta från element på mobilen</string>
     <string name="settings_add_3pid_authentication_needed">Autentisering krävs</string>
-
-
     <string name="settings_troubleshoot_diagnostic">Diagnostik för felsökning</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Kör tester</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Kör… (%1$d av %2$d)</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Sätt på</string>
-
     <string name="settings_troubleshoot_test_device_settings_quickfix">Sätt på</string>
-
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Misslyckades att ladda anpassade regler, vänligen försök igen.</string>
     <string name="settings_troubleshoot_test_play_services_title">Kolla Play-tjänster</string>
     <string name="settings_troubleshoot_test_play_services_success">APK:n Google Play-tjänster är tillgänglig och uppdaterad.</string>
     <string name="settings_troubleshoot_test_play_services_failed">Element använder Google Play-tjänster för att skicka pushmeddelanden, men den verkar inte vara korrekt konfigurerad:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fixa Play-tjänster</string>
-
     <string name="settings_troubleshoot_test_fcm_title">Firebase-token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM-token hämtades framgångsrikt:
 \n%1$s</string>
@@ -1265,30 +1080,23 @@
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDet här felet är ur Elements kontroll. Det finns inget Google-konto på telefonen. Vänligen öppna kontohanteraren och lägg till ett Google-konto.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lägg till konto</string>
-
     <string name="settings_troubleshoot_test_token_registration_title">Token-registrering</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-token registrerades framgångsrikt på hemservern.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Misslyckades att registrera FCM-token på hemservern:
 \n%1$s</string>
-
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starta tjänst</string>
-
     <string name="settings_troubleshoot_test_service_restart_success">Tjänsten dödades och startades om automatiskt.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Tjänsten misslyckades att starta om</string>
-
     <string name="settings_troubleshoot_test_service_boot_title">Starta vid boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Tjänsten kommer att startas när enheten startas om.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktivera start på boot</string>
-
     <string name="settings_troubleshoot_test_bg_restricted_title">Kolla bakgrundsrestriktioner</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Bakgrundsrestriktioner är inaktiverade för Element. Detta test bör köras med mobildata (inte Wi-Fi).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inaktivera restriktioner</string>
-
     <string name="settings_troubleshoot_test_battery_title">Batterioptimering</string>
     <string name="settings_troubleshoot_test_battery_success">Element påverkas inte av batterioptimering.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorera optimering</string>
-
     <string name="settings_notification_privacy_reduced">Reducerad sekretess</string>
     <string name="settings_notification_privacy_need_permission">Den här appen behöver behörighet att köra i bakgrunden</string>
     <string name="settings_notification_privacy_no_background_sync">Apparna behöver <b>inte</b> ansluta till hemservern i bakgrunden, det bör reducera batterianvändning</string>
@@ -1326,7 +1134,6 @@
     <string name="encryption_export_export">Exportera</string>
     <string name="encryption_export_notice">Vänligen skapa en lösenfras för att kryptera de exporterade nycklarna. Du kommer behöva skriva in samma lösenfras för att kunna importera nycklarna.</string>
     <string name="encryption_settings_manage_message_recovery_summary">Hantera nyckelsäkerhetskopiering</string>
-
     <string name="encryption_import_e2e_room_keys">Importera krypteringsnycklar</string>
     <string name="encryption_import_room_keys">Importera rumsnycklar</string>
     <string name="encryption_import_import">Importera</string>
@@ -1344,26 +1151,19 @@
 \nSessionsnamn: %1$s
 \nSenast sedd: %2$s
 \nOm du inte loggade in i en annan session, ignorera denna begäran.</string>
-
     <string name="markdown_has_been_enabled">Markdown har aktiverats.</string>
     <string name="markdown_has_been_disabled">Markdown har inaktiverats.</string>
-
     <string name="dialog_user_consent_content">För att fortsätta använda hemservern %1$s så måste du läsa och godkänna användarvillkoren.</string>
     <string name="keys_backup_no_session_error">Ingen Matrixsession tillgänglig</string>
-
     <string name="keys_backup_setup">Börja använda nyckelsäkerhetskopiering</string>
     <string name="keys_backup_setup_step1_manual_export">Exportera nycklar manuellt</string>
-
     <string name="keys_backup_setup_step2_text_title">Säkra din säkerhetskopia med en lösenfras.</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Eller säkra din säkerhetskopia med en återställningsnyckel och spara den någonstans säkert.</string>
     <string name="keys_backup_setup_step3_text_line1">Dina nycklar säkerhetskopieras.</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Det ser ut som att du redan har konfigurerat säker säkerhetskopiering från en annan session. Vill du ersätta den med den du skapar\?</string>
     <string name="keys_backup_setup_backup_started_message">Dina krypteringsnycklar säkerhetskopieras just nu till din hemserver i bakgrunden. Den initiala säkerhetskopieringen kan ta flera minuter.</string>
-
-
     <string name="keys_backup_restore_with_key_helper">Förlorat din återställningsnyckel\? Du kan sätta upp en ny i inställningarna.</string>
     <string name="keys_backup_recovery_code_error_decrypt">Säkerhetskopieringen kunde inte avkrypteras med den här återställningsnyckeln: vänligen verifiera att du skrev in rätt återställningsnyckel.</string>
-
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Återställde en säkerhetskopia med %d nyckel.</item>
         <item quantity="other">Återställde en säkerhetskopia med %d nycklar.</item>
@@ -1372,17 +1172,12 @@
         <item quantity="one">%d ny nyckel har lagts till till den här sessionen.</item>
         <item quantity="other">%d nya nycklar har lagts till till den här sessionen.</item>
     </plurals>
-
     <string name="keys_backup_no_keysbackup_sdk_error">Sessionskrypto är inte aktiverats</string>
-
-
     <string name="keys_backup_settings_restore_backup_button">Återställ från säkerhetskopia</string>
     <string name="keys_backup_settings_delete_backup_button">Radera säkerhetskopia</string>
-
     <string name="keys_backup_settings_status_ok">Nyckelsäkerhetskopiering har blivit korrekt konfigurerad för den här sessionen.</string>
     <string name="keys_backup_settings_status_ko">Nyckelsäkerhetskopiering är inte aktiverad på den här sessionen.</string>
     <string name="keys_backup_settings_status_not_setup">Dina nycklar säkerhetskopieras inte från den här sessionen.</string>
-
     <string name="keys_backup_settings_signature_from_unknown_device">Säkerhetskopian har en signatur från en okänd session med ID %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">Säkerhetskopian har en giltig signatur från den här sessionen.</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Säkerhetskopian har en giltig signatur från den verifierade sessionen %s.</string>
@@ -1391,31 +1186,23 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Säkerhetskopian har en ogiltig signatur från den overifierade sessionen %s</string>
     <string name="keys_backup_settings_untrusted_backup">För att använda nyckelsäkerhetskopiering i den här sessionen, återställ med din lösenfras eller återställningsnyckel nu.</string>
     <string name="keys_backup_settings_delete_backup_error">Misslyckades att radera säkerhetskopia (%s)</string>
-
     <string name="keys_backup_settings_delete_confirm_title">Radera säkerhetskopia</string>
     <string name="new_recovery_method_popup_title">Ny nyckelsäkerhetskopia</string>
     <string name="keys_backup_banner_setup_line2">Börja använda nyckelsäkerhetskopiering</string>
-
     <string name="secure_backup_banner_setup_line1">Säker säkerhetskopiering</string>
     <string name="keys_backup_banner_recover_line2">Använd nyckelsäkerhetskopiering</string>
-
     <string name="keys_backup_banner_update_line2">Hantera i nyckelsäkerhetskopieringen</string>
-
     <string name="secure_backup_setup">Sätt upp säker säkerhetskopiering</string>
-
     <string name="keys_backup_info_keys_all_backup_up">Alla nycklar säkerhetskopierade</string>
     <string name="keys_backup_info_title_algorithm">Algoritm</string>
     <string name="sas_incoming_request_description_2">Att verifiera den här sessionen kommer att markera den som betrodd, och även markera din session som betrodd för den andra parten.</string>
-
     <string name="sas_emoji_description">Verifiera den här sessionen genom att bekräfta att följande emojier visas på den andra partens skärm</string>
     <string name="sas_decimal_description">Verifiera den här sessionen genom att bekräfta att följande nummer visas på den andra partens skärm</string>
-
     <string name="sas_verified_successful">Du har framgångsrikt verifierat den här sessionen.</string>
     <string name="sas_cancelled_by_other">Den andra parten avbröt verifikationen.
 \n%s</string>
     <string name="sas_verification_request_notification_channel">Interaktiv sessionsverifiering</string>
     <string name="sas_incoming_request_notif_content">%s vill verifiera din session</string>
-
     <string name="sas_error_m_unknown_transaction">Sessionen känner inte till den överföringen</string>
     <string name="sas_error_m_unknown_method">Sessionen kan inte komma överens om ett nyckelavtal, hash, MAC eller SAS-metod</string>
     <string name="settings_show_redacted">Visa borttagna meddelanden</string>
@@ -1424,13 +1211,10 @@
     <string name="settings_push_rules">Pushregler</string>
     <string name="settings_push_rules_no_rules">Inga pushregler satta</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Visa dolda händelser i tidslinjen</string>
-
     <string name="labs_swipe_to_reply_in_timeline">Tillåt att svajpa för att svara i tidslinjen</string>
     <string name="labs_show_unread_notifications_as_tab">Lägg till en dedikerad flik för olästa aviseringar på startskärmen.</string>
-
     <string name="labs_allow_extended_logging">Aktivera mångordiga loggar.</string>
     <string name="error_terms_not_accepted">Vänligen försök igen när du har godkänt användarvillkoren för din hemserver.</string>
-
     <plurals name="two_and_some_others_read">
         <item quantity="one">%1$s, %2$s och %3$d annan har läst</item>
         <item quantity="other">%1$s, %2$s och %3$d andra har läst</item>
@@ -1438,9 +1222,7 @@
     <string name="permissions_rationale_msg_keys_backup_export">Element behöver behörighet för att spara dina nycklar för totalsträckskryptering i lagringen.
 \n
 \nVänligen ge tillstånd i nästa popup för att kunna manuellt exportera dina nycklar.</string>
-
     <string name="no_ignored_users">Du ignorerar inga användare</string>
-
     <string name="login_server_other_title">Annan</string>
     <string name="login_signin_matrix_id_notice">Om du har skapat ett konto på en hemserver så kan du använda ditt Matrix-ID (t.ex. @användare:domän.com) och lösenord nedan.</string>
     <string name="signed_out_notice">Detta kan bero på flera orsaker:
@@ -1455,7 +1237,6 @@
 \nRensa den om du inte ska använda den här enheten längre, eller vill logga in på ett annat konto.</string>
     <string name="soft_logout_sso_not_same_user_error">Den nuvarande sessionen är för användaren %1$s och du försedde uppgifter för användaren %2$s. Detta stöds inte av Element.
 \nVänligen rensa först data, och logga sen in på ett annat konto.</string>
-
     <string name="settings_show_devices_list">Se alla mina sessioner</string>
     <string name="settings_developer_mode">Utvecklarläge</string>
     <string name="settings_developer_mode_summary">Utvecklarläget aktiverar dolda funktioner och kan också göra appen mindre stabil. Endast för utvecklare!</string>
@@ -1464,7 +1245,6 @@
     <string name="settings_rageshake_detection_threshold_summary">Skaka din mobil för att testa detektionsgränsen</string>
     <string name="devices_current_device">Nuvarande session</string>
     <string name="devices_other_devices">Andra sessioner</string>
-
     <string name="settings_developer_mode_fail_fast_title">Misslyckas snabbt</string>
     <string name="verification_conclusion_compromised">En av följande kan vara äventyrad:
 \n
@@ -1472,11 +1252,9 @@
 \n - Hemservern användaren du verifierar är ansluten till
 \n - Din eller den andra användarens internetanslutning
 \n - Din eller den andra användarens enhet</string>
-
     <string name="verification_verify_device">Verifiera den här sessionen</string>
     <string name="verification_scan_notice">Skanna koden med den andra användarens enhet för att säkert verifiera varandra</string>
     <string name="settings_category_timeline">Tidslinje</string>
-
     <string name="verification_code_notice">Jämför koden med den som visas på den andra användarens skärm.</string>
     <string name="encryption_information_cross_signing_state">Korssignering</string>
     <string name="encryption_information_dg_xsigning_complete">Korssignering är aktiverad
@@ -1484,35 +1262,28 @@
     <string name="encryption_information_dg_xsigning_trusted">Korssignering är aktiverad
 \nNycklar är betrodda.
 \nPrivata nycklar är inte kända</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Korssignering är aktiverad
+    <string name="encryption_information_dg_xsigning_not_trusted">Korssignering är aktiverad.
 \nNycklar är inte betrodda</string>
     <string name="encryption_information_dg_xsigning_disabled">Korssignering är inte aktiverat</string>
-
     <string name="settings_active_sessions_list">Aktiva sessioner</string>
     <string name="settings_active_sessions_show_all">Visa alla sessioner</string>
     <string name="settings_active_sessions_manage">Hantera sessioner</string>
     <string name="settings_active_sessions_signout_device">Logga ut ur den här sessionen</string>
-
     <string name="settings_active_sessions_verified_device_desc">Den här sessionen är betrodd för säker kommunikation för att du verifierade den:</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d aktiv session</item>
         <item quantity="other">%d aktiva sessioner</item>
     </plurals>
-
     <string name="crosssigning_other_user_not_trust">Andra användare kanske inte litar på den</string>
     <string name="room_member_profile_failed_to_get_devices">Misslyckades att hämta sessioner</string>
     <string name="room_member_profile_sessions_section_title">Sessioner</string>
     <string name="verification_profile_device_verified_because">Den här sessionen är betrodd för säker kommunikationen för säker kommunikation för att %1$s (%2$s) verifierade den:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) loggade in i en ny session:</string>
     <string name="verification_profile_device_untrust_info">Tills den här användaren litar på den här sessionen så kommer meddelanden skickade till och från den att bli märkta med varningar. Alternativt så kan du manuellt verifiera den.</string>
-
-
     <string name="settings_dev_tools">Utvecklarverktyg</string>
     <string name="settings_account_data">Kontodata</string>
     <string name="verification_use_passphrase">Om du inte kan komma åt en existerande session</string>
-
     <string name="settings_key_requests">Nyckelförfrågningar</string>
-
     <string name="verify_not_me_self_verification">En av följande kan vara äventyrad:
 \n
 \n- Ditt lösenord
@@ -1521,14 +1292,10 @@
 \n- Internetuppkopplingen en av enheterna använder
 \n
 \nVi rekommenderar att du ändrar ditt lösenord och återställningsnyckel i inställningarna omedelbart.</string>
-
     <string name="bootstrap_crosssigning_progress_key_backup">Sätter upp nyckelsäkerhetskopiering</string>
-
-
     <string name="bootstrap_crosssigning_save_usb">Spara den på ett USB-minne eller en säkerhetskopieringsenhet</string>
     <string name="qr_code_scanned_self_verif_notice">Nästan färdigt! Visar den andra enheten samma sköld\?</string>
     <string name="error_failed_to_import_keys">Misslyckades att importera nycklar</string>
-
     <string name="setup_cross_signing">Aktivera korssignering</string>
     <string name="bootstrap_progress_checking_backup">Kollar säkerhetskopieringsnyckel</string>
     <string name="bootstrap_progress_checking_backup_with_info">Kollar säkerhetskopieringsnyckel (%s)</string>
@@ -1536,29 +1303,23 @@
     <string name="bootstrap_migration_use_recovery_key">använda din återställningsnyckel för säkerhetskopiering</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Om du inte känner till din lösenfras för säkerhetskopia så kan du %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Återställningsnyckel för säkerhetskopiering</string>
-
     <string name="settings_security_prevent_screenshots_title">Förhindra skärmdumpar av appen</string>
     <string name="settings_security_prevent_screenshots_summary">Att aktivera den här inställningen lägger till FLAG_SECURE till alla aktiviteter. Starta om appen för att inställningen ska få effekt.</string>
-
     <string name="use_other_session_content_description">Använd senaste Element på dina andra enheter; Element Web, Element iOS, Element för Android, eller annan Matrixklient som stöder korssignering</string>
     <string name="or_other_mx_capabale_client">eller en annan Matrixklient som städer korssignering</string>
     <string name="use_latest_app">Använd senaste Element på dina andra enheter:</string>
     <string name="command_description_discard_session">Tvingar den nuvarande utgående gruppsessionen i ett krypterat rum att kasseras</string>
     <string name="keys_backup_recovery_key_error_decrypt">Säkerhetskopian kunde inte avkrypteras med den här återställningsnyckeln: vänligen verifiera att du skrev in rätt återställningsnyckel.</string>
     <string name="settings_setup_secure_backup">Sätt upp säker säkerhetskopiering</string>
-
     <string name="bottom_sheet_setup_secure_backup_title">Säker säkerhetskopiering</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Sätt upp</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Skriv in en hemlig fras endast du känner till, och generera en nyckel för säkerhetskopiering.</string>
-
     <string name="settings_background_fdroid_sync_mode_battery_description">Element kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).
 \nBeroende på din enhets resurser, så kan synkroniseringen bli uppskjuten av operativsystemet.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimerad för realtid</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Ingen bakgrundssynk</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du kommer inte att bli aviserad om inkommande meddelanden när appen är i bakgrunden.</string>
     <string name="settings_background_sync_update_error">Misslyckades att uppdatera inställningarna.</string>
-
-
     <string name="settings_start_on_boot">Starta vid boot</string>
     <string name="settings_enable_background_sync">Aktivera bakgrundssynk</string>
     <string name="settings_set_sync_timeout">Timeout för synkbegäran</string>
@@ -1566,7 +1327,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynkroniseringen kan skjutas upp beroende på resurserna (batteri) eller status för enheten (vila).</string>
     <string name="settings_set_sync_delay">Fördröjning mellan varje synkronisering</string>
-
     <string name="settings_contact">Lokala kontakter</string>
     <string name="settings_contacts_app_permission">Kontaktbehörighet</string>
     <string name="settings_contacts_phonebook_country">Land för telefonbok</string>
@@ -1579,19 +1339,15 @@
     <string name="settings_vibrate_on_mention">Vibrera när en användare nämns</string>
     <string name="settings_secure_backup_manage">Hantera</string>
     <string name="reset_secure_backup_warning">Detta kommer att ersätta din nuvarande nyckel eller fras.</string>
-
     <string name="startup_notification_privacy_button_grant">Ge behörighet</string>
     <string name="startup_notification_privacy_button_other">Välj ett annat alternativ</string>
-
     <string name="startup_notification_fdroid_battery_optim_title">Bakgrundsanslutning</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Ge behörighet</string>
-
     <string name="settings_analytics">Statistik</string>
     <string name="settings_opt_in_of_analytics">Skicka statistikdata</string>
     <string name="settings_opt_in_of_analytics_summary">Element samlar in anonym statistik för att låta oss förbättra appen.</string>
     <string name="settings_opt_in_of_analytics_prompt">Vänligen aktivera statistik för att hjälpa oss att förbättra Element.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, jag vill hjälpa till!</string>
-
     <string name="settings_data_save_mode">Databesparingsläge</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Publikt namna</string>
@@ -1600,17 +1356,12 @@
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_title">Autentisering</string>
     <string name="devices_delete_submit_button_label">Skicka in</string>
-
     <string name="settings_integration_manager">Integrationshanterare</string>
-
     <string name="account_email_validation_title">Verifikation pågår</string>
     <string name="account_phone_number_already_used_error">Det här telefonnumret används redan.</string>
     <string name="passwords_do_not_match">Lösenorden matchar inte</string>
-
     <string name="settings_delete_threepid_confirmation">Är du säker på att du vill ta bort %1$s %2$s\?</string>
-
     <string name="settings_select_country">Välj ett land</string>
-
     <string name="settings_phone_number_country_label">Land</string>
     <string name="settings_phone_number_country_error">Vänligen välj ett land</string>
     <string name="settings_phone_number_label">Telefonnummer</string>
@@ -1622,112 +1373,88 @@
     <string name="settings_phone_number_code">Kod</string>
     <string name="account_phone_number_error">Ett fel inträffade vid verifiering av ditt telefonnummer.</string>
     <string name="account_additional_info">Ytterligare info: %s</string>
-
     <string name="settings_default_compression">Förvald komprimering</string>
     <string name="compression_opt_list_choose">Välj</string>
     <string name="media_source_choose">Välj</string>
     <string name="settings_play_shutter_sound">Spela slutarljud</string>
-
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 vecka</string>
     <string name="media_saving_period_1_month">1 månad</string>
     <string name="media_saving_period_forever">För alltid</string>
-
     <string name="room_settings_room_photo">Rumsbild</string>
     <string name="room_settings_room_name">Rumsnamn</string>
     <string name="room_settings_topic">Ämne</string>
     <string name="room_settings_room_tag">Rumsetikett</string>
     <string name="room_settings_tag_pref_dialog_title">Märkt som:</string>
-
     <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Låg prioritet</string>
     <string name="room_settings_tag_pref_entry_none">Ingen</string>
-
     <string name="room_settings_category_access_visibility_title">Behörighet och synlighet</string>
     <string name="room_settings_directory_visibility">Lista det här rummet i rumskatalogen</string>
     <string name="room_settings_room_access_rules_pref_title">Rumstillgång</string>
     <string name="room_settings_room_read_history_rules_pref_title">Synlighet för rumshistorik</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Vem kan läsa historiken\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Vem kan komma åt det här rummet\?</string>
-
     <string name="room_settings_read_history_entry_anyone">Vem som helst</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Endast medlemmar (från när det här alternativet valdes)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Endast medlemmar (sen de bjöds in)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Endast medlemmar (sen de gick med)</string>
-
     <string name="room_settings_room_access_warning">För att länka till ett rum så måste det ha en adress.</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Vem som helst som har rummets adress, förutom gäster</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Vem som helst som har rummets adress, inklusive gäster</string>
-
     <string name="room_settings_banned_users_title">Bannade användare</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">%d bannad användare</item>
         <item quantity="other">%d bannade användare</item>
     </plurals>
-
     <string name="room_settings_room_internal_id">Rummets interna ID</string>
     <string name="room_settings_addresses_pref_title">Adresser</string>
     <string name="room_settings_labs_end_to_end_warnings">Du behöver logga ut för att kunna aktivera krypteringen.</string>
     <string name="room_settings_addresses_no_local_addresses">Det här rummet har inga lokala adresser</string>
     <string name="room_settings_addresses_add_new_address">Ny adress (t.ex. #foo:matrix.org)</string>
-
     <string name="room_settings_add_new_group">Nytt gemenskaps-ID (t.ex. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ogiltigt gemenskaps-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' är inte ett giltigt gemenskaps-ID</string>
-
-
     <string name="room_settings_addresses_invalid_format_dialog_title">Ogiltigt aliasformat</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' är inte ett giltigt format för ett alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Du kommer inte att ha någon huvudadress specificerad för det här rummet.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Huvudadressvarningar</string>
-
     <string name="room_settings_set_main_address">Sätt som huvudadress</string>
     <string name="room_settings_unset_main_address">Avsätt som huvudadress</string>
     <string name="room_settings_copy_room_id">Kopiera rums-ID</string>
     <string name="room_settings_copy_room_address">Kopiera rumsadress</string>
-
     <string name="room_settings_addresses_e2e_disabled">Kryptering är avaktiverat i det här rummet.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Aktivera kryptering
 \n(varning: kan inte avaktiveras igen!)</string>
-
     <string name="directory_title">Katalog</string>
     <string name="encryption_information_device_info">Händelseinformation</string>
     <string name="encryption_information_user_id">Användar-ID</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519-identitetsnyckel</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Gjorde anspråk på Ed25519-fingeravtrycksynyckel</string>
     <string name="encryption_information_decryption_error">Avkrypteringsfel</string>
-
     <string name="encryption_information_device_name">Publikt namn</string>
     <string name="encryption_information_name">Publikt namn</string>
     <string name="encryption_information_verification">Verifiering</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-fingeravtryck</string>
-
     <string name="encryption_exported_successfully">Nycklar framgångsrikt importerade</string>
-
     <plurals name="encryption_import_room_keys_success">
         <item quantity="one">%1$d/%2$d nyckel importerad framgångsrikt.</item>
         <item quantity="other">%1$d/%2$d nycklar importerade framgångsrikt.</item>
     </plurals>
-
     <string name="encryption_information_not_verified">Inte verifierad</string>
     <string name="encryption_information_verified">Verifierad</string>
     <string name="encryption_information_blocked">Svartlistad</string>
-
     <string name="encryption_information_unknown_ip">okänd IP</string>
     <string name="encryption_information_none">ingen</string>
-
     <string name="encryption_information_verify">Verifiera</string>
     <string name="encryption_information_unverify">Avverifiera</string>
     <string name="encryption_information_block">Svartlista</string>
     <string name="encryption_information_unblock">Avsvartlista</string>
-
     <string name="encryption_information_verify_device_warning2">Om de inte matchar så kan kommunikationens säkerhet vara äventyrad.</string>
     <string name="encryption_information_verify_key_match">Jag verifierar att nycklarna matchar</string>
-
     <string name="directory_server_fail_to_retrieve_server">Servern kan vara otillgänglig eller överbelastad</string>
     <string name="directory_server_placeholder">Hemserver-URL</string>
     <string name="lock_screen_hint">Skriv här…</string>
-
     <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
     <string name="notification_unknown_new_event">Ny händelse</string>
     <string name="notification_unknown_room_name">Rum</string>
@@ -1737,21 +1464,17 @@
     <string name="notification_inline_reply_failed">** Misslyckades att skicka - vänligen öppna rummet</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
-
     <string name="historical_placeholder">Sök efter historiska</string>
-
     <string name="widget_no_power_to_manage">Du behöver behörighet för att hantera widgets i det här rummet</string>
     <string name="widget_creation_failure">Widgetskapande har misslyckats</string>
     <string name="settings_labs_create_conference_with_jitsi">Skapa gruppsamtal med Jitsi</string>
     <string name="widget_delete_message_confirmation">Är du säker på att du vill radera den här widgeten från det här rummet\?</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 aktiv widget</item>
+        <item quantity="one">%d aktiv widget</item>
         <item quantity="other">%d aktiva widgets</item>
     </plurals>
     <string name="active_widget_view_action">VISA</string>
     <string name="active_widgets_title">Aktiva widgets</string>
-
-
     <string name="room_widget_activity_title">Widgets</string>
     <string name="room_widget_permission_title">Ladda widget</string>
     <string name="room_widget_permission_added_by">Den här widgeten lades till av:</string>
@@ -1762,13 +1485,10 @@
     <string name="room_widget_reload">Ladda om widget</string>
     <string name="room_widget_open_in_browser">Öppna i webbläsaren</string>
     <string name="room_widget_revoke_access">Återkalla tillgång för mig</string>
-
     <string name="room_widget_permission_avatar_url">Din avatar-URL</string>
     <string name="room_widget_permission_user_id">Ditt användar-ID</string>
     <string name="room_widget_permission_widget_id">Widget-ID</string>
     <string name="room_widget_permission_room_id">Rums-ID</string>
-
-
     <string name="error_jitsi_not_supported_on_old_device">Tyvärr, gruppsamtal med Jitsi stöds inte på gamla enheter (enheter med Android äldre än 5.0)</string>
     <string name="room_widget_resource_permission_title">Den här widgeten vill använda följande resurser:</string>
     <string name="room_widget_resource_grant_permission">Tillåt</string>
@@ -1789,7 +1509,6 @@
     <string name="room_no_active_widgets">Inga aktiva widgets</string>
     <string name="settings_labs_enable_send_voice">Skicka röstmeddelanden</string>
     <string name="widget_integration_review_terms">För att fortsätta behöver du acceptera villkoren för den här tjänsten.</string>
-
     <string name="start_verification">Starta verifiering</string>
     <string name="start_verification_short_label">Verifiera</string>
     <string name="share_without_verifying">Dela utan att verifiera</string>
@@ -1797,10 +1516,8 @@
     <string name="key_share_request">Nyckeldelningsbegäran</string>
     <string name="ignore_request">Ignorera begäran</string>
     <string name="ignore_request_short_label">Ignorera</string>
-
     <string name="conference_call_warning_title">Varning!</string>
     <string name="conference_call_warning_message">Gruppsamtal är under utveckling och kanske inte är pålitligt.</string>
-
     <string name="command_error">Kommandofel</string>
     <string name="unrecognized_command">Okänt kommando: %s</string>
     <string name="command_description_emote">Visar handling</string>
@@ -1814,66 +1531,50 @@
     <string name="command_description_kick_user">Sparkar ut användaren med det angivna ID:t</string>
     <string name="command_description_nick">Ändrar ditt visningsnamn</string>
     <string name="command_description_clear_scalar_token">För att fixa Matrixapphantering</string>
-
     <string name="create">Skapa</string>
     <string name="create_community">Skapa gemenskap</string>
     <string name="community_name">Gemenskapsnamn</string>
     <string name="community_name_hint">Exempel</string>
     <string name="community_id">Gemenskaps-ID</string>
     <string name="community_id_hint">exempel</string>
-
     <string name="group_details_home">Hem</string>
     <string name="no_users_placeholder">Inga användare</string>
-
     <string name="joined">Gick med</string>
     <string name="invited">Bjöd in</string>
     <plurals name="group_members">
-        <item quantity="one">1 medlem</item>
+        <item quantity="one">%d medlem</item>
         <item quantity="other">%d medlemmar</item>
     </plurals>
-
     <string name="group_no_long_description">Gemenskapsadministratören har inte försett en lång beskrivning för den här gemenskapen.</string>
-
     <string name="has_been_kicked">Du har blivit utsparkad från %1$s av %2$s</string>
     <string name="has_been_banned">Du har blivit bannad från %1$s av %2$s</string>
     <string name="reason_colon">Orsak: %1$s</string>
     <string name="rejoin">Gå med igen</string>
     <string name="forget_room">Glöm rummet</string>
-
     <string name="receipt_avatar">Läsindikationsavatar</string>
     <string name="notice_avatar">Notisavatar</string>
     <string name="avatar">Avatar</string>
-
     <string name="dialog_user_consent_submit">Granska nu</string>
-
     <string name="error_empty_field_enter_user_name">Vänligen skriv in ett användarnamn.</string>
     <string name="room_tombstone_versioned_description">Det här rummet har blivit ersatt och är inte längre tillgängligt</string>
     <string name="room_tombstone_continuation_link">Samtalet fortsätter här</string>
     <string name="room_tombstone_continuation_description">Det här rummet är en fortsättning av en annan konversation</string>
     <string name="room_tombstone_predecessor_link">Tryck här för att se äldre meddelanden</string>
-
     <string name="resource_limit_exceeded_title">Resursgränsen överskriden</string>
     <string name="resource_limit_soft_default">Hemservern har överskridit en av sina resursbegränsningar så <b>vissa användare kommer inte att kunna logga in</b>.</string>
     <string name="resource_limit_hard_default">Den här hemservern har överskridit en av sina resursbegränsningar.</string>
-
     <string name="resource_limit_soft_mau"> Den här hemservern har nått sin månatliga aktiva användargräns så <b>vissa användare kommer inte att kunna logga in</b>.</string>
     <string name="resource_limit_hard_mau">Den här hemservern har nått sin månatliga aktiva användargräns.</string>
-
     <string name="resource_limit_soft_contact">Vänligen %s för att öka den här gränsen.</string>
     <string name="resource_limit_hard_contact">Vänligen %s för att fortsätta använda den här tjänsten.</string>
-
     <string name="error_lazy_loading_not_supported_by_home_server">Din hemserver stöder inte fördröjd inladdning av rumsmedlemmar än. Försök igen senare.</string>
-
     <string name="unknown_error">Tyvärr, ett fel inträffade</string>
-
     <string name="merged_events_expand">expandera</string>
     <string name="merged_events_collapse">kollapsa</string>
-
     <string name="settings_info_area_show">Visa infoarean</string>
     <string name="show_info_area_always">Alltid</string>
     <string name="show_info_area_messages_and_errors">För meddelanden och fel</string>
     <string name="show_info_area_only_errors">Endast för fel</string>
-
     <string name="generic_label">%1$s:</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
@@ -1884,7 +1585,6 @@
     <string name="passphrase_passphrase_does_not_match">Lösenfrasen matchar inte</string>
     <string name="passphrase_empty_error_message">Vänligen skriv en lösenfras</string>
     <string name="passphrase_passphrase_too_weak">Lösenfrasen är för svag</string>
-
     <string name="keys_backup_passphrase_not_empty_error_message">Vänligen radera lösenfrasen om du vill att Element ska generera en återställningsnyckel.</string>
     <string name="keys_backup_setup_step2_button_title">Sätt lösenfras</string>
     <string name="keys_backup_setup_creating_backup">Skapar säkerhetskopia</string>
@@ -1894,11 +1594,9 @@
     <string name="keys_backup_setup_step3_copy_button_title">Spara återställningnyckel</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Dela</string>
     <string name="recovery_key_export_saved">Återställningsnyckeln har sparats.</string>
-
     <string name="keys_backup_setup_override_backup_prompt_tile">En säkerhetskopia finns redan på din hemserver</string>
     <string name="keys_backup_setup_override_replace">Ersätt</string>
     <string name="keys_backup_setup_override_stop">Stoppa</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Vänligen gör en kopia</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Dela återställningsnyckel med…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Genererar återställningsnyckel med hjälp av lösenfras, den här processen kan ta flera sekunder.</string>
@@ -1907,15 +1605,11 @@
     <string name="keys_backup_setup_backup_started_title">Säkerhetskopiering startad</string>
     <string name="keys_backup_setup_skip_title">Är du säker\?</string>
     <string name="keys_backup_setup_skip_msg">Du kan förlora åtkomst till dina meddelanden om du loggar ut ur eller förlorar den här enheten.</string>
-
     <string name="keys_backup_restore_use_recovery_key">använd din återställningsnyckel</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Kan du inte din återställningslösenfras så kan du %s.</string>
-
     <string name="keys_backup_restore_key_enter_hint">Skriv in återställningsnyckel</string>
-
     <string name="keys_backup_passphrase_error_decrypt">Säkerhetskopian kunde inte avkrypteras med den här lösenfrasen: vänligen verifiera att du skrev in rätt lösenfras.</string>
     <string name="network_error_please_check_and_retry">Nätverksfel: vänligen kolla din anslutning och försök igen.</string>
-
     <string name="keys_backup_restoring_waiting_message">Återställer säkerhetskopia:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Räknar ut återställningsnyckel…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Laddar ner nycklar…</string>
@@ -1924,26 +1618,19 @@
     <string name="keys_backup_recovery_code_empty_error_message">Vänligen skriv in en återställningsnyckel</string>
     <string name="keys_backup_restore_success_title">Säkerhetskopia återställd %s !</string>
     <string name="keys_backup_get_trust_error">Misslyckades att få betroendeinfo för säkerhetskopian (%s).</string>
-
     <string name="keys_backup_settings_deleting_backup">Raderar säkerhetskopia…</string>
     <string name="keys_backup_settings_checking_backup_state">Kollar status för säkerhetskopian</string>
     <string name="new_recovery_method_popup_was_me">Det var jag</string>
-
     <string name="keys_backup_banner_in_progress">Säkerhetskopierar dina nycklar. Detta kan ta flera minuter…</string>
-
-
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Säkerhetskopierar %d nyckel…</item>
         <item quantity="other">Säkerhetskopierar %d nycklar…</item>
     </plurals>
-
     <string name="keys_backup_info_title_signature">Signatur</string>
-
     <string name="autodiscover_well_known_autofill_dialog_title">Autokomplettera serveralternativ</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Element detekterade en anpassad serverkonfiguration för din användar-ID-domän \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Använd konfig</string>
-
     <string name="sas_verify_title">Verifiera genom att jämföra en kort textsträng.</string>
     <string name="sas_security_advise">För maximal säkerhet så rekommenderar vi att du gör det här personligen eller med en annan pålitlig form av kommunikation.</string>
     <string name="sas_verify_start_button_title">Påbörja verifiering</string>
@@ -1951,18 +1638,14 @@
     <string name="sas_incoming_verification_request_dialog">Du mottog en inkommande verifieringsbegäran.</string>
     <string name="sas_view_request_action">Visa begäran</string>
     <string name="sas_waiting_for_partner">Väntar på att den andra parten ska bekräfta…</string>
-
     <string name="sas_verified">Verifierad!</string>
     <string name="sas_got_it">Jag förstår</string>
-
     <string name="sas_verifying_keys">Dyker inget upp\? Inte alla klienter stöder interaktiv verifiering än. Använd legacyverifiering.</string>
     <string name="sas_legacy_verification_button_title">Använd legacyverifiering.</string>
-
     <string name="sas_verification_request_notification_channel_title">Nyckelverifiering</string>
     <string name="sas_cancelled_dialog_title">Begäran avbruten</string>
     <string name="sas_cancelled_by_me">Verifieringen är avbruten.
 \nAnledning: %s</string>
-
     <string name="sas_incoming_request_notif_title">Verifieringsbegäran</string>
     <string name="sas_error_m_user">Användaren avbröt verifieringen</string>
     <string name="sas_error_m_timeout">Verifieringsprocessen timeade ut</string>
@@ -1971,17 +1654,13 @@
     <string name="sas_error_m_key_mismatch">Nyckelmismatch</string>
     <string name="sas_error_m_user_error">Användarmismatch</string>
     <string name="sas_error_unknown">Okänt fel</string>
-
     <string name="error_user_already_logged_in">Det verkar som att du försöker ansluta till en annan hemserver. Vill du logga ut\?</string>
-
     <string name="edit">Redigera</string>
     <string name="reply">Svara</string>
-
     <string name="global_retry">Försök igen</string>
     <string name="room_list_empty">Gå med i ett rum för att börja använda appen.</string>
     <string name="send_you_invite">Skickade en inbjudan till dig</string>
     <string name="invited_by">Inbjuden av %s</string>
-
     <string name="room_list_catchup_welcome_title">Välkommen hit!</string>
     <string name="room_list_catchup_welcome_body">Kom ikapp med olästa meddelanden här</string>
     <string name="room_list_people_empty_title">Konversationer</string>
@@ -1991,19 +1670,15 @@
     <string name="message_add_reaction">Lägg till reaktion</string>
     <string name="message_view_reaction">Visa reaktioner</string>
     <string name="reactions">Reaktioner</string>
-
     <string name="event_redacted_by_user_reason">Händelsen raderades av användaren</string>
     <string name="event_redacted_by_admin_reason">Händelsen modererades av en rumsadministratör</string>
     <string name="last_edited_info_message">Senast redigerad av %1$s vid %2$s</string>
-
-
     <string name="malformed_message">Felformaterad händelse, kan inte visa</string>
     <string name="error_no_network">Inget nätverk. Vänligen kolla din internetanslutning.</string>
     <string name="action_change">Ändra</string>
     <string name="please_wait">Vänligen vänta…</string>
     <string name="room_preview_no_preview">Det här rummet kan inte förhandsgranskas</string>
     <string name="room_preview_world_readable_room_not_supported_yet">Förhandsgranskning av världsläsbara rum stöds inte än av Element</string>
-
     <string name="create_room_title">Nytt rum</string>
     <string name="create_room_action_create">SKAPA</string>
     <string name="create_room_name_hint">Rumsnamn</string>
@@ -2014,71 +1689,50 @@
     <string name="create_room_federation_error">Rummet har skapats, men vissa inbjudningar har inte skickats av följande anledning:
 \n
 \n%s</string>
-
     <string name="keys_backup_unable_to_get_trust_info">Ett fel inträffade vi hämtning av betroendeinfo</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Ett fel inträffade vid hämtning av nyckelsäkerhetskopia</string>
-
     <string name="navigate_to_room_when_already_in_the_room">Du tittar redan på det här rummet!</string>
-
     <string name="quick_reactions">Snabbreaktioner</string>
-
     <string name="settings_expert">Expert</string>
     <string name="settings_push_gateway_no_pushers">Inga registrerade pushgateways</string>
-
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
-
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrera token</string>
-
     <string name="send_file_step_idle">Väntar…</string>
     <string name="send_file_step_encrypting_thumbnail">Krypterar miniatyrbild…</string>
     <string name="send_file_step_sending_thumbnail">Skickar miniatyrbild (%1$s / %2$s)</string>
     <string name="edited_suffix">(redigerad)</string>
-
     <string name="no_message_edits_found">Inga redigeringar funna</string>
-
     <string name="link_copied_to_clipboard">Länk kopierad till klippbordet</string>
-
     <string name="creating_direct_room">Skapar rum…</string>
     <string name="direct_room_start_search">Börja skriva för att få resultat</string>
     <string name="joining_room">Går med i rummet…</string>
-
     <string name="message_view_edit_history">Visa redigeringshistoria</string>
-
     <string name="terms_of_service">Användarvillkor</string>
     <string name="review_terms">Granska villkor</string>
     <string name="read_at">Läst vid</string>
-
-
     <string name="settings_discovery_mail_pending">Väntar</string>
-
     <string name="settings_text_message_sent_wrong_code">Verifikationskoden är felaktig.</string>
-
     <string name="error_network_timeout">Det verkar som att servern tar för lång tid att svara. Detta kan orsakas av antingen dålig uppkoppling eller ett fel på servern. Vänligen försök igen senare.</string>
-
     <string name="send_attachment">Skicka bilaga</string>
-
     <string name="a11y_open_drawer">Öppna navigationslådan</string>
     <string name="a11y_create_menu_open">Öppna rumskapandemenyn</string>
     <string name="a11y_create_menu_close">Stäng rumskapandemenyn…</string>
     <string name="a11y_close_keys_backup_banner">Stäng nyckelsäkerhetskopieringsbannern</string>
     <string name="a11y_jump_to_bottom">Hoppa till botten</string>
-
     <string name="three_users_read">%1$s, %2$s och %3$s läste</string>
     <string name="two_users_read">%1$s och %2$s läste</string>
     <string name="one_user_read">%s läste</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">1 användare läste</item>
+        <item quantity="one">%d användare läste</item>
         <item quantity="other">%d användare läste</item>
     </plurals>
-
     <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
-
     <string name="uploads_files_subtitle">%1$s vid %2$s</string>
     <string name="report_content_spam">Det är skräppost</string>
     <string name="report_content_inappropriate">Det är olämpligt</string>
@@ -2087,14 +1741,11 @@
     <string name="report_content_custom_hint">Anledning till att rapportera detta innehåll</string>
     <string name="report_content_custom_submit">RAPPORTERA</string>
     <string name="block_user">IGNORERA ANVÄNDARE</string>
-
     <string name="content_reported_title">Innehåll rapporterat</string>
     <string name="content_reported_as_spam_title">Rapporterad som skräppost</string>
     <string name="content_reported_as_inappropriate_title">Rapporterad som olämplig</string>
     <string name="no_network_indicator">Det finns ingen nätverksanslutning just nu</string>
-
     <string name="message_ignore_user">Ignorera användare</string>
-
     <string name="room_list_quick_actions_settings">Inställningar</string>
     <string name="room_list_quick_actions_favorite_add">Lägg till i favoriter</string>
     <string name="room_list_quick_actions_favorite_remove">Ta bort från favoriter</string>
@@ -2105,12 +1756,10 @@
     <string name="room_join_rules_public_by_you">Du gjorde rummet publikt för alla som har länken.</string>
     <string name="room_join_rules_invite_by_you">Du ändrade rummet till endast inbjudna.</string>
     <string name="timeline_unread_messages">Olästa meddelanden</string>
-
     <string name="login_splash_title">Det är din konversation. Äg det.</string>
     <string name="login_splash_text2">Håll konversationer privata med kryptering</string>
     <string name="login_splash_text3">Utöka och anpassa din upplevelse</string>
     <string name="login_splash_submit">Kom igång</string>
-
     <string name="login_server_title">Välj en server</string>
     <string name="login_server_modular_text">Premiumservervärd för organisationer</string>
     <string name="login_continue">Fortsätt</string>
@@ -2121,55 +1770,45 @@
     <string name="login_signup">Bli medlem</string>
     <string name="login_signin">Logga in</string>
     <string name="login_signin_sso">Fortsätt med SSO</string>
-
     <string name="login_server_url_form_modular_hint">Element Matrix Services-adress</string>
     <string name="login_server_url_form_other_hint">Adress</string>
     <string name="login_server_url_form_modular_text">Premiumservervärd för organisationer</string>
     <string name="login_server_url_form_modular_notice">Skriv in adressen för den Modular Element eller server du vill använda</string>
     <string name="login_server_url_form_other_notice">Skriv in adressen för en server eller Element du vill ansluta till</string>
     <string name="login_server_url_form_common_notice">Skriv in adressen för servern du vill använda</string>
-
     <string name="login_sso_error_message">Ett fel inträffade vid laddning av sidan: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">Appen kan inte logga in på den här hemservern. Hemservern stöder följande inloggninstyp(er): %1$s.
+    <string name="login_mode_not_supported">Appen kan inte logga in på den här hemservern. Hemservern stöder följande inloggningstyp(er): %1$s.
 \n
 \nVill du logga in med en webbklient\?</string>
     <string name="login_registration_disabled">Tyvärr, den här servern accepterar inte nya konton.</string>
     <string name="login_registration_not_supported">Appen kan inte skapa ett konto på den här hemservern.
 \n
 \nVill du registrera dig med en webbklient\?</string>
-
     <string name="login_reset_password_submit">Nästa</string>
     <string name="login_reset_password_warning_title">Varning!</string>
     <string name="login_reset_password_warning_submit">Fortsätt</string>
-
     <string name="login_reset_password_mail_confirmation_title">Kolla din inkorg</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Tryck på länken för att bekräfta ditt nya lösenord. När du har följt länken det innehåller, klicka nedan.</string>
     <string name="login_reset_password_success_title">Framgång!</string>
     <string name="login_reset_password_success_notice">Ditt lösenord har återställts.</string>
     <string name="login_reset_password_success_submit">Tillbaka till inloggning</string>
-
     <string name="login_reset_password_cancel_confirmation_title">Varning</string>
     <string name="login_reset_password_cancel_confirmation_content">Ditt lösenord har inte ändrats än.
 \n
 \nVill du avbryta återställningsprocessen\?</string>
-
     <string name="login_set_email_submit">Nästa</string>
-
     <string name="login_set_msisdn_title">Sätt telefonnummer</string>
     <string name="login_set_msisdn_notice2">Vänligen använd internationellt format.</string>
     <string name="login_set_msisdn_mandatory_hint">Telefonnummer</string>
     <string name="login_set_msisdn_optional_hint">Telefonnummer (valfritt)</string>
     <string name="login_set_msisdn_submit">Nästa</string>
-
     <string name="login_msisdn_confirm_title">Bekräfta telefonnummer</string>
     <string name="login_msisdn_confirm_notice">Vi skickade just en kod till %1$s. Skriv in den nedan för att bekräfta att det är du.</string>
     <string name="login_msisdn_confirm_hint">Skriv in kod</string>
     <string name="login_msisdn_confirm_send_again">Skicka igen</string>
     <string name="login_msisdn_confirm_submit">Nästa</string>
-
     <string name="login_msisdn_error_not_international">Internationella telefonnummer måste börja med \'+\'</string>
     <string name="login_msisdn_error_other">Telefonnumret verkar vara ogiltigt. Vänligen kolla det</string>
-
     <string name="login_signup_to">Logga in på %1$s</string>
     <string name="login_signup_username_hint">Användarnamn</string>
     <string name="login_signup_password_hint">Lösenord</string>
@@ -2179,20 +1818,17 @@
     <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än.
 \n
 \nVill du avbryta registreringsprocessen\?</string>
-
     <string name="login_a11y_choose_matrix_org">Välj matrix.org</string>
     <string name="login_a11y_choose_modular">Välj Element Matrix Services</string>
     <string name="login_a11y_choose_other">Välj en annan hemserver</string>
     <string name="login_a11y_captcha_container">Vänligen utför captchautmaningen</string>
     <string name="login_terms_title">Acceptera villkoren för att fortsätta</string>
-
     <string name="login_validation_code_is_not_correct">Den inskrivna koden är felaktig. Vänligen kolla den.</string>
     <string name="login_error_outdated_homeserver_title">Utdaterad hemserver</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekund…</item>
         <item quantity="other">För många förfrågningar har skickats. Du kan försöka igen om %1$d sekunder…</item>
     </plurals>
-
     <string name="login_connect_using_matrix_id_notice">Alternativt, om du redan har ett konto och du kan ditt Matrix-ID och ditt lösenord, så kan du använda den här metoden:</string>
     <string name="login_connect_using_matrix_id_submit">Logga in med ditt Matrix-ID</string>
     <string name="login_signin_matrix_id_title">Logga in med ditt Matrix-ID</string>
@@ -2200,10 +1836,8 @@
     <string name="login_signin_matrix_id_password_notice">Om du inte kan ditt lösenord, gå tillbaka för att återställa det.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Det här är inte ett giltigt användar-ID. Förväntat format: \'@användare:hemserver.org\'</string>
     <string name="seen_by">Sett av</string>
-
     <string name="signed_out_title">Du är utloggad</string>
     <string name="signed_out_submit">Logga in igen</string>
-
     <string name="soft_logout_title">Du är utloggad</string>
     <string name="soft_logout_signin_title">Logga in</string>
     <string name="soft_logout_signin_notice">Administratören för din hemserver (%1$s) har loggat ut dig ur ditt konto %2$s (%3$s).</string>
@@ -2211,15 +1845,12 @@
     <string name="soft_logout_signin_password_hint">Lösenord</string>
     <string name="soft_logout_clear_data_title">Rensa personlig information</string>
     <string name="soft_logout_clear_data_submit">Rensa all data</string>
-
     <string name="soft_logout_clear_data_dialog_title">Rensa data</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du kommer att bli av med åtkomsten till dina krypterade meddelanden om du inte loggar in igen för att återfå dina krypteringsnycklar.</string>
     <string name="soft_logout_clear_data_dialog_submit">Rensa data</string>
     <string name="permalink_malformed">Din matrix.to-länk var felformaterad</string>
     <string name="bug_report_error_too_short">Beskrivningen är för kort</string>
-
     <string name="notification_initial_sync">Inledande synk…</string>
-
     <string name="rageshake_detected">Skakning upptäckt!</string>
     <string name="settings">Inställningar</string>
     <string name="create_room_encryption_title">Aktivera kryptering</string>
@@ -2229,7 +1860,6 @@
     <string name="verify_user_sas_emoji_help_text">Verifiera den här användaren genom att bekräfta att följande unika emojier visas på hens skärm i samma ordning.</string>
     <string name="verify_user_sas_emoji_security_tip">För maximal säkerhet, använd en annan pålitlig kommunikationsform eller gör detta personligen.</string>
     <string name="verification_green_shield">Kolla efter den gröna skölden för att försäkra dig om att en användare är betrodd. Lita på alla användare i ett rum för att försäkra dig om att rummet är säkert.</string>
-
     <string name="verification_conclusion_not_secure">Inte säker</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Bild.</string>
@@ -2241,20 +1871,14 @@
     <string name="verification_sent">Verifikation skickad</string>
     <string name="verification_request">Verifieringsbegäran</string>
     <string name="verification_verify_device_manually">Verifiera manuellt</string>
-
     <string name="you">Du</string>
-
     <string name="verification_scan_their_code">Skanna deras kod</string>
     <string name="verification_scan_emoji_title">Kan inte skanna</string>
     <string name="verification_scan_emoji_subtitle">Om ni inte träffas personligen, jämför emojier istället</string>
-
     <string name="verification_no_scan_emoji_title">Verifiera genom att jämföra emojier</string>
-
     <string name="verify_by_emoji_title">Verifiera med emojier</string>
     <string name="verify_by_emoji_description">Om du inte kan skanna koden ovan, verifiera genom att jämföra ett kort, unikt urval av emojier.</string>
-
     <string name="a13n_qr_code_description">QR-kodsbild</string>
-
     <string name="verification_verify_user">Verifiera %s</string>
     <string name="verification_verified_user">Verifierade %s</string>
     <string name="verification_request_waiting_for">Väntar på %s…</string>
@@ -2264,61 +1888,43 @@
     <string name="room_profile_section_security">Säkerhet</string>
     <string name="room_profile_section_admin">Adminhandlingar</string>
     <string name="room_profile_leaving_room">Lämnar rummet…</string>
-
     <string name="room_member_power_level_custom">Anpassad</string>
     <string name="room_member_power_level_invites">Inbjudningar</string>
     <string name="room_member_power_level_users">Användare</string>
-
     <string name="room_member_power_level_admin_in">Administratör i %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
     <string name="room_member_power_level_default_in">Standard i %1$s</string>
     <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
-
     <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
-
     <string name="rendering_event_error_type_of_event_not_handled">Element hanterar inte händelser av typen \'%1$s\'</string>
     <string name="rendering_event_error_exception">Element stötte på ett fel vid rendering av innehållet i händelsen med id \'%1$s\'</string>
-
     <string name="unignore">Avignorera</string>
-
     <string name="command_description_rainbow_emote">Skickar den givna emoten i regnbågsfärg</string>
-
     <string name="call_notification_answer">Godkänn</string>
     <string name="call_notification_reject">Avslå</string>
     <string name="call_notification_hangup">Lägg på</string>
-
     <string name="room_settings_enable_encryption_dialog_title">Aktivera kryptering\?</string>
     <string name="room_settings_enable_encryption_dialog_submit">Aktivera kryptering</string>
-
     <string name="verification_request_notice">För att vara säker, verifiera %s genom att kolla en engångskod.</string>
     <string name="verification_request_start_notice">För att vara säker, gör detta personligen eller använd en annan säker kommunikationsform.</string>
-
     <string name="verification_emoji_notice">Jämför de unika emojierna, och försäkra dig om att de visas i samma ordning.</string>
     <string name="settings_hs_admin_e2e_disabled">Din serveradministratör har inaktiverat totalsträckskryptering som förval för privata rum och direktmeddelanden.</string>
     <string name="settings_failed_to_get_crypto_device_info">Ingen kryptografisk information tillgänglig</string>
-
     <string name="crosssigning_verify_this_session">Verifiera den här inloggningen</string>
     <string name="complete_security">Fullborda säkerhet</string>
-
     <string name="verification_profile_verify">Verifiera</string>
     <string name="verification_profile_verified">Verifierad</string>
     <string name="verification_profile_warning">Varning</string>
-
     <string name="trusted">Betrodd</string>
     <string name="not_trusted">Inte betrodd</string>
-
     <string name="initialize_cross_signing">Initierar korssignering</string>
     <string name="reset_cross_signing">Återställ nycklar</string>
-
     <string name="a11y_qr_code_for_verification">QR-kod</string>
-
     <string name="qr_code_scanned_by_other_notice">Nästan färdigt! Ser %s samma sköld\?</string>
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="qr_code_scanned_by_other_no">Nej</string>
-
     <string name="no_connectivity_to_the_server_indicator">Anslutningen till servern har tappats</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flygplansläge är på</string>
-
     <plurals name="poll_info">
         <item quantity="one">%d röst</item>
         <item quantity="other">%d röster</item>
@@ -2331,62 +1937,45 @@
     <string name="command_description_poll">Skapar en enkel omröstning</string>
     <string name="verification_cannot_access_other_session">Använd en återställningslösenfras eller -nyckel</string>
     <string name="new_signin">Ny inloggning</string>
-
     <string name="enter_secret_storage_passphrase">Skriv in en lösenfras för hemlig lagring</string>
     <string name="enter_secret_storage_passphrase_warning">Varning:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Du bör endast komma åt hemlig lagring från en betrodd enhet</string>
-
     <string name="message_action_item_redact">Ta bort…</string>
     <string name="share_confirm_room">Vill du skicka den här bilagan till %1$s\?</string>
     <plurals name="send_images_with_original_size">
         <item quantity="one">Skicka bild i originalstorlek</item>
         <item quantity="other">Skicka bilder i originalstorlek</item>
     </plurals>
-
     <string name="delete_event_dialog_title">Bekräfta borttagning</string>
     <string name="delete_event_dialog_content">Är du säker på att du vill ta bort (radera) den här händelsen\? Observera att om du raderar ett rumsnamn eller ämnesändring så kan det upphäva ändringen.</string>
     <string name="delete_event_dialog_reason_checkbox">Inkludera en anledning</string>
     <string name="delete_event_dialog_reason_hint">Anledning för borttagning</string>
-
     <string name="event_redacted_by_user_reason_with_reason">Händelsen raderades av användaren, anledning: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Händelsen modererades av rumsadministratören. Anledning: %1$s</string>
-
     <string name="keys_backup_restore_success_title_already_up_to_date">Nycklarna är redan uppdaterade!</string>
-
     <string name="login_default_session_public_name">Element Android</string>
-
     <string name="refresh">Ladda om</string>
-
     <string name="new_session">Ny inloggning. Var det du\?</string>
     <string name="new_session_review">Tryck för att granska och verifiera</string>
     <string name="verify_new_session_was_not_me">Det var inte jag</string>
     <string name="verify_new_session_compromized">Ditt konto kan vara äventyrat</string>
-
     <string name="verify_cancelled_notice">Verifiera dina enheter i inställningarna.</string>
     <string name="verification_cancelled">Verifikation avbruten</string>
-
     <string name="recovery_passphrase">återställningslösenfras</string>
     <string name="account_password">kontolösenord</string>
-
     <string name="set_recovery_passphrase">Sätt en %s</string>
     <string name="confirm_recovery_passphrase">Bekräfta %s</string>
-
     <string name="enter_account_password">Skriv in ditt %s för att fortsätta.</string>
-
     <string name="bootstrap_info_confirm_text">Skriv in din %s igen för att fortsätta.</string>
     <string name="bootstrap_dont_reuse_pwd">Använd inte ditt kontolösenord.</string>
-
     <string name="bootstrap_info_text_2">Skriv in en säkerhetsfras endast du känner till, vilken används för att säkra hemligheter på din server.</string>
-
     <string name="bootstrap_loading_text">Detta kan ta flera sekunder, ha tålamod.</string>
     <string name="bootstrap_loading_title">Sätter upp återställning.</string>
     <string name="your_recovery_key">Din återställningsnyckel</string>
     <string name="bootstrap_finish_title">Du är färdig!</string>
     <string name="keep_it_safe">Håll den säker</string>
     <string name="finish">Slutför</string>
-
     <string name="bootstrap_save_key_description">Använd denna %1$s som ett skyddsnät ifall du glömmer din %2$s.</string>
-
     <string name="bootstrap_crosssigning_progress_initializing">Publicerar skapade identitetsnycklar</string>
     <string name="bootstrap_crosssigning_progress_pbkdf2">Genererar säkra nycklar baserat på lösenfras</string>
     <string name="bootstrap_crosssigning_progress_default_key">Definierar förvald nyckel för SSSS</string>
@@ -2395,36 +1984,27 @@
     <string name="bootstrap_crosssigning_progress_save_ssk">Synkroniseras självsigneringsnyckel</string>
     <string name="bootstrap_crosssigning_print_it">Skriv ut den och spara den någonstans säkert</string>
     <string name="bootstrap_crosssigning_save_cloud">Kopiera den till din personliga molnlagring</string>
-
     <string name="auth_flow_not_supported">Du kan inte göra det där på mobilen</string>
-
     <string name="encryption_unknown_algorithm_tile_description">Krypteringen som används i det här rummet stöds inte</string>
-
     <string name="room_created_summary_item">%s skapade och konfigurerade rummet.</string>
     <string name="room_created_summary_item_by_you">Du skapade och konfigurerade rummet.</string>
-
     <string name="qr_code_scanned_verif_waiting_notice">Nästan färdigt! Väntar på bekräftelse…</string>
     <string name="qr_code_scanned_verif_waiting">Väntar på %s…</string>
-
     <string name="auth_invalid_login_param_space_in_password">Felaktigt användarnamn och/eller lösenord. Lösenordet du skrev börjar eller slutar med mellanslag, vänligen kolla det.</string>
     <string name="auth_invalid_login_deactivated_account">Kontot har inaktiverats.</string>
-
     <string name="upgrade_security">Krypteringsuppgradering tillgänglig</string>
     <string name="security_prompt_text">Verifiera dig själv och andra för att hålla dina chattar säkra</string>
-
     <string name="bootstrap_enter_recovery">Skriv in din %s för att fortsätta</string>
     <string name="enter_backup_passphrase">Skriv in %s</string>
     <string name="backup_recovery_passphrase">Återställningslösenfras</string>
     <string name="bootstrap_invalid_recovery_key">Det är inte en giltig återställningsnyckel</string>
     <string name="recovery_key_empty_error_message">Vänligen skriv in en återställningsnyckel</string>
-
     <string name="bootstrap_progress_compute_curve_key">Hämtar kurvnyckel</string>
     <string name="bootstrap_progress_generating_ssss">Generar SSSS-nyckel baserat på lösenfras</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Generar SSSS-nyckel baserat på lösenfras (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generar SSSS-nyckel baserat på återställningsnyckel</string>
     <string name="bootstrap_progress_storing_in_sss">Lagrar hemlighet för nyckelsäkerhetskopiering i SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
-
     <string name="app_desktop_web">Element Webb
 \nElement Skrivbord</string>
     <string name="app_ios_android">Element iOS
@@ -2433,23 +2013,19 @@
     <string name="use_recovery_key">Använd återställningsnyckel</string>
     <string name="enter_secret_storage_input_key">Välj din återställningsnyckel eller mata in den manuellt genom att skriva den eller klistra in från klippbordet</string>
     <string name="failed_to_access_secure_storage">Misslyckades att komma åt säker lagring</string>
-
     <string name="unencrypted">Okrypterad</string>
     <string name="encrypted_unverified">Krypterad av en overifierad enhet</string>
     <string name="verify_this_session">Verifiera den nya inloggningen på ditt konto: %1$s</string>
-
     <string name="cross_signing_verify_by_text">Verifiera manuellt med text</string>
     <string name="crosssigning_verify_session">Verifiera inloggning</string>
     <string name="cross_signing_verify_by_emoji">Verifiera interaktivt med emojier</string>
     <string name="mark_as_verified">Markera som betrodd</string>
-
     <string name="error_empty_field_choose_user_name">Vänligen välj ett användarnamn.</string>
     <string name="error_empty_field_choose_password">Vänligen välj att lösenord.</string>
     <string name="external_link_confirmation_title">Dubbelkolla den här länken</string>
     <string name="external_link_confirmation_message">Länken %1$s tar dig till en annan sida: %2$s.
 \n
 \nÄr du säker på att du vill fortsätta\?</string>
-
     <string name="add_members_to_room">Lägg till medlemmar</string>
     <string name="inviting_users_to_room">Bjuder in användare…</string>
     <string name="invitation_sent_to_one_user">Inbjudan skickad till %1$s</string>
@@ -2459,7 +2035,6 @@
     <string name="identity_server_error_bulk_sha256_not_supported">För ditt privatlivs skull stöder Element bara att skicka hashade e-postadresser och telefonnummer.</string>
     <string name="identity_server_error_binding_error">Associationen har misslyckats.</string>
     <string name="identity_server_error_no_current_binding_error">Det finns ingen nuvarande association med den här identifieraren.</string>
-
     <string name="identity_server_set_default_submit">Använd %1$s</string>
     <string name="identity_server_set_alternative_submit">Skicka in</string>
     <string name="power_level_edit_title">Sätt roll</string>
@@ -2472,44 +2047,32 @@
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Använd en säkerhetsfras</string>
     <string name="bottom_sheet_save_your_recovery_key_title">Spara din säkerhetsnyckel</string>
     <string name="bottom_sheet_save_your_recovery_key_content">Spara din säkerhetsnyckel någonstans säkert, som en lösenordshanterare eller ett kassaskåp.</string>
-
     <string name="set_a_security_phrase_title">Sätt an säkerhetsfras</string>
     <string name="set_a_security_phrase_notice">Skriv in en säkerhetsfras endast du känner till, vilken används för att säkra hemligheter på din server.</string>
     <string name="set_a_security_phrase_hint">Säkerhetsfras</string>
     <string name="set_a_security_phrase_again_notice">Skriv in säkerhetsfrasen igen för att bekräfta den.</string>
-
     <string name="save_your_security_key_title">Spara din säkerhetsnyckel</string>
     <string name="save_your_security_key_notice">Spara din säkerhetsnyckel någonstans säkert, som en lösenordshanterare eller ett kassaskåp.</string>
-
     <string name="room_settings_name_hint">Rumsnamn</string>
     <string name="room_settings_topic_hint">Ämne</string>
     <string name="room_settings_save_success">Du ändrade rumsinställningarna framgångsrikt</string>
-
     <string name="crypto_utd">Kan inte avkryptera</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Väntar på krypteringshistorik</string>
-
     <string name="element_disclaimer_title">Riot är nu Element!</string>
     <string name="element_disclaimer_content">Vi är glada att meddela att vi har bytt namn! Din app är uppdaterad och du är inloggad på ditt konto.</string>
     <string name="element_disclaimer_negative_button">UPPFATTAT</string>
     <string name="element_disclaimer_positive_button">LÄR DIG MER</string>
-
     <string name="element_login_splash_brand">element</string>
-
-
     <string name="save_recovery_key_chooser_hint">Spara återställningsnyckel i</string>
-
     <string name="add_from_phone_book">Lägg till från min telefonbok</string>
     <string name="empty_phone_book">Din telefonbok är tom</string>
     <string name="phone_book_title">Telefonbok</string>
     <string name="loading_contact_book">Hämtar dina kontakter…</string>
     <string name="contacts_book_title">Kontaktbok</string>
-
     <string name="three_pid_revoke_invite_dialog_title">Återkalla inbjudan</string>
     <string name="three_pid_revoke_invite_dialog_content">Återkalla inbjudan av %1$s\?</string>
-
     <string name="member_banned_by">Bannad av %1$s</string>
     <string name="failed_to_unban">Misslyckades att avbanna användaren</string>
-
     <string name="alert_push_are_disabled_title">Pushnotiser är inaktiverade</string>
     <string name="alert_push_are_disabled_description">Granska dina inställningar för att aktivera pushnotiser</string>
     <plurals name="wrong_pin_message_remaining_attempts">
@@ -2520,11 +2083,11 @@
     <string name="too_many_pin_failures">För många fel, du har blivit utloggad</string>
     <string name="create_pin_title">Välj en PIN-kod för säkerhet</string>
     <string name="create_pin_confirm_title">Bekräfta PIN</string>
-    <string name="create_pin_confirm_failure">Misslyckades med att validera PIN, vänligen skriv en ny.</string>
+    <string name="create_pin_confirm_failure">Misslyckades med att validera PIN-kod, vänligen skriv en ny.</string>
     <string name="auth_pin_title">Skriv din PIN-kod</string>
     <string name="auth_pin_forgot">Glömt PIN\?</string>
-    <string name="auth_pin_reset_title">Återställ PIN</string>
-    <string name="auth_pin_new_pin_action">Ny PIN</string>
+    <string name="auth_pin_reset_title">Återställ PIN-kod</string>
+    <string name="auth_pin_new_pin_action">Ny PIN-kod</string>
     <string name="auth_pin_reset_content">För att återställa din PIN-kod behöver du logga in igen och skapa en ny.</string>
     <string name="settings_security_pin_code_title">Aktivera PIN</string>
     <string name="settings_security_pin_code_summary">Om du vill återställa din PIN-kod, tryck på \"Glömt PIN\?\" för att logga ut och återställa.</string>
@@ -2536,28 +2099,80 @@
     <string name="settings_phone_numbers">Telefonnummer</string>
     <string name="settings_remove_three_pid_confirmation_content">Ta bort %s\?</string>
     <string name="error_threepid_auth_failed">Se till att du har klickat på länken i e-brevet vi skickade till dig.</string>
-
     <string name="settings_emails_and_phone_numbers_title">E-postadresser och telefonnummer</string>
     <string name="settings_emails_and_phone_numbers_summary">Hantera e-postadresser och telefonnummer länkade till ditt Matrix-konto</string>
-
     <string name="settings_text_message_sent_hint">Kod</string>
     <string name="login_msisdn_notice">Vänligen använd internationellt format (telefonnumret måste börja med \'+\')</string>
     <string name="confirm_your_identity_quad_s">Bekräfta din identitet genom att verifiera den här inloggningen, och ge den åtkomst till dina krypterade meddelanden.</string>
     <string name="error_sso_flow_not_supported_yet">Tyvärr stöds den här handlingen inte än för konton anslutna med externt konto.</string>
-
     <string name="error_opening_banned_room">Kan inte öppna ett rum du är bannad från.</string>
     <string name="room_error_not_found">Kan inte hitta det här rummet. Se till att det existerar.</string>
     <plurals name="seconds">
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
-
     <string name="settings_show_room_member_state_events">Visa statushändelser angående rumsmedlemmar</string>
     <string name="settings_show_room_member_state_events_summary">Inkluderar när personer bjuds in, går med, lämnar, kickas, bannas eller byter sin avatar eller sitt namn.</string>
     <string name="sent_a_poll">Omröstning</string>
     <string name="sent_a_bot_buttons">Bottknappar</string>
     <string name="sent_a_reaction">Reagerade med: %s</string>
     <string name="sent_verification_conclusion">Verifieringsavslutning</string>
-
     <string name="universal_link_malformed">Länken var felformaterad</string>
+    <string name="no_permissions_to_start_webrtc_call">Du har inte behörighet att starta ett samtal i det här rummet</string>
+    <string name="delete_account_data_warning">Radera kontodata av typen %1$s\?
+\n
+\nAnvänd varsamt, det kan leda till oväntat beteende.</string>
+    <string name="secure_backup_reset_no_history">så kommer du att börja om utan historik, meddelanden, betrodda enheter eller betrodda användare</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kod krävs varje gång du öppnar Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kod krävs efter att du inte har använt Element på 2 minuter.</string>
+    <string name="settings_security_pin_code_grace_period_title">Kräv PIN-kod efter 2 minuter</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Visa bara antal olästa meddelanden i en enkel avisering.</string>
+    <string name="settings_security_pin_code_notifications_summary_on">Visa detaljer som rumsnamn och meddelandeinnehåll.</string>
+    <string name="settings_security_pin_code_notifications_title">Visa innehåll i aviseringar</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kod är det enda sättet att låsa upp Element.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Aktivera enhetsspecifik biometri, som fingeravtryck och ansiktsigenkänning.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Aktivera biometri</string>
+    <string name="settings_security_application_protection_screen_title">Ställ in skydd</string>
+    <string name="settings_security_application_protection_summary">Skydda åtkomst med PIN-kod och biometri.</string>
+    <string name="settings_security_application_protection_title">Skydda åtkomst</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Visa enheten du kan verifiera med nu</item>
+        <item quantity="other">Visa %d enheter du kan verifiera med nu</item>
+    </plurals>
+    <string name="secure_backup_reset_if_you_reset_all">Om du återställer allt</string>
+    <string name="bad_passphrase_key_reset_all_action">Glömt eller förlorat alla återställningsalternativ\? Återställ allt</string>
+    <string name="secure_backup_reset_all_no_other_devices">Gör bara detta om du inte har någon annan enhet att verifiera den här enheten med.</string>
+    <string name="direct_room_created_summary_item">%s gick med.</string>
+    <string name="direct_room_profile_section_more_leave">Lämna</string>
+    <string name="secure_backup_reset_all">Återställ allt</string>
+    <string name="direct_room_created_summary_item_by_you">Du gick med.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade.</string>
+    <string name="direct_room_profile_section_more_settings">Inställningar</string>
+    <string name="direct_room_profile_encrypted_subtitle">Meddelanden här är totalsträckskrypterade.
+\n
+\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Meddelanden här är inte totalsträckskrypterade.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Den här hemservern kör en gammal version. Be din hemserveradministratör att uppgradera. Du kan fortsätta, men vissa funktioner kanske inte fungerar ordentligt.</string>
+    <string name="direct_room_join_rules_invite_by_you">Du ändrade detta till endast inbjudna.</string>
+    <string name="direct_room_join_rules_invite">%1$s ändrade detta till endast inbjudna.</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Visa komplett historik i krypterade rum</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s och %2$s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s i %2$s och %3$s</string>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d inbjudan</item>
+        <item quantity="other">%d inbjudningar</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Aviseringen har klickats!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Vänligen klicka på aviseringen. Om du inte ser aviseringen, vänligen kolla systeminställningarna.</string>
+    <string name="settings_troubleshoot_test_notification_title">Aviseringsvisning</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Du kollar på aviseringen! Klicka på mig!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Misslyckades att ta emot push. Lösningen kan vara att installera om appen.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Appen tar emot PUSH:en</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Appen väntar på PUSH:en</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Testa push</string>
+    <string name="search_is_not_supported_in_e2e_room">Sökning i krypterade rum stöds inte än.</string>
+    <string name="search_banned_user_hint">Filtrera bannade användare</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du har inte behörighet att starta ett samtal</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du har inte behörighet att starta ett gruppsamtal</string>
+    <string name="reset">Återställ</string>
 </resources>

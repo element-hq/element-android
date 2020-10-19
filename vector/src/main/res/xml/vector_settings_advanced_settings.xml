@@ -19,6 +19,12 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:key="SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
+            android:title="@string/settings_labs_show_complete_history_in_encrypted_room" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
             android:key="SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
             android:summary="@string/labs_allow_extended_logging_summary"
             android:title="@string/labs_allow_extended_logging" />

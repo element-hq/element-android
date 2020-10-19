@@ -2481,7 +2481,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \n%s</string>
 
-    <string name="labs_merge_e2e_in_timeline">Az egyesítésnek nem sikerült visszafejtenie egy üzenetet az idővonalon</string>
     <string name="labs_show_unread_notifications_as_tab">Külön lap hozzáadása az olvasatlan értesítések számára a főképernyőn.</string>
 
     <plurals name="two_and_some_others_read">

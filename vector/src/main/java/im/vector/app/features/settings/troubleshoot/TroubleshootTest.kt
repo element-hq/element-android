@@ -15,6 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import kotlin.properties.Delegates
 
@@ -23,6 +25,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
     enum class TestStatus {
         NOT_STARTED,
         RUNNING,
+        WAITING_FOR_USER,
         FAILED,
         SUCCESS
     }
@@ -37,7 +40,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     var manager: NotificationTroubleshootTestManager? = null
 
-    abstract fun perform()
+    abstract fun perform(activityResultLauncher: ActivityResultLauncher<Intent>)
 
     fun isFinished(): Boolean = (status == TestStatus.FAILED || status == TestStatus.SUCCESS)
 
@@ -48,5 +51,11 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
     }
 
     open fun cancel() {
+    }
+
+    open fun onPushReceived() {
+    }
+
+    open fun onNotificationClicked() {
     }
 }

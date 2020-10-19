@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.getCallRingtoneName
 import im.vector.app.core.utils.getCallRingtoneUri
@@ -57,19 +58,13 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_CALL_RINGTONE -> {
-                    val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-                    val thisActivity = activity
-                    if (callRingtoneUri != null && thisActivity != null) {
-                        setCallRingtoneUri(thisActivity, callRingtoneUri)
-                        mCallRingtonePreference.summary = getCallRingtoneName(thisActivity)
-                    }
-                }
+    private val ringtoneStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val callRingtoneUri: Uri? = activityResult.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            val thisActivity = activity
+            if (callRingtoneUri != null && thisActivity != null) {
+                setCallRingtoneUri(thisActivity, callRingtoneUri)
+                mCallRingtonePreference.summary = getCallRingtoneName(thisActivity)
             }
         }
     }
@@ -82,10 +77,6 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
             putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
             activity?.let { putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, getCallRingtoneUri(it)) }
         }
-        startActivityForResult(intent, REQUEST_CALL_RINGTONE)
-    }
-
-    companion object {
-        private const val REQUEST_CALL_RINGTONE = 999
+        ringtoneStartForActivityResult.launch(intent)
     }
 }
