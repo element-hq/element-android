@@ -1,4 +1,28 @@
-Changes in Element 1.0.9 (2020-XX-XX)
+Changes in Element 1.0.10 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
+Changes in Element 1.0.9 (2020-10-16)
 ===================================================
 
 Features ✨:
@@ -36,6 +60,8 @@ Bugfix 🐛:
  - Be robust against `StrandHogg` task injection
  - Clear alerts if user sign out
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Fix rows are hidden in Textinput (#2234)
+ - Uploading a file to a room caused it to have a info.size of -1 (#2141)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)

@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 9
+ext.versionPatch = 10
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -313,8 +313,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    // Keep at 2.0.0-beta4 at the moment, as updating is breaking some UI
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation "androidx.sharetarget:sharetarget:1.0.0"
     implementation 'androidx.core:core-ktx:1.3.2'
 
