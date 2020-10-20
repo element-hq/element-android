@@ -7,8 +7,8 @@
 
     <im.vector.app.core.ui.views.QrCodeImageView
         android:id="@+id/itemShareQrCodeImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/a11y_qr_code_for_verification"
         tools:src="@color/riotx_header_panel_background_black" />
