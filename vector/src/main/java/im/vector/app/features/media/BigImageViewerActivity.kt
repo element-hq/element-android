@@ -33,7 +33,6 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.allGranted
@@ -47,7 +46,6 @@ import javax.inject.Inject
 class BigImageViewerActivity : VectorBaseActivity() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var colorProvider: ColorProvider
-    @Inject lateinit var stringProvider: StringProvider
 
     private var uri: Uri? = null
 
@@ -100,8 +98,8 @@ class BigImageViewerActivity : VectorBaseActivity() {
     private fun showAvatarSelector() {
         AlertDialog.Builder(this)
                 .setItems(arrayOf(
-                        stringProvider.getString(R.string.attachment_type_camera),
-                        stringProvider.getString(R.string.attachment_type_gallery)
+                        getString(R.string.attachment_type_camera),
+                        getString(R.string.attachment_type_gallery)
                 )) { dialog, which ->
                     dialog.cancel()
                     onAvatarTypeSelected(isCamera = (which == 0))
