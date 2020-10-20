@@ -50,9 +50,7 @@ class GalleryOrCameraDialogHelper(
             avatarCameraUri?.let { uri ->
                 MultiPicker.get(MultiPicker.CAMERA)
                         .getTakenPhoto(fragment.requireContext(), uri)
-                        ?.let {
-                            listener.onImageReady(it)
-                        }
+                        ?.let { listener.onImageReady(it) }
             }
         }
     }
@@ -62,9 +60,8 @@ class GalleryOrCameraDialogHelper(
             MultiPicker
                     .get(MultiPicker.IMAGE)
                     .getSelectedFiles(fragment.requireContext(), activityResult.data)
-                    .firstOrNull()?.let {
-                        listener.onImageReady(it)
-                    }
+                    .firstOrNull()
+                    ?.let { listener.onImageReady(it) }
         }
     }
 
