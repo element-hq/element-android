@@ -50,17 +50,17 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.image.onClick(clickListener?.takeIf { enabled })
+        holder.imageContainer.onClick(clickListener?.takeIf { enabled })
         GlideApp.with(holder.image)
                 .load(imageUri)
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.bg_accent)
                 .into(holder.image)
         holder.delete.isVisible = imageUri != null
         holder.delete.onClick(deleteListener?.takeIf { enabled })
     }
 
     class Holder : VectorEpoxyHolder() {
+        val imageContainer by bind<View>(R.id.itemEditableAvatarImageContainer)
         val image by bind<ImageView>(R.id.itemEditableAvatarImage)
         val delete by bind<View>(R.id.itemEditableAvatarDelete)
     }
