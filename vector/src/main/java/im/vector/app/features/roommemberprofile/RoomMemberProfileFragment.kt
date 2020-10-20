@@ -19,6 +19,7 @@ package im.vector.app.features.roommemberprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +50,7 @@ import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
+import kotlinx.android.synthetic.main.item_share_qr_code.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -289,12 +291,21 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(
-                fragment = this,
-                activityResultLauncher = null,
-                chooserTitle = null,
-                text = permalink
-        )
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.item_share_qr_code, null)
+        val qrCode = view.findViewById<im.vector.app.core.ui.views.QrCodeImageView>(R.id.itemShareQrCodeImage)
+        qrCode.setData(permalink)
+        AlertDialog.Builder(requireContext())
+            .setView(view)
+            .setNeutralButton("Ok") { _, _ -> }
+            .setPositiveButton("Share by text") { _, _ ->
+                startSharePlainTextIntent(
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = null,
+                        text = permalink
+                )
+            }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
