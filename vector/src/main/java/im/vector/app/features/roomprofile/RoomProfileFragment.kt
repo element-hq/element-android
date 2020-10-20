@@ -38,6 +38,7 @@ import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
@@ -46,10 +47,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.copyToClipboard
-import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
@@ -59,7 +57,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.createUCropWithDefaultSettings
-import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
@@ -80,7 +77,9 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment(), RoomProfileController.Callback {
+) : VectorBaseFragment(),
+        RoomProfileController.Callback,
+        GalleryOrCameraDialogHelper.Listener {
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -92,6 +91,8 @@ class RoomProfileFragment @Inject constructor(
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
     override fun getMenuRes() = R.menu.vector_room_profile
+
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -272,68 +273,17 @@ class RoomProfileFragment @Inject constructor(
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
             bigImageStartForActivityResult.launch(intent, options)
         } else if (it.canChangeAvatar) {
-            showAvatarSelector()
+            galleryOrCameraDialogHelper.show()
         }
     }
 
-    private fun showAvatarSelector() {
-        AlertDialog.Builder(requireContext())
-                .setItems(arrayOf(
-                        getString(R.string.attachment_type_camera),
-                        getString(R.string.attachment_type_gallery)
-                )) { dialog, which ->
-                    dialog.cancel()
-                    onAvatarTypeSelected(isCamera = (which == 0))
-                }
-                .show()
-    }
 
-    private val takePhotoPermissionActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            onAvatarTypeSelected(true)
-        }
-    }
-
-    private var avatarCameraUri: Uri? = null
-    private fun onAvatarTypeSelected(isCamera: Boolean) {
-        if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoPermissionActivityResultLauncher)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(requireActivity(), takePhotoActivityResultLauncher)
-            }
-        } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
-        }
-    }
-
-    private fun onRoomAvatarSelected(image: MultiPickerImageType) {
+    override fun onImageReady(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
         createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
                 .apply { withAspectRatio(1f, 1f) }
                 .start(requireContext(), this)
-    }
-
-    private val takePhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK) {
-            avatarCameraUri?.let { uri ->
-                MultiPicker.get(MultiPicker.CAMERA)
-                        .getTakenPhoto(requireContext(), uri)
-                        ?.let {
-                            onRoomAvatarSelected(it)
-                        }
-            }
-        }
-    }
-
-    private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK) {
-            MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(requireContext(), activityResult.data)
-                    .firstOrNull()?.let {
-                        onRoomAvatarSelected(it)
-                    }
-        }
     }
 
     private val bigImageStartForActivityResult = registerStartForActivityResult { activityResult ->
