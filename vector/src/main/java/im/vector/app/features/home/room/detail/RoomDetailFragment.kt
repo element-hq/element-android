@@ -645,13 +645,6 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.clear_message_queue -> {
-                // This a temporary option during dev as it is not super stable
-                // Cancel all pending actions in room queue and post a dummy
-                // Then mark all sending events as undelivered
-                roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
-                true
-            }
             R.id.invite              -> {
                 navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
                 true

@@ -1,4 +1,28 @@
-Changes in Element 1.0.9 (2020-XX-XX)
+Changes in Element 1.0.10 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - Rework sending Event management (#154)
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
+Changes in Element 1.0.9 (2020-10-16)
 ===================================================
 
 Features ✨:
@@ -35,6 +59,8 @@ Bugfix 🐛:
  - Don't set presence when handling a push notification or polling (#2156)
  - Be robust against `StrandHogg` task injection
  - Clear alerts if user sign out
+ - Fix rows are hidden in Textinput (#2234)
+ - Uploading a file to a room caused it to have a info.size of -1 (#2141)
 
 Translations 🗣:
  - Move store data to `/fastlane/metadata/android` (#812)

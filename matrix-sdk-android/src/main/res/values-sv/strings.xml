@@ -1,11 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s skickade en bild.</string>
     <string name="summary_you_sent_image">Du skickade en bild.</string>
     <string name="summary_user_sent_sticker">%1$s skickade en dekal.</string>
     <string name="summary_you_sent_sticker">Du skickade en dekal.</string>
-
     <string name="notice_room_invite_no_invitee">Inbjudan från %s</string>
     <string name="notice_room_invite_no_invitee_by_you">Inbjudan från dig</string>
     <string name="notice_room_created">%1$s skapade rummet</string>
@@ -62,12 +61,10 @@
     <string name="notice_end_to_end_by_you">Du aktiverade totalsträckskryptering (%1$s)</string>
     <string name="notice_room_update">%s uppgraderade det här rummet.</string>
     <string name="notice_room_update_by_you">Du uppgraderade det här rummet.</string>
-
     <string name="notice_requested_voip_conference">%1$s begärde ett VoIP-gruppsamtal</string>
     <string name="notice_requested_voip_conference_by_you">Du begärde ett VoIP-gruppsamtal</string>
     <string name="notice_voip_started">VoIP-gruppsamtal startat</string>
     <string name="notice_voip_finished">VoIP-gruppsamtal avslutat</string>
-
     <string name="notice_avatar_changed_too">(avataren blev även bytt)</string>
     <string name="notice_room_name_removed">%1$s tog bort rummets namn</string>
     <string name="notice_room_name_removed_by_you">Du tog bort rummets namn</string>
@@ -87,54 +84,39 @@
     <string name="notice_room_third_party_revoked_invite_by_you">Du drog tillbaka inbjudan för %1$s att gå med i rummet</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepterade inbjudan för %2$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">Du accepterade inbjudan för %1$s</string>
-
     <string name="notice_widget_added">%1$s lade till %2$s-widget</string>
     <string name="notice_widget_added_by_you">Du lade till %1$s-widget</string>
     <string name="notice_widget_removed">%1$s tog bort %2$s-widget</string>
     <string name="notice_widget_removed_by_you">Du tog bort %1$s-widget</string>
     <string name="notice_widget_modified">%1$s modifierade %2$s-widget</string>
     <string name="notice_widget_modified_by_you">Du modifierade %1$s-widget</string>
-
     <string name="power_level_admin">Admin</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Anpassad (%1$d)</string>
     <string name="power_level_custom_no_value">Anpassad</string>
-
     <string name="notice_power_level_changed_by_you">Du ändrade behörighetsnivå för %1$s.</string>
     <string name="notice_power_level_changed">%1$s ändrade behörighetsnivå för %2$s.</string>
     <string name="notice_power_level_diff">%1$s från %2$s till %3$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Kan inte avkryptera: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Avsändarens enhet har inte gett oss nycklarna för det här meddelandet.</string>
-
     <string name="could_not_redact">Kunde inte dölja</string>
     <string name="unable_to_send_message">Kunde inte skicka meddelandet</string>
-
     <string name="message_failed_to_upload">Misslyckades att ladda upp bilden</string>
-
     <string name="network_error">Nätverksfel</string>
     <string name="matrix_error">Matrixfel</string>
-
     <string name="room_error_join_failed_empty_room">Det går för närvarande inte att gå med i ett tomt rum igen.</string>
-
     <string name="encrypted_message">Krypterat meddelande</string>
-
     <string name="medium_email">E-postadress</string>
     <string name="medium_phone_number">Telefonnummer</string>
-
     <string name="room_displayname_invite_from">Inbjudan från %s</string>
     <string name="room_displayname_room_invite">Rumsinbjudan</string>
-
     <string name="room_displayname_two_members">%1$s och %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s och en till</item>
         <item quantity="other">%1$s och %2$d till</item>
     </plurals>
-
     <string name="room_displayname_empty_room">Tomt rum</string>
-
     <string name="initial_sync_start_importing_account">Inledande synk:
 \nImporterar konto…</string>
     <string name="initial_sync_start_importing_account_crypto">Inledande synk:
@@ -151,10 +133,8 @@
 \nImporterar gemenskaper</string>
     <string name="initial_sync_start_importing_account_data">Inledande synk:
 \nImporterar kontodata</string>
-
     <string name="event_status_sending_message">Skickar meddelande…</string>
     <string name="clear_timeline_send_queue">Rensa sändningskö</string>
-
     <string name="notice_room_invite_no_invitee_with_reason">Inbjudan från %1$s. Anledning: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Inbjudan från dig. Anledning: %1$s</string>
     <string name="notice_room_invite_with_reason">%1$s bjöd in %2$s. Anledning: %3$s</string>
@@ -180,45 +160,57 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Du accepterade inbjudan för %1$s. Anledning: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s drog tillbaka inbjudan för %2$s. Anledning: %3$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Du drog tillbaka inbjudan för %1$s. Anledning: %2$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s lade till %2$s som en adress för det här rummet.</item>
         <item quantity="other">%1$s lade till %2$s som adresser för det här rummet.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Du lade till %1$s som en adress för det här rummet.</item>
         <item quantity="other">Du lade till %1$s som adresser för det här rummet.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s tog bort %2$s som en adress för det här rummet.</item>
         <item quantity="other">%1$s tog bort %2$s som adresser för det här rummet.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Du tog bort %1$s som en adress för det här rummet.</item>
         <item quantity="other">Du tog bort %2$s som adresser för det här rummet.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s lade till %2$s och tog bort %3$s som adresser för det här rummet.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Du lade till %1$s och tog bort %2$s som adresser för det här rummet.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s satta huvudadressen för det här rummet till %2$s.</string>
     <string name="notice_room_canonical_alias_set_by_you">Du satta huvudadressen för det här rummet till %1$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s tog bort huvudadressen för det här rummet.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Du tog bort huvudadressen för det här rummet.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s tillät gäster att gå med i rummet.</string>
     <string name="notice_room_guest_access_can_join_by_you">Du tillät gäster att gå med i rummet.</string>
     <string name="notice_room_guest_access_forbidden">%1$s hindrade gäster från att gå med i rummet.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Du hindrade gäster från att gå med i rummet.</string>
-
     <string name="notice_end_to_end_ok">%1$s aktiverade totalsträckskryptering.</string>
     <string name="notice_end_to_end_ok_by_you">Du aktiverade totalsträckskryptering.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktiverade totalsträckskryptering (okänd algoritm %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Du aktiverade totalsträckskryptering (okänd algoritm %1$s).</string>
-
     <string name="key_verification_request_fallback_message">%s begär att verifiera din nyckel, men din klient stöder inte nyckelverifiering i chatten. Du behöver använda legacynyckelverifiering för att verifiera nycklar.</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Du hindrade gäster från att gå med i rummet.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s hindrade gäster från att gå med i rummet.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Du tillät gäster att gå med här.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s tillät gäster att gå med här.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Du lämnade. Anledning: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s Lämnade. Anledning: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Du gick med. Anledning: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s gick med. Anledning: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Du drog tillbaka inbjudan för %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s drog tillbaka inbjudan för %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Du bjöd in %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s bjöd in %2$s</string>
+    <string name="notice_direct_room_update_by_you">Du uppgraderade här.</string>
+    <string name="notice_direct_room_update">%s uppgraderade här.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du gjorde framtida meddelanden synliga för %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s gjorde framtida meddelanden synliga för %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Du lämnade rummet</string>
+    <string name="notice_direct_room_leave">%1$s lämnade rummet</string>
+    <string name="notice_direct_room_join_by_you">Du gick med</string>
+    <string name="notice_direct_room_join">%1$s gick med</string>
+    <string name="notice_direct_room_created_by_you">Du skapade diskussionen</string>
+    <string name="notice_direct_room_created">%1$s skapade diskussionen</string>
 </resources>

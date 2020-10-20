@@ -62,7 +62,7 @@
     <TextView
         android:id="@+id/composer_related_message_preview"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_message_text_color"
@@ -113,8 +113,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/composer_shield"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
         tools:src="@tools:sample/avatars" />
 
 
@@ -126,9 +124,7 @@
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintBottom_toBottomOf="@id/composer_avatar_view"
         app:layout_constraintStart_toEndOf="@+id/composer_avatar_view"
-        tools:src="@drawable/ic_shield_black"
-        tools:visibility="visible"
-        />
+        tools:src="@drawable/ic_shield_black" />
 
 
 
@@ -162,7 +158,6 @@
         app:tint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintVertical_bias="1"
         tools:ignore="MissingPrefix" />
@@ -176,8 +171,8 @@
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@id/composer_avatar_view"
+        app:layout_constraintStart_toEndOf="@id/composer_shield"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem/random" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

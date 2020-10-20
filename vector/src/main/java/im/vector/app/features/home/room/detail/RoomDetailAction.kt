@@ -68,7 +68,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
-    object ClearSendQueue : RoomDetailAction()
     object ResendAll : RoomDetailAction()
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
     object EndCall : RoomDetailAction()
