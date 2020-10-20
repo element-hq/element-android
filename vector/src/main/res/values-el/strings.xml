@@ -338,7 +338,7 @@
     <string name="bottom_action_people">Άτομα</string>
     <string name="home_filter_placeholder_people">Αναζήτηση ατόμων</string>
     <string name="tab_title_search_people">ΑΤΟΜΑ</string>
-    <string name="resources_script">Λτνκ</string>
+    <string name="resources_script">Grek</string>
 
     <string name="notification_sync_init">Αρχικοποίηση υπηρεσίας</string>
     <string name="notification_listening_for_events">Αναμονή για συμβάντα</string>
