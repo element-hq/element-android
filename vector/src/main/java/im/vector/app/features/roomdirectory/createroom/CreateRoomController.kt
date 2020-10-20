@@ -73,8 +73,9 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         formEditableAvatarItem {
             id("avatar")
             enabled(enableFormElement)
-            imageUri(viewState.avatar?.contentUri)
+            imageUri(viewState.avatarUri)
             clickListener { listener?.onAvatarChange() }
+            deleteListener { listener?.onAvatarDelete() }
         }
         settingsSectionTitleItem {
             id("nameSection")
@@ -156,6 +157,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     }
 
     interface Listener {
+        fun onAvatarDelete()
         fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)

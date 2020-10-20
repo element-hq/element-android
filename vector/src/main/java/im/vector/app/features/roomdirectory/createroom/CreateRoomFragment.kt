@@ -16,22 +16,27 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
+import androidx.core.net.toUri
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(
@@ -68,12 +73,33 @@ class CreateRoomFragment @Inject constructor(
         createRoomController.listener = this
     }
 
+    override fun onAvatarDelete() {
+        viewModel.handle(CreateRoomAction.SetAvatar(null))
+    }
+
     override fun onAvatarChange() {
         galleryOrCameraDialogHelper.show()
     }
 
     override fun onImageReady(image: MultiPickerImageType) {
-        viewModel.handle(CreateRoomAction.SetAvatar(image))
+        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+                .withAspectRatio(1f, 1f)
+                .start(requireContext(), this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                UCrop.REQUEST_CROP ->
+                    viewModel.handle(CreateRoomAction.SetAvatar(data?.let { UCrop.getOutput(it) }))
+            }
+        }
     }
 
     override fun onNameChange(newName: String) {

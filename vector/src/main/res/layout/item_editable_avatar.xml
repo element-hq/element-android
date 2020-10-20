@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/itemEditableAvatarImage"
-        android:layout_width="112dp"
-        android:layout_height="112dp"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,9 +19,23 @@
         tools:src="@tools:sample/avatars" />
 
     <ImageView
+        android:id="@+id/itemEditableAvatarDelete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/circle"
+        android:scaleType="center"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImage"
+        app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImage"
+        app:tint="@color/riotx_destructive_accent"
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
+
+    <ImageView
         android:id="@+id/itemEditableAvatarPicto"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:background="@drawable/circle"
         android:scaleType="center"
         android:src="@drawable/ic_add_image"

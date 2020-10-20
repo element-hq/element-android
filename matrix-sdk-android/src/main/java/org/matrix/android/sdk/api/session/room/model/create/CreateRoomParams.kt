@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model.create
 
+import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -50,6 +51,11 @@ class CreateRoomParams {
      * See Room Events for more information on m.room.topic.
      */
     var topic: String? = null
+
+    /**
+     * If this is not null, the image uri will be sent to the media server and will be set as a room avatar.
+     */
+    var avatarUri: Uri? = null
 
     /**
      * A list of user IDs to invite to the room.

@@ -16,7 +16,9 @@
 package im.vector.app.features.form
 
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -43,6 +45,9 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
     @EpoxyAttribute
     var clickListener: ClickListener? = null
 
+    @EpoxyAttribute
+    var deleteListener: ClickListener? = null
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.image.onClick(clickListener?.takeIf { enabled })
@@ -51,9 +56,12 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.bg_accent)
                 .into(holder.image)
+        holder.delete.isVisible = imageUri != null
+        holder.delete.onClick(deleteListener?.takeIf { enabled })
     }
 
     class Holder : VectorEpoxyHolder() {
         val image by bind<ImageView>(R.id.itemEditableAvatarImage)
+        val delete by bind<View>(R.id.itemEditableAvatarDelete)
     }
 }

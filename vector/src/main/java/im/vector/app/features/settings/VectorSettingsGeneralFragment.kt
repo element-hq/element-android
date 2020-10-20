@@ -312,7 +312,7 @@ class VectorSettingsGeneralFragment :
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
         createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .apply { withAspectRatio(1f, 1f) }
+                .withAspectRatio(1f, 1f)
                 .start(requireContext(), this)
     }
 

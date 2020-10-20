@@ -101,7 +101,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         }.exhaustive
     }
 
-    private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatar = action.image) }
+    private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatarUri = action.imageUri) }
 
     private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
 
@@ -131,6 +131,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                 .apply {
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
+                    avatarUri = state.avatarUri
                     // Directory visibility
                     visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
                     // Public room
