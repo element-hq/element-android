@@ -2629,4 +2629,11 @@
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
+
+    <!-- Add by QR code -->
+    <string name="share_by_text">Share by text</string>
+    <string name="dm_self">Cannot DM yourself!</string>
+    <string name="dm_already_exists">DM already exists!</string>
+    <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
+    <string name="qr_code_not_scanned">QR code not scanned!</string>
 </resources>

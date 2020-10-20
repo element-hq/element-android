@@ -295,8 +295,8 @@ class RoomMemberProfileFragment @Inject constructor(
         qrCode.setData(permalink)
         AlertDialog.Builder(requireContext())
             .setView(view)
-            .setNeutralButton("Ok") { _, _ -> }
-            .setPositiveButton("Share by text") { _, _ ->
+            .setNeutralButton(R.string.ok) { _, _ -> }
+            .setPositiveButton(R.string.share_by_text) { _, _ ->
                 startSharePlainTextIntent(
                         fragment = this,
                         activityResultLauncher = null,
