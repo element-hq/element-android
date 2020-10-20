@@ -45,6 +45,10 @@ parser.add_argument('-e',
                     '--expecting',
                     type=int,
                     help='the expected number of artifacts. If omitted, no check will be done.')
+parser.add_argument('-i',
+                    '--ignoreErrors',
+                    help='Ignore errors that can be ignored. Build state and number of artifacts.',
+                    action="store_true")
 parser.add_argument('-d',
                     '--directory',
                     default="",
@@ -91,9 +95,14 @@ print("   git commit         : \"%s\"" % data0.get('commit'))
 print("   git commit message : \"%s\"" % data0.get('message'))
 print("   build state        : %s" % data0.get('state'))
 
+error = False
+
 if data0.get('state') != 'passed':
     print("❌ Error, the build is in state '%s', and not 'passed'" % data0.get('state'))
-    exit(1)
+    if args.ignoreErrors:
+        error = True
+    else:
+        exit(1)
 
 ### Fetch artifacts list
 
@@ -110,8 +119,11 @@ data = json.loads(r.content.decode())
 print("   %d artifact(s) found." % len(data))
 
 if args.expecting is not None and args.expecting != len(data):
-    print("Error, expecting %d artifacts and found %d." % (args.expecting, len(data)))
-    exit(1)
+    print("❌ Error, expecting %d artifacts and found %d." % (args.expecting, len(data)))
+    if args.ignoreErrors:
+        error = True
+    else:
+        exit(1)
 
 if args.verbose:
     print("Json data:")
@@ -127,8 +139,6 @@ else:
 
 if not args.simulate:
     os.mkdir(targetDir)
-
-error = False
 
 for elt in data:
     if args.verbose:
@@ -157,7 +167,7 @@ for elt in data:
             print("❌ Checksum mismatch: expecting %s and get %s" % (elt.get("sha1sum"), hash))
 
 if error:
-    print("❌ Error(s) occurred, check the log")
+    print("❌ Error(s) occurred, please check the log")
     exit(1)
 else:
     print("Done!")
