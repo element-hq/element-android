@@ -39,7 +39,7 @@
         android:id="@+id/itemEditableAvatarDelete"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/header_panel_round_background"
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"

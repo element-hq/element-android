@@ -277,7 +277,6 @@ class RoomProfileFragment @Inject constructor(
         }
     }
 
-
     override fun onImageReady(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
