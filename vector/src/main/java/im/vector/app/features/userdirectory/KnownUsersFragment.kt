@@ -142,18 +142,18 @@ class KnownUsersFragment @Inject constructor(
                                     CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
                             )
                         } else {
-                            Toast.makeText(requireContext(), "Cannot DM yourself!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), R.string.dm_self, Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
-                        Toast.makeText(requireContext(), "DM already exists!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.dm_already_exists, Toast.LENGTH_SHORT).show()
                         requireActivity().finish()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Invalid QR code (Invalid URI)!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "QR code not scanned!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
             }
         }
         addByQrCode.debouncedClicks {
