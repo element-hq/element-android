@@ -123,12 +123,10 @@ class KnownUsersFragment @Inject constructor(
     private fun setupAddByQrCodeView() {
         val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
-
                 val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
                 // Latter condition to be replaced by URL(result).protocol == "matrix" when MSC2312 is complete
                 if (result.isValidUrl() && URL(result).host == "matrix.to") {
-
                     // Remove query string parameters and initial slash from URL().ref to get MXID
                     val mxid = URL(result).ref.split("?")[0].drop(1)
 
@@ -137,14 +135,12 @@ class KnownUsersFragment @Inject constructor(
                     if (existingDm == null) {
                         // The following assumes MXIDs are case insensitive. Change if needed
                         if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
-
                             // Try to get user from known users and fall back to creating a User object from MXID
                             val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
                             createDirectRoomViewModel.handle(
                                     CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
                             )
-
                         } else {
                             Toast.makeText(requireContext(), "Cannot DM yourself!", Toast.LENGTH_SHORT).show()
                         }
