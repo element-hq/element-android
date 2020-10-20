@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
@@ -43,7 +44,8 @@ class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController
 ) : VectorBaseFragment(),
         CreateRoomController.Listener,
-        GalleryOrCameraDialogHelper.Listener {
+        GalleryOrCameraDialogHelper.Listener,
+        OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
@@ -129,6 +131,11 @@ class CreateRoomFragment @Inject constructor(
     override fun retry() {
         Timber.v("Retry")
         viewModel.handle(CreateRoomAction.Create)
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        viewModel.handle(CreateRoomAction.Reset)
+        return false
     }
 
     override fun invalidate() = withState(viewModel) { state ->

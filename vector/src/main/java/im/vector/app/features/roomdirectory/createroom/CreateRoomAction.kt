@@ -28,4 +28,5 @@ sealed class CreateRoomAction : VectorViewModelAction {
     data class SetIsEncrypted(val isEncrypted: Boolean) : CreateRoomAction()
 
     object Create : CreateRoomAction()
+    object Reset : CreateRoomAction()
 }

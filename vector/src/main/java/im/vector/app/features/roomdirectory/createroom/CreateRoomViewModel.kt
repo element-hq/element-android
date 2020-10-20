@@ -98,7 +98,17 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
             is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
             is CreateRoomAction.Create               -> doCreateRoom()
+            CreateRoomAction.Reset                   -> doReset()
         }.exhaustive
+    }
+
+    private fun doReset() {
+        setState {
+            CreateRoomViewState(
+                    isEncrypted = adminE2EByDefault,
+                    hsAdminHasDisabledE2E = !adminE2EByDefault
+            )
+        }
     }
 
     private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatarUri = action.imageUri) }
