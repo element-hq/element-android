@@ -40,25 +40,21 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.getSizeOfFiles
-import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.workers.signout.SignOutUiWorker
-import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
@@ -75,12 +71,14 @@ import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
 
-class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
+class VectorSettingsGeneralFragment :
+        VectorSettingsBaseFragment(),
+        GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private var avatarCameraUri: Uri? = null
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -154,7 +152,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Avatar
         mUserAvatarPreference.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                onUpdateAvatarClick()
+                galleryOrCameraDialogHelper.show()
                 false
             }
         }
@@ -279,30 +277,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
-    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK) {
-            avatarCameraUri?.let { uri ->
-                MultiPicker.get(MultiPicker.CAMERA)
-                        .getTakenPhoto(requireContext(), uri)
-                        ?.let {
-                            onAvatarSelected(it)
-                        }
-            }
-        }
-    }
-
-    private val attachmentImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        val data = activityResult.data ?: return@registerStartForActivityResult
-        if (activityResult.resultCode == Activity.RESULT_OK) {
-            MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(requireContext(), data)
-                    .firstOrNull()?.let {
-                        onAvatarSelected(it)
-                    }
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // TODO handle this one (Ucrop lib)
         @Suppress("DEPRECATION")
@@ -334,38 +308,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    /**
-     * Update the avatar.
-     */
-    private fun onUpdateAvatarClick() {
-        AlertDialog
-                .Builder(requireContext())
-                .setItems(arrayOf(
-                        getString(R.string.attachment_type_camera),
-                        getString(R.string.attachment_type_gallery)
-                )) { dialog, which ->
-                    dialog.cancel()
-                    onAvatarTypeSelected(isCamera = (which == 0))
-                }.show()
-    }
-
-    private val takePhotoActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            onAvatarTypeSelected(true)
-        }
-    }
-
-    private fun onAvatarTypeSelected(isCamera: Boolean) {
-        if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), takePhotoActivityResultLauncher)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(requireActivity(), attachmentPhotoActivityResultLauncher)
-            }
-        } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(attachmentImageActivityResultLauncher)
-        }
-    }
-
-    private fun onAvatarSelected(image: MultiPickerImageType) {
+    override fun onImageReady(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
         createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
