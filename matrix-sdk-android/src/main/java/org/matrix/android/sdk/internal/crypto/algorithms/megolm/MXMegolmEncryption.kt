@@ -420,7 +420,7 @@ internal class MXMegolmEncryption(
             sendToDeviceTask.execute(sendToDeviceParams)
             true
         } catch (failure: Throwable) {
-            Timber.v("## CRYPTO | CRYPTO | reshareKey() : fail to send <$sessionId> to $userId:$deviceId")
+            Timber.e(failure, "## CRYPTO | CRYPTO | reshareKey() : fail to send <$sessionId> to $userId:$deviceId")
             false
         }
     }

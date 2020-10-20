@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.relation
+package org.matrix.android.sdk.internal.session.room.send.queue
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+abstract class QueuedTask {
+    var retryCount = 0
 
-@JsonClass(generateAdapter = true)
-data class ReactionInfo(
-        @Json(name = "rel_type") override val type: String?,
-        @Json(name = "event_id") override val eventId: String,
-        @Json(name = "key") val key: String,
-        // always null for reaction
-        @Json(name = "m.in_reply_to") override val inReplyTo: ReplyToContent? = null,
-        @Json(name = "option") override val option: Int? = null
-) : RelationContent
+    abstract suspend fun execute()
+
+    abstract fun onTaskFailed()
+
+    abstract fun isCancelled() : Boolean
+
+    abstract fun cancel()
+}

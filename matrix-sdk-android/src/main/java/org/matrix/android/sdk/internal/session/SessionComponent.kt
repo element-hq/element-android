@@ -45,7 +45,6 @@ import org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
 import org.matrix.android.sdk.internal.session.room.relation.SendRelationWorker
-import org.matrix.android.sdk.internal.session.room.send.EncryptEventWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -108,8 +107,6 @@ internal interface SessionComponent {
     fun inject(worker: SendEventWorker)
 
     fun inject(worker: SendRelationWorker)
-
-    fun inject(worker: EncryptEventWorker)
 
     fun inject(worker: MultipleEventSendingDispatcherWorker)
 

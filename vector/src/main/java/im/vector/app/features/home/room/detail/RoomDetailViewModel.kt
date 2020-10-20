@@ -251,7 +251,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
-            is RoomDetailAction.ClearSendQueue                   -> handleClearSendQueue()
             is RoomDetailAction.ResendAll                        -> handleResendAll()
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
             is RoomDetailAction.ReportContent                    -> handleReportContent(action)
@@ -542,9 +541,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.clear_message_queue ->
-                // For now always disable when not in developer mode, worker cancellation is not working properly
-                timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
             R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.timeline_setting    -> true
             R.id.invite              -> state.canInvite
@@ -1063,10 +1059,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             room.cancelSend(targetEventId)
         }
-    }
-
-    private fun handleClearSendQueue() {
-        room.clearSendingQueue()
     }
 
     private fun handleResendAll() {

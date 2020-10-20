@@ -41,23 +41,27 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
-        super.bind(holder)
-        holder.messageView.movementMethod = movementMethod
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
             holder.messageView.textSize = 14F
         }
-        renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(attributes.itemClickListener)
-        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         if (searchForPills) {
-            message?.findPillsAndProcess(coroutineScope) { it.bind(holder.messageView) }
+            message?.findPillsAndProcess(coroutineScope) {
+                // mmm.. not sure this is so safe in regards to cell reuse
+                it.bind(holder.messageView)
+            }
         }
         val textFuture = PrecomputedTextCompat.getTextFuture(
                 message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
+        super.bind(holder)
+        holder.messageView.movementMethod = movementMethod
+
+        renderSendState(holder.messageView, holder.messageView)
+        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         holder.messageView.setTextFuture(textFuture)
     }
 
