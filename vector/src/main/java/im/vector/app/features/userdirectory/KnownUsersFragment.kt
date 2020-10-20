@@ -141,7 +141,9 @@ class KnownUsersFragment @Inject constructor(
                             // Try to get user from known users and fall back to creating a User object from MXID
                             val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
-                            createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee))))
+                            createDirectRoomViewModel.handle(
+                                    CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                            )
 
                         } else {
                             Toast.makeText(requireContext(), "Cannot DM yourself!", Toast.LENGTH_SHORT).show()
