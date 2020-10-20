@@ -28,6 +28,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
 import javax.inject.Inject
@@ -69,6 +70,12 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     }
 
     private fun buildForm(viewState: CreateRoomViewState, enableFormElement: Boolean) {
+        formEditableAvatarItem {
+            id("avatar")
+            enabled(enableFormElement)
+            imageUri(viewState.avatar?.contentUri)
+            clickListener { listener?.onAvatarChange() }
+        }
         settingsSectionTitleItem {
             id("nameSection")
             titleResId(R.string.create_room_name_section)
@@ -149,6 +156,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     }
 
     interface Listener {
+        fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
         fun setIsPublic(isPublic: Boolean)

@@ -19,8 +19,10 @@ package im.vector.app.features.roomdirectory.createroom
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 
 data class CreateRoomViewState(
+        val avatar: MultiPickerImageType? = null,
         val roomName: String = "",
         val roomTopic: String = "",
         val isPublic: Boolean = false,

@@ -17,12 +17,15 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 
 sealed class CreateRoomAction : VectorViewModelAction {
+    data class SetAvatar(val image: MultiPickerImageType) : CreateRoomAction()
     data class SetName(val name: String) : CreateRoomAction()
     data class SetTopic(val topic: String) : CreateRoomAction()
     data class SetIsPublic(val isPublic: Boolean) : CreateRoomAction()
     data class SetIsInRoomDirectory(val isInRoomDirectory: Boolean) : CreateRoomAction()
     data class SetIsEncrypted(val isEncrypted: Boolean) : CreateRoomAction()
+
     object Create : CreateRoomAction()
 }

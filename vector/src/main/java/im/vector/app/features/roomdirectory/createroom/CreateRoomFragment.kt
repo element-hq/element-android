@@ -23,21 +23,27 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController
-) : VectorBaseFragment(), CreateRoomController.Listener {
+) : VectorBaseFragment(),
+        CreateRoomController.Listener,
+        GalleryOrCameraDialogHelper.Listener {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
+
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 
@@ -60,6 +66,14 @@ class CreateRoomFragment @Inject constructor(
     private fun setupRecyclerView() {
         createRoomForm.configureWith(createRoomController)
         createRoomController.listener = this
+    }
+
+    override fun onAvatarChange() {
+        galleryOrCameraDialogHelper.show()
+    }
+
+    override fun onImageReady(image: MultiPickerImageType) {
+        viewModel.handle(CreateRoomAction.SetAvatar(image))
     }
 
     override fun onNameChange(newName: String) {

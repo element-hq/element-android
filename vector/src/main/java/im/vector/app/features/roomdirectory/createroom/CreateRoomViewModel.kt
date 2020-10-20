@@ -91,6 +91,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
+            is CreateRoomAction.SetAvatar            -> setAvatar(action)
             is CreateRoomAction.SetName              -> setName(action)
             is CreateRoomAction.SetTopic             -> setTopic(action)
             is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
@@ -99,6 +100,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             is CreateRoomAction.Create               -> doCreateRoom()
         }.exhaustive
     }
+
+    private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatar = action.image) }
 
     private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
 
