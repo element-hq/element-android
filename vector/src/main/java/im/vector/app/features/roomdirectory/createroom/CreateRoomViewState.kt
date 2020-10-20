@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Uninitialized
 
 data class CreateRoomViewState(
         val roomName: String = "",
+        val roomTopic: String = "",
         val isPublic: Boolean = false,
         val isInRoomDirectory: Boolean = false,
         val isEncrypted: Boolean = false,

@@ -32,7 +32,9 @@ import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(
+        private val createRoomController: CreateRoomController
+) : VectorBaseFragment(), CreateRoomController.Listener {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
@@ -75,6 +77,10 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
 
     override fun onNameChange(newName: String) {
         viewModel.handle(CreateRoomAction.SetName(newName))
+    }
+
+    override fun onTopicChange(newTopic: String) {
+        viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
     override fun setIsPublic(isPublic: Boolean) {

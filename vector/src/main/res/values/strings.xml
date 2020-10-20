@@ -1675,7 +1675,11 @@
     <!-- Create room screen -->
     <string name="create_room_title">"New Room"</string>
     <string name="create_room_action_create">"CREATE"</string>
-    <string name="create_room_name_hint">"Room name"</string>
+    <string name="create_room_name_section">"Room name"</string>
+    <string name="create_room_name_hint">"Name"</string>
+    <string name="create_room_topic_section">"Room topic (optional)"</string>
+    <string name="create_room_topic_hint">"Topic"</string>
+    <string name="create_room_settings_section">"Room settings"</string>
     <string name="create_room_public_title">"Public"</string>
     <string name="create_room_public_description">"Anyone will be able to join this room"</string>
     <string name="create_room_directory_title">"Room Directory"</string>
