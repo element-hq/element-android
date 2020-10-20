@@ -150,13 +150,14 @@ class KnownUsersFragment @Inject constructor(
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
+                        Toast.makeText(requireContext(), "DM already exists!", Toast.LENGTH_SHORT).show()
                         requireActivity().finish()
                     }
                 } else {
                     Toast.makeText(requireContext(), "Invalid QR code (Invalid URI)!", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Error while scanning QR code!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "QR code not scanned!", Toast.LENGTH_SHORT).show()
             }
         }
         addByQrCode.debouncedClicks {
