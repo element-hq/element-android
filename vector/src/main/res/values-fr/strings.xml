@@ -310,7 +310,7 @@
     <string name="room_settings_room_read_history_rules_pref_title">Accès à l’historique du salon</string>
     <string name="room_settings_read_history_entry_anyone">N’importe qui</string>
     <string name="room_settings_read_history_entry_members_only_joined">Uniquement les membres (depuis qu’ils sont arrivés)</string>
-    <string name="room_settings_banned_users_title">Utilisateurs bannis</string>
+    <string name="room_settings_banned_users_title">Utilisateurs exclus</string>
     <string name="room_settings_category_advanced_title">Avancé</string>
     <string name="room_settings_room_internal_id">L’identifiant interne de ce salon</string>
     <string name="room_settings_addresses_pref_title">Adresses</string>
@@ -337,7 +337,7 @@
     <string name="encryption_information_sender_device_information">Informations sur la session de l’expéditeur</string>
     <string name="encryption_information_device_name">Nom public</string>
     <string name="encryption_information_name">Nom public</string>
-    <string name="encryption_information_device_id">Identifiant</string>
+    <string name="encryption_information_device_id">Identifiant de session</string>
     <string name="encryption_information_device_key">Clé de la session</string>
     <string name="encryption_information_verification">Vérification</string>
     <string name="encryption_information_ed25519_fingerprint">Empreinte Ed25519</string>
@@ -610,7 +610,7 @@
     <string name="room_settings_all_messages">Notification pour chaque message</string>
     <string name="room_settings_mention_only">Notifier uniquement lorsque mon nom est mentionné</string>
     <string name="room_settings_mute">Pas de notification</string>
-    <string name="room_settings_add_homescreen_shortcut">Ajouter un raccourci sur l’écran d’accueil</string>
+    <string name="room_settings_add_homescreen_shortcut">Ajouter à l’écran d’accueil</string>
     <string name="settings_inline_url_preview">Aperçu des liens</string>
     <string name="settings_vibrate_on_mention">Vibrer lorsque l’on mentionne un utilisateur</string>
     <string name="room_settings_room_notifications_title">Notifications</string>
@@ -636,10 +636,10 @@
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
     <string name="group_no_long_description">L’administrateur de cette communauté n’a pas encore fourni de description.</string>
     <string name="has_been_kicked">%2$s vous a expulsé de %1$s</string>
-    <string name="has_been_banned">%2$s vous a banni de %1$s</string>
+    <string name="has_been_banned">%2$s vous a exclus de %1$s</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="rejoin">Rejoindre</string>
-    <string name="forget_room">Abandonner le salon</string>
+    <string name="forget_room">Oublier le salon</string>
     <string name="settings_flair">Badge</string>
     <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler une anomalie</string>
     <string name="actions">Actions</string>
@@ -749,8 +749,8 @@
     <string name="settings_without_flair">Vous n’êtes pour le moment membre d’aucune communauté.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Utiliser la touche Entrée du clavier pour envoyer un message</string>
     <string name="command_description_emote">Affiche une action</string>
-    <string name="command_description_ban_user">Banni l’utilisateur avec l’identifiant fourni</string>
-    <string name="command_description_unban_user">Révoque le bannissement du l’utilisateur avec l’identifiant fourni</string>
+    <string name="command_description_ban_user">Exclus l’utilisateur avec l’identifiant fourni</string>
+    <string name="command_description_unban_user">Révoque l\'exclusion de l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_op_user">Défini le rang d’un utilisateur</string>
     <string name="command_description_deop_user">Enlève le rang d’opérateur de l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_invite_user">Invite l’utilisateur avec l’identifiant fourni dans le salon actuel</string>
@@ -826,7 +826,7 @@
     <string name="show_info_area_messages_and_errors">Pour les messages et les erreurs</string>
     <string name="show_info_area_only_errors">Seulement pour les erreurs</string>
     <string name="generic_label">%1$s :</string>
-    <string name="generic_label_and_value">%1$s : %2$s</string>
+    <string name="generic_label_and_value">%1$s : %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Appeler quand même</string>
@@ -840,7 +840,7 @@
     <string name="settings_show_read_receipts">Afficher les accusés de réception</string>
     <string name="settings_show_read_receipts_summary">Cliquer sur les accusés de réception pour une liste détaillée.</string>
     <string name="settings_show_join_leave_messages">Afficher les notifications d’arrivée et de départ</string>
-    <string name="settings_show_join_leave_messages_summary">Les invitations, expulsions et bannissements ne sont pas concernés.</string>
+    <string name="settings_show_join_leave_messages_summary">Les invitations, expulsions et exclusions ne sont pas concernés.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Afficher les événements liés au compte</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Cela inclut les changements d’avatar et de nom affiché.</string>
     <string name="settings_password">Mot de passe</string>
@@ -1094,7 +1094,7 @@
     <string name="action_mark_room_read">Marquer comme lu</string>
     <string name="settings_notification_privacy_no_background_sync">Les applications &lt;b&gt;n’&lt;/a&gt;ont &lt;b&gt;pas&lt;/b&gt; besoin d’être connectées au serveur d’accueil en arrière-plan, cela devrait diminuer l’utilisation de la batterie<b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s : 1 message</item>
+        <item quantity="one">%1$s : %2$d message</item>
         <item quantity="other">%1$s : %2$d messages</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1349,7 +1349,7 @@
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="one_user_read">%s a lu</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">1 utilisateur a lu</item>
+        <item quantity="one">%d utilisateur a lu</item>
         <item quantity="other">%d utilisateurs ont lu</item>
     </plurals>
     <string name="error_file_too_big">Le fichier « %1$s » (%2$s) est trop gros pour être envoyé. La limite est %3$s.</string>
@@ -1960,9 +1960,9 @@
 \nVous pouvez annuler cette action à tout moment dans les paramètres généraux.</string>
     <string name="room_participants_action_cancel_invite_title">Annuler l\'invitation</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Êtes-vous sûr de vouloir annuler l\'invitation pour cet utilisateur \?</string>
-    <string name="room_participants_ban_title">Bloquer l\'utilisateur</string>
-    <string name="room_participants_ban_reason">Motif du blocage</string>
-    <string name="room_participants_unban_title">Débloquer l\'utilisateur</string>
+    <string name="room_participants_ban_title">Exclure l\'utilisateur</string>
+    <string name="room_participants_ban_reason">Motif de l\'exclusion</string>
+    <string name="room_participants_unban_title">Ne plus exclure l\'utilisateur</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Configuration</string>
     <string name="a11y_unmute_microphone">Activer le microphone</string>
     <string name="a11y_mute_microphone">Désactiver le microphone</string>
@@ -2111,8 +2111,8 @@
     </plurals>
     <string name="encryption_exported_successfully">Les clés ont bien été exportées</string>
     <plurals name="room_settings_banned_users_count">
-        <item quantity="one">%d utilisateur bloqué</item>
-        <item quantity="other">%d utilisateurs bloqués</item>
+        <item quantity="one">%d utilisateur exclu</item>
+        <item quantity="other">%d utilisateurs exclus</item>
     </plurals>
     <string name="settings_emails_and_phone_numbers_summary">Gérer les e-mails et numéros de téléphone liés à votre compte Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">E-mails et numéros de téléphone</string>
@@ -2127,7 +2127,7 @@
     <string name="settings_secure_backup_reset">Réinitialiser la sauvegarde sécurisée</string>
     <string name="settings_secure_backup_setup">Activer la sauvegarde sécurisée</string>
     <string name="settings_secure_backup_section_title">Sauvegarde sécurisée</string>
-    <string name="room_participants_unban_prompt_msg">Débloquer l\'utilisateur lui permettra de rejoindre le salon.</string>
+    <string name="room_participants_unban_prompt_msg">Ne plus exclure l\'utilisateur lui permettra de rejoindre le salon.</string>
     <string name="room_participants_power_level_demote_warning_title">Vous rétrograder vous-même \?</string>
     <string name="room_participants_power_level_demote_warning_prompt">Vous ne pourrez pas annuler cette modification car vous vous rétrogradez vous-même, il ne vous sera pas possible de regagner ces privilèges si vous êtes le dernier utilisateur privilégié de ce salon.</string>
     <string name="room_participants_power_level_demote">Rétrograder</string>
@@ -2136,7 +2136,7 @@
     <string name="settings_secure_backup_section_info">Protection contre la perte d\'accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
     <string name="settings_secure_backup_enter_to_setup">Activer sur cet appareil</string>
     <string name="settings_secure_backup_manage">Gérer</string>
-    <string name="settings_show_room_member_state_events_summary">Inclure les événement d\'invitation/ajout/départ/expulsion/bannissement ainsi que les changements d\'avatar et de nom affiché.</string>
+    <string name="settings_show_room_member_state_events_summary">Inclure les événement d\'invitation/ajout/départ/expulsion/exclusion ainsi que les changements d\'avatar et de nom affiché.</string>
     <plurals name="seconds">
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
@@ -2150,11 +2150,11 @@
     <string name="search_is_not_supported_in_e2e_room">La recherche dans les espaces chiffrés n\'est pas encore prise en charge.</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
-    <string name="room_participants_kick_prompt_msg">exclure un utilisateur le supprimera de cet espace.
+    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de cet espace.
 \n
-\nPour l’empêcher de revenir, vous devez plutôt les bloquer.</string>
-    <string name="room_participants_kick_reason">Motif d’exclusion</string>
-    <string name="room_participants_kick_title">Exclure l’utilisateur</string>
+\nPour l’empêcher de revenir, vous devez plutôt les exclure.</string>
+    <string name="room_participants_kick_reason">Motif d’expulsion</string>
+    <string name="room_participants_kick_title">Expulser l’utilisateur</string>
     <string name="room_participants_action_unignore_title">Ne plus ignorer l’utilisateur</string>
     <string name="call_format_turn_hd_on">Activer la HD</string>
     <string name="call_format_turn_hd_off">Désactiver la HD</string>
@@ -2163,4 +2163,5 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Vous n’avez pas la permission de démarrer un appel</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vous n’avez pas la permission de démarrer une téléconférence</string>
     <string name="reset">Réinitialiser</string>
+    <string name="failed_to_unban">Échec de la révocation de l\'exclusion de l\'utilisateur</string>
 </resources>
