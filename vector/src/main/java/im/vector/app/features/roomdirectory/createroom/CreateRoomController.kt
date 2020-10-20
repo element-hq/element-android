@@ -28,6 +28,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
 import javax.inject.Inject
 
@@ -139,6 +140,12 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.setIsEncrypted(value)
             }
         }
+        formSubmitButtonItem {
+            id("submit")
+            enabled(enableFormElement)
+            buttonTitleId(R.string.room_creation_title)
+            buttonClickListener { listener?.submit() }
+        }
     }
 
     interface Listener {
@@ -148,5 +155,6 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun retry()
+        fun submit()
     }
 }

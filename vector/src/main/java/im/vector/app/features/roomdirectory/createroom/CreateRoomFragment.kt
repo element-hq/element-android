@@ -41,8 +41,6 @@ class CreateRoomFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 
-    override fun getMenuRes() = R.menu.vector_room_creation
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
@@ -57,17 +55,6 @@ class CreateRoomFragment @Inject constructor(
         createRoomForm.cleanup()
         createRoomController.listener = null
         super.onDestroyView()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_create_room -> {
-                viewModel.handle(CreateRoomAction.Create)
-                true
-            }
-            else                    ->
-                super.onOptionsItemSelected(item)
-        }
     }
 
     private fun setupRecyclerView() {
@@ -93,6 +80,10 @@ class CreateRoomFragment @Inject constructor(
 
     override fun setIsEncrypted(isEncrypted: Boolean) {
         viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
+    }
+
+    override fun submit() {
+        viewModel.handle(CreateRoomAction.Create)
     }
 
     override fun retry() {
