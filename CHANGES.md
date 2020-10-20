@@ -8,7 +8,7 @@ Improvements 🙌:
  - Rework sending Event management (#154)
 
 Bugfix 🐛:
- -
+ - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
 
 Translations 🗣:
  -
@@ -59,7 +59,6 @@ Bugfix 🐛:
  - Don't set presence when handling a push notification or polling (#2156)
  - Be robust against `StrandHogg` task injection
  - Clear alerts if user sign out
- - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
  - Fix rows are hidden in Textinput (#2234)
  - Uploading a file to a room caused it to have a info.size of -1 (#2141)
 
