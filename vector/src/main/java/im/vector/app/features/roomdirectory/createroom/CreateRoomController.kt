@@ -143,7 +143,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement)
-            buttonTitleId(R.string.room_creation_title)
+            buttonTitleId(R.string.create_room_action_create)
             buttonClickListener { listener?.submit() }
         }
     }
