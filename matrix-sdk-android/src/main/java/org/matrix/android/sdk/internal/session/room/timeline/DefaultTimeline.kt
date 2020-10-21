@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmQuery
@@ -58,6 +56,8 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.createUIHandler
+import org.matrix.android.sdk.internal.util.diff.DiffRealmChangeListener
+import org.matrix.android.sdk.internal.util.diff.ListUpdateCallbackAdapter
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -119,14 +119,6 @@ internal class DefaultTimeline(
     override val isLive
         get() = !hasMoreToLoad(Timeline.Direction.FORWARDS)
 
-    private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<TimelineEventEntity>> { results, changeSet ->
-        if (!results.isLoaded || !results.isValid) {
-            return@OrderedRealmCollectionChangeListener
-        }
-        Timber.v("## SendEvent: [${System.currentTimeMillis()}] DB update for room $roomId")
-        handleUpdates(results, changeSet)
-    }
-
     // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
@@ -176,7 +168,8 @@ internal class DefaultTimeline(
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
-                nonFilteredEvents.addChangeListener(eventsChangeListener)
+                val changeListener = createChangeListener(nonFilteredEvents.createSnapshot())
+                nonFilteredEvents.addChangeListener(changeListener)
                 handleInitialLoad()
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
@@ -196,7 +189,6 @@ internal class DefaultTimeline(
             eventBus.unregister(this)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
                 if (this::sendingEvents.isInitialized) {
                     sendingEvents.removeAllChangeListeners()
@@ -298,7 +290,7 @@ internal class DefaultTimeline(
         listeners.clear()
     }
 
-// TimelineHiddenReadReceipts.Delegate
+    // TimelineHiddenReadReceipts.Delegate
 
     override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
         return rebuildEvent(eventId) { te ->
@@ -334,6 +326,16 @@ internal class DefaultTimeline(
     }
 
 // Private methods *****************************************************************************
+
+    private fun createChangeListener(list: List<TimelineEventEntity>) = object : DiffRealmChangeListener<TimelineEventEntity>(list) {
+        override fun areSameItems(old: TimelineEventEntity?, new: TimelineEventEntity?): Boolean {
+            return old?.localId == new?.localId
+        }
+
+        override fun handleResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
+            handleTimelineEventListUpdates(listUpdateCallbackAdapter)
+        }
+    }
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
         return tryOrNull {
@@ -427,14 +429,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState.get()
+            Timeline.Direction.FORWARDS -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState
+            Timeline.Direction.FORWARDS -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -477,17 +479,20 @@ internal class DefaultTimeline(
     /**
      * This has to be called on TimelineThread as it accesses realm live results
      */
-    private fun handleUpdates(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
+    private fun handleTimelineEventListUpdates(updateCallbackAdapter: ListUpdateCallbackAdapter) {
         // If changeSet has deletion we are having a gap, so we clear everything
-        if (changeSet.deletionRanges.isNotEmpty()) {
+        if (updateCallbackAdapter.deletions.isNotEmpty()) {
             clearAllValues()
         }
         var postSnapshot = false
-        changeSet.insertionRanges.forEach { range ->
-            val (startDisplayIndex, direction) = if (range.startIndex == 0) {
-                Pair(results[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
+
+        val numberOfInsertions = updateCallbackAdapter.insertions.size
+        if (numberOfInsertions > 0) {
+            val startIndex = updateCallbackAdapter.insertions.first()
+            val (startDisplayIndex, direction) = if (startIndex == 0) {
+                Pair(nonFilteredEvents[numberOfInsertions - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
             } else {
-                Pair(results[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
+                Pair(nonFilteredEvents[startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
             }
             val state = getState(direction)
             if (state.isPaginating) {
@@ -495,12 +500,14 @@ internal class DefaultTimeline(
                 postSnapshot = paginateInternal(startDisplayIndex, direction, state.requestedPaginationCount)
             } else {
                 // We are getting new items from sync
-                buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
+                buildTimelineEvents(startDisplayIndex, direction, numberOfInsertions.toLong())
                 postSnapshot = true
             }
         }
-        changeSet.changes.forEach { index ->
-            val eventEntity = results[index]
+        // This is far from perfect as we are rebuilding every built events. Need to improve.
+        builtEventsIdMap.forEach {
+            val index = it.value
+            val eventEntity = nonFilteredEvents[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
                     val builtEvent = buildTimelineEvent(eventEntity)
@@ -745,10 +752,10 @@ internal class DefaultTimeline(
         return object : MatrixCallback<TokenChunkEventPersistor.Result> {
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
-                    TokenChunkEventPersistor.Result.SUCCESS           -> {
+                    TokenChunkEventPersistor.Result.SUCCESS -> {
                         Timber.v("Success fetching $limit items $direction from pagination request")
                     }
-                    TokenChunkEventPersistor.Result.REACHED_END       -> {
+                    TokenChunkEventPersistor.Result.REACHED_END -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
@@ -855,7 +862,7 @@ internal class DefaultTimeline(
                 when (onLocalEchoCreated.timelineEvent.root.getClearType()) {
                     EventType.REDACTION -> {
                     }
-                    EventType.REACTION  -> {
+                    EventType.REACTION -> {
                         val content = onLocalEchoCreated.timelineEvent.root.content?.toModel<ReactionContent>()
                         if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                             val reaction = content.relatesTo.key

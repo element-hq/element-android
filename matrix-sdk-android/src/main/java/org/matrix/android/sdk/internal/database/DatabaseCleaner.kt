@@ -51,12 +51,12 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
                 Timber.v("There are ${allRooms.size} rooms in this session")
-                cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
+                //cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
             }
         }
     }
 
-    private suspend fun cleanUp(realm: Realm, threshold: Long) {
+    private fun cleanUp(realm: Realm, threshold: Long) {
         val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
         val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
         Timber.v("Number of events in db: $numberOfEvents | Number of timeline events in db: $numberOfTimelineEvents")

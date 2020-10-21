@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import android.util.SparseArray
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -30,6 +29,8 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
 import org.matrix.android.sdk.internal.database.query.whereInRoom
+import org.matrix.android.sdk.internal.util.diff.DiffRealmChangeListener
+import org.matrix.android.sdk.internal.util.diff.ListUpdateCallbackAdapter
 
 /**
  * This class is responsible for handling the read receipts for hidden events (check [TimelineSettings] to see filtering).
@@ -53,13 +54,20 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
     private lateinit var delegate: Delegate
 
-    private val hiddenReadReceiptsListener = OrderedRealmCollectionChangeListener<RealmResults<ReadReceiptsSummaryEntity>> { collection, changeSet ->
-        if (!collection.isLoaded || !collection.isValid) {
-            return@OrderedRealmCollectionChangeListener
+    private val hiddenReadReceiptsListener = object : DiffRealmChangeListener<ReadReceiptsSummaryEntity>(emptyList()) {
+        override fun areSameItems(old: ReadReceiptsSummaryEntity?, new: ReadReceiptsSummaryEntity?): Boolean {
+            return old?.eventId == new?.eventId
         }
+
+        override fun handleResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
+            handleChanges(listUpdateCallbackAdapter)
+        }
+    }
+
+    private fun handleChanges(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
         var hasChange = false
         // Deletion here means we don't have any readReceipts for the given hidden events
-        changeSet.deletions.forEach {
+        listUpdateCallbackAdapter.deletions.forEach {
             val eventId = correctedReadReceiptsEventByIndex.get(it, "")
             val timelineEvent = filteredEvents.where()
                     .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)

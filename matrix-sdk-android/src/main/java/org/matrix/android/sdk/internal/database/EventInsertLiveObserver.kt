@@ -39,7 +39,7 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                                                            private val cryptoService: CryptoService)
     : RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
-    override val query = Monarchy.Query<EventInsertEntity> {
+    override val query = Monarchy.Query {
         it.where(EventInsertEntity::class.java)
     }
 
