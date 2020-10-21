@@ -2,8 +2,8 @@ Element on uut tüüpi suhtlus- ja koostöörakendus, mis:
 
 1. Võimaldab täielikku kontrolli privaatsuse üle
 2. Võimaldab suhelda kõigiga Matrixi võrgus ja isegi väljaspool seda, olles integreeritud selliste rakendustega nagu Slack
-3. Kaitseb teid reklaamide ja andmekogumise eest
-4. Tagab turvalisuse otsast-lõpuni krüpteerimise kaudu, ristallkirjastamisega vestlejate tuvastamiseks
+3. Kaitseb sind reklaamide ja andmekogumise eest
+4. Tagab turvalisuse läbiva krüptimise abil, kasutades risttunnustamist vestlejate tuvastamiseks
 
 Element erineb täielikult teistest sõnumside- ja koostöörakendustest, kuna see on detsentraliseeritud ja avatud lähtekoodiga.
 
@@ -11,20 +11,20 @@ Element võimaldab ise hostida - või valida hosti -, et oleks tagatud privaatsu
 
 Element töötab Matrixil - avatud, detsentraliseeritud suhtlus-standardil.
 
-Element annab kontrolli teile, võimaldades valida, kes vestlusi korraldab. Rakenduses Element saate vestluse korraldada mitmel viisil.
+Võimaldades valida, kes vestlusi korraldab, annab Element annab kontrolli sinule. Rakendust Element saad kasutada mitmel viisil.
 
-1. Tasuta konto Matrixi arendajate hostitud avalikus serveris matrix.org või valige tuhandete avalike serverite hulgast, mida võõrustavad vabatahtlikud
-2. Hostige oma kontot ise, paigaldades serveri oma riistvarale
-3. Registreeruge serveris olevale kontole, tellides Element Matrix Services hostimisplatvormi
+1. Tasuta konto Matrixi arendajate hostitud avalikus serveris matrix.org või vali tuhandete avalike serverite hulgast, mida haldavad vabatahtlikud
+2. Hosti oma kontot ise, paigaldades serveri oma riistvarale
+3. Registreeruge serveris olevale kontole, tellides Element Matrix Services teenuseplatvormi
 
 <b> Miks valida element? </b>
 
-<b> KONTROLL ANDMETE ÜLE</b>: otsustate ise, kus oma andmeid ja sõnumeid hoida. Need kuuluvad teile ja teie käes on kontroll, mitte mõne MEGAFIRMA käes, mis andmeid oma kasuks kaevandab või kolmandatele isikutele juurdepääsu annab.
+<b> KONTROLL ANDMETE ÜLE</b>: otsustad ise, kus oma andmeid ja sõnumeid hoida. Need kuuluvad sulle ja sinu käes on kontroll, mitte mõne MEGAFIRMA käes, mis andmeid oma kasuks kaevandab või kolmandatele isikutele juurdepääsu annab.
 
-<b> AVATUD SUHTLUS JA KOOSTÖÖ </b>: saate vestelda kõigi teistega Matrixi võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust, ja isegi kui nad kasutavad teistsugust suhtlussüsteemi nagu Slack, IRC või XMPP.
+<b> AVATUD SUHTLUS JA KOOSTÖÖ </b>: saad vestelda kõigi teistega Matrixi võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust, ja isegi kui nad kasutavad teistsugust suhtlussüsteemi nagu Slack, IRC või XMPP.
 
-<b> ÜLITURVALINE </b>: tõeline otsast-lõpuni krüptimine (ainult vestluses osalejad saavad sõnumeid dešifreerida) ja ristallkirjastamine vestluses osalejate tuvastamiseks.
+<b> ÜLITURVALINE </b>: tõeline läbiv krüptimine (ainult vestluses osalejad saavad sõnumeid lugeda) ja risttunnustamine vestluses osalejate tuvastamiseks.
 
-<b> KÕIK SUHTLUSVÕIMALUSED</b>: sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk integreerimisi, botte ja vidinaid. Looge tubasid, kogukondi, hoidke ühendust ja saage asjad aetud.
+<b> KÕIK SUHTLUSVÕIMALUSED</b>: sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk lõiminguid, roboteid ja vidinaid. Loo tubasid, kogukondi, hoia ühendust ja saa asjad aetud.
 
-<b> KÕIKJAL, KUS VIIBITE</b>: saate suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.
+<b> KÕIKJAL, KUS VIIBITE</b>: saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.
