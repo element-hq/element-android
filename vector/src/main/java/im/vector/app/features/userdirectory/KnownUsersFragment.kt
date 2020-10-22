@@ -39,24 +39,23 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.core.utils.isValidUrl
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
-import java.net.URL
 import kotlinx.android.synthetic.main.fragment_known_users.*
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.Session
-import java.util.Locale
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import javax.inject.Inject
 
 class KnownUsersFragment @Inject constructor(
         val userDirectoryViewModelFactory: UserDirectoryViewModel.Factory,
         private val knownUsersController: KnownUsersController,
         private val dimensionConverter: DimensionConverter,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory,
-        val session: Session
+        private val session: Session,
+        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
     private val args: KnownUsersFragmentArgs by args()
@@ -124,33 +123,30 @@ class KnownUsersFragment @Inject constructor(
         val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
                 val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
+                val mxid = (PermalinkParser.parse(result) as? PermalinkData.UserLink)?.userId
 
-                // Latter condition to be replaced by URL(result).protocol == "matrix" when MSC2312 is complete
-                if (result.isValidUrl() && URL(result).host == "matrix.to") {
-                    // Remove query string parameters and initial slash from URL().ref to get MXID
-                    val mxid = URL(result).ref.split("?")[0].drop(1)
-
+                if (mxid === null) {
+                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                } else {
                     val existingDm = session.getExistingDirectRoomWithUser(mxid)
 
-                    if (existingDm == null) {
-                        // The following assumes MXIDs are case insensitive. Change if needed
-                        if (mxid.toLowerCase(Locale.getDefault()) != session.myUserId.toLowerCase(Locale.getDefault())) {
+                    if (existingDm === null) {
+                        // The following assumes MXIDs are case insensitive
+                        if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                            Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                        } else {
                             // Try to get user from known users and fall back to creating a User object from MXID
                             val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
                             createDirectRoomViewModel.handle(
                                     CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
                             )
-                        } else {
-                            Toast.makeText(requireContext(), R.string.dm_self, Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
                         Toast.makeText(requireContext(), R.string.dm_already_exists, Toast.LENGTH_SHORT).show()
                         requireActivity().finish()
                     }
-                } else {
-                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(requireContext(), R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
