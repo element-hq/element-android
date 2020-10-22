@@ -66,6 +66,7 @@ internal abstract class IdentityModule {
                     .apply {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
+                    .allowWritesOnUiThread(true)
                     .modules(IdentityRealmModule())
                     .build()
         }
