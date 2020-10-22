@@ -39,6 +39,9 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
@@ -151,8 +154,17 @@ class KnownUsersFragment @Inject constructor(
                 Toast.makeText(requireContext(), R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
             }
         }
+        val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+            if (allGranted) {
+                QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
+            } else {
+                Toast.makeText(requireContext(), R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
+            }
+        }
         addByQrCode.debouncedClicks {
-            QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+                QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
+            }
         }
     }
 
