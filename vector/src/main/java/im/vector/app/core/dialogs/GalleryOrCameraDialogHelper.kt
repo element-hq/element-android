@@ -43,7 +43,7 @@ class GalleryOrCameraDialogHelper(
 
     private val activity by lazy { fragment.requireActivity() }
 
-    private val listener: Listener = fragment as? Listener ?: error("Fragment must implements GalleryOrCameraDialogHelper.Listener")
+    private val listener: Listener = fragment as? Listener ?: error("Fragment must implement GalleryOrCameraDialogHelper.Listener")
 
     private val takePhotoPermissionActivityResultLauncher = fragment.registerForPermissionsResult { allGranted ->
         if (allGranted) {
@@ -55,7 +55,7 @@ class GalleryOrCameraDialogHelper(
         if (activityResult.resultCode == Activity.RESULT_OK) {
             avatarCameraUri?.let { uri ->
                 MultiPicker.get(MultiPicker.CAMERA)
-                        .getTakenPhoto(fragment.requireContext(), uri)
+                        .getTakenPhoto(activity, uri)
                         ?.let { startUCrop(it) }
             }
         }
@@ -65,20 +65,10 @@ class GalleryOrCameraDialogHelper(
         if (activityResult.resultCode == Activity.RESULT_OK) {
             MultiPicker
                     .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(fragment.requireContext(), activityResult.data)
+                    .getSelectedFiles(activity, activityResult.data)
                     .firstOrNull()
                     ?.let { startUCrop(it) }
         }
-    }
-
-    private fun startUCrop(image: MultiPickerImageType) {
-        val context = fragment.requireContext()
-        val destinationFile = File(context.cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), image.displayName)
-                .withAspectRatio(1f, 1f)
-                .getIntent(context)
-                .let { uCropActivityResultLauncher.launch(it) }
     }
 
     private val uCropActivityResultLauncher = fragment.registerStartForActivityResult { activityResult ->
@@ -87,13 +77,22 @@ class GalleryOrCameraDialogHelper(
         }
     }
 
+    private fun startUCrop(image: MultiPickerImageType) {
+        val destinationFile = File(activity.cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), image.displayName)
+                .withAspectRatio(1f, 1f)
+                .getIntent(activity)
+                .let { uCropActivityResultLauncher.launch(it) }
+    }
+
     private enum class Type {
         Gallery,
         Camera
     }
 
     fun show() {
-        AlertDialog.Builder(fragment.requireContext())
+        AlertDialog.Builder(activity)
                 .setItems(arrayOf(
                         fragment.getString(R.string.attachment_type_camera),
                         fragment.getString(R.string.attachment_type_gallery)
@@ -110,7 +109,7 @@ class GalleryOrCameraDialogHelper(
                 MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
             Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
-                    avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(fragment.requireContext(), takePhotoActivityResultLauncher)
+                    avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(activity, takePhotoActivityResultLauncher)
                 }
         }
     }
