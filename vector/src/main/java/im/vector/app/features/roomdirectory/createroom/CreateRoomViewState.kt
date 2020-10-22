@@ -16,12 +16,15 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 
 data class CreateRoomViewState(
+        val avatarUri: Uri? = null,
         val roomName: String = "",
+        val roomTopic: String = "",
         val isPublic: Boolean = false,
         val isInRoomDirectory: Boolean = false,
         val isEncrypted: Boolean = false,

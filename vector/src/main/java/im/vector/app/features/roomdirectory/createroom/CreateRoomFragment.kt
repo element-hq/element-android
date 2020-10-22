@@ -16,30 +16,43 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
+import androidx.core.net.toUri
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.yalantis.ucrop.UCrop
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.lib.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
-class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(
+        private val createRoomController: CreateRoomController
+) : VectorBaseFragment(),
+        CreateRoomController.Listener,
+        GalleryOrCameraDialogHelper.Listener,
+        OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_create_room
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
 
-    override fun getMenuRes() = R.menu.vector_room_creation
+    override fun getLayoutResId() = R.layout.fragment_create_room
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,24 +70,46 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_create_room -> {
-                viewModel.handle(CreateRoomAction.Create)
-                true
-            }
-            else                    ->
-                super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun setupRecyclerView() {
         createRoomForm.configureWith(createRoomController)
         createRoomController.listener = this
     }
 
+    override fun onAvatarDelete() {
+        viewModel.handle(CreateRoomAction.SetAvatar(null))
+    }
+
+    override fun onAvatarChange() {
+        galleryOrCameraDialogHelper.show()
+    }
+
+    override fun onImageReady(image: MultiPickerImageType) {
+        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+                .withAspectRatio(1f, 1f)
+                .start(requireContext(), this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // TODO handle this one (Ucrop lib)
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                UCrop.REQUEST_CROP ->
+                    viewModel.handle(CreateRoomAction.SetAvatar(data?.let { UCrop.getOutput(it) }))
+            }
+        }
+    }
+
     override fun onNameChange(newName: String) {
         viewModel.handle(CreateRoomAction.SetName(newName))
+    }
+
+    override fun onTopicChange(newTopic: String) {
+        viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
     override fun setIsPublic(isPublic: Boolean) {
@@ -89,9 +124,18 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
     }
 
+    override fun submit() {
+        viewModel.handle(CreateRoomAction.Create)
+    }
+
     override fun retry() {
         Timber.v("Retry")
         viewModel.handle(CreateRoomAction.Create)
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        viewModel.handle(CreateRoomAction.Reset)
+        return false
     }
 
     override fun invalidate() = withState(viewModel) { state ->
