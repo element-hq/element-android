@@ -144,7 +144,6 @@ class KnownUsersFragment @Inject constructor(
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
-                        Toast.makeText(requireContext(), R.string.dm_already_exists, Toast.LENGTH_SHORT).show()
                         requireActivity().finish()
                     }
                 }
