@@ -187,7 +187,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
         val uri = currentAttachment.queryUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), currentAttachment.name)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
                 .start(requireContext(), this)
     }
 

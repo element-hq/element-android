@@ -48,6 +48,7 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
@@ -70,8 +71,11 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class VectorSettingsGeneralFragment :
+class VectorSettingsGeneralFragment @Inject constructor(
+        private val colorProvider: ColorProvider
+):
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
 
@@ -311,7 +315,7 @@ class VectorSettingsGeneralFragment :
     override fun onImageReady(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), image.displayName)
                 .withAspectRatio(1f, 1f)
                 .start(requireContext(), this)
     }

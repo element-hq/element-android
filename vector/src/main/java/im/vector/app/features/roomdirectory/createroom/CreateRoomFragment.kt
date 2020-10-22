@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -41,7 +42,8 @@ import java.io.File
 import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(
-        private val createRoomController: CreateRoomController
+        private val createRoomController: CreateRoomController,
+        private val colorProvider: ColorProvider
 ) : VectorBaseFragment(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
@@ -86,7 +88,7 @@ class CreateRoomFragment @Inject constructor(
     override fun onImageReady(image: MultiPickerImageType) {
         val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
         val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), image.displayName)
                 .withAspectRatio(1f, 1f)
                 .start(requireContext(), this)
     }
