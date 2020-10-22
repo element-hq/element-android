@@ -234,7 +234,10 @@ internal class DefaultKeysBackupService @Inject constructor(
                     this.callback = object : MatrixCallback<KeysVersion> {
                         override fun onSuccess(data: KeysVersion) {
                             // Reset backup markers.
-                            cryptoStore.resetBackupMarkers()
+                            cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                                // move tx out of UI thread
+                                cryptoStore.resetBackupMarkers()
+                            }
 
                             val keyBackupVersion = KeysVersionResult(
                                     algorithm = createKeysBackupVersionBody.algorithm,
@@ -596,7 +599,9 @@ internal class DefaultKeysBackupService @Inject constructor(
                     val importResult = awaitCallback<ImportRoomKeysResult> {
                         restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
                     }
-                    cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
+                    withContext(coroutineDispatchers.crypto) {
+                        cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
+                    }
                     Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
                 } else {
                     Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
@@ -1123,7 +1128,9 @@ internal class DefaultKeysBackupService @Inject constructor(
 
             if (retrievedMegolmBackupAuthData != null) {
                 keysBackupVersion = keysVersionResult
-                cryptoStore.setKeyBackupVersion(keysVersionResult.version)
+                cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                    cryptoStore.setKeyBackupVersion(keysVersionResult.version)
+                }
 
                 onServerDataRetrieved(keysVersionResult.count, keysVersionResult.hash)
 

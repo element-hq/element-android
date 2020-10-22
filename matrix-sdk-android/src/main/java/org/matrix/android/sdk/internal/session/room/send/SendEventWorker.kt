@@ -87,7 +87,7 @@ internal class SendEventWorker(context: Context,
 
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
         return try {
-            sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId), cryptoService))
+            sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId)))
             Result.success()
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {

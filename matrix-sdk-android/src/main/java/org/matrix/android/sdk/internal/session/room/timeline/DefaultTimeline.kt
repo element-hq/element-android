@@ -630,7 +630,7 @@ internal class DefaultTimeline(
 
             if (timelineEvent.isEncrypted()
                     && timelineEvent.root.mxDecryptionResult == null) {
-                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(it, timelineID)) }
+                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineID)) }
             }
 
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size

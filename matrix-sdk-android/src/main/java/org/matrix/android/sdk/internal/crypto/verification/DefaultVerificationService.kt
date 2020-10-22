@@ -20,7 +20,6 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -110,9 +109,6 @@ internal class DefaultVerificationService @Inject constructor(
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
-
-    // Cannot be injected in constructor as it creates a dependency cycle
-    lateinit var cryptoService: CryptoService
 
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
@@ -1203,7 +1199,9 @@ internal class DefaultVerificationService @Inject constructor(
         // TODO refactor this with the DM one
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
-        val targetDevices = otherDevices ?: cryptoService.getUserDevices(otherUserId).map { it.deviceId }
+        val targetDevices = otherDevices ?: cryptoStore.getUserDevices(otherUserId)
+                ?.values?.map { it.deviceId } ?: emptyList()
+
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
         val transport = verificationTransportToDeviceFactory.createTransport(null)

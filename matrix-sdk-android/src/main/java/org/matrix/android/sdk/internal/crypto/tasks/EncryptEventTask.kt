@@ -33,14 +33,13 @@ internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
     data class Params(val roomId: String,
                       val event: Event,
                       /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
-                      val keepKeys: List<String>? = null,
-                      val crypto: CryptoService
+                      val keepKeys: List<String>? = null
     )
 }
 
 internal class DefaultEncryptEventTask @Inject constructor(
-//        private val crypto: CryptoService
-        private val localEchoRepository: LocalEchoRepository
+        private val localEchoRepository: LocalEchoRepository,
+        private val cryptoService: CryptoService
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         // don't want to wait for any query
@@ -60,7 +59,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
 //        try {
         // let it throws
         awaitCallback<MXEncryptEventContentResult> {
-            params.crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
+            cryptoService.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
         }.let { result ->
             val modifiedContent = HashMap(result.eventContent)
             params.keepKeys?.forEach { toKeep ->
@@ -81,7 +80,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
                         ).toContent(),
                         forwardingCurve25519KeyChain = emptyList(),
                         senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                        claimedEd25519Key = params.crypto.getMyDevice().fingerprint()
+                        claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
                 )
             } else {
                 null

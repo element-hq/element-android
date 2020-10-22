@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
-import org.matrix.android.sdk.internal.crypto.crosssigning.ShieldTrustUpdater
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -332,10 +331,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindWidgetUrlFormatter(formatter: DefaultWidgetURLFormatter): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindShieldTrustUpdated(updater: ShieldTrustUpdater): SessionLifecycleObserver
 
     @Binds
     @IntoSet
