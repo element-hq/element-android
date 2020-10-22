@@ -19,20 +19,26 @@ package im.vector.app.core.dialogs
 import android.app.Activity
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
+import java.io.File
 
 class GalleryOrCameraDialogHelper(
-        private val fragment: Fragment
+        private val fragment: Fragment,
+        private val colorProvider: ColorProvider
 ) {
     interface Listener {
-        fun onImageReady(image: MultiPickerImageType)
+        fun onImageReady(uri: Uri?)
     }
 
     private val activity by lazy { fragment.requireActivity() }
@@ -50,7 +56,7 @@ class GalleryOrCameraDialogHelper(
             avatarCameraUri?.let { uri ->
                 MultiPicker.get(MultiPicker.CAMERA)
                         .getTakenPhoto(fragment.requireContext(), uri)
-                        ?.let { listener.onImageReady(it) }
+                        ?.let { startUCrop(it) }
             }
         }
     }
@@ -61,7 +67,23 @@ class GalleryOrCameraDialogHelper(
                     .get(MultiPicker.IMAGE)
                     .getSelectedFiles(fragment.requireContext(), activityResult.data)
                     .firstOrNull()
-                    ?.let { listener.onImageReady(it) }
+                    ?.let { startUCrop(it) }
+        }
+    }
+
+    private fun startUCrop(image: MultiPickerImageType) {
+        val context = fragment.requireContext()
+        val destinationFile = File(context.cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
+        val uri = image.contentUri
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), image.displayName)
+                .withAspectRatio(1f, 1f)
+                .getIntent(context)
+                .let { uCropActivityResultLauncher.launch(it) }
+    }
+
+    private val uCropActivityResultLauncher = fragment.registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            activityResult.data?.let { listener.onImageReady(UCrop.getOutput(it)) }
         }
     }
 
