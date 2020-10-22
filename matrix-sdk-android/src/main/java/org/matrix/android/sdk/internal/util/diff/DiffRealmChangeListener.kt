@@ -16,31 +16,32 @@
 
 package org.matrix.android.sdk.internal.util.diff
 
+import android.os.Handler
 import androidx.recyclerview.widget.DiffUtil
 import io.realm.RealmChangeListener
 import io.realm.RealmObject
 import io.realm.RealmResults
 
 internal abstract class DiffRealmChangeListener<T : RealmObject>(
-        private var previousResults: List<T> = emptyList(),
+        private var previousResults: List<T> = emptyList()
 ) : RealmChangeListener<RealmResults<T>> {
 
     override fun onChange(results: RealmResults<T>) {
         if (!results.isLoaded || !results.isValid) {
             return
         }
-        val snapshotResults = results.createSnapshot()
+        val snapshotResults = results.freeze()
         val diffCallback = SimpleDiffUtilCallback<T>(previousResults, snapshotResults) { old, new ->
             areSameItems(old, new)
         }
         previousResults = snapshotResults
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        val diffResult = DiffUtil.calculateDiff(diffCallback, false)
         val listUpdateCallbackAdapter = ListUpdateCallbackAdapter()
         diffResult.dispatchUpdatesTo(listUpdateCallbackAdapter)
-        handleResults(listUpdateCallbackAdapter)
+        handleDiffResults(listUpdateCallbackAdapter)
     }
 
     abstract fun areSameItems(old: T?, new: T?): Boolean
 
-    abstract fun handleResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter)
+    internal abstract fun handleDiffResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter)
 }

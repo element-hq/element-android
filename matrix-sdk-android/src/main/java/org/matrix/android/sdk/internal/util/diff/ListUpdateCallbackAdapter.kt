@@ -25,8 +25,11 @@ import androidx.recyclerview.widget.ListUpdateCallback
 internal class ListUpdateCallbackAdapter : ListUpdateCallback {
 
     var insertions: IntArray = IntArray(0)
+        private set
     var deletions: IntArray = IntArray(0)
+        private set
     var changes: IntArray = IntArray(0)
+        private set
 
     override fun onInserted(position: Int, count: Int) {
         insertions = (position until position + count).toList().toIntArray()
@@ -42,5 +45,9 @@ internal class ListUpdateCallbackAdapter : ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {
         changes = (position until position + count).toList().toIntArray()
+    }
+
+    override fun toString(): String {
+        return "ListUpdateCallbackAdapter(insertions=${insertions.size}, deletions=${deletions.size}, changes=${changes.size})"
     }
 }

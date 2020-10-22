@@ -32,5 +32,23 @@ internal open class ReadReceiptsSummaryEntity(
     @LinkingObjects("readReceipts")
     val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ReadReceiptsSummaryEntity) return false
+
+        if (eventId != other.eventId) return false
+        if (roomId != other.roomId) return false
+        if (readReceipts != other.readReceipts) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = eventId.hashCode()
+        result = 31 * result + roomId.hashCode()
+        result = 31 * result + readReceipts.hashCode()
+        return result
+    }
+
     companion object
 }

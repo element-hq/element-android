@@ -37,5 +37,29 @@ internal open class TimelineEventEntity(var localId: Long = 0,
     @LinkingObjects("timelineEvents")
     val chunk: RealmResults<ChunkEntity>? = null
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TimelineEventEntity) return false
+        if (localId != other.localId) return false
+        if (eventId != other.eventId) return false
+        if (displayIndex != other.displayIndex) return false
+        if (root != other.root) return false
+        if (annotations != other.annotations) return false
+        if (readReceipts != other.readReceipts) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = localId.hashCode()
+        result = 31 * result + eventId.hashCode()
+        result = 31 * result + displayIndex
+        result = 31 * result + (root?.hashCode() ?: 0)
+        result = 31 * result + (annotations?.hashCode() ?: 0)
+        result = 31 * result + (readReceipts?.hashCode() ?: 0)
+        return result
+    }
+
     companion object
+
 }

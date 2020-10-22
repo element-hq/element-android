@@ -65,4 +65,33 @@ internal open class EventEntity(@Index var eventId: String = "",
         decryptionErrorCode = null
         decryptionErrorReason = null
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EventEntity) return false
+        if (eventId != other.eventId) return false
+        if (content != other.content) return false
+        if (prevContent != other.prevContent) return false
+        if (unsignedData != other.unsignedData) return false
+        if (redacts != other.redacts) return false
+        if (decryptionResultJson != other.decryptionResultJson) return false
+        if (decryptionErrorCode != other.decryptionErrorCode) return false
+        if (decryptionErrorReason != other.decryptionErrorReason) return false
+        if (sendStateStr != other.sendStateStr) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = eventId.hashCode()
+        result = 31 * result + (content?.hashCode() ?: 0)
+        result = 31 * result + (prevContent?.hashCode() ?: 0)
+        result = 31 * result + (unsignedData?.hashCode() ?: 0)
+        result = 31 * result + (redacts?.hashCode() ?: 0)
+        result = 31 * result + (decryptionResultJson?.hashCode() ?: 0)
+        result = 31 * result + (decryptionErrorCode?.hashCode() ?: 0)
+        result = 31 * result + (decryptionErrorReason?.hashCode() ?: 0)
+        result = 31 * result + sendStateStr.hashCode()
+        return result
+    }
 }

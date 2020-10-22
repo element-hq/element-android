@@ -54,16 +54,6 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
     private lateinit var delegate: Delegate
 
-    private val hiddenReadReceiptsListener = object : DiffRealmChangeListener<ReadReceiptsSummaryEntity>(emptyList()) {
-        override fun areSameItems(old: ReadReceiptsSummaryEntity?, new: ReadReceiptsSummaryEntity?): Boolean {
-            return old?.eventId == new?.eventId
-        }
-
-        override fun handleResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
-            handleChanges(listUpdateCallbackAdapter)
-        }
-    }
-
     private fun handleChanges(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
         var hasChange = false
         // Deletion here means we don't have any readReceipts for the given hidden events
@@ -133,7 +123,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
                 .isNotEmpty(ReadReceiptsSummaryEntityFields.READ_RECEIPTS.`$`)
                 .filterReceiptsWithSettings()
                 .findAllAsync()
-                .also { it.addChangeListener(hiddenReadReceiptsListener) }
+                .also { it.addChangeListener(createChangeListener()) }
     }
 
     /**
@@ -150,6 +140,16 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
      */
     fun correctedReadReceipts(eventId: String?): List<ReadReceipt>? {
         return correctedReadReceiptsByEvent[eventId]
+    }
+
+    private fun createChangeListener() = object : DiffRealmChangeListener<ReadReceiptsSummaryEntity>(emptyList()) {
+        override fun areSameItems(old: ReadReceiptsSummaryEntity?, new: ReadReceiptsSummaryEntity?): Boolean {
+            return old?.eventId == new?.eventId
+        }
+
+        override fun handleDiffResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
+            handleChanges(listUpdateCallbackAdapter)
+        }
     }
 
     /**

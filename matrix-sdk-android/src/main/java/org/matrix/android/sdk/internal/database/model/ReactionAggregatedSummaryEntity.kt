@@ -37,5 +37,22 @@ internal open class ReactionAggregatedSummaryEntity(
         var sourceLocalEcho: RealmList<String> = RealmList()
 ) : RealmObject() {
 
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ReactionAggregatedSummaryEntity) return false
+        if (key != other.key) return false
+        if (count != other.count) return false
+        if (addedByMe != other.addedByMe) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = key.hashCode()
+        result = 31 * result + count
+        result = 31 * result + addedByMe.hashCode()
+        return result
+    }
+
     companion object
 }

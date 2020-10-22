@@ -29,5 +29,26 @@ internal open class EventAnnotationsSummaryEntity(
         var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
 ) : RealmObject() {
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EventAnnotationsSummaryEntity) return false
+        if (eventId != other.eventId) return false
+        if (reactionsSummary != other.reactionsSummary) return false
+        if (editSummary != other.editSummary) return false
+        if (referencesSummaryEntity != other.referencesSummaryEntity) return false
+        if (pollResponseSummary != other.pollResponseSummary) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = eventId.hashCode()
+        result = 31 * result + reactionsSummary.hashCode()
+        result = 31 * result + (editSummary?.hashCode() ?: 0)
+        result = 31 * result + (referencesSummaryEntity?.hashCode() ?: 0)
+        result = 31 * result + (pollResponseSummary?.hashCode() ?: 0)
+        return result
+    }
+
     companion object
 }

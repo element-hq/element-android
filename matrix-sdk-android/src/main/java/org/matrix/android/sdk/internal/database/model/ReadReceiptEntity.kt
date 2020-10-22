@@ -31,4 +31,18 @@ internal open class ReadReceiptEntity(@PrimaryKey var primaryKey: String = "",
 
     @LinkingObjects("readReceipts")
     val summary: RealmResults<ReadReceiptsSummaryEntity>? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ReadReceiptEntity) return false
+        if (primaryKey != other.primaryKey) return false
+        if (originServerTs != other.originServerTs) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = primaryKey.hashCode()
+        result = 31 * result + originServerTs.hashCode()
+        return result
+    }
 }

@@ -27,5 +27,19 @@ internal open class ReferencesAggregatedSummaryEntity(
         var sourceLocalEcho: RealmList<String> = RealmList()
 ) : RealmObject() {
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ReferencesAggregatedSummaryEntity) return false
+        if (eventId != other.eventId) return false
+        if (content != other.content) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = eventId.hashCode()
+        result = 31 * result + (content?.hashCode() ?: 0)
+        return result
+    }
+
     companion object
 }

@@ -29,5 +29,16 @@ internal open class EditAggregatedSummaryEntity(
         var lastEditTs: Long = 0
 ) : RealmObject() {
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EditAggregatedSummaryEntity) return false
+        if (aggregatedContent != other.aggregatedContent) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return aggregatedContent?.hashCode() ?: 0
+    }
+
     companion object
 }

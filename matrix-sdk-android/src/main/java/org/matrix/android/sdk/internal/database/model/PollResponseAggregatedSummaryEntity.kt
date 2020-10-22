@@ -36,5 +36,21 @@ internal open class PollResponseAggregatedSummaryEntity(
         var sourceLocalEchoEvents: RealmList<String> = RealmList()
 ) : RealmObject() {
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PollResponseAggregatedSummaryEntity) return false
+        if (aggregatedContent != other.aggregatedContent) return false
+        if (closedTime != other.closedTime) return false
+        if (nbOptions != other.nbOptions) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = aggregatedContent?.hashCode() ?: 0
+        result = 31 * result + (closedTime?.hashCode() ?: 0)
+        result = 31 * result + nbOptions
+        return result
+    }
+
     companion object
 }

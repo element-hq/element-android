@@ -88,14 +88,12 @@ internal class DefaultTimeline(
     data class OnLocalEchoCreated(val roomId: String, val timelineEvent: TimelineEvent)
     data class OnLocalEchoUpdated(val roomId: String, val eventId: String, val sendState: SendState)
 
-    companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
-    }
 
     private val listeners = CopyOnWriteArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
+    private val backgroundHandler = createBackgroundHandler("TIMELINE_DB_THREAD")
     private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
     private val debouncer = Debouncer(mainHandler)
@@ -122,11 +120,11 @@ internal class DefaultTimeline(
     // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        BACKGROUND_HANDLER.post {
+        backgroundHandler.post {
             if (!canPaginate(direction)) {
                 return@post
             }
-            Timber.v("Paginate $direction of $count items")
+            Timber.v("Paginate $direction of $count items for room $roomId")
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
             val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, count)
             if (shouldPostSnapshot) {
@@ -151,7 +149,7 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
             eventBus.register(this)
-            BACKGROUND_HANDLER.post {
+            backgroundHandler.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -168,7 +166,7 @@ internal class DefaultTimeline(
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
                         .findAll()
-                val changeListener = createChangeListener(nonFilteredEvents.createSnapshot())
+                val changeListener = createChangeListener(nonFilteredEvents.freeze())
                 nonFilteredEvents.addChangeListener(changeListener)
                 handleInitialLoad()
                 if (settings.shouldHandleHiddenReadReceipts()) {
@@ -189,7 +187,7 @@ internal class DefaultTimeline(
             eventBus.unregister(this)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            BACKGROUND_HANDLER.post {
+            backgroundHandler.post {
                 if (this::sendingEvents.isInitialized) {
                     sendingEvents.removeAllChangeListeners()
                 }
@@ -332,7 +330,8 @@ internal class DefaultTimeline(
             return old?.localId == new?.localId
         }
 
-        override fun handleResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
+        override fun handleDiffResults(listUpdateCallbackAdapter: ListUpdateCallbackAdapter) {
+            Timber.v("Diff results for room $roomId: $listUpdateCallbackAdapter")
             handleTimelineEventListUpdates(listUpdateCallbackAdapter)
         }
     }
@@ -504,9 +503,7 @@ internal class DefaultTimeline(
                 postSnapshot = true
             }
         }
-        // This is far from perfect as we are rebuilding every built events. Need to improve.
-        builtEventsIdMap.forEach {
-            val index = it.value
+        updateCallbackAdapter.changes.forEach { index ->
             val eventEntity = nonFilteredEvents[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
@@ -561,7 +558,7 @@ internal class DefaultTimeline(
                     direction = direction.toPaginationDirection(),
                     limit = limit
             )
-            Timber.v("Should fetch $limit items $direction")
+            Timber.v("Should fetch $limit items $direction for room $roomId")
             cancelableBag += paginationTask
                     .configureWith(params) {
                         this.callback = createPaginationCallback(limit, direction)
@@ -647,7 +644,7 @@ internal class DefaultTimeline(
             builtEventsIdMap[eventEntity.eventId] = position
         }
         val time = System.currentTimeMillis() - start
-        Timber.v("Built ${offsetResults.size} items from db in $time ms")
+        Timber.v("Built ${offsetResults.size} items from db for room $roomId: in $time ms")
         // For the case where wo reach the lastForward chunk
         updateLoadingStates(filteredEvents)
         return offsetResults.size
@@ -712,7 +709,7 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        BACKGROUND_HANDLER.post {
+        backgroundHandler.post {
             if (isReady.get().not()) {
                 return@post
             }
@@ -753,14 +750,14 @@ internal class DefaultTimeline(
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
                     TokenChunkEventPersistor.Result.SUCCESS -> {
-                        Timber.v("Success fetching $limit items $direction from pagination request")
+                        Timber.v("Success fetching $limit items $direction from pagination request for room $roomId")
                     }
                     TokenChunkEventPersistor.Result.REACHED_END -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
                         // Database won't be updated, so we force pagination request
-                        BACKGROUND_HANDLER.post {
+                        backgroundHandler.post {
                             executePaginationTask(direction, limit)
                         }
                 }
@@ -769,7 +766,7 @@ internal class DefaultTimeline(
             override fun onFailure(failure: Throwable) {
                 updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
                 postSnapshot()
-                Timber.v("Failure fetching $limit items $direction from pagination request")
+                Timber.v("Failure fetching $limit items $direction from pagination request for room $roomId")
             }
         }
     }
@@ -887,7 +884,7 @@ internal class DefaultTimeline(
                     listeners.forEach {
                         it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
                     }
-                    Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId}")
+                    Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId} for room $roomId")
                     inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
                     postSnapshot = true
                 }
