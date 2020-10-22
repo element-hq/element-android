@@ -1842,4 +1842,80 @@
     <string name="room_participants_kick_prompt_msg">Изгонването на потребителя ще ги премахне от тази стая.
 \n
 \nАко искате да не могат да влязат пак, блокирайте ги вместо това.</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Събитието бе модерирано от администратор на стаята, причина: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">Събитието бе изтрито от потребител, причина: %1$s</string>
+    <string name="delete_event_dialog_reason_hint">Причина за редактиране</string>
+    <string name="delete_event_dialog_reason_checkbox">Укажете причина</string>
+    <string name="delete_event_dialog_content">Сигурни ли сте, че искате да премахнете (изтриете) това събитие\? Имайте предвид, че изтриването на събитие за промяна на името на стаята или темата й, може да премахне и самата промяна направена от събитието.</string>
+    <string name="delete_event_dialog_title">Потвърждаване на премахването</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Изпрати снимката с оригинален размер</item>
+        <item quantity="other">Изпрати снимките с оригинални размери</item>
+    </plurals>
+    <string name="share_confirm_room">Искате ли да изпратите този прикачен файл към %1$s\?</string>
+    <string name="message_action_item_redact">Премахни…</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Достъпвайте секретното складиране само от доверено устройство</string>
+    <string name="enter_secret_storage_passphrase_warning">Предупреждение:</string>
+    <string name="enter_secret_storage_passphrase">Въведете паролата за секретното складиране</string>
+    <string name="enter_secret_storage_invalid">Не могат да бъдат намерени тайни в секретното складиране</string>
+    <string name="new_signin">Нов вход</string>
+    <string name="verification_use_passphrase">Ако не можете да достъпите съществуваща сесия</string>
+    <string name="verification_cannot_access_other_session">Използвай парола или ключ за възстановяване</string>
+    <string name="command_description_poll">Създава проста анкета</string>
+    <string name="poll_item_selected_aria">Избрана опция</string>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d глас - Финални резултати</item>
+        <item quantity="other">%d гласа - Финални резултати</item>
+    </plurals>
+    <plurals name="poll_info">
+        <item quantity="one">%d глас</item>
+        <item quantity="other">%d гласа</item>
+    </plurals>
+    <string name="delete_account_data_warning">Изтриване на профилните данни от тип %1$s\?
+\n
+\nВнимавайте с това - може да доведе до неочаквано поведение.</string>
+    <string name="settings_account_data">Профилни данни</string>
+    <string name="settings_dev_tools">Инструменти на разработчика</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Включен е режим \"самолет\"</string>
+    <string name="no_connectivity_to_the_server_indicator">Връзката със сървъра беше изгубена</string>
+    <string name="qr_code_scanned_by_other_no">Не</string>
+    <string name="qr_code_scanned_by_other_yes">Да</string>
+    <string name="qr_code_scanned_by_other_notice">Почти е готово! Дали на %s се вижда същият щит\?</string>
+    <string name="a11y_qr_code_for_verification">QR код</string>
+    <string name="reset_cross_signing">Нулирай ключовете</string>
+    <string name="initialize_cross_signing">Инициализиране на кръстосаното-подписване</string>
+    <string name="verification_profile_device_untrust_info">Докато потребителят не се довери на тази сесия, съобщенията изпратени от и към нея ще бъдат маркирани с предупреждение. Освен това, може да я потвърдите и ръчно.</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) влезе използвайки нова сесия:</string>
+    <string name="verification_profile_device_verified_because">Тази сесия е доверена за сигурен обмен на съобщения, защото е била потвърдена от %1$s (%2$s):</string>
+    <string name="not_trusted">Не е доверено</string>
+    <string name="trusted">Доверено</string>
+    <string name="room_member_profile_sessions_section_title">Сесии</string>
+    <string name="room_member_profile_failed_to_get_devices">Неуспешно получаване на списъка със сесиите</string>
+    <string name="verification_profile_warning">Предупреждение</string>
+    <string name="verification_profile_verified">Потвърдено</string>
+    <string name="verification_profile_verify">Потвърди</string>
+    <string name="verification_open_other_to_verify">Използвайте съществуваща сесия за да потвърдите тази, давайки й достъп до шифрованите съобщения.</string>
+    <string name="complete_security">Завършете настройките за сигурност</string>
+    <string name="crosssigning_other_user_not_trust">Други може да не й се доверят</string>
+    <string name="crosssigning_verify_this_session">Потвърдете тази сесия</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d активна сесия</item>
+        <item quantity="other">%d активни сесии</item>
+    </plurals>
+    <string name="settings_active_sessions_unverified_device_desc">Потвърдете тази сесия за да я маркирате като доверена и да й дадете достъп до шифрованите съобщения. Ако не сте се вписвали в тази сесия, профила ви вероятно е бил компрометиран:</string>
+    <string name="settings_active_sessions_verified_device_desc">Тази сесия е доверена за сигурен обмен на съобщения, защото сте я потвърдили:</string>
+    <string name="settings_failed_to_get_crypto_device_info">Няма криптографска информация</string>
+    <string name="settings_active_sessions_signout_device">Излез от тази сесия</string>
+    <string name="settings_active_sessions_manage">Управление на сесиите</string>
+    <string name="settings_active_sessions_show_all">Покажи всички сесии</string>
+    <string name="settings_active_sessions_list">Активни сесии</string>
+    <string name="settings_hs_admin_e2e_disabled">Сървърният ви администратор по подразбиране е изключил шифроването от-край-до-край в частни стаи и директни съобщения.</string>
+    <string name="encryption_information_dg_xsigning_disabled">Кръстосаното-подписване не е включено</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Кръстосаното-подписване е включено.
+\nКлючовете не са доверени</string>
+    <string name="encryption_information_dg_xsigning_trusted">Кръстосаното-подписване е включено
+\nКлючовете са доверени.
+\nЧастните ключове са неизвестни.</string>
+    <string name="encryption_information_dg_xsigning_complete">Кръстосаното-подписване е включено.
+\nЧастните ключове са на устройството.</string>
 </resources>
