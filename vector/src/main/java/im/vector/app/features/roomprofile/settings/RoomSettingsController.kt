@@ -72,7 +72,8 @@ class RoomSettingsController @Inject constructor(
                 RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
                     avatarRenderer(avatarRenderer)
-                    matrixItem(roomSummary.toMatrixItem())
+                    // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
+                    matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
                 }
                 RoomSettingsViewState.AvatarAction.DeleteAvatar ->
                     imageUri(null)

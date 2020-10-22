@@ -63,7 +63,7 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.image)
         }
-        holder.delete.isVisible = imageUri != null || matrixItem?.avatarUrl != null
+        holder.delete.isVisible = enabled && (imageUri != null || matrixItem?.avatarUrl?.isNotEmpty() == true)
         holder.delete.onClick(deleteListener?.takeIf { enabled })
     }
 

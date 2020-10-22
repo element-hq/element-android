@@ -30,6 +30,7 @@ data class RoomSettingsViewState(
         val historyVisibilityEvent: Event? = null,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
+        val currentRoomAvatarUrl: String? = null,
         val avatarAction: AvatarAction = AvatarAction.None,
         val newName: String? = null,
         val newTopic: String? = null,
