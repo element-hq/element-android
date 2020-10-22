@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getFilenameFromUri
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
@@ -60,6 +61,7 @@ class RoomSettingsFragment @Inject constructor(
 ) :
         VectorBaseFragment(),
         RoomSettingsController.Callback,
+        OnBackPressed,
         GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
@@ -226,5 +228,26 @@ class RoomSettingsFragment @Inject constructor(
         }
     }
 
-    // TODO BMA Handle Back with unsaved data
+    private var ignoreChanges = false
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        if (ignoreChanges) return false
+
+        return withState(viewModel) {
+            return@withState if (it.showSaveAction) {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_title_warning)
+                        .setMessage(R.string.warning_unsaved_change)
+                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                            ignoreChanges = true
+                            vectorBaseActivity.onBackPressed()
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+                true
+            } else {
+                false
+            }
+        }
+    }
 }

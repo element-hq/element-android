@@ -2628,4 +2628,6 @@
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
+    <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
+    <string name="warning_unsaved_change_discard">Discard changes</string>
 </resources>
