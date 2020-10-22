@@ -1857,7 +1857,7 @@
 \n
 \nДля максимальной безопасности сделайте это лично.</string>
     <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.</string>
-    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.
+    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате шифруются сквозным шифрованием.
 \n
 \nВаши сообщения защищены замками, и только у вас и получателя есть уникальные ключи, чтобы разблокировать их.</string>
     <string name="room_profile_section_admin">Действия Администратора</string>
