@@ -29,12 +29,16 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_editable_avatar)
 abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
+    var avatarRenderer: AvatarRenderer? = null
+
+    @EpoxyAttribute
+    var matrixItem: MatrixItem? = null
 
     @EpoxyAttribute
     var enabled: Boolean = true
@@ -51,11 +55,15 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.imageContainer.onClick(clickListener?.takeIf { enabled })
-        GlideApp.with(holder.image)
-                .load(imageUri)
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.image)
-        holder.delete.isVisible = imageUri != null
+        if (matrixItem != null) {
+            avatarRenderer?.render(matrixItem!!, holder.image)
+        } else {
+            GlideApp.with(holder.image)
+                    .load(imageUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.image)
+        }
+        holder.delete.isVisible = imageUri != null || matrixItem?.avatarUrl != null
         holder.delete.onClick(deleteListener?.takeIf { enabled })
     }
 

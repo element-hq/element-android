@@ -10,6 +10,7 @@ Improvements 🙌:
  - Add option to send with enter (#1195)
  - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
  - Edit and remove icons are now visible on image attachment preview screen (#2294)
+ - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
 
 Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)

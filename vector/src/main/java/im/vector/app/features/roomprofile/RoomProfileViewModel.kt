@@ -28,18 +28,15 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.ShortcutCreator
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.rx.RxRoom
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import java.util.UUID
 
 class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
@@ -65,33 +62,23 @@ class RoomProfileViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        observeRoomSummary()
+        val rxRoom = room.rx()
+        observeRoomSummary(rxRoom)
+        observeBannedRoomMembers(rxRoom)
     }
 
-    private fun observeRoomSummary() {
-        val rxRoom = room.rx()
+    private fun observeRoomSummary(rxRoom: RxRoom) {
         rxRoom.liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)
                 }
+    }
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
-
-        powerLevelsContentLive
-                .subscribe {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState {
-                        copy(canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR))
-                    }
-                }
-                .disposeOnClear()
-
+    private fun observeBannedRoomMembers(rxRoom: RxRoom) {
         rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
                 .execute {
-                    copy(
-                            bannedMembership = it
-                    )
+                    copy(bannedMembership = it)
                 }
     }
 
@@ -100,7 +87,6 @@ class RoomProfileViewModel @AssistedInject constructor(
             RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
-            is RoomProfileAction.ChangeRoomAvatar            -> handleChangeAvatar(action)
             RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
         }.exhaustive
     }
@@ -141,19 +127,5 @@ class RoomProfileViewModel @AssistedInject constructor(
                 ?.let { permalink ->
                     _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
                 }
-    }
-
-    private fun handleChangeAvatar(action: RoomProfileAction.ChangeRoomAvatar) {
-        _viewEvents.post(RoomProfileViewEvents.Loading())
-        room.rx().updateAvatar(action.uri, action.fileName ?: UUID.randomUUID().toString())
-                .subscribe(
-                        {
-                            _viewEvents.post(RoomProfileViewEvents.OnChangeAvatarSuccess)
-                        },
-                        {
-                            _viewEvents.post(RoomProfileViewEvents.Failure(it))
-                        }
-                )
-                .disposeOnClear()
     }
 }

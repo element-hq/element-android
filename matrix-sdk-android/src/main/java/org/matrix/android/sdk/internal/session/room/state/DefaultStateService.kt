@@ -140,4 +140,15 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             )
         }
     }
+
+    override fun deleteAvatar(callback: MatrixCallback<Unit>): Cancelable {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
+            sendStateEvent(
+                    eventType = EventType.STATE_ROOM_AVATAR,
+                    body = emptyMap(),
+                    callback = callback,
+                    stateKey = null
+            )
+        }
+    }
 }
