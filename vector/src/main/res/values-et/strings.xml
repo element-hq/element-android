@@ -570,7 +570,7 @@
     <string name="login_reset_password_success_notice_2">Sa oled kõikidest sessioonidest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse kõikides oma seadmetes.</string>
     <string name="login_reset_password_success_submit">Tagasi sisselogimise lehele</string>
     <string name="login_reset_password_cancel_confirmation_title">Hoiatus</string>
-    <string name="verification_request_start_notice">"Turvalisuse mõttes on oluline, et  teete seda nii, et olete kas isiklikult koos või kasutate mõnda suhtluskanalit, mida mõlemad usaldate."</string>
+    <string name="verification_request_start_notice">Turvalisuse mõttes on oluline, et teete seda nii, et olete kas isiklikult koos või kasutate mõnda suhtluskanalit, mida mõlemad usaldate.</string>
     <string name="verification_emoji_notice">Võrdle unikaalset emoji\'de kombinatsiooni ja vaata, et nad oleksid samas järjekorras.</string>
     <string name="verification_code_notice">Võrdle koodi sellega, mida kuvatakse teise kasutaja ekraanil.</string>
     <string name="verification_conclusion_ok_notice">Sõnumid selle kasutajaga on läbivalt krüptitud ning kolmandad osapooled ei saa neid lugeda.</string>
@@ -1272,9 +1272,8 @@
     <string name="settings_labs_enable_send_voice_summary">Selle valiku kasutamine eeldab kolmanda osapoole rakendust sõnumite salvestamiseks.</string>
     <string name="widget_integration_review_terms">Jätkamaks pead nõustuma kasutustingimustega.</string>
     <string name="you_added_a_new_device">Sa oled lisanud uue sessiooni \'%s\', mis soovib saada krüptimisvõtmeid.</string>
-    <string name="you_added_a_new_device_with_info">Uus sessioon soovib krüptovõtmeid.
-\nSessiooni nimi: %1$s 
-\nViimati nähtud: %2$s
+    <string name="you_added_a_new_device_with_info">Uus sessioon soovib krüptovõtmeid. Sessiooni nimi: %1$s 
+\nViimati nähtud: %2$s 
 \nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.</string>
     <string name="your_unverified_device_requesting">Sinu verifitseerimata sessioon \'%s\' soovib saada krüptimisvõtmeid.</string>
     <string name="your_unverified_device_requesting_with_info">Verifitseerimata sessioon soovib krüptovõtmeid.
@@ -1385,7 +1384,7 @@
     <string name="passphrase_passphrase_does_not_match">Paroolifraasid ei klappi mitte</string>
     <string name="passphrase_empty_error_message">Palun sisesta paroolifraas</string>
     <string name="passphrase_passphrase_too_weak">Paroolifraas on liiga nõrk</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">"Kui sa soovid, et Element looks taastevõtme, siis  palun kustuta paroolifraas."</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Kui sa soovid, et Element looks taastevõtme, siis palun kustuta paroolifraas.</string>
     <string name="keys_backup_no_session_error">Matrix\'i sessioone ei leidu</string>
     <string name="keys_backup_setup_step1_title">Ära kunagi kaota krüptitud sõnumeid</string>
     <string name="keys_backup_setup_step1_description">Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.
@@ -2164,7 +2163,7 @@
         <item quantity="other">%d kutset</item>
     </plurals>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Sa oled klõpsinud teavitust!</string>
-    <string name="settings_troubleshoot_test_notification_notice">"Palun klõpsa teavitusel. Kui sa teavitust ei näe, palun  kontrolli oma seadme seadistusi."</string>
+    <string name="settings_troubleshoot_test_notification_notice">Palun klõpsa teavitusel. Kui sa teavitust ei näe, palun kontrolli oma seadme seadistusi.</string>
     <string name="settings_troubleshoot_test_notification_title">Teavituse kuvamine</string>
     <string name="settings_troubleshoot_test_push_notification_content">Sa praegu vaatad teavitust! Klõpsi mind!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Tõuketeavituse vastuvõtmine ei õnnestunud. Üks lahendus oleks kui paigaldad rakenduse uuesti.</string>
