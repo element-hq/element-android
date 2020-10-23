@@ -2,7 +2,7 @@ Changes in Element 1.0.10 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Create DMs with users by scanning their QR code (#2025)
 
 Improvements 🙌:
  - Rework sending Event management (#154)
