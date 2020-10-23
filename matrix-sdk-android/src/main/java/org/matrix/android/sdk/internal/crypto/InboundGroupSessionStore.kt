@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.LruCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
@@ -90,7 +91,9 @@ internal class InboundGroupSessionStore @Inject constructor(
         dirtySession.clear()
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.v("## Inbound: getInboundGroupSession batching save of ${dirtySession.size}")
-            store.storeInboundGroupSessions(toSave)
+            tryOrNull {
+                store.storeInboundGroupSessions(toSave)
+            }
         }
     }
 }
