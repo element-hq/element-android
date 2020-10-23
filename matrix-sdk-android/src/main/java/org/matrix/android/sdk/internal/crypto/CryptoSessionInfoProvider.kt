@@ -31,7 +31,7 @@ import javax.inject.Inject
  * in the session DB, this class encapsulate this functionality
  */
 internal class CryptoSessionInfoProvider @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy
 ) {
 
     fun isRoomEncrypted(roomId: String): Boolean {
