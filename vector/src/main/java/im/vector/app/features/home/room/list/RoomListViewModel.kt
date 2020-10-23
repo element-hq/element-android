@@ -70,7 +70,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleFavorite              -> handleToggleFavorite(action)
+            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
         }.exhaustive
     }
 
@@ -172,18 +172,18 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         })
     }
 
-    private fun handleToggleFavorite(action: RoomListAction.ToggleFavorite) {
+    private fun handleToggleTag(action: RoomListAction.ToggleTag) {
         session.getRoom(action.roomId)?.let {
             val callback = object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
             }
-            if (it.roomSummary()?.isFavorite == false) {
-                // Set favorite tag. We do not handle the order for the moment
-                it.addTag(RoomTag.ROOM_TAG_FAVOURITE, 0.5, callback)
+            if (it.roomSummary()?.hasTag(action.tag) == false) {
+                // Set the tag. We do not handle the order for the moment
+                it.addTag(action.tag, 0.5, callback)
             } else {
-                it.deleteTag(RoomTag.ROOM_TAG_FAVOURITE, callback)
+                it.deleteTag(action.tag, callback)
             }
         }
     }

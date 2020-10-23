@@ -52,6 +52,10 @@ sealed class RoomListQuickActionsSharedAction(
             R.drawable.ic_room_actions_settings
     )
 
+    data class LowPriority(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_low_priority_add,
+            R.drawable.ic_low_priority_24)
+
     data class Favorite(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_favorite_add,
             R.drawable.ic_star_24dp)

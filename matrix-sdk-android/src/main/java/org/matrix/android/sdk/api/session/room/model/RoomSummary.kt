@@ -63,8 +63,13 @@ data class RoomSummary constructor(
     val hasNewMessages: Boolean
         get() = notificationCount != 0
 
+    val isLowPriority: Boolean
+        get() = hasTag(RoomTag.ROOM_TAG_LOW_PRIORITY)
+
     val isFavorite: Boolean
-        get() = tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE }
+        get() = hasTag(RoomTag.ROOM_TAG_FAVOURITE)
+
+    fun hasTag(tag: String) = tags.any { it.name == tag }
 
     val canStartCall: Boolean
         get() = joinedMembersCount == 2
