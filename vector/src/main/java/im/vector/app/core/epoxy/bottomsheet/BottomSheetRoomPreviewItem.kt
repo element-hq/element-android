@@ -61,12 +61,20 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         holder.roomLowPriority.setOnClickListener {
             // Immediate echo
             setLowPriorityState(holder, !izLowPriority)
+            if (!izLowPriority) {
+                // If we put the room in low priority, it will also remove the favorite tag
+                setFavoriteState(holder, false)
+            }
             // And do the action
             lowPriorityClickListener?.invoke()
         }
         holder.roomFavorite.setOnClickListener {
             // Immediate echo
             setFavoriteState(holder, !izFavorite)
+            if (!izFavorite) {
+                // If we put the room in favorite, it will also remove the low priority tag
+                setLowPriorityState(holder, false)
+            }
             // And do the action
             favoriteClickListener?.invoke()
         }
