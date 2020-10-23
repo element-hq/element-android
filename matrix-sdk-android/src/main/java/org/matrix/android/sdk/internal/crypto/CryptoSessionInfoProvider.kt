@@ -30,7 +30,7 @@ import javax.inject.Inject
  * The crypto module needs some information regarding rooms that are stored
  * in the session DB, this class encapsulate this functionality
  */
-class CryptoSessionInfoProvider @Inject constructor(
+internal class CryptoSessionInfoProvider @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
 ) {
 
