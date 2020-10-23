@@ -2164,4 +2164,24 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vous n’avez pas la permission de démarrer une téléconférence</string>
     <string name="reset">Réinitialiser</string>
     <string name="failed_to_unban">Échec de la révocation de l\'exclusion de l\'utilisateur</string>
+    <string name="alert_push_are_disabled_description">Vérifiez vos paramètres pour activer les notifications push</string>
+    <string name="save_your_security_key_notice">Stockez votre clé de sécurité en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Stockez votre clé de sécurité en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Générez une clé de sécurité à stocker en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Erreur de réception du push. Une solution possible est de réinstaller l\'application.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">L\'application reçois le PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">L\'application attend le PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Tester le Push</string>
+    <string name="alert_push_are_disabled_title">Les notifications push sont désactivées</string>
+    <string name="set_a_security_phrase_notice">Entrez une phrase de sécurité que seul vous connaissez, celle-ci est utilisée pour sécuriser les mots de passe sur le serveur.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Entrez une phrase secrète que seul vous connaissez, et générez une clé de sauvegarde.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Protection contre la perte d\'accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Afficher le périphérique avec lequel vous pouvez dès à présent vérifier</item>
+        <item quantity="other">Afficher les %d périphériques avec lesquels vous pouvez dès à présent vérifier</item>
+    </plurals>
+    <string name="delete_account_data_warning">Supprimer les données du compte de type %1$s \?
+\n
+\nÀ utiliser avec précaution, ceci peut entraîner des comportements inattendus.</string>
+    <string name="sent_verification_conclusion">Conclusion de la vérification</string>
 </resources>
