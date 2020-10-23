@@ -152,7 +152,11 @@ internal class UpdateTrustWorker(context: Context,
                             ?.devices
 
                     val trustMap = devicesEntities?.map { device ->
-                        device to crossSigningService.checkDeviceTrust(myCrossSigningInfo, otherInfos[it], CryptoMapper.mapToModel(device))
+                        // get up to date from DB has could have been updated
+                        val otherInfo = realm.where(CrossSigningInfoEntity::class.java)
+                                .equalTo(CrossSigningInfoEntityFields.USER_ID, it)
+                                .findFirst()?.let { mapCrossSigningInfoEntity(it) }
+                        device to crossSigningService.checkDeviceTrust(myCrossSigningInfo, otherInfo, CryptoMapper.mapToModel(device))
                     }?.toMap()
 
                     // Update trust if needed
