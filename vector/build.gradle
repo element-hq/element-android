@@ -441,6 +441,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
+    // Analytics
+    implementation 'ly.count.android:sdk:20.04.2'
+
     // TESTS
     testImplementation 'junit:junit:4.13'
     testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
