@@ -1743,7 +1743,7 @@
     <string name="room_member_profile_sessions_section_title">Istunnot</string>
     <string name="trusted">Luotettu</string>
     <string name="not_trusted">Ei luotettu</string>
-    <string name="verification_profile_device_verified_because">"Tähän istuntoon luotetetaan salatussa viestinnässä, koska  %1$s (%2$s) varmisti sen:"</string>
+    <string name="verification_profile_device_verified_because">Tähän istuntoon luotetetaan salatussa viestinnässä, koska %1$s (%2$s) varmensi sen:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) kirjautui sisään uuteen istuntoon:</string>
     <string name="verification_profile_device_untrust_info">Tämän käyttäjän kanssa käyty viestintä merkitään virheiksi kunnes käyttäjä luottaa tähän istuntoon. Voit vaihtoehtoisesti käsin varmentaa sen.</string>
     <string name="reset_cross_signing">Nollaa avaimet</string>
