@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import androidx.core.net.toFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
@@ -104,6 +105,10 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun doReset() {
         setState {
+            // Delete temporary file with the avatar
+            // TODO BMA Do this also in the other PR
+            avatarUri?.let { tryOrNull { it.toFile().delete() }}
+
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
                     hsAdminHasDisabledE2E = !adminE2EByDefault

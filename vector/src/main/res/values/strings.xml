@@ -1840,12 +1840,14 @@
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
+    <string name="attachment_type_dialog_title">"Add image from"</string>
     <string name="attachment_type_file">"File"</string>
     <string name="attachment_type_contact">"Contact"</string>
     <string name="attachment_type_camera">"Camera"</string>
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
     <string name="uploads_media_title">MEDIA</string>

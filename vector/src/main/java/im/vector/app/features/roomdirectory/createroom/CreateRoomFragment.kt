@@ -113,6 +113,7 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        // TODO BMA, as per the other PR, ask the user if he has started to input elements before leaving the screen
         viewModel.handle(CreateRoomAction.Reset)
         return false
     }
