@@ -1759,6 +1759,7 @@
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="add_by_qr_code">Add by QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
@@ -2628,4 +2629,10 @@
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
+
+    <!-- Add by QR code -->
+    <string name="share_by_text">Share by text</string>
+    <string name="cannot_dm_self">Cannot DM yourself!</string>
+    <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
+    <string name="qr_code_not_scanned">QR code not scanned!</string>
 </resources>
