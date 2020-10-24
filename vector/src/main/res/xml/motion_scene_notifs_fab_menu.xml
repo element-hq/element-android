@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <!-- Click on main FAB: toggle -->
+    <Transition
+        motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
+        motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
+        motion:duration="300"
+        motion:motionInterpolator="easeInOut">
+
+        <OnClick
+            motion:clickAction="toggle"
+            motion:targetId="@+id/createRoomButton" />
+
+        <KeyFrameSet>
+
+            <!-- First icon goes up quickly to let room for other-->
+            <KeyPosition
+                motion:framePosition="50"
+                motion:keyPositionType="deltaRelative"
+                motion:motionTarget="@id/createRoomItemGroup"
+                motion:percentX="0.8"
+                motion:percentY="0.8" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:keyPositionType="deltaRelative"
+                motion:motionTarget="@id/createRoomItemGroupLabel"
+                motion:percentX="0.9"
+                motion:percentY="0.8" />
+
+            <!-- Delay apparition of labels-->
+            <KeyAttribute
+                android:alpha="0.4"
+                motion:framePosition="80"
+                motion:motionTarget="@id/createRoomItemChatLabel" />
+            <KeyAttribute
+                android:alpha="0.4"
+                motion:framePosition="80"
+                motion:motionTarget="@id/createRoomItemGroupLabel" />
+
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_close">
+
+        <Constraint
+            android:id="@+id/createRoomTouchGuard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?riotx_touch_guard_bg"
+            android:visibility="invisible" />
+
+        <!-- Sub menu item 2 -->
+        <Constraint
+            android:id="@+id/createRoomItemGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_fab_add_room"
+            android:visibility="invisible"
+            motion:backgroundTint="#FFFFFF"
+            motion:fabCustomSize="48dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
+            motion:maxImageSize="26dp"
+            motion:tint="@color/black" />
+
+        <Constraint
+            android:id="@+id/createRoomItemGroupLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/fab_menu_create_room"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemGroup"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemGroup"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomItemGroup" />
+
+        <!-- Sub menu item 1 -->
+        <Constraint
+            android:id="@+id/createRoomItemChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_fab_add_chat"
+            android:visibility="invisible"
+            motion:backgroundTint="#FFFFFF"
+            motion:fabCustomSize="48dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
+            motion:maxImageSize="29dp"
+            motion:tint="@color/black" />
+
+        <Constraint
+            android:id="@+id/createRoomItemChatLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/fab_menu_create_chat"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+
+        <!-- Menu -->
+        <Constraint
+            android:id="@+id/createRoomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_fab_add"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:maxImageSize="14dp" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_open">
+
+        <Constraint
+            android:id="@+id/createRoomTouchGuard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?riotx_touch_guard_bg" />
+
+        <!-- Sub menu item 2 -->
+        <Constraint
+            android:id="@+id/createRoomItemGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="14dp"
+            android:src="@drawable/ic_fab_add_room"
+            motion:backgroundTint="#FFFFFF"
+            motion:fabCustomSize="48dp"
+            motion:layout_constraintBottom_toTopOf="@+id/createRoomItemChat"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:maxImageSize="26dp"
+            motion:tint="@color/black" />
+
+        <Constraint
+            android:id="@+id/createRoomItemGroupLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/fab_menu_create_room"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemGroup"
+            motion:layout_constraintEnd_toStartOf="@+id/createRoomItemGroup"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomItemGroup" />
+
+        <!-- Sub menu item 1 -->
+        <Constraint
+            android:id="@+id/createRoomItemChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="25dp"
+            android:src="@drawable/ic_fab_add_chat"
+            motion:backgroundTint="#FFFFFF"
+            motion:fabCustomSize="48dp"
+            motion:layout_constraintBottom_toTopOf="@+id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:maxImageSize="29dp"
+            motion:tint="@color/black" />
+
+        <Constraint
+            android:id="@+id/createRoomItemChatLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/fab_menu_create_chat"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
+            motion:layout_constraintEnd_toStartOf="@+id/createRoomItemChat"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+
+        <!-- Menu -->
+        <Constraint
+            android:id="@+id/createRoomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:rotation="135"
+            android:src="@drawable/ic_fab_add"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:maxImageSize="14dp" />
+
+    </ConstraintSet>
+
+</MotionScene>

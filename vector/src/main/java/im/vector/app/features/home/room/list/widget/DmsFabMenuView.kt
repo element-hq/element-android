@@ -22,15 +22,15 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
-import kotlinx.android.synthetic.main.motion_fab_menu_merge.view.*
+import kotlinx.android.synthetic.main.motion_notifs_fab_menu_merge.view.*
 
-class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                            defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
+class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
+                                               defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
 
     var listener: Listener? = null
 
     init {
-        inflate(context, R.layout.motion_fab_menu_merge, this)
+        inflate(context, R.layout.motion_dms_fab_menu_merge, this)
     }
 
     override fun onFinishInflate() {
@@ -47,7 +47,7 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.openRoomDirectory()
+                        listener?.openRoomDirectory("")
                     }
                 }
 
@@ -97,6 +97,6 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     interface Listener {
         fun createDirectChat()
-        fun openRoomDirectory(initialFilter: String = "")
+        fun openRoomDirectory(initialFilter: String)
     }
 }

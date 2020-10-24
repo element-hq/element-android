@@ -45,7 +45,8 @@ import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.home.room.list.widget.FabMenuView
+import im.vector.app.features.home.room.list.widget.DmsFabMenuView
+import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
@@ -66,7 +67,7 @@ class RoomListFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool
 
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
+) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -110,6 +111,7 @@ class RoomListFragment @Inject constructor(
             }.exhaustive
         }
 
+        createChatRoomButton.listener = this
         createChatFabMenu.listener = this
 
         sharedActionViewModel
@@ -128,6 +130,7 @@ class RoomListFragment @Inject constructor(
         roomListView.cleanup()
         roomController.listener = null
         stateRestorer.clear()
+        createChatRoomButton.listener = null
         createChatFabMenu.listener = null
         super.onDestroyView()
     }
@@ -144,21 +147,23 @@ class RoomListFragment @Inject constructor(
             else                              -> Unit // No button in this mode
         }
 
-        createChatRoomButton.debouncedClicks {
+        /*createChatRoomButton.debouncedClicks {
             createDirectChat()
-        }
+        }*/
         createGroupRoomButton.debouncedClicks {
-            openRoomDirectory()
+            openRoomDirectory("")
         }
 
-        // Hide FAB when list is scrolling
+        // Hide FAB when lists is scrolling
         roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        createChatRoomButton.removeCallbacks(showFabRunnable)
                         createChatFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
+                                createChatRoomButton.postDelayed(showFabRunnable, 250)
                                 createChatFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
@@ -334,6 +339,9 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        if (createChatRoomButton.onBackPressed()) {
+            return true
+        }
         if (createChatFabMenu.onBackPressed()) {
             return true
         }
