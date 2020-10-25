@@ -249,7 +249,6 @@
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, welche nicht mit diesem Konto verknüpft ist.
-\n
 \nDu kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen.</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
