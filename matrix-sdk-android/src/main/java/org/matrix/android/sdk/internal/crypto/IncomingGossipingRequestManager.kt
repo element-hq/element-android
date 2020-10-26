@@ -66,6 +66,10 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         receivedGossipingRequests.addAll(cryptoStore.getPendingIncomingGossipingRequests())
     }
 
+    fun close() {
+        executor.shutdownNow()
+    }
+
     // Recently verified devices (map of deviceId and timestamp)
     private val recentlyVerifiedDevices = HashMap<String, Long>()
 
