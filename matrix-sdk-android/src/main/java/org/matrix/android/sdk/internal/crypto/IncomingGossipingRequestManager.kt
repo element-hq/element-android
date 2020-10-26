@@ -158,8 +158,6 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             }
         }
 
-
-
         executor.execute {
             cryptoStore.storeIncomingGossipingRequests(roomKeyRequestsToProcess)
             for (request in roomKeyRequestsToProcess) {
@@ -191,9 +189,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                     }
                 }
             }
-
         }
-
     }
 
     private fun processIncomingRoomKeyRequest(request: IncomingRoomKeyRequest) {
