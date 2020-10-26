@@ -125,7 +125,8 @@ internal class DefaultVerificationService @Inject constructor(
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START         -> {
                     onStartRequestReceived(event)
@@ -159,7 +160,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onRoomStartRequestReceived(event)
@@ -236,6 +237,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
+        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId}")
         uiHandler.post {
             listeners.forEach {
                 try {
@@ -299,11 +301,14 @@ internal class DefaultVerificationService @Inject constructor(
         // We don't want to block here
         val otherDeviceId = validRequestInfo.fromDevice
 
+        Timber.v("## SAS onRequestReceived from $senderId and device $otherDeviceId, txId:${validRequestInfo.transactionId}")
+
         cryptoCoroutineScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
                 Timber.e("## Verification device $otherDeviceId is not known")
             }
         }
+        Timber.v("## SAS onRequestReceived .. checkKeysAreDownloaded launched")
 
         // Remember this request
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
