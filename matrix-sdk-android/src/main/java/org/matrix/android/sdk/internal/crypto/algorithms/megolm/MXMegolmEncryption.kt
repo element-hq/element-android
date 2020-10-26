@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -39,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
+import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 
@@ -54,7 +58,9 @@ internal class MXMegolmEncryption(
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope
 ) : IMXEncrypting {
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
@@ -84,15 +90,18 @@ internal class MXMegolmEncryption(
     }
 
     private fun notifyWithheldForSession(devices: MXUsersDevicesMap<WithHeldCode>, outboundSession: MXOutboundSessionInfo) {
-        mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
-            devices.forEach { userId, deviceId, withheldCode ->
-                this.add(UserDevice(userId, deviceId) to withheldCode)
+        // offload to computation thread
+        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
+            mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
+                devices.forEach { userId, deviceId, withheldCode ->
+                    this.add(UserDevice(userId, deviceId) to withheldCode)
+                }
+            }.groupBy(
+                    { it.second },
+                    { it.first }
+            ).forEach { (code, targets) ->
+                notifyKeyWithHeld(targets, outboundSession.sessionId, olmDevice.deviceCurve25519Key, code)
             }
-        }.groupBy(
-                { it.second },
-                { it.first }
-        ).forEach { (code, targets) ->
-            notifyKeyWithHeld(targets, outboundSession.sessionId, olmDevice.deviceCurve25519Key, code)
         }
     }
 
