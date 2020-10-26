@@ -16,11 +16,15 @@
 
 package im.vector.app.features.home.room.list
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -30,6 +34,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -37,9 +42,15 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -48,12 +59,19 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.DmsFabMenuView
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.app.features.userdirectory.PendingInvitee
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
+import kotlinx.android.synthetic.main.motion_dms_fab_menu_merge.*
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 @Parcelize
@@ -65,15 +83,19 @@ class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
-        private val sharedViewPool: RecyclerView.RecycledViewPool
+        private val sharedViewPool: RecyclerView.RecycledViewPool,
+        private val session: Session,
 
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
+        ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
+    private lateinit var qrStartForActivityResult : ActivityResultLauncher<Intent>
+    private lateinit var openCameraActivityResultLauncher : ActivityResultLauncher<Array<String>>
+    //private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
 
@@ -101,6 +123,7 @@ class RoomListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupCreateRoomButton()
         setupRecyclerView()
+        setupOpenAddByQrCode()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
@@ -147,9 +170,6 @@ class RoomListFragment @Inject constructor(
             else                              -> Unit // No button in this mode
         }
 
-        /*createChatRoomButton.debouncedClicks {
-            createDirectChat()
-        }*/
         createGroupRoomButton.debouncedClicks {
             openRoomDirectory("")
         }
@@ -195,8 +215,50 @@ class RoomListFragment @Inject constructor(
         navigator.openCreateDirectRoom(requireActivity())
     }
 
+    private fun setupOpenAddByQrCode() {
+        qrStartForActivityResult = registerStartForActivityResult { activityResult ->
+            if (activityResult.resultCode == Activity.RESULT_OK) {
+                val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
+                val mxid = (PermalinkParser.parse(result) as? PermalinkData.UserLink)?.userId
+
+                if (mxid === null) {
+                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                } else {
+                    val existingDm = session.getExistingDirectRoomWithUser(mxid)
+
+                    if (existingDm === null) {
+                        // The following assumes MXIDs are case insensitive
+                        if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                            Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                        } else {
+                            // Try to get user from known users and fall back to creating a User object from MXID
+                            //val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+
+                            //createDirectRoomViewModel.handle(
+                            //        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                            //)
+                        }
+                    } else {
+                        navigator.openRoom(requireContext(), existingDm.roomId, null, false)
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+            }
+        }
+        openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+            if (allGranted) {
+                QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
+            } else {
+                Toast.makeText(requireContext(), R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun openAddByQrCode() {
-        // TODO
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+            QrCodeScannerActivity.startForResult(requireActivity(), qrStartForActivityResult)
+        }
     }
 
     private fun setupRecyclerView() {
