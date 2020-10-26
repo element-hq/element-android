@@ -1284,6 +1284,28 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>) {
+        doRealmTransactionAsync(realmConfiguration) { realm ->
+            requests.forEach { request ->
+                // After a clear cache, we might have a
+                realm.createObject(IncomingGossipingRequestEntity::class.java).let {
+                    it.otherDeviceId = request.deviceId
+                    it.otherUserId = request.userId
+                    it.requestId = request.requestId ?: ""
+                    it.requestState = GossipingRequestState.PENDING
+                    it.localCreationTimestamp = request.localCreationTimestamp ?: System.currentTimeMillis()
+                    if (request is IncomingSecretShareRequest) {
+                        it.type = GossipRequestType.SECRET
+                        it.requestedInfoStr = request.secretName
+                    } else if (request is IncomingRoomKeyRequest) {
+                        it.type = GossipRequestType.KEY
+                        it.requestedInfoStr = request.requestBody?.toJson()
+                    }
+                }
+            }
+        }
+    }
+
 //    override fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest> {
 //        return doRealmQueryAndCopyList(realmConfiguration) {
 //            it.where<GossipingEventEntity>()

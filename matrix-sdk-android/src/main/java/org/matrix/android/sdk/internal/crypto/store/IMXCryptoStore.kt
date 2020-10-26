@@ -127,6 +127,7 @@ internal interface IMXCryptoStore {
 
     fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
     fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
+    fun storeIncomingGossipingRequests(request: List<IncomingShareRequestCommon>)
 //    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**

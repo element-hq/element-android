@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @SessionScope
@@ -52,6 +53,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope) {
 
+    private val executor = Executors.newSingleThreadExecutor()
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
     private val receivedGossipingRequests = ArrayList<IncomingShareRequestCommon>()
@@ -108,8 +110,8 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                             // ignore, it was sent by me as *
                             Timber.v("## GOSSIP onGossipingRequestEvent type ${event.type} ignore remote echo")
                         } else {
-                            // save in DB
-                            cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
+//                            // save in DB
+//                            cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
                             receivedGossipingRequests.add(it)
                         }
                     }
@@ -119,7 +121,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                             // ignore, it was sent by me as *
                             Timber.v("## GOSSIP onGossipingRequestEvent type ${event.type} ignore remote echo")
                         } else {
-                            cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
+//                            cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
                             receivedGossipingRequests.add(it)
                         }
                     }
@@ -144,13 +146,8 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     fun processReceivedGossipingRequests() {
         val roomKeyRequestsToProcess = receivedGossipingRequests.toList()
         receivedGossipingRequests.clear()
-        for (request in roomKeyRequestsToProcess) {
-            if (request is IncomingRoomKeyRequest) {
-                processIncomingRoomKeyRequest(request)
-            } else if (request is IncomingSecretShareRequest) {
-                processIncomingSecretShareRequest(request)
-            }
-        }
+
+        Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : ${roomKeyRequestsToProcess.size} request to process")
 
         var receivedRequestCancellations: List<IncomingRequestCancellation>? = null
 
@@ -161,27 +158,42 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             }
         }
 
-        receivedRequestCancellations?.forEach { request ->
-            Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : m.room_key_request cancellation $request")
-            // we should probably only notify the app of cancellations we told it
-            // about, but we don't currently have a record of that, so we just pass
-            // everything through.
-            if (request.userId == credentials.userId && request.deviceId == credentials.deviceId) {
-                // ignore remote echo
-                return@forEach
-            }
-            val matchingIncoming = cryptoStore.getIncomingRoomKeyRequest(request.userId ?: "", request.deviceId ?: "", request.requestId ?: "")
-            if (matchingIncoming == null) {
-                // ignore that?
-                return@forEach
-            } else {
-                // If it was accepted from this device, keep the information, do not mark as cancelled
-                if (matchingIncoming.state != GossipingRequestState.ACCEPTED) {
-                    onRoomKeyRequestCancellation(request)
-                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.CANCELLED_BY_REQUESTER)
+
+
+        executor.execute {
+            cryptoStore.storeIncomingGossipingRequests(roomKeyRequestsToProcess)
+            for (request in roomKeyRequestsToProcess) {
+                if (request is IncomingRoomKeyRequest) {
+                    processIncomingRoomKeyRequest(request)
+                } else if (request is IncomingSecretShareRequest) {
+                    processIncomingSecretShareRequest(request)
                 }
             }
+
+            receivedRequestCancellations?.forEach { request ->
+                Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : m.room_key_request cancellation $request")
+                // we should probably only notify the app of cancellations we told it
+                // about, but we don't currently have a record of that, so we just pass
+                // everything through.
+                if (request.userId == credentials.userId && request.deviceId == credentials.deviceId) {
+                    // ignore remote echo
+                    return@forEach
+                }
+                val matchingIncoming = cryptoStore.getIncomingRoomKeyRequest(request.userId ?: "", request.deviceId ?: "", request.requestId ?: "")
+                if (matchingIncoming == null) {
+                    // ignore that?
+                    return@forEach
+                } else {
+                    // If it was accepted from this device, keep the information, do not mark as cancelled
+                    if (matchingIncoming.state != GossipingRequestState.ACCEPTED) {
+                        onRoomKeyRequestCancellation(request)
+                        cryptoStore.updateGossipingRequestState(request, GossipingRequestState.CANCELLED_BY_REQUESTER)
+                    }
+                }
+            }
+
         }
+
     }
 
     private fun processIncomingRoomKeyRequest(request: IncomingRoomKeyRequest) {
