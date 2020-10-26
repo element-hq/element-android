@@ -690,7 +690,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                 // Get backed up keys from the homeserver
                 val data = getKeys(sessionId, roomId, keysVersionResult.version!!)
 
-                withContext(coroutineDispatchers.crypto) {
+                withContext(coroutineDispatchers.computation) {
                     val sessionsData = ArrayList<MegolmSessionData>()
                     // Restore that data
                     var sessionsFromHsCount = 0
