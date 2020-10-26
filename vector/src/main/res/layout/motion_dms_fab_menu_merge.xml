@@ -10,7 +10,7 @@
     tools:showPaths="true">
 
     <View
-        android:id="@+id/createRoomTouchGuard"
+        android:id="@+id/dmsCreateRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?riotx_touch_guard_bg"
@@ -20,44 +20,20 @@
 
     <!-- Sub menu item 2 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createRoomItemGroup"
+        android:id="@+id/createDmByQrCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:accessibilityTraversalBefore="@+id/roomListView"
-        android:contentDescription="@string/a11y_create_room"
-        android:src="@drawable/ic_fab_add_members"
+        android:contentDescription="@string/a11y_create_direct_message_by_qr_code"
+        android:src="@drawable/ic_fab_add_by_qr_code"
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
         app:tint="@color/black" />
 
     <TextView
-        android:id="@+id/createRoomItemGroupLabel"
-        style="@style/VectorLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:importantForAccessibility="no"
-        android:text="@string/fab_menu_create_room" />
-
-    <!-- Sub menu item 1 -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createRoomItemChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@+id/createRoomItemGroup"
-        android:contentDescription="@string/a11y_create_direct_message"
-        android:src="@drawable/ic_fab_add_chat"
-        app:backgroundTint="#FFFFFF"
-        app:fabCustomSize="48dp"
-        app:maxImageSize="29dp"
-        app:tint="@color/black" />
-
-    <TextView
-        android:id="@+id/createRoomItemChatLabel"
+        android:id="@+id/createDmByQrCodeLabel"
         style="@style/VectorLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,14 +42,38 @@
         android:importantForAccessibility="no"
         android:text="@string/add_by_qr_code" />
 
-    <!-- Menu -->
+    <!-- Sub menu item 1 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createRoomButton"
+        android:id="@+id/createDmByMxid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:accessibilityTraversalBefore="@+id/createRoomItemChat"
+        android:layout_gravity="bottom|end"
+        android:accessibilityTraversalBefore="@+id/createDmByQrCode"
+        android:contentDescription="@string/a11y_create_direct_message_by_mxid"
+        android:src="@drawable/ic_fab_add_by_mxid"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="29dp"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/createDmByMxidLabel"
+        style="@style/VectorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:importantForAccessibility="no"
+        android:text="@string/add_by_matrix_id" />
+
+    <!-- Menu -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/dmsCreateRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:accessibilityTraversalBefore="@+id/createDmByMxid"
         android:contentDescription="@string/a11y_create_menu_open"
-        android:src="@drawable/ic_fab_add_chat"
+        android:src="@drawable/ic_fab_add"
         app:maxImageSize="14dp" />
 
 </merge>

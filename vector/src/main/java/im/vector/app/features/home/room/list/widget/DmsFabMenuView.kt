@@ -22,7 +22,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
-import kotlinx.android.synthetic.main.motion_notifs_fab_menu_merge.view.*
+import kotlinx.android.synthetic.main.motion_dms_fab_menu_merge.view.*
 
 class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
@@ -36,22 +36,22 @@ class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attribut
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        listOf(createRoomItemChat, createRoomItemChatLabel)
+        listOf(createDmByMxid, createDmByMxidLabel)
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
                         listener?.createDirectChat()
                     }
                 }
-        listOf(createRoomItemGroup, createRoomItemGroupLabel)
+        listOf(createDmByQrCode, createDmByQrCodeLabel)
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.openRoomDirectory("")
+                        listener?.openAddByQrCode()
                     }
                 }
 
-        createRoomTouchGuard.setOnClickListener {
+        dmsCreateRoomTouchGuard.setOnClickListener {
             closeFabMenu()
         }
     }
@@ -59,22 +59,22 @@ class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attribut
     override fun transitionToEnd() {
         super.transitionToEnd()
 
-        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
+        dmsCreateRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
     }
 
     override fun transitionToStart() {
         super.transitionToStart()
 
-        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
+        dmsCreateRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
     }
 
     fun show() {
         isVisible = true
-        createRoomButton.show()
+        dmsCreateRoomButton.show()
     }
 
     fun hide() {
-        createRoomButton.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+        dmsCreateRoomButton.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
                 isVisible = false
@@ -97,6 +97,6 @@ class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     interface Listener {
         fun createDirectChat()
-        fun openRoomDirectory(initialFilter: String)
+        fun openAddByQrCode()
     }
 }
