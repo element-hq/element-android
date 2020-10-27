@@ -34,7 +34,6 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -51,6 +50,7 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+import im.vector.app.features.createdirect.CreateDirectRoomViewState
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -63,7 +63,6 @@ import im.vector.app.features.qrcode.QrCodeScannerActivity
 import im.vector.app.features.userdirectory.PendingInvitee
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
-import kotlinx.android.synthetic.main.motion_dms_fab_menu_merge.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -85,9 +84,9 @@ class RoomListFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool,
         private val session: Session,
+) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
 
-        ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
-
+    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
@@ -95,7 +94,6 @@ class RoomListFragment @Inject constructor(
     private lateinit var stateRestorer: LayoutManagerStateRestorer
     private lateinit var qrStartForActivityResult : ActivityResultLauncher<Intent>
     private lateinit var openCameraActivityResultLauncher : ActivityResultLauncher<Array<String>>
-    //private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
 
@@ -232,11 +230,12 @@ class RoomListFragment @Inject constructor(
                             Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                         } else {
                             // Try to get user from known users and fall back to creating a User object from MXID
-                            //val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+                            val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
 
-                            //createDirectRoomViewModel.handle(
-                            //        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
-                            //)
+                            val createDirectRoomViewModel: CreateDirectRoomViewModel = createDirectRoomViewModelFactory.create(CreateDirectRoomViewState())
+                            createDirectRoomViewModel.handle(
+                                    CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
+                            )
                         }
                     } else {
                         navigator.openRoom(requireContext(), existingDm.roomId, null, false)
