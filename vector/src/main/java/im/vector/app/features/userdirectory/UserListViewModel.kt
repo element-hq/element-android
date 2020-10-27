@@ -36,6 +36,7 @@ import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
@@ -63,6 +64,8 @@ class UserListViewModel @AssistedInject constructor(@Assisted
 
     private var allContacts: List<MappedContact> = emptyList()
     private var mappedContacts: List<MappedContact> = emptyList()
+
+    private var currentUserSearchDisposable: Disposable? = null
 
     @AssistedInject.Factory
     interface Factory {
@@ -130,6 +133,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted
                     copy(knownUsers = async)
                 }
 
+        currentUserSearchDisposable?.dispose()
         directoryUsersSearch
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
@@ -140,6 +144,12 @@ class UserListViewModel @AssistedInject constructor(@Assisted
                                 .searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
                                 .map { users ->
                                     users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
+                                }
+                                .doOnSubscribe {
+                                    currentUserSearchDisposable = it
+                                }
+                                .doOnDispose {
+                                    currentUserSearchDisposable = null
                                 }
                     }
                     stream.toAsync {
