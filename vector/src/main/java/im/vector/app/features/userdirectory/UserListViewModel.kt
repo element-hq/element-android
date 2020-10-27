@@ -261,8 +261,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun handleSelectUser(action: UserListAction.SelectPendingInvitee) = withState { state ->
-        // Reset the filter asap
-        directoryUsersSearch.accept("")
         val selectedUsers = state.pendingInvitees.toggle(action.pendingInvitee)
         setState { copy(pendingInvitees = selectedUsers) }
     }
