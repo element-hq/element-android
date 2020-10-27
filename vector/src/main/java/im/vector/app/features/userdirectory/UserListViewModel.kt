@@ -87,16 +87,16 @@ class UserListViewModel @AssistedInject constructor(@Assisted
 
     init {
         observeUsers()
-        loadContacts()
     }
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers          -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers     -> handleClearSearchUsers()
-            is UserListAction.SelectPendingInvitee -> handleSelectUser(action)
-            is UserListAction.RemovePendingInvitee -> handleRemoveSelectedUser(action)
-            is UserListAction.OnlyBoundContacts    -> handleOnlyBoundContacts(action)
+            is UserListAction.SearchUsers                     -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers                -> handleClearSearchUsers()
+            is UserListAction.SelectPendingInvitee            -> handleSelectUser(action)
+            is UserListAction.RemovePendingInvitee            -> handleRemoveSelectedUser(action)
+            is UserListAction.OnlyBoundContacts               -> handleOnlyBoundContacts(action)
+            is UserListAction.OnReadContactsPermissionGranted -> loadContacts()
         }.exhaustive
     }
 
@@ -174,6 +174,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted
             override fun onFailure(failure: Throwable) {
                 // Ignore
                 Timber.w(failure, "Unable to perform the lookup")
+                updateFilteredMappedContacts()
             }
 
             override fun onSuccess(data: List<FoundThreePid>) {

@@ -24,4 +24,5 @@ sealed class UserListAction : VectorViewModelAction {
     data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
     data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
     data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : UserListAction()
+    object OnReadContactsPermissionGranted : UserListAction()
 }

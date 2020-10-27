@@ -36,6 +36,9 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import kotlinx.android.synthetic.main.fragment_user_list.*
 import kotlinx.android.synthetic.main.fragment_user_list.chipGroup
@@ -57,6 +60,12 @@ class UserListFragment @Inject constructor(
     private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
+    private val readContactsActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            viewModel.handle(UserListAction.OnReadContactsPermissionGranted)
+        }
+    }
+
     override fun getLayoutResId() = R.layout.fragment_user_list
 
     override fun getMenuRes() = args.menuResId
@@ -77,6 +86,10 @@ class UserListFragment @Inject constructor(
 
         viewModel.selectSubscribe(this, UserListViewState::pendingInvitees) {
             renderSelectedUsers(it)
+        }
+
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), readContactsActivityResultLauncher, 0)) {
+            viewModel.handle(UserListAction.OnReadContactsPermissionGranted)
         }
     }
 

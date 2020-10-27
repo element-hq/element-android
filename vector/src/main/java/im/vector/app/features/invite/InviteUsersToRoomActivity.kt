@@ -31,10 +31,6 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
-import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.toast
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
@@ -67,10 +63,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
 
         toolbar.visibility = View.GONE
-        checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                this,
-                PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                0)
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
@@ -96,15 +88,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         }
 
         viewModel.observeViewEvents { renderInviteEvents(it) }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                // TODO. Trigger VM
-            }
-        }
     }
 
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
