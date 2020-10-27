@@ -1759,6 +1759,8 @@
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
     <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
+    <string name="direct_room_user_list_recent_title">Recent</string>
+    <string name="direct_room_user_list_contacts_title">Contacts</string>
 
     <string name="joining_room">"Joining room…"</string>
 

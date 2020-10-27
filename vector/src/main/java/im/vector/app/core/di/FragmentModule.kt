@@ -23,7 +23,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
-import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -110,8 +109,7 @@ import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.terms.ReviewTermsFragment
-import im.vector.app.features.userdirectory.KnownUsersFragment
-import im.vector.app.features.userdirectory.UserDirectoryFragment
+import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.widgets.WidgetFragment
 
 @Module
@@ -254,13 +252,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(UserDirectoryFragment::class)
-    fun bindUserDirectoryFragment(fragment: UserDirectoryFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(KnownUsersFragment::class)
-    fun bindKnownUsersFragment(fragment: KnownUsersFragment): Fragment
+    @FragmentKey(UserListFragment::class)
+    fun bindUserListFragment(fragment: UserListFragment): Fragment
 
     @Binds
     @IntoMap
@@ -556,11 +549,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(WidgetFragment::class)
     fun bindWidgetFragment(fragment: WidgetFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(ContactsBookFragment::class)
-    fun bindPhoneBookFragment(fragment: ContactsBookFragment): Fragment
 
     @Binds
     @IntoMap

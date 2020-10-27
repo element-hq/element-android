@@ -32,7 +32,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
@@ -40,14 +39,11 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
-import im.vector.app.features.contactsbook.ContactsBookFragment
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.userdirectory.KnownUsersFragment
-import im.vector.app.features.userdirectory.KnownUsersFragmentArgs
-import im.vector.app.features.userdirectory.UserDirectoryFragment
-import im.vector.app.features.userdirectory.UserDirectorySharedAction
-import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
-import im.vector.app.features.userdirectory.UserDirectoryViewModel
+import im.vector.app.features.userdirectory.UserListFragment
+import im.vector.app.features.userdirectory.UserListFragmentArgs
+import im.vector.app.features.userdirectory.UserListSharedAction
+import im.vector.app.features.userdirectory.UserListSharedActionViewModel
+import im.vector.app.features.userdirectory.UserListViewModel
 import kotlinx.android.synthetic.main.activity.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
@@ -57,10 +53,9 @@ import javax.inject.Inject
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
-    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
-    @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
+    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
+    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
@@ -71,25 +66,27 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        sharedActionViewModel = viewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+        checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
+                this,
+                PERMISSION_REQUEST_CODE_READ_CONTACTS,
+                0)
+
+        sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
-                .subscribe { sharedAction ->
-                    when (sharedAction) {
-                        UserDirectorySharedAction.OpenUsersDirectory    ->
-                            addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
-                        UserDirectorySharedAction.Close                 -> finish()
-                        UserDirectorySharedAction.GoBack                -> onBackPressed()
-                        is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                        UserDirectorySharedAction.OpenPhoneBook         -> openPhoneBook()
+                .subscribe { action ->
+                    when (action) {
+                        UserListSharedAction.Close  -> finish()
+                        UserListSharedAction.GoBack -> onBackPressed()
+                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
                     }.exhaustive
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
             addFragment(
                     R.id.container,
-                    KnownUsersFragment::class.java,
-                    KnownUsersFragmentArgs(
+                    UserListFragment::class.java,
+                    UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room
                     )
@@ -100,26 +97,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun openPhoneBook() {
-        // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                        this,
-                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                        0)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+                // TODO. Trigger VM
             }
         }
     }
 
-    private fun onMenuItemSelected(action: UserDirectorySharedAction.OnMenuItemSelected) {
+    private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
             viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.invitees))
         }
