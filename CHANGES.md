@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Merge DM creation screens (#2304)
 
 Bugfix 🐛:
  -
