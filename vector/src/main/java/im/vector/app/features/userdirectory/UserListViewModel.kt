@@ -16,7 +16,6 @@
 
 package im.vector.app.features.userdirectory
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -32,8 +31,6 @@ import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.createdirect.CreateDirectRoomActivity
-import im.vector.app.features.invite.InviteUsersToRoomActivity
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -74,17 +71,11 @@ class UserListViewModel @AssistedInject constructor(@Assisted
 
     companion object : MvRxViewModelFactory<UserListViewModel, UserListViewState> {
         override fun create(viewModelContext: ViewModelContext, state: UserListViewState): UserListViewModel? {
-            return when (viewModelContext) {
-                is ActivityViewModelContext -> {
-                    when (viewModelContext.activity<FragmentActivity>()) {
-                        is CreateDirectRoomActivity  -> (viewModelContext.activity<CreateDirectRoomActivity>()).userListViewModelFactory.create(state)
-                        is InviteUsersToRoomActivity -> (viewModelContext.activity<InviteUsersToRoomActivity>()).userListViewModelFactory.create(state)
-                        else                         -> error("Wrong activity or fragment")
-                    }
-                }
-                is FragmentViewModelContext -> (viewModelContext.fragment() as UserListFragment).userListViewModelFactory.create(state)
-                else                        -> error("Wrong activity or fragment")
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 

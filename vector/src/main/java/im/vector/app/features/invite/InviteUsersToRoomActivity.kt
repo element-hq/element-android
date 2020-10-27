@@ -37,6 +37,7 @@ import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
+import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import org.matrix.android.sdk.api.failure.Failure
@@ -46,7 +47,7 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
-class InviteUsersToRoomActivity : SimpleFragmentActivity() {
+class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
@@ -57,6 +58,10 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
+    }
+
+    override fun create(initialState: UserListViewState): UserListViewModel {
+        return userListViewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
