@@ -155,6 +155,10 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>) {
+        userListHeaderItem {
+            id("suggestions")
+            header(stringProvider.getString(R.string.direct_room_user_list_suggestions_title))
+        }
         if (directoryUsers.isEmpty()) {
             renderEmptyState()
         } else {
