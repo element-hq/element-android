@@ -26,6 +26,7 @@ import ly.count.android.sdk.CountlyConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.internal.util.sha256
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,6 +42,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
 
         data class RoomView(val roomId: String, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean) : AnalyticEvent()
         data class HomeView(val mode: RoomListDisplayMode) : AnalyticEvent()
+        data class SettingsView(val category: String) : AnalyticEvent()
         data class StartCall(val roomId: String, val isVideo: Boolean) : AnalyticEvent()
         data class JoinCall(val roomId: String, val isVideo: Boolean) : AnalyticEvent()
         data class StartJitsiConf(val roomId: String, val isVideo: Boolean) : AnalyticEvent()
@@ -60,9 +62,18 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
         object StartJoinRoomEvent : AnalyticEvent()
         data class EndJoinRoomEvent(val roomId: String, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean): AnalyticEvent()
         object CancelJoinRoomEvent : AnalyticEvent()
+
+        data class UnHandledCrash(val exception: Throwable) : AnalyticEvent()
+        data class GetFeedBacks(val id: String, val closeText: String, val activity: Activity,) : AnalyticEvent()
+
     }
 
     private var countly: Countly? = null
+
+    fun isEnabled() : Boolean {
+        // Should check consent here
+        return countly?.isInitialized ?: false
+    }
 
     fun report(event: AnalyticEvent) {
         when (event) {
@@ -72,7 +83,12 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                     if (BuildConfig.DEBUG) {
                         it.setLoggingEnabled(true)
                     }
-                    it.setDeviceId(session.sessionId)
+//                    it.enableCrashReporting()
+//                    it.setCustomCrashSegment(mapOf(
+//                            "flavor" to BuildConfig.FLAVOR,
+//                            "branch" to BuildConfig.GIT_BRANCH_NAME
+//                    ))
+                    it.setDeviceId(session.myUserId.sha256())
                     Countly.sharedInstance().init(it).also {
                         countly = it
                     }
@@ -239,6 +255,19 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
             }
             AnalyticEvent.CancelJoinRoomEvent -> {
                 countly?.events()?.cancelEvent("join_room")
+                Unit
+            }
+            is AnalyticEvent.UnHandledCrash   -> {
+                countly?.crashes()?.recordUnhandledException(event.exception)
+                Unit
+            }
+            is AnalyticEvent.GetFeedBacks        -> {
+                countly?.ratings()?.showFeedbackPopup(event.id, event.closeText, event.activity) {
+                    // if (it) error is null no error...
+                }
+            }
+            is AnalyticEvent.SettingsView -> {
+                countly?.views()?.recordView("settings_view", mapOf("category" to event.category))
                 Unit
             }
         }.exhaustive

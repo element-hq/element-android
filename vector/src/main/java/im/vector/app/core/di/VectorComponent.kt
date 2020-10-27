@@ -152,7 +152,7 @@ interface VectorComponent {
 
     fun reAuthHelper(): ReAuthHelper
 
-    fun countlyProvider(): AnalyticsEngine
+    fun analyticsEngine(): AnalyticsEngine
 
     fun pinLocker(): PinLocker
 
