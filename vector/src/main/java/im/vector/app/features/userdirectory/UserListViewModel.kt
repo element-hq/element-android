@@ -87,6 +87,10 @@ class UserListViewModel @AssistedInject constructor(@Assisted
 
     init {
         observeUsers()
+
+        selectSubscribe(UserListViewState::onlyBoundContacts) {
+            updateFilteredMappedContacts()
+        }
     }
 
     override fun handle(action: UserListAction) {
@@ -196,6 +200,11 @@ class UserListViewModel @AssistedInject constructor(@Assisted
                             }
                     )
                 }
+
+                setState {
+                    copy(isBoundRetrieved = true)
+                }
+
                 updateFilteredMappedContacts()
             }
         })

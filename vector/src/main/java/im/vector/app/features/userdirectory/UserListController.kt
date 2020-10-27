@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.contacts.MappedContact
+import im.vector.app.core.epoxy.checkBoxItem
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
@@ -106,6 +107,15 @@ class UserListController @Inject constructor(private val session: Session,
         userListHeaderItem {
             id("contacts")
             header(stringProvider.getString(R.string.direct_room_user_list_contacts_title))
+        }
+        if (state?.isBoundRetrieved == true) {
+            checkBoxItem {
+                id("onlyBoundContacts")
+                title(stringProvider.getString(R.string.matrix_only_filter))
+                checkChangeListener { _, isChecked ->
+                    callback?.onOnlyBoundContactsCheckChanged(isChecked)
+                }
+            }
         }
         if (mappedContacts.isEmpty()) {
             renderEmptyState()
@@ -214,5 +224,6 @@ class UserListController @Inject constructor(private val session: Session,
         fun onItemClick(user: User)
         fun onMatrixIdClick(matrixId: String)
         fun onThreePidClick(threePid: ThreePid)
+        fun onOnlyBoundContactsCheckChanged(isChecked: Boolean)
     }
 }

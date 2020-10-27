@@ -193,4 +193,9 @@ class UserListFragment @Inject constructor(
         view?.hideKeyboard()
         viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
     }
+
+    override fun onOnlyBoundContactsCheckChanged(isChecked: Boolean) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.OnlyBoundContacts(isChecked))
+    }
 }
