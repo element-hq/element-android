@@ -210,6 +210,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         {
                             postLoading(false)
                             setState { copy(newHistoryVisibility = null) }
+                            deletePendingAvatar()
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {
