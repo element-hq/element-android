@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Rework sending Event management (#154)
  - New room creation screen: set topic and avatar in the room creation form (#2078)
+ - Toggle Low priority tag (#1490)
  - Add option to send with enter (#1195)
  - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
  - Edit and remove icons are now visible on image attachment preview screen (#2294)
