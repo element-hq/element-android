@@ -119,6 +119,7 @@ class KeyRequestViewModel @AssistedInject constructor(
                                 EventType.SEND_SECRET        -> {
                                     val content = it.getClearContent().toModel<SecretSendEventContent>()
                                     stringBuilder.append("requestId:${content?.requestId} From Device:${it.mxDecryptionResult?.payload?.get("sender_device")}")
+                                    stringBuilder.append("\n")
                                 }
                                 EventType.REQUEST_SECRET     -> {
                                     val content = it.getClearContent().toModel<SecretShareRequest>()
