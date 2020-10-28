@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -255,6 +256,15 @@ internal class MXMegolmEncryption(
         for ((userId, devicesToShareWith) in devicesByUser) {
             for ((deviceId) in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
+                cryptoStore.saveGossipingEvent(Event(
+                        type = EventType.ROOM_KEY,
+                        senderId = credentials.userId,
+                        content = submap.apply {
+                            this["session_key"] = ""
+                            // we add a fake key for trail
+                            this["_dest"] = "$userId|$deviceId"
+                        }
+                ))
             }
         }
 

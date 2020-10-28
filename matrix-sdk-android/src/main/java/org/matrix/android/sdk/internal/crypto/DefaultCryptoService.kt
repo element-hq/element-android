@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.squareup.moshi.Types
 import dagger.Lazy
 import kotlinx.coroutines.CancellationException
@@ -184,6 +185,8 @@ internal class DefaultCryptoService @Inject constructor(
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
+
+    val gossipingBuffer = mutableListOf<Event>()
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
@@ -427,6 +430,13 @@ internal class DefaultCryptoService @Inject constructor(
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
+            }
+
+            tryOrNull {
+                gossipingBuffer.toList().let {
+                    cryptoStore.saveGossipingEvents(it)
+                }
+                gossipingBuffer.clear()
             }
         }
     }
@@ -721,19 +731,19 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
-                    cryptoStore.saveGossipingEvent(event)
+                    gossipingBuffer.add(event)
                     // Keys are imported directly, not waiting for end of sync
                     onRoomKeyEvent(event)
                 }
                 EventType.REQUEST_SECRET,
                 EventType.ROOM_KEY_REQUEST                       -> {
                     // save audit trail
-                    cryptoStore.saveGossipingEvent(event)
+                    gossipingBuffer.add(event)
                     // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
                     incomingGossipingRequestManager.onGossipingRequestEvent(event)
                 }
                 EventType.SEND_SECRET                            -> {
-                    cryptoStore.saveGossipingEvent(event)
+                    gossipingBuffer.add(event)
                     onSecretSendReceived(event)
                 }
                 EventType.ROOM_KEY_WITHHELD                      -> {
@@ -1254,12 +1264,24 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getOutgoingRoomKeyRequests()
     }
 
+    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>> {
+        return cryptoStore.getOutgoingRoomKeyRequestsPaged()
+    }
+
+    override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
+        return cryptoStore.getIncomingRoomKeyRequestsPaged()
+    }
+
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
         return cryptoStore.getIncomingRoomKeyRequests()
     }
 
-    override fun getGossipingEventsTrail(): List<Event> {
+    override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
         return cryptoStore.getGossipingEventsTrail()
+    }
+
+    override fun getGossipingEvents(): List<Event> {
+        return cryptoStore.getGossipingEvents()
     }
 
     override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {

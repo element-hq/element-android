@@ -2304,6 +2304,7 @@
     <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
+    <string name="settings_export_trail">Export Audit</string>
 
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
