@@ -142,7 +142,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
-            is RoomSettingsAction.SetAvatarAction          -> setState { copy(avatarAction = action.avatarAction) }
+            is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
@@ -152,12 +152,21 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         }.exhaustive
     }
 
-    private fun cancel() {
+    private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
+        deletePendingAvatar()
+        setState { copy(avatarAction = action.avatarAction) }
+    }
+
+    private fun deletePendingAvatar() {
         // Maybe delete the pending avatar
         withState {
             (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
                     ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
         }
+    }
+
+    private fun cancel() {
+        deletePendingAvatar()
 
         _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
