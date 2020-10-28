@@ -226,7 +226,7 @@
 
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Quitaste %1$s como dirección para esta sala.</item>
-        <item quantity="other">Quitaste %2$s como direcciones para esta sala.</item>
+        <item quantity="other">Quitaste %1$s como direcciones para esta sala.</item>
     </plurals>
 
     <string name="notice_room_aliases_added_and_removed">"%1$s agregó %2$s  y eliminó %3$s como direcciones para esta sala."</string>

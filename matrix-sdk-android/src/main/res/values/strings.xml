@@ -225,7 +225,7 @@
 
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">You removed %1$s as an address for this room.</item>
-        <item quantity="other">You removed %2$s as addresses for this room.</item>
+        <item quantity="other">You removed %1$s as addresses for this room.</item>
     </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s added %2$s and removed %3$s as addresses for this room.</string>
