@@ -145,7 +145,7 @@
     <string name="notice_room_leave_with_reason_by_you">Vi foriris de la ĉambro. Kialo: %1$s</string>
     <string name="notice_room_join_with_reason_by_you">Vi envenis. Kialo: %1$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Vi aliĝis. Kialo: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s aliĝis. Kialo: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s aliĝis. Kialo: %2$s</string>
     <string name="notice_room_invite_with_reason_by_you">Vi invitis uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Via invito. Kialo: %1$s</string>
     <string name="notice_power_level_diff">%1$s de %2$s al %3$s</string>
