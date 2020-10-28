@@ -2632,6 +2632,7 @@
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
+    <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
     <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
     <string name="warning_unsaved_change_discard">Discard changes</string>
 </resources>

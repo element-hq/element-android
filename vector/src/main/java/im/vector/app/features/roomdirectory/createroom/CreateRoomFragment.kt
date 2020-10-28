@@ -19,6 +19,7 @@ package im.vector.app.features.roomdirectory.createroom
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -26,18 +27,20 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.app.features.roomprofile.settings.RoomSettingsAction
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
-        private val colorProvider: ColorProvider
+        colorProvider: ColorProvider
 ) : VectorBaseFragment(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
@@ -57,6 +60,11 @@ class CreateRoomFragment @Inject constructor(
         setupRecyclerView()
         createRoomClose.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)
+        }
+        viewModel.observeViewEvents {
+            when (it) {
+                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+            }.exhaustive
         }
     }
 
@@ -113,9 +121,21 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        // TODO BMA, as per the other PR, ask the user if he has started to input elements before leaving the screen
-        viewModel.handle(CreateRoomAction.Reset)
-        return false
+        return withState(viewModel) {
+            return@withState if (!it.isEmpty()) {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_title_warning)
+                        .setMessage(R.string.warning_room_not_created_yet)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.handle(CreateRoomAction.Reset)
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
