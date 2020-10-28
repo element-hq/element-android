@@ -191,7 +191,7 @@
     <string name="auth_password_placeholder">Lösenord</string>
     <string name="auth_new_password_placeholder">Nytt lösenord</string>
     <string name="auth_user_name_placeholder">Användarnamn</string>
-    <string name="auth_add_email_message_2">Sätt en e-postadress för kontoåterförvärv, och senare för att valfritt vara upptäckbar av folk som som känner dig.</string>
+    <string name="auth_add_email_message_2">Sätt en e-postadress för kontoåterförvärv, och för att senare valfritt vara upptäckbar av folk som känner dig.</string>
     <string name="auth_add_phone_message_2">Sätt ett telefonnummer som folk som känner dig kan använda för att hitta dig.</string>
     <string name="auth_add_email_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
     <string name="auth_add_email_and_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
@@ -751,7 +751,7 @@
 \nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.</string>
     <string name="room_settings_enable_encryption">Aktivera totalsträckskryptering</string>
     <string name="room_settings_enable_encryption_warning">Efter aktivering så kan kryptering inte avaktiveras.</string>
-    <string name="room_settings_enable_encryption_dialog_content">Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan kan göra att många bottar och bryggor inte funkar ordentligt.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan göra att många bottar och bryggor inte funkar ordentligt.</string>
     <string name="verification_conclusion_ok_notice">Meddelanden mellan dig och den här användaren är totalsträckskrypterade och kan inte läsas av tredje parter.</string>
     <string name="verification_conclusion_ok_self_notice">Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd.</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifiera den här sessionen gör att markera den som betrodd och ge den tillgång till dina krypterade meddelanden. Om det inte var du som loggade in i den här sessionen så kan ditt konto vara kapat:</string>

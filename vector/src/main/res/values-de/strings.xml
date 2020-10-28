@@ -225,11 +225,12 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
-
-Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element benötigt die Berechtigung, auf Kamera und Mikrofon zu zugreifen, um Video-Anrufe durchzuführen.
+\n
+\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
     <string name="permissions_rationale_msg_contacts">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden. 
+\n
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
     <!-- medias slider string -->
@@ -247,8 +248,8 @@ Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</str
     <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht springen.</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
-    <string name="room_preview_unlinked_email_warning">"Diese Einladung wurde an %s gesendet. Es ist nicht mit diesem Konto verknüpft.
-Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen."</string>
+    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, welche nicht mit diesem Konto verknüpft ist.
+\nDu kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen.</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
     <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau dieses Raums. Raum-Interaktionen wurden deaktiviert.</string>
@@ -281,7 +282,8 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzer!n dasselbe Berechtigungslevel wie du selbst erhalten wirst. Bist du sicher\?</string>
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzer!n dasselbe Berechtigungslevel wie du erhalten wirst.
+\nBist du sicher\?</string>
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
@@ -328,9 +330,9 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_details_people_present_group_name">TEILNEHMER</string>
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Grund für das Melden dieses Inhalts</string>
-    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses Nutzers verbergen?
-
-Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses Nutzers verbergen\?
+\n
+\nBeachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="room_event_action_cancel_upload">Upload abbrechen</string>
     <string name="room_event_action_cancel_download">Download abbrechen</string>
     <!-- Search -->
@@ -420,7 +422,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
-Um fortzufahren, gib dein Passwort ein.</string>
+\nUm fortzufahren, gib dein Passwort ein.</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>
     <string name="devices_delete_pswd">Passwort:</string>
     <string name="devices_delete_submit_button_label">Absenden</string>
@@ -439,9 +441,9 @@ Um fortzufahren, gib dein Passwort ein.</string>
     <string name="settings_confirm_password">Neues Passwort bestätigen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
     <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
-    <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?
-
-Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
+    <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen\?
+\n
+\nBeachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="settings_delete_notification_targets_confirmation">Bist du sicher, dass du dieses Benachrichtigungsziel entfernen möchtest?</string>
     <string name="settings_delete_threepid_confirmation">Bist du sicher, dass du %1$s %2$s entfernen möchtest?</string>
     <string name="settings_select_country">Wähle ein Land</string>
@@ -536,8 +538,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="passphrase_enter_passphrase">Passphrase eingeben</string>
     <string name="passphrase_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert.
-
-Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.</string>
+\n
+\nAchtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.</string>
     <string name="encryption_import_e2e_room_keys">Ende-zu-Ende-Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
@@ -689,26 +691,26 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
     <string name="forget_room">Raum vergessen</string>
-    <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
+    <string name="room_settings_add_homescreen_shortcut">Zum Startbildschirm hinzufügen</string>
     <string name="settings_flair">Community Avatare</string>
     <string name="send_bug_report_rage_shake">Schütteln, um einen Fehler zu melden</string>
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
     <string name="room_sync_in_progress">Synchronisiere…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktives Mitglied</item>
+        <item quantity="one">%d aktives Mitglied</item>
         <item quantity="other">%d aktive Mitglieder</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 Mitglied</item>
+        <item quantity="one">%d Mitglied</item>
         <item quantity="other">%d Mitglieder</item>
     </plurals>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 neue Nachricht</item>
+        <item quantity="one">%d neue Nachricht</item>
         <item quantity="other">%d neue Nachrichten</item>
     </plurals>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">%d Raum</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -716,26 +718,26 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
         <item quantity="other">%1$s Räume gefunden für %2$s</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 ungelesene Nachricht</item>
+        <item quantity="one">%d ungelesene Nachricht</item>
         <item quantity="other">%d ungelesene Nachrichten</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 ungelesene benachrichtige Nachricht</item>
-        <item quantity="other">%d ungelesene benachrichte Nachrichten</item>
+        <item quantity="one">%d ungelesene Benachrichtigung</item>
+        <item quantity="other">%d ungelesene Benachrichtigungen</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">%d Raum</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <plurals name="active_widgets">
-        <item quantity="one">1 aktives Widget</item>
+        <item quantity="one">%d aktives Widget</item>
         <item quantity="other">%d aktive Widgets</item>
     </plurals>
     <!-- Widget Integration Manager -->
     <string name="avatar">Profilbild</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 Mitgliederänderung</item>
-        <item quantity="other">%d Mitgliederänderungen</item>
+        <item quantity="one">%d Mitgliedsänderung</item>
+        <item quantity="other">%d Mitgliedsänderungen</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
     <string name="open_chat_header">Öffne Header</string>
@@ -817,20 +819,20 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
     <string name="missing_permissions_error">Nicht berechtigt, diese Aktion durchzuführen.</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
-        <item quantity="other">%ds</item>
+        <item quantity="one">%d s</item>
+        <item quantity="other">%d s</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
-        <item quantity="other">%dm</item>
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
-        <item quantity="other">%dh</item>
+        <item quantity="one">%d h</item>
+        <item quantity="other">%d h</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1T</item>
-        <item quantity="other">%dT</item>
+        <item quantity="one">%d T</item>
+        <item quantity="other">%d T</item>
     </plurals>
     <string name="room_participants_now">Jetzt %1$s</string>
     <string name="room_participants_ago">%1$s seit %2$s</string>
@@ -838,15 +840,15 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="room_participants_invite_join_names_and">%1$s und %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 ausgewählt</item>
+        <item quantity="one">%d ausgewählt</item>
         <item quantity="other">%d ausgewählt</item>
     </plurals>
     <plurals name="group_members">
-        <item quantity="one">1 Mitglied</item>
+        <item quantity="one">%d Mitglied</item>
         <item quantity="other">%d Mitglieder</item>
     </plurals>
     <plurals name="group_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">%d Raum</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <string name="system_alerts_header">Systembenachrichtigungen</string>
@@ -911,13 +913,13 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Bitte sende einen Fehlerbericht, damit dies untersucht werden kann.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Systemeinstellungen.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Benachrichtigungen sind in den Systemeinstellungen aktiviert.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Notifications sind in den Systemeinstellungen deaktiviert.
-Bitte überprüfe die Systemeinstellungen.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Benachrichtigungen sind in den Systemeinstellungen deaktiviert.
+\nBitte überprüfe die Systemeinstellungen.</string>
     <string name="open_settings">Öffne Einstellungen</string>
     <string name="settings_troubleshoot_test_account_settings_title">Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Benachrichtigungen sind für dein Konto eingeschaltet.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Notifications sind für dein Konto deaktiviert.
-Bitte überprüfe die Kontoeinstellungen.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Benachrichtigungen sind für dein Konto deaktiviert.
+\nBitte überprüfe die Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktiviere</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sitzungseinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für diese Sitzung aktiviert.</string>
@@ -925,7 +927,7 @@ Bitte überprüfe die Kontoeinstellungen.</string>
 \nBitte überprüfe die Einstellungen für Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
     <string name="settings_troubleshoot_test_play_services_failed">Element benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play-Dienste</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM-Token erfolgreich abgefragt:
@@ -933,11 +935,12 @@ Bitte überprüfe die Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_fcm_failed">Abfragen des FCM-Tokens fehlgeschlagen:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Home-Sserver registriert.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Home-Server registriert werden: %1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Home-Server registriert werden:
+\n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Benachrichtigungsdienst</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Benachrichtigungsdienst läuft.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Benachrichtigungsdienst läuft nicht.
-Versuche die Anwendung neuzustarten.</string>
+\nVersuche die Anwendung neu zu starten.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starte Dienst</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatischer Neustart des Benachrichtigungsdienstes</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dienst wurde automatisch gestoppt und erneut gestartet.</string>
@@ -948,7 +951,7 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiviere das Starten beim Hochfahren</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Überprüfe Hintergrund-Einschränkungen</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Element deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Element aktiviert.
 \nDie App wird aggressiv eingeschränkt, während sie im Hintergrund arbeiten möchte. Dies könnte Benachrichtigungen beeinflussen.
 \n%1$s</string>
@@ -964,8 +967,8 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_battery_failed">Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
-    <string name="startup_notification_fdroid_battery_optim_message">"Element muss eine  Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
-\nAuf dem nächsten Bildschirm wirst Du gefragt, ob Du Element erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren."</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element muss eine Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
+\nAuf dem nächsten Bildschirm wirst du gefragt, ob du Element erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Berechtigung gewähren</string>
     <string name="account_email_error">Beim Verifizieren deiner E-Mail-Adresse trat ein Fehler auf.</string>
     <string name="account_phone_number_error">Beim Verifizieren deiner Telefonnummer trat ein Fehler auf.</string>
@@ -1015,11 +1018,11 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Dieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+\nDieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDieser Fehler liegt nicht unter der Kontrolle von Element. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
+\nDieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
     <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger!nnen haben die Schlüssel um diese Nachrichten zu lesen. 
@@ -1083,14 +1086,16 @@ Dieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf
     <string name="keys_backup_setup_step1_advanced">(Erweitert)</string>
     <string name="keys_backup_setup_step1_manual_export">Schlüssel manuell exportieren</string>
     <string name="keys_backup_setup_step2_text_title">Schütze deine Sicherung mit einer Passphrase.</string>
-    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Home-Server gespeichert. Schütze deine Sicherung mit einer Passphrase. Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
+    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Home-Server gespeichert. Schütze deine Sicherung mit einer Passphrase.
+\n
+\nFür maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
     <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Oder schütze deine Sicherung mit einem Wiederherstellungsschlüssel den du sicher verwahrst.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Wiederherstellungsschlüssel einrichten</string>
     <string name="keys_backup_setup_step3_success_title">Erfolg!</string>
     <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
     <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
-Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
+\nVerwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Bewahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort auf, wie z.B. einem Passwortmanager (oder Tresor) auf</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Teilen</string>
@@ -1141,7 +1146,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="action_mark_room_read">Als gelesen markieren</string>
     <string name="settings_notification_privacy_no_background_sync">Die App braucht sich <b>nicht</b> im Hintergrund mit dem Home-Server verbinden, dies sollte die Akkunutzung reduzieren</string>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 Nachricht</item>
+        <item quantity="one">%1$s: %2$d Nachricht</item>
         <item quantity="other">%1$s: %2$d Nachrichten</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1442,17 +1447,17 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="report_content_custom_submit">MELDEN</string>
     <string name="block_user">NUTZER IGNORIEREN</string>
     <string name="content_reported_title">Inhalt gemeldet</string>
-    <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
-\n
-\nWenn du keine weiteren Inhalte dieses Nutzers sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+    <string name="content_reported_content">Dieser Inhalt wurde gemeldet. 
+\n 
+\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="content_reported_as_spam_title">Als Spam gemeldet</string>
-    <string name="content_reported_as_spam_content">Dieser Inhalt wurde als Spam gemeldet
-\n
-\nWenn du keine weiteren Inhalte dieses Nutzers mehr sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+    <string name="content_reported_as_spam_content">Dieser Inhalt wurde als Spam gemeldet.
+\n 
+\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="content_reported_as_inappropriate_title">Als unangebracht gemeldet</string>
-    <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet
-\n
-\nWenn du keine weiteren Inhalte dieses Nutzers mehr sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+    <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet.
+\n 
+\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="permissions_rationale_msg_keys_backup_export">Element benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
 \n
 \nBitte erlaube den Zugriff im nächsten Pop-Up sodass du deine Schlüssel manuell exportieren kannst.</string>
@@ -1960,6 +1965,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_participants_power_level_demote">Zurückstufen</string>
     <string name="room_participants_action_ignore_title">Benutzer ignorieren</string>
     <string name="room_participants_action_ignore_prompt_msg">Durch das Ignorieren werden für dich alle Nachrichten des Nutzers ausgeblendet.
+\n
 \nDu kannst die Aktion jederzeit in den allgemeinen Einstellungen rückgängig machen.</string>
     <string name="room_participants_action_unignore_title">Ignorieren des Benutzers rückgängig machen</string>
     <string name="room_participants_action_unignore_prompt_msg">Das Aufheben der Ignorierung wird alle Nachrichten des Benutzers wieder einblenden.</string>
@@ -1967,8 +1973,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
     <string name="room_participants_kick_title">Benutzer entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den Benutzer von diesem Raum ausschließen.
-\nUm einen erneuten Beitritt zu verhindern, solltest du ihn stattdessen bannen.</string>
+    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den/die Benutzer!n von diesem Raum ausschließen.
+\n
+\nUm einen erneuten Beitritt zu verhindern, solltest du ihn/sie stattdessen bannen.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
@@ -2174,4 +2181,56 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
     <string name="reset">Zurücksetzen</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Pushempfang fehlgeschlagen. Lösung könnte eine Neuinstallation der Applikation sein.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Die Applikation empfängt den PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
+    <string name="search_is_not_supported_in_e2e_room">Die Suche in verschlüsselten Räumen wird noch nicht unterstützt.</string>
+    <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu starten</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
+    <string name="settings_security_pin_code_notifications_summary_on">Zeige Details wie Raumnamen und Nachrichteninhalt.</string>
+    <string name="settings_security_pin_code_notifications_title">Zeige Inhalt in Benachrichtigungen</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit Element zu entsperren.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiviere Gerät-spezifische Biometrie wie Fingerabdrücke und Gesichtserkennung.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Biometrie aktivieren</string>
+    <string name="settings_security_application_protection_screen_title">Schutz konfigurieren</string>
+    <string name="settings_security_application_protection_title">Zugriff schützen</string>
+    <string name="settings_security_application_protection_summary">Schütze den Zugriff mit PIN und Biometrie.</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Zeigen das Gerät, mit dem du jetzt überprüfen kannst</item>
+        <item quantity="other">Zeigen %d Geräte, mit denen du jetzt überprüfen kannst</item>
+    </plurals>
+    <string name="secure_backup_reset_no_history">Du wirst ohne Nachrichtenverlauf, Nachrichten, vertraute Geräten und vertraute Nutzer!nnen neu starten</string>
+    <string name="secure_backup_reset_if_you_reset_all">Wenn du alles zurücksetzt</string>
+    <string name="secure_backup_reset_all_no_other_devices">Mache dies nur, wenn du kein anderes Gerät hast, mit dem du dieses verifizieren kannst.</string>
+    <string name="secure_backup_reset_all">Alles zurücksetzen</string>
+    <string name="bad_passphrase_key_reset_all_action">Alle Wiederherstellungsoptionen vergessen oder verloren\? Alles zurücksetzen</string>
+    <string name="direct_room_created_summary_item_by_you">Du bist beigetreten.</string>
+    <string name="direct_room_created_summary_item">%s ist beigetreten.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt.</string>
+    <string name="direct_room_profile_section_more_leave">Verlassen</string>
+    <string name="direct_room_profile_section_more_settings">Einstellungen</string>
+    <string name="direct_room_profile_encrypted_subtitle">Nachrichten hier sind Ende-zu-Ende verschlüsselt.
+\n
+\nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der/die Empfänger!n haben die einzigen Schlüssel, um jene zu entsperren.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Nachrichten hier sind nicht Ende-zu-Ende verschlüsselt.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Dieser Homeserver läuft mit einer alten Version. Bitte deine Homeserver-Administration um ein Upgrade. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
+    <string name="direct_room_join_rules_invite_by_you">Du hast dies auf Einladungen beschränkt.</string>
+    <string name="direct_room_join_rules_invite">%1$s hat dies auf Einladungen beschränkt.</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Zeige vollständigen Verlauf in verschlüsselten Räumen an</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s und %2$s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s in %2$s und %3$s</string>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d Einladung</item>
+        <item quantity="other">%d Einladungen</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Die Benachrichtigung wurde angeklickt!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Bitte klicke auf die Benachrichtigung. Wenn die Benachrichtigung nicht angezeigt wird, überprüfe die Systemeinstellungen.</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Du siehst die Benachrichtigung! Klick mich!</string>
+    <string name="settings_troubleshoot_test_notification_title">Benachrichtigungsanzeige</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Bei jedem Öffnen von Element ist der PIN-Code erforderlich.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem Element 2 Minuten lang nicht verwendet wurde.</string>
+    <string name="settings_security_pin_code_grace_period_title">Fordere PIN nach 2 Minuten an</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Zeige nur die Anzahl von ungelesenen Nachrichten in einer einfachen Benachrichtigung.</string>
 </resources>
