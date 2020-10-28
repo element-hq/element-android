@@ -203,8 +203,8 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openCreateDirectRoom(context: Context) {
-        val intent = CreateDirectRoomActivity.getIntent(context)
+    override fun openCreateDirectRoom(context: Context, byQrCode: Boolean) {
+        val intent = CreateDirectRoomActivity.getIntent(context, byQrCode)
         context.startActivity(intent)
     }
 

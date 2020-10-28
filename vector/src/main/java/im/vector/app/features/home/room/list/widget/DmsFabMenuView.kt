@@ -47,7 +47,7 @@ class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attribut
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.openAddByQrCode()
+                        listener?.createDirectChatByQrCode()
                     }
                 }
 
@@ -97,6 +97,6 @@ class DmsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     interface Listener {
         fun createDirectChat()
-        fun openAddByQrCode()
+        fun createDirectChatByQrCode()
     }
 }
