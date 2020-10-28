@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import androidx.core.net.toFile
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,6 +28,7 @@ import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -140,13 +142,33 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
-            is RoomSettingsAction.SetAvatarAction          -> setState { copy(avatarAction = action.avatarAction) }
+            is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
             is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
             is RoomSettingsAction.Save                     -> saveSettings()
+            is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
+    }
+
+    private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
+        deletePendingAvatar()
+        setState { copy(avatarAction = action.avatarAction) }
+    }
+
+    private fun deletePendingAvatar() {
+        // Maybe delete the pending avatar
+        withState {
+            (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
+                    ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+        }
+    }
+
+    private fun cancel() {
+        deletePendingAvatar()
+
+        _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
 
     private fun saveSettings() = withState { state ->
@@ -188,6 +210,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         {
                             postLoading(false)
                             setState { copy(newHistoryVisibility = null) }
+                            deletePendingAvatar()
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {

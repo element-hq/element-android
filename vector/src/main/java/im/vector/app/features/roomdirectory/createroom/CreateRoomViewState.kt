@@ -30,4 +30,10 @@ data class CreateRoomViewState(
         val isEncrypted: Boolean = false,
         val hsAdminHasDisabledE2E: Boolean = false,
         val asyncCreateRoomRequest: Async<String> = Uninitialized
-) : MvRxState
+) : MvRxState {
+
+    /**
+     * Return true if there is not important input from user
+     */
+    fun isEmpty() = avatarUri == null && roomName.isEmpty() && roomTopic.isEmpty()
+}

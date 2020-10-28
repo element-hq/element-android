@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import androidx.core.net.toFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
@@ -27,7 +28,6 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
@@ -45,7 +45,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService
-) : VectorViewModel<CreateRoomViewState, CreateRoomAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -104,11 +104,16 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun doReset() {
         setState {
+            // Delete temporary file with the avatar
+            avatarUri?.let { tryOrNull { it.toFile().delete() } }
+
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
                     hsAdminHasDisabledE2E = !adminE2EByDefault
             )
         }
+
+        _viewEvents.post(CreateRoomViewEvents.Quit)
     }
 
     private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatarUri = action.imageUri) }

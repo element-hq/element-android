@@ -18,8 +18,6 @@
 
 package im.vector.app.features.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -28,7 +26,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -38,7 +35,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -48,14 +44,13 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.workers.signout.SignOutUiWorker
-import im.vector.lib.multipicker.entity.MultiPickerImageType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,15 +65,18 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class VectorSettingsGeneralFragment :
+class VectorSettingsGeneralFragment @Inject constructor(
+        colorProvider: ColorProvider
+):
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -277,18 +275,6 @@ class VectorSettingsGeneralFragment :
         session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // TODO handle this one (Ucrop lib)
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                UCrop.REQUEST_CROP -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-            }
-        }
-    }
-
     private fun refreshIntegrationManagerSettings() {
         val integrationAllowed = session.integrationManagerService().isIntegrationEnabled()
         (findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ALLOW_INTEGRATIONS_KEY))!!.let {
@@ -308,15 +294,7 @@ class VectorSettingsGeneralFragment :
         }
     }
 
-    override fun onImageReady(image: MultiPickerImageType) {
-        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .withAspectRatio(1f, 1f)
-                .start(requireContext(), this)
-    }
-
-    private fun onAvatarCropped(uri: Uri?) {
+    override fun onImageReady(uri: Uri?) {
         if (uri != null) {
             uploadAvatar(uri)
         } else {

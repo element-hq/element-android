@@ -24,7 +24,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.resources.ColorProvider
 import kotlinx.android.synthetic.main.activity_big_image_viewer.*
 import javax.inject.Inject
 
@@ -33,7 +32,6 @@ import javax.inject.Inject
  */
 class BigImageViewerActivity : VectorBaseActivity() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
-    @Inject lateinit var colorProvider: ColorProvider
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
