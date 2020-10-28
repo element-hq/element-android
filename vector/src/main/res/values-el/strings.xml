@@ -327,8 +327,6 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">Δεν έχετε άδεια να ξεκινήσετε μια κλήση συνδιάσκεψης</string>
     <string name="no_permissions_to_start_conf_call">Δεν έχετε άδεια να ξεκινήσετε μια κλήση συνδιάσκεψης σε αυτήν την αίθουσα</string>
     <string name="missing_permissions_to_start_conf_call">Χρειάζεστε άδεια για να προσκαλέσετε να ξεκινήσει μια διάσκεψη σε αυτήν την αίθουσα</string>
-    <string name="ongoing_conference_call">Τρέχουσα κλήση συνδιάσκεψης.
-\nΣυνδεθείτε ώς</string>
     <string name="reset">Επαναφορά</string>
     <string name="dismiss">Απόρριψη</string>
     <string name="play_video">Παίξε</string>

@@ -196,7 +196,7 @@
     <string name="notice_direct_room_third_party_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_direct_room_update_by_you">您在此处升级。</string>
     <string name="notice_direct_room_update">%s 在此处升级。</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">您使未来的消息对 %2$s 可见</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">您使未来的消息对 %1$s 可见</string>
     <string name="notice_made_future_direct_room_visibility">%1$s 使未来的消息对 %2$s 可见</string>
     <string name="notice_direct_room_leave_by_you">您离开了聊天室</string>
     <string name="notice_direct_room_leave">%1$s 离开了聊天室</string>

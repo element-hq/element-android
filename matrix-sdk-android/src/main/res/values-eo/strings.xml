@@ -123,7 +123,7 @@
     <string name="notice_room_guest_access_can_join_by_you">Vi permesis al gastoj enveni.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Vi forigis la ĉefadreson de ĉi tiu ĉambro.</string>
     <string name="notice_room_canonical_alias_set_by_you">Vi agordis al ĉefadreson de ĉi tiu ĉambro al %1$s.</string>
-    <string name="notice_room_aliases_added_and_removed_by_you">Vi aldonis %2$s kaj forigis %3$s kiel adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Vi aldonis %1$s kaj forigis %2$s kiel adresojn por ĉi tiu ĉambro.</string>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Vi forigis %2$s kiel adreson por ĉi tiu ĉambro.</item>
         <item quantity="other">Vi forigis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
@@ -132,12 +132,12 @@
         <item quantity="one">Vi aldonis %2$s kiel adreson por ĉi tiu ĉambro.</item>
         <item quantity="other">Vi aldonis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
     </plurals>
-    <string name="notice_room_withdraw_with_reason_by_you">Vi nuligis la inviton por %2$s. Kialo: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Vi nuligis la inviton por %1$s. Kialo: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Vi akceptis la inviton por %1$s. Kialo: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Vi nuligis inviton al la ĉambro por %1$s. Kialo: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Vi sendis al %1$s inviton al la ĉambro. Kialo: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Vi forbaris uzanton %1$s. Kialo: %2$s</string>
-    <string name="notice_room_unban_with_reason_by_you">Vi malforbaris uzanton %1$s. Kialo: %1$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Vi malforbaris uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_kick_with_reason_by_you">Vi forpelis uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Vi rifuzis la inviton. Kialo: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Vi foriris. Kialo: %1$s</string>
@@ -145,7 +145,7 @@
     <string name="notice_room_leave_with_reason_by_you">Vi foriris de la ĉambro. Kialo: %1$s</string>
     <string name="notice_room_join_with_reason_by_you">Vi envenis. Kialo: %1$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Vi aliĝis. Kialo: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s aliĝis. Kialo: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s aliĝis. Kialo: %2$s</string>
     <string name="notice_room_invite_with_reason_by_you">Vi invitis uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Via invito. Kialo: %1$s</string>
     <string name="notice_power_level_diff">%1$s de %2$s al %3$s</string>
@@ -165,7 +165,7 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s nuligis la inviton por %2$s</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Vi nuligis la aliĝan inviton por %1$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Vi invitis uzanton %1$s</string>
-    <string name="notice_direct_room_third_party_invite">%1$s invitis uzanton %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s invitis uzanton %2$s</string>
     <string name="notice_room_third_party_invite_by_you">Vi sendis aliĝan inviton al %1$s</string>
     <string name="notice_profile_change_redacted_by_you">Vi ĝisdatigis vian profilon %1$s</string>
     <string name="notice_room_avatar_removed_by_you">Vi forigis bildon de la ĉambro</string>

@@ -154,7 +154,7 @@
     <string name="notice_direct_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">Напуснахте стаята. Причина: %1$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Присъединихте се. Причина: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s се присъедини. Причина: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s се присъедини. Причина: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Присъединихте се в стаята. Причина: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Поканихте %1$s. Причина: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваша покана. Причина: %1$s</string>
@@ -169,7 +169,7 @@
     <string name="notice_widget_modified_by_you">Променихте %1$s приспособлението</string>
     <string name="notice_widget_modified">%1$s промени %2$s приспособлението</string>
     <string name="notice_widget_removed_by_you">Премахнахте %1$s приспособлението</string>
-    <string name="notice_widget_removed">%1$s премахна %1$s приспособлението</string>
+    <string name="notice_widget_removed">%1$s премахна %2$s приспособлението</string>
     <string name="notice_widget_added_by_you">Добавихте %1$s приспособление</string>
     <string name="notice_widget_added">%1$s добави %2$s приспособление</string>
     <string name="notice_room_third_party_registered_invite_by_you">Приехте поканата за %1$s</string>

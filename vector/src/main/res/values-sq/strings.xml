@@ -2137,7 +2137,7 @@
     <string name="bad_passphrase_key_reset_all_action">Harruat ose humbët krejt mundësitë e rimarrjes\? Riujdisni gjihçka</string>
     <string name="command_description_discard_session">E detyron të hidhet tej sesionin e tanishëm outbound në një dhomë të fshehtëzuar</string>
     <string name="direct_room_created_summary_item_by_you">Erdhët.</string>
-    <string name="direct_room_created_summary_item">$s erdhi.</string>
+    <string name="direct_room_created_summary_item">%s erdhi.</string>
     <string name="direct_room_encryption_enabled_tile_description">Mesazhet në këtë dhomë s’fshehtëzohen skaj-më-skaj.</string>
     <string name="direct_room_profile_section_more_leave">Braktise</string>
     <string name="direct_room_profile_section_more_settings">Rregullime</string>
