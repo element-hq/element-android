@@ -58,6 +58,11 @@ interface StateService {
      */
     fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable
 
+    /**
+     * Delete the avatar of the room
+     */
+    fun deleteAvatar(callback: MatrixCallback<Unit>): Cancelable
+
     fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict, callback: MatrixCallback<Unit>): Cancelable
 
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
