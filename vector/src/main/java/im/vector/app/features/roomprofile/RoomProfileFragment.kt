@@ -244,10 +244,12 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
-        if (matrixItem.avatarUrl?.isNotEmpty() == true) {
-            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-            startActivity(intent, options.toBundle())
-        }
+        matrixItem.avatarUrl
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { avatarUrl ->
+                    val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), avatarUrl)
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
+                    startActivity(intent, options.toBundle())
+                }
     }
 }
