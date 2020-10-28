@@ -16,19 +16,16 @@
 
 package im.vector.app.features.roomprofile.settings
 
-import android.app.Activity
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -37,19 +34,17 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
-import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import im.vector.lib.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.util.toMatrixItem
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -57,6 +52,7 @@ class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        colorProvider: ColorProvider,
         private val avatarRenderer: AvatarRenderer
 ) :
         VectorBaseFragment(),
@@ -66,7 +62,7 @@ class RoomSettingsFragment @Inject constructor(
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
@@ -178,12 +174,15 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.handle(RoomSettingsAction.SetRoomCanonicalAlias(alias))
     }
 
-    override fun onImageReady(image: MultiPickerImageType) {
-        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .withAspectRatio(1f, 1f)
-                .start(requireContext(), this)
+    override fun onImageReady(uri: Uri?) {
+        uri ?: return
+        viewModel.handle(
+                RoomSettingsAction.SetAvatarAction(
+                        RoomSettingsViewState.AvatarAction.UpdateAvatar(
+                                newAvatarUri = uri,
+                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+                )
+        )
     }
 
     override fun onAvatarDelete() {
@@ -206,26 +205,6 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onAvatarChange() {
         galleryOrCameraDialogHelper.show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // TODO handle this one (Ucrop lib)
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                UCrop.REQUEST_CROP -> {
-                    val uri = data?.let { UCrop.getOutput(it) } ?: return
-                    viewModel.handle(RoomSettingsAction.SetAvatarAction(
-                            RoomSettingsViewState.AvatarAction.UpdateAvatar(
-                                    newAvatarUri = uri,
-                                    newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
-                    )
-                    )
-                }
-            }
-        }
     }
 
     private var ignoreChanges = false
