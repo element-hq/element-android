@@ -273,8 +273,24 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
+            is RoomDetailAction.OpenOrCreateDm                   -> handleOpenOrCreateDm(action)
             is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
         }.exhaustive
+    }
+
+    private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
+        val existingDm = session.getExistingDirectRoomWithUser(action.userId)
+        if (existingDm == null) {
+            // First create a direct room
+            viewModelScope.launch(Dispatchers.IO) {
+                val roomId = awaitCallback<String> {
+                    session.createDirectRoom(action.userId, it)
+                }
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
+            }
+        } else {
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDm.roomId))
+        }
     }
 
     private fun handleJumpToReadReceipt(action: RoomDetailAction.JumpToReadReceipt) {

@@ -36,6 +36,22 @@ interface RoomService {
                    callback: MatrixCallback<String>): Cancelable
 
     /**
+     * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters
+     */
+    fun createDirectRoom(otherUserId: String,
+                         callback: MatrixCallback<String>): Cancelable {
+        return createRoom(
+                CreateRoomParams()
+                        .apply {
+                            invitedUserIds.add(otherUserId)
+                            setDirectMessage()
+                            enableEncryptionIfInvitedUsersSupportIt = true
+                        },
+                callback
+        )
+    }
+
+    /**
      * Join a room by id
      * @param roomIdOrAlias the roomId or the room alias of the room to join
      * @param reason optional reason for joining the room

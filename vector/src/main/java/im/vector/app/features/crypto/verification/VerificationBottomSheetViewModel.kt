@@ -49,7 +49,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
@@ -245,14 +244,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParams()
-                            .apply {
-                                invitedUserIds.add(otherUserId)
-                                setDirectMessage()
-                                enableEncryptionIfInvitedUsersSupportIt = true
-                            }
-
-                    session.createRoom(roomParams, object : MatrixCallback<String> {
+                    session.createDirectRoom(otherUserId, object : MatrixCallback<String> {
                         override fun onSuccess(data: String) {
                             setState {
                                 copy(
