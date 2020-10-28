@@ -128,7 +128,7 @@ class KeyRequestsFragment @Inject constructor(
             selectTxtFileToWrite(
                     activity = requireActivity(),
                     activityResultLauncher = epxortAuditForActivityResult,
-                    defaultFileName = "audit-export-json_${System.currentTimeMillis()}.txt",
+                    defaultFileName = "audit-export_${System.currentTimeMillis()}.txt",
                     chooserHint = "Export Audit"
             )
             return true
