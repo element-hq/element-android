@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import androidx.core.net.toFile
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,6 +28,7 @@ import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -146,7 +148,18 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
             is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
             is RoomSettingsAction.Save                     -> saveSettings()
+            is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
+    }
+
+    private fun cancel() {
+        // Maybe delete the pending avatar
+        withState {
+            (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
+                    ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+        }
+
+        _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
 
     private fun saveSettings() = withState { state ->

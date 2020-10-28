@@ -106,7 +106,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun doReset() {
         setState {
             // Delete temporary file with the avatar
-            // TODO BMA Do this also in the other PR
             avatarUri?.let { tryOrNull { it.toFile().delete() }}
 
             CreateRoomViewState(

@@ -27,4 +27,5 @@ sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetRoomCanonicalAlias(val newCanonicalAlias: String) : RoomSettingsAction()
     object EnableEncryption : RoomSettingsAction()
     object Save : RoomSettingsAction()
+    object Cancel : RoomSettingsAction()
 }

@@ -79,7 +79,11 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                is RoomSettingsViewEvents.Success -> showSuccess()
+                RoomSettingsViewEvents.Success    -> showSuccess()
+                RoomSettingsViewEvents.GoBack     -> {
+                    ignoreChanges = true
+                    vectorBaseActivity.onBackPressed()
+                }
             }.exhaustive
         }
     }
@@ -218,8 +222,7 @@ class RoomSettingsFragment @Inject constructor(
                         .setTitle(R.string.dialog_title_warning)
                         .setMessage(R.string.warning_unsaved_change)
                         .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
-                            ignoreChanges = true
-                            vectorBaseActivity.onBackPressed()
+                            viewModel.handle(RoomSettingsAction.Cancel)
                         }
                         .setNegativeButton(R.string.cancel, null)
                         .show()
