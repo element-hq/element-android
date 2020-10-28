@@ -204,4 +204,8 @@
     <string name="notice_direct_room_join">%1$s 已加入</string>
     <string name="notice_direct_room_created_by_you">您创建了讨论</string>
     <string name="notice_direct_room_created">%1$s 创建了讨论</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">你已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">你已允许客人加入这里。</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s 已允许客人加入这里。</string>
 </resources>

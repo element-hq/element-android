@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s تصویری فرستاد.</string>
     <string name="summary_user_sent_sticker">%1$s برچسبی فرستاد.</string>
-
     <string name="notice_room_invite_no_invitee">دعوت %s</string>
     <string name="notice_room_invite">‫%1$s، %2$s را دعوت کرد</string>
     <string name="notice_room_invite_you">%1$s دعوتتان کرد</string>
@@ -32,11 +31,9 @@
     <string name="notice_room_visibility_unknown">ناشناخته (%s).</string>
     <string name="notice_end_to_end">%1$s رمزنگاری سرتاسری را روشن کرد (%2$s)</string>
     <string name="notice_room_update">%s این اتاق را ارتقا داد.</string>
-
     <string name="notice_requested_voip_conference">%1$s درخواست یک گردهمایی صوتی داد</string>
     <string name="notice_voip_started">گردهمایی صوتی آغاز شد</string>
     <string name="notice_voip_finished">گردهمایی صوتی پایان یافت</string>
-
     <string name="notice_avatar_changed_too">(تصویر هم عوض شد)</string>
     <string name="notice_room_name_removed">%1$s نام اتاق را پاک کرد</string>
     <string name="notice_room_topic_removed">%1$s موضوع اتاق را پاک کرد</string>
@@ -47,36 +44,24 @@
     <string name="notice_room_third_party_invite">%1$s دعوتی برای پیوستن %2$s به اتاق فرستاد</string>
     <string name="notice_room_third_party_revoked_invite">%1$s دعوت پیوستن به اتاق %2$s را باطل کرد</string>
     <string name="notice_room_third_party_registered_invite">%1$s دعوت برای %2$s را پذیرفت</string>
-
     <string name="notice_crypto_unable_to_decrypt">** ناتوان در رمزگشایی: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">دستگاه فرستنده، کلیدهای این پیام را برایمان نفرستاده است.</string>
-
     <string name="unable_to_send_message">ناتوان در فرستادن پیام</string>
-
     <string name="message_failed_to_upload">شکست در بارگذاری تصویر</string>
-
     <string name="network_error">خطای شبکه</string>
     <string name="matrix_error">خطای ماتریکس</string>
-
     <string name="room_error_join_failed_empty_room">در حال حاضر امکان بازپیوست به اتاقی خالی وجود ندارد‌‌.</string>
-
     <string name="encrypted_message">پیام رمزنگاری شده</string>
-
     <string name="medium_email">نشانی رایانامه</string>
     <string name="medium_phone_number">شماره تلفن</string>
-
     <string name="room_displayname_invite_from">دعوت از %s</string>
     <string name="room_displayname_room_invite">دعوت اتاق</string>
-
     <string name="room_displayname_two_members">%1$s و %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s و ۱ نفر دیگر</item>
         <item quantity="other">%1$s و %2$d نفر دیگر</item>
     </plurals>
-
     <string name="room_displayname_empty_room">اتاق خالی</string>
-
     <string name="initial_sync_start_importing_account">همگام‌سازی نخستین:
 \nدر حال درون‌ریزی حساب…</string>
     <string name="initial_sync_start_importing_account_crypto">همگام‌سازی نخستین:
@@ -93,10 +78,8 @@
 \nدر حال درون‌ریزی انجمن‌ها</string>
     <string name="initial_sync_start_importing_account_data">همگام‌سازی نخستین:
 \nدر حال درون‌ریزی داده‌های حساب</string>
-
     <string name="event_status_sending_message">در حال فرستادن پیام…</string>
     <string name="clear_timeline_send_queue">پاک‌سازی صفِ در حال ارسال</string>
-
     <string name="notice_room_invite_no_invitee_with_reason">دعوت %1$s. دلیل: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s، %2$s را دعوت کرد. دلیل: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s دعوتتان کرد. دلیل: %2$s</string>
@@ -110,36 +93,27 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s دعوت %2$s برای پیوستن به اتاق را باطل کرد. دلیل: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s دعوت برای %2$s را پذیرفت. دلیل: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s دعوت %2$s را نپذیرفت. دلیل: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق افزود.</item>
         <item quantity="other">%1$s، %2$s را به عنوان نشانی‌هایی برای این اتاق افزود.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق پاک کرد.</item>
         <item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s برای نشانی این اتاق، %2$s را افزود و %3$s را پاک کرد.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s نشانی اصلی این اتاق را به %2$s تنظیم کرد.</string>
     <string name="notice_room_canonical_alias_unset">%1$s نشانی اصلی را برای این اتاق پاک کرد.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s اجازه داد میمهانان به گروه بپیوندند.</string>
     <string name="notice_room_guest_access_forbidden">%1$s جلوی پیوستن میمهانان به گروه را گرفت.</string>
-
     <string name="notice_end_to_end_ok">%1$s رمزنگاری سرتاسری را روشن کرد.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s رمزنگاری سرتاسری را روشن کرد (الگوریتم تشخیص‌داده‌نشده %2$s ).</string>
-
     <string name="key_verification_request_fallback_message">%s درخواست تأیید کلیدتان را دارد، ولی کارخواهتان تأیید کلید درون گپ را پشتیبانی نمی‌کند. برای تأیید کلیدها لازم است از تأییدیهٔ کلید قدیمی استفاده کنید.</string>
-
     <string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
     <string name="notice_profile_change_redacted">%1$s نمایه‌اش را به‌روز کرد %2$s</string>
     <string name="could_not_redact">نمی‌توان ویرایش کرد</string>
     <string name="summary_you_sent_image">تصویری فرستادید.</string>
     <string name="summary_you_sent_sticker">برچسبی فرستادید.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">دعوتتان</string>
     <string name="notice_room_created_by_you">اتاق را ایجاد کردید</string>
     <string name="notice_room_invite_by_you">از %1$s دعوت کردید</string>
@@ -167,7 +141,6 @@
     <string name="notice_made_future_room_visibility_by_you">تاریخچهٔ آتی اتاق را برای %1$s نمایان کردید</string>
     <string name="notice_end_to_end_by_you">رمزنگاری سرتاسری را روشن کردید (%1$s)</string>
     <string name="notice_room_update_by_you">این اتاق را ارتقا دادید.</string>
-
     <string name="notice_requested_voip_conference_by_you">دارخواست کنفرانس ویپ دادید</string>
     <string name="notice_room_name_removed_by_you">نام اتاق را برداشتید</string>
     <string name="notice_room_topic_removed_by_you">موضوع اتاق را برداشتید</string>
@@ -177,24 +150,20 @@
     <string name="notice_room_third_party_invite_by_you">برای %1$s دعوت پیوستن به اتاق فرستادید</string>
     <string name="notice_room_third_party_revoked_invite_by_you">دعوت پیوستن %1$s به اتاق را پس گرفتید</string>
     <string name="notice_room_third_party_registered_invite_by_you">دعوت برای %1$s را پذیرفتید</string>
-
     <string name="notice_widget_added">%1$s ابزارک %2$s را افزود</string>
     <string name="notice_widget_added_by_you">ابزارک %1$s را افزودید</string>
     <string name="notice_widget_removed">%1$s ابزارک %2$s را برداشت</string>
     <string name="notice_widget_removed_by_you">ابزارک %1$s را برداشتید</string>
     <string name="notice_widget_modified">%1$s ابزارک %2$s را دستکاری کرد</string>
     <string name="notice_widget_modified_by_you">ابزارک %1$s را دستکاری کردید</string>
-
     <string name="power_level_admin">مدیر</string>
     <string name="power_level_moderator">ناظم</string>
     <string name="power_level_default">پیش‌گزیده</string>
     <string name="power_level_custom">سفارشی (%1$d)</string>
     <string name="power_level_custom_no_value">سفارشی</string>
-
     <string name="notice_power_level_changed_by_you">سطح قدرت %1$s را تغییر دادید.</string>
     <string name="notice_power_level_changed">%1$s سطح قدرت %2$s را تغییر داد.</string>
     <string name="notice_power_level_diff">%1$s از %2$s به %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">دعوتتان. دلیل: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">%1$s را دعوت کردید. دلیل: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">به اتاق پیوستید. دلیل: %1$s</string>
@@ -207,26 +176,41 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">دعوت %1$s برای پیوستن به اتاق را پس گرفتید. دلیل: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">دعوت برای %1$s را پذیرفتید. دلیل: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">دعوت %1$s را رد کردید. دلیل: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">نشانی %1$s را به این اتاق افزودید.</item>
         <item quantity="other">نشانی‌های %1$s را به این اتاق افزودید.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">نشانی %1$s ار از این اتاق برداشتید.</item>
         <item quantity="other">نشانی‌های %1$s ار از این اتاق برداشتید.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">نشانی %1$s ار افزوده و %2$s را از این اتاق برداشتید.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">نشانی اصلی این اتاق را به %1$s تنظیم کردید.</string>
     <string name="notice_room_canonical_alias_unset_by_you">نشانی اصلی این اتاق را برداشتید.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">به میهمانان اجازهٔ پیوستن به گروه دادید.</string>
     <string name="notice_room_guest_access_forbidden_by_you">میمهانان را از پیوستن به گروه بازداشتید.</string>
-
     <string name="notice_end_to_end_ok_by_you">رمزنگاری سرتاسری را روشن کردید.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">رمزنگاری سرتاسری را روشن کردید (الگوریتم ناشناخته %1$s).</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">مهمان‌ها را از پیوستن به اتاق بازداشتید.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s مهمان‌ها را از پیوستن به اتاق بازداشت.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">به مهمان‌ها اجازه دادید به این‌جا بپیوندند.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s به مهمان‌ها اجازه داد به این‌جا بپیوندند.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">رفتید. دلیل: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s رفت. دلیل: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">پیوستید. دلیل: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$sپیوست. دلیل: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">دعوت %1$s را پس گرفتید</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s دعوت %2$s را پس گرفت</string>
+    <string name="notice_direct_room_third_party_invite_by_you">%1$s را دعوت کردید</string>
+    <string name="notice_direct_room_third_party_invite">%1$s، %2$s را دعوت کرد</string>
+    <string name="notice_direct_room_update_by_you">این‌جا را ارتقا دادید.</string>
+    <string name="notice_direct_room_update">%s این‌جا را ارتقا داد.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">پیام‌های آینده را برای %1$s نمایان کردید</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s پیام‌های آینده را برای %2$s نمایان کرد</string>
+    <string name="notice_direct_room_leave_by_you">اتاق را ترک کردید</string>
+    <string name="notice_direct_room_leave">%1$s اتاق را ترک کرد</string>
+    <string name="notice_direct_room_join_by_you">پیوستید</string>
+    <string name="notice_direct_room_join">%1$s پیوست</string>
+    <string name="notice_direct_room_created_by_you">گفت‌وگو را ایجاد کردید</string>
+    <string name="notice_direct_room_created">%1$s گفت‌وگو را ایجاد کرد</string>
 </resources>
