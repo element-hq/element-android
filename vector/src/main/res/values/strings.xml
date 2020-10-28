@@ -1271,7 +1271,7 @@
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new session \'%s\', which is requesting encryption keys.</string>
-    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\Session name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
+    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
     <string name="your_unverified_device_requesting">Your unverified session  \'%s\' is requesting encryption keys.</string>
     <string name="your_unverified_device_requesting_with_info">An unverified session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
 

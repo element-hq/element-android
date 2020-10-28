@@ -43,6 +43,12 @@
             android:summary="@string/settings_send_typing_notifs_summary"
             android:title="@string/settings_send_typing_notifs" />
 
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
+            android:summary="@string/settings_send_message_with_enter_summary"
+            android:title="@string/settings_send_message_with_enter" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
@@ -98,12 +104,6 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
-            android:summary="@string/settings_send_message_with_enter_summary"
-            android:title="@string/settings_send_message_with_enter"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.app.core.preference.VectorListPreference
