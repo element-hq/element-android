@@ -88,6 +88,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
                 // The following assumes MXIDs are case insensitive
                 if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
                     Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
                 } else {
                     // Try to get user from known users and fall back to creating a User object from MXID
                     val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)

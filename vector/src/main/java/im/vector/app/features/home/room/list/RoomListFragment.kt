@@ -40,7 +40,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -69,7 +68,6 @@ class RoomListFragment @Inject constructor(
         private val sharedViewPool: RecyclerView.RecycledViewPool,
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
 
-    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
@@ -149,10 +147,10 @@ class RoomListFragment @Inject constructor(
         }
 
         createGroupRoomButton.debouncedClicks {
-            openRoomDirectory("")
+            openRoomDirectory()
         }
 
-        // Hide FAB when lists is scrolling
+        // Hide FABs when list is scrolling
         roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

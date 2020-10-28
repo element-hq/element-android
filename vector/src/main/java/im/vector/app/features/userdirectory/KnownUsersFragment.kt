@@ -54,7 +54,7 @@ class KnownUsersFragment @Inject constructor(
 
     override fun getMenuRes() = args.menuResId
 
-    private val userDirViewModel: UserDirectoryViewModel by activityViewModel()
+    private val viewModel: UserDirectoryViewModel by activityViewModel()
     private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
 
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
@@ -75,7 +75,7 @@ class KnownUsersFragment @Inject constructor(
             knownUsersE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        userDirViewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
+        viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
             renderSelectedUsers(it)
         }
     }
@@ -87,7 +87,7 @@ class KnownUsersFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        withState(userDirViewModel) {
+        withState(viewModel) {
             val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
@@ -96,7 +96,7 @@ class KnownUsersFragment @Inject constructor(
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(userDirViewModel) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
         sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
         return@withState true
     }
@@ -131,7 +131,7 @@ class KnownUsersFragment @Inject constructor(
                     } else {
                         UserDirectoryAction.FilterKnownUsers(filterValue.toString())
                     }
-                    userDirViewModel.handle(action)
+                    viewModel.handle(action)
                 }
                 .disposeOnDestroyView()
 
@@ -145,7 +145,7 @@ class KnownUsersFragment @Inject constructor(
         }
     }
 
-    override fun invalidate() = withState(userDirViewModel) {
+    override fun invalidate() = withState(viewModel) {
         knownUsersController.setData(it)
     }
 
@@ -176,12 +176,12 @@ class KnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            userDirViewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
+            viewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
         }
     }
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        userDirViewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
+        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
     }
 }

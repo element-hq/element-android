@@ -47,7 +47,7 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.openRoomDirectory("")
+                        listener?.openRoomDirectory()
                     }
                 }
 
@@ -97,6 +97,6 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
 
     interface Listener {
         fun createDirectChat()
-        fun openRoomDirectory(initialFilter: String)
+        fun openRoomDirectory(initialFilter: String = "")
     }
 }
