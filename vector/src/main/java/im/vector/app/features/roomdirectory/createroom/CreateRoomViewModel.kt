@@ -105,7 +105,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun doReset() {
         setState {
             // Delete temporary file with the avatar
-            avatarUri?.let { tryOrNull { it.toFile().delete() }}
+            avatarUri?.let { tryOrNull { it.toFile().delete() } }
 
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
