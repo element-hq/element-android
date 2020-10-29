@@ -125,12 +125,12 @@
     <string name="notice_room_canonical_alias_set_by_you">Vi agordis al ĉefadreson de ĉi tiu ĉambro al %1$s.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Vi aldonis %1$s kaj forigis %2$s kiel adresojn por ĉi tiu ĉambro.</string>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">Vi forigis %2$s kiel adreson por ĉi tiu ĉambro.</item>
-        <item quantity="other">Vi forigis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+        <item quantity="one">Vi forigis %1$s kiel adreson por ĉi tiu ĉambro.</item>
+        <item quantity="other">Vi forigis %1$s kiel adresojn por ĉi tiu ĉambro.</item>
     </plurals>
     <plurals name="notice_room_aliases_added_by_you">
-        <item quantity="one">Vi aldonis %2$s kiel adreson por ĉi tiu ĉambro.</item>
-        <item quantity="other">Vi aldonis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+        <item quantity="one">Vi aldonis %1$s kiel adreson por ĉi tiu ĉambro.</item>
+        <item quantity="other">Vi aldonis %1$s kiel adresojn por ĉi tiu ĉambro.</item>
     </plurals>
     <string name="notice_room_withdraw_with_reason_by_you">Vi nuligis la inviton por %1$s. Kialo: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Vi akceptis la inviton por %1$s. Kialo: %2$s</string>

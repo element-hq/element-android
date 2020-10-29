@@ -285,14 +285,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
     fun createDM(alice: Session, bob: Session): String {
         val roomId = mTestHelper.doSync<String> {
-            alice.createRoom(
-                    CreateRoomParams().apply {
-                        invitedUserIds.add(bob.myUserId)
-                        setDirectMessage()
-                        enableEncryptionIfInvitedUsersSupportIt = true
-                    },
-                    it
-            )
+            alice.createDirectRoom(bob.myUserId, it)
         }
 
         mTestHelper.waitWithLatch { latch ->

@@ -13,6 +13,7 @@ Improvements 🙌:
  - Edit and remove icons are now visible on image attachment preview screen (#2294)
  - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
  - Better visibility of text reactions in dark theme (#1118)
+ - Room member profile: Add action to create (or open) a DM (#2310)
 
 Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
