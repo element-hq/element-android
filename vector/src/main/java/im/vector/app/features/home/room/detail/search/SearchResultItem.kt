@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -49,7 +50,9 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
         holder.memberNameView.setTextOrHide(sender?.getBestName())
         holder.timeView.text = dateFormatter?.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         // TODO Improve that (use formattedBody, etc.)
-        holder.contentView.text = event.content?.get("body") as? String
+        @Suppress("UNCHECKED_CAST")
+        // Take new content first
+        holder.contentView.text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String
     }
 
     class Holder : VectorEpoxyHolder() {
