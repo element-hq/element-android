@@ -109,7 +109,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA, 0)) {
-            addFragment( R.id.container, CreateDirectRoomByQrCodeFragment::class.java )
+            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
@@ -129,7 +129,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
                 doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
             } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && intent?.getBooleanExtra(BY_QR_CODE, false)!!) {
-                addFragment( R.id.container, CreateDirectRoomByQrCodeFragment::class.java )
+                addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
             }
         } else {
             Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()

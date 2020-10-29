@@ -2638,7 +2638,7 @@
     <string name="cannot_dm_self">Cannot DM yourself!</string>
     <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
     <string name="qr_code_not_scanned">QR code not scanned!</string>
-  
+
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
     <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
