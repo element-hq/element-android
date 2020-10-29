@@ -43,19 +43,19 @@ class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyCo
             title(roomKeyRequest.requestId)
             description(
                     span {
-                        span("roomId:\n") {
+                        span("roomId: ") {
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.roomId}"
 
-                        span("sessionId:\n") {
+                        span("\nsessionId: ") {
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.sessionId}"
-                        span("\nstate:") {
+                        span("\nstate: ") {
                             textStyle = "bold"
                         }
-                        +"\n${roomKeyRequest.state.name}"
+                        +roomKeyRequest.state.name
                     }
             )
         }

@@ -47,16 +47,23 @@ class IncomingKeyRequestPagedController @Inject constructor(
             title(roomKeyRequest.requestId)
             description(
                     span {
-                        span("From user: ${roomKeyRequest.userId}")
-                        +vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                        span("sessionId:") {
+                        span("From: ") {
                             textStyle = "bold"
                         }
+                        span("${roomKeyRequest.userId}")
+                        +vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                        span("\nsessionId:") {
+                            textStyle = "bold"
+                        }
+                        +"${roomKeyRequest.requestBody?.sessionId}"
                         span("\nFrom device:") {
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.deviceId}"
-                        +"\n${roomKeyRequest.state.name}"
+                        span("\nstate: ") {
+                            textStyle = "bold"
+                        }
+                        +roomKeyRequest.state.name
                     }
             )
         }
