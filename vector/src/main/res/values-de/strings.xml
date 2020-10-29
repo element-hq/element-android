@@ -2233,4 +2233,5 @@
     <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem Element 2 Minuten lang nicht verwendet wurde.</string>
     <string name="settings_security_pin_code_grace_period_title">Fordere PIN nach 2 Minuten an</string>
     <string name="settings_security_pin_code_notifications_summary_off">Zeige nur die Anzahl von ungelesenen Nachrichten in einer einfachen Benachrichtigung.</string>
+    <string name="attachment_type_dialog_title">Bild hinzufügen von</string>
 </resources>
