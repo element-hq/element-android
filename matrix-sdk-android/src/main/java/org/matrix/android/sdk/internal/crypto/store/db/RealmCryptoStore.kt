@@ -1124,7 +1124,7 @@ internal class RealmCryptoStore @Inject constructor(
                         content = ContentMapper.map(event.content)
                 ).apply {
                     sendState = SendState.SYNCED
-                    decryptionResultJson = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                    decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
                     decryptionErrorCode = event.mCryptoError?.name
                 }
                 realm.insertOrUpdate(entity)
@@ -1143,7 +1143,7 @@ internal class RealmCryptoStore @Inject constructor(
                     content = ContentMapper.map(event.content)
             ).apply {
                 sendState = SendState.SYNCED
-                decryptionResultJson = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
                 decryptionErrorCode = event.mCryptoError?.name
             }
             realm.insertOrUpdate(entity)

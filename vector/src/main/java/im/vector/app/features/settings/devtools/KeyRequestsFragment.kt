@@ -30,6 +30,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -103,17 +104,11 @@ class KeyRequestsFragment @Inject constructor(
             when (it) {
                 is KeyRequestEvents.SaveAudit -> {
                     tryOrNull {
-                        val os = requireContext().contentResolver?.openOutputStream(it.uri)
-                        if (os == null) {
-                            false
-                        } else {
-                            os.write(it.raw.toByteArray())
-                            os.flush()
-                            true
-                        }
+                        requireContext().contentResolver?.openOutputStream(it.uri)
+                                ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }
-            }
+            }.exhaustive
         }
     }
 

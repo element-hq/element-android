@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
@@ -54,7 +55,7 @@ sealed class KeyRequestEvents : VectorViewEvents {
 }
 
 data class KeyRequestViewState(
-        val exporting: Async<String> = Uninitialized
+        val exporting: Async<Unit> = Uninitialized
 ) : MvRxState
 
 class KeyRequestViewModel @AssistedInject constructor(
@@ -78,76 +79,74 @@ class KeyRequestViewModel @AssistedInject constructor(
 
     override fun handle(action: KeyRequestAction) {
         when (action) {
-            is KeyRequestAction.ExportAudit -> {
-                setState {
-                    copy(exporting = Loading())
-                }
-                viewModelScope.launch(Dispatchers.IO) {
-                    try {
-                        // this can take long
-                        val eventList = session.cryptoService().getGossipingEvents()
-                        // clean it a bit to
-                        val stringBuilder = StringBuilder()
-                        eventList.forEach {
-                            val clearType = it.getClearType()
-                            stringBuilder.append("[${it.ageLocalTs}] : $clearType from:${it.senderId} - ")
-                            when (clearType) {
-                                EventType.ROOM_KEY_REQUEST   -> {
-                                    val content = it.getClearContent().toModel<RoomKeyShareRequest>()
-                                    stringBuilder.append("reqId:${content?.requestId}  action:${content?.action} ")
-                                    if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
-                                        stringBuilder.append("sessionId: ${content.body?.sessionId} ")
-                                    }
-                                    stringBuilder.append("requestedBy: ${content?.requestingDeviceId} ")
-                                    stringBuilder.append("\n")
-                                }
-                                EventType.FORWARDED_ROOM_KEY -> {
-                                    val encryptedContent = it.content.toModel<OlmEventContent>()
-                                    val content = it.getClearContent().toModel<ForwardedRoomKeyContent>()
+            is KeyRequestAction.ExportAudit -> exportAudit(action)
+        }.exhaustive
+    }
 
-                                    stringBuilder.append("sessionId:${content?.sessionId}  From Device (sender key):${encryptedContent?.senderKey} ")
-                                    span("\nFrom Device (sender key):") {
-                                        textStyle = "bold"
-                                    }
-                                    stringBuilder.append("\n")
+    private fun exportAudit(action: KeyRequestAction.ExportAudit) {
+        setState {
+            copy(exporting = Loading())
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // this can take long
+                val eventList = session.cryptoService().getGossipingEvents()
+                // clean it a bit to
+                val raw = buildString {
+                    eventList.forEach {
+                        val clearType = it.getClearType()
+                        append("[${it.ageLocalTs}] : $clearType from:${it.senderId} - ")
+                        when (clearType) {
+                            EventType.ROOM_KEY_REQUEST   -> {
+                                val content = it.getClearContent().toModel<RoomKeyShareRequest>()
+                                append("reqId:${content?.requestId} action:${content?.action} ")
+                                if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
+                                    append("sessionId: ${content.body?.sessionId} ")
                                 }
-                                EventType.ROOM_KEY           -> {
-                                    val content = it.getClearContent()
-                                    stringBuilder.append("sessionId:${content?.get("session_id")} roomId:${content?.get("room_id")} dest:${content?.get("_dest") ?: "me"}")
-                                    stringBuilder.append("\n")
-                                }
-                                EventType.SEND_SECRET        -> {
-                                    val content = it.getClearContent().toModel<SecretSendEventContent>()
-                                    stringBuilder.append("requestId:${content?.requestId} From Device:${it.mxDecryptionResult?.payload?.get("sender_device")}")
-                                    stringBuilder.append("\n")
-                                }
-                                EventType.REQUEST_SECRET     -> {
-                                    val content = it.getClearContent().toModel<SecretShareRequest>()
-                                    stringBuilder.append("reqId:${content?.requestId} action:${content?.action} ")
-                                    if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
-                                        stringBuilder.append("secretName:${content.secretName} ")
-                                    }
-                                    stringBuilder.append("requestedBy:${content?.requestingDeviceId}")
-                                    stringBuilder.append("\n")
-                                }
-                                EventType.ENCRYPTED          -> {
-                                    stringBuilder.append("Failed to Derypt \n")
-                                }
-                                else                         -> {
-                                    stringBuilder.append("?? \n")
+                                append("requestedBy: ${content?.requestingDeviceId}")
+                            }
+                            EventType.FORWARDED_ROOM_KEY -> {
+                                val encryptedContent = it.content.toModel<OlmEventContent>()
+                                val content = it.getClearContent().toModel<ForwardedRoomKeyContent>()
+
+                                append("sessionId:${content?.sessionId} From Device (sender key):${encryptedContent?.senderKey}")
+                                span("\nFrom Device (sender key):") {
+                                    textStyle = "bold"
                                 }
                             }
+                            EventType.ROOM_KEY           -> {
+                                val content = it.getClearContent()
+                                append("sessionId:${content?.get("session_id")} roomId:${content?.get("room_id")} dest:${content?.get("_dest") ?: "me"}")
+                            }
+                            EventType.SEND_SECRET        -> {
+                                val content = it.getClearContent().toModel<SecretSendEventContent>()
+                                append("requestId:${content?.requestId} From Device:${it.mxDecryptionResult?.payload?.get("sender_device")}")
+                            }
+                            EventType.REQUEST_SECRET     -> {
+                                val content = it.getClearContent().toModel<SecretShareRequest>()
+                                append("reqId:${content?.requestId} action:${content?.action} ")
+                                if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
+                                    append("secretName:${content.secretName} ")
+                                }
+                                append("requestedBy:${content?.requestingDeviceId}")
+                            }
+                            EventType.ENCRYPTED          -> {
+                                append("Failed to Decrypt")
+                            }
+                            else                         -> {
+                                append("??")
+                            }
                         }
-                        val raw = stringBuilder.toString()
-                        setState {
-                            copy(exporting = Success(""))
-                        }
-                        _viewEvents.post(KeyRequestEvents.SaveAudit(action.uri, raw))
-                    } catch (error: Throwable) {
-                        setState {
-                            copy(exporting = Fail(error))
-                        }
+                        append("\n")
                     }
+                }
+                setState {
+                    copy(exporting = Success(Unit))
+                }
+                _viewEvents.post(KeyRequestEvents.SaveAudit(action.uri, raw))
+            } catch (error: Throwable) {
+                setState {
+                    copy(exporting = Fail(error))
                 }
             }
         }
