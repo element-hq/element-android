@@ -819,7 +819,7 @@ internal class DefaultTimeline(
         private val inMemorySendingEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
 
         fun getInMemorySendingEvents(): List<TimelineEvent> {
-            return inMemorySendingEvents
+            return inMemorySendingEvents.toList()
         }
 
         /**
