@@ -70,10 +70,6 @@ class KeyRequestViewModel @AssistedInject constructor(
         fun create(initialState: KeyRequestViewState): KeyRequestViewModel
     }
 
-    private val full24DateFormatter by lazy {
-        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    }
-
     companion object : MvRxViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
 
         @JvmStatic
@@ -98,54 +94,7 @@ class KeyRequestViewModel @AssistedInject constructor(
                 // this can take long
                 val eventList = session.cryptoService().getGossipingEvents()
                 // clean it a bit to
-                val raw = buildString {
-                    eventList.forEach {
-                        val clearType = it.getClearType()
-                        append("[${getFormattedDate(it.ageLocalTs)}] $clearType from:${it.senderId} - ")
-                        when (clearType) {
-                            EventType.ROOM_KEY_REQUEST   -> {
-                                val content = it.getClearContent().toModel<RoomKeyShareRequest>()
-                                append("reqId:${content?.requestId} action:${content?.action} ")
-                                if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
-                                    append("sessionId: ${content.body?.sessionId} ")
-                                }
-                                append("requestedBy: ${content?.requestingDeviceId}")
-                            }
-                            EventType.FORWARDED_ROOM_KEY -> {
-                                val encryptedContent = it.content.toModel<OlmEventContent>()
-                                val content = it.getClearContent().toModel<ForwardedRoomKeyContent>()
-
-                                append("sessionId:${content?.sessionId} From Device (sender key):${encryptedContent?.senderKey}")
-                                span("\nFrom Device (sender key):") {
-                                    textStyle = "bold"
-                                }
-                            }
-                            EventType.ROOM_KEY           -> {
-                                val content = it.getClearContent()
-                                append("sessionId:${content?.get("session_id")} roomId:${content?.get("room_id")} dest:${content?.get("_dest") ?: "me"}")
-                            }
-                            EventType.SEND_SECRET        -> {
-                                val content = it.getClearContent().toModel<SecretSendEventContent>()
-                                append("requestId:${content?.requestId} From Device:${it.mxDecryptionResult?.payload?.get("sender_device")}")
-                            }
-                            EventType.REQUEST_SECRET     -> {
-                                val content = it.getClearContent().toModel<SecretShareRequest>()
-                                append("reqId:${content?.requestId} action:${content?.action} ")
-                                if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
-                                    append("secretName:${content.secretName} ")
-                                }
-                                append("requestedBy:${content?.requestingDeviceId}")
-                            }
-                            EventType.ENCRYPTED          -> {
-                                append("Failed to Decrypt")
-                            }
-                            else                         -> {
-                                append("??")
-                            }
-                        }
-                        append("\n")
-                    }
-                }
+                val raw = GossipingEventsSerializer().serialize(eventList)
                 setState {
                     copy(exporting = Success(Unit))
                 }
@@ -156,12 +105,5 @@ class KeyRequestViewModel @AssistedInject constructor(
                 }
             }
         }
-    }
-
-    private fun getFormattedDate(ageLocalTs: Long?): String {
-        return ageLocalTs
-                ?.let { DateProvider.toLocalDateTime(it) }
-                ?.let { full24DateFormatter.format(it) }
-                ?: "?"
     }
 }
