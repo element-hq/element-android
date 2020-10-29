@@ -112,8 +112,8 @@ class ReactionButton @JvmOverloads constructor(context: Context,
 
 //        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
         context.withStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr) {
-            onDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape)
-            offDrawable = ContextCompat.getDrawable(context, R.drawable.rounded_rect_shape_off)
+            onDrawable = ContextCompat.getDrawable(context, R.drawable.reaction_rounded_rect_shape)
+            offDrawable = ContextCompat.getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
 
             circleStartColor = getColor(R.styleable.ReactionButton_circle_start_color, 0)
 
