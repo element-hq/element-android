@@ -31,7 +31,7 @@ import javax.inject.Inject
 internal interface RoomGetter {
     fun getRoom(roomId: String): Room?
 
-    fun getDirectRoomWith(otherUserId: String): Room?
+    fun getDirectRoomWith(otherUserId: String): String?
 }
 
 @SessionScope
@@ -46,7 +46,7 @@ internal class DefaultRoomGetter @Inject constructor(
         }
     }
 
-    override fun getDirectRoomWith(otherUserId: String): Room? {
+    override fun getDirectRoomWith(otherUserId: String): String? {
         return realmSessionProvider.withRealm { realm ->
             RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
@@ -55,7 +55,6 @@ internal class DefaultRoomGetter @Inject constructor(
                     .filter { dm -> dm.otherMemberIds.contains(otherUserId) }
                     .map { it.roomId }
                     .firstOrNull { roomId -> otherUserId in RoomMemberHelper(realm, roomId).getActiveRoomMemberIds() }
-                    ?.let { roomId -> createRoom(realm, roomId) }
         }
     }
 

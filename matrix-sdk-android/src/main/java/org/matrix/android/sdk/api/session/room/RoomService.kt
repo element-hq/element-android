@@ -129,5 +129,8 @@ interface RoomService {
      */
     fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
-    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
+    /**
+     * Return the roomId of an existing DM with the other user, or null if such room does not exist
+     */
+    fun getExistingDirectRoomWithUser(otherUserId: String): String?
 }

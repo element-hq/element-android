@@ -232,7 +232,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)?.roomId
+                ?: session.getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {

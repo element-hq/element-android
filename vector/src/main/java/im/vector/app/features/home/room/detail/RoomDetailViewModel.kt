@@ -279,8 +279,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
-        val existingDm = session.getExistingDirectRoomWithUser(action.userId)
-        if (existingDm == null) {
+        val existingDmRoomId = session.getExistingDirectRoomWithUser(action.userId)
+        if (existingDmRoomId == null) {
             // First create a direct room
             viewModelScope.launch(Dispatchers.IO) {
                 val roomId = awaitCallback<String> {
@@ -289,7 +289,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
             }
         } else {
-            _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDm.roomId))
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
         }
     }
 
