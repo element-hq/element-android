@@ -443,6 +443,7 @@ dependencies {
 
     // Analytics
     implementation 'ly.count.android:sdk:20.04.5'
+    implementation 'ly.count.android:sdk-native:20.04.5'
 
     // TESTS
     testImplementation 'junit:junit:4.13'

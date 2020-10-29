@@ -23,10 +23,10 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.features.home.RoomListDisplayMode
 import ly.count.android.sdk.Countly
 import ly.count.android.sdk.CountlyConfig
+import ly.count.android.sdknative.CountlyNative
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.internal.util.sha256
-import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,6 +52,8 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
         data class SendQuote(val roomId: String) : AnalyticEvent()
         data class SendEdit(val roomId: String) : AnalyticEvent()
         data class SendMedia(val roomId: String, val type: ContentAttachmentData.Type) : AnalyticEvent()
+        data class BeginInvite(val roomId: String, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean) : AnalyticEvent()
+        data class SendInvite(val roomId: String, val inviteeCount: Int, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean) : AnalyticEvent()
 
         object StartRoomDirectory : AnalyticEvent()
         object EndRoomDirectory : AnalyticEvent()
@@ -60,30 +62,30 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
         data class EndRoomDirectorySearch(val resultCount: Int) : AnalyticEvent()
 
         object StartJoinRoomEvent : AnalyticEvent()
-        data class EndJoinRoomEvent(val roomId: String, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean): AnalyticEvent()
+        data class EndJoinRoomEvent(val roomId: String, val isEncrypted: Boolean, val memberCount: Int, val isPublic: Boolean) : AnalyticEvent()
         object CancelJoinRoomEvent : AnalyticEvent()
 
         data class UnHandledCrash(val exception: Throwable) : AnalyticEvent()
-        data class GetFeedBacks(val id: String, val closeText: String, val activity: Activity,) : AnalyticEvent()
-
+        data class GetFeedBacks(val id: String, val closeText: String, val activity: Activity, ) : AnalyticEvent()
     }
 
     private var countly: Countly? = null
 
-    fun isEnabled() : Boolean {
+    fun isEnabled(): Boolean {
         // Should check consent here
         return countly?.isInitialized ?: false
     }
 
     fun report(event: AnalyticEvent) {
         when (event) {
-            is AnalyticEvent.Init     -> {
+            is AnalyticEvent.Init                   -> {
                 val session = event.session
                 CountlyConfig(context, "8abf1ee15646bc884556b82e5053857904264b66", "https://try.count.ly/").let {
                     if (BuildConfig.DEBUG) {
                         it.setLoggingEnabled(true)
                     }
-//                    it.enableCrashReporting()
+                    it.enableCrashReporting()
+                    CountlyNative.initNative(context.applicationContext);
 //                    it.setCustomCrashSegment(mapOf(
 //                            "flavor" to BuildConfig.FLAVOR,
 //                            "branch" to BuildConfig.GIT_BRANCH_NAME
@@ -93,13 +95,12 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         countly = it
                     }
                     Countly.userData.setUserData(
-                            mapOf("name" to session.myUserId),
                             mapOf("home_server" to session.sessionParams.homeServerHost)
                     )
                     Countly.userData.save()
                 }
             }
-            is AnalyticEvent.RoomView -> {
+            is AnalyticEvent.RoomView               -> {
                 countly?.views()?.recordView(
                         "view_room",
                         mapOf(
@@ -111,14 +112,14 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                 )
                 Unit
             }
-            is AnalyticEvent.HomeView -> {
+            is AnalyticEvent.HomeView               -> {
                 countly?.views()?.recordView(
                         "view_home",
                         mapOf<String, Any>("filter" to event.mode.name)
                 )
                 Unit
             }
-            is AnalyticEvent.StartCall -> {
+            is AnalyticEvent.StartCall              -> {
                 countly?.events()?.recordEvent(
                         "start_call",
                         mapOf<String, Any>(
@@ -128,7 +129,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.StartJitsiConf -> {
+            is AnalyticEvent.StartJitsiConf         -> {
                 countly?.events()?.recordEvent(
                         "start_call",
                         mapOf<String, Any>(
@@ -138,7 +139,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.SendText -> {
+            is AnalyticEvent.SendText               -> {
                 countly?.events()?.recordEvent(
                         "send_message",
                         mapOf<String, Any>(
@@ -149,7 +150,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.SendReply -> {
+            is AnalyticEvent.SendReply              -> {
                 countly?.events()?.recordEvent(
                         "send_message",
                         mapOf<String, Any>(
@@ -160,7 +161,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.SendQuote -> {
+            is AnalyticEvent.SendQuote              -> {
                 countly?.events()?.recordEvent(
                         "send_message",
                         mapOf<String, Any>(
@@ -171,7 +172,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.SendMedia -> {
+            is AnalyticEvent.SendMedia              -> {
                 countly?.events()?.recordEvent(
                         "send_message",
                         mapOf<String, Any>(
@@ -187,7 +188,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.SendEdit       -> {
+            is AnalyticEvent.SendEdit               -> {
                 countly?.events()?.recordEvent(
                         "send_message",
                         mapOf<String, Any>(
@@ -198,53 +199,53 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                         )
                 )
             }
-            is AnalyticEvent.JoinCall       -> {
+            is AnalyticEvent.JoinCall               -> {
                 countly?.events()?.recordEvent(
                         "join_call",
-                        mapOf<String, Any> (
+                        mapOf<String, Any>(
                                 "room_id" to event.roomId.sha256(),
                                 "is_video" to event.isVideo,
                                 "is_jitsi" to false
                         )
                 )
             }
-            is AnalyticEvent.JoinConference -> {
+            is AnalyticEvent.JoinConference         -> {
                 countly?.events()?.recordEvent(
                         "join_call",
-                        mapOf<String, Any> (
+                        mapOf<String, Any>(
                                 "room_id" to event.roomId.sha256(),
                                 "is_video" to event.isVideo,
                                 "is_jitsi" to true
                         )
                 )
             }
-            is AnalyticEvent.StartActivity  -> {
+            is AnalyticEvent.StartActivity          -> {
                 countly?.onStart(event.activity)
             }
-            is AnalyticEvent.EndActivity    -> {
+            is AnalyticEvent.EndActivity            -> {
                 countly?.onStop()
             }
-            AnalyticEvent.StartRoomDirectory -> {
+            AnalyticEvent.StartRoomDirectory        -> {
                 countly?.events()?.startEvent("room_directory")
                 Unit
             }
-            AnalyticEvent.EndRoomDirectory -> {
+            AnalyticEvent.EndRoomDirectory          -> {
                 countly?.events()?.endEvent("room_directory")
                 Unit
             }
-            AnalyticEvent.StartRoomDirectorySearch -> {
+            AnalyticEvent.StartRoomDirectorySearch  -> {
                 countly?.events()?.startEvent("room_directory_search")
                 Unit
             }
-            is AnalyticEvent.EndRoomDirectorySearch ->  {
+            is AnalyticEvent.EndRoomDirectorySearch -> {
                 countly?.events()?.endEvent("room_directory_search", mapOf("result_count" to event.resultCount), 1, 0.0)
                 Unit
             }
-            AnalyticEvent.StartJoinRoomEvent -> {
+            AnalyticEvent.StartJoinRoomEvent        -> {
                 countly?.events()?.startEvent("join_room")
                 Unit
             }
-            is AnalyticEvent.EndJoinRoomEvent -> {
+            is AnalyticEvent.EndJoinRoomEvent       -> {
                 countly?.events()?.endEvent(
                         "join_room",
                         mapOf<String, Any>("room_id" to event.roomId.sha256()),
@@ -253,21 +254,49 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
                 )
                 Unit
             }
-            AnalyticEvent.CancelJoinRoomEvent -> {
+            AnalyticEvent.CancelJoinRoomEvent       -> {
                 countly?.events()?.cancelEvent("join_room")
                 Unit
             }
-            is AnalyticEvent.UnHandledCrash   -> {
+            is AnalyticEvent.UnHandledCrash         -> {
                 countly?.crashes()?.recordUnhandledException(event.exception)
                 Unit
             }
-            is AnalyticEvent.GetFeedBacks        -> {
+            is AnalyticEvent.GetFeedBacks           -> {
                 countly?.ratings()?.showFeedbackPopup(event.id, event.closeText, event.activity) {
                     // if (it) error is null no error...
                 }
             }
-            is AnalyticEvent.SettingsView -> {
+            is AnalyticEvent.SettingsView           -> {
                 countly?.views()?.recordView("settings_view", mapOf("category" to event.category))
+                Unit
+            }
+            is AnalyticEvent.BeginInvite            -> {
+                countly?.events()?.recordEvent(
+                        "begin_invite",
+                        mapOf(
+                                "room_id" to event.roomId.sha256(),
+                                "is_encrypted" to event.isEncrypted,
+                                "num_users" to event.memberCount,
+                                "is_public" to event.isPublic
+                        ),
+                        1,
+                        0.0
+                )
+                Unit
+            }
+            is AnalyticEvent.SendInvite             -> {
+                countly?.events()?.recordEvent(
+                        "send_invite",
+                        mapOf(
+                                "room_id" to event.roomId.sha256(),
+                                "is_encrypted" to event.isEncrypted,
+                                "num_users" to event.memberCount,
+                                "is_public" to event.isPublic
+                        ),
+                        1,
+                        event.inviteeCount.toDouble()
+                )
                 Unit
             }
         }.exhaustive
