@@ -167,11 +167,14 @@ internal class DefaultTimeline(
                 val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
                         ?: throw IllegalStateException("Can't open a timeline without a room")
 
-                sendingEvents = roomEntity.sendingTimelineEvents.where().filterEventsWithSettings().findAll()
+                // We don't want to filter here because some sending events that are not displayed
+                // are still used for ui echo (relation like reaction)
+                sendingEvents = roomEntity.sendingTimelineEvents.where()/*.filterEventsWithSettings()*/.findAll()
                 sendingEvents.addChangeListener { events ->
                     uiEchoManager.sentEventsUpdated(events)
                     postSnapshot()
                 }
+
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
@@ -410,13 +413,16 @@ internal class DefaultTimeline(
         val builtSendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
             builtSendingEvents.addAll(uiEchoManager.getInMemorySendingEvents().filterEventsWithSettings())
-            sendingEvents.forEach { timelineEventEntity ->
-                if (builtSendingEvents.find { it.eventId == timelineEventEntity.eventId } == null) {
-                    val element = timelineEventMapper.map(timelineEventEntity)
-                    uiEchoManager.updateSentStateWithUiEcho(element)
-                    builtSendingEvents.add(element)
-                }
-            }
+            sendingEvents
+                    .map { timelineEventMapper.map(it) }
+                    // Filter out sending event that are not displayable!
+                    .filterEventsWithSettings()
+                    .forEach { timelineEvent ->
+                        if (builtSendingEvents.find { it.eventId == timelineEvent.eventId } == null) {
+                            uiEchoManager.updateSentStateWithUiEcho(timelineEvent)
+                            builtSendingEvents.add(timelineEvent)
+                        }
+                    }
         }
         return builtSendingEvents
     }
@@ -782,8 +788,8 @@ internal class DefaultTimeline(
             val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.contains(it.root.type)
             if (!filterType) return@filter false
 
-            val filterEdits = if (settings.filters.filterEdits && it.root.type == EventType.MESSAGE) {
-                val messageContent = it.root.content.toModel<MessageContent>()
+            val filterEdits = if (settings.filters.filterEdits && it.root.getClearType() == EventType.MESSAGE) {
+                val messageContent = it.root.getClearContent().toModel<MessageContent>()
                 messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
                 true
@@ -831,8 +837,13 @@ internal class DefaultTimeline(
             inMemorySendingStates.keys.removeAll { key ->
                 events.find { it.eventId == key } == null
             }
-            inMemoryReactions.keys.removeAll { key ->
-                events.find { it.eventId == key } == null
+
+            inMemoryReactions.forEach { (_, uiEchoData) ->
+                uiEchoData.removeAll { data ->
+                    // I remove the uiEcho, when the related event is not anymore in the sending list
+                    // (means that it is synced)!
+                    events.find { it.eventId == data.localEchoId } == null
+                }
             }
         }
 
@@ -896,6 +907,7 @@ internal class DefaultTimeline(
                     relatedEventID
             )
             val updateReactions = existingAnnotationSummary.reactionsSummary.toMutableList()
+
             contents.forEach { uiEchoReaction ->
                 val existing = updateReactions.firstOrNull { it.key == uiEchoReaction.reaction }
                 if (existing == null) {
