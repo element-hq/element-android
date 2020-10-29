@@ -131,6 +131,14 @@ interface RoomService {
 
     /**
      * Return the roomId of an existing DM with the other user, or null if such room does not exist
+     * A room is a DM if:
+     *  - it is listed in the `m.direct` account data
+     *  - the current user has joined the room
+     *  - the other user is invited or has joined the room
+     *  - it has exactly 2 members
+     * Note:
+     *  - the returning room can be encrypted or not
+     *  - the power level of the users are not taken into account. Normally in a DM, the 2 members are admins of the room
      */
     fun getExistingDirectRoomWithUser(otherUserId: String): String?
 }
