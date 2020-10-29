@@ -16,16 +16,23 @@
 
 package im.vector.app.features.home.room.detail.search
 
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
+import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
+import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.search.EventAndSender
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.Calendar
 import javax.inject.Inject
@@ -33,6 +40,7 @@ import javax.inject.Inject
 class SearchResultController @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<SearchViewState>() {
 
@@ -64,13 +72,31 @@ class SearchResultController @Inject constructor(
             }
         }
 
-        buildSearchResultItems(data.searchResult)
+        val hasItems = buildSearchResultItems(data)
+        if (!hasItems && !data.hasMoreResult) {
+            // All returned result returned by the server has been filtered out and there is no more result
+            noResultItem {
+                id("noResult")
+                text(stringProvider.getString(R.string.no_result_placeholder))
+            }
+        }
     }
 
-    private fun buildSearchResultItems(events: List<EventAndSender>) {
+    /**
+     * @return true if some item has been added
+     */
+    private fun buildSearchResultItems(data: SearchViewState): Boolean {
         var lastDate: Calendar? = null
+        var hasItems = false
 
-        events.forEach { eventAndSender ->
+        data.searchResult.forEach { eventAndSender ->
+            val event = eventAndSender.event
+
+            @Suppress("UNCHECKED_CAST")
+            // Take new content first
+            val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String ?: return@forEach
+            val spannable = setHighLightedText(text, data.highlights) ?: return@forEach
+
             val eventDate = Calendar.getInstance().apply {
                 timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
             }
@@ -85,12 +111,39 @@ class SearchResultController @Inject constructor(
             searchResultItem {
                 id(eventAndSender.event.eventId)
                 avatarRenderer(avatarRenderer)
-                dateFormatter(dateFormatter)
-                event(eventAndSender.event)
+                formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
+                spannable(spannable)
                 sender(eventAndSender.sender
                         ?: eventAndSender.event.senderId?.let { session.getUser(it) }?.toMatrixItem())
                 listener { listener?.onItemClicked(eventAndSender.event) }
             }
+            hasItems = true
         }
+
+        return hasItems
+    }
+
+    /**
+     * Highlight the text. If the text is not found, return null to ignore this result
+     * See https://github.com/matrix-org/synapse/issues/8686
+     */
+    private fun setHighLightedText(text: String, highlights: List<String>): Spannable? {
+        val wordToSpan: Spannable = SpannableString(text)
+        var found = false
+        highlights.forEach { highlight ->
+            var searchFromIndex = 0
+            while (searchFromIndex < text.length) {
+                val indexOfHighlight = text.indexOf(highlight, searchFromIndex, ignoreCase = true)
+                searchFromIndex = if (indexOfHighlight == -1) {
+                    Integer.MAX_VALUE
+                } else {
+                    // bold
+                    found = true
+                    wordToSpan.setSpan(StyleSpan(Typeface.BOLD), indexOfHighlight, indexOfHighlight + highlight.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    indexOfHighlight + 1
+                }
+            }
+        }
+        return wordToSpan.takeIf { found }
     }
 }
