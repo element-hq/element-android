@@ -1233,7 +1233,7 @@
     <string name="fab_menu_create_chat">Direktnachrichten</string>
     <string name="create_room_title">Neuer Raum</string>
     <string name="create_room_action_create">ERSTELLEN</string>
-    <string name="create_room_name_hint">Raumname</string>
+    <string name="create_room_name_hint">Name</string>
     <string name="create_room_public_title">Öffentlich</string>
     <string name="create_room_public_description">Jeder wird diesem Raum beitreten können</string>
     <string name="create_room_directory_title">Raumverzeichnis</string>
@@ -2234,4 +2234,14 @@
     <string name="settings_security_pin_code_grace_period_title">Fordere PIN nach 2 Minuten an</string>
     <string name="settings_security_pin_code_notifications_summary_off">Zeige nur die Anzahl von ungelesenen Nachrichten in einer einfachen Benachrichtigung.</string>
     <string name="attachment_type_dialog_title">Bild hinzufügen von</string>
+    <string name="warning_room_not_created_yet">Der Raum ist noch nicht erstellt. Raumerstellung abbrechen\?</string>
+    <string name="room_list_quick_actions_low_priority_add">Zu niedrige Priorität hinzufügen</string>
+    <string name="create_room_topic_hint">Thema</string>
+    <string name="warning_unsaved_change_discard">Änderungen verwerfen</string>
+    <string name="warning_unsaved_change">Es gibt ungespeicherte Änderungen. Änderungen verwerfen\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Von niedrige Priorität entfernen</string>
+    <string name="rotate_and_crop_screen_title">Rotieren und Zuschneiden</string>
+    <string name="create_room_settings_section">Raumeinstellungen</string>
+    <string name="create_room_topic_section">Raum-Thema (optional)</string>
+    <string name="create_room_name_section">Raumname</string>
 </resources>
