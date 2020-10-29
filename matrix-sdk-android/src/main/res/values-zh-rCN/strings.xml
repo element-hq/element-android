@@ -177,7 +177,7 @@
         <item quantity="other">您新增了 %1$s 为此聊天室的地址。</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="other">您移除了此聊天室的 %2$s 地址。</item>
+        <item quantity="other">您移除了此聊天室的 %1$s 地址。</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed_by_you">您为此聊天室新增了 %1$s 并移除了 %2$s 地址。</string>
     <string name="notice_room_canonical_alias_set_by_you">您将此聊天室的主地址设为了 %1$s。</string>

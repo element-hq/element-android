@@ -177,9 +177,9 @@
         <item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">Odstranili jste %2$s jako adresu pro tuto místnost.</item>
-        <item quantity="few">Odstranili jste %2$s jako adresuy pro tuto místnost.</item>
-        <item quantity="other">Odstranili jste %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="one">Odstranili jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste %1$s jako adresuy pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste %1$s jako adresy pro tuto místnost.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s přidali %2$s a odstranili %3$s jako adresy pro tuto místnost.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Přidali jste %1$s a odstranili %2$s jako adresy pro tuto místnost.</string>
