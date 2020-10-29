@@ -127,8 +127,10 @@ internal interface IMXCryptoStore {
     fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
 
     fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
+
     fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
-    fun storeIncomingGossipingRequests(request: List<IncomingShareRequestCommon>)
+
+    fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>)
 //    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**

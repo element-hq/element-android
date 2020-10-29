@@ -105,7 +105,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     fun onGossipingRequestEvent(event: Event) {
         Timber.v("## CRYPTO | GOSSIP onGossipingRequestEvent type ${event.type} from user ${event.senderId}")
         val roomKeyShare = event.getClearContent().toModel<GossipingDefaultContent>()
-        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        // val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
         when (roomKeyShare?.action) {
             GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
