@@ -33,6 +33,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.resources.DateProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
+import org.threeten.bp.format.DateTimeFormatter
 
 sealed class KeyRequestAction : VectorViewModelAction {
     data class ExportAudit(val uri: Uri) : KeyRequestAction()
@@ -66,6 +68,10 @@ class KeyRequestViewModel @AssistedInject constructor(
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: KeyRequestViewState): KeyRequestViewModel
+    }
+
+    private val full24DateFormatter by lazy {
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
     }
 
     companion object : MvRxViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
@@ -95,7 +101,7 @@ class KeyRequestViewModel @AssistedInject constructor(
                 val raw = buildString {
                     eventList.forEach {
                         val clearType = it.getClearType()
-                        append("[${it.ageLocalTs}] : $clearType from:${it.senderId} - ")
+                        append("[${getFormattedDate(it.ageLocalTs)}] $clearType from:${it.senderId} - ")
                         when (clearType) {
                             EventType.ROOM_KEY_REQUEST   -> {
                                 val content = it.getClearContent().toModel<RoomKeyShareRequest>()
@@ -150,5 +156,12 @@ class KeyRequestViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private fun getFormattedDate(ageLocalTs: Long?): String {
+        return ageLocalTs
+                ?.let { DateProvider.toLocalDateTime(it) }
+                ?.let { full24DateFormatter.format(it) }
+                ?: "?"
     }
 }
