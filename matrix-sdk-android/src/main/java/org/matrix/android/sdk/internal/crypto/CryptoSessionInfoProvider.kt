@@ -47,7 +47,7 @@ internal class CryptoSessionInfoProvider @Inject constructor(
     /**
      * @param allActive if true return joined as well as invited, if false, only joined
      */
-     fun getRoomUserIdsForCrypto(roomId: String, allActive: Boolean): List<String> {
+     fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {
         var userIds: List<String> = emptyList()
         monarchy.doWithRealm { realm ->
             userIds = if (allActive) {

@@ -872,7 +872,7 @@ internal class DefaultCryptoService @Inject constructor(
     private fun getRoomUserIds(roomId: String): List<String> {
         val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
                 && shouldEncryptForInvitedMembers(roomId)
-        return cryptoSessionInfoProvider.getRoomUserIdsForCrypto(roomId, encryptForInvitedMembers)
+        return cryptoSessionInfoProvider.getRoomUserIds(roomId, encryptForInvitedMembers)
     }
 
     /**
