@@ -289,7 +289,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
             }
         } else {
-            _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
+            if (existingDmRoomId != initialState.roomId) {
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
+            }
         }
     }
 
