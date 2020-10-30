@@ -92,8 +92,8 @@ class SearchFragment @Inject constructor(
                 }
             }
         } else {
-            stateView.state = StateView.State.Content
             controller.setData(state)
+            stateView.state = StateView.State.Content
         }
     }
 
