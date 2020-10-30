@@ -112,7 +112,7 @@ android {
     ndkVersion "21.3.6528147"
 
     defaultConfig {
-        applicationId "im.vector.app.count"
+        applicationId "im.vector.app"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
