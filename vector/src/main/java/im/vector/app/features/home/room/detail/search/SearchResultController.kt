@@ -92,7 +92,7 @@ class SearchResultController @Inject constructor(
     }
 
     /**
-     * @return true if some item has been added
+     * @return the list of EpoxyModel (date items and search result items), or an empty list if all items have been filtered out
      */
     private fun buildSearchResultItems(data: SearchViewState): List<EpoxyModel<*>> {
         var lastDate: Calendar? = null
