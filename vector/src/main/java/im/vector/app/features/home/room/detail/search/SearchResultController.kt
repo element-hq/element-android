@@ -20,6 +20,7 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.R
@@ -28,7 +29,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericItemHeader
+import im.vector.app.core.ui.list.GenericItemHeader_
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -60,6 +61,8 @@ class SearchResultController @Inject constructor(
     override fun buildModels(data: SearchViewState?) {
         data ?: return
 
+        val searchItems = buildSearchResultItems(data)
+
         if (data.hasMoreResult) {
             loadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
@@ -70,24 +73,30 @@ class SearchResultController @Inject constructor(
                     }
                 }
             }
-        }
-
-        val hasItems = buildSearchResultItems(data)
-        if (!hasItems && !data.hasMoreResult) {
-            // All returned result returned by the server has been filtered out and there is no more result
-            noResultItem {
-                id("noResult")
-                text(stringProvider.getString(R.string.no_result_placeholder))
+        } else {
+            if (searchItems.isEmpty()) {
+                // All returned results by the server has been filtered out and there is no more result
+                noResultItem {
+                    id("noResult")
+                    text(stringProvider.getString(R.string.no_result_placeholder))
+                }
+            } else {
+                noResultItem {
+                    id("noMoreResult")
+                    text(stringProvider.getString(R.string.no_more_results))
+                }
             }
         }
+
+        searchItems.forEach { add(it) }
     }
 
     /**
      * @return true if some item has been added
      */
-    private fun buildSearchResultItems(data: SearchViewState): Boolean {
+    private fun buildSearchResultItems(data: SearchViewState): List<EpoxyModel<*>> {
         var lastDate: Calendar? = null
-        var hasItems = false
+        val result = mutableListOf<EpoxyModel<*>>()
 
         data.searchResult.forEach { eventAndSender ->
             val event = eventAndSender.event
@@ -101,26 +110,25 @@ class SearchResultController @Inject constructor(
                 timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
-                genericItemHeader {
-                    id(eventDate.hashCode())
-                    text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
-                }
+                GenericItemHeader_()
+                        .id(eventDate.hashCode())
+                        .text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
+                        .let { result.add(it) }
             }
             lastDate = eventDate
 
-            searchResultItem {
-                id(eventAndSender.event.eventId)
-                avatarRenderer(avatarRenderer)
-                formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
-                spannable(spannable)
-                sender(eventAndSender.sender
-                        ?: eventAndSender.event.senderId?.let { session.getUser(it) }?.toMatrixItem())
-                listener { listener?.onItemClicked(eventAndSender.event) }
-            }
-            hasItems = true
+            SearchResultItem_()
+                    .id(eventAndSender.event.eventId)
+                    .avatarRenderer(avatarRenderer)
+                    .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
+                    .spannable(spannable)
+                    .sender(eventAndSender.sender
+                            ?: eventAndSender.event.senderId?.let { session.getUser(it) }?.toMatrixItem())
+                    .listener { listener?.onItemClicked(eventAndSender.event) }
+                    .let { result.add(it) }
         }
 
-        return hasItems
+        return result
     }
 
     /**
