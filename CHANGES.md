@@ -16,9 +16,11 @@ Improvements 🙌:
  - Room member profile: Add action to create (or open) a DM (#2310)
  - Prepare changelog for F-Droid (#2296)
  - Add graphic resources for F-Droid (#812, #2220)
+ - Highlight text in the body of the displayed result (#2200)
 
 Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Search Result | scroll jumps after pagination (#2238)
 
 Translations 🗣:
  -

@@ -173,6 +173,7 @@
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_contact_access_placeholder">You didn’t allow Element to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
+    <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
 
     <!-- Rooms fragment -->
