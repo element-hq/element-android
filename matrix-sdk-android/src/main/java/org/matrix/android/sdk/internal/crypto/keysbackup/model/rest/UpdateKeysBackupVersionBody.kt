@@ -26,16 +26,16 @@ data class UpdateKeysBackupVersionBody(
          * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
          */
         @Json(name = "algorithm")
-        override val algorithm: String? = null,
+        override val algorithm: String,
 
         /**
          * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2"
          * see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
          */
         @Json(name = "auth_data")
-        override val authData: JsonDict? = null,
+        override val authData: JsonDict,
 
-        // the backup version, mandatory
+        // Optional. The backup version. If present, must be the same as the path parameter.
         @Json(name = "version")
-        val version: String
+        val version: String? = null
 ) : KeysAlgorithmAndData

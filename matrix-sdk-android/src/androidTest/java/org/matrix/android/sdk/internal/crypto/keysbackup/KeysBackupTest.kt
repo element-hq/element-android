@@ -115,9 +115,8 @@ class KeysBackupTest : InstrumentedTest {
         }
 
         assertEquals(MXCRYPTO_ALGORITHM_MEGOLM_BACKUP, megolmBackupCreationInfo.algorithm)
-        assertNotNull(megolmBackupCreationInfo.authData)
-        assertNotNull(megolmBackupCreationInfo.authData!!.publicKey)
-        assertNotNull(megolmBackupCreationInfo.authData!!.signatures)
+        assertNotNull(megolmBackupCreationInfo.authData.publicKey)
+        assertNotNull(megolmBackupCreationInfo.authData.signatures)
         assertNotNull(megolmBackupCreationInfo.recoveryKey)
 
         stateObserver.stopAndCheckStates(null)

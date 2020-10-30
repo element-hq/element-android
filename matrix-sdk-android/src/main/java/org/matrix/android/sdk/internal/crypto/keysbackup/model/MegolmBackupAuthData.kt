@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.keysbackup.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
@@ -30,7 +31,7 @@ data class MegolmBackupAuthData(
          * The curve25519 public key used to encrypt the backups.
          */
         @Json(name = "public_key")
-        val publicKey: String = "",
+        val publicKey: String,
 
         /**
          * In case of a backup created from a password, the salt associated with the backup
@@ -50,20 +51,38 @@ data class MegolmBackupAuthData(
          * userId -> (deviceSignKeyId -> signature)
          */
         @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>? = null
+        val signatures: Map<String, Map<String, String>>
 ) {
 
-    fun toJsonString(): String {
-        return MoshiProvider.providesMoshi()
+    fun toJsonDict(): JsonDict {
+        val moshi = MoshiProvider.providesMoshi()
+        val adapter = moshi.adapter(Map::class.java)
+
+        return moshi
                 .adapter(MegolmBackupAuthData::class.java)
                 .toJson(this)
+                .let {
+                    @Suppress("UNCHECKED_CAST")
+                    adapter.fromJson(it) as JsonDict
+                }
     }
 
-    /**
-     * Same as the parent [MXJSONModel JSONDictionary] but return only
-     * data that must be signed.
-     */
-    fun signalableJSONDictionary(): Map<String, Any> = HashMap<String, Any>().apply {
+    fun signalableJSONDictionary(): JsonDict {
+        return SignalableMegolmBackupAuthData(
+                publicKey = publicKey,
+                privateKeySalt = privateKeySalt,
+                privateKeyIterations = privateKeyIterations
+        )
+                .signalableJSONDictionary()
+    }
+}
+
+internal data class SignalableMegolmBackupAuthData(
+        val publicKey: String,
+        val privateKeySalt: String? = null,
+        val privateKeyIterations: Int? = null
+) {
+    fun signalableJSONDictionary(): JsonDict = HashMap<String, Any>().apply {
         put("public_key", publicKey)
 
         privateKeySalt?.let {

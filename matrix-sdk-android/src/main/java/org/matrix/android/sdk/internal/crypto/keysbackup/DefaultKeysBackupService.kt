@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
@@ -85,6 +84,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmPkDecryption
 import org.matrix.olm.OlmPkEncryption
@@ -170,7 +170,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
                     val olmPkDecryption = OlmPkDecryption()
-                    val megolmBackupAuthData = if (password != null) {
+                    val signalableMegolmBackupAuthData = if (password != null) {
                         // Generate a private key from the password
                         val backgroundProgressListener = if (progressListener == null) {
                             null
@@ -189,7 +189,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
 
                         val generatePrivateKeyResult = generatePrivateKeyWithPassword(password, backgroundProgressListener)
-                        MegolmBackupAuthData(
+                        SignalableMegolmBackupAuthData(
                                 publicKey = olmPkDecryption.setPrivateKey(generatePrivateKeyResult.privateKey),
                                 privateKeySalt = generatePrivateKeyResult.salt,
                                 privateKeyIterations = generatePrivateKeyResult.iterations
@@ -197,14 +197,17 @@ internal class DefaultKeysBackupService @Inject constructor(
                     } else {
                         val publicKey = olmPkDecryption.generateKey()
 
-                        MegolmBackupAuthData(
+                        SignalableMegolmBackupAuthData(
                                 publicKey = publicKey
                         )
                     }
 
-                    val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, megolmBackupAuthData.signalableJSONDictionary())
+                    val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableMegolmBackupAuthData.signalableJSONDictionary())
 
-                    val signedMegolmBackupAuthData = megolmBackupAuthData.copy(
+                    val signedMegolmBackupAuthData = MegolmBackupAuthData(
+                            publicKey = signalableMegolmBackupAuthData.publicKey,
+                            privateKeySalt = signalableMegolmBackupAuthData.privateKeySalt,
+                            privateKeyIterations = signalableMegolmBackupAuthData.privateKeyIterations,
                             signatures = objectSigner.signObject(canonicalJson)
                     )
 
@@ -223,8 +226,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         val createKeysBackupVersionBody = CreateKeysBackupVersionBody(
                 algorithm = keysBackupCreationInfo.algorithm,
-                authData = MoshiProvider.providesMoshi().adapter(Map::class.java)
-                        .fromJson(keysBackupCreationInfo.authData?.toJsonString() ?: "") as JsonDict?
+                authData = keysBackupCreationInfo.authData.toJsonDict()
         )
 
         keysBackupStateManager.state = KeysBackupState.Enabling
@@ -245,7 +247,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                                     version = data.version,
                                     // We can consider that the server does not have keys yet
                                     count = 0,
-                                    hash = null
+                                    hash = ""
                             )
 
                             enableKeysBackup(keyBackupVersion)
@@ -267,7 +269,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             withContext(coroutineDispatchers.crypto) {
                 // If we're currently backing up to this backup... stop.
                 // (We start using it automatically in createKeysBackupVersion so this is symmetrical).
-                if (keysBackupVersion != null && version == keysBackupVersion!!.version) {
+                if (keysBackupVersion != null && version == keysBackupVersion?.version) {
                     resetKeysBackupData()
                     keysBackupVersion = null
                     keysBackupStateManager.state = KeysBackupState.Unknown
@@ -408,10 +410,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
-        if (keysBackupVersion.algorithm == null
-                || authData == null
-                || authData.publicKey.isEmpty()
-                || authData.signatures.isNullOrEmpty()) {
+        if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             return keysBackupVersionTrust
         }
@@ -479,7 +478,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = authData.signatures?.get(userId)?.toMutableMap() ?: HashMap()
+                    val myUserSignatures = authData.signatures[userId].orEmpty().toMutableMap()
 
                     if (trust) {
                         // Add current device signature
@@ -498,26 +497,23 @@ internal class DefaultKeysBackupService @Inject constructor(
                     // Create an updated version of KeysVersionResult
                     val newMegolmBackupAuthData = authData.copy()
 
-                    val newSignatures = newMegolmBackupAuthData.signatures!!.toMutableMap()
+                    val newSignatures = newMegolmBackupAuthData.signatures.toMutableMap()
                     newSignatures[userId] = myUserSignatures
 
                     val newMegolmBackupAuthDataWithNewSignature = newMegolmBackupAuthData.copy(
                             signatures = newSignatures
                     )
 
-                    val moshi = MoshiProvider.providesMoshi()
-                    val adapter = moshi.adapter(Map::class.java)
-
                     @Suppress("UNCHECKED_CAST")
                     UpdateKeysBackupVersionBody(
                             algorithm = keysBackupVersion.algorithm,
-                            authData = adapter.fromJson(newMegolmBackupAuthDataWithNewSignature.toJsonString()) as Map<String, Any>?,
-                            version = keysBackupVersion.version!!)
+                            authData = newMegolmBackupAuthDataWithNewSignature.toJsonDict(),
+                            version = keysBackupVersion.version)
                 }
 
                 // And send it to the homeserver
                 updateKeysBackupVersionTask
-                        .configureWith(UpdateKeysBackupVersionTask.Params(keysBackupVersion.version!!, updateKeysBackupVersionBody)) {
+                        .configureWith(UpdateKeysBackupVersionTask.Params(keysBackupVersion.version, updateKeysBackupVersionBody)) {
                             this.callback = object : MatrixCallback<Unit> {
                                 override fun onSuccess(data: Unit) {
                                     // Relaunch the state machine on this updated backup version
@@ -688,7 +684,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                 stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
                 // Get backed up keys from the homeserver
-                val data = getKeys(sessionId, roomId, keysVersionResult.version!!)
+                val data = getKeys(sessionId, roomId, keysVersionResult.version)
 
                 withContext(coroutineDispatchers.computation) {
                     val sessionsData = ArrayList<MegolmSessionData>()
@@ -1023,19 +1019,10 @@ internal class DefaultKeysBackupService @Inject constructor(
      * @return the authentication if found and valid, null in other case
      */
     private fun getMegolmBackupAuthData(keysBackupData: KeysVersionResult): MegolmBackupAuthData? {
-        if (keysBackupData.version.isNullOrBlank()
-                || keysBackupData.algorithm != MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-                || keysBackupData.authData == null) {
-            return null
-        }
-
-        val authData = keysBackupData.getAuthDataAsMegolmBackupAuthData()
-
-        if (authData?.signatures == null || authData.publicKey.isBlank()) {
-            return null
-        }
-
-        return authData
+        return keysBackupData
+                .takeIf { it.version.isNotEmpty() && it.algorithm == MXCRYPTO_ALGORITHM_MEGOLM_BACKUP }
+                ?.getAuthDataAsMegolmBackupAuthData()
+                ?.takeIf { it.publicKey.isNotEmpty() }
     }
 
     /**
@@ -1123,34 +1110,29 @@ internal class DefaultKeysBackupService @Inject constructor(
      * @param keysVersionResult backup information object as returned by [getCurrentVersion].
      */
     private fun enableKeysBackup(keysVersionResult: KeysVersionResult) {
-        if (keysVersionResult.authData != null) {
-            val retrievedMegolmBackupAuthData = keysVersionResult.getAuthDataAsMegolmBackupAuthData()
+        val retrievedMegolmBackupAuthData = keysVersionResult.getAuthDataAsMegolmBackupAuthData()
 
-            if (retrievedMegolmBackupAuthData != null) {
-                keysBackupVersion = keysVersionResult
-                cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                    cryptoStore.setKeyBackupVersion(keysVersionResult.version)
-                }
-
-                onServerDataRetrieved(keysVersionResult.count, keysVersionResult.hash)
-
-                try {
-                    backupOlmPkEncryption = OlmPkEncryption().apply {
-                        setRecipientKey(retrievedMegolmBackupAuthData.publicKey)
-                    }
-                } catch (e: OlmException) {
-                    Timber.e(e, "OlmException")
-                    keysBackupStateManager.state = KeysBackupState.Disabled
-                    return
-                }
-
-                keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
-
-                maybeBackupKeys()
-            } else {
-                Timber.e("Invalid authentication data")
-                keysBackupStateManager.state = KeysBackupState.Disabled
+        if (retrievedMegolmBackupAuthData != null) {
+            keysBackupVersion = keysVersionResult
+            cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                cryptoStore.setKeyBackupVersion(keysVersionResult.version)
             }
+
+            onServerDataRetrieved(keysVersionResult.count, keysVersionResult.hash)
+
+            try {
+                backupOlmPkEncryption = OlmPkEncryption().apply {
+                    setRecipientKey(retrievedMegolmBackupAuthData.publicKey)
+                }
+            } catch (e: OlmException) {
+                Timber.e(e, "OlmException")
+                keysBackupStateManager.state = KeysBackupState.Disabled
+                return
+            }
+
+            keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
+
+            maybeBackupKeys()
         } else {
             Timber.e("Invalid authentication data")
             keysBackupStateManager.state = KeysBackupState.Disabled
@@ -1160,11 +1142,11 @@ internal class DefaultKeysBackupService @Inject constructor(
     /**
      * Update the DB with data fetch from the server
      */
-    private fun onServerDataRetrieved(count: Int?, hash: String?) {
+    private fun onServerDataRetrieved(count: Int?, etag: String?) {
         cryptoStore.setKeysBackupData(KeysBackupDataEntity()
                 .apply {
                     backupLastServerNumberOfKeys = count
-                    backupLastServerHash = hash
+                    backupLastServerHash = etag
                 }
         )
     }
@@ -1316,7 +1298,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                 // Make the request
                 storeSessionDataTask
-                        .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version!!, keysBackupData)) {
+                        .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version, keysBackupData)) {
                             this.callback = sendingRequestCallback
                         }
                         .executeBy(taskExecutor)
@@ -1337,8 +1319,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                 "algorithm" to sessionData!!.algorithm,
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
-                "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain
-                        ?: ArrayList<Any>()),
+                "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
                 "session_key" to sessionData.sessionKey)
 
         var encryptedSessionBackupData: OlmPkMessage? = null
@@ -1379,9 +1360,9 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         val jsonObject = keyBackupData.sessionData
 
-        val ciphertext = jsonObject?.get("ciphertext")?.toString()
-        val mac = jsonObject?.get("mac")?.toString()
-        val ephemeralKey = jsonObject?.get("ephemeral")?.toString()
+        val ciphertext = jsonObject["ciphertext"]?.toString()
+        val mac = jsonObject["mac"]?.toString()
+        val ephemeralKey = jsonObject["ephemeral"]?.toString()
 
         if (ciphertext != null && mac != null && ephemeralKey != null) {
             val encrypted = OlmPkMessage()
@@ -1426,8 +1407,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         val createKeysBackupVersionBody = CreateKeysBackupVersionBody(
                 algorithm = keysBackupCreationInfo.algorithm,
-                authData = MoshiProvider.providesMoshi().adapter(Map::class.java)
-                        .fromJson(keysBackupCreationInfo.authData?.toJsonString() ?: "") as JsonDict?
+                authData = keysBackupCreationInfo.authData.toJsonDict()
         )
 
         createKeysBackupVersionTask

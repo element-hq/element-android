@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.parsing.ForceToBoolean
 
 /**
@@ -30,13 +30,13 @@ data class KeyBackupData(
          * Required. The index of the first message in the session that the key can decrypt.
          */
         @Json(name = "first_message_index")
-        val firstMessageIndex: Long = 0,
+        val firstMessageIndex: Long,
 
         /**
          * Required. The number of times this key has been forwarded.
          */
         @Json(name = "forwarded_count")
-        val forwardedCount: Int = 0,
+        val forwardedCount: Int,
 
         /**
          * Whether the device backing up the key has verified the device that the key is from.
@@ -44,16 +44,11 @@ data class KeyBackupData(
          */
         @ForceToBoolean
         @Json(name = "is_verified")
-        val isVerified: Boolean = false,
+        val isVerified: Boolean,
 
         /**
          * Algorithm-dependent data.
          */
         @Json(name = "session_data")
-        val sessionData: Map<String, Any>? = null
-) {
-
-    fun toJsonString(): String {
-        return MoshiProvider.providesMoshi().adapter(KeyBackupData::class.java).toJson(this)
-    }
-}
+        val sessionData: JsonDict
+)
