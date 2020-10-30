@@ -66,7 +66,7 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
         object CancelJoinRoomEvent : AnalyticEvent()
 
         data class UnHandledCrash(val exception: Throwable) : AnalyticEvent()
-        data class GetFeedBacks(val id: String, val closeText: String, val activity: Activity, ) : AnalyticEvent()
+        data class GetFeedBacks(val id: String, val closeText: String, val activity: Activity) : AnalyticEvent()
     }
 
     private var countly: Countly? = null
@@ -80,18 +80,18 @@ class AnalyticsEngine @Inject constructor(private val context: Context) {
         when (event) {
             is AnalyticEvent.Init                   -> {
                 val session = event.session
-                CountlyConfig(context, "8abf1ee15646bc884556b82e5053857904264b66", "https://try.count.ly/").let {
+                CountlyConfig(context, "8abf1ee15646bc884556b82e5053857904264b66", "https://try.count.ly/").let { config ->
                     if (BuildConfig.DEBUG) {
-                        it.setLoggingEnabled(true)
+                        config.setLoggingEnabled(true)
                     }
-                    it.enableCrashReporting()
-                    CountlyNative.initNative(context.applicationContext);
-//                    it.setCustomCrashSegment(mapOf(
+                    config.enableCrashReporting()
+                    CountlyNative.initNative(context.applicationContext)
+//                    config.setCustomCrashSegment(mapOf(
 //                            "flavor" to BuildConfig.FLAVOR,
 //                            "branch" to BuildConfig.GIT_BRANCH_NAME
 //                    ))
-                    it.setDeviceId(session.myUserId.sha256())
-                    Countly.sharedInstance().init(it).also {
+                    config.setDeviceId(session.myUserId.sha256())
+                    Countly.sharedInstance().init(config).also {
                         countly = it
                     }
                     Countly.userData.setUserData(

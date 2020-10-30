@@ -163,7 +163,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
             Action.IgnoreNewDevices -> {
                 withState { state ->
                     val detected = state.unknownSessions.invoke() ?: emptyList()
-                    val allNew = detected.filter { it.isNew }.mapNotNull { it.deviceInfo.deviceId } ?: emptyList()
+                    val allNew = detected.filter { it.isNew }.mapNotNull { it.deviceInfo.deviceId }
                     ignoredDeviceList.addAll(allNew)
                     val updated = detected.filter { !ignoredDeviceList.contains(it.deviceInfo.deviceId) }
                     setState {

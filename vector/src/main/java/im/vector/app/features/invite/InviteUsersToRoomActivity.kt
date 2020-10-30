@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
-import im.vector.app.core.utils.AnalyticsEngine
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.app.core.utils.allGranted
