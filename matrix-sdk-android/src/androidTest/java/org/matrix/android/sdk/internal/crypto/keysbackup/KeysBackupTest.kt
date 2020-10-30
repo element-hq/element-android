@@ -257,14 +257,14 @@ class KeysBackupTest : InstrumentedTest {
         // - Check encryptGroupSession() returns stg
         val keyBackupData = keysBackup.encryptGroupSession(session)
         assertNotNull(keyBackupData)
-        assertNotNull(keyBackupData.sessionData)
+        assertNotNull(keyBackupData!!.sessionData)
 
         // - Check pkDecryptionFromRecoveryKey() is able to create a OlmPkDecryption
         val decryption = keysBackup.pkDecryptionFromRecoveryKey(keyBackupCreationInfo.recoveryKey)
         assertNotNull(decryption)
         // - Check decryptKeyBackupData() returns stg
         val sessionData = keysBackup
-                .decryptKeyBackupData(keyBackupData,
+                .decryptKeyBackupData(keyBackupData!!,
                         session.olmInboundGroupSession!!.sessionIdentifier(),
                         cryptoTestData.roomId,
                         decryption!!)
