@@ -18,11 +18,16 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
+import android.os.SystemClock
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
@@ -71,8 +76,8 @@ import javax.inject.Singleton
 @Singleton
 class WebRtcPeerConnectionManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
-) : CallsListener {
+        private val activeSessionDataSource: ActiveSessionDataSource,
+) : CallsListener, LifecycleObserver {
 
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
@@ -170,6 +175,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private var currentCaptureMode: CaptureFormat = CaptureFormat.HD
 
+    private var isInBackground: Boolean = true
+
     var capturerIsInError = false
         set(value) {
             field = value
@@ -200,6 +207,17 @@ class WebRtcPeerConnectionManager @Inject constructor(
             list.add(WeakReference(renderer))
         }
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun entersForeground() {
+        isInBackground = false
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun entersBackground() {
+        isInBackground = true
+    }
+
 
     var currentCall: CallContext? = null
         set(value) {
@@ -703,7 +721,17 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         callContext.offerSdp = callInviteContent.offer
 
-        currentSession?.startSync(true)
+        // If this is received while in background, the app will not sync,
+        // and thus won't be able to received events. For example if the call is
+        // accepted on an other session this device will continue ringing
+        if (isInBackground) {
+            if (FcmHelper.isPushSupported()) {
+                // only for push version as fdroid version is already doing it?
+                currentSession?.startAutomaticBackgroundSync(30, 0)
+            } else {
+                // Maybe increase sync freq? but how to set back to default values?
+            }
+        }
     }
 
     private fun createAnswer() {
@@ -851,6 +879,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         currentCall = null
         CallService.onNoActiveCall(context)
+
+        // did we start background sync? so we should stop it
+        if (isInBackground) {
+            if (FcmHelper.isPushSupported()) {
+                currentSession?.stopAnyBackgroundSync()
+            } else {
+                // for fdroid we should not stop, it should continue syncing
+                // maybe we should restore default timeout/delay though?
+            }
+        }
     }
 
     private inner class StreamObserver(val callContext: CallContext) : PeerConnection.Observer {
