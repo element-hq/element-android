@@ -49,7 +49,7 @@ class OlmInboundGroupSessionWrapper2 : Serializable {
     val firstKnownIndex: Long?
         get() {
             return try {
-                return olmInboundGroupSession?.firstKnownIndex
+                olmInboundGroupSession?.firstKnownIndex
             } catch (e: Exception) {
                 Timber.e(e, "## getFirstKnownIndex() : getFirstKnownIndex failed")
                 null
