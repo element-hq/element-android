@@ -1179,6 +1179,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         cryptoStore.setKeyBackupVersion(null)
         cryptoStore.setKeysBackupData(null)
+        backupOlmPkEncryption?.releaseEncryption()
         backupOlmPkEncryption = null
 
         // Reset backup markers
