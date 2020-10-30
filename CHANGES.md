@@ -14,6 +14,8 @@ Improvements 🙌:
  - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
  - Better visibility of text reactions in dark theme (#1118)
  - Room member profile: Add action to create (or open) a DM (#2310)
+ - Prepare changelog for F-Droid (#2296)
+ - Add graphic resources for F-Droid (#812, #2220)
  - Highlight text in the body of the displayed result (#2200)
 
 Bugfix 🐛:
