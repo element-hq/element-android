@@ -12,6 +12,7 @@ Improvements 🙌:
  - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
  - Edit and remove icons are now visible on image attachment preview screen (#2294)
  - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
+ - Better visibility of text reactions in dark theme (#1118)
  - Room member profile: Add action to create (or open) a DM (#2310)
 
 Bugfix 🐛:
